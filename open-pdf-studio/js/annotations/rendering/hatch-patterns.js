@@ -381,6 +381,27 @@ function _apparaatSchaal(ctx) {
 // dicht: duizenden paden tekenen geeft dan hetzelfde beeld als één fillRect.
 const VERZADIGD_PX = 0.35;
 
+// Gemiddelde dekking (0..1) van één lijnfamilie: lijnbreedte gedeeld door de
+// lijnafstand, maal het getekende deel van een streeppatroon; bij stippen het
+// stipoppervlak per rastercel. Dit is de toon die de losse lijnen samen geven
+// zodra ze dichter dan een pixel op elkaar liggen.
+function _dekking(family, isStippen, spacing, stipAfstand, lijnBreedte, scale) {
+  if (isStippen) {
+    const r = Math.max(0.5, 1 * scale);
+    return Math.min(1, (Math.PI * r * r) / (spacing * stipAfstand));
+  }
+  let dekking = lijnBreedte / spacing;
+  const streep = family.dashPattern;
+  if (streep && streep.length > 0) {
+    // Canvas herhaalt een oneven streeppatroon twee keer (setLineDash).
+    const reeks = streep.length % 2 ? [...streep, ...streep] : streep;
+    let aan = 0, totaal = 0;
+    reeks.forEach((d, i) => { const l = Math.abs(d); totaal += l; if (i % 2 === 0) aan += l; });
+    if (totaal > 0) dekking *= aan / totaal;
+  }
+  return Math.min(1, Math.max(0, dekking));
+}
+
 // anker: { cx, cy, diagonal } — hieraan hangt de FASE van het patroon, en dat
 //        anker komt uit het volledige vlak, niet uit het zichtbare deel. Zou
 //        de fase aan het beeld hangen, dan zou de arcering meeschuiven zodra
@@ -406,17 +427,26 @@ function drawLineFamily(ctx, family, anker, gebied, scale, baseStrokeColor, lijn
   const isStippen = !!(family.dashPattern && family.dashPattern.includes(0));
   const stipAfstand = deltaX || spacing;
 
+  const lijnBreedte = lijnbreedte ? lijnbreedte(family.strokeWidth) : _hatchLineWidth(family.strokeWidth);
+
   // Verzadigd patroon: zelfde beeld, één primitief in plaats van duizenden.
+  // Met de dekking van de lijnen als alfa: een fijne arcering van dunne
+  // lijnen is een lichte toon, geen dichte vulling. Zonder die alfa sprong
+  // zo'n vlak bij uitzoomen ineens naar de volle arceringskleur en verdween
+  // de achtergrondkleur (#279).
   const fijnste = isStippen ? Math.min(spacing, stipAfstand) : spacing;
   if (fijnste * _apparaatSchaal(ctx) < VERZADIGD_PX) {
+    const alfa = ctx.globalAlpha ?? 1;
+    ctx.globalAlpha = alfa * _dekking(family, isStippen, spacing, stipAfstand, lijnBreedte, scale);
     ctx.fillStyle = kleur;
     ctx.fillRect(left, top, right - left, bottom - top);
+    ctx.globalAlpha = alfa;
     return;
   }
 
   ctx.strokeStyle = kleur;
   ctx.fillStyle   = kleur;
-  ctx.lineWidth   = lijnbreedte ? lijnbreedte(family.strokeWidth) : _hatchLineWidth(family.strokeWidth);
+  ctx.lineWidth   = lijnBreedte;
 
   // Identiek aan de oude berekening — bepaalt de lengte (en daarmee de
   // streepfase) van gestreepte lijnen.
@@ -557,12 +587,21 @@ export function applyHatchFill(ctx, annotation) {
   const cx = bx + bw / 2;
   const cy = by + bh / 2;
 
-  const expandedW = bw * 1.5;
-  const expandedH = bh * 1.5;
-  const left   = cx - expandedW / 2;
-  const top    = cy - expandedH / 2;
-  const right  = cx + expandedW / 2;
-  const bottom = cy + expandedH / 2;
+  // Het arceringsgebied ligt in het (gedraaide) assenstelsel van de arcering
+  // en moet de hele vorm bedekken. Anderhalf keer het kader is genoeg zolang
+  // de arcering niet gedraaid is; bij een hoek moet het gedraaide kader erin
+  // passen — anders kreeg een langgerekte rechthoek of ellips onder 90° maar
+  // een strook in het midden gearceerd (#279). Zonder hoek blijft het gebied
+  // (en daarmee de fase van gestreepte lijnen) precies zoals het was.
+  const hoek = hatchAngle * Math.PI / 180;
+  const cosH = Math.abs(Math.cos(hoek));
+  const sinH = Math.abs(Math.sin(hoek));
+  const halfW = Math.max(bw * 0.75, (bw * cosH + bh * sinH) / 2);
+  const halfH = Math.max(bh * 0.75, (bw * sinH + bh * cosH) / 2);
+  const left   = cx - halfW;
+  const top    = cy - halfH;
+  const right  = cx + halfW;
+  const bottom = cy + halfH;
 
   ctx.save();
   ctx.clip();
