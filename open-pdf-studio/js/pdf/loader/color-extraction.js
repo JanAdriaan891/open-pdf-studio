@@ -694,6 +694,14 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         if (ha !== null) colors.opsHatchAngle = ha;
       }
 
+      // Read /OPS_StyleType — the type chosen in the type picker (#279)
+      const stRaw = annotDict.get(PDFName.of('OPS_StyleType'));
+      if (stRaw) {
+        const st = context.lookup(stRaw) || stRaw;
+        if (typeof st.decodeText === 'function') colors.opsStyleType = st.decodeText();
+        else if (typeof st.value === 'string') colors.opsStyleType = st.value;
+      }
+
       // Read /OPS_DikteMm — wall thickness in real-world mm (wall round-trip)
       const dkRaw = annotDict.get(PDFName.of('OPS_DikteMm'));
       if (dkRaw) {

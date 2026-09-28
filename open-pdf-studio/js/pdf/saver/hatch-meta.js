@@ -28,3 +28,36 @@ export function hatchUitExtra(extra, standaardKleur = '#000000') {
     hatchAngle: e.opsHatchAngle ?? 0,
   };
 }
+
+/**
+ * Arcering van een rechthoek, ellips, veelhoek of wolk (#279): alleen de
+ * velden die het bestand heeft. Zonder arcering blijft het model gelijk aan
+ * dat van een vorm zonder arcering; zonder eigen kleur volgt de arcering op
+ * het scherm de randkleur, net als vóór het opslaan.
+ */
+export function hatchVanVorm(extra) {
+  const e = extra || {};
+  if (!e.opsHatchPattern || e.opsHatchPattern === 'none') return {};
+  const uit = { hatchPattern: e.opsHatchPattern };
+  if (e.opsHatchColor) uit.hatchColor = e.opsHatchColor;
+  if (e.opsHatchScale != null) uit.hatchScale = e.opsHatchScale;
+  if (e.opsHatchAngle != null) uit.hatchAngle = e.opsHatchAngle;
+  return uit;
+}
+
+/**
+ * Het gekozen type uit de Type-kiezer (arcering-, maatlijn-, pentype) als
+ * /OPS_StyleType (#279). Zonder deze sleutel toonde de kiezer na heropenen
+ * "Aangepast", ook als er sinds de keuze niets veranderd was.
+ */
+export function schrijfStijlType(annotDict, ann) {
+  if (!ann?.styleType || typeof ann.styleType !== 'string') return false;
+  annotDict.set(PDFName.of('OPS_StyleType'), pdfTextString(ann.styleType));
+  return true;
+}
+
+/** Het gekozen type terug voor het model; niets als het bestand er geen heeft. */
+export function stijlTypeUitExtra(extra) {
+  const t = extra?.opsStyleType;
+  return typeof t === 'string' && t ? { styleType: t } : {};
+}

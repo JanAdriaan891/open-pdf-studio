@@ -9,7 +9,7 @@ import { ifcCategoryForAnnotationType, ifcCategoryForParametric } from '../../so
 import { nenIfcForStamp } from '../../solid/data/nenIfcMap.js';
 import { STAVENREEKS_DEFAULTS } from '../../annotations/stavenreeks.js';
 import { knipselUitExtra } from './vector-snippet-load.js';
-import { hatchUitExtra } from '../saver/hatch-meta.js';
+import { hatchUitExtra, hatchVanVorm, stijlTypeUitExtra } from '../saver/hatch-meta.js';
 import { wandJoinUitExtra } from '../saver/wand-join-meta.js';
 import { wolkVakUitHoeken, wolkVakUitZeshoek } from '../saver/veelhoek-grondvorm.js';
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
@@ -124,7 +124,9 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
     locked: !!(annot.annotationFlags & 128),      // Bit 8: Locked
     printable: !!(annot.annotationFlags & 4),       // Bit 3: Print
     readOnly: !!(annot.annotationFlags & 64),       // Bit 7: ReadOnly
-    marked: false
+    marked: false,
+    // Het gekozen type uit de Type-kiezer (#279), voor elke soort.
+    ...stijlTypeUitExtra(extraColors),
   };
 
   switch (annot.subtype) {
@@ -400,6 +402,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
       };
       if (sqRotation) sqProps.rotation = sqRotation;
       if (extraColors.cross && sqProps.type === 'box') sqProps.cross = true;
+      // Arcering terug uit de eigen sleutels (#279).
+      Object.assign(sqProps, hatchVanVorm(extraColors));
       // Vorm zonder rand (#431): strokeColor 'none' met de lijndikte-instelling.
       Object.assign(sqProps, randloosUitExtra(extraColors));
       // Onzichtbaar vlak (#435): hulplijn op het scherm, geen streek bij opslaan.
@@ -443,6 +447,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
       };
       if (crRotation) crProps.rotation = crRotation;
       if (extraColors.cross) crProps.cross = true;
+      // Arcering terug uit de eigen sleutels (#279).
+      Object.assign(crProps, hatchVanVorm(extraColors));
       Object.assign(crProps, randloosUitExtra(extraColors)); // zonder rand (#431)
       // Onzichtbaar vlak (#435): hulplijn op het scherm, geen streek bij opslaan.
       if (onzichtbaarVlakUitExtra(extraColors)) crProps.onzichtbaarVlak = true;
@@ -1089,6 +1095,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
           borderStyle: mapBorderStyle(annot, extraColors),
           ...(extraColors.cloudIntensity !== undefined ? { cloudIntensity: extraColors.cloudIntensity } : {})
         };
+        // Arcering terug uit de eigen sleutels (#279).
+        Object.assign(polyProps, hatchVanVorm(extraColors));
         Object.assign(polyProps, randloosUitExtra(extraColors)); // zonder rand (#431)
 
         // Rechthoekige wolk: het vak terug, de punten weg (#434). Een wolk

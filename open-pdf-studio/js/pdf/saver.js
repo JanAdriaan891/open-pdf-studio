@@ -11,7 +11,7 @@ import { getCachedPdfBytes, setCachedPdfBytes, hidePdfABar } from './loader.js';
 import { PDFDocument, PDFString, PDFHexString, PDFName, PDFArray, PDFStream, degrees,
   PDFTextField, PDFCheckBox, PDFDropdown, PDFRadioGroup, PDFOptionList } from 'pdf-lib';
 import { bouwKnipselAppearance, tekenKnipselInPagina, alInBasis, markeerGebakken, ruimKnipselRestenOp, CATALOGUS_SLEUTEL as KNIPSEL_CATALOGUS } from './saver/vector-snippet.js';
-import { schrijfHatchMeta } from './saver/hatch-meta.js';
+import { schrijfHatchMeta, schrijfStijlType } from './saver/hatch-meta.js';
 import { schrijfWandJoinMeta } from './saver/wand-join-meta.js';
 import { schrijfPlattegrondMeta } from './saver/plattegrond-meta.js';
 import { maatlijnTekst, maatLabelRuimte } from '../annotations/maat-label.js';
@@ -636,6 +636,8 @@ async function _savePDFNu(saveAsPath) {
             if (ann.rotation) annDictObj.OPS_Rotation = ann.rotation;
 
             annotDict = context.obj(annDictObj);
+            // Arcering: de parameters mee, anders is hij na heropenen weg (#279).
+            if (ann.type === 'box') schrijfHatchMeta(annotDict, ann, context);
             break;
           }
 
@@ -758,6 +760,8 @@ async function _savePDFNu(saveAsPath) {
             if (ann.cross) annDictObj.OPS_Cross = true;
 
             annotDict = context.obj(annDictObj);
+            // Arcering: de parameters mee, anders is hij na heropenen weg (#279).
+            schrijfHatchMeta(annotDict, ann, context);
             break;
           }
 
@@ -1107,6 +1111,8 @@ async function _savePDFNu(saveAsPath) {
             }
 
             annotDict = context.obj(polygonDict);
+            // Arcering: de parameters mee, anders is hij na heropenen weg (#279).
+            schrijfHatchMeta(annotDict, ann, context);
 
             // Vector /AP voor GEWONE polygonen: viewers die zelf uit /Vertices
             // synthetiseren tekenen alleen de rand en laten /IC-vulling (en al
@@ -2926,6 +2932,8 @@ async function _savePDFNu(saveAsPath) {
           // voor alle soorten. Zonder lagen is laagOcgs null en komt er niets bij.
           const ocRef = ocVoorAnnotatie(laagOcgs, ann);
           if (ocRef && typeof annotDict.set === 'function') annotDict.set(PDFName.of('OC'), ocRef);
+          // Het gekozen type uit de Type-kiezer (#279) — één plek voor alle soorten.
+          if (typeof annotDict.set === 'function') schrijfStijlType(annotDict, ann);
           parentAnnotRef = context.register(annotDict);
           annotsArray.push(parentAnnotRef);
         }
