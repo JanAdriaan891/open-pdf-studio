@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "प्रकार",
+    "dimTypeCustom": "कस्टम",
+    "searchType": "खोजें…",
+    "editTypes": "प्रकार संपादित करें",
+    "noTypesFound": "कोई प्रकार नहीं मिला"
   },
   "schedules": {
     "title": "Schedules",

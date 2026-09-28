@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Type",
+    "dimTypeCustom": "Egendefinert",
+    "searchType": "Søk…",
+    "editTypes": "Rediger typer",
+    "noTypesFound": "Fant ingen typer"
   },
   "schedules": {
     "title": "Schedules",

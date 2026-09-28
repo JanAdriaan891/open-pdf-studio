@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Tür",
+    "dimTypeCustom": "Özel",
+    "searchType": "Ara…",
+    "editTypes": "Türleri düzenle",
+    "noTypesFound": "Tür bulunamadı"
   },
   "schedules": {
     "title": "Schedules",

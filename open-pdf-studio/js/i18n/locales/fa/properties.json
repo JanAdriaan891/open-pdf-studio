@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "نوع",
+    "dimTypeCustom": "سفارشی",
+    "searchType": "جستجو…",
+    "editTypes": "ویرایش انواع",
+    "noTypesFound": "هیچ نوعی یافت نشد"
   },
   "schedules": {
     "title": "Schedules",

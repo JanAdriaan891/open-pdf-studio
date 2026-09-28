@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Typ",
+    "dimTypeCustom": "Vlastný",
+    "searchType": "Hľadať…",
+    "editTypes": "Upraviť typy",
+    "noTypesFound": "Nenašli sa žiadne typy"
   },
   "schedules": {
     "title": "Schedules",

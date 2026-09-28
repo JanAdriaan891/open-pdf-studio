@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "유형",
+    "dimTypeCustom": "사용자 지정",
+    "searchType": "검색…",
+    "editTypes": "유형 편집",
+    "noTypesFound": "유형을 찾을 수 없습니다"
   },
   "schedules": {
     "title": "Schedules",

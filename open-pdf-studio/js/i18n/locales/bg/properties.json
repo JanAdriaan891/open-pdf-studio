@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Тип",
+    "dimTypeCustom": "По избор",
+    "searchType": "Търсене…",
+    "editTypes": "Редактиране на типовете",
+    "noTypesFound": "Няма намерени типове"
   },
   "schedules": {
     "title": "Schedules",

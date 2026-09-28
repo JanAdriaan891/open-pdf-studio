@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Loại",
+    "dimTypeCustom": "Tùy chỉnh",
+    "searchType": "Tìm kiếm…",
+    "editTypes": "Chỉnh sửa loại",
+    "noTypesFound": "Không tìm thấy loại nào"
   },
   "schedules": {
     "title": "Schedules",

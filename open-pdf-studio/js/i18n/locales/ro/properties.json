@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Tip",
+    "dimTypeCustom": "Personalizat",
+    "searchType": "Căutare…",
+    "editTypes": "Editare tipuri",
+    "noTypesFound": "Nu s-a găsit niciun tip"
   },
   "schedules": {
     "title": "Schedules",

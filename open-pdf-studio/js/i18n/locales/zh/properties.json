@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "类型",
+    "dimTypeCustom": "自定义",
+    "searchType": "搜索…",
+    "editTypes": "编辑类型",
+    "noTypesFound": "未找到类型"
   },
   "schedules": {
     "title": "Schedules",

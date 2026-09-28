@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Jenis",
+    "dimTypeCustom": "Tersuai",
+    "searchType": "Cari…",
+    "editTypes": "Sunting jenis",
+    "noTypesFound": "Tiada jenis ditemui"
   },
   "schedules": {
     "title": "Schedules",

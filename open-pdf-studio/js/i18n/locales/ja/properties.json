@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "種類",
+    "dimTypeCustom": "カスタム",
+    "searchType": "検索…",
+    "editTypes": "種類を編集",
+    "noTypesFound": "種類が見つかりません"
   },
   "schedules": {
     "title": "Schedules",

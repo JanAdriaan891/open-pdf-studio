@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Typ",
+    "dimTypeCustom": "Benutzerdefiniert",
+    "searchType": "Suchen…",
+    "editTypes": "Typen bearbeiten",
+    "noTypesFound": "Keine Typen gefunden"
   },
   "schedules": {
     "title": "Schedules",

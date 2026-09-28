@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Típus",
+    "dimTypeCustom": "Egyedi",
+    "searchType": "Keresés…",
+    "editTypes": "Típusok szerkesztése",
+    "noTypesFound": "Nem található típus"
   },
   "schedules": {
     "title": "Schedules",

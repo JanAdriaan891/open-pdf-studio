@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Τύπος",
+    "dimTypeCustom": "Προσαρμοσμένος",
+    "searchType": "Αναζήτηση…",
+    "editTypes": "Επεξεργασία τύπων",
+    "noTypesFound": "Δεν βρέθηκαν τύποι"
   },
   "schedules": {
     "title": "Schedules",

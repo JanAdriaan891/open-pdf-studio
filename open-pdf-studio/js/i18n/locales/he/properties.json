@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "סוג",
+    "dimTypeCustom": "מותאם אישית",
+    "searchType": "חיפוש…",
+    "editTypes": "עריכת סוגים",
+    "noTypesFound": "לא נמצאו סוגים"
   },
   "schedules": {
     "title": "Schedules",

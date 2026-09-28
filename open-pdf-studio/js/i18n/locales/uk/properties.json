@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Тип",
+    "dimTypeCustom": "Користувацький",
+    "searchType": "Пошук…",
+    "editTypes": "Редагувати типи",
+    "noTypesFound": "Типи не знайдено"
   },
   "schedules": {
     "title": "Schedules",

@@ -258,7 +258,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "Tipus",
+    "dimTypeCustom": "Personalitzat",
+    "searchType": "Cerca…",
+    "editTypes": "Edita els tipus",
+    "noTypesFound": "No s'ha trobat cap tipus"
   },
   "schedules": {
     "title": "Schedules",

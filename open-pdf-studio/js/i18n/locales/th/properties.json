@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "ประเภท",
+    "dimTypeCustom": "กำหนดเอง",
+    "searchType": "ค้นหา…",
+    "editTypes": "แก้ไขประเภท",
+    "noTypesFound": "ไม่พบประเภท"
   },
   "schedules": {
     "title": "Schedules",

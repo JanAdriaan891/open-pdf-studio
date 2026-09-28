@@ -270,7 +270,12 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "dimType": "வகை",
+    "dimTypeCustom": "தனிப்பயன்",
+    "searchType": "தேடு…",
+    "editTypes": "வகைகளைத் திருத்து",
+    "noTypesFound": "வகைகள் எதுவும் கிடைக்கவில்லை"
   },
   "schedules": {
     "title": "Schedules",
