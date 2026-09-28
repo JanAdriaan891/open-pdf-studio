@@ -4,13 +4,14 @@ import { annotProps, applyStyleType } from '../../stores/propertiesStore.js';
 import { styleTypesFor } from '../../../annotations/style-types.js';
 import { openDialog } from '../../stores/dialogStore.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
+import { arceringVoorbeeldSpec, arceringVoorbeeldUrl } from '../../../annotations/rendering/hatch-patterns.js';
 
 // Generic STYLE TYPE picker — pinned at the TOP of the properties panel for
 // every annotation kind with a preset list (maatlijnen, lijnen/pijlen,
 // arceringen). Custom dropdown with a SEARCH box, a visual PREVIEW per type
 // and an "Bewerken…" entry that opens the type editor.
 
-// ── Per-kind preview swatch (small inline SVG) ─────────────────────────────
+// ── Per-kind preview swatch (small inline SVG; hatches: rendered image) ────
 function _dashFor(style) {
   switch (style) {
     case 'dashed': return '7,4';
@@ -20,20 +21,6 @@ function _dashFor(style) {
     case 'long-dash': return '14,5';
     default: return '';
   }
-}
-
-// Map an engine hatch-pattern id onto one of a few preview families.
-function _hatchFamily(pattern = '') {
-  const p = String(pattern);
-  if (p === 'solid') return 'solid';
-  if (p.includes('cross') || p.includes('isolatie')) return 'cross';
-  if (p === 'grid' || p.includes('raster-l') === false && p.includes('grid')) return 'grid';
-  if (p.includes('raster-liggend') || p.includes('horizontal') || p.includes('hout-langs')) return 'h';
-  if (p.includes('raster-staand') || p.includes('vertical') || p.includes('verticaal')) return 'v';
-  if (p.includes('dots') || p.includes('sand') || p.includes('concrete') || p.includes('grind') || p.includes('gravel')) return 'dots';
-  if (p.includes('brick') || p.includes('tegel') || p.includes('plank') || p.includes('blok') || p.includes('lood') || p.includes('metselwerk') || p.includes('kunststeen')) return 'brick';
-  if (p.includes('diagonal-right')) return 'diag-r';
-  return 'diag'; // default: diagonal line work
 }
 
 export function PreviewSwatch(props) {
@@ -64,69 +51,25 @@ export function PreviewSwatch(props) {
     );
   };
 
-  const hatchSvg = () => {
-    const p = e().props || {};
-    const bg = p.fillColor || 'transparent';
-    const lc = p.hatchColor || e().color || '#000';
-    const fam = _hatchFamily(p.hatchPattern);
-    const lines = [];
-    if (fam === 'diag' || fam === 'cross' || fam === 'diag-r') {
-      for (let x = -H; x < W; x += 8) {
-        lines.push(<line x1={x} y1={H} x2={x + H} y2={0} stroke={lc} stroke-width="1" />);
-      }
-    }
-    if (fam === 'cross' || fam === 'diag-r') {
-      for (let x = 0; x < W + H; x += 8) {
-        lines.push(<line x1={x} y1={0} x2={x - H} y2={H} stroke={lc} stroke-width="1" />);
-      }
-    }
-    if (fam === 'grid' || fam === 'h' || fam === 'brick') {
-      for (let y = 4; y < H; y += 7) {
-        lines.push(<line x1={0} y1={y} x2={W} y2={y} stroke={lc} stroke-width="1" />);
-      }
-    }
-    if (fam === 'grid' || fam === 'v') {
-      for (let x = 6; x < W; x += 9) {
-        lines.push(<line x1={x} y1={0} x2={x} y2={H} stroke={lc} stroke-width="1" />);
-      }
-    }
-    if (fam === 'brick') {
-      let off = 0;
-      for (let y = 4; y < H; y += 7) {
-        for (let x = off; x < W; x += 14) {
-          lines.push(<line x1={x} y1={y} x2={x} y2={Math.min(y + 7, H)} stroke={lc} stroke-width="1" />);
-        }
-        off = off === 0 ? 7 : 0;
-      }
-    }
-    if (fam === 'dots') {
-      for (let y = 5; y < H; y += 7) {
-        for (let x = 6 + ((y % 14) ? 4 : 0); x < W; x += 9) {
-          lines.push(<circle cx={x} cy={y} r="1" fill={lc} />);
-        }
-      }
-    }
-    if (fam === 'solid') {
-      lines.push(<rect x="0" y="0" width={W} height={H} fill={lc} />);
-    }
-    return (
-      <g>
-        <rect x="0" y="0" width={W} height={H} fill={bg === 'transparent' ? 'var(--theme-bg, #fff)' : bg} />
-        {lines}
-      </g>
-    );
-  };
+  // Arceringen: geen nagetekend icoontje maar het echte patroon, getekend
+  // door dezelfde routine als het vlak zelf — met het patroon, de kleur, de
+  // hatchScale en de achtergrond van het type (#279).
+  const hatchSrc = () => arceringVoorbeeldUrl(
+    arceringVoorbeeldSpec(e().props || {}, e().color),
+    { breedte: W, hoogte: H, pixelRatio: window.devicePixelRatio || 1 },
+  );
 
   return (
-    <svg width={W} height={H} style={{ border: '1px solid var(--theme-border, #999)', 'flex-shrink': 0, background: 'var(--theme-bg, #fff)' }}>
-      <Show when={kind() === 'filledArea'} fallback={
+    <Show when={kind() === 'filledArea'} fallback={
+      <svg width={W} height={H} style={{ border: '1px solid var(--theme-border, #999)', 'flex-shrink': 0, background: 'var(--theme-bg, #fff)' }}>
         <Show when={kind() === 'measureDistance'} fallback={lineSvg()}>
           {dimSvg()}
         </Show>
-      }>
-        {hatchSvg()}
-      </Show>
-    </svg>
+      </svg>
+    }>
+      <img src={hatchSrc()} width={W} height={H} alt=""
+        style={{ border: '1px solid var(--theme-border, #999)', 'flex-shrink': 0, display: 'block' }} />
+    </Show>
   );
 }
 

@@ -386,7 +386,9 @@ const VERZADIGD_PX = 0.35;
 //        de fase aan het beeld hangen, dan zou de arcering meeschuiven zodra
 //        je scrollt of zoomt.
 // gebied: het gebied dat werkelijk bestreken moet worden (vlak ∩ beeld).
-function drawLineFamily(ctx, family, anker, gebied, scale, baseStrokeColor) {
+// lijnbreedte: optioneel (familieBreedte) → breedte in gebruikerseenheden;
+//        zonder deze functie geldt de lijnbreedte van de app (_hatchLineWidth).
+function drawLineFamily(ctx, family, anker, gebied, scale, baseStrokeColor, lijnbreedte) {
   const { cx, cy, diagonal } = anker;
   const { left, top, right, bottom } = gebied;
 
@@ -414,7 +416,7 @@ function drawLineFamily(ctx, family, anker, gebied, scale, baseStrokeColor) {
 
   ctx.strokeStyle = kleur;
   ctx.fillStyle   = kleur;
-  ctx.lineWidth   = _hatchLineWidth(family.strokeWidth);
+  ctx.lineWidth   = lijnbreedte ? lijnbreedte(family.strokeWidth) : _hatchLineWidth(family.strokeWidth);
 
   // Identiek aan de oude berekening — bepaalt de lengte (en daarmee de
   // streepfase) van gestreepte lijnen.
@@ -501,7 +503,7 @@ function drawLineFamily(ctx, family, anker, gebied, scale, baseStrokeColor) {
   ctx.setLineDash([]);
 }
 
-function renderPattern(ctx, patternId, left, top, right, bottom, scale, color) {
+function renderPattern(ctx, patternId, left, top, right, bottom, scale, color, opties = {}) {
   const pattern = PATTERN_BY_ID.get(patternId);
   if (!pattern) return;
   if (!pattern.lineFamilies || pattern.lineFamilies.length === 0) {
@@ -532,7 +534,7 @@ function renderPattern(ctx, patternId, left, top, right, bottom, scale, color) {
   const gebied = { left: gLeft, top: gTop, right: gRight, bottom: gBottom };
 
   for (const fam of pattern.lineFamilies) {
-    drawLineFamily(ctx, fam, anker, gebied, scale, color);
+    drawLineFamily(ctx, fam, anker, gebied, scale, color, opties.lijnbreedte);
   }
 }
 
@@ -576,7 +578,8 @@ export function applyHatchFill(ctx, annotation) {
   ctx.restore();
 }
 
-export function applyHatchFillPolygon(ctx, points, holes, hatchPattern, hatchColor, hatchScale, hatchAngle) {
+// opties.lijnbreedte: zie drawLineFamily (alleen het arceringsvoorbeeld zet hem).
+export function applyHatchFillPolygon(ctx, points, holes, hatchPattern, hatchColor, hatchScale, hatchAngle, opties = {}) {
   if (!hatchPattern || hatchPattern === 'none' || !points || points.length < 3) return;
 
   const color = hatchColor || '#ff0000';
@@ -633,9 +636,74 @@ export function applyHatchFillPolygon(ctx, points, holes, hatchPattern, hatchCol
     ctx.translate(-cx, -cy);
   }
 
-  renderPattern(ctx, hatchPattern, left, top, right, bottom, scale, color);
+  renderPattern(ctx, hatchPattern, left, top, right, bottom, scale, color, opties);
 
   ctx.restore();
+}
+
+// ---------------------------------------------------------------------------
+// Arceringsvoorbeeld voor de Type-kiezer (#279)
+// ---------------------------------------------------------------------------
+//
+// Het voorbeeld naast een type is een stukje van het vlak zoals het op papier
+// komt: dezelfde tekenroutine als een gevuld gebied (applyHatchFillPolygon),
+// met het patroon, de kleur, de hatchScale en de hoek van het type, en de
+// vulkleur als achtergrond. Op 100% zoom (1 pt = 1 px), zodat "smal",
+// "midden" en "breed" van elkaar te onderscheiden zijn. Een type zonder
+// vulkleur staat op wit papier, ook in het donkere thema — zo ziet het er in
+// de tekening uit.
+
+export const ARCERING_VOORBEELD_PAPIER = '#ffffff';
+
+// De tekenparameters van een voorbeeld uit de props van een type.
+export function arceringVoorbeeldSpec(props = {}, kleur) {
+  return {
+    hatchPattern: props.hatchPattern || 'none',
+    hatchColor: props.hatchColor || props.strokeColor || kleur || '#000000',
+    hatchScale: props.hatchScale != null ? props.hatchScale : 100,
+    hatchAngle: props.hatchAngle || 0,
+    achtergrond: props.fillColor && props.fillColor !== 'none' && props.fillColor !== 'transparent'
+      ? props.fillColor
+      : ARCERING_VOORBEELD_PAPIER,
+  };
+}
+
+// Teken het voorbeeld op ctx. breedte/hoogte in CSS-pixels; pixelRatio is de
+// verhouding tussen canvaspixels en CSS-pixels.
+export function tekenArceringVoorbeeld(ctx, spec, { breedte, hoogte, pixelRatio = 1, zoom = 1 }) {
+  ctx.save();
+  ctx.fillStyle = spec.achtergrond || ARCERING_VOORBEELD_PAPIER;
+  ctx.fillRect(0, 0, breedte * pixelRatio, hoogte * pixelRatio);
+  ctx.scale(pixelRatio * zoom, pixelRatio * zoom);
+  const w = breedte / zoom;
+  const h = hoogte / zoom;
+  const vlak = [{ x: 0, y: 0 }, { x: w, y: 0 }, { x: w, y: h }, { x: 0, y: h }];
+  // Minstens één schermpixel breed, anders verdwijnen de fijnste lijnen in
+  // het kleine vakje; verder de breedte van het patroon zelf.
+  const minimaal = 1 / (pixelRatio * zoom);
+  const lijnbreedte = (familieBreedte) => Math.max(familieBreedte != null ? familieBreedte : 0.4, minimaal);
+  applyHatchFillPolygon(ctx, vlak, null, spec.hatchPattern, spec.hatchColor, spec.hatchScale, spec.hatchAngle, { lijnbreedte });
+  ctx.restore();
+}
+
+const VOORBEELD_CACHE = new Map();
+
+// Data-URL van het voorbeeld (gecachet: de kiezer toont ruim honderd typen).
+export function arceringVoorbeeldUrl(spec, { breedte = 64, hoogte = 24, pixelRatio = 1 } = {}) {
+  const sleutel = [spec.hatchPattern, spec.hatchColor, spec.hatchScale, spec.hatchAngle,
+    spec.achtergrond, breedte, hoogte, pixelRatio].join('|');
+  const bekend = VOORBEELD_CACHE.get(sleutel);
+  if (bekend) return bekend;
+  if (typeof document === 'undefined') return '';
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(breedte * pixelRatio);
+  canvas.height = Math.round(hoogte * pixelRatio);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return '';
+  tekenArceringVoorbeeld(ctx, spec, { breedte, hoogte, pixelRatio });
+  const url = canvas.toDataURL('image/png');
+  VOORBEELD_CACHE.set(sleutel, url);
+  return url;
 }
 
 // ---------------------------------------------------------------------------
