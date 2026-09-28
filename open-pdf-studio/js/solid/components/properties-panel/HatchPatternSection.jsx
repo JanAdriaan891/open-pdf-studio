@@ -5,6 +5,7 @@ import CollapsibleSection from './CollapsibleSection.jsx';
 import ColorPalettePicker from './ColorPalettePicker.jsx';
 import PrefComboBox from '../preferences/PrefComboBox.jsx';
 import { useTranslation } from '../../../i18n/useTranslation.js';
+import { uitklapPositie } from './uitklap-positie.js';
 import {
   HATCH_CATEGORIES,
   listHatchPatternsByCategory,
@@ -65,14 +66,17 @@ export default function HatchPatternSection() {
   // Button ref + computed dropdown position (Portal needs absolute viewport
   // coords because it's rendered outside the panel's overflow:hidden context).
   let buttonRef = null;
-  const [dropdownPos, setDropdownPos] = createSignal({ top: 0, right: 0 });
+  const [dropdownPos, setDropdownPos] = createSignal({ x: 0, y: 0, breedte: 320, maxHoogte: 420 });
 
   // Recompute Portal position whenever the dropdown opens AND on scroll/resize
-  // (so it tracks the button if the user scrolls the property panel).
+  // (so it tracks the button if the user scrolls the property panel). The
+  // list stays inside the window: onderaan het paneel klapt hij naar boven
+  // uit in plaats van onder de vensterrand te verdwijnen (#279).
   function updateDropdownPos() {
     if (!buttonRef) return;
     const r = buttonRef.getBoundingClientRect();
-    setDropdownPos({ top: r.bottom, right: window.innerWidth - r.right });
+    setDropdownPos(uitklapPositie(r, { breedte: window.innerWidth, hoogte: window.innerHeight },
+      { breedte: 320, maxHoogte: 420, uitlijning: 'rechts', tussenruimte: 0 }));
   }
   createEffect(() => {
     if (pickerOpen()) {
@@ -171,10 +175,10 @@ export default function HatchPatternSection() {
                   class="hatch-pattern-portal-dropdown"
                   style={{
                     position: 'fixed',
-                    top: `${dropdownPos().top}px`,
-                    right: `${dropdownPos().right}px`,
-                    width: '320px',
-                    'max-height': '420px',
+                    left: `${dropdownPos().x}px`,
+                    ...(dropdownPos().onder != null ? { bottom: `${dropdownPos().onder}px` } : { top: `${dropdownPos().y}px` }),
+                    width: `${dropdownPos().breedte}px`,
+                    'max-height': `${dropdownPos().maxHoogte}px`,
                     'overflow-y': 'auto',
                     background: 'var(--theme-surface, #fff)',
                     color: 'var(--theme-text, #333)',

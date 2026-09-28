@@ -5,6 +5,7 @@ import { styleTypesFor } from '../../../annotations/style-types.js';
 import { openDialog } from '../../stores/dialogStore.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { arceringVoorbeeldSpec, arceringVoorbeeldUrl } from '../../../annotations/rendering/hatch-patterns.js';
+import { uitklapPositie } from './uitklap-positie.js';
 
 // Generic STYLE TYPE picker — pinned at the TOP of the properties panel for
 // every annotation kind with a preset list (maatlijnen, lijnen/pijlen,
@@ -78,7 +79,7 @@ export default function DimensionTypeSection() {
   const { t } = useTranslation('properties');
   const [open, setOpen] = createSignal(false);
   const [query, setQuery] = createSignal('');
-  const [popupPos, setPopupPos] = createSignal({ x: 0, y: 0, w: 280 });
+  const [popupPos, setPopupPos] = createSignal({ x: 0, y: 0, breedte: 280, maxHoogte: 420 });
   let triggerRef;
   let searchRef;
 
@@ -100,7 +101,12 @@ export default function DimensionTypeSection() {
   function openPopup() {
     if (isLocked()) return;
     const r = triggerRef?.getBoundingClientRect();
-    if (r) setPopupPos({ x: r.left, y: r.bottom + 2, w: Math.max(280, r.width) });
+    // Binnen het venster houden: de lijst is breder dan de knop en viel
+    // anders voorbij de rechterrand (#279).
+    if (r) {
+      setPopupPos(uitklapPositie(r, { breedte: window.innerWidth, hoogte: window.innerHeight },
+        { breedte: Math.max(280, r.width), maxHoogte: 420 }));
+    }
     setQuery('');
     setOpen(true);
     requestAnimationFrame(() => searchRef?.focus());
@@ -142,8 +148,9 @@ export default function DimensionTypeSection() {
       <Show when={open()}>
         <Portal>
           <div class="style-type-popup" style={{
-            position: 'fixed', left: `${popupPos().x}px`, top: `${popupPos().y}px`,
-            width: `${popupPos().w}px`, 'max-height': '420px', 'z-index': 3000,
+            position: 'fixed', left: `${popupPos().x}px`,
+            ...(popupPos().onder != null ? { bottom: `${popupPos().onder}px` } : { top: `${popupPos().y}px` }),
+            width: `${popupPos().breedte}px`, 'max-height': `${popupPos().maxHoogte}px`, 'z-index': 3000,
             background: 'var(--theme-surface, #f5f5f5)', color: 'var(--theme-text, #000)',
             border: '1px solid var(--theme-border, #7a7a7a)',
             'box-shadow': '3px 3px 8px rgba(0,0,0,0.3)', display: 'flex', 'flex-direction': 'column',
