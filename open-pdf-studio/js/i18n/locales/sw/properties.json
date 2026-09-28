@@ -140,7 +140,7 @@
       "nen47-staal": "NEN47-18 Chuma",
       "nen47-aluminium": "NEN47-19 Alumini/shaba nyeusi/shaba",
       "nen47-kunststof": "NEN47-22 Plastiki",
-      "nen47-afdichtingsmiddel": "NEN47-23 Kizibo",
+      "nen47-afdichtingsmiddel": "NEN47-23 Kiziba nyufa",
       "nen47-maaiveld": "NEN47-25 Usawa wa ardhi"
     }
   },
@@ -655,7 +655,7 @@
       "inb-nen47-20-lood": "NEN47-20 Risasi",
       "inb-nen47-21-zink": "NEN47-21 Zinki",
       "inb-nen47-22-kunststof": "NEN47-22 Plastiki",
-      "inb-nen47-23-afdichtingsmiddel": "NEN47-23 Kizibo",
+      "inb-nen47-23-afdichtingsmiddel": "NEN47-23 Kiziba nyufa",
       "inb-nen47-24-bitumen": "NEN47-24 Lami",
       "inb-nen47-25-maaiveld": "NEN47-25 Usawa wa ardhi",
       "inb-nen47-26-zand": "NEN47-26 Mchanga",
@@ -726,7 +726,7 @@
       "inb-zand-gekleurd": "Mchanga (wa rangi)",
       "inb-water-gekleurd": "Maji (ya rangi)",
       "inb-glas-helder": "Kioo, angavu",
-      "inb-glas-mat": "Kioo, kisichoonyesha"
+      "inb-glas-mat": "Kioo, cha ukungu"
     }
   }
 }
