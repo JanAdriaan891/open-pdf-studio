@@ -19,6 +19,7 @@
 import { state, getActiveDocument } from '../../core/state.js';
 import { applyToolTransform } from '../tool-context.js';
 import { computeUndoLastPoint } from './filled-area-undo.js';
+import { regioMonsterpunt, schetsArcering } from './filled-area-arcering.js';
 import { createAnnotation } from '../../annotations/factory.js';
 import { recordAdd } from '../../core/undo-manager.js';
 import i18next from '../../i18n/config.js';
@@ -311,20 +312,10 @@ export const filledAreaTool = {
     const opacity = (prefs.filledAreaOpacity ?? 100) / 100;
     // Region-aware preview: the hatch density (and thus the look) during
     // drawing must MATCH the final render exactly — same regionFactor
-    // sampling as rendering.js does for committed filledAreas, so nothing
-    // "jumps" at finish.
-    const _faFirst = state.filledAreaPoints[0] || { x: snapX, y: snapY };
-    const _faRegionFactor = getRegionScaleFactor(
-      getActiveDocument()?.currentPage || 1, _faFirst.x, _faFirst.y
-    );
-    const hatchOpts = prefs.filledAreaHatchPattern && prefs.filledAreaHatchPattern !== 'none'
-      ? {
-          pattern: prefs.filledAreaHatchPattern,
-          color: prefs.filledAreaHatchColor || strokeColor,
-          scale: (prefs.filledAreaHatchScale ?? 100) * _faRegionFactor,
-          angle: prefs.filledAreaHatchAngle ?? 0,
-        }
-      : null;
+    // sampling as rendering.js does for committed filledAreas (first point
+    // of the OUTER contour, also in the holes phase), so nothing "jumps" at
+    // finish.
+    const hatchOpts = _schetsArcering(prefs, snapX, snapY);
 
     canvasCtx.strokeStyle = strokeColor;
     canvasCtx.lineWidth = lineWidth;
@@ -689,14 +680,7 @@ function _drawHolesPhasePreview(ctx, cursorX, cursorY) {
   const lineWidth = prefs.filledAreaLineWidth || 1;
   const borderStyle = prefs.filledAreaBorderStyle || 'solid';
   const opacity = (prefs.filledAreaOpacity ?? 100) / 100;
-  const hatchOpts = prefs.filledAreaHatchPattern && prefs.filledAreaHatchPattern !== 'none'
-    ? {
-        pattern: prefs.filledAreaHatchPattern,
-        color: prefs.filledAreaHatchColor || strokeColor,
-        scale: prefs.filledAreaHatchScale ?? 100,
-        angle: prefs.filledAreaHatchAngle ?? 0,
-      }
-    : null;
+  const hatchOpts = _schetsArcering(prefs, cursorX, cursorY);
 
   canvasCtx.save();
   applyToolTransform(canvasCtx);
@@ -714,6 +698,14 @@ function _drawHolesPhasePreview(ctx, cursorX, cursorY) {
   canvasCtx.fillText(i18next.t('statusbar:filledAreaSketch.holesPhaseHint'), cursorX + 12 / scale, cursorY - 4 / scale);
   canvasCtx.globalAlpha = 1;
   canvasCtx.restore();
+}
+
+// Arcering van de schets: parameters en schaalregio zoals het afgeronde vlak.
+function _schetsArcering(prefs, cursorX, cursorY) {
+  const punt = regioMonsterpunt(state.filledAreaPhase, state.filledAreaOuterPoints,
+    state.filledAreaPoints, { x: cursorX, y: cursorY });
+  const regioFactor = getRegionScaleFactor(getActiveDocument()?.currentPage || 1, punt.x, punt.y);
+  return schetsArcering(prefs, regioFactor);
 }
 
 function _drawHoverSnap(ctx, x, y) {
