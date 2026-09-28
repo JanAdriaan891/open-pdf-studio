@@ -11,7 +11,7 @@
   "update": "Uppdatera",
   "yes": "Ja",
   "no": "Nej",
-  "none": "None",
+  "none": "Ingen",
   "export": "Exportera",
   "import": "Importera",
   "print": "Skriv ut",
@@ -127,5 +127,6 @@
     "copied": "Utsnitt kopierat — klistra in det i en annan ritning",
     "failed": "Utklippet misslyckades",
     "clipboardEmpty": "Inget utsnitt i Urklipp"
-  }
+  },
+  "mixed": "Blandad"
 }

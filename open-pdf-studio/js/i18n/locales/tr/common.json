@@ -11,7 +11,7 @@
   "update": "Güncelle",
   "yes": "Evet",
   "no": "Hayır",
-  "none": "None",
+  "none": "Yok",
   "export": "Dışa Aktar",
   "import": "İçe Aktar",
   "print": "Yazdır",
@@ -127,5 +127,6 @@
     "copied": "Kesit kopyalandı — başka bir çizime yapıştırın",
     "failed": "Kesme başarısız oldu",
     "clipboardEmpty": "Panoda kesit yok"
-  }
+  },
+  "mixed": "Karışık"
 }

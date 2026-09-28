@@ -777,5 +777,29 @@
     "underlayLimited": "রেজোলিউশন {{dpi}} dpi-এ কমানো হয়েছে",
     "underlayNoMeasure": "আন্ডারলেতে প্রযোজ্য নয়; পরিমাপ স্কেল পৃষ্ঠা থেকে আসে",
     "queued": "আরও {{n}}টি অঙ্কন সারিতে অপেক্ষমাণ"
+  },
+  "styleType": {
+    "lineTypes": "রেখার ধরন",
+    "arrowTypes": "তীরের ধরন",
+    "dimensionTypes": "মাত্রার ধরন",
+    "hatchTypes": "হ্যাচের ধরন",
+    "close": "বন্ধ করুন",
+    "preview": "প্রিভিউ",
+    "color": "রং",
+    "textMm": "লেখা (mm)",
+    "unit": "একক",
+    "background": "পটভূমি",
+    "scale": "স্কেল",
+    "noBackground": "পটভূমি নেই",
+    "deleteType": "ধরন মুছুন",
+    "resetDefault": "ডিফল্টে ফেরান",
+    "name": "নাম",
+    "thicknessMm": "পুরুত্ব (mm)",
+    "style": "শৈলী",
+    "backgroundColor": "পটভূমির রং",
+    "newType": "নতুন ধরন",
+    "addNewType": "+ নতুন ধরন",
+    "editTitle": "{{kind}} সম্পাদনা",
+    "genericTypes": "ধরন"
   }
 }

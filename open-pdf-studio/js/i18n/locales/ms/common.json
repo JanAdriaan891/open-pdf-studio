@@ -11,7 +11,7 @@
   "update": "Kemas Kini",
   "yes": "Ya",
   "no": "Tidak",
-  "none": "None",
+  "none": "Tiada",
   "export": "Eksport",
   "import": "Import",
   "print": "Cetak",
@@ -127,5 +127,6 @@
     "copied": "Keratan disalin — tampalkannya ke lukisan lain",
     "failed": "Pemotongan gagal",
     "clipboardEmpty": "Tiada keratan dalam papan keratan"
-  }
+  },
+  "mixed": "Bercampur"
 }

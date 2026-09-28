@@ -11,7 +11,7 @@
   "update": "Aggiorna",
   "yes": "Sì",
   "no": "No",
-  "none": "None",
+  "none": "Nessuno",
   "export": "Esporta",
   "import": "Importa",
   "print": "Stampa",
@@ -127,5 +127,6 @@
     "copied": "Ritaglio copiato — incollalo in un altro disegno",
     "failed": "Ritaglio non riuscito",
     "clipboardEmpty": "Nessun ritaglio negli appunti"
-  }
+  },
+  "mixed": "Misto"
 }

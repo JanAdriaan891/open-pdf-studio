@@ -777,5 +777,29 @@
     "underlayLimited": "Résolution réduite à {{dpi}} ppp",
     "underlayNoMeasure": "Sans effet pour un fond de plan ; l'échelle de mesure vient de la page",
     "queued": "{{n}} dessin(s) de plus en attente"
+  },
+  "styleType": {
+    "lineTypes": "Types de ligne",
+    "arrowTypes": "Types de flèche",
+    "dimensionTypes": "Types de cote",
+    "hatchTypes": "Types de hachure",
+    "close": "Fermer",
+    "preview": "Aperçu",
+    "color": "Couleur",
+    "textMm": "Texte (mm)",
+    "unit": "Unité",
+    "background": "Arr.-plan",
+    "scale": "Échelle",
+    "noBackground": "Sans arrière-plan",
+    "deleteType": "Supprimer le type",
+    "resetDefault": "Rétablir la valeur par défaut",
+    "name": "Nom",
+    "thicknessMm": "Épaisseur (mm)",
+    "style": "Style",
+    "backgroundColor": "Couleur d'arrière-plan",
+    "newType": "Nouveau type",
+    "addNewType": "+ Nouveau type",
+    "editTitle": "Modifier : {{kind}}",
+    "genericTypes": "Types"
   }
 }

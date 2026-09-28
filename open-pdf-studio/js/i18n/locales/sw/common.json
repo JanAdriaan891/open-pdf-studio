@@ -11,7 +11,7 @@
   "update": "Sasisha",
   "yes": "Ndiyo",
   "no": "Hapana",
-  "none": "None",
+  "none": "Hakuna",
   "export": "Hamisha nje",
   "import": "Ingiza",
   "print": "Chapisha",
@@ -127,5 +127,6 @@
     "copied": "Kipande kimenakiliwa — kibandike kwenye mchoro mwingine",
     "failed": "Kukata kumeshindwa",
     "clipboardEmpty": "Hakuna kipande kwenye ubao wa kunakili"
-  }
+  },
+  "mixed": "Mchanganyiko"
 }

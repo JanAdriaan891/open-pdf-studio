@@ -777,5 +777,29 @@
     "underlayLimited": "Tarkkuus laskettu {{dpi}} dpi:hin",
     "underlayNoMeasure": "Ei koske taustakuvaa; mittakaava tulee sivulta",
     "queued": "Jonossa vielä {{n}} piirustus(ta)"
+  },
+  "styleType": {
+    "lineTypes": "Viivatyypit",
+    "arrowTypes": "Nuolityypit",
+    "dimensionTypes": "Mittatyypit",
+    "hatchTypes": "Viivoitustyypit",
+    "close": "Sulje",
+    "preview": "Esikatselu",
+    "color": "Väri",
+    "textMm": "Teksti (mm)",
+    "unit": "Yksikkö",
+    "background": "Tausta",
+    "scale": "Mittakaava",
+    "noBackground": "Ei taustaa",
+    "deleteType": "Poista tyyppi",
+    "resetDefault": "Palauta oletus",
+    "name": "Nimi",
+    "thicknessMm": "Paksuus (mm)",
+    "style": "Tyyli",
+    "backgroundColor": "Taustaväri",
+    "newType": "Uusi tyyppi",
+    "addNewType": "+ Uusi tyyppi",
+    "editTitle": "Muokkaa: {{kind}}",
+    "genericTypes": "Tyypit"
   }
 }

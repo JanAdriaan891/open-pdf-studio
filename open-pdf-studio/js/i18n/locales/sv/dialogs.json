@@ -777,5 +777,29 @@
     "underlayLimited": "Upplösning sänkt till {{dpi}} dpi",
     "underlayNoMeasure": "Gäller inte för ett underlag; mätskalan kommer från sidan",
     "queued": "{{n}} ritning(ar) till i kön"
+  },
+  "styleType": {
+    "lineTypes": "Linjetyper",
+    "arrowTypes": "Piltyper",
+    "dimensionTypes": "Måttyper",
+    "hatchTypes": "Skrafferingstyper",
+    "close": "Stäng",
+    "preview": "Förhandsgranskning",
+    "color": "Färg",
+    "textMm": "Text (mm)",
+    "unit": "Enhet",
+    "background": "Bakgr.",
+    "scale": "Skala",
+    "noBackground": "Ingen bakgrund",
+    "deleteType": "Ta bort typ",
+    "resetDefault": "Återställ standard",
+    "name": "Namn",
+    "thicknessMm": "Tjocklek (mm)",
+    "style": "Stil",
+    "backgroundColor": "Bakgrundsfärg",
+    "newType": "Ny typ",
+    "addNewType": "+ Ny typ",
+    "editTitle": "Redigera {{kind}}",
+    "genericTypes": "Typer"
   }
 }

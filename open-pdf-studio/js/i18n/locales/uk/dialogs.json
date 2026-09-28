@@ -777,5 +777,29 @@
     "underlayLimited": "Роздільну здатність знижено до {{dpi}} dpi",
     "underlayNoMeasure": "Не стосується підкладки; масштаб береться зі сторінки",
     "queued": "Ще {{n}} креслення в черзі"
+  },
+  "styleType": {
+    "lineTypes": "Типи ліній",
+    "arrowTypes": "Типи стрілок",
+    "dimensionTypes": "Типи розмірів",
+    "hatchTypes": "Типи штрихування",
+    "close": "Закрити",
+    "preview": "Попередній перегляд",
+    "color": "Колір",
+    "textMm": "Текст (мм)",
+    "unit": "Одиниця",
+    "background": "Тло",
+    "scale": "Масштаб",
+    "noBackground": "Без тла",
+    "deleteType": "Видалити тип",
+    "resetDefault": "Скинути до типового",
+    "name": "Назва",
+    "thicknessMm": "Товщина (мм)",
+    "style": "Стиль",
+    "backgroundColor": "Колір тла",
+    "newType": "Новий тип",
+    "addNewType": "+ Новий тип",
+    "editTitle": "Редагувати: {{kind}}",
+    "genericTypes": "Типи"
   }
 }

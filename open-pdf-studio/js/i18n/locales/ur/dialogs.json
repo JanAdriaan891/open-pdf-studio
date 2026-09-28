@@ -777,5 +777,29 @@
     "underlayLimited": "ریزولوشن کم کرکے {{dpi}} dpi کر دیا گیا",
     "underlayNoMeasure": "زیریں تہہ پر لاگو نہیں؛ پیمائشی پیمانہ صفحے سے آتا ہے",
     "queued": "قطار میں مزید {{n}} ڈرائنگ"
+  },
+  "styleType": {
+    "lineTypes": "لائن کی اقسام",
+    "arrowTypes": "تیر کی اقسام",
+    "dimensionTypes": "پیمائش کی اقسام",
+    "hatchTypes": "ہیچ کی اقسام",
+    "close": "بند کریں",
+    "preview": "پیش منظر",
+    "color": "رنگ",
+    "textMm": "متن (mm)",
+    "unit": "اکائی",
+    "background": "پس منظر",
+    "scale": "اسکیل",
+    "noBackground": "کوئی پس منظر نہیں",
+    "deleteType": "قسم حذف کریں",
+    "resetDefault": "ڈیفالٹ پر بحال کریں",
+    "name": "نام",
+    "thicknessMm": "موٹائی (mm)",
+    "style": "انداز",
+    "backgroundColor": "پس منظر کا رنگ",
+    "newType": "نئی قسم",
+    "addNewType": "+ نئی قسم",
+    "editTitle": "{{kind}} میں ترمیم",
+    "genericTypes": "اقسام"
   }
 }

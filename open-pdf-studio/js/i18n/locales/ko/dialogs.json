@@ -777,5 +777,29 @@
     "underlayLimited": "해상도가 {{dpi}} dpi로 낮아졌습니다",
     "underlayNoMeasure": "밑그림에는 적용되지 않습니다. 측정 축척은 페이지에서 가져옵니다",
     "queued": "도면 {{n}}개 더 대기 중"
+  },
+  "styleType": {
+    "lineTypes": "선 유형",
+    "arrowTypes": "화살표 유형",
+    "dimensionTypes": "치수 유형",
+    "hatchTypes": "해치 유형",
+    "close": "닫기",
+    "preview": "미리 보기",
+    "color": "색상",
+    "textMm": "텍스트 (mm)",
+    "unit": "단위",
+    "background": "배경",
+    "scale": "축척",
+    "noBackground": "배경 없음",
+    "deleteType": "유형 삭제",
+    "resetDefault": "기본값으로 재설정",
+    "name": "이름",
+    "thicknessMm": "두께 (mm)",
+    "style": "스타일",
+    "backgroundColor": "배경색",
+    "newType": "새 유형",
+    "addNewType": "+ 새 유형",
+    "editTitle": "{{kind}} 편집",
+    "genericTypes": "유형"
   }
 }

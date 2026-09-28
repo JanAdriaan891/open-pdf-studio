@@ -11,7 +11,7 @@
   "update": "Ažuriraj",
   "yes": "Da",
   "no": "Ne",
-  "none": "None",
+  "none": "Nema",
   "export": "Izvoz",
   "import": "Uvoz",
   "print": "Ispis",
@@ -127,5 +127,6 @@
     "copied": "Isječak kopiran — zalijepite ga u drugi crtež",
     "failed": "Izrezivanje nije uspjelo",
     "clipboardEmpty": "U međuspremniku nema isječka"
-  }
+  },
+  "mixed": "Mješovito"
 }

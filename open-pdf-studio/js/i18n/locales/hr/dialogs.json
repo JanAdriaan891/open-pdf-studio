@@ -777,5 +777,29 @@
     "underlayLimited": "Razlučivost smanjena na {{dpi}} dpi",
     "underlayNoMeasure": "Ne odnosi se na podlogu; mjerilo dolazi sa stranice",
     "queued": "Još {{n}} crtež(a) u redu čekanja"
+  },
+  "styleType": {
+    "lineTypes": "Vrste linija",
+    "arrowTypes": "Vrste strelica",
+    "dimensionTypes": "Vrste kota",
+    "hatchTypes": "Vrste šrafura",
+    "close": "Zatvori",
+    "preview": "Pregled",
+    "color": "Boja",
+    "textMm": "Tekst (mm)",
+    "unit": "Jedinica",
+    "background": "Pozadina",
+    "scale": "Mjerilo",
+    "noBackground": "Bez pozadine",
+    "deleteType": "Izbriši vrstu",
+    "resetDefault": "Vrati zadano",
+    "name": "Naziv",
+    "thicknessMm": "Debljina (mm)",
+    "style": "Stil",
+    "backgroundColor": "Boja pozadine",
+    "newType": "Nova vrsta",
+    "addNewType": "+ Nova vrsta",
+    "editTitle": "Uredi: {{kind}}",
+    "genericTypes": "Vrste"
   }
 }

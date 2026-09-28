@@ -777,5 +777,29 @@
     "underlayLimited": "تم تخفيض الدقة إلى {{dpi}} نقطة/بوصة",
     "underlayNoMeasure": "لا ينطبق على الطبقة السفلية؛ مقياس القياس يأتي من الصفحة",
     "queued": "{{n}} رسم (رسوم) آخر في قائمة الانتظار"
+  },
+  "styleType": {
+    "lineTypes": "أنواع الخطوط",
+    "arrowTypes": "أنواع الأسهم",
+    "dimensionTypes": "أنواع الأبعاد",
+    "hatchTypes": "أنواع التهشير",
+    "close": "إغلاق",
+    "preview": "معاينة",
+    "color": "اللون",
+    "textMm": "النص (mm)",
+    "unit": "الوحدة",
+    "background": "الخلفية",
+    "scale": "المقياس",
+    "noBackground": "بدون خلفية",
+    "deleteType": "حذف النوع",
+    "resetDefault": "إعادة التعيين إلى الافتراضي",
+    "name": "الاسم",
+    "thicknessMm": "السُمك (mm)",
+    "style": "النمط",
+    "backgroundColor": "لون الخلفية",
+    "newType": "نوع جديد",
+    "addNewType": "+ نوع جديد",
+    "editTitle": "تحرير {{kind}}",
+    "genericTypes": "الأنواع"
   }
 }

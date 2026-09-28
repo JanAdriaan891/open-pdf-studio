@@ -11,7 +11,7 @@
   "update": "Oppdater",
   "yes": "Ja",
   "no": "Nei",
-  "none": "None",
+  "none": "Ingen",
   "export": "Eksporter",
   "import": "Importer",
   "print": "Skriv ut",
@@ -127,5 +127,6 @@
     "copied": "Utsnitt kopiert — lim det inn i en annen tegning",
     "failed": "Utklipp mislyktes",
     "clipboardEmpty": "Ingen utsnitt på utklippstavlen"
-  }
+  },
+  "mixed": "Blandet"
 }

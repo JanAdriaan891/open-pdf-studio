@@ -777,5 +777,29 @@
     "underlayLimited": "分辨率已降至 {{dpi}} dpi",
     "underlayNoMeasure": "不适用于底图；测量比例来自页面",
     "queued": "队列中还有 {{n}} 张图纸"
+  },
+  "styleType": {
+    "lineTypes": "线型",
+    "arrowTypes": "箭头类型",
+    "dimensionTypes": "标注类型",
+    "hatchTypes": "填充类型",
+    "close": "关闭",
+    "preview": "预览",
+    "color": "颜色",
+    "textMm": "文字 (mm)",
+    "unit": "单位",
+    "background": "背景",
+    "scale": "比例",
+    "noBackground": "无背景",
+    "deleteType": "删除类型",
+    "resetDefault": "恢复默认",
+    "name": "名称",
+    "thicknessMm": "粗细 (mm)",
+    "style": "样式",
+    "backgroundColor": "背景颜色",
+    "newType": "新类型",
+    "addNewType": "+ 新类型",
+    "editTitle": "编辑{{kind}}",
+    "genericTypes": "类型"
   }
 }

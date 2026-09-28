@@ -777,5 +777,29 @@
     "underlayLimited": "Разрешение снижено до {{dpi}} dpi",
     "underlayNoMeasure": "Не применяется к подложке; масштаб берётся со страницы",
     "queued": "Ещё {{n}} чертёж(ей) в очереди"
+  },
+  "styleType": {
+    "lineTypes": "Типы линий",
+    "arrowTypes": "Типы стрелок",
+    "dimensionTypes": "Типы размеров",
+    "hatchTypes": "Типы штриховки",
+    "close": "Закрыть",
+    "preview": "Предпросмотр",
+    "color": "Цвет",
+    "textMm": "Текст (мм)",
+    "unit": "Единица",
+    "background": "Фон",
+    "scale": "Масштаб",
+    "noBackground": "Без фона",
+    "deleteType": "Удалить тип",
+    "resetDefault": "Сбросить по умолчанию",
+    "name": "Название",
+    "thicknessMm": "Толщина (мм)",
+    "style": "Стиль",
+    "backgroundColor": "Цвет фона",
+    "newType": "Новый тип",
+    "addNewType": "+ Новый тип",
+    "editTitle": "Изменить: {{kind}}",
+    "genericTypes": "Типы"
   }
 }

@@ -777,5 +777,29 @@
     "underlayLimited": "A felbontás {{dpi}} dpi-re csökkentve",
     "underlayNoMeasure": "Alátétre nem vonatkozik; a méretarány az oldalról jön",
     "queued": "Még {{n}} rajz a várólistán"
+  },
+  "styleType": {
+    "lineTypes": "Vonaltípusok",
+    "arrowTypes": "Nyíltípusok",
+    "dimensionTypes": "Mérettípusok",
+    "hatchTypes": "Sraffozástípusok",
+    "close": "Bezárás",
+    "preview": "Előnézet",
+    "color": "Szín",
+    "textMm": "Szöveg (mm)",
+    "unit": "Mértékegység",
+    "background": "Háttér",
+    "scale": "Lépték",
+    "noBackground": "Nincs háttér",
+    "deleteType": "Típus törlése",
+    "resetDefault": "Alapértelmezés visszaállítása",
+    "name": "Név",
+    "thicknessMm": "Vastagság (mm)",
+    "style": "Stílus",
+    "backgroundColor": "Háttérszín",
+    "newType": "Új típus",
+    "addNewType": "+ Új típus",
+    "editTitle": "{{kind}} szerkesztése",
+    "genericTypes": "Típusok"
   }
 }

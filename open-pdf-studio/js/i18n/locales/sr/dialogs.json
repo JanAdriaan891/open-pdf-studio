@@ -777,5 +777,29 @@
     "underlayLimited": "Резолуција смањена на {{dpi}} dpi",
     "underlayNoMeasure": "Не важи за подлогу; размера долази са странице",
     "queued": "Још {{n}} цртеж(а) у реду"
+  },
+  "styleType": {
+    "lineTypes": "Типови линија",
+    "arrowTypes": "Типови стрелица",
+    "dimensionTypes": "Типови котирања",
+    "hatchTypes": "Типови шрафура",
+    "close": "Затвори",
+    "preview": "Преглед",
+    "color": "Боја",
+    "textMm": "Текст (mm)",
+    "unit": "Јединица",
+    "background": "Позадина",
+    "scale": "Размера",
+    "noBackground": "Без позадине",
+    "deleteType": "Обриши тип",
+    "resetDefault": "Врати подразумевано",
+    "name": "Назив",
+    "thicknessMm": "Дебљина (mm)",
+    "style": "Стил",
+    "backgroundColor": "Боја позадине",
+    "newType": "Нови тип",
+    "addNewType": "+ Нови тип",
+    "editTitle": "Уреди: {{kind}}",
+    "genericTypes": "Типови"
   }
 }

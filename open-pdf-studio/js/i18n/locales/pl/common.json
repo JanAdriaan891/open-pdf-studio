@@ -11,7 +11,7 @@
   "update": "Aktualizuj",
   "yes": "Tak",
   "no": "Nie",
-  "none": "None",
+  "none": "Brak",
   "export": "Eksportuj",
   "import": "Importuj",
   "print": "Drukuj",
@@ -127,5 +127,6 @@
     "copied": "Wycinek skopiowany — wklej go do innego rysunku",
     "failed": "Wycinanie nie powiodło się",
     "clipboardEmpty": "Brak wycinka w schowku"
-  }
+  },
+  "mixed": "Mieszane"
 }

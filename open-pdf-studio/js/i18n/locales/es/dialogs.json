@@ -777,5 +777,29 @@
     "underlayLimited": "Resolución reducida a {{dpi}} ppp",
     "underlayNoMeasure": "No se aplica a un calco subyacente; la escala de medición viene de la página",
     "queued": "{{n}} dibujo(s) más en la cola"
+  },
+  "styleType": {
+    "lineTypes": "Tipos de línea",
+    "arrowTypes": "Tipos de flecha",
+    "dimensionTypes": "Tipos de cota",
+    "hatchTypes": "Tipos de sombreado",
+    "close": "Cerrar",
+    "preview": "Vista previa",
+    "color": "Color",
+    "textMm": "Texto (mm)",
+    "unit": "Unidad",
+    "background": "Fondo",
+    "scale": "Escala",
+    "noBackground": "Sin fondo",
+    "deleteType": "Eliminar tipo",
+    "resetDefault": "Restablecer valor predeterminado",
+    "name": "Nombre",
+    "thicknessMm": "Grosor (mm)",
+    "style": "Estilo",
+    "backgroundColor": "Color de fondo",
+    "newType": "Nuevo tipo",
+    "addNewType": "+ Nuevo tipo",
+    "editTitle": "Editar {{kind}}",
+    "genericTypes": "Tipos"
   }
 }

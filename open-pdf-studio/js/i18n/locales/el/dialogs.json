@@ -777,5 +777,29 @@
     "underlayLimited": "Η ανάλυση μειώθηκε σε {{dpi}} dpi",
     "underlayNoMeasure": "Δεν ισχύει για υπόστρωμα· η κλίμακα μέτρησης προέρχεται από τη σελίδα",
     "queued": "Ακόμη {{n}} σχέδιο(-α) στην ουρά"
+  },
+  "styleType": {
+    "lineTypes": "Τύποι γραμμής",
+    "arrowTypes": "Τύποι βέλους",
+    "dimensionTypes": "Τύποι διαστάσεων",
+    "hatchTypes": "Τύποι διαγράμμισης",
+    "close": "Κλείσιμο",
+    "preview": "Προεπισκόπηση",
+    "color": "Χρώμα",
+    "textMm": "Κείμενο (mm)",
+    "unit": "Μονάδα",
+    "background": "Φόντο",
+    "scale": "Κλίμακα",
+    "noBackground": "Χωρίς φόντο",
+    "deleteType": "Διαγραφή τύπου",
+    "resetDefault": "Επαναφορά προεπιλογής",
+    "name": "Όνομα",
+    "thicknessMm": "Πάχος (mm)",
+    "style": "Στυλ",
+    "backgroundColor": "Χρώμα φόντου",
+    "newType": "Νέος τύπος",
+    "addNewType": "+ Νέος τύπος",
+    "editTitle": "Επεξεργασία: {{kind}}",
+    "genericTypes": "Τύποι"
   }
 }

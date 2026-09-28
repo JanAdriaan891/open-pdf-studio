@@ -777,5 +777,29 @@
     "underlayLimited": "Resolució reduïda a {{dpi}} ppp",
     "underlayNoMeasure": "No s'aplica a un calc de fons; l'escala de mesura ve de la pàgina",
     "queued": "{{n}} dibuix(os) més a la cua"
+  },
+  "styleType": {
+    "lineTypes": "Tipus de línia",
+    "arrowTypes": "Tipus de fletxa",
+    "dimensionTypes": "Tipus de cota",
+    "hatchTypes": "Tipus d'ombrejat",
+    "close": "Tanca",
+    "preview": "Previsualització",
+    "color": "Color",
+    "textMm": "Text (mm)",
+    "unit": "Unitat",
+    "background": "Fons",
+    "scale": "Escala",
+    "noBackground": "Sense fons",
+    "deleteType": "Suprimeix el tipus",
+    "resetDefault": "Restableix el valor per defecte",
+    "name": "Nom",
+    "thicknessMm": "Gruix (mm)",
+    "style": "Estil",
+    "backgroundColor": "Color de fons",
+    "newType": "Tipus nou",
+    "addNewType": "+ Tipus nou",
+    "editTitle": "Edita: {{kind}}",
+    "genericTypes": "Tipus"
   }
 }

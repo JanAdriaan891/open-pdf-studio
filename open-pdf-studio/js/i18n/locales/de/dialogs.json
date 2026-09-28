@@ -777,5 +777,29 @@
     "underlayLimited": "Auflösung auf {{dpi}} dpi verringert",
     "underlayNoMeasure": "Gilt nicht für eine Unterlage; der Messmaßstab kommt von der Seite",
     "queued": "Noch {{n}} Zeichnung(en) in der Warteschlange"
+  },
+  "styleType": {
+    "lineTypes": "Linientypen",
+    "arrowTypes": "Pfeiltypen",
+    "dimensionTypes": "Bemaßungstypen",
+    "hatchTypes": "Schraffurtypen",
+    "close": "Schließen",
+    "preview": "Vorschau",
+    "color": "Farbe",
+    "textMm": "Text (mm)",
+    "unit": "Einheit",
+    "background": "Hintergr.",
+    "scale": "Maßstab",
+    "noBackground": "Kein Hintergrund",
+    "deleteType": "Typ löschen",
+    "resetDefault": "Auf Standard zurücksetzen",
+    "name": "Name",
+    "thicknessMm": "Stärke (mm)",
+    "style": "Stil",
+    "backgroundColor": "Hintergrundfarbe",
+    "newType": "Neuer Typ",
+    "addNewType": "+ Neuer Typ",
+    "editTitle": "{{kind}} bearbeiten",
+    "genericTypes": "Typen"
   }
 }

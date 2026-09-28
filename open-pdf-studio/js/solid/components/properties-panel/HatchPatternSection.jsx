@@ -103,11 +103,14 @@ export default function HatchPatternSection() {
     }
   });
 
+  // De namen staan onder appearance.* (zoals de labels hierboven); zonder dat
+  // voorvoegsel vond de kiezer ze nooit en toonde hij de kale id's (#279).
   const patternLabel = (id) => {
-    const key = `hatchPatterns.${id}`;
+    const key = `appearance.hatchPatterns.${id}`;
     const translated = t(key);
-    // i18next returns the key itself when missing — fall back to the id
-    return translated && translated !== key ? translated : id;
+    // i18next returns the key itself when missing (with converted digits in
+    // Farsi/Arabic) — fall back to the id
+    return translated && !translated.startsWith('appearance.') ? translated : id;
   };
 
   const currentSwatch = () => {
@@ -205,9 +208,9 @@ export default function HatchPatternSection() {
                         'font-size': '11px',
                       }}>
                         {(() => {
-                          const k = `hatchCategories.${cat}`;
+                          const k = `appearance.hatchCategories.${cat}`;
                           const v = t(k);
-                          return v && v !== k ? v : cat;
+                          return v && !v.startsWith('appearance.') ? v : cat;
                         })()}
                       </div>
                       <For each={grouped()[cat]}>

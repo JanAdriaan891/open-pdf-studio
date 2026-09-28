@@ -777,5 +777,29 @@
     "underlayLimited": "रिज़ॉल्यूशन घटाकर {{dpi}} dpi किया गया",
     "underlayNoMeasure": "अंडरले पर लागू नहीं; माप पैमाना पृष्ठ से आता है",
     "queued": "कतार में {{n}} और ड्राइंग"
+  },
+  "styleType": {
+    "lineTypes": "रेखा प्रकार",
+    "arrowTypes": "तीर प्रकार",
+    "dimensionTypes": "आयाम प्रकार",
+    "hatchTypes": "हैच प्रकार",
+    "close": "बंद करें",
+    "preview": "पूर्वावलोकन",
+    "color": "रंग",
+    "textMm": "पाठ (mm)",
+    "unit": "इकाई",
+    "background": "पृष्ठभूमि",
+    "scale": "स्केल",
+    "noBackground": "कोई पृष्ठभूमि नहीं",
+    "deleteType": "प्रकार हटाएँ",
+    "resetDefault": "डिफ़ॉल्ट पर रीसेट करें",
+    "name": "नाम",
+    "thicknessMm": "मोटाई (mm)",
+    "style": "शैली",
+    "backgroundColor": "पृष्ठभूमि रंग",
+    "newType": "नया प्रकार",
+    "addNewType": "+ नया प्रकार",
+    "editTitle": "{{kind}} संपादित करें",
+    "genericTypes": "प्रकार"
   }
 }

@@ -11,7 +11,7 @@
   "update": "Perbarui",
   "yes": "Ya",
   "no": "Tidak",
-  "none": "None",
+  "none": "Tidak ada",
   "export": "Ekspor",
   "import": "Impor",
   "print": "Cetak",
@@ -127,5 +127,6 @@
     "copied": "Potongan disalin — tempelkan ke gambar lain",
     "failed": "Pemotongan gagal",
     "clipboardEmpty": "Tidak ada potongan di papan klip"
-  }
+  },
+  "mixed": "Campuran"
 }

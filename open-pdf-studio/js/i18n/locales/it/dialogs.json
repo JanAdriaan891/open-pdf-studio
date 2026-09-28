@@ -777,5 +777,29 @@
     "underlayLimited": "Risoluzione ridotta a {{dpi}} dpi",
     "underlayNoMeasure": "Non si applica a un sottofondo; la scala di misura viene dalla pagina",
     "queued": "Altri {{n}} disegni in coda"
+  },
+  "styleType": {
+    "lineTypes": "Tipi di linea",
+    "arrowTypes": "Tipi di freccia",
+    "dimensionTypes": "Tipi di quota",
+    "hatchTypes": "Tipi di tratteggio",
+    "close": "Chiudi",
+    "preview": "Anteprima",
+    "color": "Colore",
+    "textMm": "Testo (mm)",
+    "unit": "Unità",
+    "background": "Sfondo",
+    "scale": "Scala",
+    "noBackground": "Nessuno sfondo",
+    "deleteType": "Elimina tipo",
+    "resetDefault": "Ripristina predefinito",
+    "name": "Nome",
+    "thicknessMm": "Spessore (mm)",
+    "style": "Stile",
+    "backgroundColor": "Colore di sfondo",
+    "newType": "Nuovo tipo",
+    "addNewType": "+ Nuovo tipo",
+    "editTitle": "Modifica {{kind}}",
+    "genericTypes": "Tipi"
   }
 }

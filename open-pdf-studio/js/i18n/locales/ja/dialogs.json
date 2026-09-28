@@ -777,5 +777,29 @@
     "underlayLimited": "解像度を {{dpi}} dpi に下げました",
     "underlayNoMeasure": "下敷きには適用されません。計測縮尺はページから取得します",
     "queued": "あと {{n}} 件の図面が待機中"
+  },
+  "styleType": {
+    "lineTypes": "線の種類",
+    "arrowTypes": "矢印の種類",
+    "dimensionTypes": "寸法の種類",
+    "hatchTypes": "ハッチングの種類",
+    "close": "閉じる",
+    "preview": "プレビュー",
+    "color": "色",
+    "textMm": "文字 (mm)",
+    "unit": "単位",
+    "background": "背景",
+    "scale": "尺度",
+    "noBackground": "背景なし",
+    "deleteType": "種類を削除",
+    "resetDefault": "既定に戻す",
+    "name": "名前",
+    "thicknessMm": "太さ (mm)",
+    "style": "スタイル",
+    "backgroundColor": "背景色",
+    "newType": "新しい種類",
+    "addNewType": "+ 新しい種類",
+    "editTitle": "{{kind}}の編集",
+    "genericTypes": "種類"
   }
 }

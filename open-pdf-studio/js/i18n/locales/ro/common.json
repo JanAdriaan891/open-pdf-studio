@@ -11,7 +11,7 @@
   "update": "Actualizare",
   "yes": "Da",
   "no": "Nu",
-  "none": "None",
+  "none": "Niciunul",
   "export": "Export",
   "import": "Import",
   "print": "Tiparire",
@@ -127,5 +127,6 @@
     "copied": "Decupaj copiat — lipiți-l într-un alt desen",
     "failed": "Decuparea a eșuat",
     "clipboardEmpty": "Niciun decupaj în clipboard"
-  }
+  },
+  "mixed": "Mixt"
 }

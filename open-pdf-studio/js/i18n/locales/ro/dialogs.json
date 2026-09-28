@@ -777,5 +777,29 @@
     "underlayLimited": "Rezoluție redusă la {{dpi}} dpi",
     "underlayNoMeasure": "Nu se aplică unui fundal; scara de măsurare vine de la pagină",
     "queued": "Încă {{n}} desen(e) în coadă"
+  },
+  "styleType": {
+    "lineTypes": "Tipuri de linie",
+    "arrowTypes": "Tipuri de săgeată",
+    "dimensionTypes": "Tipuri de cotă",
+    "hatchTypes": "Tipuri de hașură",
+    "close": "Închide",
+    "preview": "Previzualizare",
+    "color": "Culoare",
+    "textMm": "Text (mm)",
+    "unit": "Unitate",
+    "background": "Fundal",
+    "scale": "Scară",
+    "noBackground": "Fără fundal",
+    "deleteType": "Șterge tipul",
+    "resetDefault": "Resetează la implicit",
+    "name": "Nume",
+    "thicknessMm": "Grosime (mm)",
+    "style": "Stil",
+    "backgroundColor": "Culoare de fundal",
+    "newType": "Tip nou",
+    "addNewType": "+ Tip nou",
+    "editTitle": "Editare: {{kind}}",
+    "genericTypes": "Tipuri"
   }
 }

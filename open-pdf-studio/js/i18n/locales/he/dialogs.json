@@ -777,5 +777,29 @@
     "underlayLimited": "הרזולוציה הופחתה ל-{{dpi}} dpi",
     "underlayNoMeasure": "לא חל על שכבת רקע; קנה המידה למדידה מגיע מהעמוד",
     "queued": "עוד {{n}} שרטוט(ים) בתור"
+  },
+  "styleType": {
+    "lineTypes": "סוגי קווים",
+    "arrowTypes": "סוגי חצים",
+    "dimensionTypes": "סוגי מידות",
+    "hatchTypes": "סוגי קווקוו",
+    "close": "סגירה",
+    "preview": "תצוגה מקדימה",
+    "color": "צבע",
+    "textMm": "טקסט (mm)",
+    "unit": "יחידה",
+    "background": "רקע",
+    "scale": "קנה מידה",
+    "noBackground": "ללא רקע",
+    "deleteType": "מחיקת סוג",
+    "resetDefault": "איפוס לברירת המחדל",
+    "name": "שם",
+    "thicknessMm": "עובי (mm)",
+    "style": "סגנון",
+    "backgroundColor": "צבע רקע",
+    "newType": "סוג חדש",
+    "addNewType": "+ סוג חדש",
+    "editTitle": "עריכת {{kind}}",
+    "genericTypes": "סוגים"
   }
 }

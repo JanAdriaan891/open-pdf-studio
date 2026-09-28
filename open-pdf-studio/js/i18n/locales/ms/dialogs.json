@@ -777,5 +777,29 @@
     "underlayLimited": "Resolusi dikurangkan kepada {{dpi}} dpi",
     "underlayNoMeasure": "Tidak terpakai untuk lapisan dasar; skala ukuran datang daripada halaman",
     "queued": "{{n}} lagi lukisan dalam giliran"
+  },
+  "styleType": {
+    "lineTypes": "Jenis garisan",
+    "arrowTypes": "Jenis anak panah",
+    "dimensionTypes": "Jenis dimensi",
+    "hatchTypes": "Jenis lorekan",
+    "close": "Tutup",
+    "preview": "Pratonton",
+    "color": "Warna",
+    "textMm": "Teks (mm)",
+    "unit": "Unit",
+    "background": "Latar",
+    "scale": "Skala",
+    "noBackground": "Tiada latar",
+    "deleteType": "Padam jenis",
+    "resetDefault": "Tetapkan semula kepada lalai",
+    "name": "Nama",
+    "thicknessMm": "Ketebalan (mm)",
+    "style": "Gaya",
+    "backgroundColor": "Warna latar",
+    "newType": "Jenis baharu",
+    "addNewType": "+ Jenis baharu",
+    "editTitle": "Sunting {{kind}}",
+    "genericTypes": "Jenis"
   }
 }

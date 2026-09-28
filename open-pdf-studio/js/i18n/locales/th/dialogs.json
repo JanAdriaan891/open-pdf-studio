@@ -777,5 +777,29 @@
     "underlayLimited": "ลดความละเอียดเป็น {{dpi}} dpi",
     "underlayNoMeasure": "ไม่มีผลกับภาพรองพื้น มาตราส่วนการวัดมาจากหน้า",
     "queued": "มีแบบอีก {{n}} รายการรอในคิว"
+  },
+  "styleType": {
+    "lineTypes": "ประเภทเส้น",
+    "arrowTypes": "ประเภทลูกศร",
+    "dimensionTypes": "ประเภทมิติ",
+    "hatchTypes": "ประเภทแฮตช์",
+    "close": "ปิด",
+    "preview": "ตัวอย่าง",
+    "color": "สี",
+    "textMm": "ข้อความ (mm)",
+    "unit": "หน่วย",
+    "background": "พื้นหลัง",
+    "scale": "มาตราส่วน",
+    "noBackground": "ไม่มีพื้นหลัง",
+    "deleteType": "ลบประเภท",
+    "resetDefault": "คืนค่าเริ่มต้น",
+    "name": "ชื่อ",
+    "thicknessMm": "ความหนา (mm)",
+    "style": "สไตล์",
+    "backgroundColor": "สีพื้นหลัง",
+    "newType": "ประเภทใหม่",
+    "addNewType": "+ ประเภทใหม่",
+    "editTitle": "แก้ไข{{kind}}",
+    "genericTypes": "ประเภท"
   }
 }

@@ -777,5 +777,29 @@
     "underlayLimited": "Ubora wa picha umepunguzwa hadi dpi {{dpi}}",
     "underlayNoMeasure": "Haitumiki kwa tabaka la chini; kipimo cha upimaji kinatoka kwenye ukurasa",
     "queued": "Michoro {{n}} zaidi kwenye foleni"
+  },
+  "styleType": {
+    "lineTypes": "Aina za mistari",
+    "arrowTypes": "Aina za mishale",
+    "dimensionTypes": "Aina za vipimo",
+    "hatchTypes": "Aina za mistari ya kivuli",
+    "close": "Funga",
+    "preview": "Onyesho la kukagua",
+    "color": "Rangi",
+    "textMm": "Maandishi (mm)",
+    "unit": "Kizio",
+    "background": "Usuli",
+    "scale": "Kiwango",
+    "noBackground": "Bila usuli",
+    "deleteType": "Futa aina",
+    "resetDefault": "Rejesha chaguo-msingi",
+    "name": "Jina",
+    "thicknessMm": "Unene (mm)",
+    "style": "Mtindo",
+    "backgroundColor": "Rangi ya usuli",
+    "newType": "Aina mpya",
+    "addNewType": "+ Aina mpya",
+    "editTitle": "Hariri {{kind}}",
+    "genericTypes": "Aina"
   }
 }

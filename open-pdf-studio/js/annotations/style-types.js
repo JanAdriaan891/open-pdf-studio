@@ -254,13 +254,21 @@ import { state as _appState } from '../core/state.js';
 
 function _mergeEntry(base, ov) {
   if (!ov) return base;
-  return {
+  const merged = {
     ...base,
     label: ov.label ?? base.label,
     color: ov.color ?? base.color,
     props: { ...base.props, ...(ov.props || {}) },
   };
+  // Een eigen naam van de gebruiker wint van de vertaling.
+  if (ov.label != null) delete merged.labelKey;
+  return merged;
 }
+
+// Soorten waarvan de ingebouwde typen een vertaalde naam hebben (#279):
+// properties:styleTypes.<soort>.<id> in elke taal. De `label` in de lijsten
+// hierboven is dan alleen nog de terugval.
+const VERTAALDE_SOORTEN = new Set(['filledArea']);
 
 // Preset list for an annotation type (built-ins + user overrides/extras), or
 // null when the type has none.
@@ -270,8 +278,26 @@ export function styleTypesFor(annType) {
   const prefs = _appState?.preferences || {};
   const overrides = (prefs.customStyleTypes || {})[annType] || {};
   const extras = (prefs.customStyleTypesExtra || {})[annType] || [];
-  const merged = base.map((e) => _mergeEntry(e, overrides[e.id]));
+  const vertaald = VERTAALDE_SOORTEN.has(annType);
+  const merged = base.map((e) => _mergeEntry(
+    vertaald ? { ...e, labelKey: `styleTypes.${annType}.${e.id}` } : e,
+    overrides[e.id],
+  ));
   return [...merged, ...extras];
+}
+
+// De naam van een type zoals de kiezer en de type-editor hem tonen: de
+// vertaling van een ingebouwd type, of de naam die de gebruiker zelf gaf.
+// `t` vertaalt in de namespace 'properties'.
+export function styleTypeLabel(entry, t) {
+  if (!entry) return '';
+  if (entry.labelKey && typeof t === 'function') {
+    const vertaling = t(entry.labelKey);
+    // Een ontbrekende sleutel komt als sleutel terug (in het Perzisch en
+    // Arabisch met omgezette cijfers): dan de eigen naam.
+    if (typeof vertaling === 'string' && vertaling && !vertaling.startsWith('styleTypes.')) return vertaling;
+  }
+  return entry.label ?? '';
 }
 
 // Resolve a preset to the props it applies (always includes styleType so the

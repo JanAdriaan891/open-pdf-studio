@@ -777,5 +777,29 @@
     "underlayLimited": "Çözünürlük {{dpi}} dpi'ye düşürüldü",
     "underlayNoMeasure": "Altlık için geçerli değil; ölçüm ölçeği sayfadan gelir",
     "queued": "Sırada {{n}} çizim daha var"
+  },
+  "styleType": {
+    "lineTypes": "Çizgi türleri",
+    "arrowTypes": "Ok türleri",
+    "dimensionTypes": "Ölçü türleri",
+    "hatchTypes": "Tarama türleri",
+    "close": "Kapat",
+    "preview": "Önizleme",
+    "color": "Renk",
+    "textMm": "Metin (mm)",
+    "unit": "Birim",
+    "background": "Arka plan",
+    "scale": "Ölçek",
+    "noBackground": "Arka plan yok",
+    "deleteType": "Türü sil",
+    "resetDefault": "Varsayılana sıfırla",
+    "name": "Ad",
+    "thicknessMm": "Kalınlık (mm)",
+    "style": "Stil",
+    "backgroundColor": "Arka plan rengi",
+    "newType": "Yeni tür",
+    "addNewType": "+ Yeni tür",
+    "editTitle": "{{kind}} düzenle",
+    "genericTypes": "Türler"
   }
 }

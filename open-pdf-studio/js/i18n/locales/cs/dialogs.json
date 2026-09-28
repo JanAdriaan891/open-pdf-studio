@@ -777,5 +777,29 @@
     "underlayLimited": "Rozlišení sníženo na {{dpi}} dpi",
     "underlayNoMeasure": "Neplatí pro podklad; měřítko pochází ze stránky",
     "queued": "Ve frontě čeká ještě {{n}} výkres(ů)"
+  },
+  "styleType": {
+    "lineTypes": "Typy čar",
+    "arrowTypes": "Typy šipek",
+    "dimensionTypes": "Typy kót",
+    "hatchTypes": "Typy šrafování",
+    "close": "Zavřít",
+    "preview": "Náhled",
+    "color": "Barva",
+    "textMm": "Text (mm)",
+    "unit": "Jednotka",
+    "background": "Pozadí",
+    "scale": "Měřítko",
+    "noBackground": "Bez pozadí",
+    "deleteType": "Odstranit typ",
+    "resetDefault": "Obnovit výchozí",
+    "name": "Název",
+    "thicknessMm": "Tloušťka (mm)",
+    "style": "Styl",
+    "backgroundColor": "Barva pozadí",
+    "newType": "Nový typ",
+    "addNewType": "+ Nový typ",
+    "editTitle": "Upravit: {{kind}}",
+    "genericTypes": "Typy"
   }
 }

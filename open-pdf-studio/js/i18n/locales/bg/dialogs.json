@@ -777,5 +777,29 @@
     "underlayLimited": "Разделителната способност е намалена до {{dpi}} dpi",
     "underlayNoMeasure": "Не се отнася за подложка; мащабът за измерване идва от страницата",
     "queued": "Още {{n}} чертеж(а) в опашката"
+  },
+  "styleType": {
+    "lineTypes": "Типове линии",
+    "arrowTypes": "Типове стрелки",
+    "dimensionTypes": "Типове размери",
+    "hatchTypes": "Типове щриховки",
+    "close": "Затвори",
+    "preview": "Преглед",
+    "color": "Цвят",
+    "textMm": "Текст (mm)",
+    "unit": "Единица",
+    "background": "Фон",
+    "scale": "Мащаб",
+    "noBackground": "Без фон",
+    "deleteType": "Изтрий типа",
+    "resetDefault": "Възстанови по подразбиране",
+    "name": "Име",
+    "thicknessMm": "Дебелина (mm)",
+    "style": "Стил",
+    "backgroundColor": "Цвят на фона",
+    "newType": "Нов тип",
+    "addNewType": "+ Нов тип",
+    "editTitle": "Редактиране: {{kind}}",
+    "genericTypes": "Типове"
   }
 }

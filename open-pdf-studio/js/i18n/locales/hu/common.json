@@ -11,7 +11,7 @@
   "update": "Frissítés",
   "yes": "Igen",
   "no": "Nem",
-  "none": "None",
+  "none": "Nincs",
   "export": "Exportálás",
   "import": "Importálás",
   "print": "Nyomtatás",
@@ -127,5 +127,6 @@
     "copied": "Kivágás másolva — illessze be egy másik rajzba",
     "failed": "A kivágás nem sikerült",
     "clipboardEmpty": "Nincs kivágás a vágólapon"
-  }
+  },
+  "mixed": "Vegyes"
 }

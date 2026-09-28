@@ -777,5 +777,29 @@
     "underlayLimited": "Oppløsning redusert til {{dpi}} dpi",
     "underlayNoMeasure": "Gjelder ikke for et underlag; målestokken kommer fra siden",
     "queued": "{{n}} tegning(er) til i køen"
+  },
+  "styleType": {
+    "lineTypes": "Linjetyper",
+    "arrowTypes": "Piltyper",
+    "dimensionTypes": "Måltyper",
+    "hatchTypes": "Skraveringstyper",
+    "close": "Lukk",
+    "preview": "Forhåndsvisning",
+    "color": "Farge",
+    "textMm": "Tekst (mm)",
+    "unit": "Enhet",
+    "background": "Bakgr.",
+    "scale": "Skala",
+    "noBackground": "Ingen bakgrunn",
+    "deleteType": "Slett type",
+    "resetDefault": "Tilbakestill til standard",
+    "name": "Navn",
+    "thicknessMm": "Tykkelse (mm)",
+    "style": "Stil",
+    "backgroundColor": "Bakgrunnsfarge",
+    "newType": "Ny type",
+    "addNewType": "+ Ny type",
+    "editTitle": "Rediger {{kind}}",
+    "genericTypes": "Typer"
   }
 }

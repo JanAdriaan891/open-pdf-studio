@@ -777,5 +777,29 @@
     "underlayLimited": "Rozdzielczość obniżona do {{dpi}} dpi",
     "underlayNoMeasure": "Nie dotyczy podkładu; skala pomiarowa pochodzi ze strony",
     "queued": "Jeszcze {{n}} rysunek(-ów) w kolejce"
+  },
+  "styleType": {
+    "lineTypes": "Typy linii",
+    "arrowTypes": "Typy strzałek",
+    "dimensionTypes": "Typy wymiarów",
+    "hatchTypes": "Typy kreskowania",
+    "close": "Zamknij",
+    "preview": "Podgląd",
+    "color": "Kolor",
+    "textMm": "Tekst (mm)",
+    "unit": "Jednostka",
+    "background": "Tło",
+    "scale": "Skala",
+    "noBackground": "Bez tła",
+    "deleteType": "Usuń typ",
+    "resetDefault": "Przywróć domyślne",
+    "name": "Nazwa",
+    "thicknessMm": "Grubość (mm)",
+    "style": "Styl",
+    "backgroundColor": "Kolor tła",
+    "newType": "Nowy typ",
+    "addNewType": "+ Nowy typ",
+    "editTitle": "Edytuj: {{kind}}",
+    "genericTypes": "Typy"
   }
 }

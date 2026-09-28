@@ -11,7 +11,7 @@
   "update": "Cập nhật",
   "yes": "Có",
   "no": "Không",
-  "none": "None",
+  "none": "Không có",
   "export": "Xuất",
   "import": "Nhập",
   "print": "In",
@@ -127,5 +127,6 @@
     "copied": "Đã sao chép đoạn cắt — dán vào bản vẽ khác",
     "failed": "Cắt không thành công",
     "clipboardEmpty": "Không có đoạn cắt nào trong bảng tạm"
-  }
+  },
+  "mixed": "Hỗn hợp"
 }

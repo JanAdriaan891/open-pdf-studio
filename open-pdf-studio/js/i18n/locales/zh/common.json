@@ -11,7 +11,7 @@
   "update": "更新",
   "yes": "是",
   "no": "否",
-  "none": "None",
+  "none": "无",
   "export": "导出",
   "import": "导入",
   "print": "打印",
@@ -127,5 +127,6 @@
     "copied": "片段已复制 — 请粘贴到其他图纸中",
     "failed": "剪切失败",
     "clipboardEmpty": "剪贴板中没有片段"
-  }
+  },
+  "mixed": "混合"
 }

@@ -777,5 +777,29 @@
     "underlayLimited": "وضوح به {{dpi}} نقطه در اینچ کاهش یافت",
     "underlayNoMeasure": "برای زیرلایه کاربرد ندارد؛ مقیاس اندازه‌گیری از صفحه می‌آید",
     "queued": "{{n}} نقشهٔ دیگر در صف"
+  },
+  "styleType": {
+    "lineTypes": "انواع خط",
+    "arrowTypes": "انواع پیکان",
+    "dimensionTypes": "انواع اندازه‌گذاری",
+    "hatchTypes": "انواع هاشور",
+    "close": "بستن",
+    "preview": "پیش‌نمایش",
+    "color": "رنگ",
+    "textMm": "متن (mm)",
+    "unit": "واحد",
+    "background": "پس‌زمینه",
+    "scale": "مقیاس",
+    "noBackground": "بدون پس‌زمینه",
+    "deleteType": "حذف نوع",
+    "resetDefault": "بازنشانی به پیش‌فرض",
+    "name": "نام",
+    "thicknessMm": "ضخامت (mm)",
+    "style": "سبک",
+    "backgroundColor": "رنگ پس‌زمینه",
+    "newType": "نوع جدید",
+    "addNewType": "+ نوع جدید",
+    "editTitle": "ویرایش {{kind}}",
+    "genericTypes": "انواع"
   }
 }

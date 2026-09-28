@@ -11,7 +11,7 @@
   "update": "Aktualizovat",
   "yes": "Ano",
   "no": "Ne",
-  "none": "None",
+  "none": "Žádné",
   "export": "Exportovat",
   "import": "Importovat",
   "print": "Tisk",
@@ -127,5 +127,6 @@
     "copied": "Výřez zkopírován — vložte jej do jiného výkresu",
     "failed": "Vyříznutí se nezdařilo",
     "clipboardEmpty": "Ve schránce není žádný výřez"
-  }
+  },
+  "mixed": "Smíšené"
 }

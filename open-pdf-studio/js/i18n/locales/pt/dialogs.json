@@ -777,5 +777,29 @@
     "underlayLimited": "Resolução reduzida para {{dpi}} ppp",
     "underlayNoMeasure": "Não se aplica a um decalque de fundo; a escala de medição vem da página",
     "queued": "Mais {{n}} desenho(s) em fila"
+  },
+  "styleType": {
+    "lineTypes": "Tipos de linha",
+    "arrowTypes": "Tipos de seta",
+    "dimensionTypes": "Tipos de cota",
+    "hatchTypes": "Tipos de hachura",
+    "close": "Fechar",
+    "preview": "Visualização",
+    "color": "Cor",
+    "textMm": "Texto (mm)",
+    "unit": "Unidade",
+    "background": "Fundo",
+    "scale": "Escala",
+    "noBackground": "Sem fundo",
+    "deleteType": "Excluir tipo",
+    "resetDefault": "Restaurar padrão",
+    "name": "Nome",
+    "thicknessMm": "Espessura (mm)",
+    "style": "Estilo",
+    "backgroundColor": "Cor de fundo",
+    "newType": "Novo tipo",
+    "addNewType": "+ Novo tipo",
+    "editTitle": "Editar {{kind}}",
+    "genericTypes": "Tipos"
   }
 }

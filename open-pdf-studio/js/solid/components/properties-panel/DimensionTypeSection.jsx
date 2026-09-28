@@ -1,7 +1,7 @@
 import { Show, For, createSignal, createMemo, onCleanup } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { annotProps, applyStyleType } from '../../stores/propertiesStore.js';
-import { styleTypesFor } from '../../../annotations/style-types.js';
+import { styleTypesFor, styleTypeLabel } from '../../../annotations/style-types.js';
 import { openDialog } from '../../stores/dialogStore.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { arceringVoorbeeldSpec, arceringVoorbeeldUrl } from '../../../annotations/rendering/hatch-patterns.js';
@@ -91,11 +91,13 @@ export default function DimensionTypeSection() {
   });
   const currentId = () => annotProps.styleType || annotProps.dimType || '';
   const current = () => (types() || []).find((x) => x.id === currentId()) || null;
+  // Naam in de taal van de app (ingebouwde typen) of de eigen naam.
+  const labelOf = (d) => styleTypeLabel(d, t);
   const filtered = () => {
     const q = query().toLowerCase().trim();
     const list = types() || [];
     if (!q) return list;
-    return list.filter((d) => d.label.toLowerCase().includes(q) || d.id.toLowerCase().includes(q));
+    return list.filter((d) => labelOf(d).toLowerCase().includes(q) || d.id.toLowerCase().includes(q));
   };
 
   function openPopup() {
@@ -139,7 +141,7 @@ export default function DimensionTypeSection() {
           }}>
           <Show when={current()} fallback={<span style={{ flex: 1, 'font-size': '13px', opacity: 0.7 }}>{t('measurement.dimTypeCustom') || 'Aangepast'}</span>}>
             <PreviewSwatch annType={annotProps.type} entry={current()} />
-            <span style={{ flex: 1, 'font-size': '13px', overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' }}>{current().label}</span>
+            <span style={{ flex: 1, 'font-size': '13px', overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' }}>{labelOf(current())}</span>
           </Show>
           <span style={{ 'font-size': '10px' }}>▼</span>
         </div>
@@ -172,7 +174,7 @@ export default function DimensionTypeSection() {
                     onMouseLeave={(ev) => ev.currentTarget.style.background = d.id === currentId() ? 'var(--theme-accent-soft, #cce4f7)' : 'transparent'}
                   >
                     <PreviewSwatch annType={annotProps.type} entry={d} />
-                    <span style={{ 'font-size': '13px', flex: 1, overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' }}>{d.label}</span>
+                    <span style={{ 'font-size': '13px', flex: 1, overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap' }}>{labelOf(d)}</span>
                   </div>
                 )}
               </For>

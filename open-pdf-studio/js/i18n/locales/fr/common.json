@@ -11,7 +11,7 @@
   "update": "Mettre à jour",
   "yes": "Oui",
   "no": "Non",
-  "none": "None",
+  "none": "Aucun",
   "export": "Exporter",
   "import": "Importer",
   "print": "Imprimer",
@@ -127,5 +127,6 @@
     "copied": "Découpe copiée — collez-la dans un autre dessin",
     "failed": "Échec de la découpe",
     "clipboardEmpty": "Aucune découpe dans le presse-papiers"
-  }
+  },
+  "mixed": "Mixte"
 }

@@ -777,5 +777,29 @@
     "underlayLimited": "Độ phân giải đã giảm xuống {{dpi}} dpi",
     "underlayNoMeasure": "Không áp dụng cho lớp nền; tỷ lệ đo lấy từ trang",
     "queued": "Còn {{n}} bản vẽ trong hàng đợi"
+  },
+  "styleType": {
+    "lineTypes": "Loại đường",
+    "arrowTypes": "Loại mũi tên",
+    "dimensionTypes": "Loại kích thước",
+    "hatchTypes": "Loại tô vật liệu",
+    "close": "Đóng",
+    "preview": "Xem trước",
+    "color": "Màu",
+    "textMm": "Chữ (mm)",
+    "unit": "Đơn vị",
+    "background": "Nền",
+    "scale": "Tỷ lệ",
+    "noBackground": "Không nền",
+    "deleteType": "Xóa loại",
+    "resetDefault": "Khôi phục mặc định",
+    "name": "Tên",
+    "thicknessMm": "Độ dày (mm)",
+    "style": "Kiểu",
+    "backgroundColor": "Màu nền",
+    "newType": "Loại mới",
+    "addNewType": "+ Loại mới",
+    "editTitle": "Chỉnh sửa {{kind}}",
+    "genericTypes": "Loại"
   }
 }
