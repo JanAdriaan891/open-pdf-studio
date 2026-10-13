@@ -89,6 +89,7 @@ pub const TOOLS: &[ToolMeta] = &[
     wijzigt("app_close_tab", "Close document tab"),
     wijzigt("app_save_pdf", "Save PDF"),
     wijzigt("app_replace_text", "Replace existing page text"),
+    wijzigt("app_translate_page", "Replace page text in bulk"),
     wijzigt("app_export_cad", "Export to CAD drawing"),
     // Afdrukken laat het document ongemoeid, maar is geen leesactie: de ene
     // schrijft een bestand dat een bestaand bestand kan overschrijven, de

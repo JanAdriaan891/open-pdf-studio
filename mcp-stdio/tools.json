@@ -1031,6 +1031,64 @@
       "destructiveHint": true,
       "openWorldHint": false,
       "readOnlyHint": false,
+      "title": "Replace page text in bulk"
+    },
+    "description": "Replace many text spans of one page in a single call, for example to translate the page. Takes spans from app_get_page_text with their exact expected text. All or nothing: if any replacement fails, nothing changes and the result lists the error per span. Same rules as app_replace_text (in-place removal, fit to the original width, full fallback font when the subset lacks glyphs), checked together on one copy of the PDF and applied as one undo step. Changes stay pending until app_save_pdf is called.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "description": "1-based page number; defaults to the page of the first spanId.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "replacements": {
+          "description": "One entry per span to replace, each on one line.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "description": "Required only when the source fill colour could not be recovered.",
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "type": "string"
+              },
+              "expectedText": {
+                "description": "Exact current text returned for that span.",
+                "type": "string"
+              },
+              "newText": {
+                "description": "Replacement text on one line (may be empty to delete).",
+                "type": "string"
+              },
+              "spanId": {
+                "description": "Opaque span ID from app_get_page_text.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "spanId",
+              "expectedText",
+              "newText"
+            ],
+            "type": "object"
+          },
+          "maxItems": 500,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "replacements"
+      ],
+      "type": "object"
+    },
+    "name": "app_translate_page"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
       "title": "Set measurement scale"
     },
     "description": "Set the active document's measurement scale calibration (pixels per unit + unit, e.g. ~2.835 px/mm for 1:1 at 72 dpi) and recalculate every measurement annotation.",

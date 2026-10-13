@@ -36,6 +36,7 @@ js/unit-testlijst.test.mjs
 js/text/mcp-page-text.test.mjs
 js/text/mcp-text-color.test.mjs
 js/text/mcp-text-font.test.mjs
+js/text/mcp-text-plan.test.mjs
 js/pdf/office-document.test.mjs
 js/pdf/tiff.test.mjs
 js/pdf/export-document.test.mjs

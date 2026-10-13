@@ -1017,6 +1017,35 @@ fn handle_tools_list() -> Value {
                 }
             },
             {
+                "name": "app_translate_page",
+                "description": "Replace many text spans of one page in a single call, for example to translate the page. Takes spans from app_get_page_text with their exact expected text. All or nothing: if any replacement fails, nothing changes and the result lists the error per span. Same rules as app_replace_text (in-place removal, fit to the original width, full fallback font when the subset lacks glyphs), checked together on one copy of the PDF and applied as one undo step. Changes stay pending until app_save_pdf is called.",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "page": { "type": "integer", "minimum": 1, "description": "1-based page number; defaults to the page of the first spanId." },
+                        "replacements": {
+                            "type": "array",
+                            "minItems": 1,
+                            "maxItems": 500,
+                            "description": "One entry per span to replace, each on one line.",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "spanId": { "type": "string", "description": "Opaque span ID from app_get_page_text." },
+                                    "expectedText": { "type": "string", "description": "Exact current text returned for that span." },
+                                    "newText": { "type": "string", "description": "Replacement text on one line (may be empty to delete)." },
+                                    "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "description": "Required only when the source fill colour could not be recovered." }
+                                },
+                                "required": ["spanId", "expectedText", "newText"],
+                                "additionalProperties": false
+                            }
+                        }
+                    },
+                    "required": ["replacements"],
+                    "additionalProperties": false
+                }
+            },
+            {
                 "name": "app_set_measure_scale",
                 "description": "Set the active document's measurement scale calibration (pixels per unit + unit, e.g. ~2.835 px/mm for 1:1 at 72 dpi) and recalculate every measurement annotation.",
                 "inputSchema": {
@@ -1331,6 +1360,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
+        "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
         "app_set_measure_scale"  => tool_app_request(state, "mcp:set-measure-scale",  &arguments, Duration::from_secs(15)).await,
         "app_get_takeoff"        => tool_app_request(state, "mcp:get-takeoff",        &arguments, Duration::from_secs(10)).await,
         "app_place_schedule"     => tool_app_request(state, "mcp:place-schedule",     &arguments, Duration::from_secs(15)).await,
@@ -1970,7 +2000,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 62);
+        assert_eq!(arr.len(), 63);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
