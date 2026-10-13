@@ -56,6 +56,9 @@
     "noPlaces": "Nema spremljenih mjesta",
     "removePlace": "Ukloni mjesto",
     "noFilesInFolder": "Nema PDF datoteka u ovoj mapi",
+    "site": "Na ovom web-mjestu",
+    "noSiteDocuments": "Nema dokumenata na ovom web-mjestu",
+    "siteListError": "Dokumente ovog web-mjesta nije moguće učitati",
     "save": "Spremi"
   },
   "importPanel": {

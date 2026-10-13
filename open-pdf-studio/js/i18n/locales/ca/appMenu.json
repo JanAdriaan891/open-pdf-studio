@@ -56,6 +56,9 @@
     "noPlaces": "No hi ha llocs desats",
     "removePlace": "Elimina el lloc",
     "noFilesInFolder": "No hi ha fitxers PDF en aquesta carpeta",
+    "site": "En aquest lloc",
+    "noSiteDocuments": "No hi ha documents en aquest lloc",
+    "siteListError": "No s'han pogut carregar els documents d'aquest lloc",
     "save": "Desa"
   },
   "importPanel": {

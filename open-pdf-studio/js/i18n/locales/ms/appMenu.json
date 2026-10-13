@@ -56,6 +56,9 @@
     "noPlaces": "Tiada tempat tersimpan",
     "removePlace": "Alih keluar tempat",
     "noFilesInFolder": "Tiada fail PDF dalam folder ini",
+    "site": "Di laman ini",
+    "noSiteDocuments": "Tiada dokumen di laman ini",
+    "siteListError": "Dokumen laman ini tidak dapat dimuatkan",
     "save": "Simpan"
   },
   "importPanel": {

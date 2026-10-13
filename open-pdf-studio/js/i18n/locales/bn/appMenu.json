@@ -56,6 +56,9 @@
     "noPlaces": "কোনো সংরক্ষিত জায়গা নেই",
     "removePlace": "জায়গা সরান",
     "noFilesInFolder": "এই ফোল্ডারে কোনো PDF ফাইল নেই",
+    "site": "এই সাইটে",
+    "noSiteDocuments": "এই সাইটে কোনো নথি নেই",
+    "siteListError": "এই সাইটের নথিগুলি লোড করা যায়নি",
     "save": "সংরক্ষণ"
   },
   "importPanel": {

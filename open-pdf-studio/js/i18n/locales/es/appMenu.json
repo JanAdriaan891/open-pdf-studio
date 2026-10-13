@@ -56,6 +56,9 @@
     "noPlaces": "No hay lugares guardados",
     "removePlace": "Quitar lugar",
     "noFilesInFolder": "No hay archivos PDF en esta carpeta",
+    "site": "En este sitio",
+    "noSiteDocuments": "No hay documentos en este sitio",
+    "siteListError": "No se pudieron cargar los documentos de este sitio",
     "save": "Guardar"
   },
   "importPanel": {

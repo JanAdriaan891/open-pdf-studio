@@ -56,6 +56,9 @@
     "noPlaces": "Hakuna maeneo yaliyohifadhiwa",
     "removePlace": "Ondoa mahali",
     "noFilesInFolder": "Hakuna faili za PDF katika folda hii",
+    "site": "Kwenye tovuti hii",
+    "noSiteDocuments": "Hakuna nyaraka kwenye tovuti hii",
+    "siteListError": "Imeshindwa kupakia nyaraka za tovuti hii",
     "save": "Hifadhi"
   },
   "importPanel": {

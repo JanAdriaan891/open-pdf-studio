@@ -335,6 +335,14 @@ async function init() {
   pendingOpenFiles = [];
   appReady = true;
 
+  // Als gast in de OpenAEC-site: het document dat de site meegeeft openen
+  // via het opslagcontract van de site (#546). Zonder contract gebeurt niets.
+  if (!hasCommandLineFile) {
+    import('./pdf/host-document.js')
+      .then(m => m.startMetGastsite())
+      .catch(e => console.warn('[gast] openen via de site mislukt:', e));
+  }
+
   // Detached-window mode: a detached document window is its OWN app process,
   // launched by `spawn_window_with_pdf` with the PDF path as a command-line
   // argument and `OPDS_DETACHED=1` in its env. The PDF therefore arrives via

@@ -56,6 +56,9 @@
     "noPlaces": "ไม่มีสถานที่ที่บันทึก",
     "removePlace": "นำสถานที่ออก",
     "noFilesInFolder": "ไม่มีไฟล์ PDF ในโฟล์เดอร์นี้",
+    "site": "บนไซต์นี้",
+    "noSiteDocuments": "ไม่มีเอกสารบนไซต์นี้",
+    "siteListError": "ไม่สามารถโหลดเอกสารของไซต์นี้ได้",
     "save": "บันทึก"
   },
   "importPanel": {

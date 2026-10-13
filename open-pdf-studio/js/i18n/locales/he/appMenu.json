@@ -56,6 +56,9 @@
     "noPlaces": "אין מקומות שמורים",
     "removePlace": "הסר מיקום",
     "noFilesInFolder": "אין קבצי PDF בתיקייה זו",
+    "site": "באתר זה",
+    "noSiteDocuments": "אין מסמכים באתר זה",
+    "siteListError": "לא ניתן לטעון את המסמכים של אתר זה",
     "save": "שמור"
   },
   "importPanel": {

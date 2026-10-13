@@ -56,6 +56,9 @@
     "noPlaces": "Ei tallennettuja paikkoja",
     "removePlace": "Poista paikka",
     "noFilesInFolder": "Kansiossa ei ole PDF-tiedostoja",
+    "site": "Tällä sivustolla",
+    "noSiteDocuments": "Tällä sivustolla ei ole asiakirjoja",
+    "siteListError": "Tämän sivuston asiakirjoja ei voitu ladata",
     "save": "Tallenna"
   },
   "importPanel": {

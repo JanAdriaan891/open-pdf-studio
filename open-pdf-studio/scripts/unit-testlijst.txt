@@ -264,3 +264,4 @@ js/ui/chrome/tab-sneltoets-koppeling.test.mjs
 js/core/basis-url.test.mjs
 js/core/opslag.test.mjs
 js/core/ai-sleutel.test.mjs
+js/core/host-opslag.test.mjs

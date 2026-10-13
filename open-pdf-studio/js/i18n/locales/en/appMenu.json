@@ -68,6 +68,9 @@
     "noPlaces": "No saved places",
     "removePlace": "Remove place",
     "noFilesInFolder": "No PDF files in this folder",
+    "site": "On this site",
+    "noSiteDocuments": "No documents on this site",
+    "siteListError": "Could not load the documents of this site",
     "save": "Save"
   },
   "importPanel": {

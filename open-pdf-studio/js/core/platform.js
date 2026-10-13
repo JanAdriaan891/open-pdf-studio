@@ -1,4 +1,5 @@
 import { leesOpslag, verwijderOpslag } from './opslag.js';
+import { gastObject } from './gehost.js';
 
 /**
  * Tauri API wrapper module
@@ -21,6 +22,98 @@ const _webFileCache = new Map(); // filename -> Uint8Array
 export function cacheWebFile(name, data) {
   _webFileCache.set(name, data instanceof Uint8Array ? data : new Uint8Array(data));
   return name;
+}
+
+// ── Opslag van de gastsite (#546) ───────────────────────────────────────────
+// Als gast in de OpenAEC-site (#544) openen en bewaren documenten via een
+// klein contract dat de site levert. De gastpagina zet het vóór het laden neer:
+//
+//   window.__OPDS_HOST__ = {
+//     storage: {
+//       open(id)                  -> Promise<{ name, data }>  data: Uint8Array |
+//                                    ArrayBuffer | Blob
+//       save(id, bytes, { name }) -> Promise<unknown>  schrijft over het
+//                                    geopende document heen (nieuwe versie)
+//       list()      (optioneel)   -> Promise<[{ id, name, modified? }]>
+//       versions(id) (optioneel)  -> Promise<[{ version, modified?, author? }]>
+//     },
+//     document: '<id>',  // optioneel: dit document gaat bij de start open
+//   };
+//
+// Een document van de site heeft als pad `opds-host://<id>/<naam>`: de naam
+// achteraan houdt alles wat een bestandsnaam uit het pad haalt (tabbladen,
+// titel, recente bestanden) gewoon werkend. Alleen een pad dat echt als
+// document van de site geopend is, schrijft terug; een afgeleid pad (een
+// export naast het document) wordt een download, net als in de webversie.
+// Uploaden en downloaden van en naar de pc blijven bestaan.
+
+const HOST_SCHEMA = 'opds-host://';
+const _hostPaden = new Map(); // pad -> id, voor elk als document geopend pad
+
+/** Het opslagcontract van de gastsite, of null. */
+export function hostOpslag() {
+  const opslag = gastObject()?.storage;
+  return opslag && typeof opslag.open === 'function' && typeof opslag.save === 'function'
+    ? opslag
+    : null;
+}
+
+/** Pad van een document van de site. */
+export function hostPad(id, naam) {
+  const veilig = String(naam || 'document.pdf').replace(/[\\/]/g, '_').trim() || 'document.pdf';
+  return `${HOST_SCHEMA}${encodeURIComponent(String(id))}/${veilig}`;
+}
+
+/** `{ id, naam }` uit een pad van de site, of null. */
+export function leesHostPad(pad) {
+  if (typeof pad !== 'string' || !pad.startsWith(HOST_SCHEMA)) return null;
+  const rest = pad.slice(HOST_SCHEMA.length);
+  const schuin = rest.indexOf('/');
+  if (schuin <= 0) return null;
+  try {
+    return { id: decodeURIComponent(rest.slice(0, schuin)), naam: rest.slice(schuin + 1) };
+  } catch {
+    return null;
+  }
+}
+
+async function naarBytes(data) {
+  if (data instanceof Uint8Array) return data;
+  if (data instanceof ArrayBuffer) return new Uint8Array(data);
+  if (ArrayBuffer.isView(data)) return new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+  if (data && typeof data.arrayBuffer === 'function') return new Uint8Array(await data.arrayBuffer());
+  throw new Error('The site returned no document data');
+}
+
+/**
+ * Haal een document van de site op.
+ * @returns {Promise<{ pad: string, naam: string, data: Uint8Array }>}
+ */
+export async function openHostBestand(id) {
+  const opslag = hostOpslag();
+  if (!opslag) throw new Error('This page has no site storage');
+  const antwoord = await opslag.open(String(id));
+  const data = await naarBytes(antwoord?.data ?? antwoord?.bytes ?? antwoord);
+  const naam = String(antwoord?.name || 'document.pdf');
+  const pad = hostPad(id, naam);
+  _hostPaden.set(pad, String(id));
+  return { pad, naam, data };
+}
+
+/** De documenten die de site aanbiedt (leeg als het contract geen lijst kent). */
+export async function hostDocumenten() {
+  const opslag = hostOpslag();
+  if (!opslag || typeof opslag.list !== 'function') return [];
+  const lijst = await opslag.list();
+  return Array.isArray(lijst) ? lijst.filter((d) => d && d.id != null) : [];
+}
+
+/** De versies van een document op de site (leeg als het contract die niet kent). */
+export async function hostVersies(id) {
+  const opslag = hostOpslag();
+  if (!opslag || typeof opslag.versions !== 'function') return [];
+  const lijst = await opslag.versions(String(id));
+  return Array.isArray(lijst) ? lijst : [];
 }
 
 // Extract a display-friendly file name from a path or content:// URI
@@ -247,7 +340,10 @@ export async function saveFileDialog(defaultPath, filters) {
     return null;
   }
 
-  // Web fallback: return the suggested filename (writeBinaryFile will trigger download)
+  // Web fallback: return the suggested filename (writeBinaryFile will trigger download).
+  // "Opslaan als" van een document van de site is een download: alleen de naam,
+  // anders schreef hij via het pad terug naar de site (#546).
+  if (leesHostPad(defaultPath)) return extractFileName(defaultPath);
   return defaultPath || 'document.pdf';
 }
 
@@ -273,6 +369,16 @@ export async function openFolderDialog(title) {
 
 // File system operations
 export async function readBinaryFile(path) {
+  // Een document van de site komt via het contract van de site (#546). Het
+  // gevraagde pad telt daarna als geopend, ook als de site de naam intussen
+  // veranderde (bv. een recent bestand na een herlaadbeurt).
+  const host = leesHostPad(path);
+  if (host && hostOpslag()) {
+    const { data } = await openHostBestand(host.id);
+    _hostPaden.set(path, host.id);
+    return data;
+  }
+
   // Web fallback: check the in-memory file cache first
   if (!isTauri()) {
     const cached = _webFileCache.get(path);
@@ -289,6 +395,15 @@ export async function readBinaryFile(path) {
 }
 
 export async function writeBinaryFile(path, data) {
+  // Terugschrijven naar de site: alleen voor een pad dat als document van de
+  // site geopend is (#546).
+  const hostId = _hostPaden.get(path);
+  if (hostId !== undefined && hostOpslag()) {
+    const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+    await hostOpslag().save(hostId, bytes, { name: leesHostPad(path)?.naam });
+    return true;
+  }
+
   if (!isTauri()) {
     // Web fallback: trigger a browser download
     const fileName = path.replace(/^.*[\\/]/, '') || 'download';
@@ -333,6 +448,7 @@ export async function writeBinaryFileAtomic(path, data) {
 }
 
 export async function fileExists(path) {
+  if (leesHostPad(path)) return hostOpslag() !== null;
   if (!isTauri()) return false;
 
   // Try using the fs plugin

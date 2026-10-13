@@ -56,6 +56,9 @@
     "noPlaces": "保存された場所なし",
     "removePlace": "場所を削除",
     "noFilesInFolder": "このフォルダに PDF ファイルがありません",
+    "site": "このサイト",
+    "noSiteDocuments": "このサイトにドキュメントはありません",
+    "siteListError": "このサイトのドキュメントを読み込めませんでした",
     "save": "保存"
   },
   "importPanel": {

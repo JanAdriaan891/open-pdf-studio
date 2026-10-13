@@ -56,6 +56,9 @@
     "noPlaces": "Kaydedilmiş yer yok",
     "removePlace": "Yeri kaldır",
     "noFilesInFolder": "Bu klasörde PDF dosyası yok",
+    "site": "Bu sitede",
+    "noSiteDocuments": "Bu sitede belge yok",
+    "siteListError": "Bu sitenin belgeleri yüklenemedi",
     "save": "Kaydet"
   },
   "importPanel": {

@@ -56,6 +56,9 @@
     "noPlaces": "Keine gespeicherten Orte",
     "removePlace": "Ort entfernen",
     "noFilesInFolder": "Keine PDF-Dateien in diesem Ordner",
+    "site": "Auf dieser Website",
+    "noSiteDocuments": "Keine Dokumente auf dieser Website",
+    "siteListError": "Die Dokumente dieser Website konnten nicht geladen werden",
     "save": "Speichern"
   },
   "importPanel": {
