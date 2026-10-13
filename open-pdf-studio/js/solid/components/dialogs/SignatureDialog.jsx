@@ -10,6 +10,7 @@ import { updateStatusMessage } from '../../../ui/chrome/status-bar.js';
 import { generateImageId } from '../../../utils/helpers.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { createSignaturePad } from '../../../annotations/signature-pad.js';
+import { leesOpslagJson, schrijfOpslagJson } from '../../../core/opslag.js';
 
 const STORAGE_KEY = 'pdfEditorSignatures';
 const MAX_SAVED = 5;
@@ -19,8 +20,8 @@ const MAX_PLACE_WIDTH = 200;
 
 function getSavedSignatures() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    const saved = leesOpslagJson(STORAGE_KEY, []);
+    return Array.isArray(saved) ? saved : [];
   } catch {
     return [];
   }
@@ -30,13 +31,13 @@ function saveSignatureToStorage(dataUrl) {
   const signatures = getSavedSignatures();
   signatures.push({ dataUrl, createdAt: new Date().toISOString() });
   while (signatures.length > MAX_SAVED) signatures.shift();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(signatures));
+  schrijfOpslagJson(STORAGE_KEY, signatures);
 }
 
 function deleteSavedSignature(index) {
   const signatures = getSavedSignatures();
   signatures.splice(index, 1);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(signatures));
+  schrijfOpslagJson(STORAGE_KEY, signatures);
 }
 
 function getCroppedDataUrl(canvas) {

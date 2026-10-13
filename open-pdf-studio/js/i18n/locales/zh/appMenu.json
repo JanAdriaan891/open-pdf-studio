@@ -56,6 +56,9 @@
     "noPlaces": "没有已保存的位置",
     "removePlace": "移除位置",
     "noFilesInFolder": "此文件夹中没有 PDF 文件",
+    "site": "此站点",
+    "noSiteDocuments": "此站点上没有文档",
+    "siteListError": "无法加载此站点的文档",
     "save": "保存"
   },
   "importPanel": {

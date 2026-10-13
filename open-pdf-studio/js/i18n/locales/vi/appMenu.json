@@ -56,6 +56,9 @@
     "noPlaces": "Không có vị trí đã lưu",
     "removePlace": "Xóa vị trí",
     "noFilesInFolder": "Không có tệp PDF trong thư mục này",
+    "site": "Trên trang này",
+    "noSiteDocuments": "Không có tài liệu nào trên trang này",
+    "siteListError": "Không thể tải tài liệu của trang này",
     "save": "Lưu"
   },
   "importPanel": {

@@ -7,6 +7,7 @@ import { getScaleForPoint } from './scale-bar.js';
 import { getScaleFromRegion } from './scale-region.js';
 import { schaalBronnen, metSchaalBronnen } from './schaal-bronnen.js';
 import { cloneAnnotation } from './factory.js';
+import { leesOpslagJson, schrijfOpslagJson, verwijderOpslag } from '../core/opslag.js';
 import { nettoVlakOppervlak } from './vlak-ringen.js';
 import { vlakZijden, lengteEenheid } from './vlak-zijden.js';
 import {
@@ -429,12 +430,12 @@ function recalculateMeasurementsIn(doc) {
   }
 }
 
-// LocalStorage key for per-document scale persistence
+// Naam in de browseropslag (core/opslag.js) voor de schaal per document
 function scaleStorageKey(filePath) {
   return 'ops_measureScale_' + filePath;
 }
 
-// Save the measure scale of the given (or active) document to localStorage.
+// Save the measure scale of the given (or active) document to browser storage.
 // A caller that works on a specific document (loadPDF, also for background
 // tabs) must pass it, or the scale of the tab in front is what gets stored.
 export function saveDocumentScale(doc) {
@@ -443,21 +444,21 @@ export function saveDocumentScale(doc) {
   const ms = doc.measureScale;
   if (ms) {
     try {
-      localStorage.setItem(scaleStorageKey(doc.filePath), JSON.stringify(ms));
+      schrijfOpslagJson(scaleStorageKey(doc.filePath), ms);
     } catch { /* quota exceeded or private mode */ }
   } else {
-    localStorage.removeItem(scaleStorageKey(doc.filePath));
+    verwijderOpslag(scaleStorageKey(doc.filePath));
   }
 }
 
-// Load measure scale from localStorage into the given (or active) document
+// Load measure scale from browser storage into the given (or active) document
 export function loadDocumentScale(doc) {
   if (!doc) doc = getActiveDocument();
   if (!doc || !doc.filePath) return;
   try {
-    const raw = localStorage.getItem(scaleStorageKey(doc.filePath));
-    if (raw) {
-      doc.measureScale = JSON.parse(raw);
+    const opgeslagen = leesOpslagJson(scaleStorageKey(doc.filePath));
+    if (opgeslagen) {
+      doc.measureScale = opgeslagen;
     }
   } catch { /* corrupted data */ }
 }

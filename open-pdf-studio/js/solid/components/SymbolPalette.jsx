@@ -43,6 +43,8 @@ const isCatalogusFamilie = (sym) =>
 import { registerLineworkCatalog } from '../../symbols/linework-catalog-store.js';
 import { openDialog } from '../stores/dialogStore.js';
 import { updateStatusMessage } from '../../ui/chrome/status-bar.js';
+import { isTauri } from '../../core/platform.js';
+import { knopUit, meldingTekst } from '../../core/webfuncties.js';
 
 const DOCK_SNAP = 60;
 
@@ -400,7 +402,11 @@ export function FloatingSymbolPalette() {
 
 // --- Settings Dialog ---
 export function SymbolSettingsDialog() {
+  const { t: tCommon } = useTranslation('common');
   const [newGroupName, setNewGroupName] = createSignal('');
+  // De online bibliotheek staat op GitHub: als gast uit (#548).
+  const downloadUit = knopUit('symbol-library-download', { inTauri: isTauri() });
+  const downloadMelding = () => meldingTekst(tCommon, tCommon('onlineSymbolLibrary'));
   let fileInputRef;
   let importGroupInputRef;
 
@@ -555,6 +561,9 @@ export function SymbolSettingsDialog() {
           <Show when={indexStatus() === 'loading'}>
             <div class="sp-settings-download sp-settings-download-note">Online bibliotheek laden…</div>
           </Show>
+          <Show when={indexStatus() === 'uit'}>
+            <div class="sp-settings-download sp-settings-download-note">{downloadMelding()}</div>
+          </Show>
           <Show when={indexStatus() === 'offline'}>
             <div class="sp-settings-download sp-settings-download-note">Online bibliotheek niet bereikbaar — beperkte landenlijst</div>
           </Show>
@@ -570,7 +579,9 @@ export function SymbolSettingsDialog() {
                     ? `${dlInfo().toFetch.length} collectie${dlInfo().toFetch.length === 1 ? '' : 's'} online beschikbaar (${dlInfo().symbolCount} symbolen)`
                     : `${dlInfo().tagOnly.length} gedownloade collectie${dlInfo().tagOnly.length === 1 ? '' : 's'} activeren voor dit land`}
                 </span>
-                <button class="sp-settings-btn-add"
+                <button id="symbol-library-download" class="sp-settings-btn-add"
+                  disabled={downloadUit}
+                  title={downloadUit ? downloadMelding() : undefined}
                   onClick={() => downloadCountrySector(selectedCountry(), selectedIndustry())}>
                   Download
                 </button>

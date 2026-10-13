@@ -56,6 +56,9 @@
     "noPlaces": "Aucun emplacement enregistré",
     "removePlace": "Supprimer l'emplacement",
     "noFilesInFolder": "Aucun fichier PDF dans ce dossier",
+    "site": "Sur ce site",
+    "noSiteDocuments": "Aucun document sur ce site",
+    "siteListError": "Impossible de charger les documents de ce site",
     "save": "Enregistrer"
   },
   "importPanel": {

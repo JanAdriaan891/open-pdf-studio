@@ -56,6 +56,9 @@
     "noPlaces": "Žiadne uložené miesta",
     "removePlace": "Odstrániť miesto",
     "noFilesInFolder": "V tomto prieč inku nie sú žiadne PDF súbory",
+    "site": "Na tejto lokalite",
+    "noSiteDocuments": "Na tejto lokalite nie sú žiadne dokumenty",
+    "siteListError": "Dokumenty tejto lokality sa nepodarilo načítať",
     "save": "Uložiť"
   },
   "importPanel": {

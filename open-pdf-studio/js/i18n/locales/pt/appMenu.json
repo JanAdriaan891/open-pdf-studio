@@ -56,6 +56,9 @@
     "noPlaces": "Nenhum local salvo",
     "removePlace": "Remover local",
     "noFilesInFolder": "Nenhum arquivo PDF nesta pasta",
+    "site": "Neste site",
+    "noSiteDocuments": "Nenhum documento neste site",
+    "siteListError": "Não foi possível carregar os documentos deste site",
     "save": "Salvar"
   },
   "importPanel": {

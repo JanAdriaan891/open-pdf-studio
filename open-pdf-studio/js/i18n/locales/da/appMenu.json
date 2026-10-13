@@ -56,6 +56,9 @@
     "noPlaces": "Ingen gemte steder",
     "removePlace": "Fjern sted",
     "noFilesInFolder": "Ingen PDF-filer i denne mappe",
+    "site": "På dette websted",
+    "noSiteDocuments": "Ingen dokumenter på dette websted",
+    "siteListError": "Dokumenterne på dette websted kunne ikke indlæses",
     "save": "Gem"
   },
   "importPanel": {

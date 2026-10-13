@@ -56,6 +56,9 @@
     "noPlaces": "Inga sparade platser",
     "removePlace": "Ta bort plats",
     "noFilesInFolder": "Inga PDF-filer i den här mappen",
+    "site": "På den här webbplatsen",
+    "noSiteDocuments": "Inga dokument på den här webbplatsen",
+    "siteListError": "Det gick inte att läsa in dokumenten på den här webbplatsen",
     "save": "Spara"
   },
   "importPanel": {

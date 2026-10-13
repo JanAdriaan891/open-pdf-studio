@@ -1,5 +1,9 @@
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { leesOpslag } from '../core/opslag.js';
+
+// Naam van de opgeslagen taalkeuze in de browseropslag (core/opslag.js).
+const TAAL_NAAM = 'i18nextLng';
 
 // Locale bundles are loaded on demand, one language at a time, instead of
 // statically importing all 37 languages (296 JSON files) into the entry
@@ -89,11 +93,11 @@ export async function loadLocale(lng) {
   loadedLanguages.add(base);
 }
 
-// Mirror the LanguageDetector order (localStorage, then navigator) so the
+// Mirror the LanguageDetector order (stored choice, then navigator) so the
 // language it will pick is already loaded before init.
 function detectInitialLanguage() {
   try {
-    const stored = localStorage.getItem('i18nextLng');
+    const stored = leesOpslag(TAAL_NAAM);
     if (stored) return stored.split('-')[0];
   } catch (_) { /* storage unavailable */ }
   return (navigator.language || 'en').split('-')[0];
@@ -108,8 +112,17 @@ if (initialLng !== 'en' && isKnownLanguage(initialLng)) {
   loadedLanguages.add(initialLng);
 }
 
+// De detector leest de opgeslagen taal via core/opslag.js (met voorvoegsel,
+// #547) in plaats van rechtstreeks uit localStorage.
+const taalDetector = new LanguageDetector();
+taalDetector.addDetector({
+  name: 'opdsOpslag',
+  lookup: () => leesOpslag(TAAL_NAAM) || undefined,
+  cacheUserLanguage: () => {},
+});
+
 i18next
-  .use(LanguageDetector)
+  .use(taalDetector)
   .init({
     resources: initialResources,
     ns,
@@ -120,8 +133,7 @@ i18next
       escapeValue: false
     },
     detection: {
-      order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'i18nextLng',
+      order: ['opdsOpslag', 'navigator'],
       caches: []
     }
   });

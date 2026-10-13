@@ -56,6 +56,9 @@
     "noPlaces": "Nincsenek mentett helyek",
     "removePlace": "Hely eltávolítása",
     "noFilesInFolder": "Nincsenek PDF fájlok ebben a mappában",
+    "site": "Ezen a webhelyen",
+    "noSiteDocuments": "Nincsenek dokumentumok ezen a webhelyen",
+    "siteListError": "A webhely dokumentumait nem sikerült betölteni",
     "save": "Mentés"
   },
   "importPanel": {

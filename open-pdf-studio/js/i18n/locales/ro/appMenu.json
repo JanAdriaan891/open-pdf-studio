@@ -56,6 +56,9 @@
     "noPlaces": "Niciun loc salvat",
     "removePlace": "Elimina locul",
     "noFilesInFolder": "Niciun fisier PDF in acest folder",
+    "site": "Pe acest site",
+    "noSiteDocuments": "Niciun document pe acest site",
+    "siteListError": "Documentele acestui site nu au putut fi încărcate",
     "save": "Salvare"
   },
   "importPanel": {

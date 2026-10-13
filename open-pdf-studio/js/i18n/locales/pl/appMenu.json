@@ -56,6 +56,9 @@
     "noPlaces": "Brak zapisanych miejsc",
     "removePlace": "Usuń miejsce",
     "noFilesInFolder": "Brak plików PDF w tym folderze",
+    "site": "W tej witrynie",
+    "noSiteDocuments": "Brak dokumentów w tej witrynie",
+    "siteListError": "Nie udało się wczytać dokumentów tej witryny",
     "save": "Zapisz"
   },
   "importPanel": {

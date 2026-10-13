@@ -56,6 +56,9 @@
     "noPlaces": "لا توجد أماكن محفوظة",
     "removePlace": "إزالة المكان",
     "noFilesInFolder": "لا توجد ملفات PDF في هذا المجلد",
+    "site": "على هذا الموقع",
+    "noSiteDocuments": "لا توجد مستندات على هذا الموقع",
+    "siteListError": "تعذّر تحميل مستندات هذا الموقع",
     "save": "حفظ"
   },
   "importPanel": {

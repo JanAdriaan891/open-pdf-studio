@@ -56,6 +56,9 @@
     "noPlaces": "कोई सहेजा गया स्थान नहीं",
     "removePlace": "स्थान हटाएं",
     "noFilesInFolder": "इस फ़ोल्डर में कोई PDF फ़ाइल नहीं",
+    "site": "इस साइट पर",
+    "noSiteDocuments": "इस साइट पर कोई दस्तावेज़ नहीं है",
+    "siteListError": "इस साइट के दस्तावेज़ लोड नहीं हो सके",
     "save": "सहेजें"
   },
   "importPanel": {

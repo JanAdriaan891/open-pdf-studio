@@ -9,6 +9,7 @@ import {
   setAttachmentEmptyMessage as setEmptyMessage, setAttachmentSelectedKey as setSelectedKey,
   setAttachmentToolbarDisabled as setToolbarDisabled,
 } from '../../bridge.js';
+import { pdfjsBronnen } from '../../core/basis-url.js';
 
 // Current state
 let currentAttachments = {}; // key -> { filename, content, description, createdAt, modifiedAt }
@@ -282,10 +283,7 @@ async function reloadDocumentFromBytes(activeDoc, bytes) {
   const pdfjsLib = await import('pdfjs-dist');
   const newDoc = await pdfjsLib.getDocument({
     data: bytes,
-    cMapUrl: '/pdfjs/web/cmaps/',
-    cMapPacked: true,
-    standardFontDataUrl: '/pdfjs/web/standard_fonts/',
-    wasmUrl: '/pdfjs/web/wasm/',
+    ...pdfjsBronnen(),
     isEvalSupported: false,
     verbosity: 0,
   }).promise;

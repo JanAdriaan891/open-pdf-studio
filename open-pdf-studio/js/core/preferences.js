@@ -5,6 +5,7 @@ import { updateStatusMessage } from '../ui/chrome/status-bar.js';
 import { changeLanguage } from '../i18n/useTranslation.js';
 import { isTauri, getUsername, savePreferencesFile, loadPreferencesFile } from './platform.js';
 import { preferencesMirrorJson } from './preferences-mirror.js';
+import { leesOpslag, schrijfOpslag, VOORKEUREN_NAAM } from './opslag.js';
 import { voegSamenMetStandaarden } from './preferences-merge.js';
 import { randkleurVoorVoorkeur, randkleurenUitVoorkeur } from '../annotations/fill-utils.js';
 import { zetRanddikte } from '../annotations/rendering/textbox-layout.js';
@@ -17,7 +18,7 @@ export async function loadPreferences() {
 
     if (!loaded) {
       // Fallback: migrate from localStorage (first launch after update, or non-Tauri)
-      const saved = localStorage.getItem('pdfEditorPreferences');
+      const saved = leesOpslag(VOORKEUREN_NAAM);
       if (saved) {
         loaded = JSON.parse(saved);
       }
@@ -62,7 +63,7 @@ export async function loadPreferences() {
       );
     }
     try {
-      localStorage.setItem('pdfEditorPreferences', preferencesMirrorJson(state.preferences, isTauri()));
+      schrijfOpslag(VOORKEUREN_NAAM, preferencesMirrorJson(state.preferences, isTauri()));
     } catch (e) {
       console.warn('Voorkeuren-spiegel niet bijgewerkt (localStorage):', e);
     }
@@ -101,7 +102,7 @@ export function savePreferences() {
   }
   applyPreferences();
   try {
-    localStorage.setItem('pdfEditorPreferences', preferencesMirrorJson(state.preferences, isTauri()));
+    schrijfOpslag(VOORKEUREN_NAAM, preferencesMirrorJson(state.preferences, isTauri()));
   } catch (e) {
     // Alleen de pre-boot-themaflits staat op het spel — niet de instellingen.
     console.warn('Voorkeuren-spiegel niet bijgewerkt (localStorage):', e);

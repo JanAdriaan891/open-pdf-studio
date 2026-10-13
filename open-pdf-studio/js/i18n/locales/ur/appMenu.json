@@ -56,6 +56,9 @@
     "noPlaces": "کوئی محفوظ جگہیں نہیں",
     "removePlace": "جگہ ہٹائیں",
     "noFilesInFolder": "اس فولڈر میں کوئی PDF فائلیں نہیں",
+    "site": "اس سائٹ پر",
+    "noSiteDocuments": "اس سائٹ پر کوئی دستاویز نہیں",
+    "siteListError": "اس سائٹ کی دستاویزات لوڈ نہیں ہو سکیں",
     "save": "محفوظ کریں"
   },
   "importPanel": {

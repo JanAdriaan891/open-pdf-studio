@@ -48,6 +48,8 @@
   "percent": "%",
   "webSessionStartsEmpty": "A page reload starts empty: in the browser your document stays on your computer and is not stored.",
   "desktopOnly": "{{feature}} only works in the desktop app. This page is the browser version.",
+  "assistantTitle": "OpenAEC assistant",
+  "onlineSymbolLibrary": "Online symbol library",
   "noDocumentOpen": "No document is open.",
   "noPdfLoaded": "No PDF loaded.",
   "saveRequiresTauri": "Save functionality requires Tauri environment.",

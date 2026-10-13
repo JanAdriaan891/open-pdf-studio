@@ -56,6 +56,9 @@
     "noPlaces": "هیچ مکان ذخیره‌شده‌ای وجود ندارد",
     "removePlace": "حذف مکان",
     "noFilesInFolder": "هیچ پرونده PDF در این پوشه وجود ندارد",
+    "site": "در این سایت",
+    "noSiteDocuments": "هیچ سندی در این سایت نیست",
+    "siteListError": "بارگیری اسناد این سایت ممکن نشد",
     "save": "ذخیره"
   },
   "importPanel": {

@@ -56,6 +56,9 @@
     "noPlaces": "저장된 위치 없음",
     "removePlace": "위치 제거",
     "noFilesInFolder": "이 폴더에 PDF 파일이 없습니다",
+    "site": "이 사이트",
+    "noSiteDocuments": "이 사이트에 문서가 없습니다",
+    "siteListError": "이 사이트의 문서를 불러올 수 없습니다",
     "save": "저장"
   },
   "importPanel": {

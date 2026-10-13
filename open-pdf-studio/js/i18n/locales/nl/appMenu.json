@@ -67,6 +67,9 @@
     "noPlaces": "Geen opgeslagen locaties",
     "removePlace": "Locatie verwijderen",
     "noFilesInFolder": "Geen PDF-bestanden in deze map",
+    "site": "Op deze site",
+    "noSiteDocuments": "Geen documenten op deze site",
+    "siteListError": "De documenten van deze site konden niet worden geladen",
     "save": "Opslaan"
   },
   "importPanel": {
