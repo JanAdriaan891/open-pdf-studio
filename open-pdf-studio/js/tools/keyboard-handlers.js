@@ -20,7 +20,8 @@ import { toggleAnnotationsListPanel } from '../ui/panels/annotations-list.js';
 import { toggleLeftPanel } from '../ui/panels/left-panel.js';
 import { switchRibbonTab as switchToTab } from '../bridge.js';
 import { openFindBar, closeFindBar, onFindNext } from '../search/find-bar.js';
-import { closeActiveTab } from '../ui/chrome/tabs.js';
+import { closeActiveTab, wisselTabMetSneltoets } from '../ui/chrome/tabs.js';
+import { isTextEntryTarget, tabSneltoetsRichting, maakTabSneltoetsHandler, maakTabWisselaar } from '../ui/chrome/tab-sneltoets.js';
 import { hideProperties, showProperties, showMultiSelectionProperties, togglePropertiesPanel } from '../ui/panels/properties-panel.js';
 import { wisselTagEnRuimte } from '../plattegrond/ruimte-selectie.js';
 import { openDialog, getDialogs } from '../bridge.js';
@@ -233,19 +234,44 @@ function _cadChordTry(letter) {
   return false;
 }
 
-// Handle keydown events
-// Typt de gebruiker in een tekstinvoer? Naast INPUT/TEXTAREA tellen ook
-// contenteditable-editors mee (o.a. de PDF-tekst-editor, die geen textarea
-// meer is). Losse letter-/cijfer-sneltoetsen en spatie mogen een lopende
-// tekstbewerking nooit onderbreken — een toolwissel sluit de editor.
-function isTextEntryTarget(t) {
-  if (!t) return false;
-  if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') return true;
-  if (t.isContentEditable) return true;
-  return typeof t.closest === 'function' && !!t.closest('[contenteditable="true"]');
-}
+// ── Tabblad wisselen: Ctrl+Tab / Ctrl+PageDown en terug (#539) ─────────────
+// Hangt in de capture-fase op window (zie initKeyboardHandlers): daar komt
+// de toets als eerste langs, waar de focus ook staat, en kan geen component
+// hem inslikken. Zelfde tekstinvoer-bewaking als de andere sneltoetsen
+// (isTextEntryTarget, tab-sneltoets.js). De rem laat bij ingedrukt houden
+// geen achterstand ontstaan: een volgende wissel start pas als de vorige in
+// beeld staat, en er wacht er hoogstens één.
+const _tabWisselaar = maakTabWisselaar({
+  wissel: (richting) => wisselTabMetSneltoets(richting),
+  // Na het eerstvolgende frame (requestAnimationFrame + taak erna), met een
+  // vangnet voor een verborgen venster waar geen frames komen.
+  naBeeld: () => new Promise((klaar) => {
+    let gedaan = false;
+    const af = () => { if (!gedaan) { gedaan = true; klaar(); } };
+    requestAnimationFrame(() => setTimeout(af, 0));
+    setTimeout(af, 250);
+  }),
+  wacht: (ms) => new Promise((klaar) => setTimeout(klaar, ms)),
+});
 
+const handleTabSneltoets = maakTabSneltoetsHandler({
+  wisselaar: _tabWisselaar,
+  bewaking: () => ({
+    modaalOpen: isModalOpen()
+      || (typeof getDialogs === 'function' && (getDialogs() || []).length > 0),
+    tekstBewerking: !!(state.isEditingText || state.pdfTextEditState),
+    // Verplaatsen/draaien (G), bijsnijden of een lengte intikken midden in
+    // een tekening: die sessie hoort bij het huidige document.
+    bezigeSessie: isGMoveModeActive() || isGRotateModeActive() || !!state.imageCropMode || typeLengthActive(),
+  }),
+});
+
+// Handle keydown events
 export async function handleKeydown(e) {
+  // De tabwissel-toetsen zijn al afgehandeld (of bewust geweigerd) door
+  // handleTabSneltoets; niets hieronder mag er nog op reageren.
+  if (tabSneltoetsRichting(e)) return;
+
   const ctrl = e.ctrlKey || e.metaKey;
   const shift = e.shiftKey;
   const shortcutKey = typeof e.key === 'string' ? e.key.toLowerCase() : '';
@@ -989,6 +1015,9 @@ function handlePaste(e) {
 
 // Initialize keyboard handlers
 export function initKeyboardHandlers() {
+  // Capture-fase op window: vóór alle keydown-luisteraars op document en
+  // daaronder, ook de capture-luisteraars (#539).
+  window.addEventListener('keydown', handleTabSneltoets, true);
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('paste', handlePaste);
   // Focusverlies bijhouden voor de plak-voorrangsregel (zie Ctrl+V hierboven).

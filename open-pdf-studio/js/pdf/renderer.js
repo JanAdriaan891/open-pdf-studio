@@ -517,7 +517,9 @@ async function _renderPageImpl(pageNum) {
         const _rotSwap = (_intrinsicRot === 90 || _intrinsicRot === 270);
         const _pageWpt = _rotSwap ? _rawH : _rawW;
         const _pageHpt = _rotSwap ? _rawW : _rawH;
-        setPage(
+        // true = terug naar een eerder getoond document (tabwissel, #539):
+        // zoom/verschuiving en de gecachte bitmap staan al klaar.
+        const _hersteld = setPage(
           doc.filePath, pageNum,
           _pageWpt, _pageHpt,
           _x0, _y0,
@@ -534,6 +536,10 @@ async function _renderPageImpl(pageNum) {
         // Tile will be ensured on the first zoom change via the _anchorAt hook
         // (Step 4); for the initial fit we let _render() display whatever
         // getBestAvailableBitmap provides immediately.
+        // Een teruggezette stand kan ver ingezoomd zijn: haal dan meteen de
+        // scherpe tegel erbij (uit de tegelcache als die het beeld nog dekt),
+        // anders blijft de pagina wazig tot de gebruiker zoomt of pant.
+        if (_hersteld) _orch.ensureTileForCurrentView(pdfCanvas).catch(() => {});
 
         console.log(`[render] Raster viewport activated: ${_pageWpt}x${_pageHpt} pt (intrinsic /Rotate=${_intrinsicRot}°)`);
         // The new viewport path now OWNS the canvas (initViewport's

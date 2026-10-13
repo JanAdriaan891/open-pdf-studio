@@ -292,6 +292,8 @@ Thumbnails, Bookmarks, Annotations, Attachments, Digital Signatures, Layers, For
 | `Delete` | Delete selected annotation(s) |
 | `Ctrl+D` | Document properties |
 | `Ctrl+W` | Close active tab |
+| `Ctrl+Tab` / `Ctrl+PgDn` | Next tab (wraps around) |
+| `Ctrl+Shift+Tab` / `Ctrl+PgUp` | Previous tab (wraps around) |
 | `V` | Select tool |
 | `H` | Hand tool |
 | `T` | Text box tool |
