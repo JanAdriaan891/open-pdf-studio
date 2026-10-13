@@ -3256,6 +3256,58 @@ async function handleSetLayer(params) {
   return r;
 }
 
+// ─── Systeemtypen (#567) ──────────────────────────────────────────────────
+// De regels staan puur in annotations/systeem-typen-mcp.js; hier alleen de
+// host: de registry (één commit-pad met opslaan, hertekenen en melding), de
+// native editor en de geometrie van een systeem in het actieve document.
+// Geen GUI-automatisering, geen preferences-bestand.
+async function _systeemTypenMcp() {
+  const [regels, registry, editor, geometrie] = await Promise.all([
+    import('./annotations/systeem-typen-mcp.js'),
+    import('./annotations/systeem-typen-registry.js'),
+    import('./solid/stores/systeemtypenEditorStore.js'),
+    import('./annotations/systeem-geometrie-app.js'),
+  ]);
+  return {
+    regels,
+    host: {
+      ...registry,
+      openEditor: editor.openSysteemtypenEditor,
+      systeemInstanceGeometrie: geometrie.systeemInstanceGeometrie,
+    },
+  };
+}
+
+/** app_list_system_types — de systeemtypen van de bibliotheek, of één op id. */
+async function handleListSystemTypes(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpLijstSysteemTypen(params ?? {}, host);
+}
+
+/** app_register_system_type — een type onder mcp:<key> registreren. */
+async function handleRegisterSystemType(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpRegistreerSysteemType(params ?? {}, host);
+}
+
+/** app_update_system_type — een MCP-type bijwerken met revisiecontrole. */
+async function handleUpdateSystemType(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpWerkSysteemTypeBij(params ?? {}, host);
+}
+
+/** app_open_system_type_editor — de native editor met dit type geselecteerd. */
+async function handleOpenSystemTypeEditor(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpOpenSysteemTypeEditor(params ?? {}, host);
+}
+
+/** app_get_system_geometry — de geometrie van één systeem in het actieve document. */
+async function handleGetSystemGeometry(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpSysteemGeometrie(params ?? {}, host);
+}
+
 const HANDLERS = {
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
@@ -3333,6 +3385,12 @@ const HANDLERS = {
   'mcp:list-layers':        handleListLayers,
   'mcp:create-layer':       handleCreateLayer,
   'mcp:set-layer':          handleSetLayer,
+  // Systeemtypen (#567)
+  'mcp:list-system-types':       handleListSystemTypes,
+  'mcp:register-system-type':    handleRegisterSystemType,
+  'mcp:update-system-type':      handleUpdateSystemType,
+  'mcp:open-system-type-editor': handleOpenSystemTypeEditor,
+  'mcp:get-system-geometry':     handleGetSystemGeometry,
   // Assistant — test the AI end-to-end
   'mcp:ai-complete':        handleAiComplete,
   // Accounts introspection — deactivated (cloud accounts feature removed)

@@ -46,6 +46,15 @@ js/pdf/save-document.test.mjs
 js/core/atomic-write.test.mjs
 scripts/test-nen-ifc-map.mjs
 scripts/test-systeemraster.mjs
+js/annotations/systeem-typen.test.mjs
+js/annotations/systeem-typen-contract.test.mjs
+js/annotations/systeem-typen-editor.test.mjs
+js/annotations/systeem-typen-registry.test.mjs
+js/annotations/systeem-typen-mcp.test.mjs
+js/annotations/systeem-geometrie.test.mjs
+js/solid/stores/systeemtypenEditorSessie.test.mjs
+js/pdf/loader/systeemraster-ifc-rondgang.test.mjs
+js/solid/components/dialogs/systeemtypen-dialoog-bedrading.test.mjs
 js/drafting/tekeningtype.test.mjs
 js/annotations/betonbalk-join.test.mjs
 js/annotations/hoek-trim.test.mjs
@@ -201,6 +210,7 @@ js/plattegrond/skill.test.mjs
 js/plugins/annotation-batch.test.mjs
 js/plugins/page-access.test.mjs
 js/plugins/plugin-pdf.test.mjs
+js/plugins/system-type-api.test.mjs
 js/tools/text-edit-vak.test.mjs
 js/symbols/anker.test.mjs
 js/symbols/templates/sanitair.test.mjs

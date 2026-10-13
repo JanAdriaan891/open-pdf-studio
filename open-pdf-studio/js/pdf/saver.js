@@ -2214,8 +2214,6 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               // Ontbreken ze (extern herschreven), dan laadt hij als gewone
               // polygon — nooit crashen.
               OPS_Subtype: PDFString.of('systeemraster'),
-              OPS_SgPlaatB: sgP.plaatBreedteMm,
-              OPS_SgPlaatH: sgP.plaatHoogteMm,
               OPS_SgOrigX: sgP.originXMm,
               OPS_SgOrigY: sgP.originYMm,
               OPS_SgEqX: sgP.equalizeX ? 1 : 0,
@@ -2231,6 +2229,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               OPS_SgEdge: pdfTextString(sgOps.edgeProfiel),
               OPS_IfcCategory: pdfTextString(ann.ifcCategory || ''),
             };
+            // Plaatmaat: weg bij een onbevestigde maat van het type (#567) —
+            // de loader vult dan niets in; het type bepaalt de maat.
+            if (sgP.plaatBreedteMm != null) sgDict.OPS_SgPlaatB = sgP.plaatBreedteMm;
+            if (sgP.plaatHoogteMm != null) sgDict.OPS_SgPlaatH = sgP.plaatHoogteMm;
             if (ann.ifcPredefinedType) {
               sgDict.OPS_IfcPredefined = pdfTextString(ann.ifcPredefinedType);
             }

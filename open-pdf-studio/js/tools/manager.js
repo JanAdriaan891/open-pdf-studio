@@ -308,6 +308,15 @@ export function setTool(tool) {
     state.toolOverrides = null;
   }
 
+  // Activate the new tool via lifecycle — also when it is the same tool,
+  // because choosing it again (ribbon, library) is a new activation. Only
+  // tools that define onActivate are affected (systeemplafond, #567).
+  const newToolObj = getTool(tool);
+  if (newToolObj && newToolObj.onActivate) {
+    const redraw = () => { if (getActiveDocument()?.viewMode === 'continuous') redrawContinuous(); else redrawAnnotations(); };
+    newToolObj.onActivate({ state, redraw, redrawAnnotations, redrawContinuous });
+  }
+
   // Reset hover state so a stale hover from the previous tool doesn't keep
   // showing its cursor under the new tool. The reactive cursor module
   // (js/ui/cursor.js) will pick up state.currentTool and recompute.

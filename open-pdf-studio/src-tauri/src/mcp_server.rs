@@ -339,6 +339,139 @@ fn floorplan_tool() -> Value {
     })
 }
 
+/// Het definitie-object van een systeemtype (#567), schema 1. Een eigen functie
+/// vanwege de recursielimiet van `json!` (zie lib.rs). `register`: bij
+/// registreren zijn naam, categorie en layout verplicht; bij bijwerken is niets
+/// verplicht en wist null een optioneel veld. De JS-kant
+/// (js/annotations/systeem-typen-contract.js) is de echte controle: Rust
+/// valideert het inputSchema niet.
+fn system_type_definition_schema(register: bool) -> Value {
+    let mut schema = json!({
+        "type": "object",
+        "properties": {
+            "naam":              { "type": "string", "description": "Display name (1-200 characters). Not an identity: references use the id." },
+            "categorie":         { "type": "string", "enum": ["plafond", "vloer", "wand", "overig"] },
+            "layout":            { "type": "string", "enum": ["raster", "strook"], "description": "raster: cells in two directions (needs celXMm and celYMm). strook: strips in one direction (needs strookBreedteMm and celYMm)." },
+            "ifcCategory":       { "type": "string", "enum": ["IfcCovering", "IfcWall", "IfcSlab", "IfcPlate"] },
+            "ifcPredefinedType": { "type": ["string", "null"], "enum": ["CEILING", "FLOORING", "FLOOR", "CLADDING", "ROOFING", null] },
+            "celXMm":            { "type": ["number", "null"], "minimum": 50, "maximum": 20000, "description": "Cell width in mm. Left out or null: unconfirmed, no default is applied." },
+            "celYMm":            { "type": ["number", "null"], "minimum": 50, "maximum": 20000, "description": "Cell height in mm. Left out or null: unconfirmed, no default is applied." },
+            "strookBreedteMm":   { "type": ["number", "null"], "minimum": 50, "maximum": 20000, "description": "Strip width in mm for the strook layout. Left out or null: unconfirmed." },
+            "edgeProfiel":       { "type": "string", "enum": ["geen", "hoeklijn", "schaduwvoeg"] },
+            "sparingRegels":     { "type": ["object", "null"], "properties": {
+                                     "kleineSparingMaxMm": { "type": "number", "minimum": 10, "maximum": 20000 },
+                                     "raveelVanafMm":      { "type": "number", "minimum": 10, "maximum": 20000 } },
+                                   "additionalProperties": false },
+            "paneelTypen":       { "type": "array", "minItems": 1, "maxItems": 50, "items": {
+                                     "type": "object",
+                                     "properties": {
+                                       "id":          { "type": "string" },
+                                       "naam":        { "type": "string" },
+                                       "renderStijl": { "type": "string", "enum": ["tegel", "ventilatie", "licht"] } },
+                                     "required": ["id", "naam", "renderStijl"],
+                                     "additionalProperties": false } },
+            "lagen":             { "type": "array", "maxItems": 0, "description": "Reserved. Schema 1 has one implicit layer; only an empty array is accepted." }
+        },
+        "additionalProperties": false
+    });
+    if register {
+        schema["required"] = json!(["naam", "categorie", "layout"]);
+    }
+    schema
+}
+
+/// `app_list_system_types` (#567): de bibliotheek met systeemtypen lezen.
+fn list_system_types_tool() -> Value {
+    json!({
+        "name": "app_list_system_types",
+        "description": "List the reusable system types (suspended ceilings, floor slabs, panel systems) of the app library, or one type by id. Each entry has its stable id, owner, revision, whether the user edited it, the validated definition, unconfirmed dimensions and stored values that fail validation. Compare libraryRevision between calls to detect changes. Reads only.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "id": { "type": "string", "description": "Stable id of one system type." }
+            },
+            "additionalProperties": false
+        }
+    })
+}
+
+/// `app_register_system_type` (#567): een type onder `mcp:<key>` registreren.
+/// Een andere definitie vervangt een bestaand, onbewerkt `mcp:`-type en
+/// hertekent alle systemen ermee: daarom `wijzigt` in mcp_tool_meta.rs.
+fn register_system_type_tool() -> Value {
+    json!({
+        "name": "app_register_system_type",
+        "description": "Register a system type owned by MCP under the id mcp:<key>. Repeating the call with the same definition changes nothing (status unchanged), and a definition the user edited in the app is kept (status kept-user-edit) and never overwritten. A different definition replaces an existing mcp:<key> type that the user has not edited (status updated) and redraws every system that uses it. Unknown fields, out-of-range values and layered definitions are rejected. Missing dimensions stay unconfirmed.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "key":        { "type": "string", "description": "Stable key: lowercase letters, digits, dot, underscore or hyphen (1-64)." },
+                "definition": system_type_definition_schema(true),
+                "schema":     { "type": "integer", "enum": [1] },
+                "restore":    { "type": "boolean", "description": "Recreate a type the user removed. Only on an explicit user request." }
+            },
+            "required": ["key", "definition"],
+            "additionalProperties": false
+        }
+    })
+}
+
+/// `app_update_system_type` (#567): een MCP-type bijwerken met revisiecontrole.
+fn update_system_type_tool() -> Value {
+    json!({
+        "name": "app_update_system_type",
+        "description": "Update a system type owned by MCP (id mcp:<key>). Pass the revision you last read as expectedRevision; a stale revision is rejected with the current revision. Types of the app or of extensions cannot be changed here. Nested values (sparingRegels, paneelTypen) are replaced as a whole; null clears an optional field.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "id":               { "type": "string" },
+                "expectedRevision": { "type": "integer", "minimum": 1 },
+                "changes":          system_type_definition_schema(false),
+                "schema":           { "type": "integer", "enum": [1] }
+            },
+            "required": ["id", "expectedRevision", "changes"],
+            "additionalProperties": false
+        }
+    })
+}
+
+/// `app_open_system_type_editor` (#567): de native editor openen met de focus
+/// op een type. Keert meteen terug; de gebruiker past toe of annuleert.
+fn open_system_type_editor_tool() -> Value {
+    json!({
+        "name": "app_open_system_type_editor",
+        "description": "Open the app's system type editor with the given type selected, or select it in the editor that is already open without discarding unapplied edits. Returns immediately; the user applies or cancels in the app. Does not change any data.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "id": { "type": "string", "description": "Stable id of the system type to select." }
+            },
+            "required": ["id"],
+            "additionalProperties": false
+        }
+    })
+}
+
+/// `app_get_system_geometry` (#567, punt 7): de documentgebonden geometrie van
+/// één systeem in het actieve document, uit de eigen geometrie van de app.
+fn get_system_geometry_tool() -> Value {
+    json!({
+        "name": "app_get_system_geometry",
+        "description": "Get the geometry of one system (suspended ceiling, floor slab, panel field) in the active document, computed by the app's own geometry engine: panels with clipped outlines, grid lines, openings, trimmers, edge segments and component positions, in millimetres in the system's own frame (independent of zoom and view rotation; placement maps it onto the page). Includes the document and type revisions and whether every physical dimension is confirmed. Pass expectedDocumentRevision and expectedTypeRevision to reject a stale snapshot. Reads only.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "annotationId":             { "type": "string", "description": "Id of the system annotation (type systeemraster) in the active document." },
+                "expectedDocumentRevision": { "type": "string", "description": "document.revision of an earlier snapshot; a different current revision is rejected." },
+                "expectedTypeRevision":     { "type": "integer", "minimum": 1, "description": "type.revision of an earlier snapshot; a different current revision is rejected." },
+                "schema":                   { "type": "integer", "enum": [1] }
+            },
+            "required": ["annotationId"],
+            "additionalProperties": false
+        }
+    })
+}
+
 /// Beschrijving van `app_facade_element`: het gevelelement (#475) — een
 /// vliesgevel of kozijn als één object met stijlen op de veldgrenzen en een
 /// paneel per veld.
@@ -1240,7 +1373,13 @@ fn handle_tools_list() -> Value {
                 }
             },
             floorplan_tool(),
-            facade_element_tool()
+            facade_element_tool(),
+            // Systeemtypen (#567)
+            list_system_types_tool(),
+            register_system_type_tool(),
+            update_system_type_tool(),
+            open_system_type_editor_tool(),
+            get_system_geometry_tool()
         ]
     })
 }
@@ -1357,6 +1496,12 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_list_layers"        => tool_app_request(state, "mcp:list-layers",        &arguments, Duration::from_secs(10)).await,
         "app_create_layer"       => tool_app_request(state, "mcp:create-layer",       &arguments, Duration::from_secs(10)).await,
         "app_set_layer"          => tool_app_request(state, "mcp:set-layer",          &arguments, Duration::from_secs(10)).await,
+        // Systeemtypen (#567): alleen de bibliotheek, dus korte grenzen.
+        "app_list_system_types"       => tool_app_request(state, "mcp:list-system-types",       &arguments, Duration::from_secs(10)).await,
+        "app_register_system_type"    => tool_app_request(state, "mcp:register-system-type",    &arguments, Duration::from_secs(10)).await,
+        "app_update_system_type"      => tool_app_request(state, "mcp:update-system-type",      &arguments, Duration::from_secs(10)).await,
+        "app_open_system_type_editor" => tool_app_request(state, "mcp:open-system-type-editor", &arguments, Duration::from_secs(10)).await,
+        "app_get_system_geometry"     => tool_app_request(state, "mcp:get-system-geometry",     &arguments, Duration::from_secs(10)).await,
         other => Err((
             jsonrpc_error::METHOD_NOT_FOUND,
             format!("method not found: {other}"),
@@ -1970,7 +2115,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 62);
+        assert_eq!(arr.len(), 67);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
@@ -2494,6 +2639,11 @@ mod tests {
             "app_list_layers",
             "app_create_layer",
             "app_set_layer",
+            "app_list_system_types",
+            "app_register_system_type",
+            "app_update_system_type",
+            "app_open_system_type_editor",
+            "app_get_system_geometry",
         ] {
             assert!(names.contains(&tool), "missing tool: {tool} (got {names:?})");
             let descr = arr.iter().find(|t| t["name"] == tool).unwrap();

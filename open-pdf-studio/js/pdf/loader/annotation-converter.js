@@ -17,7 +17,7 @@ import { vlakSchaalUitMeasure } from '../../annotations/vlak-zijden.js';
 import { heeft as heeftKnipselBron } from '../../annotations/vector-snippet-store.js';
 import { syncTwoPointGeometry } from '../../symbols/two-point.js';
 import { systeemFromOps, sparingenFromJson } from '../../annotations/systeemraster.js';
-import { systeemTypeFromJson } from '../../annotations/systeem-typen.js';
+import { systeemTypeFromJson, ifcPredefinedNaLaden } from '../../annotations/systeem-typen.js';
 import { ensureSysteemType, getSysteemTypeById } from '../../annotations/systeem-typen-registry.js';
 import { computeTextboxContentHeight } from '../../annotations/rendering/shapes.js';
 import { pasRegelafstandAanDoos } from '../../annotations/rendering/textbox-layout.js';
@@ -788,12 +788,18 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
             system: sgSystem,
             sparingen: sparingenFromJson(extraColors.sgSparingenJson),
             systeemTypeId: sgTypeId,
-            ifcPredefinedType: sgResolvedType?.ifcPredefinedType
-              || extraColors.opsIfcPredefined
-              || (sgSystem.type === 'plafond' ? 'CEILING' : undefined),
+            // Met een gevonden type is het TYPE leidend (#567): geen verzonnen
+            // CEILING voor een type zonder predefined type.
+            ifcPredefinedType: ifcPredefinedNaLaden({
+              typeDef: sgResolvedType,
+              bewaard: extraColors.opsIfcPredefined,
+              sysType: sgSystem.type,
+            }),
             x: minX, y: minY, width: maxX - minX, height: maxY - minY,
-            plaatBreedteMm: extraColors.sgPlaatBreedteMm ?? 2000,
-            plaatHoogteMm: extraColors.sgPlaatHoogteMm ?? 2000,
+            // Terugval op 2000 alleen voor een raster ZONDER type; bij een
+            // type bepaalt het type de maat (#567: geen verzonnen maat).
+            plaatBreedteMm: extraColors.sgPlaatBreedteMm ?? (sgTypeId ? undefined : 2000),
+            plaatHoogteMm: extraColors.sgPlaatHoogteMm ?? (sgTypeId ? undefined : 2000),
             originXMm: extraColors.sgOriginXMm ?? 0,
             originYMm: extraColors.sgOriginYMm ?? 0,
             equalizeX: extraColors.sgEqualizeX === true,

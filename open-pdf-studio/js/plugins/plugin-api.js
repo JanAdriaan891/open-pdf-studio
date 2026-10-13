@@ -24,9 +24,22 @@ import { getPageInfoForDocument, readPageContentForDocument, renderPageTileForDo
 import { extractPageGeometry } from '../tools/pdf-snap-extractor.js';
 import { schaalOpPunt } from '../annotations/schaal-op-punt.js';
 import { getScaleFromRegion } from '../annotations/scale-region.js';
+import * as systeemTypenRegistry from '../annotations/systeem-typen-registry.js';
+import { systeemInstanceGeometrie } from '../annotations/systeem-geometrie-app.js';
+import { openSysteemtypenEditor } from '../solid/stores/systeemtypenEditorStore.js';
+import { createSystemTypeApi } from './system-type-api.js';
 import { createRoot, createEffect } from 'solid-js';
 
 export function createPluginApi(pluginId) {
+  // System types (#567): registry, native tool, native editor and the
+  // geometry of system instances as the host. See docs/plugin-systeemtypen.md
+  // for the contract and the lifecycle.
+  const systemTypes = createSystemTypeApi(pluginId, {
+    ...systeemTypenRegistry,
+    systeemInstanceGeometrie,
+    setTool,
+    openEditor: openSysteemtypenEditor,
+  });
   const registeredTypes = [];
   const registeredPalettes = [];
   const registeredPanels = [];
@@ -79,6 +92,7 @@ export function createPluginApi(pluginId) {
       annotationBatch: true,
       pageAnalysis: true,
       pluginDocumentEvents: true,
+      systemTypes: true,
     },
 
     // --- Annotation type registration ---
@@ -150,8 +164,10 @@ export function createPluginApi(pluginId) {
     },
 
     // --- State access (read-only helpers) ---
+    // A detached copy: writing to it changes nothing. System types go through
+    // the system type API below, which validates every change.
     getPreferences() {
-      return state.preferences;
+      return JSON.parse(JSON.stringify(state.preferences));
     },
 
     getCurrentTool() {
@@ -284,6 +300,21 @@ export function createPluginApi(pluginId) {
       redrawAnnotations();
     },
 
+    // --- System types (#567) ---
+    // Read detached snapshots, register and update types owned by this
+    // plugin ('ext:<pluginId>#<key>'), pick a type for the native tool, open
+    // the native editor, listen to confirmed changes and read the geometry of
+    // a system instance in the active document.
+    listSystemTypes: systemTypes.listSystemTypes,
+    getSystemType: systemTypes.getSystemType,
+    systemTypeId: systemTypes.systemTypeId,
+    registerSystemType: systemTypes.registerSystemType,
+    updateSystemType: systemTypes.updateSystemType,
+    selectSystemTypeForTool: systemTypes.selectSystemTypeForTool,
+    openSystemTypeEditor: systemTypes.openSystemTypeEditor,
+    onSystemTypesChanged: systemTypes.onSystemTypesChanged,
+    getSystemInstanceGeometry: systemTypes.getSystemInstanceGeometry,
+
     // --- Cleanup (called by plugin-manager on deactivate) ---
     _cleanup() {
       registeredTypes.forEach(t => unregisterAnnotationType(t));
@@ -301,6 +332,9 @@ export function createPluginApi(pluginId) {
       disposeDocumentEvents?.();
       disposeDocumentEvents = null;
       documentListeners.clear();
+      // Only runtime state: stored system types are never removed here, so a
+      // document that references them keeps working.
+      systemTypes.dispose();
     }
   };
 }
