@@ -1,6 +1,7 @@
 import { state, getActiveDocument, selectAllOnPage, clearSelection } from '../core/state.js';
 import { undo, redo, recordAdd, recordModify, recordBulkModify, recordClearPage } from '../core/undo-manager.js';
 import { setTool } from './manager.js';
+import { heeftGekozenAfbeelding, wisAfbeeldingSelectie, deleteSelectedEmbeddedImage } from './tools/remove-image-tool.js';
 import { showPreferencesDialog, setAsDefaultStyle } from '../core/preferences.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
 import { copyAndMove } from './edit-ops.js';
@@ -478,6 +479,11 @@ export async function handleKeydown(e) {
     }
   } else if (e.key === 'Delete') {
     e.preventDefault();
+    if (heeftGekozenAfbeelding()) {
+      // Afbeelding bewerken: Delete verwijdert de gekozen afbeelding uit de pagina.
+      if (!isPdfAReadOnly()) deleteSelectedEmbeddedImage();
+      return;
+    }
     if (isPdfAReadOnly()) { /* block */ }
     else if ((getActiveDocument()?.selectedAnnotations || []).length > 0) {
       // Een vervanging (#508) telt met beide helften, ook in de vraag.
@@ -720,6 +726,11 @@ export async function handleKeydown(e) {
   //    doet (tool.onEscape → zelfde afrondroutines), daarna selectietool.
   // 3. Teken-tool actief zonder actieve tekening → selectietool.
   // 4. Selectietool actief → selectie legen (bestaand gedrag).
+  else if (e.key === 'Escape' && heeftGekozenAfbeelding()) {
+    // Afbeelding bewerken: Escape wist eerst de gekozen afbeelding.
+    wisAfbeeldingSelectie();
+    return;
+  }
   else if (e.key === 'Escape') {
     // Trede 1: modale dialogen (vanilla overlays + Solid dialogStore), de
     // Edit-Type-editor en de crop-modus handelen Escape volledig zelf af.
