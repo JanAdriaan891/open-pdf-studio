@@ -180,7 +180,13 @@
     "allPages": "Всички страници",
     "firstPageOnly": "Само първата страница",
     "range": "Диапазон:",
-    "rangePlaceholder": "напр. 1-5, 8"
+    "rangePlaceholder": "напр. 1-5, 8",
+    "bates": "Номериране Bates:",
+    "batesHint": "Номерира страниците с {bates}: представка, номер с водещи нули, наставка",
+    "batesPrefix": "Представка",
+    "batesStart": "Начало",
+    "batesDigits": "Цифри",
+    "batesSuffix": "Наставка"
   },
   "manageWatermarks": {
     "title": "Управление на водни знаци",

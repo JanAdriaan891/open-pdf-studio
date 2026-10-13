@@ -180,7 +180,13 @@
     "allPages": "Kaikki sivut",
     "firstPageOnly": "Vain ensimmäinen sivu",
     "range": "Alue:",
-    "rangePlaceholder": "esim. 1-5, 8"
+    "rangePlaceholder": "esim. 1-5, 8",
+    "bates": "Bates-numerointi:",
+    "batesHint": "Numeroi sivut muuttujalla {bates}: etuliite, numero etunollin, jälkiliite",
+    "batesPrefix": "Etuliite",
+    "batesStart": "Alku",
+    "batesDigits": "Numerot",
+    "batesSuffix": "Jälkiliite"
   },
   "manageWatermarks": {
     "title": "Hallitse vesileimoja",

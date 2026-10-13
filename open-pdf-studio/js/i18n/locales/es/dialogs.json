@@ -180,7 +180,13 @@
     "allPages": "Todas las páginas",
     "firstPageOnly": "Solo la primera página",
     "range": "Rango:",
-    "rangePlaceholder": "ej. 1-5, 8"
+    "rangePlaceholder": "ej. 1-5, 8",
+    "bates": "Numeración Bates:",
+    "batesHint": "Numera las páginas con {bates}: prefijo, número con ceros a la izquierda, sufijo",
+    "batesPrefix": "Prefijo",
+    "batesStart": "Inicio",
+    "batesDigits": "Dígitos",
+    "batesSuffix": "Sufijo"
   },
   "manageWatermarks": {
     "title": "Administrar marcas de agua",

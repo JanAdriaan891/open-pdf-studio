@@ -180,7 +180,13 @@
     "allPages": "Усі сторінки",
     "firstPageOnly": "Лише перша сторінка",
     "range": "Діапазон:",
-    "rangePlaceholder": "напр. 1-5, 8"
+    "rangePlaceholder": "напр. 1-5, 8",
+    "bates": "Нумерація Бейтса:",
+    "batesHint": "Нумерує сторінки за допомогою {bates}: префікс, номер з початковими нулями, суфікс",
+    "batesPrefix": "Префікс",
+    "batesStart": "Початок",
+    "batesDigits": "Цифри",
+    "batesSuffix": "Суфікс"
   },
   "manageWatermarks": {
     "title": "Керування водяними знаками",

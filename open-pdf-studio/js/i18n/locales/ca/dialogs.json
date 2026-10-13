@@ -180,7 +180,13 @@
     "allPages": "Totes les pàgines",
     "firstPageOnly": "Només la primera pàgina",
     "range": "Interval:",
-    "rangePlaceholder": "p. ex. 1-5, 8"
+    "rangePlaceholder": "p. ex. 1-5, 8",
+    "bates": "Numeració Bates:",
+    "batesHint": "Numera les pàgines amb {bates}: prefix, número amb zeros inicials, sufix",
+    "batesPrefix": "Prefix",
+    "batesStart": "Inici",
+    "batesDigits": "Dígits",
+    "batesSuffix": "Sufix"
   },
   "manageWatermarks": {
     "title": "Gestiona filigranes",

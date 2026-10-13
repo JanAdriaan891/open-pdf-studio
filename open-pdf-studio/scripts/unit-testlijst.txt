@@ -262,3 +262,5 @@ js/ui/chrome/tab-sneltoets.test.mjs
 js/pdf/weergave-per-document.test.mjs
 js/ui/chrome/tab-sneltoets-koppeling.test.mjs
 js/pdf/bijlagen.test.mjs
+js/watermark/kopvoet.test.mjs
+js/pdf/page-manager-kopvoet.test.mjs

@@ -180,7 +180,13 @@
     "allPages": "Alla sidor",
     "firstPageOnly": "Endast första sidan",
     "range": "Intervall:",
-    "rangePlaceholder": "t.ex. 1-5, 8"
+    "rangePlaceholder": "t.ex. 1-5, 8",
+    "bates": "Bates-numrering:",
+    "batesHint": "Numrerar sidorna med {bates}: prefix, nummer med inledande nollor, suffix",
+    "batesPrefix": "Prefix",
+    "batesStart": "Start",
+    "batesDigits": "Siffror",
+    "batesSuffix": "Suffix"
   },
   "manageWatermarks": {
     "title": "Hantera vattenstamplar",

@@ -180,7 +180,13 @@
     "allPages": "Tất cả trang",
     "firstPageOnly": "Chỉ trang đầu",
     "range": "Phạm vi:",
-    "rangePlaceholder": "vd. 1-5, 8"
+    "rangePlaceholder": "vd. 1-5, 8",
+    "bates": "Đánh số Bates:",
+    "batesHint": "Đánh số trang bằng {bates}: tiền tố, số có các số 0 ở đầu, hậu tố",
+    "batesPrefix": "Tiền tố",
+    "batesStart": "Bắt đầu",
+    "batesDigits": "Chữ số",
+    "batesSuffix": "Hậu tố"
   },
   "manageWatermarks": {
     "title": "Quản lý Hình mờ",

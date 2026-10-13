@@ -224,7 +224,13 @@
     "allPages": "Alle pagina's",
     "firstPageOnly": "Alleen eerste pagina",
     "range": "Bereik:",
-    "rangePlaceholder": "bijv. 1-5, 8"
+    "rangePlaceholder": "bijv. 1-5, 8",
+    "bates": "Bates-nummering:",
+    "batesHint": "Nummert de pagina's met {bates}: voorvoegsel, nummer met voorloopnullen, achtervoegsel",
+    "batesPrefix": "Voorvoegsel",
+    "batesStart": "Begin",
+    "batesDigits": "Cijfers",
+    "batesSuffix": "Achtervoegsel"
   },
   "manageWatermarks": {
     "title": "Watermerken beheren",

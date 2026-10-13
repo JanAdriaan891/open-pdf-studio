@@ -180,7 +180,13 @@
     "allPages": "সমস্ত পৃষ্ঠা",
     "firstPageOnly": "শুধু প্রথম পৃষ্ঠা",
     "range": "পরিসর:",
-    "rangePlaceholder": "যেমন 1-5, 8"
+    "rangePlaceholder": "যেমন 1-5, 8",
+    "bates": "Bates নম্বরিং:",
+    "batesHint": "{bates} দিয়ে পৃষ্ঠাগুলোতে নম্বর দেয়: উপসর্গ, শুরুর শূন্যসহ নম্বর, প্রত্যয়",
+    "batesPrefix": "উপসর্গ",
+    "batesStart": "শুরু",
+    "batesDigits": "অঙ্ক",
+    "batesSuffix": "প্রত্যয়"
   },
   "manageWatermarks": {
     "title": "ওয়াটারমার্ক পরিচালনা",

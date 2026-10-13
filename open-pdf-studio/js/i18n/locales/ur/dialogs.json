@@ -180,7 +180,13 @@
     "allPages": "تمام صفحات",
     "firstPageOnly": "صرف پہلا صفحہ",
     "range": "حد:",
-    "rangePlaceholder": "مثلاً 1-5, 8"
+    "rangePlaceholder": "مثلاً 1-5, 8",
+    "bates": "Bates نمبرنگ:",
+    "batesHint": "{bates} کے ذریعے صفحات کو نمبر دیتا ہے: سابقہ، شروع میں صفر والا نمبر، لاحقہ",
+    "batesPrefix": "سابقہ",
+    "batesStart": "آغاز",
+    "batesDigits": "ہندسے",
+    "batesSuffix": "لاحقہ"
   },
   "manageWatermarks": {
     "title": "واٹر مارکس کا انتظام",

@@ -180,7 +180,13 @@
     "allPages": "ทุกหน้า",
     "firstPageOnly": "หน้าแรกเท่านั้น",
     "range": "ช่วง:",
-    "rangePlaceholder": "เช่น 1-5, 8"
+    "rangePlaceholder": "เช่น 1-5, 8",
+    "bates": "การกำหนดเลข Bates:",
+    "batesHint": "ใส่เลขหน้าด้วย {bates}: คำนำหน้า ตัวเลขที่มีศูนย์นำหน้า คำต่อท้าย",
+    "batesPrefix": "คำนำหน้า",
+    "batesStart": "เริ่มต้น",
+    "batesDigits": "จำนวนหลัก",
+    "batesSuffix": "คำต่อท้าย"
   },
   "manageWatermarks": {
     "title": "จัดการลายน้ำ",

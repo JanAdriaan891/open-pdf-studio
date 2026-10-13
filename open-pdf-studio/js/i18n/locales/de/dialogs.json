@@ -180,7 +180,13 @@
     "allPages": "Alle Seiten",
     "firstPageOnly": "Nur erste Seite",
     "range": "Bereich:",
-    "rangePlaceholder": "z.B. 1-5, 8"
+    "rangePlaceholder": "z.B. 1-5, 8",
+    "bates": "Bates-Nummerierung:",
+    "batesHint": "Nummeriert die Seiten mit {bates}: Präfix, Nummer mit führenden Nullen, Suffix",
+    "batesPrefix": "Präfix",
+    "batesStart": "Start",
+    "batesDigits": "Stellen",
+    "batesSuffix": "Suffix"
   },
   "manageWatermarks": {
     "title": "Wasserzeichen verwalten",

@@ -2926,8 +2926,9 @@ async function _savePDFNu(saveAsPath, activeDoc) {
       }
     }
 
-    // Burn watermarks into the PDF
-    await saveWatermarksToPages(pdfDocLib, pages, activeDoc);
+    // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
+    // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.
+    const watermerkUitkomst = await saveWatermarksToPages(pdfDocLib, pages, activeDoc);
 
     // Save bookmarks to PDF outline
     saveBookmarksToOutline(pdfDocLib, activeDoc);
@@ -3002,6 +3003,13 @@ async function _savePDFNu(saveAsPath, activeDoc) {
     // alInBasis(): een volgende save op die basis tekent ze niet nogmaals.
     if (activeDoc) markeerGebakken(activeDoc.annotations, outputPath);
 
+    // Kop-/voetteksten staan nu als pagina-inhoud in outputPath (#375).
+    const kopVoetIds = Array.isArray(watermerkUitkomst?.kopVoet) ? watermerkUitkomst.kopVoet : null;
+    if (kopVoetIds && activeDoc) {
+      const { naOpslaanKopVoet } = await import('../watermark/kopvoet-weergave.js');
+      naOpslaanKopVoet(activeDoc, kopVoetIds, outputPath);
+    }
+
     // Ingebakken text-edits zijn nu deel van het bestand: markeer ze als
     // 'baked' zodat een volgende save ze niet NOGMAALS inbakt (dubbele
     // tekstlagen in het bestand, oud/nieuw dat bij zoomen door elkaar
@@ -3066,6 +3074,19 @@ async function _savePDFNu(saveAsPath, activeDoc) {
           '[saver] Verversing na text-edit-save mislukt (weergave kan de oude ' +
           'render tonen tot heropenen):', reloadErr,
         );
+      }
+    }
+
+    // Opgeslagen in het bestand dat ook de weergave is: daar staan de
+    // kop-/voetteksten nu in, en het scherm tekent ze zelf. Herladen zonder
+    // die streams (kopvoet-weergave.js). De bytes hebben de paginadraaiingen
+    // van het document al.
+    if (!saveAsPath && activeDoc?._kopVoetBron && activeDoc._kopVoetBron === activeDoc.filePath) {
+      try {
+        const { haalKopVoetUitWeergave } = await import('../watermark/kopvoet-weergave.js');
+        if (await haalKopVoetUitWeergave(activeDoc, { bytes: savedBytes, rotaties: {} })) markDocumentSaved(activeDoc);
+      } catch (e) {
+        console.warn('[saver] verversen na het opslaan van kop-/voetteksten mislukt:', e);
       }
     }
 
@@ -3140,6 +3161,16 @@ export async function savePDFAs(doc = getActiveDocument()) {
           const { losgelatenWerkbestanden, ruimWerkbestandenOp } = await import('./document-release.js');
           await ruimWerkbestandenOp(doc, losgelatenWerkbestanden(doc, state.documents.filter((d) => d !== doc)));
         } catch (e) { console.warn('[save-as] working files not removed:', e); }
+      }
+    }
+    // De weergave is nu het opgeslagen bestand, met de kop-/voetteksten erin:
+    // zonder die streams herladen, het scherm tekent ze zelf (#375).
+    if (success && doc?._kopVoetBron && doc._kopVoetBron === doc.filePath) {
+      try {
+        const { haalKopVoetUitWeergave } = await import('../watermark/kopvoet-weergave.js');
+        if (await haalKopVoetUitWeergave(doc, { rotaties: {} })) markDocumentSaved(doc);
+      } catch (e) {
+        console.warn('[save-as] verversen na het opslaan van kop-/voetteksten mislukt:', e);
       }
     }
     return success || false;

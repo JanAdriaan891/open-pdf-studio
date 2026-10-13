@@ -180,7 +180,13 @@
     "allPages": "Všetky strany",
     "firstPageOnly": "Len prvá strana",
     "range": "Rozsah:",
-    "rangePlaceholder": "napr. 1-5, 8"
+    "rangePlaceholder": "napr. 1-5, 8",
+    "bates": "Číslovanie Bates:",
+    "batesHint": "Čísluje strany pomocou {bates}: predpona, číslo s úvodnými nulami, prípona",
+    "batesPrefix": "Predpona",
+    "batesStart": "Začiatok",
+    "batesDigits": "Číslice",
+    "batesSuffix": "Prípona"
   },
   "manageWatermarks": {
     "title": "Spravovať vodotlače",

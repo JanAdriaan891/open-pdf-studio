@@ -180,7 +180,13 @@
     "allPages": "Toate paginile",
     "firstPageOnly": "Doar prima pagina",
     "range": "Interval:",
-    "rangePlaceholder": "ex. 1-5, 8"
+    "rangePlaceholder": "ex. 1-5, 8",
+    "bates": "Numerotare Bates:",
+    "batesHint": "Numerotează paginile cu {bates}: prefix, număr cu zerouri la început, sufix",
+    "batesPrefix": "Prefix",
+    "batesStart": "Început",
+    "batesDigits": "Cifre",
+    "batesSuffix": "Sufix"
   },
   "manageWatermarks": {
     "title": "Administrare filigrane",

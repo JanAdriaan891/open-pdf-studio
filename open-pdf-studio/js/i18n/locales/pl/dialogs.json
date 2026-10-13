@@ -180,7 +180,13 @@
     "allPages": "Wszystkie strony",
     "firstPageOnly": "Tylko pierwsza strona",
     "range": "Zakres:",
-    "rangePlaceholder": "np. 1-5, 8"
+    "rangePlaceholder": "np. 1-5, 8",
+    "bates": "Numeracja Bates:",
+    "batesHint": "Numeruje strony za pomocą {bates}: prefiks, numer z wiodącymi zerami, sufiks",
+    "batesPrefix": "Prefiks",
+    "batesStart": "Początek",
+    "batesDigits": "Cyfry",
+    "batesSuffix": "Sufiks"
   },
   "manageWatermarks": {
     "title": "Zarządzaj znakami wodnymi",

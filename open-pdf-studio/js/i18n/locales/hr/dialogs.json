@@ -180,7 +180,13 @@
     "allPages": "Sve stranice",
     "firstPageOnly": "Samo prva stranica",
     "range": "Raspon:",
-    "rangePlaceholder": "npr. 1-5, 8"
+    "rangePlaceholder": "npr. 1-5, 8",
+    "bates": "Bates numeriranje:",
+    "batesHint": "Numerira stranice s {bates}: prefiks, broj s vodećim nulama, sufiks",
+    "batesPrefix": "Prefiks",
+    "batesStart": "Početak",
+    "batesDigits": "Znamenke",
+    "batesSuffix": "Sufiks"
   },
   "manageWatermarks": {
     "title": "Upravljaj vodenim žigovima",

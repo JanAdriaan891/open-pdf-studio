@@ -180,7 +180,13 @@
     "allPages": "所有页面",
     "firstPageOnly": "仅第一页",
     "range": "范围：",
-    "rangePlaceholder": "例如 1-5, 8"
+    "rangePlaceholder": "例如 1-5, 8",
+    "bates": "Bates 编号：",
+    "batesHint": "用 {bates} 为页面编号：前缀、带前导零的编号、后缀",
+    "batesPrefix": "前缀",
+    "batesStart": "起始",
+    "batesDigits": "位数",
+    "batesSuffix": "后缀"
   },
   "manageWatermarks": {
     "title": "管理水印",

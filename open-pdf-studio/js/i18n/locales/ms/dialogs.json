@@ -180,7 +180,13 @@
     "allPages": "Semua halaman",
     "firstPageOnly": "Halaman pertama sahaja",
     "range": "Julat:",
-    "rangePlaceholder": "cth. 1-5, 8"
+    "rangePlaceholder": "cth. 1-5, 8",
+    "bates": "Penomboran Bates:",
+    "batesHint": "Menomborkan halaman dengan {bates}: awalan, nombor dengan sifar di hadapan, akhiran",
+    "batesPrefix": "Awalan",
+    "batesStart": "Mula",
+    "batesDigits": "Digit",
+    "batesSuffix": "Akhiran"
   },
   "manageWatermarks": {
     "title": "Urus Tera Air",

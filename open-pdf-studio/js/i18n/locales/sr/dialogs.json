@@ -180,7 +180,13 @@
     "allPages": "Све странице",
     "firstPageOnly": "Само прва страница",
     "range": "Опсег:",
-    "rangePlaceholder": "нпр. 1-5, 8"
+    "rangePlaceholder": "нпр. 1-5, 8",
+    "bates": "Бејтс нумерисање:",
+    "batesHint": "Нумерише странице помоћу {bates}: префикс, број са водећим нулама, суфикс",
+    "batesPrefix": "Префикс",
+    "batesStart": "Почетак",
+    "batesDigits": "Цифре",
+    "batesSuffix": "Суфикс"
   },
   "manageWatermarks": {
     "title": "Управљање воденим жиговима",

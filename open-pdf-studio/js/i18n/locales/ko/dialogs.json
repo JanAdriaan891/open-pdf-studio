@@ -180,7 +180,13 @@
     "allPages": "모든 페이지",
     "firstPageOnly": "첫 페이지만",
     "range": "범위:",
-    "rangePlaceholder": "예: 1-5, 8"
+    "rangePlaceholder": "예: 1-5, 8",
+    "bates": "Bates 번호 매기기:",
+    "batesHint": "{bates}로 페이지에 번호를 매깁니다: 접두사, 앞자리 0이 붙은 번호, 접미사",
+    "batesPrefix": "접두사",
+    "batesStart": "시작",
+    "batesDigits": "자릿수",
+    "batesSuffix": "접미사"
   },
   "manageWatermarks": {
     "title": "워터마크 관리",

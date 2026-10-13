@@ -180,7 +180,13 @@
     "allPages": "Все страницы",
     "firstPageOnly": "Только первая страница",
     "range": "Диапазон:",
-    "rangePlaceholder": "напр. 1-5, 8"
+    "rangePlaceholder": "напр. 1-5, 8",
+    "bates": "Нумерация Бейтса:",
+    "batesHint": "Нумерует страницы с помощью {bates}: префикс, номер с ведущими нулями, суффикс",
+    "batesPrefix": "Префикс",
+    "batesStart": "Начало",
+    "batesDigits": "Цифры",
+    "batesSuffix": "Суффикс"
   },
   "manageWatermarks": {
     "title": "Управление водяными знаками",
