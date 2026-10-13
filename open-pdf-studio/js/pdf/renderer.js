@@ -21,6 +21,7 @@ import { onPageRendered, clearHighlights } from '../search/find-bar.js';
 import { showPagePlaceholder, hidePagePlaceholderWhenReady } from './page-transition.js';
 import { anchorScrollCorrection, pickAnchorPageIndex } from './continuous-zoom-anchor.js';
 import { createRerenderGate } from './continuous-rerender-gate.js';
+import { continuousRenderScale } from './continuous-render-scale.js';
 import { weergaveRotatie, weergaveTransform } from './weergave-ruimte.js';
 import { normaliseerRotatie, isKwartslag } from './weergave-rotatie.js';
 import { rotateTextDir } from '../annotations/corrections/geometry.js';
@@ -1222,11 +1223,11 @@ async function renderContinuousPage(pageNum) {
   // Webversie/documenten zonder pad: PDF.js tekent. Zie render-route.js.
   const _pdfjsPad = pdfjsFallbackNodig({ inTauri: isTauri(), hasFilePath: !!doc.filePath });
 
-  // ─── PERF FIX #1 + #2 + #3 (BARN measurement scaffold) ───────────────
-  //  #1: Drop the DPR multiplier — single-page mode renders at bare
-  //      doc.scale and looks fine on 2x DPR displays. Multiplying the
-  //      render scale was doing 4x the Rust pixel work per page for
-  //      identical visual output.
+  // ─── PERF FIX #2 + #3 (BARN measurement scaffold) ───────────────────
+  //  (#1 — de DPR-factor laten vallen — is teruggedraaid, issue #549: de
+  //      enkele-paginaweergave rendert op zoom × dpr, en zonder die factor
+  //      rekte de browser de bitmap op 125%/150% Windows-schaal op en was
+  //      doorlopend zichtbaar wazig. Zie continuous-render-scale.js.)
   //  #2: Reuse the same JS-side ImageBitmap cache that renderPage uses
   //      (_BITMAP_JS_CACHE) so scrolling a page back into view does a
   //      <10ms drawImage instead of a 1.5-3s cold Rust render. Cache key
@@ -1248,10 +1249,14 @@ async function renderContinuousPage(pageNum) {
   // the bitmap to the logical size — same philosophy as MAX_BITMAP_AXIS_PX in
   // the single-page path. Sharp detail work at high zoom belongs to
   // single-page mode (tiles); continuous trades that for full-document flow.
-  const _maxViewAxis = Math.max(viewport.width, viewport.height);
-  const renderScale = _maxViewAxis > CONT_MAX_AXIS_PX
-    ? doc.scale * (CONT_MAX_AXIS_PX / _maxViewAxis)
-    : doc.scale;
+  // Render in apparaat-pixels (zoom × dpr); de cap geldt voor die bitmap.
+  const renderScale = continuousRenderScale({
+    scale: doc.scale,
+    dpr: getCanvasDPR(),
+    viewWidth: viewport.width,
+    viewHeight: viewport.height,
+    maxAxisPx: CONT_MAX_AXIS_PX,
+  });
 
   const label = `[render p${pageNum} scale ${renderScale.toFixed(2)}]`;
   console.time(label);
