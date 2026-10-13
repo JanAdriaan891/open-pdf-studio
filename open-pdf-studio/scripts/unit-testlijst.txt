@@ -19,6 +19,7 @@ js/pdf/saver/bestaande-markeringen.test.mjs
 js/pdf/correction-wiring.test.mjs
 js/pdf/correction-roundtrip.test.mjs
 js/annotations/rendering/caret.test.mjs
+js/annotations/rendering/markeringslijnen.test.mjs
 js/annotations/corrections/correction-ui.test.mjs
 js/annotations/corrections/correction-app.test.mjs
 js/annotations/corrections/correction-ui-wiring.test.mjs

@@ -36,7 +36,7 @@ import { fracties as cropFracties, volledigVak as cropVolledigVak } from './crop
 import { drawEmbeddedImageOverlay } from '../tools/tools/remove-image-tool.js';
 import { updateQuickAccessButtons, updateContextualTabs, drawGrid, snapToGrid } from './rendering/ui-state.js';
 import { drawCommentIcon } from './rendering/comment-icons.js';
-import { drawCaret, strikeLine, replaceStrikeColor } from './rendering/caret.js';
+import { drawCaret, drawMarkupLines, replaceStrikeColor } from './rendering/caret.js';
 import { spatialIndex, annotationBounds } from './spatial-index.js';
 import { bitmapVoor, bijNieuweTegel } from './vector-snippet-preview.js';
 import { invalidateScaleRegionCache, pixelsPerUnitFor, getRegionScaleFactor } from './scale-region.js';
@@ -1431,21 +1431,7 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       ctx.strokeStyle = ouderKleur || strokeColor;
       ctx.lineWidth = thinLw(annotation.lineWidth ?? 1);
       ctx.lineCap = 'round';
-      if (annotation.rects && annotation.rects.length > 0) {
-        annotation.rects.forEach(rect => {
-          const [van, tot] = strikeLine(rect, annotation.textDir);
-          ctx.beginPath();
-          ctx.moveTo(van.x, van.y);
-          ctx.lineTo(tot.x, tot.y);
-          ctx.stroke();
-        });
-      } else {
-        const [van, tot] = strikeLine(annotation, annotation.textDir);
-        ctx.beginPath();
-        ctx.moveTo(van.x, van.y);
-        ctx.lineTo(tot.x, tot.y);
-        ctx.stroke();
-      }
+      drawMarkupLines(ctx, annotation);
       break;
     }
 
@@ -1455,25 +1441,16 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       break;
 
     case 'textUnderline':
-      // Draw underline at the bottom of each text rect
+    case 'textSquiggly':
+      // Onderstreping of kronkellijn langs de onderkant van de tekst in de
+      // leesrichting (textDir), op dezelfde lijn als de opgeslagen
+      // appearance (#564): bij verticale tekst langs de kolom. De kronkellijn
+      // krijgt ronde hoeken, zoals in de appearance.
       ctx.strokeStyle = strokeColor;
       ctx.lineWidth = thinLw(annotation.lineWidth ?? 1);
       ctx.lineCap = 'round';
-      if (annotation.rects && annotation.rects.length > 0) {
-        annotation.rects.forEach(rect => {
-          const bottomY = rect.y + rect.height - 1;
-          ctx.beginPath();
-          ctx.moveTo(rect.x, bottomY);
-          ctx.lineTo(rect.x + rect.width, bottomY);
-          ctx.stroke();
-        });
-      } else {
-        const bottomY = annotation.y + annotation.height - 1;
-        ctx.beginPath();
-        ctx.moveTo(annotation.x, bottomY);
-        ctx.lineTo(annotation.x + annotation.width, bottomY);
-        ctx.stroke();
-      }
+      ctx.lineJoin = 'round';
+      drawMarkupLines(ctx, annotation);
       break;
 
     case 'stamp': {
