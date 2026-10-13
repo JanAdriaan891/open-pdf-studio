@@ -1,3 +1,4 @@
+import { cssPxPerPtAt100, nextScaleStep } from '../core/zoom-display.js';
 import { state, getActiveDocument, getPageRotation, setPageRotation } from '../core/state.js';
 import { isTauri, invoke } from '../core/platform.js';
 import { pdfjsFallbackNodig } from './render-route.js';
@@ -1268,13 +1269,28 @@ async function renderContinuousPage(pageNum) {
   // the single-page path. Sharp detail work at high zoom belongs to
   // single-page mode (tiles); continuous trades that for full-document flow.
   // Render in apparaat-pixels (zoom × dpr); de cap geldt voor die bitmap.
+  const _contScale = doc.scale;
   const renderScale = continuousRenderScale({
-    scale: doc.scale,
+    scale: _contScale,
     dpr: getCanvasDPR(),
     viewWidth: viewport.width,
     viewHeight: viewport.height,
     maxAxisPx: CONT_MAX_AXIS_PX,
   });
+  // Device-pixel resolution shown 1:1 (#523): canvas CSS size = bitmap size /
+  // dpr, so the browser does not resample the bitmap by a fraction of a pixel
+  // (that blurs thin rules and text). A capped bitmap, or one that no longer
+  // belongs to the current scale (zoom changed while it rendered), keeps the
+  // logical size from cssSize() above.
+  const _contDpr = getCanvasDPR();
+  const _contCapped = renderScale < _contScale * _contDpr * (1 - 1e-9);
+  const cssFromBitmap = (bw, bh) => {
+    const logical = cssSize();
+    if (_contCapped) return logical;
+    const w = bw / _contDpr;
+    const h = bh / _contDpr;
+    return Math.abs(w - logical.w) <= 2 && Math.abs(h - logical.h) <= 2 ? { w, h } : logical;
+  };
 
   const label = `[render p${pageNum} scale ${renderScale.toFixed(2)}]`;
   console.time(label);
@@ -1294,9 +1310,9 @@ async function renderContinuousPage(pageNum) {
     console.time(label + ' canvas-draw-cached');
     pdfCanvasEl.width = _cached.w;
     pdfCanvasEl.height = _cached.h;
-    // CSS size = logical page size; differs from the backing store when the
-    // axis cap reduced renderScale (CSS upscales the capped bitmap).
-    const { w: cssW1, h: cssH1 } = cssSize();
+    // CSS size = bitmap / dpr (1:1), or the logical page size when the axis
+    // cap reduced renderScale (CSS upscales the capped bitmap).
+    const { w: cssW1, h: cssH1 } = cssFromBitmap(_cached.w, _cached.h);
     pdfCanvasEl.style.width = cssW1 + 'px';
     pdfCanvasEl.style.height = cssH1 + 'px';
     pdfCtxEl.drawImage(_cached.bitmap, 0, 0);
@@ -1343,8 +1359,8 @@ async function renderContinuousPage(pageNum) {
       console.time(label + ' canvas-putImageData');
       pdfCanvasEl.width = rustW;
       pdfCanvasEl.height = rustH;
-      // CSS size = logical page size (see the cached branch above).
-      const { w: cssW2, h: cssH2 } = cssSize();
+      // CSS size: see the cached branch above.
+      const { w: cssW2, h: cssH2 } = cssFromBitmap(rustW, rustH);
       pdfCanvasEl.style.width = cssW2 + 'px';
       pdfCanvasEl.style.height = cssH2 + 'px';
       const imageData = new ImageData(rgba, rustW, rustH);
@@ -1627,7 +1643,9 @@ async function _continuousRezoom(oldScale) {
 
 // One discrete zoom step (zoom buttons / keyboard) anchored at anchorY.
 export function continuousZoomStep(direction, anchorY = null) {
-  continuousZoomBy(direction > 0 ? 1.25 : 0.8, anchorY);
+  const doc = getActiveDocument();
+  if (!doc) return;
+  continuousZoomBy(nextScaleStep(doc.scale, direction) / doc.scale, anchorY);
 }
 
 // While the user scrolls freely, the page whose center sits closest to the
@@ -2357,15 +2375,17 @@ export async function actualSize() {
   const doc = state.documents[state.activeDocumentIndex];
   if (!doc) return;
 
-  // Werkelijke grootte (issue #520): zonder schermkalibratie zoom 1,0, dus
-  // 1 PDF-punt = 1 CSS-pixel (het gedrag van altijd). Is dit scherm
-  // gekalibreerd (Voorkeuren > Paginaweergave), dan pxPerInch / 72, zodat een
-  // A4 met een liniaal gemeten 210 mm breed is. Alleen de weergavezoom: de
-  // bitmap volgt zoals altijd zoom * devicePixelRatio, dus de schermschaal
-  // telt niet dubbel.
-  const zoom = werkelijkeGrootteZoom(
-    kalibratieVoor(state.preferences?.screenCalibration, window.devicePixelRatio || 1),
-  );
+  // Werkelijke grootte = 100%. Is dit scherm gekalibreerd (issue #520,
+  // Voorkeuren > Paginaweergave), dan pxPerInch / 72, zodat een A4 met een
+  // liniaal gemeten 210 mm breed is. Zonder kalibratie bepaalt de voorkeur
+  // 'Schermresolutie voor 100% zoom' het (#523): zoomDpi / 72 CSS-pixels per
+  // PDF-punt. Dezelfde regel als het percentage in de statusbalk
+  // (zoom-display.js). Alleen de weergavezoom: de bitmap volgt zoals altijd
+  // zoom * devicePixelRatio, dus de schermschaal telt niet dubbel.
+  const kalibratie = kalibratieVoor(state.preferences?.screenCalibration, window.devicePixelRatio || 1);
+  const zoom = kalibratie != null
+    ? werkelijkeGrootteZoom(kalibratie)
+    : cssPxPerPtAt100(state.preferences?.zoomDpi);
 
   // Vector viewport mode: anchored at canvas center.
   const vp = window.__pdfViewport;

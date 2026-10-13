@@ -2,6 +2,17 @@ import { Show } from 'solid-js';
 import { useTranslation, localizeNumber } from '../../../i18n/useTranslation.js';
 import { openDialog } from '../../stores/dialogStore.js';
 import { kalibratieVoor, zetKalibratie, wisKalibratie } from '../../../pdf/schermkalibratie.js';
+import PrefSelect from './PrefSelect.jsx';
+
+// Page sharpening levels 0-4 (render-sharpen.js), written out so every key
+// used here is findable in the locale files.
+const SHARPEN_LEVELS = [
+  'pageDisplay.pageSharpenLevel0',
+  'pageDisplay.pageSharpenLevel1',
+  'pageDisplay.pageSharpenLevel2',
+  'pageDisplay.pageSharpenLevel3',
+  'pageDisplay.pageSharpenLevel4',
+];
 
 export default function PageDisplayTab(props) {
   const { t } = useTranslation('preferences');
@@ -47,9 +58,23 @@ export default function PageDisplayTab(props) {
             <span>{t('pageDisplay.progressiveRender')}</span>
           </label>
         </div>
+        <div class="pref-row">
+          <label>{t('pageDisplay.pageSharpen')}</label>
+          <PrefSelect
+            value={p.pageSharpen[0]}
+            setValue={p.pageSharpen[1]}
+            options={SHARPEN_LEVELS.map((key, v) => ({ value: v, label: t(key) }))}
+          />
+        </div>
       </fieldset>
       <fieldset class="pref-fieldset">
         <legend>{t('pageDisplay.actualSize')}</legend>
+        {/* Without a calibration for this screen the dpi below defines 100%;
+            a calibration (#520) takes precedence on the screen it was made for. */}
+        <div class="pref-row">
+          <label>{t('pageDisplay.zoomDpi')}</label>
+          <input type="number" min="50" max="300" value={p.zoomDpi[0]()} onInput={e => p.zoomDpi[1](parseInt(e.target.value) || 96)} />
+        </div>
         <div class="pref-row">
           <span class="pref-status-text">
             <Show when={huidig() != null} fallback={t('pageDisplay.calibrationNone', { scale: schaalProcent() })}>

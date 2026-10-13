@@ -287,3 +287,5 @@ js/watermark/kopvoet.test.mjs
 js/pdf/page-manager-kopvoet.test.mjs
 js/pdf/pdfx-enrich.test.mjs
 js/pdf/pdfx-cmyk.test.mjs
+js/core/zoom-display.test.mjs
+js/pdf/render-sharpen.test.mjs

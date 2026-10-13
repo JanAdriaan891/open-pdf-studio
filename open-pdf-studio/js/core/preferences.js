@@ -9,6 +9,15 @@ import { leesOpslag, schrijfOpslag, VOORKEUREN_NAAM } from './opslag.js';
 import { voegSamenMetStandaarden } from './preferences-merge.js';
 import { randkleurVoorVoorkeur, randkleurenUitVoorkeur } from '../annotations/fill-utils.js';
 import { zetRanddikte } from '../annotations/rendering/textbox-layout.js';
+import { setZoomDpi, setZoomDpiSource, normalizeZoomDpi } from './zoom-display.js';
+import { kalibratieVoor } from '../pdf/schermkalibratie.js';
+
+// What 100% zoom means (#523), read live so a new calibration, a changed
+// preference or a move to a screen with another scale applies at once: on a
+// screen with a calibration (#520) its CSS pixels per inch (100% = the real
+// paper size), otherwise the 'Screen resolution for 100% zoom' preference.
+setZoomDpiSource(() => kalibratieVoor(state.preferences?.screenCalibration, globalThis.devicePixelRatio || 1)
+  ?? normalizeZoomDpi(state.preferences?.zoomDpi));
 
 // Load preferences from Rust file storage, with localStorage migration fallback
 export async function loadPreferences() {
@@ -166,6 +175,9 @@ export function applyPreferences() {
   if (state.preferences.theme) {
     applyTheme(state.preferences.theme);
   }
+
+  // Screen resolution behind the 100% zoom label
+  setZoomDpi(state.preferences.zoomDpi);
 
   // Update default author from preferences
   state.defaultAuthor = state.preferences.authorName || 'User';

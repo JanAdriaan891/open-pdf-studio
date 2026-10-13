@@ -293,9 +293,14 @@ export const DEFAULT_PREFERENCES: Preferences = {
   // zwart scherm, hoofdthread blijft vrij. Uitzetbaar in Voorkeuren.
   progressiveRender: true,
   // Schermkalibratie voor Werkelijke grootte (#520): CSS-pixels per inch per
-  // schermschaal ({ "1.25": 120.5 }). Leeg = niet gekalibreerd, dan blijft
-  // Werkelijke grootte zoom 1,0 (1 PDF-punt = 1 CSS-pixel).
+  // schermschaal ({ "1.25": 120.5 }). Gekalibreerd scherm: 100% is de echte
+  // papiermaat. Leeg = niet gekalibreerd, dan bepaalt zoomDpi wat 100% is.
   screenCalibration: {},
+  // Screen resolution (dpi) that defines 100% zoom on a screen without a
+  // calibration (screenCalibration wins when this screen has one).
+  zoomDpi: 110,
+  // Page text sharpening 0-4 (0 = as rendered).
+  pageSharpen: 2,
 
   // Panels
   propertiesPanelVisible: true,

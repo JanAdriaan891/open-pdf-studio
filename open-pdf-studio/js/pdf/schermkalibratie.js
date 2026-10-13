@@ -1,11 +1,11 @@
 // Schermkalibratie (issue #520): "Werkelijke grootte" (Ctrl+0, de knop 100%)
 // op de echte papiermaat laten uitkomen.
 //
-// Zonder kalibratie blijft het oude gedrag: zoom 1,0, dus 1 PDF-punt is 1
-// CSS-pixel. Een A4 (595 pt breed) is dan 595 CSS-pixels, op een gewoon
-// scherm zo'n 157 mm in plaats van 210 mm. Wie zijn scherm kalibreert (een
+// Zonder kalibratie bepaalt de voorkeur 'Schermresolutie voor 100% zoom'
+// (zoomDpi, zoom-display.js) wat 100% is. Wie zijn scherm kalibreert (een
 // betaalpas of liniaal tegen het scherm houden), slaat het werkelijke aantal
-// CSS-pixels per inch op; Werkelijke grootte zoomt dan naar pxPerInch / 72.
+// CSS-pixels per inch op; Werkelijke grootte zoomt dan naar pxPerInch / 72 en
+// die waarde gaat op dat scherm voor zoomDpi.
 //
 // De kalibratie geldt ALLEEN voor de weergave op het scherm. Paginamaten, de
 // tekenschaal van de meetgereedschappen, export-DPI en afdrukschaal blijven

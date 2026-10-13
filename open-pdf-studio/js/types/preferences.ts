@@ -225,6 +225,8 @@ export interface Preferences {
   showScrollbars: boolean;
   progressiveRender: boolean;
   screenCalibration: Record<string, number>;
+  zoomDpi: number;
+  pageSharpen: number;
 
   // Panels
   propertiesPanelVisible: boolean;

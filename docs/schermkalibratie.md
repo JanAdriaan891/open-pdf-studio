@@ -7,12 +7,14 @@ PDF zien op zijn echte papiermaat, als het scherm gekalibreerd is.
 
 | Situatie | Werkelijke grootte |
 | --- | --- |
-| Niet gekalibreerd (standaard) | zoom 1,0: 1 PDF-punt = 1 CSS-pixel. Precies het gedrag van voor de kalibratie. Een A4 (595 pt) is dan 595 CSS-pixels, op een gewoon scherm zo'n 157 mm breed. |
-| Gekalibreerd | zoom = (CSS-pixels per inch) / 72. Een A4 meet dan 210 mm met een liniaal. |
+| Niet gekalibreerd (standaard) | zoom = `zoomDpi` / 72: de voorkeur "Schermresolutie voor 100% zoom" (standaard 110 dpi; 96 is de browsermaat) bepaalt wat 100% is. |
+| Gekalibreerd | zoom = (CSS-pixels per inch) / 72. Een A4 meet dan 210 mm met een liniaal. De kalibratie gaat voor `zoomDpi`. |
 
-De zoomweergave in de statusbalk blijft de ruwe zoom tonen. Na kalibratie
-staat er bij Werkelijke grootte dus bijvoorbeeld 153% in plaats van 100%: dat
-getal is de verhouding PDF-punt : CSS-pixel, niet de verhouding tot papier.
+Het percentage in de statusbalk, de ronde zoomstappen (knoppen, toetsen,
+Ctrl+wiel) en Werkelijke grootte gebruiken dezelfde definitie van 100%
+(`js/core/zoom-display.js`): op een gekalibreerd scherm is 100% de echte
+papiermaat, anders `zoomDpi`. De interne zoom (`doc.scale`, MCP
+`app_set_zoom`) blijft CSS-pixels per PDF-punt.
 
 ## Kalibreren
 
@@ -25,7 +27,7 @@ Voorkeuren > Paginaweergave > Werkelijke grootte (100%) > **Kalibreren...**
    en klik op Toepassen.
 4. OK, en daarna **Opslaan** in het voorkeurenvenster.
 
-**Verwijderen** zet dit scherm terug op het oude gedrag (zoom 1,0).
+**Verwijderen** zet dit scherm terug op `zoomDpi` als definitie van 100%.
 
 ## Wat de kalibratie NIET verandert
 
@@ -61,5 +63,7 @@ schermschaal van het besturingssysteem telt dus niet dubbel mee.
 - Voorkeur `screenCalibration`: `{ "<dpr>": <CSS-px per inch> }`, standaard `{}`.
 - Rekenwerk: `open-pdf-studio/js/pdf/schermkalibratie.js` (tests in
   `schermkalibratie.test.mjs`).
-- Werkelijke grootte: `actualSize()` in `js/pdf/renderer.js`.
+- Werkelijke grootte: `actualSize()` in `js/pdf/renderer.js`; de definitie van
+  100% voor statusbalk en zoomstappen: `js/core/zoom-display.js` (de bron wordt
+  gezet in `js/core/preferences.js`).
 - Schermwissel: de dpr-bewaking in `js/pdf/pdf-viewport.js`.

@@ -96,7 +96,10 @@ test('Werkelijke grootte (Ctrl+0 en de knop 100%) gebruikt de kalibratie', () =>
   const renderer = bron('./renderer.js');
   const blok = renderer.slice(renderer.indexOf('export async function actualSize()'));
   const lijf = blok.slice(0, blok.indexOf('\n}\n'));
-  assert.match(lijf, /werkelijkeGrootteZoom\(\s*kalibratieVoor\(state\.preferences\?\.screenCalibration/);
+  assert.match(lijf, /kalibratieVoor\(state\.preferences\?\.screenCalibration/);
+  assert.match(lijf, /kalibratie != null\s*\?\s*werkelijkeGrootteZoom\(kalibratie\)/);
+  // Zonder kalibratie bepaalt de voorkeur zoomDpi wat 100% is (#523).
+  assert.match(lijf, /:\s*cssPxPerPtAt100\(state\.preferences\?\.zoomDpi\)/);
   assert.match(lijf, /setZoomAtPoint\([^)]*, zoom\)/);
   assert.match(lijf, /doc\.scale = zoom;/);
   assert.doesNotMatch(lijf, /doc\.scale = 1;/);
