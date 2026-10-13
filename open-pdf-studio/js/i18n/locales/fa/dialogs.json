@@ -180,7 +180,13 @@
     "allPages": "تمام صفحات",
     "firstPageOnly": "فقط صفحه اول",
     "range": "محدوده:",
-    "rangePlaceholder": "مثال: 1-5, 8"
+    "rangePlaceholder": "مثال: 1-5, 8",
+    "bates": "شماره‌گذاری Bates:",
+    "batesHint": "صفحه‌ها را با {bates} شماره‌گذاری می‌کند: پیشوند، شماره با صفرهای ابتدایی، پسوند",
+    "batesPrefix": "پیشوند",
+    "batesStart": "شروع",
+    "batesDigits": "رقم‌ها",
+    "batesSuffix": "پسوند"
   },
   "manageWatermarks": {
     "title": "مدیریت واترمارک‌ها",

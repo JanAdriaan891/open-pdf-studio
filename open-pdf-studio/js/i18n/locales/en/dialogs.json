@@ -243,7 +243,13 @@
     "allPages": "All pages",
     "firstPageOnly": "First page only",
     "range": "Range:",
-    "rangePlaceholder": "e.g. 1-5, 8"
+    "rangePlaceholder": "e.g. 1-5, 8",
+    "bates": "Bates numbering:",
+    "batesHint": "Numbers the pages with {bates}: prefix, number with leading zeros, suffix",
+    "batesPrefix": "Prefix",
+    "batesStart": "Start",
+    "batesDigits": "Digits",
+    "batesSuffix": "Suffix"
   },
   "manageWatermarks": {
     "title": "Manage Watermarks",

@@ -180,7 +180,13 @@
     "allPages": "सभी पृष्ठ",
     "firstPageOnly": "केवल पहला पृष्ठ",
     "range": "सीमा:",
-    "rangePlaceholder": "जैसे 1-5, 8"
+    "rangePlaceholder": "जैसे 1-5, 8",
+    "bates": "Bates क्रमांकन:",
+    "batesHint": "{bates} से पृष्ठों को क्रमांकित करता है: उपसर्ग, आगे शून्य वाली संख्या, प्रत्यय",
+    "batesPrefix": "उपसर्ग",
+    "batesStart": "आरंभ",
+    "batesDigits": "अंक",
+    "batesSuffix": "प्रत्यय"
   },
   "manageWatermarks": {
     "title": "वॉटरमार्क प्रबंधित करें",

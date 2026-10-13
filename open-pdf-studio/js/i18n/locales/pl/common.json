@@ -133,5 +133,6 @@
     "copied": "Wycinek skopiowany — wklej go do innego rysunku",
     "failed": "Wycinanie nie powiodło się",
     "clipboardEmpty": "Brak wycinka w schowku"
-  }
+  },
+  "snippetOutputFailed": "Nie udało się wyrenderować wycinka wektorowego, dlatego eksport lub drukowanie zostało przerwane. Spróbuj ponownie."
 }

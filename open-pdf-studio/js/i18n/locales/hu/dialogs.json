@@ -180,7 +180,13 @@
     "allPages": "Összes oldal",
     "firstPageOnly": "Csak az első oldal",
     "range": "Tartomány:",
-    "rangePlaceholder": "pl. 1-5, 8"
+    "rangePlaceholder": "pl. 1-5, 8",
+    "bates": "Bates-számozás:",
+    "batesHint": "A {bates} változóval számozza az oldalakat: előtag, vezető nullás szám, utótag",
+    "batesPrefix": "Előtag",
+    "batesStart": "Kezdet",
+    "batesDigits": "Számjegyek",
+    "batesSuffix": "Utótag"
   },
   "manageWatermarks": {
     "title": "Vízjelek kezelése",

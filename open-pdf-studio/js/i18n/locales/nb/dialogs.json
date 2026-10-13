@@ -180,7 +180,13 @@
     "allPages": "Alle sider",
     "firstPageOnly": "Kun første side",
     "range": "Område:",
-    "rangePlaceholder": "f.eks. 1-5, 8"
+    "rangePlaceholder": "f.eks. 1-5, 8",
+    "bates": "Bates-nummerering:",
+    "batesHint": "Nummererer sidene med {bates}: prefiks, nummer med innledende nuller, suffiks",
+    "batesPrefix": "Prefiks",
+    "batesStart": "Start",
+    "batesDigits": "Sifre",
+    "batesSuffix": "Suffiks"
   },
   "manageWatermarks": {
     "title": "Administrer vannmerker",

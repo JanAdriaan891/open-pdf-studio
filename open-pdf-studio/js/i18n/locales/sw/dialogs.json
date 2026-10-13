@@ -180,7 +180,13 @@
     "allPages": "Kurasa zote",
     "firstPageOnly": "Ukurasa wa kwanza tu",
     "range": "Masafa:",
-    "rangePlaceholder": "mf. 1-5, 8"
+    "rangePlaceholder": "mf. 1-5, 8",
+    "bates": "Uwekaji namba wa Bates:",
+    "batesHint": "Huweka namba kwenye kurasa kwa {bates}: kiambishi awali, namba yenye sifuri za mwanzo, kiambishi tamati",
+    "batesPrefix": "Kiambishi awali",
+    "batesStart": "Mwanzo",
+    "batesDigits": "Tarakimu",
+    "batesSuffix": "Kiambishi tamati"
   },
   "manageWatermarks": {
     "title": "Simamia Alama za Maji",

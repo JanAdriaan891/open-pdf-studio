@@ -133,5 +133,6 @@
     "copied": "Decupaj copiat — lipiți-l într-un alt desen",
     "failed": "Decuparea a eșuat",
     "clipboardEmpty": "Niciun decupaj în clipboard"
-  }
+  },
+  "snippetOutputFailed": "Un decupaj vectorial nu a putut fi randat, așa că exportul sau tipărirea a fost oprită. Încercați din nou."
 }

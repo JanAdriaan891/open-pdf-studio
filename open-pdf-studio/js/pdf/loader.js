@@ -537,6 +537,22 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
       }).catch(() => { /* presets zijn optioneel — negeer leesfouten */ });
     }
 
+    // Titel en kop-/voetteksten uit het bestand (#375): de definities komen
+    // terug in de lijst, zodat een nieuwe save ze vervangt in plaats van er
+    // nog een exemplaar overheen te zetten. Niet-blokkerend, zoals hierboven.
+    {
+      const bron = doc.filePath;
+      getSharedPdfLibDoc(doc).then(async (pdfLibDoc) => {
+        if (isClosed() || !pdfLibDoc) return;
+        const { leesKopVoetUitBestand } = await import('../watermark/kopvoet-weergave.js');
+        if (isClosed()) return;
+        if (leesKopVoetUitBestand(doc, pdfLibDoc, bron) && isActive()) {
+          const { redrawAnnotations, redrawContinuous } = await import('../annotations/rendering.js');
+          if (doc.viewMode === 'continuous') redrawContinuous(); else redrawAnnotations();
+        }
+      }).catch((e) => { console.warn('[loader] kop-/voetteksten niet gelezen:', e); });
+    }
+
     // Meetschalen uit de PDF zelf (/VP + /Measure): CAD-plots en de DWG/DXF-
     // import brengen ze mee, zodat de maatvoering meteen klopt (#400). Alleen
     // lezen, niet-blokkerend, net als de stijl-presets hierboven.

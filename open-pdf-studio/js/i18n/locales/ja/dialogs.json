@@ -180,7 +180,13 @@
     "allPages": "すべてのページ",
     "firstPageOnly": "最初のページのみ",
     "range": "範囲：",
-    "rangePlaceholder": "例: 1-5, 8"
+    "rangePlaceholder": "例: 1-5, 8",
+    "bates": "Bates 番号：",
+    "batesHint": "{bates} でページに番号を付けます：接頭辞、先頭ゼロ付きの番号、接尾辞",
+    "batesPrefix": "接頭辞",
+    "batesStart": "開始",
+    "batesDigits": "桁数",
+    "batesSuffix": "接尾辞"
   },
   "manageWatermarks": {
     "title": "透かしを管理",

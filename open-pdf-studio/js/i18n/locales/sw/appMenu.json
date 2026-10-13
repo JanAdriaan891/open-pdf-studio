@@ -100,7 +100,9 @@
     "pdfxConformance": "Conformance",
     "pdfxNote": "Adds an sRGB output intent, TrimBox and PDF/X metadata. Existing RGB images are not converted to CMYK; for strict CMYK printing, substitute a CMYK profile.",
     "exportCad": "Mchoro wa CAD (DXF, DWG)",
-    "exportCadDesc": "Hamisha mchoro wa vekta kwenda DXF au DWG pamoja na tabaka, skeli na eneo"
+    "exportCadDesc": "Hamisha mchoro wa vekta kwenda DXF au DWG pamoja na tabaka, skeli na eneo",
+    "exportDocx": "Hati ya maandishi (DOCX)",
+    "exportDocxDesc": "Maandishi na majedwali yanayoharirika kwa programu za kuchakata maneno, pamoja na picha za kurasa za hiari"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }

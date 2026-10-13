@@ -100,7 +100,9 @@
     "pdfxConformance": "Conformance",
     "pdfxNote": "Adds an sRGB output intent, TrimBox and PDF/X metadata. Existing RGB images are not converted to CMYK; for strict CMYK printing, substitute a CMYK profile.",
     "exportCad": "CAD வரைபடம் (DXF, DWG)",
-    "exportCadDesc": "வெக்டர் வரைபடத்தை அடுக்குகள், அளவுகோல், பகுதியுடன் DXF அல்லது DWG ஆக ஏற்றுமதி செய்"
+    "exportCadDesc": "வெக்டர் வரைபடத்தை அடுக்குகள், அளவுகோல், பகுதியுடன் DXF அல்லது DWG ஆக ஏற்றுமதி செய்",
+    "exportDocx": "உரை ஆவணம் (DOCX)",
+    "exportDocxDesc": "சொல் செயலிகளுக்கான திருத்தக்கூடிய உரை மற்றும் அட்டவணைகள், விருப்பப் பக்கப் படங்களுடன்"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }

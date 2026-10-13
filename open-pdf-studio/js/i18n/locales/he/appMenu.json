@@ -100,7 +100,9 @@
     "pdfxConformance": "Conformance",
     "pdfxNote": "Adds an sRGB output intent, TrimBox and PDF/X metadata. Existing RGB images are not converted to CMYK; for strict CMYK printing, substitute a CMYK profile.",
     "exportCad": "שרטוט CAD (DXF, DWG)",
-    "exportCadDesc": "ייצוא השרטוט הווקטורי ל-DXF או ל-DWG עם שכבות, קנה מידה ואזור"
+    "exportCadDesc": "ייצוא השרטוט הווקטורי ל-DXF או ל-DWG עם שכבות, קנה מידה ואזור",
+    "exportDocx": "מסמך טקסט (DOCX)",
+    "exportDocxDesc": "טקסט וטבלאות הניתנים לעריכה עבור מעבדי תמלילים, עם תמונות עמוד אופציונליות"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }

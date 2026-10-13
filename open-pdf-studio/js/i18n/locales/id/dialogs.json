@@ -180,7 +180,13 @@
     "allPages": "Semua halaman",
     "firstPageOnly": "Halaman pertama saja",
     "range": "Rentang:",
-    "rangePlaceholder": "mis. 1-5, 8"
+    "rangePlaceholder": "mis. 1-5, 8",
+    "bates": "Penomoran Bates:",
+    "batesHint": "Memberi nomor halaman dengan {bates}: awalan, nomor dengan nol di depan, akhiran",
+    "batesPrefix": "Awalan",
+    "batesStart": "Mulai",
+    "batesDigits": "Digit",
+    "batesSuffix": "Akhiran"
   },
   "manageWatermarks": {
     "title": "Kelola Tanda Air",

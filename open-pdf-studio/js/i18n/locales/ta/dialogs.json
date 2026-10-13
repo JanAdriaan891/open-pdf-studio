@@ -180,7 +180,13 @@
     "allPages": "அனைத்து பக்கங்கள்",
     "firstPageOnly": "முதல் பக்கம் மட்டும்",
     "range": "வரம்பு:",
-    "rangePlaceholder": "எ.கா. 1-5, 8"
+    "rangePlaceholder": "எ.கா. 1-5, 8",
+    "bates": "Bates எண்ணிடல்:",
+    "batesHint": "{bates} மூலம் பக்கங்களுக்கு எண்ணிடுகிறது: முன்னொட்டு, முன்னணி பூஜ்ஜியங்களுடன் எண், பின்னொட்டு",
+    "batesPrefix": "முன்னொட்டு",
+    "batesStart": "தொடக்கம்",
+    "batesDigits": "இலக்கங்கள்",
+    "batesSuffix": "பின்னொட்டு"
   },
   "manageWatermarks": {
     "title": "நீர்முத்திரைகளை நிர்வகி",

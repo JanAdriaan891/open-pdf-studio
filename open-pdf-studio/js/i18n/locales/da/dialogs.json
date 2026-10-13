@@ -180,7 +180,13 @@
     "allPages": "Alle sider",
     "firstPageOnly": "Kun første side",
     "range": "Område:",
-    "rangePlaceholder": "f.eks. 1-5, 8"
+    "rangePlaceholder": "f.eks. 1-5, 8",
+    "bates": "Bates-nummerering:",
+    "batesHint": "Nummererer siderne med {bates}: præfiks, nummer med foranstillede nuller, suffiks",
+    "batesPrefix": "Præfiks",
+    "batesStart": "Start",
+    "batesDigits": "Cifre",
+    "batesSuffix": "Suffiks"
   },
   "manageWatermarks": {
     "title": "Administrer vandmærker",

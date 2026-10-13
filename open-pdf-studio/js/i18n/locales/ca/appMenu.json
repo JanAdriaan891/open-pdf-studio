@@ -100,7 +100,9 @@
     "pdfxConformance": "Conformance",
     "pdfxNote": "Adds an sRGB output intent, TrimBox and PDF/X metadata. Existing RGB images are not converted to CMYK; for strict CMYK printing, substitute a CMYK profile.",
     "exportCad": "Dibuix CAD (DXF, DWG)",
-    "exportCadDesc": "Exporta el dibuix vectorial a DXF o DWG, amb capes, escala i zona"
+    "exportCadDesc": "Exporta el dibuix vectorial a DXF o DWG, amb capes, escala i zona",
+    "exportDocx": "Document de text (DOCX)",
+    "exportDocxDesc": "Text i taules editables per a processadors de text, amb imatges de pàgina opcionals"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }

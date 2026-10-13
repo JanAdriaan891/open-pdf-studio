@@ -2993,6 +2993,18 @@
   gap: 4px;
 }
 
+/* Bates-nummering in de kop-/voettekstdialoog */
+.hf-bates {
+  margin: 6px 0;
+}
+
+.hf-bates-example {
+  align-self: center;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--theme-text-secondary, #666);
+}
+
 /* Manage Watermarks list */
 .manage-wm-list {
   min-height: 100px;

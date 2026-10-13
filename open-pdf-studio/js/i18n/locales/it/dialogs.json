@@ -180,7 +180,13 @@
     "allPages": "Tutte le pagine",
     "firstPageOnly": "Solo la prima pagina",
     "range": "Intervallo:",
-    "rangePlaceholder": "es. 1-5, 8"
+    "rangePlaceholder": "es. 1-5, 8",
+    "bates": "Numerazione Bates:",
+    "batesHint": "Numera le pagine con {bates}: prefisso, numero con zeri iniziali, suffisso",
+    "batesPrefix": "Prefisso",
+    "batesStart": "Inizio",
+    "batesDigits": "Cifre",
+    "batesSuffix": "Suffisso"
   },
   "manageWatermarks": {
     "title": "Gestisci filigrane",

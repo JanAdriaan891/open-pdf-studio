@@ -16,7 +16,7 @@ function harness() {
   const a = { id: 'a', pdfDoc: {}, filePath: 'a.pdf', annotations: [], modified: true, undoStack: [] };
   const b = { id: 'b', pdfDoc: {}, filePath: 'b.pdf', annotations: [], modified: true, undoStack: [] };
   let active = a;
-  const writes = [], owners = [];
+  const writes = [], owners = [], attachmentEdits = [];
   const deps = {
     state: { documents: [a, b] }, getActiveDocument: () => active,
     showLoading() {}, hideLoading() {}, updateTabBar() {}, updateWindowTitle() {},
@@ -29,6 +29,7 @@ function harness() {
     saveTextEditsToPages: async (_pdf, _pages, doc) => owners.push(doc),
     saveWatermarksToPages: async (_pdf, _pages, doc) => owners.push(doc),
     saveBookmarksToOutline: (_pdf, doc) => owners.push(doc), saveStylePresetsToCatalog() {},
+    pasBijlagenToe: (_pdf, wijzigingen) => attachmentEdits.push(wijzigingen),
     unlockFile: async () => {}, lockFile: async () => {},
     writeBinaryFileAtomic: async (path, bytes) => { writes.push({ path, source: new TextDecoder().decode(bytes) }); },
     isTauri: () => false, markeerGebakken() {}, hidePdfABar() {}, stripPdfAMetadata() {},
@@ -45,7 +46,7 @@ function harness() {
   };
   // A with scope keeps the injected dependencies mutable across awaits.
   const api = new Function('deps', `with (deps) { ${saved}\n${functions}\n return {savePDF, savePDFAs}; }`)(deps);
-  return { a, b, deps, api, writes, owners, switchToB: () => { active = b; } };
+  return { a, b, deps, api, writes, owners, attachmentEdits, switchToB: () => { active = b; } };
 }
 
 test('tab switch during signature verification still saves A to the requested path', async () => {
@@ -159,4 +160,13 @@ test('saving aborts before writing when a page has model annotations but is not 
   assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
   assert.deepEqual(h.writes, []);
   assert.equal(h.a.modified, true);
+});
+
+test('a save writes the attachment changes of the document being saved (#376)', async () => {
+  const h = harness();
+  const edits = { toegevoegd: [{ naam: 'model.ifc', bytes: new Uint8Array([1]) }], verwijderd: ['old.xlsx'] };
+  h.a.bijlagenWijzigingen = edits;
+  h.b.bijlagenWijzigingen = { toegevoegd: [], verwijderd: ['b-only.txt'] };
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), true);
+  assert.deepEqual(h.attachmentEdits, [edits]);
 });

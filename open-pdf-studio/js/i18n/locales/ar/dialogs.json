@@ -180,7 +180,13 @@
     "allPages": "جميع الصفحات",
     "firstPageOnly": "الصفحة الأولى فقط",
     "range": "النطاق:",
-    "rangePlaceholder": "مثال: 1-5, 8"
+    "rangePlaceholder": "مثال: 1-5, 8",
+    "bates": "ترقيم Bates:",
+    "batesHint": "يرقّم الصفحات باستخدام {bates}: بادئة، ورقم بأصفار بادئة، ولاحقة",
+    "batesPrefix": "البادئة",
+    "batesStart": "البداية",
+    "batesDigits": "الأرقام",
+    "batesSuffix": "اللاحقة"
   },
   "manageWatermarks": {
     "title": "إدارة العلامات المائية",

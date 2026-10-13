@@ -38,7 +38,7 @@ import { updateQuickAccessButtons, updateContextualTabs, drawGrid, snapToGrid } 
 import { drawCommentIcon } from './rendering/comment-icons.js';
 import { drawCaret, drawMarkupLines, replaceStrikeColor } from './rendering/caret.js';
 import { spatialIndex, annotationBounds } from './spatial-index.js';
-import { bitmapVoor, bijNieuweTegel } from './vector-snippet-preview.js';
+import { bitmapVoor, bijNieuweTegel, KNIPSEL_UITVOER_FOUT } from './vector-snippet-preview.js';
 import { invalidateScaleRegionCache, pixelsPerUnitFor, getRegionScaleFactor } from './scale-region.js';
 import { metSchaalBronnen } from './schaal-bronnen.js';
 import { drawSnapIndicator } from '../tools/snap-engine.js';
@@ -1278,8 +1278,16 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       const zoom = (vpz && vpz.active)
         ? vpz.zoom
         : (state.documents[state.activeDocumentIndex]?.scale || 1);
-      const bmp = snippetBitmaps ? snippetBitmaps.get(annotation) : bitmapVoor(annotation, zoom);
-      if (snippetBitmaps && !bmp) throw new Error('Vectorknipsel ontbreekt in uitvoer');
+      // Afdruk of export: het beeld komt uit bereidKnipselsVoorUitvoer, nooit
+      // uit de schermcache, en ontbreekt het, dan stopt de uitvoer in plaats
+      // van het lege kader af te drukken (#511).
+      const uitvoer = !!_lagen && !laag('selectie');
+      const bmp = snippetBitmaps ? snippetBitmaps.get(annotation) : (uitvoer ? null : bitmapVoor(annotation, zoom));
+      if ((snippetBitmaps || uitvoer) && !bmp) {
+        const fout = new Error('Vectorknipsel ontbreekt in uitvoer');
+        fout.code = KNIPSEL_UITVOER_FOUT;
+        throw fout;
+      }
       ctx.save();
       const kcx = annotation.x + annotation.width / 2;
       const kcy = annotation.y + annotation.height / 2;

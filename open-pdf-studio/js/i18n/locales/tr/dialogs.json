@@ -180,7 +180,13 @@
     "allPages": "Tüm sayfalar",
     "firstPageOnly": "Yalnızca ilk sayfa",
     "range": "Aralık:",
-    "rangePlaceholder": "örn. 1-5, 8"
+    "rangePlaceholder": "örn. 1-5, 8",
+    "bates": "Bates numaralandırma:",
+    "batesHint": "Sayfaları {bates} ile numaralandırır: önek, başında sıfır olan numara, sonek",
+    "batesPrefix": "Önek",
+    "batesStart": "Başlangıç",
+    "batesDigits": "Basamak",
+    "batesSuffix": "Sonek"
   },
   "manageWatermarks": {
     "title": "Filigranları Yönet",

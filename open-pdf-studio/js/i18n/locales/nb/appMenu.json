@@ -100,7 +100,9 @@
     "pdfxConformance": "Conformance",
     "pdfxNote": "Adds an sRGB output intent, TrimBox and PDF/X metadata. Existing RGB images are not converted to CMYK; for strict CMYK printing, substitute a CMYK profile.",
     "exportCad": "CAD-tegning (DXF, DWG)",
-    "exportCadDesc": "Eksporter vektortegningen til DXF eller DWG med lag, målestokk og utsnitt"
+    "exportCadDesc": "Eksporter vektortegningen til DXF eller DWG med lag, målestokk og utsnitt",
+    "exportDocx": "Tekstdokument (DOCX)",
+    "exportDocxDesc": "Redigerbar tekst og tabeller for tekstbehandlere, med valgfrie sidebilder"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }

@@ -180,7 +180,13 @@
     "allPages": "Všechny stránky",
     "firstPageOnly": "Pouze první stránka",
     "range": "Rozsah:",
-    "rangePlaceholder": "např. 1-5, 8"
+    "rangePlaceholder": "např. 1-5, 8",
+    "bates": "Číslování Bates:",
+    "batesHint": "Čísluje stránky pomocí {bates}: předpona, číslo s úvodními nulami, přípona",
+    "batesPrefix": "Předpona",
+    "batesStart": "Začátek",
+    "batesDigits": "Číslice",
+    "batesSuffix": "Přípona"
   },
   "manageWatermarks": {
     "title": "Spravovat vodoznaky",

@@ -180,7 +180,13 @@
     "allPages": "כל העמודים",
     "firstPageOnly": "עמוד ראשון בלבד",
     "range": "טווח:",
-    "rangePlaceholder": "לדוגמה: 1-5, 8"
+    "rangePlaceholder": "לדוגמה: 1-5, 8",
+    "bates": "מספור Bates:",
+    "batesHint": "ממספר את העמודים עם {bates}: קידומת, מספר עם אפסים מובילים, סיומת",
+    "batesPrefix": "קידומת",
+    "batesStart": "התחלה",
+    "batesDigits": "ספרות",
+    "batesSuffix": "סיומת"
   },
   "manageWatermarks": {
     "title": "ניהול סימני מים",

@@ -180,7 +180,13 @@
     "allPages": "Όλες οι σελίδες",
     "firstPageOnly": "Μόνο η πρώτη σελίδα",
     "range": "Εύρος:",
-    "rangePlaceholder": "π.χ. 1-5, 8"
+    "rangePlaceholder": "π.χ. 1-5, 8",
+    "bates": "Αρίθμηση Bates:",
+    "batesHint": "Αριθμεί τις σελίδες με {bates}: πρόθεμα, αριθμός με αρχικά μηδενικά, επίθημα",
+    "batesPrefix": "Πρόθεμα",
+    "batesStart": "Έναρξη",
+    "batesDigits": "Ψηφία",
+    "batesSuffix": "Επίθημα"
   },
   "manageWatermarks": {
     "title": "Διαχείριση υδατογραφημάτων",
