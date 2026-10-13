@@ -201,6 +201,7 @@ js/plattegrond/skill.test.mjs
 js/plugins/annotation-batch.test.mjs
 js/plugins/page-access.test.mjs
 js/plugins/plugin-pdf.test.mjs
+js/plugins/view-navigation.test.mjs
 js/tools/text-edit-vak.test.mjs
 js/symbols/anker.test.mjs
 js/symbols/templates/sanitair.test.mjs
