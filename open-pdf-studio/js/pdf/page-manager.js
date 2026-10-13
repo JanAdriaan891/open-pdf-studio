@@ -21,6 +21,7 @@ import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
 import { onthoudWerkbestand, losgelatenWerkbestanden, ruimWerkbestandenOp } from './document-release.js';
 import { nieuwMergeVerslag, REDEN_VOORBEELD, REDEN_GEEN_PAGINAS } from './merge-verslag.js';
+import { pdfjsBronnen } from '../core/basis-url.js';
 
 // Page clipboard for cut/copy/paste
 let pageClipboard = null; // { bytes: Uint8Array, cut: boolean, sourcePageNum: number }
@@ -260,10 +261,7 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
   // Load new bytes into pdf.js (slice to prevent buffer detachment of the original)
   doc.pdfDoc = await pdfjsLib.getDocument({
     data: newBytes.slice(),
-    cMapUrl: '/pdfjs/web/cmaps/',
-    cMapPacked: true,
-    standardFontDataUrl: '/pdfjs/web/standard_fonts/',
-    wasmUrl: '/pdfjs/web/wasm/',
+    ...pdfjsBronnen(),
     isEvalSupported: false,
     verbosity: 0,
   }).promise;

@@ -4,6 +4,8 @@ import { state } from '../../core/state.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
 import { openDialog, getDialogs } from '../stores/dialogStore.js';
 import { isTauri } from '../../core/platform.js';
+// Als asset geïmporteerd: Vite zet de bouwbasis ervoor (#545).
+import appIcoon from '/icon.png';
 
 async function handleClose() {
   const { closeActiveTab } = await import('../../ui/chrome/tabs.js');
@@ -69,7 +71,7 @@ export default function TitleBar() {
     <div class={`title-bar${hasDialogs() ? ' dialogs-open' : ''}`} data-tauri-drag-region>
       <div class="title-bar-left">
         <div class="quick-access-toolbar">
-          <img src="icon.png" class="app-icon" alt={tCommon('appName')} />
+          <img src={appIcoon} class="app-icon" alt={tCommon('appName')} />
           <div class="quick-access-separator"></div>
 
           <button class="quick-access-btn" title={`${tCommon('open')} (Ctrl+O)`}
