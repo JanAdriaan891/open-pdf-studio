@@ -2189,8 +2189,11 @@ async function handleFacadeElement(params) {
 async function handleAiComplete(params) {
   const prompt = params?.prompt;
   if (typeof prompt !== 'string' || !prompt) return { ok: false, error: 'missing params.prompt' };
-  const { leesOpslag } = await import('./core/opslag.js');
-  const key = leesOpslag('opds-anthropic-key') || '';
+  // Als gast praat de app niet met andere hosts en staat de sleutel nergens (#548).
+  const { externeDienstenAan } = await import('./core/webfuncties.js');
+  if (!externeDienstenAan()) return { ok: false, error: 'AI service is off when hosted' };
+  const { leesAiSleutel } = await import('./core/ai-sleutel.js');
+  const key = leesAiSleutel();
   // Claude (Anthropic) direct — uses the personal key set via the 🔑 button.
   if (!key) return { ok: false, error: 'geen Claude-key gezet (🔑)' };
   const r = await fetch('https://api.anthropic.com/v1/messages', {

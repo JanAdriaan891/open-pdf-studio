@@ -4,6 +4,7 @@ import { state } from '../../core/state.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
 import { openDialog, getDialogs } from '../stores/dialogStore.js';
 import { isTauri } from '../../core/platform.js';
+import { knopUit, meldingTekst } from '../../core/webfuncties.js';
 // Als asset geïmporteerd: Vite zet de bouwbasis ervoor (#545).
 import appIcoon from '/icon.png';
 
@@ -20,6 +21,8 @@ async function handleClose() {
 export default function TitleBar() {
   const { t: tCommon } = useTranslation('common');
   const [isMaximized, setIsMaximized] = createSignal(false);
+  // Feedback gaat naar een andere host: als gast uit (#548).
+  const feedbackUit = knopUit('send-feedback', { inTauri: isTauri() });
   let unlisten = null;
 
   onMount(async () => {
@@ -166,7 +169,13 @@ export default function TitleBar() {
       </div>
 
       <div class="window-controls">
-        <button class="send-feedback-btn" onClick={() => openDialog('feedback')}>
+        <button
+          id="send-feedback"
+          class="send-feedback-btn"
+          disabled={feedbackUit}
+          title={feedbackUit ? meldingTekst(tCommon, tCommon('sendFeedback')) : undefined}
+          onClick={() => openDialog('feedback')}
+        >
           {tCommon('sendFeedback')}
         </button>
         {isTauri() && <>
