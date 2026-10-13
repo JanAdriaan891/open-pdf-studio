@@ -776,8 +776,9 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               lineDict.LE = [PDFName.of(kopNaarLE(startHead)), PDFName.of(kopNaarLE(endHead))];
               lineDict.OPS_HeadSize = headSize;
               // Een kop die /LE niet exact kent (stealth), gaat apart mee.
+              // pdfTextString: een kop uit XFDF kan een los haakje bevatten (#555).
               const koppen = koppenSleutel(startHead, endHead);
-              if (koppen) lineDict.OPS_LineHeads = PDFString.of(koppen);
+              if (koppen) lineDict.OPS_LineHeads = pdfTextString(koppen);
 
               // Interior color for closed arrowheads
               if (hasFill(ann.fillColor)) {
@@ -966,7 +967,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               C: saStrokeColor,
               CA: opacity,
               LE: [PDFName.of(saMapHead(ann.startHead)), PDFName.of(saMapHead(ann.endHead || 'open'))],
-              ...(koppenSleutel(ann.startHead, ann.endHead || 'open') ? { OPS_LineHeads: PDFString.of(koppenSleutel(ann.startHead, ann.endHead || 'open')) } : {}),
+              ...(koppenSleutel(ann.startHead, ann.endHead || 'open') ? { OPS_LineHeads: pdfTextString(koppenSleutel(ann.startHead, ann.endHead || 'open')) } : {}),
               T: pdfTextString(ann.author || 'User'),
               Contents: pdfTextString(ann.subject || ''),
               M: PDFString.of(new Date().toISOString()),
@@ -1176,7 +1177,9 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
             // Map font family + bold/italic to PDF standard font name
             const pdfFontName = mapFontToPdfName(ann.fontFamily, ann.fontBold, ann.fontItalic);
-            const da = `${textColorArr[0]} ${textColorArr[1]} ${textColorArr[2]} rg /${pdfFontName} ${fontSize} Tf`;
+            // Als PDF-naam ('(' -> #28): /DA is een literal string zonder
+            // escapes en een haakje uit een fontnaam sloot hem te vroeg (#555).
+            const da = `${textColorArr[0]} ${textColorArr[1]} ${textColorArr[2]} rg ${PDFName.of(pdfFontName)} ${fontSize} Tf`;
 
             // FreeText color mapping (must match loader):
             //   C entry  = fill/background color (annot.color in pdf.js)
