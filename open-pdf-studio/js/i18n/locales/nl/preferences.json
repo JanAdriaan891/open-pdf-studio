@@ -226,6 +226,7 @@
     "scale": "Schaal (px naar eenheid)",
     "unit": "Eenheid",
     "precision": "Precisie",
+    "showEdgeLengths": "Zijdelengtes tonen",
     "lineEndings": "Lijnuiteinden (afstand / omtrek)",
     "start": "Begin",
     "end": "Eind",

@@ -273,7 +273,8 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "showEdgeLengths": "변 길이 표시"
   },
   "schedules": {
     "title": "Schedules",

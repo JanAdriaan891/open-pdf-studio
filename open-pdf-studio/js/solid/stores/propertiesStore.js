@@ -37,7 +37,8 @@ import { createDefaultPaneelTypen } from '../../annotations/systeem-typen.js';
 import {
   getSysteemTypeById, getSysteemTypenData, updateSysteemType,
 } from '../../annotations/systeem-typen-registry.js';
-import { recalculateAllMeasurements, calculateArea, calculatePerimeter, calculateDistance, formatMeasurement, formatDimensionText, getMeasureScale } from '../../annotations/measurement.js';
+import { recalculateAllMeasurements, calculateArea, calculatePerimeter, calculateDistance, formatMeasurement, formatDimensionText, getMeasureScale, herberekenVlakMaat, vlakLengteSchaal } from '../../annotations/measurement.js';
+import { lengteEenheid, schaalInEenheid } from '../../annotations/vlak-zijden.js';
 import {
   isRuimteVlak, isRuimteTag, ruimteVanTag, tagWeergaveParams, tagWijziging,
 } from '../../plattegrond/ruimte-koppeling.js';
@@ -137,6 +138,7 @@ const [annotProps, setAnnotProps] = createStore({
   dimExtension: true,
   dimShowUnit: true,
   measureShowLabel: true,
+  measureShowEdgeLengths: false,
   isRuimte: false,
   opsRuimteNummer: '',
   ruimteOppervlakte: '',
@@ -380,7 +382,9 @@ export function storeShowProperties(annotation) {
         })()
       : '',
     measureScale: annotation.measureScale || 0,
-    measureUnit: annotation.measureUnit || '',
+    // Een meetvlak bewaart zijn oppervlakte-eenheid ('mm²'); de keuzelijst
+    // kent lengte-eenheden (#536).
+    measureUnit: (annotation.type === 'measureArea' ? lengteEenheid(annotation.measureUnit) : annotation.measureUnit) || '',
     measurePrecision: annotation.measurePrecision !== undefined ? annotation.measurePrecision : 2,
     measureName: annotation.measureName || '',
     dimType: annotation.dimType || '',
@@ -390,6 +394,8 @@ export function storeShowProperties(annotation) {
     // alleen een expliciete false zet ze uit (maat-label.js).
     dimShowUnit: annotation.dimShowUnit !== false,
     measureShowLabel: annotation.measureShowLabel !== false,
+    // Zijdematen van een meetvlak: standaard uit (#536).
+    measureShowEdgeLengths: annotation.measureShowEdgeLengths === true,
     // Uitloop en hulplijnen in mm op papier; leeg = automatisch (oude beeld).
     dimLineOvershootMm: annotation.dimLineOvershootMm ?? '',
     dimExtGapMm: annotation.dimExtGapMm ?? '',
@@ -1099,7 +1105,7 @@ function applyPropToAnnotation(ann, key, value) {
     }
     case 'rotation': ann.rotation = Math.max(-360, Math.min(360, parseInt(value) || 0)); break;
     case 'measureScale': ann.measureScale = parseFloat(value) || 0; recomputeMeasureText(ann); break;
-    case 'measureUnit': ann.measureUnit = value; recomputeMeasureText(ann); break;
+    case 'measureUnit': zetMeetEenheid(ann, value); break;
     case 'measurePrecision': ann.measurePrecision = parseInt(value); recomputeMeasureText(ann); break;
     case 'measureName':
       ann.measureName = value;
@@ -1210,6 +1216,20 @@ function applyPropToAnnotation(ann, key, value) {
   }
 }
 
+// Eenheid van een meting kiezen. Bij een meetvlak (#536) blijft de echte maat
+// gelijk: een eigen schaal rekent mee om naar de nieuwe eenheid, en zonder
+// eigen schaal wordt de schaal van het document in die eenheid vastgelegd
+// (anders zette het herberekenen de eenheid meteen terug). Pixels hebben geen
+// vaste maat; daar blijft het schaalgetal staan.
+function zetMeetEenheid(ann, eenheid) {
+  if (ann?.type === 'measureArea' && eenheid) {
+    const huidig = vlakLengteSchaal(ann);
+    ann.measureScale = schaalInEenheid(huidig.perPt, huidig.unit, eenheid);
+  }
+  ann.measureUnit = eenheid;
+  recomputeMeasureText(ann);
+}
+
 // Recompute measurement text for a measurement annotation
 function recomputeMeasureText(ann) {
   if (!ann || !ann.type?.startsWith('measure')) return;
@@ -1234,10 +1254,8 @@ function recomputeMeasureText(ann) {
     ann.measureUnit = dist.unit;
     ann.measurePixels = dist.pixels;
   } else if (ann.type === 'measureArea' && ann.points && ann.points.length >= 3) {
-    const area = calculateArea(ann.points, ann.holes, ann.page);
-    ann.measureText = formatMeasurement(area);
-    ann.measureValue = area.value;
-    ann.measureUnit = area.unit;
+    // Met de eigen schaal (measureScale) als die er is (#536).
+    herberekenVlakMaat(ann);
   } else if (ann.type === 'measurePerimeter' && ann.points && ann.points.length >= 2) {
     const perim = calculatePerimeter(ann.points, ann.page);
     ann.measureText = formatMeasurement(perim);
@@ -1552,8 +1570,18 @@ function applyAnnotProp(key, value) {
     case 'startHead': currentAnnotation.startHead = value; break;
     case 'endHead': currentAnnotation.endHead = value; break;
     case 'headSize': currentAnnotation.headSize = parseInt(value); break;
-    case 'measureScale': currentAnnotation.measureScale = parseFloat(value) || 0; recomputeMeasureText(currentAnnotation); break;
-    case 'measureUnit': currentAnnotation.measureUnit = value; recomputeMeasureText(currentAnnotation); break;
+    case 'measureScale':
+      currentAnnotation.measureScale = parseFloat(value) || 0;
+      recomputeMeasureText(currentAnnotation);
+      // Zonder eigen schaal volgt een meetvlak de eenheid van het document.
+      if (currentAnnotation.type === 'measureArea') {
+        setAnnotProps('measureUnit', lengteEenheid(currentAnnotation.measureUnit) || '');
+      }
+      break;
+    case 'measureUnit':
+      zetMeetEenheid(currentAnnotation, value);
+      if (currentAnnotation.type === 'measureArea') setAnnotProps('measureScale', currentAnnotation.measureScale || 0);
+      break;
     case 'measurePrecision': currentAnnotation.measurePrecision = parseInt(value); recomputeMeasureText(currentAnnotation); break;
     case 'measureName':
       currentAnnotation.measureName = value;

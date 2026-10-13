@@ -657,6 +657,8 @@ export function createMeasureAreaAnnotation(points, holes) {
   if (holes && holes.length > 0) {
     annProps.holes = holes;
   }
+  // Zijdematen (#536): alleen als de gebruiker ze als standaard aanzette.
+  if (mPrefs.measureAreaShowEdgeLengths === true) annProps.measureShowEdgeLengths = true;
   // Always use calculateArea (which resolves scale from scaleBar / document / prefs)
   // followed by formatMeasurement (which auto-converts mm² → m²).
   const currentPage = getActiveDocument()?.currentPage || 1;

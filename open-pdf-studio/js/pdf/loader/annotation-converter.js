@@ -13,6 +13,7 @@ import { hatchUitExtra } from '../saver/hatch-meta.js';
 import { wandJoinUitExtra } from '../saver/wand-join-meta.js';
 import { wolkVakUitHoeken, wolkVakUitZeshoek } from '../saver/veelhoek-grondvorm.js';
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
+import { vlakSchaalUitMeasure } from '../../annotations/vlak-zijden.js';
 import { heeft as heeftKnipselBron } from '../../annotations/vector-snippet-store.js';
 import { syncTwoPointGeometry } from '../../symbols/two-point.js';
 import { systeemFromOps, sparingenFromJson } from '../../annotations/systeemraster.js';
@@ -973,8 +974,11 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
             ...hatchUitExtra(extraColors),
           };
           if (extraColors.measureScale) {
-            maProps.measureScale = extraColors.measureScale;
-            maProps.measureUnit = extraColors.measureAreaUnit || extraColors.measureUnit || 'mm';
+            // De schaal uit /X staat in de eenheid van /X; het meetvlak rekent
+            // hem in de lengte-eenheid van measureUnit (#536). Die twee laten
+            // kloppen, ook bij /X in mm en /A in m² of /X in voet + inch.
+            Object.assign(maProps, vlakSchaalUitMeasure(
+              extraColors.measureScale, extraColors.measureUnit, extraColors.measureAreaUnit));
             const areaPrecision = extraColors.measureAreaPrecision !== undefined
               ? extraColors.measureAreaPrecision : extraColors.measurePrecision;
             if (areaPrecision !== undefined) maProps.measurePrecision = areaPrecision;

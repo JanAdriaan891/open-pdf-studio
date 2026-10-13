@@ -101,6 +101,7 @@
     "scale": "Scale (px to unit)",
     "unit": "Unit",
     "precision": "Precision",
+    "showEdgeLengths": "Show edge lengths",
     "lineEndings": "Line Endings (Distance / Perimeter)",
     "start": "Start",
     "end": "End",

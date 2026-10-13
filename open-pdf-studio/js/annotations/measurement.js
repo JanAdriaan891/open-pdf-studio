@@ -8,6 +8,7 @@ import { getScaleFromRegion } from './scale-region.js';
 import { schaalBronnen, metSchaalBronnen } from './schaal-bronnen.js';
 import { cloneAnnotation } from './factory.js';
 import { nettoVlakOppervlak } from './vlak-ringen.js';
+import { vlakZijden, lengteEenheid } from './vlak-zijden.js';
 import {
   recordBulkModify,
   recordMeasureScale,
@@ -120,6 +121,74 @@ export function calculateArea(points, holes, pageNum) {
     unit: scale.unit + '\u00B2',
     pixels: area
   };
+}
+
+// ── Meetvlak: eigen schaal en zijdematen (GitHub #536) ────────────────────
+//
+// Een meetvlak kan een EIGEN schaal hebben (measureScale, eenheden per punt,
+// in de lengte-eenheid van measureUnit). Zonder eigen schaal geldt de schaal
+// op het zwaartepunt van de punten, precies zoals calculateArea hem opzoekt.
+// De oppervlaktetekst en de zijdematen rekenen met dezelfde lengteschaal.
+
+function zwaartepunt(points) {
+  let x = 0, y = 0;
+  for (const p of points) { x += p.x; y += p.y; }
+  return { x: x / points.length, y: y / points.length };
+}
+
+/**
+ * De lengteschaal van een meetvlak: { perPt (eenheden per punt), unit }.
+ * Een eigen schaal wint; anders de schaal op het zwaartepunt.
+ */
+export function vlakLengteSchaal(ann) {
+  const eigen = Number(ann?.measureScale);
+  if (eigen > 0) return { perPt: eigen, unit: lengteEenheid(ann.measureUnit) || 'mm' };
+  const points = ann?.points || [];
+  let scale;
+  if (ann?.page != null && points.length > 0) {
+    const c = zwaartepunt(points);
+    scale = getMeasureScale(ann.page, c.x, c.y);
+  } else {
+    scale = getMeasureScale();
+  }
+  return { perPt: 1 / scale.pixelsPerUnit, unit: scale.unit || 'mm' };
+}
+
+/** De oppervlakte van een meetvlak ({ value, unit, pixels }), met zijn eigen schaal. */
+export function vlakMeting(ann) {
+  // Zonder eigen schaal: precies calculateArea, zodat bestaande vlakken
+  // dezelfde waarde houden als voorheen.
+  if (!ann?.points || ann.points.length < 3 || !(Number(ann.measureScale) > 0)) {
+    return calculateArea(ann?.points, ann?.holes, ann?.page);
+  }
+  const { perPt, unit } = vlakLengteSchaal(ann);
+  const pixels = nettoVlakOppervlak(ann.points, ann.holes);
+  return { value: pixels * perPt * perPt, unit: unit + '²', pixels };
+}
+
+/**
+ * Tekst, waarde en eenheid van een meetvlak opnieuw uit zijn punten en zijn
+ * (eigen of document-)schaal. Eén routine voor het eigenschappenpaneel, het
+ * verslepen van hoekpunten en het toevoegen van een gat.
+ */
+export function herberekenVlakMaat(ann) {
+  if (!ann?.points || ann.points.length < 3) return;
+  const meting = vlakMeting(ann);
+  ann.measureText = formatMeasurement(meting);
+  ann.measureValue = meting.value;
+  ann.measureUnit = meting.unit;
+}
+
+/**
+ * De zijdematen van een meetvlak: elke rechte zijde van de buitenring
+ * (vlak-zijden.js) met haar lengte als tekst, in dezelfde schaal, eenheid en
+ * afronding als de oppervlaktetekst (formatMeasurement).
+ */
+export function vlakZijdeTeksten(ann) {
+  const zijden = vlakZijden(ann?.points);
+  if (zijden.length === 0) return [];
+  const { perPt, unit } = vlakLengteSchaal(ann);
+  return zijden.map((z) => ({ ...z, tekst: formatMeasurement({ value: z.lengte * perPt, unit }) }));
 }
 
 // Calculate perimeter of a polyline

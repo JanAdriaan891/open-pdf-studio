@@ -10,7 +10,8 @@ import { tekstvakKnipvlak } from './rendering/textbox-layout.js';
 import { drawArrowheadOnCanvas, applyBorderStyle, drawDimensionLineEnding } from './rendering/decorations.js';
 import { catmullRomSpline } from '../tools/tools/spline-tool.js';
 import { catmullRomToBezier, splineArrowEndTangent } from './spline-arrow-geometry.js';
-import { drawDimension, drawMeasureAreaShape, drawCentroidLabel, drawMeasurePerimeterShape } from './rendering/measurements.js';
+import { drawDimension, drawMeasureAreaShape, drawCentroidLabel, drawMeasurePerimeterShape, drawVlakZijdematen } from './rendering/measurements.js';
+import { vlakZijdeTeksten } from './measurement.js';
 import { maatlijnTekst } from './maat-label.js';
 import { maatlijnVelden } from './maatlijn-geometrie.js';
 import { tagWeergaveParams } from '../plattegrond/ruimte-koppeling.js';
@@ -2033,6 +2034,11 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       // in de ruimtetag van een plattegrond) en het vlak toont geen eigen label.
       if (annotation.measureText && annotation.measureShowLabel !== false) {
         drawCentroidLabel(ctx, annotation.points, annotation.measureText, strokeColor, annotation);
+      }
+      // Zijdematen (#536): alleen als ze voor dit vlak aanstaan; dezelfde
+      // schaal, eenheid en afronding als de oppervlaktetekst.
+      if (annotation.measureShowEdgeLengths === true) {
+        drawVlakZijdematen(ctx, vlakZijdeTeksten(annotation), strokeColor);
       }
       break;
     }

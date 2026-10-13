@@ -363,6 +363,7 @@
     "extension": "Extensie",
     "showUnit": "Eenheid tonen",
     "showLabel": "Label tonen",
+    "showEdgeLengths": "Zijdelengtes tonen",
     "lineOvershoot": "Uitloop maatlijn (mm)",
     "extGap": "Hulplijn: vrije afstand (mm)",
     "extOvershoot": "Hulplijn: doorloop (mm)",

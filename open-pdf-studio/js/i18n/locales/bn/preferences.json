@@ -178,5 +178,8 @@
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default"
+  },
+  "measurement": {
+    "showEdgeLengths": "বাহুর দৈর্ঘ্য দেখান"
   }
 }

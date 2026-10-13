@@ -226,8 +226,12 @@ export function getStyleMapping(type) {
       return { prefix: 'redaction', overlayColor: 'OverlayColor' };
     case 'measureDistance':
       return { prefix: 'measureDist', stroke: 'StrokeColor', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', startHead: 'StartHead', endHead: 'EndHead', headSize: 'HeadSize', fontSize: 'FontSize', dimension: true };
+    // noDimScale: schaal en eenheid van een meetvlak zijn geen stijl. Een
+    // nieuw vlak rekent met de schaal van het document; een eigen schaal
+    // hoort bij dat ene vlak en mag niet via de standaardstijl naar een
+    // ander vlak (#536).
     case 'measureArea':
-      return { prefix: 'measureArea', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', dimension: true };
+      return { prefix: 'measureArea', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', dimension: true, noDimScale: true, edgeLengths: 'ShowEdgeLengths' };
     case 'measurePerimeter':
       return { prefix: 'measurePerim', stroke: 'StrokeColor', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', startHead: 'StartHead', endHead: 'EndHead', headSize: 'HeadSize', dimension: true };
     default:
@@ -274,13 +278,18 @@ export function setAsDefaultStyle(annotation) {
 
   // Dimension measurement properties (use 'Dim' prefix to avoid clash with global measureScale object)
   if (m.dimension) {
-    if (annotation.measureScale != null) prefs[p + 'DimScale'] = annotation.measureScale;
-    if (annotation.measureUnit) prefs[p + 'DimUnit'] = annotation.measureUnit;
+    if (!m.noDimScale) {
+      if (annotation.measureScale != null) prefs[p + 'DimScale'] = annotation.measureScale;
+      if (annotation.measureUnit) prefs[p + 'DimUnit'] = annotation.measureUnit;
+    }
     if (annotation.measurePrecision != null) prefs[p + 'DimPrecision'] = annotation.measurePrecision;
     // Dimension type preset (1.8/2.5/3.5/5.0 mm) — '' means custom.
     prefs[p + 'DimType'] = annotation.dimType || '';
     prefs[p + 'DimExtension'] = !!annotation.dimExtension;
   }
+
+  // Zijdematen van een meetvlak (#536): aan of uit, standaard uit.
+  if (m.edgeLengths) prefs[p + m.edgeLengths] = annotation.measureShowEdgeLengths === true;
 
   savePreferences();
   updateStatusMessage('Style set as default');
@@ -330,12 +339,16 @@ export function applyDefaultStyle(annotation) {
 
   // Dimension measurement properties (use 'Dim' prefix to avoid clash with global measureScale object)
   if (m.dimension) {
-    if (prefs[p + 'DimScale'] != null) annotation.measureScale = prefs[p + 'DimScale'];
-    if (prefs[p + 'DimUnit']) annotation.measureUnit = prefs[p + 'DimUnit'];
+    if (!m.noDimScale) {
+      if (prefs[p + 'DimScale'] != null) annotation.measureScale = prefs[p + 'DimScale'];
+      if (prefs[p + 'DimUnit']) annotation.measureUnit = prefs[p + 'DimUnit'];
+    }
     if (prefs[p + 'DimPrecision'] != null) annotation.measurePrecision = prefs[p + 'DimPrecision'];
     if (prefs[p + 'DimType']) annotation.dimType = prefs[p + 'DimType'];
     if (prefs[p + 'DimExtension'] != null) annotation.dimExtension = !!prefs[p + 'DimExtension'];
   }
+
+  if (m.edgeLengths) annotation.measureShowEdgeLengths = prefs[p + m.edgeLengths] === true;
 
   annotation.modifiedAt = new Date().toISOString();
 }
