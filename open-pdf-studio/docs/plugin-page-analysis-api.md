@@ -67,3 +67,42 @@ participate in this structured round trip.
 `pageChanged`, and `scaleChanged`; it returns an unsubscribe function. The
 host also removes subscriptions when the plugin is unloaded. Read the current
 state once on activation because listeners only receive subsequent changes.
+
+## View navigation and selection
+
+Check `api.features.viewNavigation` before calling these methods. They let an
+extension go from its own list (rooms, objects) to the drawing without GUI
+automation or private modules. Pass the `id` from `api.getDocumentInfo()`.
+
+```js
+const doc = api.getDocumentInfo();
+await api.navigateToPage({ documentId: doc.id, page: 2 });
+await api.selectAnnotations({ documentId: doc.id, ids: ['room-1', 'room-2'], focus: true });
+const result = await api.focusAnnotation({ documentId: doc.id, annotationId: 'room-1', page: 1 });
+if (!result.ok) console.warn(result.code, result.message);
+```
+
+- `navigateToPage({ documentId, page })` shows a valid page of the active
+  document. Asking for the current page does nothing (and keeps the selection).
+- `selectAnnotations({ documentId, ids, focus })` selects existing annotations
+  through the normal selection and property-panel workflow. They must be on
+  one page; the view goes to that page when needed. `focus: true` centres
+  their bounds in the view.
+- `focusAnnotation({ documentId, annotationId, page })` navigates to one
+  annotation, selects it and centres it. With `page`, the annotations of that
+  page are loaded first when needed, and the annotation must be on that page.
+
+Every call resolves to `{ ok: true, documentId, page, ... }` or to
+`{ ok: false, code, message }`. Codes: `invalidArgument`, `documentClosed`,
+`documentNotActive`, `documentChanged`, `invalidPage`, `annotationNotFound`
+(with `missing`), `annotationHidden` and `annotationLocked` (with `ids`),
+`multiplePages`, `pageMismatch` and `superseded`. A failed call does not
+change the selection.
+
+The document identity is checked again after every wait. Switching or closing
+the document while a call is pending makes it fail with `documentChanged` or
+`documentClosed`; nothing is selected in the document that is now active. A
+newer call from the same extension supersedes an older one that is still
+pending. These methods never change annotation geometry, layers, saved
+content or other tabs. Selecting through them notifies the listeners from
+`registerSelectionListener`, just like a click on the page.

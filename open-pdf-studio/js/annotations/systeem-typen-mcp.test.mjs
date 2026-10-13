@@ -353,5 +353,5 @@ test('de opdrachten staan in de brug, de Rust-server, de metatabel, tools.json e
   }
   // Achteraan, in de volgorde van de server.
   assert.deepEqual(tools.slice(-TOOLS.length).map((t) => t.name), TOOLS.map((t) => t.naam));
-  assert.equal(tools.length, 67);
+  assert.equal(tools.length, 68);
 });

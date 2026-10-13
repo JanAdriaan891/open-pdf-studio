@@ -24,6 +24,7 @@ import { createRerenderGate } from './continuous-rerender-gate.js';
 import { continuousRenderScale } from './continuous-render-scale.js';
 import { weergaveRotatie, weergaveTransform } from './weergave-ruimte.js';
 import { normaliseerRotatie, isKwartslag } from './weergave-rotatie.js';
+import { voorvertoningSleutel, voorvertoningRotatie, maakVoorvertoningLus } from './voorvertoning-sleutel.js';
 import { rotateTextDir } from '../annotations/corrections/geometry.js';
 import { isTextAnchored } from '../annotations/corrections/model.js';
 import { stopAlleWielScrollers } from './wiel-scroll.js';
@@ -1059,17 +1060,27 @@ const LOW_RES_SCALE = 0.5; // Render at 50% for fast preview
 // Rotation is part of the key so a rotated page doesn't reuse the pre-rotation
 // (old-orientation) preview canvas — that stale preview flashed in the OLD
 // orientation on the continuous-view rebuild after rotating (issue #262).
-function _lowResKey(pageNum) {
-  return `${getActiveDocument()?.filePath || 'blank'}|${pageNum}|${beeldRotatie(pageNum)}`;
+// De sleutel hoort bij het document dat gerenderd wordt (#506): de
+// achtergrondlus van een vorig document mag zijn pagina's niet onder de
+// sleutel van het nu actieve document leggen.
+function _lowResKey(pageNum, doc = getActiveDocument()) {
+  return voorvertoningSleutel(doc, pageNum);
 }
 
+// Eén achtergrondlus tegelijk, en alleen voor het document dat voor staat.
+const _startLowResLus = maakVoorvertoningLus(getActiveDocument);
+
 // Render a quick low-res preview of a page (fast, <50ms per page)
-async function renderLowResPreview(pdfDoc, pageNum, targetWidth, targetHeight) {
-  const cacheKey = _lowResKey(pageNum);
+async function renderLowResPreview(doc, pageNum, nogActueel = () => true) {
+  const pdfDoc = doc.pdfDoc;
+  const cacheKey = _lowResKey(pageNum, doc);
   if (_lowResCache.has(cacheKey)) return _lowResCache.get(cacheKey).canvas;
 
   const page = await pdfDoc.getPage(pageNum);
-  const extraRotation = beeldRotatie(pageNum);
+  // Intussen een ander document of een nieuwere lus: niet meer renderen,
+  // de PDF.js-worker is nodig voor wat nu in beeld staat.
+  if (!nogActueel()) return null;
+  const extraRotation = voorvertoningRotatie(doc, pageNum);
   const vpOpts = { scale: LOW_RES_SCALE };
   if (extraRotation) vpOpts.rotation = (page.rotate + extraRotation) % 360;
   const viewport = page.getViewport(vpOpts);
@@ -1835,12 +1846,16 @@ export async function renderContinuous(forceRebuild) {
   // Fire-and-forget: pre-render low-res previews in background for fast scroll
   // This runs without blocking — pages that scroll into view get full render via observer.
   // Facing toont maar één spread (geen scroll), dus geen zin om alle pagina's te primen.
+  // De lus stopt zodra een ander document voor staat of de weergave opnieuw
+  // is opgebouwd (dan neemt een nieuwe lus het over), zie #506.
   if (pdfDoc.numPages > 1 && !doc.facingSpread) {
+    const nogActueel = _startLowResLus(pdfDoc);
     (async () => {
       for (let p = 1; p <= Math.min(pdfDoc.numPages, 200); p++) {
-        if (_lowResCache.has(_lowResKey(p))) continue;
+        if (!nogActueel()) return;
+        if (_lowResCache.has(_lowResKey(p, doc))) continue;
         try {
-          await renderLowResPreview(pdfDoc, p, 0, 0);
+          await renderLowResPreview(doc, p, nogActueel);
         } catch {}
         // Yield to main thread every 5 pages
         if (p % 5 === 0) await new Promise(r => setTimeout(r, 0));

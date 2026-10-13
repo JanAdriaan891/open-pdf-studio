@@ -2051,6 +2051,11 @@ async function handleReplaceText(params) {
   return textTools.replaceTextForMcp(params);
 }
 
+async function handleTranslatePage(params) {
+  const textTools = await import('./text/mcp-text-tools.js');
+  return textTools.translatePageForMcp(params);
+}
+
 async function handleSetMeasureScale(params) {
   const pixelsPerUnit = Number(params?.pixelsPerUnit);
   const unit = params?.unit;
@@ -3358,6 +3363,7 @@ const HANDLERS = {
   'mcp:get-page-count':     handleGetPageCount,
   'mcp:get-page-text':      handleGetPageText,
   'mcp:replace-text':       handleReplaceText,
+  'mcp:translate-page':     handleTranslatePage,
   // App control: measurement scale
   'mcp:set-measure-scale':  handleSetMeasureScale,
   // Plattegrond: sparingen, ruimten en verankerde maatvoering

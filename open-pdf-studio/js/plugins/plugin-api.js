@@ -14,7 +14,7 @@ import {
 } from './selection-listener-registry.js';
 import { clearAllToolGroups } from './tool-group-state.js';
 import { setNativePanelHidden } from '../solid/stores/propertiesStore.js';
-import { state, getActiveDocument, getPageRotation } from '../core/state.js';
+import { state, getActiveDocument, getPageRotation, getAnnotationBounds } from '../core/state.js';
 import { setTool } from '../tools/manager.js';
 import { createAnnotation } from '../annotations/factory.js';
 import { redrawAnnotations } from '../annotations/rendering.js';
@@ -29,6 +29,80 @@ import { systeemInstanceGeometrie } from '../annotations/systeem-geometrie-app.j
 import { openSysteemtypenEditor } from '../solid/stores/systeemtypenEditorStore.js';
 import { createSystemTypeApi } from './system-type-api.js';
 import { createRoot, createEffect } from 'solid-js';
+import { createViewNavigation } from './view-navigation.js';
+
+// Wat createViewNavigation van de app nodig heeft (#557). De modules voor
+// selecteren en in beeld brengen worden vooraf geladen (`prepare`), zodat de
+// laatste identiteitscontrole en de selectie zelf in één synchrone stap
+// gebeuren: geen wachtmoment waarin een tabbladwissel ertussen kan komen.
+function viewNavigationHost() {
+  let m = null;
+  return {
+    documents: () => state.documents,
+    activeDocument: () => getActiveDocument(),
+    pageCount: doc => doc?.numPages || doc?.pdfDoc?.numPages || 0,
+    async loadPageAnnotations(doc, pageNum) {
+      const { ensureAnnotationsForPage } = await import('../pdf/loader.js');
+      if (getActiveDocument() !== doc) return;
+      await ensureAnnotationsForPage(pageNum, doc);
+      const started = Date.now();
+      while (doc._annotationPagesReady && !doc._annotationPagesReady.has(pageNum)) {
+        if (getActiveDocument() !== doc || Date.now() - started > 30_000) return;
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+    },
+    async goToPage(doc, pageNum) {
+      // Twee-paginaweergave: staat de pagina al in de getoonde spread, dan
+      // niet navigeren (goToPage zou dat als 'volgende spread' lezen).
+      const anker = p => (p <= 1 ? 1 : (p % 2 === 0 ? p : p - 1));
+      if (doc.facingSpread && anker(pageNum) === anker(doc.currentPage)) return;
+      const { goToPage } = await import('../pdf/renderer.js');
+      if (getActiveDocument() === doc) await goToPage(pageNum);
+    },
+    async prepare() {
+      if (m) return;
+      const [filters, model, panel, list] = await Promise.all([
+        import('../annotations/view-filters.js'),
+        import('../annotations/corrections/model.js'),
+        import('../ui/panels/properties-panel.js'),
+        import('../ui/panels/annotations-list.js'),
+      ]);
+      m = { filters, model, panel, list };
+    },
+    // Verborgen (niet getekend) of op een vergrendelde laag: een klik pakt
+    // zo'n object ook niet.
+    isHidden: (doc, ann) => !!m && m.filters.isAnnotationHiddenInView(ann),
+    isLocked: (doc, ann) => !!m && !m.filters.isAnnotationHiddenInView(ann)
+      && !m.filters.isAnnotationPickableInView(ann),
+    // De gewone selectieroute, zoals een klik in de annotatielijst: een
+    // vervanging (#508) blijft één selectie, het eigenschappenpaneel volgt en
+    // meldt de selectie aan de plugin-listeners.
+    select(doc, anns) {
+      const leden = m.model.expandCorrectionGroups(doc.annotations, anns);
+      const ouder = leden.length > 1 ? m.model.replaceParentOf(leden, doc.annotations) : null;
+      doc.selectedAnnotation = ouder || anns[0];
+      doc.selectedAnnotations = leden;
+      redrawAnnotations();
+      if (ouder) m.panel.showProperties(ouder);
+      else if (leden.length > 1) m.panel.showMultiSelectionProperties();
+      else m.panel.showProperties(anns[0]);
+      m.list.updateAnnotationsList();
+    },
+    // De omhullende van de selectie in het midden van de weergave; even
+    // wachten zoals de annotatielijst doet, tot de paginawissel staat.
+    reveal(doc, anns) {
+      const kaders = anns.map(a => getAnnotationBounds(a)).filter(Boolean);
+      let doel = anns[0];
+      if (kaders.length > 1) {
+        const x = Math.min(...kaders.map(b => b.x)), y = Math.min(...kaders.map(b => b.y));
+        doel = { type: 'box', page: anns[0].page, x, y,
+          width: Math.max(...kaders.map(b => b.x + b.width)) - x,
+          height: Math.max(...kaders.map(b => b.y + b.height)) - y };
+      }
+      setTimeout(() => { if (getActiveDocument() === doc) m.list.scrollToAnnotation(doel); }, 50);
+    },
+  };
+}
 
 export function createPluginApi(pluginId) {
   // System types (#567): registry, native tool, native editor and the
@@ -45,6 +119,8 @@ export function createPluginApi(pluginId) {
   const registeredPanels = [];
   const registeredSelectionListeners = []; // [{typeName, fn}]
   const documentListeners = new Map();
+  let viewNavigation = null;
+  const navigation = () => (viewNavigation ??= createViewNavigation(viewNavigationHost()));
   let disposeDocumentEvents = null;
 
   function ensureDocumentEvents() {
@@ -93,6 +169,7 @@ export function createPluginApi(pluginId) {
       pageAnalysis: true,
       pluginDocumentEvents: true,
       systemTypes: true,
+      viewNavigation: true,
     },
 
     // --- Annotation type registration ---
@@ -314,6 +391,24 @@ export function createPluginApi(pluginId) {
     openSystemTypeEditor: systemTypes.openSystemTypeEditor,
     onSystemTypesChanged: systemTypes.onSystemTypesChanged,
     getSystemInstanceGeometry: systemTypes.getSystemInstanceGeometry,
+
+    // --- View navigation and selection (#557) ---
+    // Document-scoped: pass the id from getDocumentInfo(). Each call resolves
+    // to { ok: true, ... } or { ok: false, code, message }; the identity of
+    // the document is checked again after every wait, so a tab switch or
+    // close while a call is pending never selects in another document. A
+    // newer call from the same plugin supersedes an older pending one.
+    navigateToPage(request) {
+      return navigation().navigateToPage(request);
+    },
+
+    selectAnnotations(request) {
+      return navigation().selectAnnotations(request);
+    },
+
+    focusAnnotation(request) {
+      return navigation().focusAnnotation(request);
+    },
 
     // --- Cleanup (called by plugin-manager on deactivate) ---
     _cleanup() {

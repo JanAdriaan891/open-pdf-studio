@@ -196,6 +196,10 @@
       "description": "Replace one existing PDF text span returned by app_get_page_text."
     },
     {
+      "name": "app_translate_page",
+      "description": "Replace many text spans of one page in a single call, for example to translate the page."
+    },
+    {
       "name": "app_set_measure_scale",
       "description": "Set the active document's measurement scale calibration (pixels per unit + unit, e.g."
     },
