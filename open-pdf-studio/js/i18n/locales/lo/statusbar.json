@@ -60,7 +60,7 @@
   "engine": {
     "pdfium": "PDFium",
     "scene": "AEC-PDF v1",
-    "vector": "AEC-PDF v1 (vector)"
+    "vector": "AEC-PDF v1 (ເວັກເຕີ)"
   },
   "viewSingle": "ໜ້າດຽວ",
   "viewContinuous": "ຕໍ່ເນື່ອງ",
@@ -90,6 +90,7 @@
   },
   "boxWidthAbbr": "ກ",
   "boxHeightAbbr": "ສ",
+  "boxSizeHint": "ພິມຄ່າ + Enter — ຫຼື ຄລິກບ່ອນອື່ນເພື່ອນຳໃຊ້",
   "ocr": {
     "progress": {
       "starting": "ກຳລັງກວດຈັບຂໍ້ຄວາມ...",

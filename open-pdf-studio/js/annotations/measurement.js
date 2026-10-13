@@ -10,6 +10,7 @@ import { cloneAnnotation } from './factory.js';
 import { leesOpslagJson, schrijfOpslagJson, verwijderOpslag } from '../core/opslag.js';
 import { nettoVlakOppervlak } from './vlak-ringen.js';
 import { vlakZijden, lengteEenheid } from './vlak-zijden.js';
+import { isSpotCoord, spotCoordTekst } from './spot-coord.js';
 import {
   recordBulkModify,
   recordMeasureScale,
@@ -385,8 +386,20 @@ export function recalculateAllMeasurements() {
   }
 }
 
+/**
+ * Spot Coord-label opnieuw opbouwen uit de plek van het beginpunt, met de
+ * schaal die daar geldt (zoals het gereedschap hem maakte). Geen lengte.
+ */
+export function syncSpotCoord(ann) {
+  const scale = getMeasureScale(ann.page, ann.startX, ann.startY);
+  ann.measureText = spotCoordTekst(ann.startX, ann.startY, scale);
+  ann.measureUnit = scale.unit;
+}
+
 function recalculateMeasurementsIn(doc) {
   for (const ann of doc.annotations) {
+    // Spot Coord: coördinaten, geen lengte (zie spot-coord.js).
+    if (isSpotCoord(ann)) { syncSpotCoord(ann); continue; }
     const pt = getAnnotationPoint(ann);
     const scale = getMeasureScale(pt.page, pt.x, pt.y);
 

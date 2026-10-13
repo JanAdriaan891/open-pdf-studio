@@ -146,7 +146,7 @@ function rotateSelected() {
 }
 
 function moveSelected() {
-  // AutoCAD-achtig verplaatsen met basispunt (de 'mv'-flow uit g-move-mode):
+  // CAD-stijl verplaatsen met basispunt (de 'mv'-flow uit g-move-mode):
   // klik 1 kiest het basispunt, slepen óf een getypte verplaatsing (50,0)
   // plaatst de selectie.
   if (tryStartGMove({ basePoint: true })) {
@@ -424,7 +424,7 @@ export function DrawingGroups() {
               disabled={ro()} active={state.currentTool === 'stretch'} onClick={() => startStretchTool()} />
           </RibbonButtonStack>
           <RibbonButtonStack>
-            {/* Vergroten/verkleinen (AutoCAD SCALE) rond een basispunt */}
+            {/* Vergroten/verkleinen (CAD-stijl schalen) rond een basispunt */}
             <RibbonButton size="small" id="dr-enlarge" title={t('drawing.enlarge')} icon={enlargeIcon} label={t('drawing.enlarge')}
               disabled={ro()} active={state.currentTool === 'enlarge'} onClick={() => startEnlargeTool()} />
           </RibbonButtonStack>

@@ -312,8 +312,8 @@
   "calibration": {
     "title": "Schaalcalibratie",
     "helpText": "Teken een meetlijn van bekende lengte en voer vervolgens de werkelijke afstand hier in.",
-    "knownDistance": "Known distance:",
-    "measuredPixels": "Measured pixels:",
+    "knownDistance": "Bekende afstand:",
+    "measuredPixels": "Gemeten pixels:",
     "methodReference": "Referentielijn",
     "methodRatio": "Schaalverhouding",
     "referenceHelp": "Voer de werkelijke afstand in voor een bekende meetlijn.",
@@ -515,7 +515,7 @@
   },
   "parametricSymbolPicker": {
     "title": "Parametrisch symbool kiezen",
-    "cancel": "Cancel"
+    "cancel": "Annuleren"
   },
   "ocrLanguage": {
     "title": "Tekst herkennen (OCR)",

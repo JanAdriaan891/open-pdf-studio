@@ -1,4 +1,4 @@
-import { wrapTekst } from '../text/wrap-tekst.js';
+import { plaatsTekstOpPagina } from '../text/wrap-tekst.js';
 import { state, getActiveDocument, getPageRotation } from '../core/state.js';
 import { redrawAnnotations, redrawContinuous } from '../annotations/rendering.js';
 import { hasFill } from '../annotations/fill-utils.js';
@@ -375,24 +375,21 @@ export async function addTextAnnotation(x, y, pageNum, canvasEl) {
   const fontSize = result.fontSize || 16;
 
   // Lange tekst binnen de pagina houden: afbreken op de rechtermarge, en het
-  // beginpunt zo ver naar links schuiven dat er minstens een leesbare breedte
-  // overblijft. Zonder dit liep de tekst als één regel de pagina uit.
-  const PAGINA_MARGE = 36;
-  const MIN_BREEDTE = Math.min(150, Math.max(0, geometry.pageWidth - 2 * PAGINA_MARGE));
-  let tekstX = pdfX;
-  let wrapBreedte = geometry.pageWidth - tekstX - PAGINA_MARGE;
-  if (wrapBreedte < MIN_BREEDTE) {
-    wrapBreedte = MIN_BREEDTE;
-    tekstX = Math.max(PAGINA_MARGE, geometry.pageWidth - PAGINA_MARGE - wrapBreedte);
-  }
-  const wrapTekstResultaat = wrapTekst(result.text, wrapBreedte, maakTekstMeter(fontFamily, fontSize));
+  // beginpunt alleen naar links schuiven als de tekst er anders niet past.
+  // Zonder dit liep de tekst als één regel de pagina uit.
+  const plaatsing = plaatsTekstOpPagina({
+    tekst: result.text,
+    x: pdfX,
+    paginaBreedte: geometry.pageWidth,
+    meet: maakTekstMeter(fontFamily, fontSize),
+  });
 
   const editRecord = {
     id: Date.now() + Math.random().toString(36).substr(2, 9),
     page,
     originalText: '',
-    newText: wrapTekstResultaat,
-    pdfX: tekstX,
+    newText: plaatsing.tekst,
+    pdfX: plaatsing.x,
     pdfY,
     pdfWidth: 0,
     fontSize,

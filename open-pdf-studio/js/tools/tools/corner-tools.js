@@ -1,5 +1,5 @@
 /**
- * Fillet (afronden) en Chamfer (afkanten) — AutoCAD-achtige hoekbewerkingen
+ * Fillet (afronden) en Chamfer (afkanten) — CAD-achtige hoekbewerkingen
  * op twee lijnen.
  *
  * Werking (beide):
@@ -32,6 +32,8 @@ import {
   clearTypeLengthBuffer,
 } from '../type-length-input.js';
 import { parseCoordBuffer } from '../coord-invoer.js';
+import { syncMeasurementAfterEdit } from '../../annotations/transforms.js';
+import { isEditableTarget } from '../edit-ops.js';
 
 function _t(key, def) {
   return i18next.t(key, { ns: 'ribbon', defaultValue: def });
@@ -51,7 +53,7 @@ const _seg = (a) => ({ x1: a.startX, y1: a.startY, x2: a.endX, y2: a.endY });
  */
 function makeCornerTool(soort) {
   // Onthouden waarde (straal / afstand) — blijft over sessies heen staan,
-  // net als AutoCAD's onthouden fillet-radius.
+  // net als de onthouden fillet-straal in CAD-pakketten.
   let _waarde = 10;
   let _tweede = null;   // chamfer: d2 (null = gelijk aan d1)
   const _s = { first: null, ownsCommit: false };
@@ -188,6 +190,9 @@ function makeCornerTool(soort) {
       startX: resultaat.lijn2.x1, startY: resultaat.lijn2.y1,
       endX: resultaat.lijn2.x2, endY: resultaat.lijn2.y2,
     });
+    // Een maat die zo verandert, krijgt meteen de nieuwe maatwaarde.
+    syncMeasurementAfterEdit(eerste);
+    syncMeasurementAfterEdit(tweede);
     const nu = new Date().toISOString();
     eerste.modifiedAt = nu;
     tweede.modifiedAt = nu;
@@ -276,6 +281,14 @@ function makeCornerTool(soort) {
             soort === 'fillet' ? 'drawing.filletPick1' : 'drawing.chamferPick1',
           );
         }
+        return;
+      }
+      // Vergrendeld: dezelfde regel als elke andere bewerking (getEditTargets).
+      if (!isEditableTarget(clicked)) {
+        _bericht(
+          soort === 'fillet' ? 'Fillet: that line is locked' : 'Chamfer: that line is locked',
+          soort === 'fillet' ? 'drawing.filletLocked' : 'drawing.chamferLocked',
+        );
         return;
       }
       if (!_isLijn(clicked)) {

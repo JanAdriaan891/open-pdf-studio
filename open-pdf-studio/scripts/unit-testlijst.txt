@@ -296,3 +296,5 @@ js/text/wrap-tekst.test.mjs
 js/annotations/offset-geometry.test.mjs
 js/annotations/stretch-geometry.test.mjs
 js/annotations/scale-geometry.test.mjs
+js/annotations/spot-coord.test.mjs
+js/tools/maat-vorm-eindpunt.test.mjs

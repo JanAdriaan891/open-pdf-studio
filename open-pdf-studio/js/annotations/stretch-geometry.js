@@ -1,10 +1,10 @@
 /**
- * Stretch-geometrie (AutoCAD STRETCH) — puur, zonder state/DOM.
+ * Stretch-geometrie (CAD-stijl stretch) — puur, zonder state/DOM.
  *
  * Het gereedschap laat de gebruiker een selectieruit (crossing window)
  * tekenen. Alle HOEKPUNTEN die in die ruimte vallen, bewegen mee met de
- * sleper; de rest blijft staan. Dat is precies het gedrag van AutoCAD's
- * STRETCH: de rechterrand van een rechthoek verlengen blijft rechts, de
+ * sleper; de rest blijft staan. Dat is het gebruikelijke stretch-gedrag in
+ * CAD: de rechterrand van een rechthoek verlengen blijft rechts, de
  * linkerrand blijft staan.
  *
  *   verticesOf(ann)                         → de tikbare punten van een vorm
@@ -28,6 +28,18 @@ export function isRectAnnotation(ann) {
 
 const MIN_MAAT = 0.5;
 
+/** Basispunten (hulplijnen) van een maat, of null. */
+function _leiders(ann) {
+  const begin = _fin(ann.leaderStartX) && _fin(ann.leaderStartY)
+    ? { x: ann.leaderStartX, y: ann.leaderStartY } : null;
+  const eind = _fin(ann.leaderEndX) && _fin(ann.leaderEndY)
+    ? { x: ann.leaderEndX, y: ann.leaderEndY } : null;
+  return { begin, eind };
+}
+
+/** Een punt verplaatst; overige velden (boog: arc/bulge) blijven staan. */
+const _verschuif = (p, dx, dy) => ({ ...p, x: p.x + dx, y: p.y + dy });
+
 /**
  * Alle tikbare punten van een annotatie (in tekenvolgorde).
  * @returns {{x:number,y:number}[]}
@@ -35,7 +47,8 @@ const MIN_MAAT = 0.5;
 export function verticesOf(ann) {
   if (!ann) return [];
   if (isLineAnnotation(ann)) {
-    return [{ x: ann.startX, y: ann.startY }, { x: ann.endX, y: ann.endY }];
+    const { begin, eind } = _leiders(ann);
+    return [{ x: ann.startX, y: ann.startY }, { x: ann.endX, y: ann.endY }, begin, eind].filter(Boolean);
   }
   if (Array.isArray(ann.points) && ann.points.length > 0) {
     return ann.points.map((p) => ({ x: p.x, y: p.y }));
@@ -75,36 +88,38 @@ export function stretchAnnotation(orig, doel, dx, dy, inRuit) {
   if (!orig || !doel) return false;
 
   if (isLineAnnotation(orig)) {
-    if (inRuit({ x: orig.startX, y: orig.startY })) {
-      doel.startX = orig.startX + dx;
-      doel.startY = orig.startY + dy;
-    } else {
-      doel.startX = orig.startX;
-      doel.startY = orig.startY;
-    }
-    if (inRuit({ x: orig.endX, y: orig.endY })) {
-      doel.endX = orig.endX + dx;
-      doel.endY = orig.endY + dy;
-    } else {
-      doel.endX = orig.endX;
-      doel.endY = orig.endY;
-    }
+    // Maat met hulplijnen: een kant gaat mee als zijn maatlijn-eind OF zijn
+    // basispunt in de ruit ligt, en dan verhuizen ze samen. Zo blijven
+    // maatlijn en gemeten punt bij elkaar (een wand met zijn maat oprekken).
+    const { begin, eind } = _leiders(orig);
+    const beginMee = inRuit({ x: orig.startX, y: orig.startY }) || (!!begin && inRuit(begin));
+    const eindMee = inRuit({ x: orig.endX, y: orig.endY }) || (!!eind && inRuit(eind));
+    const bx = beginMee ? dx : 0, by = beginMee ? dy : 0;
+    const ex = eindMee ? dx : 0, ey = eindMee ? dy : 0;
+    doel.startX = orig.startX + bx;
+    doel.startY = orig.startY + by;
+    doel.endX = orig.endX + ex;
+    doel.endY = orig.endY + ey;
+    if (begin) { doel.leaderStartX = begin.x + bx; doel.leaderStartY = begin.y + by; }
+    if (eind) { doel.leaderEndX = eind.x + ex; doel.leaderEndY = eind.y + ey; }
     return true;
   }
 
+  const rek = (p) => (inRuit(p) ? _verschuif(p, dx, dy) : { ...p });
+
   if (Array.isArray(orig.points) && orig.points.length > 0) {
-    doel.points = orig.points.map((p) => (inRuit(p)
-      ? { x: p.x + dx, y: p.y + dy }
-      : { x: p.x, y: p.y }));
+    doel.points = orig.points.map(rek);
+    // Gaten volgen dezelfde regel: hun hoekpunten in de ruit gaan mee.
+    if (Array.isArray(orig.holes)) {
+      doel.holes = orig.holes.map((ring) => (Array.isArray(ring) ? ring.map(rek) : ring));
+    }
     if (isRectAnnotation(orig)) _updateBbox(doel);
     return true;
   }
 
   if (Array.isArray(orig.path) && orig.path.length > 0) {
-    doel.path = orig.path.map((p) => (inRuit(p)
-      ? { x: p.x + dx, y: p.y + dy }
-      : { x: p.x, y: p.y }));
-    if (isRectAnnotation(orig)) _updateBbox(doel);
+    doel.path = orig.path.map(rek);
+    if (isRectAnnotation(orig)) _updateBbox(doel, doel.path);
     return true;
   }
 
@@ -147,8 +162,8 @@ export function stretchAnnotation(orig, doel, dx, dy, inRuit) {
 }
 
 /** Omtrek-velden (x/y/width/height) opnieuw afleiden uit de puntenreeks. */
-function _updateBbox(doel) {
-  const punten = doel.points;
+function _updateBbox(doel, punten = doel.points) {
+  if (!Array.isArray(punten)) return;
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const p of punten) {
     minX = Math.min(minX, p.x); minY = Math.min(minY, p.y);

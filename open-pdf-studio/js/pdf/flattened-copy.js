@@ -7,8 +7,10 @@
 
 import { getActiveDocument, state } from '../core/state.js';
 import { saveFileDialog } from '../core/platform.js';
+import i18next from '../i18n/config.js';
 import { standaardDoelPad, doelIsGeopend } from './print-doel.js';
 import { slaPrintOpAlsPdf } from './print-job.js';
+import { heeftFormuliervelden } from './formuliervelden.js';
 
 export const GEVLAKT_ACHTERVOEGSEL = ' (flattened)';
 
@@ -30,6 +32,16 @@ async function openOpgeslagen(pad) {
 export async function maakGevlakteKopie() {
   const doc = getActiveDocument();
   if (!doc?.pdfDoc) return { ok: false, reden: 'geen-document' };
+  // Formuliervelden komen niet mee (de pagina wordt zonder widgets getekend):
+  // eerst waarschuwen, anders deelt iemand ongemerkt een leeg formulier.
+  if (await heeftFormuliervelden(doc.pdfDoc)) {
+    const { showConfirm } = await import('../ui/chrome/confirm-dialog.js');
+    const verder = await showConfirm({
+      title: i18next.t('appMenu:exportPanel.exportFlat'),
+      message: i18next.t('appMenu:exportPanel.exportFlatFormFields'),
+    });
+    if (!verder) return { ok: false, reden: 'afgebroken' };
+  }
   const pad = await saveFileDialog(standaardDoelPad(doc, null, GEVLAKT_ACHTERVOEGSEL), [
     { name: 'PDF', extensions: ['pdf'] },
   ]);

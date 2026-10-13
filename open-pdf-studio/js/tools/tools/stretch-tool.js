@@ -1,5 +1,5 @@
 /**
- * Stretch-gereedschap (AutoCAD STRETCH) — hoekpunten verplaatsen, rest blijft.
+ * Stretch-gereedschap (CAD-stijl stretch) — hoekpunten verplaatsen, rest blijft.
  *
  * Fasen:
  *   1. Ruit: sleep een selectieruit over de hoekpunten die mee moeten bewegen
@@ -28,6 +28,10 @@ import {
 } from '../type-length-input.js';
 import { parseCoordBuffer } from '../coord-invoer.js';
 import { getMeasureScale } from '../../annotations/measurement.js';
+import { isAnnotationPickableInView } from '../../annotations/view-filters.js';
+import { raakbaarBijKlik } from '../../plattegrond/ruimte-koppeling.js';
+import { syncMeasurementAfterEdit } from '../../annotations/transforms.js';
+import { isEditableTarget } from '../edit-ops.js';
 
 const _s = {
   fase: 'ruit',        // 'ruit' | 'verplaats'
@@ -68,13 +72,36 @@ function _inRuit(r) {
   return (p) => p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY;
 }
 
-/** Kandidaten: de selectie, anders alles op deze pagina. */
+/**
+ * Mag stretch deze annotatie oppakken als er niets geselecteerd is? Dezelfde
+ * filters als de selectieruit en een klik (geometry.js findAnnotationAt):
+ * niets wat verborgen is of op een vergrendelde laag staat, geen vastgezet
+ * vectorknipsel en geen ruimte uit de plattegrond.
+ */
+function _raakbaar(a) {
+  if (!isAnnotationPickableInView(a)) return false;
+  if (a.type === 'vectorSnippet' && (a.flattened || a.gebakkenIn)) return false;
+  if (raakbaarBijKlik(a) === false) return false;
+  return true;
+}
+
+/** Kandidaten: de selectie, anders alles wat op deze pagina raakbaar is. */
 function _kandidaten(pageNum) {
   const doc = getActiveDocument();
   if (!doc) return [];
+  // Dezelfde regel als elke andere bewerking (getEditTargets): niet
+  // vergrendeld en niet aan tekst verankerd.
   const sel = (doc.selectedAnnotations || []).filter((a) => a.page === pageNum);
-  if (sel.length > 0) return sel;
-  return (doc.annotations || []).filter((a) => a.page === pageNum);
+  if (sel.length > 0) return sel.filter(isEditableTarget);
+  return (doc.annotations || []).filter((a) => a.page === pageNum && isEditableTarget(a) && _raakbaar(a));
+}
+
+/** Uitrekken en de opgeslagen maatwaarden meteen bijwerken. */
+function _rekUit(doelen, dx, dy, test) {
+  for (const t of doelen) {
+    stretchAnnotation(t.orig, t.ann, dx, dy, test);
+    syncMeasurementAfterEdit(t.ann);
+  }
 }
 
 /** Tijdelijke tekening van de crossing window (dashed rechthoek). */
@@ -135,8 +162,7 @@ export const stretchTool = {
     if (_s.fase === 'verplaats' && _s.basis && _s.doelen) {
       const dx = ctx.x - _s.basis.x;
       const dy = ctx.y - _s.basis.y;
-      const test = _inRuit(_s.ruit);
-      for (const t of _s.doelen) stretchAnnotation(t.orig, t.ann, dx, dy, test);
+      _rekUit(_s.doelen, dx, dy, _inRuit(_s.ruit));
       ctx.redraw();
     }
   },
@@ -153,7 +179,7 @@ export const stretchTool = {
       // Klik (geen sleep) op één object → alle hoeken van dat object mee.
       if (doelen.length === 0) {
         const hit = ctx.findAnnotationAt(ctx.x, ctx.y);
-        if (hit && canStretch(hit) && hit.page === ctx.pageNum) {
+        if (hit && canStretch(hit) && hit.page === ctx.pageNum && isEditableTarget(hit)) {
           doelen = [{ ann: hit, orig: cloneAnnotation(hit) }];
         }
       }
@@ -188,8 +214,7 @@ export const stretchTool = {
         _s.basis = { x: ctx.x, y: ctx.y };
         return true;
       }
-      const test = _inRuit(_s.ruit);
-      for (const t of _s.doelen) stretchAnnotation(t.orig, t.ann, dx, dy, test);
+      _rekUit(_s.doelen, dx, dy, _inRuit(_s.ruit));
       recordBulkModify(_s.doelen.map((t) => t.ann), _s.doelen.map((t) => t.orig));
       ctx.redraw();
       _bericht('Stretched — drag another window, or press Escape', 'drawing.stretchDone');
@@ -235,8 +260,7 @@ function _commitVerschuiving() {
   const ax = (_s.ruit.x1 + _s.ruit.x2) / 2;
   const ay = (_s.ruit.y1 + _s.ruit.y2) / 2;
   const ppu = getMeasureScale(page, ax, ay).pixelsPerUnit || 1;
-  const test = _inRuit(_s.ruit);
-  for (const t of _s.doelen) stretchAnnotation(t.orig, t.ann, dx * ppu, dy * ppu, test);
+  _rekUit(_s.doelen, dx * ppu, dy * ppu, _inRuit(_s.ruit));
   recordBulkModify(_s.doelen.map((t) => t.ann), _s.doelen.map((t) => t.orig));
   redrawAnnotations();
   _bericht('Stretched — drag another window, or press Escape', 'drawing.stretchDone');

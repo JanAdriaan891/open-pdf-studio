@@ -63,3 +63,33 @@ test('scale: ongeldige factoren veranderen niets', () => {
     assert.deepEqual(ann, orig);
   }
 });
+
+test('scale: boogpunten houden arc en bulge', () => {
+  const vlak = {
+    type: 'filledArea',
+    points: [{ x: 0, y: 0 }, { x: 100, y: 0, arc: true, bulge: 0.4 }, { x: 100, y: 50 }],
+  };
+  scaleAnnotation(vlak, 0, 0, 2);
+  assert.deepEqual(vlak.points[1], { x: 200, y: 0, arc: true, bulge: 0.4 });
+  assert.deepEqual(vlak.points[0], { x: 0, y: 0 });
+});
+
+test('scale: gaten en de basispunten van een maat schalen mee', () => {
+  const vlak = {
+    type: 'measureArea',
+    points: [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }],
+    holes: [[{ x: 10, y: 10 }, { x: 20, y: 10, arc: true, bulge: 0.2 }, { x: 20, y: 20 }]],
+  };
+  scaleAnnotation(vlak, 0, 0, 2);
+  assert.deepEqual(vlak.holes[0], [{ x: 20, y: 20 }, { x: 40, y: 20, arc: true, bulge: 0.2 }, { x: 40, y: 40 }]);
+
+  const maat = {
+    type: 'measureDistance', startX: 0, startY: 20, endX: 100, endY: 20,
+    leaderStartX: 0, leaderStartY: 0, leaderEndX: 100, leaderEndY: 0,
+  };
+  scaleAnnotation(maat, 0, 0, 2);
+  assert.deepEqual(
+    [maat.startX, maat.startY, maat.endX, maat.endY, maat.leaderStartX, maat.leaderStartY, maat.leaderEndX, maat.leaderEndY],
+    [0, 40, 200, 40, 0, 0, 200, 0],
+  );
+});

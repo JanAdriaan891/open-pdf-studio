@@ -88,3 +88,40 @@ test('stretch: verticesOf levert de tikbare punten per type', () => {
   assert.equal(canStretch({}), false);
   assert.equal(canStretch({ type: 'box', x: 0, y: 0, width: 1, height: 1 }), true);
 });
+
+test('stretch: boogpunten houden arc en bulge', () => {
+  const orig = {
+    type: 'filledArea',
+    points: [{ x: 0, y: 0 }, { x: 100, y: 0, arc: true, bulge: 0.4 }, { x: 100, y: 50 }],
+  };
+  const doel = { ...orig };
+  stretchAnnotation(orig, doel, 10, 0, inRuit(90, -10, 110, 10));
+  assert.deepEqual(doel.points[1], { x: 110, y: 0, arc: true, bulge: 0.4 });
+  assert.deepEqual(doel.points[2], { x: 100, y: 50 });
+  assert.notEqual(doel.points[0], orig.points[0], 'nieuwe puntobjecten, de bron blijft heel');
+});
+
+test('stretch: gaten volgen de ruit', () => {
+  const orig = {
+    type: 'measureArea',
+    points: [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }, { x: 0, y: 100 }],
+    holes: [[{ x: 80, y: 40 }, { x: 90, y: 40 }, { x: 90, y: 60 }]],
+  };
+  const doel = { ...orig };
+  stretchAnnotation(orig, doel, 20, 0, inRuit(85, -10, 110, 110));
+  assert.deepEqual(doel.points.map((p) => p.x), [0, 120, 120, 0]);
+  assert.deepEqual(doel.holes[0].map((p) => p.x), [80, 110, 110]);
+});
+
+test('stretch: maatlijn en basispunt van een maat verhuizen samen', () => {
+  const orig = {
+    type: 'measureDistance', startX: 0, startY: -20, endX: 100, endY: -20,
+    leaderStartX: 0, leaderStartY: 0, leaderEndX: 100, leaderEndY: 0,
+  };
+  // De ruit pakt alleen het basispunt rechts (op de wand), niet de maatlijn.
+  const doel = { ...orig };
+  stretchAnnotation(orig, doel, 50, 0, inRuit(90, -5, 110, 5));
+  assert.deepEqual([doel.endX, doel.endY, doel.leaderEndX, doel.leaderEndY], [150, -20, 150, 0]);
+  assert.deepEqual([doel.startX, doel.leaderStartX], [0, 0]);
+  assert.equal(verticesOf(orig).length, 4, 'basispunten tellen als hoekpunt');
+});

@@ -8,7 +8,7 @@ import { state as appState, getActiveDocument } from '../../core/state.js';
 import { updateStatusMessage } from '../../ui/chrome/status-bar.js';
 import i18next from '../../i18n/config.js';
 import { getMeasureScale } from '../../annotations/measurement.js';
-import { parseCoordBuffer } from '../coord-invoer.js';
+import { parseCoordBuffer, maatVormEindpunt } from '../coord-invoer.js';
 import {
   enterTypeLengthMode,
   exitTypeLengthMode,
@@ -37,28 +37,14 @@ function _dimEindpunt(ctx) {
   if (!_dim.actief) return null;
   const buf = typeLengthBuffer();
   if (!buf) return null;
-  const r = parseCoordBuffer(buf);
-  if (!r || r.kind === 'empty' || r.kind === 'invalid') return null;
   const ax = _dim.startX;
   const ay = _dim.startY;
-  if (r.kind === 'absolute') return { x: r.a, y: r.b };
   const page = getActiveDocument()?.currentPage || 1;
   const ppu = getMeasureScale(page, ax, ay).pixelsPerUnit || 1;
-  if (r.kind === 'cartesian') return { x: ax + r.a * ppu, y: ay + r.b * ppu };
-  if (r.kind === 'polar') {
-    const rad = (r.b * Math.PI) / 180;
-    return { x: ax + r.a * ppu * Math.cos(rad), y: ay + r.a * ppu * Math.sin(rad) };
-  }
-  // Length-only: één getal = vierkant / diameter. De ORDE van grootte is
-  // exact de getypte waarde; alleen het KWADRANT (richting van de cursor)
-  // bepaalt welke kant de vorm opgaat. Zo blijft "240" een cirkel van 240
-  // ook als de muis toevallig schuin staat.
-  const c = (ctx && Number.isFinite(ctx.x) && Number.isFinite(ctx.y)) ? ctx : _dim.cursor;
-  const dx = c ? c.x - ax : 0;
-  const dy = c ? c.y - ay : 0;
-  const richtingX = dx < -1e-9 ? -1 : 1;
-  const richtingY = dy < -1e-9 ? -1 : 1;
-  return { x: ax + richtingX * r.a * ppu, y: ay + richtingY * r.a * ppu };
+  // Eén getal = vierkant / diameter in het kwadrant van de cursor; de rest
+  // volgt de regel van de lijn-tool (coord-invoer.js, maatVormEindpunt).
+  const c = (ctx && Number.isFinite(ctx.x) && Number.isFinite(ctx.y)) ? ctx : (_dim.cursor || { x: ax, y: ay });
+  return maatVormEindpunt(parseCoordBuffer(buf), ax, ay, c.x, c.y, ppu);
 }
 
 /** Start de maatinvoer na een klik-zonder-sleep. */

@@ -131,6 +131,10 @@ export async function maakMeerPerBlad(pdf, opties) {
   });
   const { bladB, bladH } = kiesBlad({ papier, orientatie, eerstePagina: maten[0], kolommen, rijen });
 
+  // pdf-lib schrijft lui ingebedde afbeeldingen en fonts (embedJpg/embedFont
+  // in bouwPrintPdf) pas bij flush()/save() weg. Zonder flush kopieert
+  // embedPdf alleen de verwijzingen en blijven de cellen leeg.
+  await pdf.flush();
   const uit = await PDFDocument.create();
   const ingebed = await uit.embedPdf(pdf, bron.map((_, i) => i));
   const perBlad = kolommen * rijen;

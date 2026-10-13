@@ -14,6 +14,29 @@ export function wrapTekst(tekst, maxBreedte, meet) {
   return bron.split('\n').map((alinea) => wrapAlinea(alinea, maxBreedte, meet)).join('\n');
 }
 
+/**
+ * Waar nieuwe tekst op de pagina komt. Past de breedste regel tussen het
+ * klikpunt en de rechtermarge, dan blijft het klikpunt staan. Anders wordt er
+ * afgebroken op de rechtermarge; blijft daar minder dan `minBreedte` over, dan
+ * schuift het beginpunt naar links, maar niet verder dan de tekst nodig heeft.
+ * @param {{ tekst: string, x: number, paginaBreedte: number,
+ *           meet: (s: string) => number, marge?: number, minBreedte?: number }} opties
+ * @returns {{ x: number, tekst: string }}
+ */
+export function plaatsTekstOpPagina({ tekst, x, paginaBreedte, meet, marge = 36, minBreedte = 150 }) {
+  const bron = String(tekst ?? '');
+  if (typeof meet !== 'function' || !(paginaBreedte > 0)) return { x, tekst: bron };
+  const min = Math.min(minBreedte, Math.max(0, paginaBreedte - 2 * marge));
+  const breedste = Math.max(0, ...bron.split('\n').map((regel) => meet(regel)));
+  let tekstX = x;
+  let wrapBreedte = paginaBreedte - tekstX - marge;
+  if (breedste > wrapBreedte && wrapBreedte < min) {
+    wrapBreedte = Math.min(min, breedste);
+    tekstX = Math.max(marge, paginaBreedte - marge - wrapBreedte);
+  }
+  return { x: tekstX, tekst: wrapTekst(bron, wrapBreedte, meet) };
+}
+
 function wrapAlinea(alinea, maxBreedte, meet) {
   if (alinea === '' || meet(alinea) <= maxBreedte) return alinea;
   const regels = [];

@@ -144,7 +144,7 @@ export function registerAllTools() {
   registerTool('split', splitTool);
   registerTool('break', breakTool);
   registerTool('lengthen', lengthenTool);
-  // AutoCAD-achtig: parallel kopieën, hoekpunten uitrekken, uniform schalen
+  // CAD-stijl: parallel kopieën, hoekpunten uitrekken, uniform schalen
   registerTool('offset', offsetTool);
   registerTool('stretch', stretchTool);
   registerTool('enlarge', enlargeTool);
@@ -153,7 +153,7 @@ export function registerAllTools() {
   registerTool('radius', radiusTool);
   registerTool('diameter', diameterTool);
 
-  // Hoekbewerkingen (AutoCAD FILLET / CHAMFER) en spot-coördinaat
+  // Hoekbewerkingen (CAD-stijl fillet / chamfer) en spot-coördinaat
   registerTool('fillet', filletTool);
   registerTool('chamfer', chamferTool);
   registerTool('spotCoord', spotCoordTool);

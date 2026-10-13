@@ -112,9 +112,9 @@ const LOCALES = join(HIER, '../i18n/locales');
 const lees = (locale, ns) => JSON.parse(readFileSync(join(LOCALES, locale, `${ns}.json`), 'utf8'));
 const LINT = ['rotateViewLeft', 'rotateViewRight', 'rotateViewLeftTitle', 'rotateViewRightTitle'];
 
-test('alle 39 talen hebben de teksten voor weergave draaien', () => {
+test('alle 40 talen hebben de teksten voor weergave draaien', () => {
   const locales = readdirSync(LOCALES);
-  assert.equal(locales.length, 39);
+  assert.equal(locales.length, 40);
   for (const locale of locales) {
     const view = lees(locale, 'ribbon').view || {};
     for (const key of LINT) {

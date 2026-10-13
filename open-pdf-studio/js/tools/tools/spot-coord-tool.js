@@ -1,6 +1,6 @@
 /**
  * Spot Coord. — klik op een punt en het labelt de X,Y-coördinaten daarvan
- * (AutoCAD's "spot coordinate"). Werkt als een leidraad-label: één pijl naar
+ * (een CAD-"spot coordinate"). Werkt als een leidraad-label: één pijl naar
  * het punt, tekst ernaast, in de meeteenheden van het document/schaalgebied.
  *
  * Hergebruikt het measureDistance-annotatietype (zelfde renderer, saver en
@@ -9,6 +9,7 @@
  */
 import { state, getActiveDocument } from '../../core/state.js';
 import { getMeasureScale } from '../../annotations/measurement.js';
+import { SPOT_COORD, spotCoordTekst } from '../../annotations/spot-coord.js';
 import { schermPxNaarPt } from '../../annotations/minimummaat.js';
 import { getEffectiveScale } from '../effective-scale.js';
 import { updateStatusMessage } from '../../ui/chrome/status-bar.js';
@@ -22,10 +23,7 @@ function _bericht(def, key) {
 /** X,Y in meeteenheden (schaalgebied-bewust), zes significante cijfers. */
 function _coordinaten(page, x, y) {
   const ms = getMeasureScale(page, x, y);
-  const k = ms.pixelsPerUnit || 1;
-  const unit = ms.unit || 'mm';
-  const num = (v) => (Number.isFinite(v) ? String(Number(v.toPrecision(6))) : '0');
-  return { text: `X ${num(x / k)}, Y ${num(y / k)} ${unit}`, unit };
+  return { text: spotCoordTekst(x, y, ms), unit: ms.unit || 'mm' };
 }
 
 /** Vaste leidraadlengte in schermpixels → paginapunten (zoom-onafhankelijk). */
@@ -47,12 +45,15 @@ export const spotCoordTool = {
 
     const doc = getActiveDocument();
     const page = doc?.currentPage || 1;
-    const { text } = _coordinaten(page, px, py);
+    const { text, unit } = _coordinaten(page, px, py);
     const off = _richting();
     const prefs = ctx.prefs || {};
 
     const ann = ctx.createAnnotation({
       type: 'measureDistance',
+      // Coördinaten, geen lengte: herberekeningen bouwen het label opnieuw
+      // op uit het beginpunt (spot-coord.js), en de saver bewaart dit merk.
+      dimKind: SPOT_COORD,
       page,
       startX: px, startY: py,
       endX: px + off.dx, endY: py + off.dy,
@@ -66,7 +67,7 @@ export const spotCoordTool = {
       dimExtension: false,
       opacity: (prefs.measureDistOpacity || 100) / 100,
       measureText: text,
-      measureUnit: _coordinaten(page, px, py).unit,
+      measureUnit: unit,
     });
     if (doc) doc.annotations.push(ann);
     ctx.recordAdd(ann);

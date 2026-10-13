@@ -1,5 +1,5 @@
 /**
- * Offset-gereedschap (AutoCAD OFFSET) — parallelle copy van een object.
+ * Offset-gereedschap (CAD-stijl offset) — parallelle copy van een object.
  *
  * Werking:
  *   1. Selectie (of de ribbon-knop) bepaalt WELK object wordt geoffzet;
@@ -13,8 +13,7 @@
  * De geometrie zit in annotations/offset-geometry.js (puur, getest).
  */
 import { state, getActiveDocument } from '../../core/state.js';
-import { cloneAnnotation } from '../../annotations/factory.js';
-import { recordAdd } from '../../core/undo-manager.js';
+import { beginUndoTransaction, endUndoTransaction } from '../../core/undo-manager.js';
 import { redrawAnnotations } from '../../annotations/rendering.js';
 import { updateStatusMessage } from '../../ui/chrome/status-bar.js';
 import { getMeasureScale } from '../../annotations/measurement.js';
@@ -27,6 +26,7 @@ import {
 } from '../type-length-input.js';
 import { offsetProps, canOffset } from '../../annotations/offset-geometry.js';
 import { verticesOf } from '../../annotations/stretch-geometry.js';
+import { cloneForInsert } from '../edit-ops.js';
 
 const _s = {
   sources: null,   // annotaties die worden geoffzet
@@ -100,17 +100,22 @@ function _plaats(ctx, x, y) {
   if (!doc || !_s.sources || _s.distance == null) return;
   let ok = 0;
   let nietOndersteund = 0;
-  for (const src of _s.sources) {
-    const props = offsetProps(src, _s.distance, { x, y });
-    if (!props) { nietOndersteund++; continue; }
-    const basis = { ...src, ...props };
-    delete basis.id;
-    delete basis.createdAt;
-    const fresh = ctx.createAnnotation(basis);
-    fresh.modifiedAt = new Date().toISOString();
-    doc.annotations.push(fresh);
-    ctx.recordAdd(fresh);
-    ok++;
+  // Meer bronnen tegelijk: één undo-stap voor alle kopieën.
+  beginUndoTransaction();
+  try {
+    for (const src of _s.sources) {
+      const props = offsetProps(src, _s.distance, { x, y });
+      if (!props) { nietOndersteund++; continue; }
+      // De duplicatieregel van de app (edit-ops.js): een diepe kopie met een
+      // nieuwe id, zodat kopie en bron geen geneste arrays of objecten delen.
+      const fresh = cloneForInsert(src);
+      Object.assign(fresh, props);
+      doc.annotations.push(fresh);
+      ctx.recordAdd(fresh);
+      ok++;
+    }
+  } finally {
+    endUndoTransaction();
   }
   if (ok > 0) {
     ctx.redraw();

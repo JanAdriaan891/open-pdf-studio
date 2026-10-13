@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { wrapTekst } from './wrap-tekst.js';
+import { wrapTekst, plaatsTekstOpPagina } from './wrap-tekst.js';
 
 const tien = (s) => s.length * 10; // elk teken 10 breed
 
@@ -28,4 +28,40 @@ test('onbruikbare invoer geeft de tekst terug', () => {
   assert.equal(wrapTekst('abc def', 0, tien), 'abc def');
   assert.equal(wrapTekst('abc def', 50, null), 'abc def');
   assert.equal(wrapTekst(undefined, 50, tien), '');
+});
+
+// A4-breedte in punten, marge 36: de rechtermarge ligt op x = 559.
+const A4_B = 595;
+
+test('plaatsTekstOpPagina: korte tekst dicht bij de rechterrand blijft op het klikpunt', () => {
+  const uit = plaatsTekstOpPagina({ tekst: 'OK', x: 500, paginaBreedte: A4_B, meet: tien });
+  assert.deepEqual(uit, { x: 500, tekst: 'OK' });
+  // Een regel per stuk telt, niet de hele tekst achter elkaar.
+  const tweeRegels = plaatsTekstOpPagina({ tekst: 'abc\nde', x: 520, paginaBreedte: A4_B, meet: tien });
+  assert.deepEqual(tweeRegels, { x: 520, tekst: 'abc\nde' });
+});
+
+test('plaatsTekstOpPagina: korte tekst over de marge schuift alleen zo ver als nodig', () => {
+  const uit = plaatsTekstOpPagina({ tekst: 'OK', x: 580, paginaBreedte: A4_B, meet: tien });
+  assert.equal(uit.tekst, 'OK');
+  assert.equal(uit.x, A4_B - 36 - 20);
+});
+
+test('plaatsTekstOpPagina: lange tekst links op de pagina breekt op de rechtermarge', () => {
+  const tekst = 'aaaa '.repeat(30).trim();
+  const uit = plaatsTekstOpPagina({ tekst, x: 100, paginaBreedte: A4_B, meet: tien });
+  assert.equal(uit.x, 100);
+  for (const regel of uit.tekst.split('\n')) assert.ok(tien(regel) <= A4_B - 36 - 100);
+  assert.ok(uit.tekst.includes('\n'));
+});
+
+test('plaatsTekstOpPagina: lange tekst dicht bij de rechterrand schuift naar links', () => {
+  const tekst = 'aaaa '.repeat(30).trim();
+  const uit = plaatsTekstOpPagina({ tekst, x: 500, paginaBreedte: A4_B, meet: tien });
+  assert.equal(uit.x, A4_B - 36 - 150);
+  for (const regel of uit.tekst.split('\n')) assert.ok(tien(regel) <= 150);
+});
+
+test('plaatsTekstOpPagina: zonder meter blijft alles staan', () => {
+  assert.deepEqual(plaatsTekstOpPagina({ tekst: 'abc', x: 580, paginaBreedte: A4_B, meet: null }), { x: 580, tekst: 'abc' });
 });

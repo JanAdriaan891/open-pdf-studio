@@ -1,5 +1,5 @@
 /**
- * Offset-geometrie (AutoCAD OFFSET) — puur, zonder state/DOM, zodat de
+ * Offset-geometrie (CAD-stijl offset) — puur, zonder state/DOM, zodat de
  * unit-tests hem direct kunnen aanroepen.
  *
  * offsetProps(ann, dist, side) levert de nieuwe geometrie-velden voor een
@@ -39,9 +39,19 @@ export function isRectAnnotation(ann) {
   return !!ann && _fin(ann.x) && _fin(ann.y) && _fin(ann.width) && _fin(ann.height);
 }
 
+/**
+ * Een puntenreeks met boogsegmenten (arc/bulge op een punt). De
+ * bissectrice-methode hieronder rekent met rechte randen; een boog zou er
+ * zonder waarschuwing een rechte rand van worden. Zulke vormen weigeren we.
+ */
+function _heeftBogen(ann) {
+  return Array.isArray(ann?.points) && ann.points.some((p) => p && p.arc === true);
+}
+
 /** Of dit type object in principe geoffzet kan worden (los van afstand). */
 export function canOffset(ann) {
   if (!ann || !ONDERSTEUND.has(ann.type)) return false;
+  if (_heeftBogen(ann)) return false;
   if (isLineAnnotation(ann)) return true;
   if (Array.isArray(ann.points) && ann.points.length > 1) return true;
   if (isRectAnnotation(ann)) return true;
@@ -57,6 +67,7 @@ export function canOffset(ann) {
 export function offsetProps(ann, dist, side) {
   if (!ann || !_fin(dist) || dist <= 0) return null;
   if (!ONDERSTEUND.has(ann.type)) return null;
+  if (_heeftBogen(ann)) return null;
   if (isLineAnnotation(ann)) return _offsetLine(ann, dist, side);
   if (Array.isArray(ann.points) && ann.points.length > 1) return _offsetPoints(ann, dist, side);
   if (isRectAnnotation(ann)) return _offsetRect(ann, dist, side);

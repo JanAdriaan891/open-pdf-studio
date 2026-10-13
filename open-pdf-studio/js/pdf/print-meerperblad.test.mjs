@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, PDFRef, PDFDict, PDFArray, PDFStream, StandardFonts } from 'pdf-lib';
 
 import {
   rasterVan, isMeerPerBlad, celVoorVolgnummer, plaatsInCel, kiesBlad, maakMeerPerBlad,
@@ -74,6 +74,56 @@ test('maakMeerPerBlad: 5 pagina\'s, 2 per vel -> 3 vellen, liggend A4', async ()
 test('maakMeerPerBlad: 1 per vel geeft hetzelfde document terug', async () => {
   const doc = await bron(2);
   assert.equal(await maakMeerPerBlad(doc, { kolommen: 1, rijen: 1 }), doc);
+});
+
+// 1 x 1 PNG: pdf-lib schrijft een ingebedde afbeelding (en een standaardfont)
+// pas bij flush()/save() weg; tot die tijd is er alleen een verwijzing.
+const PNG_1PX = Uint8Array.from(Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+  'base64',
+));
+
+/** Alle verwijzingen die vanaf de catalogus bereikbaar zijn, en welke daarvan nergens naar wijzen. */
+function losseVerwijzingen(doc) {
+  const los = [];
+  const gezien = new Set();
+  const loop = (obj) => {
+    if (obj instanceof PDFRef) {
+      const sleutel = obj.toString();
+      if (gezien.has(sleutel)) return;
+      gezien.add(sleutel);
+      const doel = doc.context.lookup(obj);
+      if (doel === undefined) { los.push(sleutel); return; }
+      loop(doel);
+    } else if (obj instanceof PDFStream) {
+      loop(obj.dict);
+    } else if (obj instanceof PDFDict) {
+      for (const [, waarde] of obj.entries()) loop(waarde);
+    } else if (obj instanceof PDFArray) {
+      for (const waarde of obj.asArray()) loop(waarde);
+    }
+  };
+  loop(doc.context.trailerInfo.Root);
+  return { los, aantal: gezien.size };
+}
+
+test('maakMeerPerBlad: lui ingebedde afbeeldingen en fonts van de bron blijven heel', async () => {
+  // Zoals bouwPrintPdf: embedPng/embedFont + tekenen, zonder flush.
+  const doc = await PDFDocument.create();
+  const beeld = await doc.embedPng(PNG_1PX);
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  for (let i = 0; i < 4; i++) {
+    const p = doc.addPage(A4_PT);
+    p.drawImage(beeld, { x: 0, y: 0, width: A4_PT[0], height: A4_PT[1] });
+    p.drawText(`p${i + 1}`, { x: 50, y: 50, font });
+  }
+  const uit = await maakMeerPerBlad(doc, { kolommen: 2, rijen: 2, papier: A4 });
+  await uit.flush(); // de ingebedde pagina's van het vel zelf zijn ook lui
+  const direct = losseVerwijzingen(uit);
+  assert.ok(direct.aantal > 0);
+  assert.deepEqual(direct.los, [], 'verwijzingen zonder object in het n-up-vel');
+  const heropend = await PDFDocument.load(await uit.save());
+  assert.deepEqual(losseVerwijzingen(heropend).los, [], 'verwijzingen zonder object na opslaan');
 });
 
 test('maakMeerPerBlad: 9 per vel, onbekend vel volgt de eerste pagina, met rand', async () => {

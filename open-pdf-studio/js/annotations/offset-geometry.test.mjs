@@ -114,3 +114,15 @@ test('offset: onondersteunde types leveren null, maar melden het wel', () => {
   assert.equal(offsetProps(box, -5, { x: 100, y: 100 }), null, 'negatieve afstand');
   assert.equal(offsetProps(box, NaN, { x: 100, y: 100 }), null, 'NaN afstand');
 });
+
+test('offset: een reeks met boogsegmenten wordt geweigerd (geen stille rechte rand)', () => {
+  const ann = {
+    type: 'polyline',
+    points: [{ x: 0, y: 0 }, { x: 100, y: 0, arc: true, bulge: 0.4 }, { x: 100, y: 100 }],
+  };
+  assert.equal(canOffset(ann), false);
+  assert.equal(offsetProps(ann, 10, { x: 50, y: -50 }), null);
+  const recht = { ...ann, points: ann.points.map(({ x, y }) => ({ x, y })) };
+  assert.equal(canOffset(recht), true);
+  assert.ok(offsetProps(recht, 10, { x: 50, y: -50 }));
+});

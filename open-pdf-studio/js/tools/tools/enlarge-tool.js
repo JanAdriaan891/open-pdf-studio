@@ -1,5 +1,5 @@
 /**
- * Vergroten (AutoCAD SCALE) — de selectie uniform schalen rond een basispunt.
+ * Vergroten (CAD-stijl schalen) — de selectie uniform schalen rond een basispunt.
  *
  * Werking:
  *   1. Selecteer de objecten en druk op Vergroten (of de ribbon-knop start
@@ -29,6 +29,8 @@ import {
   clearTypeLengthBuffer,
 } from '../type-length-input.js';
 import { parseCoordBuffer } from '../coord-invoer.js';
+import { syncMeasurementAfterEdit } from '../../annotations/transforms.js';
+import { isEditableTarget } from '../edit-ops.js';
 
 const _s = {
   anns: null,      // annotaties in de huidige sessie
@@ -39,6 +41,24 @@ const _s = {
 
 function _bericht(def, key, opts) {
   updateStatusMessage(key ? i18next.t(key, { ns: 'ribbon', defaultValue: def, ...opts }) : def, 5000);
+}
+
+/** De selectie waarop Vergroten werkt: dezelfde regel als elke andere
+ *  bewerking (getEditTargets) — niet vergrendeld, niet aan tekst verankerd. */
+function _doelen(sel) {
+  return (sel || []).filter(isEditableTarget);
+}
+
+/** Schaal één annotatie vanuit haar origineel en werk de maatwaarden bij. */
+function _schaal(ann, orig, factor) {
+  Object.assign(ann, orig);
+  scaleAnnotation(ann, _s.basis.x, _s.basis.y, factor);
+  syncMeasurementAfterEdit(ann);
+}
+
+function _herteken() {
+  if (getActiveDocument()?.viewMode === 'continuous') redrawContinuous();
+  else redrawAnnotations();
 }
 
 /** Herstel de annotaties naar de originele situatie (preview annuleren). */
@@ -101,13 +121,9 @@ function _commitFactor(factor) {
     return;
   }
   if (!_s.anns || !_s.origs) { _reset(); return; }
-  for (let i = 0; i < _s.anns.length; i++) {
-    Object.assign(_s.anns[i], _s.origs[i]);
-    scaleAnnotation(_s.anns[i], _s.basis.x, _s.basis.y, factor);
-  }
+  for (let i = 0; i < _s.anns.length; i++) _schaal(_s.anns[i], _s.origs[i], factor);
   recordBulkModify(_s.anns, _s.origs);
-  if (getActiveDocument()?.viewMode === 'continuous') redrawContinuous();
-  else redrawAnnotations();
+  _herteken();
   _bericht(
     `Enlarge: scaled by ${factor}`,
     'drawing.enlargeDone',
@@ -122,7 +138,11 @@ export async function startEnlargeTool() {
   // vergroten én kan de gebruiker tijdens dit gereedschap ook niet selecteren
   // (elke klik kiest een basispunt). In dat geval geen dead-end activering,
   // maar een duidelijke instructie.
-  const sel0 = getActiveDocument()?.selectedAnnotations || [];
+  // Loopt er nog een voorbeeld (opnieuw op Vergroten geklikt), zet dan eerst
+  // alles terug: anders wordt de geschaalde stand het nieuwe origineel en
+  // blijft hij zonder undo-stap staan.
+  if (_s.anns) { _herstel(); _reset(); _herteken(); }
+  const sel0 = _doelen(getActiveDocument()?.selectedAnnotations);
   if (sel0.length === 0) {
     _bericht(
       'Enlarge: select the objects first (Select tool), then click Enlarge',
@@ -136,8 +156,9 @@ export async function startEnlargeTool() {
 }
 
 function _startMetSelectie(sel0) {
+  if (_s.anns) { _herstel(); _reset(); }
   const sel = (sel0 && sel0.length > 0 ? sel0 : null)
-    || getActiveDocument()?.selectedAnnotations || [];
+    || _doelen(getActiveDocument()?.selectedAnnotations);
   if (sel.length === 0) {
     _bericht('Enlarge: select the objects to enlarge first', 'drawing.enlargeNoSelection');
     return false;
@@ -159,7 +180,7 @@ export const enlargeTool = {
     if (e.button === 2) { _herstel(); ctx.redraw(); _reset(); return; }
 
     // Eerste klik: basispunt kiezen (selectie vastleggen).
-    const sel = getActiveDocument()?.selectedAnnotations || [];
+    const sel = _doelen(getActiveDocument()?.selectedAnnotations);
     if (!_s.anns) {
       if (sel.length === 0) {
         _bericht('Enlarge: select the objects to enlarge first', 'drawing.enlargeNoSelection');
@@ -181,10 +202,7 @@ export const enlargeTool = {
       ctx.redraw();
       return;
     }
-    for (let i = 0; i < _s.anns.length; i++) {
-      Object.assign(_s.anns[i], _s.origs[i]);
-      scaleAnnotation(_s.anns[i], _s.basis.x, _s.basis.y, factor);
-    }
+    for (let i = 0; i < _s.anns.length; i++) _schaal(_s.anns[i], _s.origs[i], factor);
     ctx.redraw();
   },
 
