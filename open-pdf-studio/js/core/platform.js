@@ -1,3 +1,5 @@
+import { leesOpslag, verwijderOpslag } from './opslag.js';
+
 /**
  * Tauri API wrapper module
  * Provides a unified interface for Tauri 2.x APIs
@@ -159,14 +161,15 @@ export async function toggleWindowFullscreen() {
 //      dir as the cold default.
 //   2) Pre-warm shell32 at app idle (see `prewarmFileDialog()` below) so the
 //      first user click pays only the enumeration cost, not the DLL load.
-// Timings are logged when `localStorage.openPdfStudio.debugDialog === '1'`.
+// Timings are logged when storage name `openPdfStudio.debugDialog` is '1'
+// (key `opds:openPdfStudio.debugDialog`, see core/opslag.js).
 export async function openFileDialog(extensions, options = {}) {
   if (isTauri()) {
     const filters = extensions
       ? [{ name: 'Files', extensions }]
       : [{ name: 'PDF Files', extensions: ['pdf'] }];
 
-    const dbg = (() => { try { return localStorage.getItem('openPdfStudio.debugDialog') === '1'; } catch { return false; } })();
+    const dbg = leesOpslag('openPdfStudio.debugDialog') === '1';
     const t0 = dbg ? performance.now() : 0;
 
     // Try using the dialog plugin via window.__TAURI__.dialog
@@ -553,7 +556,7 @@ const WEB_SESSIE_SLEUTEL = 'pdfStudioSession';
 export async function saveSession(data) {
   if (!isTauri()) {
     // Ook een eerder bewaarde sessie opruimen.
-    try { localStorage.removeItem(WEB_SESSIE_SLEUTEL); } catch { /* ignore */ }
+    verwijderOpslag(WEB_SESSIE_SLEUTEL);
     return;
   }
   return await invoke('save_session', { data: JSON.stringify(data) });

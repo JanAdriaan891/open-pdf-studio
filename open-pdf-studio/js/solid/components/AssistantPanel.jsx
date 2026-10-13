@@ -7,6 +7,7 @@ import { registerAssistantSubmit, registerAssistantMessages, enqueueAssistantQue
 import { ASSISTANT_SKILLS, SKILLS_SYSTEM_PROMPT } from '../../assistant-skills.js';
 import { getActiveDocument } from '../../core/state.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
+import { leesOpslag, schrijfOpslag, verwijderOpslag } from '../../core/opslag.js';
 
 const GREETING =
   'Hallo! Ik ben de **OpenAEC-assistent**. Ik kan: 🌐 vertalen, 📝 samenvatten, ✏️ tekenen op de tekening, en 🚪 deuren herkennen. Kies hieronder een vaardigheid of stel je vraag.';
@@ -46,7 +47,7 @@ export default function AssistantPanel() {
   const [messages, setMessages] = createSignal([{ role: 'assistant', content: GREETING }]);
   const [input, setInput] = createSignal('');
   const [loading, setLoading] = createSignal(false);
-  const readKey = () => { try { return localStorage.getItem(ANTHROPIC_KEY_LS) || ''; } catch (_) { return ''; } };
+  const readKey = () => leesOpslag(ANTHROPIC_KEY_LS) || '';
   const [apiKey, setApiKey] = createSignal(readKey());
   const [showKey, setShowKey] = createSignal(false);
   let messagesEnd, inputEl, keyEl;
@@ -65,8 +66,8 @@ export default function AssistantPanel() {
   function saveKey() {
     const v = (keyEl?.value || '').trim();
     try {
-      if (v) localStorage.setItem(ANTHROPIC_KEY_LS, v);
-      else localStorage.removeItem(ANTHROPIC_KEY_LS);
+      if (v) schrijfOpslag(ANTHROPIC_KEY_LS, v);
+      else verwijderOpslag(ANTHROPIC_KEY_LS);
     } catch (_) { /* private mode — ignore */ }
     setApiKey(v);
     setShowKey(false);

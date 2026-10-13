@@ -2189,8 +2189,8 @@ async function handleFacadeElement(params) {
 async function handleAiComplete(params) {
   const prompt = params?.prompt;
   if (typeof prompt !== 'string' || !prompt) return { ok: false, error: 'missing params.prompt' };
-  let key = '';
-  try { key = localStorage.getItem('opds-anthropic-key') || ''; } catch { /* no localStorage */ }
+  const { leesOpslag } = await import('./core/opslag.js');
+  const key = leesOpslag('opds-anthropic-key') || '';
   // Claude (Anthropic) direct — uses the personal key set via the 🔑 button.
   if (!key) return { ok: false, error: 'geen Claude-key gezet (🔑)' };
   const r = await fetch('https://api.anthropic.com/v1/messages', {
