@@ -261,7 +261,8 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "showEdgeLengths": "Mostra les longituds dels costats"
   },
   "schedules": {
     "title": "Schedules",

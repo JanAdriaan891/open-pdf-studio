@@ -273,7 +273,8 @@
     "namePlaceholder": "Area name (optional)",
     "scale": "Scale",
     "unit": "Unit",
-    "precision": "Precision (Decimals)"
+    "precision": "Precision (Decimals)",
+    "showEdgeLengths": "বাহুর দৈর্ঘ্য দেখান"
   },
   "schedules": {
     "title": "Schedules",

@@ -1061,7 +1061,8 @@ function _recomputeMeasureFields(ann, meas, userProps = {}) {
     ann.measurePixels = d.pixels;
     if (!keepText) ann.measureText = meas.formatMeasurement(d);
   } else if (ann.type === 'measureArea') {
-    const a = meas.calculateArea(ann.points, ann.holes, ann.page);
+    // Met de eigen schaal van het vlak als die er is (#536).
+    const a = meas.vlakMeting(ann);
     ann.measureValue = a.value;
     ann.measureUnit = a.unit;
     if (!keepText) ann.measureText = meas.formatMeasurement(a);

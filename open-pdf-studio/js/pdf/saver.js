@@ -16,6 +16,8 @@ import { schrijfHatchMeta } from './saver/hatch-meta.js';
 import { schrijfWandJoinMeta } from './saver/wand-join-meta.js';
 import { schrijfPlattegrondMeta } from './saver/plattegrond-meta.js';
 import { maatlijnAnnotatie, kopVullingSleutels } from './saver/maatlijn-opslaan.js';
+import { schrijfMeetvlakSchaal, meetvlakRect } from './saver/meetvlak-opslaan.js';
+import { vlakZijdeTeksten } from '../annotations/measurement.js';
 import { attachVectorAP } from './saver/vector-ap.js';
 import { bytesVan as knipselBytesVan } from '../annotations/vector-snippet-store.js';
 import { getAnnotationStorage, getAnnotIdToFieldName } from './form-layer.js';
@@ -2322,13 +2324,21 @@ async function _savePDFNu(saveAsPath, activeDoc) {
             for (const pt of ann.points) {
               maVertices.push(convertX(pt.x), convertY(pt.y));
             }
+            // Zijdematen (#536): de teksten uit de annotatie zoals de app hem
+            // toont (annRaw: de schaal hoort bij die plaats), de plaatsing in
+            // het ongedraaide paginaframe van `ann`.
+            const maZijden = ann.measureShowEdgeLengths === true
+              ? vlakZijdeTeksten(annRaw).map(z => ({ index: z.index, tekst: z.tekst }))
+              : null;
+            const maDraaiing = ((pageRot || 0) * Math.PI) / 180;
 
             const maDict = {
               Type: 'Annot',
               Subtype: 'Polygon',
               // Over alle ringen, dus ook over een tweede deel naast de
               // buitenring: buiten de /Rect knipt een andere lezer het weg (#457).
-              Rect: vlakRect(ann, convertX, convertY, 2),
+              // Met zijdematen ook over hun tekst.
+              Rect: meetvlakRect(ann, convertX, convertY, maZijden, maDraaiing),
               Vertices: maVertices,
               C: hexToColorArray(ann.strokeColor || '#ff0000'),
               CA: opacity,
@@ -2344,6 +2354,8 @@ async function _savePDFNu(saveAsPath, activeDoc) {
             }
             annotDict = context.obj(maDict);
             annotDict.set(PDFName.of('BS'), buildBorderStyle(context, borderWidth, ann.borderStyle));
+            // Eigen schaal van het vlak als /Measure (#536).
+            schrijfMeetvlakSchaal(annotDict, ann, context);
             // Arcering: de parameters mee, niet alleen de lijnen in de
             // appearance — anders is de arcering na heropenen weg en schrijft
             // de volgende save een kaal vlak.
@@ -2377,6 +2389,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               hatchScale: ann.hatchScale, hatchAngle: (ann.hatchAngle || 0) - pageRot,
               text: ann.measureShowLabel === false ? '' : ann.measureText,
               labelX: ann.labelX, labelY: ann.labelY,
+              zijdeTeksten: maZijden, draaiing: maDraaiing,
               // Eigen vul-alfa (bv. een extern meetvlak op 30%) ook in de
               // appearance, anders tonen andere lezers het vlak na opslaan dekkend.
               fillAlpha: fillOpacity,

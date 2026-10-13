@@ -182,6 +182,7 @@ export interface Preferences {
   measureAreaDimScale: number;
   measureAreaDimUnit: string;
   measureAreaDimPrecision: number;
+  measureAreaShowEdgeLengths: boolean;
 
   // Measure Perimeter defaults
   measurePerimStrokeColor: string;

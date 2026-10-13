@@ -234,6 +234,8 @@ export const DEFAULT_PREFERENCES: Preferences = {
   measureAreaDimScale: 1,
   measureAreaDimUnit: 'mm',
   measureAreaDimPrecision: 2,
+  // Lengte van elke rechte zijde tonen (#536); standaard uit.
+  measureAreaShowEdgeLengths: false,
 
   // Filled Area defaults (user-drawn contour with arcs + holes, solid + hatch fill)
   filledAreaStrokeColor: '#000000',

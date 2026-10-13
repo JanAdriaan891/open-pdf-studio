@@ -1,7 +1,7 @@
 import { HANDLE_TYPES } from '../core/constants.js';
 import { state } from '../core/state.js';
 import { snapAngle } from '../utils/helpers.js';
-import { calculateDistance, calculateArea, calculatePerimeter, formatMeasurement, formatDimensionText, snapDistanceTo10 } from './measurement.js';
+import { calculateDistance, calculateArea, calculatePerimeter, formatMeasurement, formatDimensionText, snapDistanceTo10, herberekenVlakMaat } from './measurement.js';
 import { handleAnchors, lineEndForDotTarget, resolveParams } from './stavenreeks.js';
 import { getTemplate } from '../symbols/registry.js';
 import { systeemrasterPxPerMm, systeemrasterBuildOpts } from './systeemraster-scale.js';
@@ -747,8 +747,10 @@ export function applyResize(annotation, handleType, deltaX, deltaY, originalAnn,
                 return keepArc(p, nx, ny);
               });
             });
-            // Recalculate measurement text with holes
-            annotation.measureText = formatMeasurement(calculateArea(annotation.points, annotation.holes, annotation.page));
+            // Recalculate measurement text with holes; een meetvlak met zijn
+            // eigen schaal als die er is (#536).
+            if (annotation.type === 'measureArea') herberekenVlakMaat(annotation);
+            else annotation.measureText = formatMeasurement(calculateArea(annotation.points, annotation.holes, annotation.page));
           }
         } else {
           // Regular outer node drag
@@ -801,7 +803,8 @@ export function applyResize(annotation, handleType, deltaX, deltaY, originalAnn,
             annotation.height = Math.max(...ys) - annotation.y;
             // Recalculate measurement text (with holes if present)
             if (annotation.type === 'measureArea') {
-              annotation.measureText = formatMeasurement(calculateArea(annotation.points, annotation.holes, annotation.page));
+              // Tekst, waarde en eenheid, met de eigen schaal als die er is (#536).
+              herberekenVlakMaat(annotation);
             } else if (annotation.type === 'measurePerimeter') {
               annotation.measureText = formatMeasurement(calculatePerimeter(annotation.points, annotation.page));
             }
