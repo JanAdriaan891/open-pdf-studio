@@ -9,6 +9,13 @@ import { isTauri } from '../../../core/platform.js';
 import { knopUitInBrowser, meldingTekst } from '../../../core/webfuncties.js';
 import i18next from '../../../i18n/config.js';
 
+// Exports naar bewerkbare kantoorbestanden (office-export.js).
+const OFFICE_CARDS = [
+  { type: 'odt', title: 'exportPanel.exportOdt', desc: 'exportPanel.exportOdtDesc' },
+  { type: 'docx', title: 'exportPanel.exportDocx', desc: 'exportPanel.exportDocxDesc' },
+  { type: 'xlsx', title: 'exportPanel.exportExcel', desc: 'exportPanel.exportExcelDesc' },
+];
+
 export default function ExportPanel() {
   const { t } = useTranslation('appMenu');
   const { t: tCommon } = useTranslation('common');
@@ -22,7 +29,7 @@ export default function ExportPanel() {
   const [includeImages, setIncludeImages] = createSignal(false);
   const [includeAnnotations, setIncludeAnnotations] = createSignal(true);
   const [decimal, setDecimal] = createSignal((i18next.language || '').startsWith('nl') ? ',' : '.');
-  const office = () => ['odt', 'xlsx'].includes(exportType());
+  const office = () => OFFICE_CARDS.some(card => card.type === exportType());
   const [pdfxConformance, setPdfxConformance] = createSignal('X-3');
   // PDF/X en CAD-uitvoer lopen over de Rust-kant en bestaan in de webversie
   // niet; ze gaven daar stil `false` terug (#456).
@@ -104,12 +111,12 @@ export default function ExportPanel() {
       <h2 class="bs-export-title">{t('exportPanel.title')}</h2>
 
       <div class="bs-export-cards">
-        {['odt', 'xlsx'].map(type => (
+        {OFFICE_CARDS.map(({ type, title, desc }) => (
           <button type="button" class={`bs-export-card${showOptions() && exportType() === type ? ' active' : ''}`} onClick={() => handleCardClick(type)}>
             <div class="bs-export-card-icon" aria-hidden="true"><strong>{type.toUpperCase()}</strong></div>
             <div class="bs-export-card-info">
-              <h3>{t(type === 'odt' ? 'exportPanel.exportOdt' : 'exportPanel.exportExcel')}</h3>
-              <p>{t(type === 'odt' ? 'exportPanel.exportOdtDesc' : 'exportPanel.exportExcelDesc')}</p>
+              <h3>{t(title)}</h3>
+              <p>{t(desc)}</p>
             </div>
           </button>
         ))}
@@ -244,7 +251,7 @@ export default function ExportPanel() {
           <Show when={office()}>
             <p class="bs-export-note">{t('exportPanel.officeNote')}</p>
           </Show>
-          <Show when={exportType() === 'odt'}>
+          <Show when={exportType() === 'odt' || exportType() === 'docx'}>
             <label class="bs-export-radio"><input type="checkbox" checked={includeImages()} onChange={e => setIncludeImages(e.target.checked)} /> {t('exportPanel.officeImages')}</label>
           </Show>
           <Show when={exportType() === 'xlsx'}>

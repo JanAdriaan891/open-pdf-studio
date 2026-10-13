@@ -97,7 +97,9 @@
     "pdfxConformance": "Conformance",
     "pdfxNote": "Adds an sRGB output intent, TrimBox and PDF/X metadata. Existing RGB images are not converted to CMYK; for strict CMYK printing, substitute a CMYK profile.",
     "exportCad": "Desen CAD (DXF, DWG)",
-    "exportCadDesc": "Exportă desenul vectorial în DXF sau DWG, cu straturi, scară și zonă"
+    "exportCadDesc": "Exportă desenul vectorial în DXF sau DWG, cu straturi, scară și zonă",
+    "exportDocx": "Document text (DOCX)",
+    "exportDocxDesc": "Text și tabele editabile pentru procesoare de text, cu imagini de pagină opționale"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }
