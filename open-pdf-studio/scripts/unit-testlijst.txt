@@ -247,3 +247,4 @@ js/text/leesrichting.test.mjs
 js/pdf/frame-planner.test.mjs
 js/pdf/pdf-viewport-lus.test.mjs
 js/pdf/scrollbalk-geometrie.test.mjs
+js/tools/greep-strek.test.mjs
