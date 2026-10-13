@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Ukubwa Halisi (100%)",
-    "calibrationNone": "Haijasawazishwa kwa skrini hii (kipimo {{scale}}%). Kwa 100%, nukta moja ya PDF ni pikseli moja ya skrini.",
+    "calibrationNone": "Haijasawazishwa kwa skrini hii (kipimo {{scale}}%).",
     "calibrationActive": "Imesawazishwa kwa skrini hii (kipimo {{scale}}%): pikseli {{ppi}} kwa inchi.",
     "calibrate": "Sawazisha...",
     "removeCalibration": "Ondoa",

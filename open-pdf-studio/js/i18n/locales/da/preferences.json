@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Faktisk størrelse (100 %)",
-    "calibrationNone": "Ikke kalibreret til denne skærm (skalering {{scale}} %). Ved 100 % er ét PDF-punkt én skærmpixel.",
+    "calibrationNone": "Ikke kalibreret til denne skærm (skalering {{scale}} %).",
     "calibrationActive": "Kalibreret til denne skærm (skalering {{scale}} %): {{ppi}} pixels pr. tomme.",
     "calibrate": "Kalibrer...",
     "removeCalibration": "Fjern",

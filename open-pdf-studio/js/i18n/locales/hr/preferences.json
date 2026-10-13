@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Stvarna veličina (100 %)",
-    "calibrationNone": "Nije kalibrirano za ovaj zaslon (mjerilo {{scale}} %). Pri 100 % jedna PDF točka je jedan piksel zaslona.",
+    "calibrationNone": "Nije kalibrirano za ovaj zaslon (mjerilo {{scale}} %).",
     "calibrationActive": "Kalibrirano za ovaj zaslon (mjerilo {{scale}} %): {{ppi}} piksela po inču.",
     "calibrate": "Kalibriraj...",
     "removeCalibration": "Ukloni",

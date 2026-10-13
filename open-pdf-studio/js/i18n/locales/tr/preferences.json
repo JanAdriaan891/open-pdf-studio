@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Gerçek Boyut (%100)",
-    "calibrationNone": "Bu ekran için kalibre edilmedi (ölçek %{{scale}}). %100'de bir PDF noktası bir ekran pikseline eşittir.",
+    "calibrationNone": "Bu ekran için kalibre edilmedi (ölçek %{{scale}}).",
     "calibrationActive": "Bu ekran için kalibre edildi (ölçek %{{scale}}): inç başına {{ppi}} piksel.",
     "calibrate": "Kalibre et...",
     "removeCalibration": "Kaldır",

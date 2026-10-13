@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Skutočná veľkosť (100 %)",
-    "calibrationNone": "Pre tento displej nekalibrované (mierka {{scale}} %). Pri 100 % zodpovedá jeden bod PDF jednému pixelu obrazovky.",
+    "calibrationNone": "Pre tento displej nekalibrované (mierka {{scale}} %).",
     "calibrationActive": "Kalibrované pre tento displej (mierka {{scale}} %): {{ppi}} pixelov na palec.",
     "calibrate": "Kalibrovať...",
     "removeCalibration": "Odstrániť",

@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Mida real (100%)",
-    "calibrationNone": "No calibrada per a aquesta pantalla (escala {{scale}}%). Al 100%, un punt PDF és un píxel de pantalla.",
+    "calibrationNone": "No calibrada per a aquesta pantalla (escala {{scale}}%).",
     "calibrationActive": "Calibrada per a aquesta pantalla (escala {{scale}}%): {{ppi}} píxels per polzada.",
     "calibrate": "Calibra...",
     "removeCalibration": "Elimina",

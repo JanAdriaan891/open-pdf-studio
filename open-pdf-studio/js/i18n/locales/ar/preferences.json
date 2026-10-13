@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "الحجم الفعلي (100%)",
-    "calibrationNone": "غير معايَر لهذه الشاشة (المقياس {{scale}}%). عند 100% تساوي نقطة PDF واحدة بكسلاً واحداً على الشاشة.",
+    "calibrationNone": "غير معايَر لهذه الشاشة (المقياس {{scale}}%).",
     "calibrationActive": "معايَر لهذه الشاشة (المقياس {{scale}}%): {{ppi}} بكسل لكل بوصة.",
     "calibrate": "معايرة...",
     "removeCalibration": "إزالة",

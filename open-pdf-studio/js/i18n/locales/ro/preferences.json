@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Dimensiune reală (100%)",
-    "calibrationNone": "Necalibrat pentru acest ecran (scară {{scale}}%). La 100%, un punct PDF este un pixel de ecran.",
+    "calibrationNone": "Necalibrat pentru acest ecran (scară {{scale}}%).",
     "calibrationActive": "Calibrat pentru acest ecran (scară {{scale}}%): {{ppi}} pixeli pe inch.",
     "calibrate": "Calibrează...",
     "removeCalibration": "Elimină",

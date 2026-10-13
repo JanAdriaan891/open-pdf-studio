@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "実際のサイズ (100%)",
-    "calibrationNone": "このディスプレイは未調整です (拡大率 {{scale}}%)。100% では PDF の 1 ポイントが画面の 1 ピクセルになります。",
+    "calibrationNone": "このディスプレイは未調整です (拡大率 {{scale}}%)。",
     "calibrationActive": "このディスプレイは調整済みです (拡大率 {{scale}}%): 1 インチあたり {{ppi}} ピクセル。",
     "calibrate": "調整...",
     "removeCalibration": "削除",

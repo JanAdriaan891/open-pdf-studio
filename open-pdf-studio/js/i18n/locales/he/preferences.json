@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "גודל בפועל (100%)",
-    "calibrationNone": "לא כויל עבור מסך זה (קנה מידה {{scale}}%). ב-100%, נקודת PDF אחת שווה לפיקסל מסך אחד.",
+    "calibrationNone": "לא כויל עבור מסך זה (קנה מידה {{scale}}%).",
     "calibrationActive": "כויל עבור מסך זה (קנה מידה {{scale}}%): {{ppi}} פיקסלים לאינץ'.",
     "calibrate": "כיול...",
     "removeCalibration": "הסרה",

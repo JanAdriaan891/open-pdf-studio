@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "உண்மை அளவு (100%)",
-    "calibrationNone": "இந்தத் திரைக்கு அளவுத்திருத்தம் செய்யப்படவில்லை (அளவுகோல் {{scale}}%). 100% இல் ஒரு PDF புள்ளி ஒரு திரை பிக்சலுக்குச் சமம்.",
+    "calibrationNone": "இந்தத் திரைக்கு அளவுத்திருத்தம் செய்யப்படவில்லை (அளவுகோல் {{scale}}%).",
     "calibrationActive": "இந்தத் திரைக்கு அளவுத்திருத்தம் செய்யப்பட்டது (அளவுகோல் {{scale}}%): அங்குலத்திற்கு {{ppi}} பிக்சல்கள்.",
     "calibrate": "அளவுத்திருத்தம்...",
     "removeCalibration": "அகற்று",

@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Todellinen koko (100 %)",
-    "calibrationNone": "Ei kalibroitu tälle näytölle (skaalaus {{scale}} %). 100 %:ssa yksi PDF-piste on yksi näytön pikseli.",
+    "calibrationNone": "Ei kalibroitu tälle näytölle (skaalaus {{scale}} %).",
     "calibrationActive": "Kalibroitu tälle näytölle (skaalaus {{scale}} %): {{ppi}} pikseliä tuumalla.",
     "calibrate": "Kalibroi...",
     "removeCalibration": "Poista",

@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "اندازه واقعی (100%)",
-    "calibrationNone": "برای این نمایشگر کالیبره نشده است (مقیاس {{scale}}%). در 100% هر نقطه PDF برابر یک پیکسل صفحه است.",
+    "calibrationNone": "برای این نمایشگر کالیبره نشده است (مقیاس {{scale}}%).",
     "calibrationActive": "برای این نمایشگر کالیبره شده است (مقیاس {{scale}}%): {{ppi}} پیکسل در هر اینچ.",
     "calibrate": "کالیبره کردن...",
     "removeCalibration": "حذف",

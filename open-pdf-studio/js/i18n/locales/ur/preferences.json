@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "اصل سائز (100%)",
-    "calibrationNone": "اس ڈسپلے کے لیے کیلیبریٹ نہیں کیا گیا (اسکیل {{scale}}%)۔ 100% پر ایک PDF پوائنٹ ایک اسکرین پکسل کے برابر ہے۔",
+    "calibrationNone": "اس ڈسپلے کے لیے کیلیبریٹ نہیں کیا گیا (اسکیل {{scale}}%)۔",
     "calibrationActive": "اس ڈسپلے کے لیے کیلیبریٹ کیا گیا (اسکیل {{scale}}%): فی انچ {{ppi}} پکسل۔",
     "calibrate": "کیلیبریٹ کریں...",
     "removeCalibration": "ہٹائیں",

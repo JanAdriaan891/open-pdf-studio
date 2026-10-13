@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "ขนาดจริง (100%)",
-    "calibrationNone": "ยังไม่ได้ปรับเทียบสำหรับจอนี้ (มาตราส่วน {{scale}}%) ที่ 100% หนึ่งจุด PDF เท่ากับหนึ่งพิกเซลบนหน้าจอ",
+    "calibrationNone": "ยังไม่ได้ปรับเทียบสำหรับจอนี้ (มาตราส่วน {{scale}}%)",
     "calibrationActive": "ปรับเทียบสำหรับจอนี้แล้ว (มาตราส่วน {{scale}}%): {{ppi}} พิกเซลต่อนิ้ว",
     "calibrate": "ปรับเทียบ...",
     "removeCalibration": "ลบ",

@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Kích thước thực (100%)",
-    "calibrationNone": "Chưa hiệu chỉnh cho màn hình này (tỷ lệ {{scale}}%). Ở 100%, một điểm PDF bằng một điểm ảnh màn hình.",
+    "calibrationNone": "Chưa hiệu chỉnh cho màn hình này (tỷ lệ {{scale}}%).",
     "calibrationActive": "Đã hiệu chỉnh cho màn hình này (tỷ lệ {{scale}}%): {{ppi}} điểm ảnh mỗi inch.",
     "calibrate": "Hiệu chỉnh...",
     "removeCalibration": "Xóa",

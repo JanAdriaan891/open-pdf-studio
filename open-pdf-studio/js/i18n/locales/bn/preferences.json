@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "প্রকৃত আকার (100%)",
-    "calibrationNone": "এই ডিসপ্লের জন্য ক্যালিব্রেট করা হয়নি (স্কেল {{scale}}%)। 100%-এ একটি PDF পয়েন্ট একটি স্ক্রিন পিক্সেলের সমান।",
+    "calibrationNone": "এই ডিসপ্লের জন্য ক্যালিব্রেট করা হয়নি (স্কেল {{scale}}%)।",
     "calibrationActive": "এই ডিসপ্লের জন্য ক্যালিব্রেট করা হয়েছে (স্কেল {{scale}}%): প্রতি ইঞ্চিতে {{ppi}} পিক্সেল।",
     "calibrate": "ক্যালিব্রেট করুন...",
     "removeCalibration": "সরান",

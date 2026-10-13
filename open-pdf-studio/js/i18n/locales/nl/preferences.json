@@ -213,7 +213,7 @@
     "pageSharpenLevel4": "Maximaal",
     "showScrollbars": "Canvas-schuifbalken tonen",
     "actualSize": "Werkelijke grootte (100%)",
-    "calibrationNone": "Niet gekalibreerd voor dit scherm (schaal {{scale}}%). Op 100% is één PDF-punt één schermpixel.",
+    "calibrationNone": "Niet gekalibreerd voor dit scherm (schaal {{scale}}%). 100% volgt de schermresolutie hierboven.",
     "calibrationActive": "Gekalibreerd voor dit scherm (schaal {{scale}}%): {{ppi}} pixels per inch.",
     "calibrate": "Kalibreren...",
     "removeCalibration": "Verwijderen",

@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Dimensione reale (100%)",
-    "calibrationNone": "Non calibrato per questo schermo (scala {{scale}}%). Al 100% un punto PDF corrisponde a un pixel dello schermo.",
+    "calibrationNone": "Non calibrato per questo schermo (scala {{scale}}%).",
     "calibrationActive": "Calibrato per questo schermo (scala {{scale}}%): {{ppi}} pixel per pollice.",
     "calibrate": "Calibra...",
     "removeCalibration": "Rimuovi",

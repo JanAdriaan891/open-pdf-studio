@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "실제 크기 (100%)",
-    "calibrationNone": "이 디스플레이는 보정되지 않았습니다 (배율 {{scale}}%). 100%에서 PDF 1포인트는 화면 1픽셀입니다.",
+    "calibrationNone": "이 디스플레이는 보정되지 않았습니다 (배율 {{scale}}%).",
     "calibrationActive": "이 디스플레이는 보정되었습니다 (배율 {{scale}}%): 인치당 {{ppi}}픽셀.",
     "calibrate": "보정...",
     "removeCalibration": "제거",

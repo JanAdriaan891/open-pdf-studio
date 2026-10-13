@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Πραγματικό μέγεθος (100%)",
-    "calibrationNone": "Δεν έχει βαθμονομηθεί για αυτή την οθόνη (κλίμακα {{scale}}%). Στο 100%, ένα σημείο PDF είναι ένα pixel οθόνης.",
+    "calibrationNone": "Δεν έχει βαθμονομηθεί για αυτή την οθόνη (κλίμακα {{scale}}%).",
     "calibrationActive": "Βαθμονομημένη για αυτή την οθόνη (κλίμακα {{scale}}%): {{ppi}} pixel ανά ίντσα.",
     "calibrate": "Βαθμονόμηση...",
     "removeCalibration": "Αφαίρεση",

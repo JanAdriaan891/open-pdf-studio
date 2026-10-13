@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Verklig storlek (100 %)",
-    "calibrationNone": "Inte kalibrerad för den här skärmen (skalning {{scale}} %). Vid 100 % är en PDF-punkt en skärmpixel.",
+    "calibrationNone": "Inte kalibrerad för den här skärmen (skalning {{scale}} %).",
     "calibrationActive": "Kalibrerad för den här skärmen (skalning {{scale}} %): {{ppi}} pixlar per tum.",
     "calibrate": "Kalibrera...",
     "removeCalibration": "Ta bort",

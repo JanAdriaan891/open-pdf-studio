@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Tényleges méret (100%)",
-    "calibrationNone": "Ehhez a kijelzőhöz nincs kalibrálva (méretezés {{scale}}%). 100%-on egy PDF-pont egy képernyőpixel.",
+    "calibrationNone": "Ehhez a kijelzőhöz nincs kalibrálva (méretezés {{scale}}%).",
     "calibrationActive": "Ehhez a kijelzőhöz kalibrálva (méretezés {{scale}}%): {{ppi}} pixel hüvelykenként.",
     "calibrate": "Kalibrálás...",
     "removeCalibration": "Eltávolítás",

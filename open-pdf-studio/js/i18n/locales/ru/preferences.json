@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Фактический размер (100%)",
-    "calibrationNone": "Не откалиброван для этого экрана (масштаб {{scale}}%). При 100% одна точка PDF равна одному пикселю экрана.",
+    "calibrationNone": "Не откалиброван для этого экрана (масштаб {{scale}}%).",
     "calibrationActive": "Откалиброван для этого экрана (масштаб {{scale}}%): {{ppi}} пикселей на дюйм.",
     "calibrate": "Калибровать...",
     "removeCalibration": "Удалить",

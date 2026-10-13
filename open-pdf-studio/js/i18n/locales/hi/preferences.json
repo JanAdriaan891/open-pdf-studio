@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "वास्तविक आकार (100%)",
-    "calibrationNone": "इस डिस्प्ले के लिए कैलिब्रेट नहीं किया गया (स्केल {{scale}}%)। 100% पर एक PDF पॉइंट एक स्क्रीन पिक्सेल के बराबर है।",
+    "calibrationNone": "इस डिस्प्ले के लिए कैलिब्रेट नहीं किया गया (स्केल {{scale}}%)।",
     "calibrationActive": "इस डिस्प्ले के लिए कैलिब्रेट किया गया (स्केल {{scale}}%): {{ppi}} पिक्सेल प्रति इंच।",
     "calibrate": "कैलिब्रेट करें...",
     "removeCalibration": "हटाएँ",

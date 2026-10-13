@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Справжній розмір (100%)",
-    "calibrationNone": "Не відкалібровано для цього екрана (масштаб {{scale}}%). При 100% одна точка PDF дорівнює одному пікселю екрана.",
+    "calibrationNone": "Не відкалібровано для цього екрана (масштаб {{scale}}%).",
     "calibrationActive": "Відкалібровано для цього екрана (масштаб {{scale}}%): {{ppi}} пікселів на дюйм.",
     "calibrate": "Калібрувати...",
     "removeCalibration": "Видалити",

@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Стварна величина (100%)",
-    "calibrationNone": "Није калибрисано за овај екран (размера {{scale}}%). На 100% једна PDF тачка је један пиксел екрана.",
+    "calibrationNone": "Није калибрисано за овај екран (размера {{scale}}%).",
     "calibrationActive": "Калибрисано за овај екран (размера {{scale}}%): {{ppi}} пиксела по инчу.",
     "calibrate": "Калибриши...",
     "removeCalibration": "Уклони",

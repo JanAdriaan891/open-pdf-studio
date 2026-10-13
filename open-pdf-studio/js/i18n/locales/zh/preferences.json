@@ -162,7 +162,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "实际大小 (100%)",
-    "calibrationNone": "此显示器未校准（缩放 {{scale}}%）。在 100% 时，一个 PDF 点等于一个屏幕像素。",
+    "calibrationNone": "此显示器未校准（缩放 {{scale}}%）。",
     "calibrationActive": "此显示器已校准（缩放 {{scale}}%）：每英寸 {{ppi}} 像素。",
     "calibrate": "校准...",
     "removeCalibration": "移除",

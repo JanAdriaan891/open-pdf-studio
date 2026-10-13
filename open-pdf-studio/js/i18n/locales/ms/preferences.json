@@ -179,7 +179,7 @@
     "showPropertiesPanel": "Show Properties Panel by default",
     "showToolPalette": "Show Tool Palette by default",
     "actualSize": "Saiz Sebenar (100%)",
-    "calibrationNone": "Belum ditentukur untuk paparan ini (skala {{scale}}%). Pada 100%, satu titik PDF ialah satu piksel skrin.",
+    "calibrationNone": "Belum ditentukur untuk paparan ini (skala {{scale}}%).",
     "calibrationActive": "Ditentukur untuk paparan ini (skala {{scale}}%): {{ppi}} piksel per inci.",
     "calibrate": "Tentukur...",
     "removeCalibration": "Buang",
