@@ -59,15 +59,26 @@ const tweePunt = await import('../symbols/two-point.js');
 // symbolId krijgen geen sjabloon en houden hun vakgrepen.
 const getTemplate = (id) => (id === 'balk' ? { placement: 'two-point' } : undefined);
 
+// Tekstbreedte zoals de canvas hem meet: hier vast 0,55 x de lettergrootte per
+// teken, uit het font dat handles.js op de context zet.
+const annotationCtx = {
+  font: '16px Arial',
+  measureText(tekst) {
+    const px = Number(/^(\d+(?:\.\d+)?)px/.exec(this.font)?.[1] || 16);
+    return { width: String(tekst ?? '').length * 0.55 * px };
+  },
+};
+
 const grepen = await laadMetStubs('../annotations/handles.js', {
   ...minimummaat, ...greepKeuze, HANDLE_SIZE, HANDLE_TYPES, state,
-  getTemplate, twoPointEndpoints: tweePunt.twoPointEndpoints,
+  getTemplate, twoPointEndpoints: tweePunt.twoPointEndpoints, annotationCtx,
 });
 const { applyResize } = await laadMetStubs('../annotations/transforms.js', {
   ...minimummaat, ...polygonTransform, ...tweePunt, HANDLE_TYPES, state, getTemplate,
 });
 const { greepOorsprong, strekBasispunt, strekLengteTekst } = await laadMetStubs('./greep-strek.js', {
   greepOpScherm: grepen.greepOpScherm,
+  greepPunt: grepen.greepPunt,
   twoPointEndpoints: tweePunt.twoPointEndpoints,
 });
 
@@ -239,6 +250,98 @@ test('sjabloon-eigen greep: het punt van het sjabloon, ongedraaid; zonder punt d
   assert.deepEqual(greepOorsprong(ps, 'gevelelement_stijl', () => null), { x: 5, y: 5 });
 });
 
+// ── Vormen zonder x/width/height (#562) ────────────────────────────────────
+// Hun grepen komen uit andere velden: een plugin-vorm voert {x, y, w, h}, een
+// tekst staat op zijn basislijn met de gemeten tekstbreedte, een
+// vrijehandlijn heeft de omhullende van zijn pad. De terugval op
+// orig.x/orig.width gaf NaN of een punt naast de greep.
+
+const PLUGIN_VAK = { type: 'plugin.rect-area', x: 40.5, y: 70.25, w: 60, h: 35, page: 1 };
+const TEKST = { type: 'text', x: 100, y: 200, text: 'Gevel', fontSize: 20, page: 1 };
+const VRIJE_HAND = {
+  type: 'draw', page: 1,
+  path: [{ x: 10, y: 50 }, { x: 35.5, y: 20 }, { x: 80, y: 44 }, { x: 62, y: 90.75 }],
+};
+const HOEKGREPEN = ['tl', 'tr', 'bl', 'br'];
+
+test('plugin-vorm {x, y, w, h}, tekst en vrijehandlijn: elke greep geeft een eindige oorsprong op de getekende greep', () => {
+  for (const [ann, namen] of [[PLUGIN_VAK, MAATGREPEN], [TEKST, HOEKGREPEN], [VRIJE_HAND, HOEKGREPEN]]) {
+    const getekend = grepen.getAnnotationHandles(ann, SCHAAL).map((g) => g.type);
+    assert.deepEqual([...getekend].sort(), [...namen].sort(), `${ann.type}: getekende grepen`);
+    for (const greep of namen) {
+      const verwacht = greepMidden(ann, greep);
+      const o = greepOorsprong(ann, greep);
+      const b = strekBasispunt(ann, greep);
+      for (const [wat, p] of [['snap', o], ['meetlijn', b]]) {
+        assert.ok(p && Number.isFinite(p.x) && Number.isFinite(p.y), `${ann.type} ${greep} ${wat}: ${JSON.stringify(p)}`);
+        assert.ok(dichtbij(p.x, verwacht.x) && dichtbij(p.y, verwacht.y),
+          `${ann.type} ${greep} ${wat}: ${JSON.stringify(p)}, greep op ${JSON.stringify(verwacht)}`);
+      }
+    }
+  }
+  // De tekstgrepen: basislijn onder, een regel hoog, de gemeten breedte breed.
+  const breedte = 'Gevel'.length * 0.55 * 20;
+  assert.deepEqual(greepOorsprong(TEKST, 'tl'), { x: 100, y: 180 });
+  assert.deepEqual(greepOorsprong(TEKST, 'br'), { x: 100 + breedte, y: 200 });
+  // De vrijehandlijn: de omhullende van het pad.
+  assert.deepEqual(greepOorsprong(VRIJE_HAND, 'tl'), { x: 10, y: 20 });
+  assert.deepEqual(strekBasispunt(VRIJE_HAND, 'br'), { x: 80, y: 90.75 });
+});
+
+test('plugin-vorm en vrijehandlijn: een gesnapte greep komt op het snappunt, zonder sprong of inklappen', () => {
+  for (const [ann, namen, velden] of [
+    [PLUGIN_VAK, MAATGREPEN, ['x', 'y', 'w', 'h']],
+    [VRIJE_HAND, HOEKGREPEN, ['path']],
+  ]) {
+    for (const greep of namen) {
+      const opScherm = greepMidden(ann, greep);
+      const snap = { x: opScherm.x + 4.25, y: opScherm.y - 3.5 };
+      const o = greepOorsprong(ann, greep);
+      const metSnap = geschaald(ann, greep, snap.x - o.x, snap.y - o.y);
+      const metCursor = geschaald(ann, greep, snap.x - opScherm.x, snap.y - opScherm.y);
+      for (const k of velden) {
+        assert.deepEqual(metSnap[k], metCursor[k], `${ann.type} ${greep} ${k}`);
+      }
+      // De greep staat op het snappunt, op de as(sen) die hij stuurt: een
+      // randgreep schuift alleen loodrecht op zijn rand.
+      const na = greepMidden(metSnap, greep);
+      assert.ok(Number.isFinite(na.x) && Number.isFinite(na.y), `${ann.type} ${greep}: geen NaN`);
+      const stuurtX = greep !== 't' && greep !== 'b';
+      const stuurtY = greep !== 'l' && greep !== 'r';
+      assert.ok((!stuurtX || dichtbij(na.x, snap.x)) && (!stuurtY || dichtbij(na.y, snap.y)),
+        `${ann.type} ${greep}: greep op (${na.x}, ${na.y}), snappunt (${snap.x}, ${snap.y})`);
+    }
+  }
+});
+
+test('stavenreeks: snap en meetlijn vanaf het wapeningspunt waar de greep staat', async () => {
+  // De eindgrepen van een stavenreeks staan op de staven, niet op de
+  // uiteinden van de aanhaallijn (handleAnchors); de sleep (applyResize)
+  // rekent ook vanaf die staven.
+  const reeks = { type: 'stavenreeks', startX: 0, startY: 0, endX: 100, endY: 0 };
+  const ankers = { start: { x: 5, y: 12 }, end: { x: 95, y: 12 }, mid: { x: 50, y: 12 } };
+  const grepenMetAnkers = await laadMetStubs('../annotations/handles.js', {
+    ...minimummaat, ...greepKeuze, HANDLE_SIZE, HANDLE_TYPES, state, getTemplate, handleAnchors: () => ankers,
+  });
+  const metAnkers = await laadMetStubs('./greep-strek.js', {
+    greepOpScherm: grepenMetAnkers.greepOpScherm,
+    greepPunt: grepenMetAnkers.greepPunt,
+    twoPointEndpoints: tweePunt.twoPointEndpoints,
+  });
+  for (const [greep, verwacht] of [['line_start', ankers.start], ['line_end', ankers.end], ['line_mid', ankers.mid]]) {
+    assert.deepEqual(metAnkers.greepOorsprong(reeks, greep), verwacht, `${greep} snap`);
+    assert.deepEqual(metAnkers.strekBasispunt(reeks, greep), verwacht, `${greep} meetlijn`);
+  }
+});
+
+test('zonder bekende greepplek geeft greepOorsprong null in plaats van NaN', () => {
+  // Een plugin-vorm zonder vak en zonder grepen.
+  assert.equal(greepOorsprong({ type: 'plugin.leeg' }, 'br'), null);
+  assert.equal(strekBasispunt({ type: 'plugin.leeg' }, 'br'), null);
+  // De sleep rekent dan vanaf waar hij begon.
+  assert.match(handleResizeRomp(), /\|\| \{ x: state\.dragStartX, y: state\.dragStartY \}/);
+});
+
 // ── Tooltip-lengte ────────────────────────────────────────────────────────
 
 // Documentschaal zoals de automatische schaalherkenning hem zet (loader.js).
@@ -314,8 +417,109 @@ test('_handleResize rekent met de greep-strek-helpers', () => {
   assert.doesNotMatch(romp, /measureScale\)\s*\|\|\s*1/);
 });
 
-test('gedraaide afbeelding: geen gelijke-maat-snap (die zet het vaste punt in het ongedraaide vak terug)', () => {
+// ── Gelijke breedte/hoogte bij een gedraaide afbeelding (#561) ────────────
+// De snap zette het vaste punt terug in het ONGEDRAAIDE vak; dat verschoof het
+// draaipunt en daarmee de vaste greep op het scherm, dus sloeg de sleep hem
+// bij een gedraaide afbeelding over. Nu gaat het vak na de snap om het
+// gedraaide midden terug: de greep tegenover de gesleepte blijft staan.
+
+const { snapImageResize, herankerOmGedraaidMidden } = await laadMetStubs('./image-align-snap.js', { state });
+
+const TEGENOVER = { tl: 'br', tr: 'bl', bl: 'tr', br: 'tl', t: 'b', b: 't', l: 'r', r: 'l' };
+// Referentie: 100 x 70. De gesleepte afbeelding is 120 x 80 (verhouding 1,5).
+const REF = { type: 'image', id: 'ref', page: 1, x: 500, y: 40, width: 100, height: 70 };
+
+/**
+ * Sleept greep `greep` van een afbeelding met draaiing `rotation` zoals
+ * _handleResize: eerst applyResize met de cursor (tot net naast de maat van
+ * de referentie), dan de gelijke-maat-snap.
+ */
+function sleepMetGelijkeMaat(greep, rotation, lockAspectRatio) {
+  const ann = {
+    type: 'image', id: 'img', page: 1, x: 200, y: 150, width: 120, height: 80,
+    originalWidth: 120, originalHeight: 80, rotation, lockAspectRatio,
+  };
+  // Lokale sleep naar 102 x 72 (binnen de tolerantie van 100 x 70), naar
+  // paginaruimte gedraaid.
+  const links = ['tl', 'l', 'bl'].includes(greep), rechts = ['tr', 'r', 'br'].includes(greep);
+  const boven = ['tl', 't', 'tr'].includes(greep), onder = ['bl', 'b', 'br'].includes(greep);
+  const lx = links ? 120 - 102 : rechts ? 102 - 120 : 0;
+  const ly = boven ? 80 - 72 : onder ? 72 - 80 : 0;
+  const rad = rotation * Math.PI / 180;
+  const dx = lx * Math.cos(rad) - ly * Math.sin(rad);
+  const dy = lx * Math.sin(rad) + ly * Math.cos(rad);
+  const voor = geschaald(ann, greep, dx, dy);
+  const box = { x: voor.x, y: voor.y, w: voor.width, h: voor.height };
+  const res = snapImageResize(box, greep, [REF], 5, { lockRatio: lockAspectRatio, aspectRatio: 1.5, rotation });
+  const na = { ...voor, x: res.box.x, y: res.box.y, width: res.box.w, height: res.box.h };
+  return { ann, voor, na, res };
+}
+
+test('gedraaide afbeelding: gelijke maat snapt en de vaste greep blijft op het scherm staan (90, 180, 270 en vrije hoek)', () => {
+  for (const rotation of [0, 90, 180, 270, -90, 33.5, -127]) {
+    for (const vast of [false, true]) {
+      for (const greep of MAATGREPEN) {
+        const label = `${rotation}° ${vast ? 'vaste verhouding' : 'vrij'} ${greep}`;
+        const { ann, voor, na, res } = sleepMetGelijkeMaat(greep, rotation, vast);
+        assert.ok(res.guides.length > 0, `${label}: de snap slaat aan`);
+        // De maat van de referentie: met vaste verhouding op de eerste as
+        // (hoeken en l/r de breedte, t/b de hoogte) en de andere uit de
+        // verhouding; vrij op elke as die de greep stuurt.
+        const stuurtB = !['t', 'b'].includes(greep), stuurtH = !['l', 'r'].includes(greep);
+        if (vast) {
+          if (stuurtB) assert.ok(dichtbij(na.width, 100) && dichtbij(na.height, 100 / 1.5), `${label}: ${na.width} x ${na.height}`);
+          else assert.ok(dichtbij(na.height, 70) && dichtbij(na.width, 70 * 1.5), `${label}: ${na.width} x ${na.height}`);
+        } else {
+          assert.ok(dichtbij(na.width, stuurtB ? 100 : 120), `${label}: breedte ${na.width}`);
+          assert.ok(dichtbij(na.height, stuurtH ? 70 : 80), `${label}: hoogte ${na.height}`);
+        }
+        // De greep tegenover de gesleepte staat op het scherm nog waar hij
+        // vóór de sleep getekend werd.
+        const vastPunt = greepMidden(ann, TEGENOVER[greep]);
+        for (const [wanneer, vorm] of [['voor de snap', voor], ['na de snap', na]]) {
+          const p = greepMidden(vorm, TEGENOVER[greep]);
+          assert.ok(dichtbij(p.x, vastPunt.x, 1e-9) && dichtbij(p.y, vastPunt.y, 1e-9),
+            `${label} ${wanneer}: vaste greep op (${p.x}, ${p.y}), was (${vastPunt.x}, ${vastPunt.y})`);
+        }
+        // Gedraaid: de aanduiding staat op het vak zoals het getekend wordt
+        // en draait mee (ongedraaid blijft ze zoals ze was).
+        if (rotation !== 0) {
+          for (const g of res.guides) {
+            assert.ok(dichtbij(g.box.x, res.box.x) && dichtbij(g.box.y, res.box.y)
+              && dichtbij(g.box.w, res.box.w) && dichtbij(g.box.h, res.box.h), `${label}: aanduiding op het vak`);
+            assert.equal(g.box.rotation, rotation, `${label}: aanduiding draait mee`);
+          }
+        }
+      }
+    }
+  }
+});
+
+test('ongedraaide afbeelding: de gelijke-maat-snap blijft precies zoals hij was', () => {
+  for (const vast of [false, true]) {
+    for (const greep of MAATGREPEN) {
+      const box = { x: 10, y: 20, w: 102, h: 72 };
+      const zonder = snapImageResize(box, greep, [REF], 5, { lockRatio: vast, aspectRatio: 1.5 });
+      const nul = snapImageResize(box, greep, [REF], 5, { lockRatio: vast, aspectRatio: 1.5, rotation: 0 });
+      assert.deepEqual(nul, zonder, `${greep} ${vast}`);
+    }
+  }
+});
+
+test('herankerOmGedraaidMidden: zonder draaiing of zonder maatgreep verandert er niets', () => {
+  const voor = { x: 0, y: 0, w: 10, h: 20 };
+  const na = { x: 3, y: 4, w: 8, h: 16 };
+  assert.deepEqual(herankerOmGedraaidMidden(voor, na, 'br', 0), na);
+  assert.deepEqual(herankerOmGedraaidMidden(voor, na, 'rotate', 45), na);
+  // 180 graden, 'br' gesleept: de vaste greep 'tl' staat op het scherm
+  // rechtsonder (10, 20), dus het kleinere vak ligt links-boven daarvan.
+  const r = herankerOmGedraaidMidden(voor, na, 'br', 180);
+  assert.ok(dichtbij(r.x, 2) && dichtbij(r.y, 4) && r.w === 8 && r.h === 16, JSON.stringify(r));
+});
+
+test('_handleResize geeft de draaiing door aan de gelijke-maat-snap en slaat gedraaide afbeeldingen niet meer over', () => {
   const romp = handleResizeRomp();
-  assert.match(romp,
-    /enableImageAlignSnap && ann\.type === 'image' && _isBoxHandle\s*&& !state\.originalAnnotation\.rotation\)/);
+  assert.doesNotMatch(romp, /!state\.originalAnnotation\.rotation/);
+  assert.match(romp, /enableImageAlignSnap && ann\.type === 'image' && _isBoxHandle\) \{/);
+  assert.match(romp, /snapImageResize\(box, _rh, refs, tol, \{[\s\S]*?rotation: state\.originalAnnotation\.rotation \|\| 0,[\s\S]*?\}\)/);
 });

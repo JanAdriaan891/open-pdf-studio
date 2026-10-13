@@ -7,12 +7,17 @@
  *   Snapt de cursor, dan wordt de sleep "gesnapt punt min dit punt", zodat de
  *   greep precies op het snappunt komt.
  * - strekBasispunt: beginpunt van de gestippelde meetlijn naar de cursor.
+ *
+ * Beide nemen de plek waar de greep getekend wordt (greepPunt in handles.js),
+ * ook bij vormen zonder x/width/height zoals plugin-vormen met {x, y, w, h},
+ * een tekst en een vrijehandlijn (#562). Alleen als de vorm die greep niet
+ * tekent, rekenen ze uit de velden van de vorm.
  * - strekLengteTekst: de lengte van die meetlijn als tekst.
  *
  * Alle coördinaten zijn paginacoördinaten.
  */
 
-import { greepOpScherm } from '../annotations/handles.js';
+import { greepOpScherm, greepPunt } from '../annotations/handles.js';
 import { twoPointEndpoints } from '../symbols/two-point.js';
 
 // De acht maatgrepen staan in de lokale (ongedraaide) ruimte van de vorm en
@@ -38,7 +43,8 @@ function _tweepuntGreep(orig, h) {
 /**
  * Oorspronkelijke plek van de gesleepte greep. `sjabloonOorsprong(orig, h)`
  * levert voor een parametrisch symbool de plek van een sjabloon-eigen greep
- * (of niets).
+ * (of niets). Null als die plek niet te bepalen is (nooit NaN); de sleep
+ * rekent dan vanaf het punt waar hij begon.
  */
 export function greepOorsprong(orig, h, sjabloonOorsprong) {
   let ox, oy;
@@ -108,6 +114,13 @@ export function greepOorsprong(orig, h, sjabloonOorsprong) {
     const t = _tweepuntGreep(orig, h);
     if (t) { ox = t.x; oy = t.y; }
   }
+  // Elke andere greep: waar hij getekend wordt. Bij een plugin-vorm met
+  // {x, y, w, h}, een tekst of een vrijehandlijn gaf het vak hieronder NaN of
+  // een punt naast de greep, en sprong de vorm weg of klapte hij in.
+  if (ox === undefined) {
+    const p = greepPunt(orig, h);
+    if (p) { ox = p.x; oy = p.y; }
+  }
   if (ox === undefined) {
     ox = h === 'line_start' ? orig.startX
       : h === 'line_end' ? orig.endX
@@ -138,7 +151,17 @@ export function greepOorsprong(orig, h, sjabloonOorsprong) {
       ox = p.x; oy = p.y;
     }
   }
+  if (!Number.isFinite(ox) || !Number.isFinite(oy)) return null;
   return { x: ox, y: oy };
+}
+
+// Grepen met een meetlijn: knooppunten (geen gat), lijngrepen, middengrepen
+// en de acht maatgrepen.
+function _heeftMeetlijn(h) {
+  if (typeof h !== 'string') return false;
+  return _MAATGREPEN.has(h) || h === 'line_start' || h === 'line_end' || h === 'line_mid'
+    || h === 'rect_center' || h === 'circle_center'
+    || (h.startsWith('polyline_node_') && !h.includes('hole'));
 }
 
 /**
@@ -148,6 +171,9 @@ export function greepOorsprong(orig, h, sjabloonOorsprong) {
 export function strekBasispunt(orig, h) {
   const tweepunt = _tweepuntGreep(orig, h);
   if (tweepunt) return tweepunt;
+  if (!_heeftMeetlijn(h)) return null;
+  const getekend = greepPunt(orig, h);
+  if (getekend) return getekend;
   let bx, by;
   if (typeof h === 'string' && h.startsWith('polyline_node_') && !h.includes('hole') && Array.isArray(orig.points)) {
     const ni = parseInt(h.split('_').pop(), 10);
@@ -172,7 +198,7 @@ export function strekBasispunt(orig, h) {
   else if (h === 'b') { bx = orig.x + orig.width / 2; by = orig.y + orig.height; }
   else if (h === 'l') { bx = orig.x; by = orig.y + orig.height / 2; }
   else if (h === 'r') { bx = orig.x + orig.width; by = orig.y + orig.height / 2; }
-  if (bx === undefined || by === undefined) return null;
+  if (!Number.isFinite(bx) || !Number.isFinite(by)) return null;
   return _MAATGREPEN.has(h) ? greepOpScherm(orig, bx, by) : { x: bx, y: by };
 }
 
