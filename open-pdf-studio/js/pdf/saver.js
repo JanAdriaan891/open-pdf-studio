@@ -36,6 +36,7 @@ import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrTextLayer, embedOcrFont, loadDefaultOcrFontBytes } from './saver/ocr-text-layer.js';
 import { saveBookmarksToOutline } from './saver/bookmarks.js';
 import { saveStylePresetsToCatalog } from './saver/style-presets.js';
+import { pasBijlagenToe } from './bijlagen.js';
 import { schrijfAnnotatieLagen, ocVoorAnnotatie } from './saver/annotatie-lagen.js';
 import { layersForSave, currentLayerId } from '../annotations/annotatie-lagen.js';
 import { pdfTextString, toWinAnsiText, winAnsiLiteral, asciiPdfName } from './saver/pdf-text.js';
@@ -2933,6 +2934,9 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
     // Save named line-style presets into the catalog (travel with the PDF)
     saveStylePresetsToCatalog(pdfDocLib, activeDoc.stylePresets || null);
+
+    // Bijlagen die in het paneel zijn toegevoegd of verwijderd (bijlagen.js).
+    pasBijlagenToe(pdfDocLib, activeDoc.bijlagenWijzigingen);
 
     // Vectorknipsels: opruimen wat de vorige stempels en het inbedden achter-
     // lieten, anders groeit het bestand per save met de hele bronpagina. Eerst
