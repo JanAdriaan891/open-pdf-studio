@@ -291,3 +291,4 @@ js/core/zoom-display.test.mjs
 js/pdf/render-sharpen.test.mjs
 js/pdf/print-meerperblad.test.mjs
 js/pdf/flattened-copy.test.mjs
+js/text/wrap-tekst.test.mjs
