@@ -160,7 +160,28 @@
     "thinLines": "خطوط رفيعة (عرض جميع الخطوط بعرض 1 بكسل)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "الحجم الفعلي (100%)",
+    "calibrationNone": "غير معايَر لهذه الشاشة (المقياس {{scale}}%). عند 100% تساوي نقطة PDF واحدة بكسلاً واحداً على الشاشة.",
+    "calibrationActive": "معايَر لهذه الشاشة (المقياس {{scale}}%): {{ppi}} بكسل لكل بوصة.",
+    "calibrate": "معايرة...",
+    "removeCalibration": "إزالة",
+    "calibrationHint": "يؤثر على العرض على الشاشة فقط. لا تتغير الطباعة والتصدير والقياسات."
+  },
+  "screenCalibration": {
+    "title": "معايرة الشاشة",
+    "instructions": "ضع بطاقة ائتمان أو مسطرة على الشاشة واضبط الحجم حتى يصبح طول الشريط مساوياً تماماً للمرجع.",
+    "reference": "المرجع",
+    "referenceCard": "عرض بطاقة الائتمان (85.6 مم)",
+    "referenceRuler50": "مسطرة، 50 مم",
+    "referenceRuler100": "مسطرة، 100 مم",
+    "size": "الحجم",
+    "smaller": "أصغر",
+    "larger": "أكبر",
+    "pxPerInch": "بكسل/بوصة",
+    "measuredLength": "الطول المقاس",
+    "apply": "تطبيق",
+    "displayScale": "مقياس الشاشة {{scale}}%. تنطبق المعايرة على الشاشات بهذا المقياس فقط."
   },
   "measurement": {
     "showEdgeLengths": "إظهار أطوال الأضلاع"

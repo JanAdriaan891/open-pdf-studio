@@ -292,6 +292,10 @@ export const DEFAULT_PREFERENCES: Preferences = {
   // multi-proces worker-pool: parallelle eerste render (sneller), geen
   // zwart scherm, hoofdthread blijft vrij. Uitzetbaar in Voorkeuren.
   progressiveRender: true,
+  // Schermkalibratie voor Werkelijke grootte (#520): CSS-pixels per inch per
+  // schermschaal ({ "1.25": 120.5 }). Leeg = niet gekalibreerd, dan blijft
+  // Werkelijke grootte zoom 1,0 (1 PDF-punt = 1 CSS-pixel).
+  screenCalibration: {},
 
   // Panels
   propertiesPanelVisible: true,

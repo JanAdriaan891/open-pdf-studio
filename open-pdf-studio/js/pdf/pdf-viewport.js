@@ -15,6 +15,7 @@ import {
 import { tileCoversViewport } from './tile-coverage.js';
 import { bepaalOverlayMaat, pasOverlayMaatToe } from './overlay-canvas-size.js';
 import { maakWielScroller } from './wiel-scroll.js';
+import { zoomNaDprWissel } from './schermkalibratie.js';
 import { maakFramePlanner, bewaakSchrijven } from './frame-planner.js';
 import {
   normaliseerRotatie,
@@ -249,8 +250,13 @@ function _resizeCanvas() {
 // threshold is baked into the query, so we re-arm at the new ratio after every
 // change. Stored on window so an HMR reload can remove the stale listener.
 let _dprDebounce = null;
+// Schermschaal van VOOR een (reeks) dpr-wissel(s), voor de schermkalibratie
+// van Werkelijke grootte (#520). Blijft staan tot de debounce afloopt, zodat
+// een trage sleep over meerdere tussenstappen met de echte begin-dpr rekent.
+let _dprVoorWissel = null;
 
 function _onDprChanged() {
+  if (_dprVoorWissel == null) _dprVoorWissel = window.__pdfDprMql?.dpr ?? null;
   // Re-arm immediately at the new ratio so a further jump mid-drag isn't
   // missed while the debounce below is still pending.
   _armDprWatcher();
@@ -273,11 +279,34 @@ function _armDprWatcher() {
   const dpr = window.devicePixelRatio || 1;
   const mql = window.matchMedia(`(resolution: ${dpr}dppx)`);
   mql.addEventListener('change', _onDprChanged);
-  window.__pdfDprMql = { mql, handler: _onDprChanged };
+  window.__pdfDprMql = { mql, handler: _onDprChanged, dpr };
 }
 
 async function _applyDprChange() {
   _dprDebounce = null;
+  const oudeDpr = _dprVoorWissel;
+  _dprVoorWissel = null;
+  await _herschaalNaarNieuweDpr();
+  await _werkelijkeGrootteNaDprWissel(oudeDpr);
+}
+
+// Stond de weergave op Werkelijke grootte voor het vorige scherm en zijn beide
+// schermen gekalibreerd, dan krijgt het nieuwe scherm zijn eigen werkelijke
+// grootte (#520). In alle andere gevallen blijft de zoom zoals hij was.
+async function _werkelijkeGrootteNaDprWissel(oudeDpr) {
+  if (oudeDpr == null) return;
+  try {
+    const doc = getActiveDocument();
+    if (!doc?.pdfDoc) return;
+    const zoomNu = viewport.active && doc.filePath ? viewport.zoom : doc.scale;
+    const doel = zoomNaDprWissel(zoomNu, oudeDpr, window.devicePixelRatio || 1, state.preferences?.screenCalibration);
+    if (doel == null) return;
+    const m = await import('./renderer.js');
+    await m.actualSize();
+  } catch { /* zoomherstel is best-effort */ }
+}
+
+async function _herschaalNaarNieuweDpr() {
   const doc = getActiveDocument();
   if (doc && doc.viewMode === 'continuous') {
     // Continuous/book/facing mode paints per-page canvases sized at

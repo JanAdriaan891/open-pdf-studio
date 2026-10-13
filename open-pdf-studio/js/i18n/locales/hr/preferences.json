@@ -177,7 +177,28 @@
     "thinLines": "Tanke linije (prikaži sve linije širinom 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Stvarna veličina (100 %)",
+    "calibrationNone": "Nije kalibrirano za ovaj zaslon (mjerilo {{scale}} %). Pri 100 % jedna PDF točka je jedan piksel zaslona.",
+    "calibrationActive": "Kalibrirano za ovaj zaslon (mjerilo {{scale}} %): {{ppi}} piksela po inču.",
+    "calibrate": "Kalibriraj...",
+    "removeCalibration": "Ukloni",
+    "calibrationHint": "Utječe samo na prikaz na zaslonu. Ispis, izvoz i mjerenja se ne mijenjaju."
+  },
+  "screenCalibration": {
+    "title": "Kalibracija zaslona",
+    "instructions": "Prislonite kreditnu karticu ili ravnalo uz zaslon i podesite veličinu dok traka ne bude točno jednako duga kao referenca.",
+    "reference": "Referenca",
+    "referenceCard": "Širina kreditne kartice (85,6 mm)",
+    "referenceRuler50": "Ravnalo, 50 mm",
+    "referenceRuler100": "Ravnalo, 100 mm",
+    "size": "Veličina",
+    "smaller": "Manje",
+    "larger": "Veće",
+    "pxPerInch": "px/inč",
+    "measuredLength": "Izmjerena duljina",
+    "apply": "Primijeni",
+    "displayScale": "Mjerilo zaslona {{scale}} %. Kalibracija vrijedi samo za zaslone s tim mjerilom."
   },
   "measurement": {
     "showEdgeLengths": "Prikaži duljine stranica"

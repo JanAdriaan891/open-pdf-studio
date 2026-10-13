@@ -177,7 +177,28 @@
     "thinLines": "Linii subțiri (afișează toate liniile cu lățime de 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Dimensiune reală (100%)",
+    "calibrationNone": "Necalibrat pentru acest ecran (scară {{scale}}%). La 100%, un punct PDF este un pixel de ecran.",
+    "calibrationActive": "Calibrat pentru acest ecran (scară {{scale}}%): {{ppi}} pixeli pe inch.",
+    "calibrate": "Calibrează...",
+    "removeCalibration": "Elimină",
+    "calibrationHint": "Afectează doar afișarea pe ecran. Tipărirea, exportul și măsurătorile nu se schimbă."
+  },
+  "screenCalibration": {
+    "title": "Calibrare ecran",
+    "instructions": "Țineți un card bancar sau o riglă pe ecran și ajustați dimensiunea până când bara are exact aceeași lungime ca referința.",
+    "reference": "Referință",
+    "referenceCard": "Lățimea unui card bancar (85,6 mm)",
+    "referenceRuler50": "Riglă, 50 mm",
+    "referenceRuler100": "Riglă, 100 mm",
+    "size": "Dimensiune",
+    "smaller": "Mai mic",
+    "larger": "Mai mare",
+    "pxPerInch": "px/țol",
+    "measuredLength": "Lungime măsurată",
+    "apply": "Aplică",
+    "displayScale": "Scara ecranului {{scale}}%. Calibrarea se aplică doar ecranelor cu această scară."
   },
   "measurement": {
     "showEdgeLengths": "Afișează lungimile laturilor"

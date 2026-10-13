@@ -177,7 +177,28 @@
     "thinLines": "Vékony vonalak (minden vonal megjelenítése 1px szélességgel)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Tényleges méret (100%)",
+    "calibrationNone": "Ehhez a kijelzőhöz nincs kalibrálva (méretezés {{scale}}%). 100%-on egy PDF-pont egy képernyőpixel.",
+    "calibrationActive": "Ehhez a kijelzőhöz kalibrálva (méretezés {{scale}}%): {{ppi}} pixel hüvelykenként.",
+    "calibrate": "Kalibrálás...",
+    "removeCalibration": "Eltávolítás",
+    "calibrationHint": "Csak a képernyőn való megjelenítést érinti. A nyomtatás, az exportálás és a mérések nem változnak."
+  },
+  "screenCalibration": {
+    "title": "Kijelző kalibrálása",
+    "instructions": "Tartson egy bankkártyát vagy vonalzót a képernyőhöz, és állítsa a méretet addig, amíg a sáv pontosan olyan hosszú nem lesz, mint a viszonyítási tárgy.",
+    "reference": "Viszonyítás",
+    "referenceCard": "Bankkártya szélessége (85,6 mm)",
+    "referenceRuler50": "Vonalzó, 50 mm",
+    "referenceRuler100": "Vonalzó, 100 mm",
+    "size": "Méret",
+    "smaller": "Kisebb",
+    "larger": "Nagyobb",
+    "pxPerInch": "px/hüvelyk",
+    "measuredLength": "Mért hossz",
+    "apply": "Alkalmaz",
+    "displayScale": "Kijelző méretezése {{scale}}%. A kalibrálás csak az ilyen méretezésű kijelzőkre érvényes."
   },
   "measurement": {
     "showEdgeLengths": "Oldalhosszak megjelenítése"

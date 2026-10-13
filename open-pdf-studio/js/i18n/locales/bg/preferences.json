@@ -177,7 +177,28 @@
     "thinLines": "Тънки линии (показване на всички линии с ширина 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Действителен размер (100%)",
+    "calibrationNone": "Не е калибриран за този екран (мащаб {{scale}}%). При 100% една PDF точка е един пиксел на екрана.",
+    "calibrationActive": "Калибриран за този екран (мащаб {{scale}}%): {{ppi}} пиксела на инч.",
+    "calibrate": "Калибриране...",
+    "removeCalibration": "Премахване",
+    "calibrationHint": "Засяга само показването на екрана. Печатът, експортът и измерванията не се променят."
+  },
+  "screenCalibration": {
+    "title": "Калибриране на екрана",
+    "instructions": "Поставете кредитна карта или линийка до екрана и променете размера, докато лентата стане точно толкова дълга, колкото еталона.",
+    "reference": "Еталон",
+    "referenceCard": "Ширина на кредитна карта (85,6 мм)",
+    "referenceRuler50": "Линийка, 50 мм",
+    "referenceRuler100": "Линийка, 100 мм",
+    "size": "Размер",
+    "smaller": "По-малко",
+    "larger": "По-голямо",
+    "pxPerInch": "пиксела/инч",
+    "measuredLength": "Измерена дължина",
+    "apply": "Приложи",
+    "displayScale": "Мащаб на екрана {{scale}}%. Калибрирането важи само за екрани с този мащаб."
   },
   "measurement": {
     "showEdgeLengths": "Показване на дължините на страните"

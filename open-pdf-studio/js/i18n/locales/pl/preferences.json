@@ -160,7 +160,28 @@
     "thinLines": "Cienkie linie (wyświetlaj wszystkie linie o szerokości 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Rozmiar rzeczywisty (100%)",
+    "calibrationNone": "Niekalibrowany dla tego ekranu (skala {{scale}}%). Przy 100% jeden punkt PDF to jeden piksel ekranu.",
+    "calibrationActive": "Skalibrowany dla tego ekranu (skala {{scale}}%): {{ppi}} pikseli na cal.",
+    "calibrate": "Kalibruj...",
+    "removeCalibration": "Usuń",
+    "calibrationHint": "Dotyczy tylko wyświetlania na ekranie. Drukowanie, eksport i pomiary się nie zmieniają."
+  },
+  "screenCalibration": {
+    "title": "Kalibracja ekranu",
+    "instructions": "Przyłóż do ekranu kartę płatniczą lub linijkę i dopasuj rozmiar, aż pasek będzie dokładnie tak długi jak wzorzec.",
+    "reference": "Wzorzec",
+    "referenceCard": "Szerokość karty płatniczej (85,6 mm)",
+    "referenceRuler50": "Linijka, 50 mm",
+    "referenceRuler100": "Linijka, 100 mm",
+    "size": "Rozmiar",
+    "smaller": "Mniejszy",
+    "larger": "Większy",
+    "pxPerInch": "px/cal",
+    "measuredLength": "Zmierzona długość",
+    "apply": "Zastosuj",
+    "displayScale": "Skala ekranu {{scale}}%. Kalibracja dotyczy tylko ekranów z tą skalą."
   },
   "measurement": {
     "showEdgeLengths": "Pokaż długości boków"

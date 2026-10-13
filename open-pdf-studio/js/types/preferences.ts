@@ -224,6 +224,7 @@ export interface Preferences {
   thinLines: boolean;
   showScrollbars: boolean;
   progressiveRender: boolean;
+  screenCalibration: Record<string, number>;
 
   // Panels
   propertiesPanelVisible: boolean;

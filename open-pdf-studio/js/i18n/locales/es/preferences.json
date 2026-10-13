@@ -160,7 +160,28 @@
     "thinLines": "Líneas finas (mostrar todas las líneas con 1px de ancho)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Tamaño real (100%)",
+    "calibrationNone": "Sin calibrar para esta pantalla (escala {{scale}}%). Al 100%, un punto PDF equivale a un píxel de pantalla.",
+    "calibrationActive": "Calibrada para esta pantalla (escala {{scale}}%): {{ppi}} píxeles por pulgada.",
+    "calibrate": "Calibrar...",
+    "removeCalibration": "Quitar",
+    "calibrationHint": "Solo afecta a la visualización en pantalla. La impresión, la exportación y las mediciones no cambian."
+  },
+  "screenCalibration": {
+    "title": "Calibrar pantalla",
+    "instructions": "Coloque una tarjeta de crédito o una regla sobre la pantalla y ajuste el tamaño hasta que la barra mida exactamente lo mismo que la referencia.",
+    "reference": "Referencia",
+    "referenceCard": "Ancho de una tarjeta de crédito (85,6 mm)",
+    "referenceRuler50": "Regla, 50 mm",
+    "referenceRuler100": "Regla, 100 mm",
+    "size": "Tamaño",
+    "smaller": "Más pequeño",
+    "larger": "Más grande",
+    "pxPerInch": "px/pulgada",
+    "measuredLength": "Longitud medida",
+    "apply": "Aplicar",
+    "displayScale": "Escala de pantalla {{scale}}%. La calibración solo se aplica a pantallas con esta escala."
   },
   "measurement": {
     "showEdgeLengths": "Mostrar longitudes de los lados"

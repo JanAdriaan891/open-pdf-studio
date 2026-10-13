@@ -177,7 +177,28 @@
     "thinLines": "Λεπτές γραμμές (εμφάνιση όλων των γραμμών σε πλάτος 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Πραγματικό μέγεθος (100%)",
+    "calibrationNone": "Δεν έχει βαθμονομηθεί για αυτή την οθόνη (κλίμακα {{scale}}%). Στο 100%, ένα σημείο PDF είναι ένα pixel οθόνης.",
+    "calibrationActive": "Βαθμονομημένη για αυτή την οθόνη (κλίμακα {{scale}}%): {{ppi}} pixel ανά ίντσα.",
+    "calibrate": "Βαθμονόμηση...",
+    "removeCalibration": "Αφαίρεση",
+    "calibrationHint": "Επηρεάζει μόνο την προβολή στην οθόνη. Η εκτύπωση, η εξαγωγή και οι μετρήσεις δεν αλλάζουν."
+  },
+  "screenCalibration": {
+    "title": "Βαθμονόμηση οθόνης",
+    "instructions": "Κρατήστε μια πιστωτική κάρτα ή έναν χάρακα πάνω στην οθόνη και προσαρμόστε το μέγεθος μέχρι η μπάρα να έχει ακριβώς το ίδιο μήκος με την αναφορά.",
+    "reference": "Αναφορά",
+    "referenceCard": "Πλάτος πιστωτικής κάρτας (85,6 mm)",
+    "referenceRuler50": "Χάρακας, 50 mm",
+    "referenceRuler100": "Χάρακας, 100 mm",
+    "size": "Μέγεθος",
+    "smaller": "Μικρότερο",
+    "larger": "Μεγαλύτερο",
+    "pxPerInch": "px/ίντσα",
+    "measuredLength": "Μετρημένο μήκος",
+    "apply": "Εφαρμογή",
+    "displayScale": "Κλίμακα οθόνης {{scale}}%. Η βαθμονόμηση ισχύει μόνο για οθόνες με αυτή την κλίμακα."
   },
   "measurement": {
     "showEdgeLengths": "Εμφάνιση μηκών πλευρών"

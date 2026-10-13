@@ -160,7 +160,28 @@
     "thinLines": "Linhas finas (exibir todas as linhas com largura de 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Tamanho real (100%)",
+    "calibrationNone": "Não calibrada para esta tela (escala {{scale}}%). Em 100%, um ponto PDF equivale a um pixel da tela.",
+    "calibrationActive": "Calibrada para esta tela (escala {{scale}}%): {{ppi}} pixels por polegada.",
+    "calibrate": "Calibrar...",
+    "removeCalibration": "Remover",
+    "calibrationHint": "Afeta apenas a exibição na tela. Impressão, exportação e medições não mudam."
+  },
+  "screenCalibration": {
+    "title": "Calibrar tela",
+    "instructions": "Encoste um cartão de crédito ou uma régua na tela e ajuste o tamanho até a barra ter exatamente o mesmo comprimento da referência.",
+    "reference": "Referência",
+    "referenceCard": "Largura de um cartão de crédito (85,6 mm)",
+    "referenceRuler50": "Régua, 50 mm",
+    "referenceRuler100": "Régua, 100 mm",
+    "size": "Tamanho",
+    "smaller": "Menor",
+    "larger": "Maior",
+    "pxPerInch": "px/polegada",
+    "measuredLength": "Comprimento medido",
+    "apply": "Aplicar",
+    "displayScale": "Escala da tela {{scale}}%. A calibração vale apenas para telas com essa escala."
   },
   "measurement": {
     "showEdgeLengths": "Mostrar comprimentos dos lados"

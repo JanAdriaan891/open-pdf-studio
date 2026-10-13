@@ -27,6 +27,7 @@ import { normaliseerRotatie, isKwartslag } from './weergave-rotatie.js';
 import { rotateTextDir } from '../annotations/corrections/geometry.js';
 import { isTextAnchored } from '../annotations/corrections/model.js';
 import { stopAlleWielScrollers } from './wiel-scroll.js';
+import { werkelijkeGrootteZoom, kalibratieVoor } from './schermkalibratie.js';
 // Hi-DPI support: render canvases at device pixel ratio for sharp text
 export function getCanvasDPR() { return window.devicePixelRatio || 1; }
 
@@ -2341,9 +2342,17 @@ export async function actualSize() {
   const doc = state.documents[state.activeDocumentIndex];
   if (!doc) return;
 
-  // Vector viewport mode: 100% = 1.0 zoom, anchored at canvas center.
-  // This makes 1 PDF point = 1 CSS pixel, the standard "Actual Size"
-  // interpretation.
+  // Werkelijke grootte (issue #520): zonder schermkalibratie zoom 1,0, dus
+  // 1 PDF-punt = 1 CSS-pixel (het gedrag van altijd). Is dit scherm
+  // gekalibreerd (Voorkeuren > Paginaweergave), dan pxPerInch / 72, zodat een
+  // A4 met een liniaal gemeten 210 mm breed is. Alleen de weergavezoom: de
+  // bitmap volgt zoals altijd zoom * devicePixelRatio, dus de schermschaal
+  // telt niet dubbel.
+  const zoom = werkelijkeGrootteZoom(
+    kalibratieVoor(state.preferences?.screenCalibration, window.devicePixelRatio || 1),
+  );
+
+  // Vector viewport mode: anchored at canvas center.
   const vp = window.__pdfViewport;
   // Same blank-doc guard as zoomIn() — see comment there.
   if (vp && vp.active && doc.filePath) {
@@ -2353,17 +2362,17 @@ export async function actualSize() {
     // Anchor in CSS pixels (same unit as zoomStepAtCenter) — the backing
     // store is dpr-scaled and would mis-centre on 125%/150% displays.
     const dpr = window.devicePixelRatio || 1;
-    m.setZoomAtPoint(pdfCanvas.width / dpr / 2, pdfCanvas.height / dpr / 2, 1.0);
+    m.setZoomAtPoint(pdfCanvas.width / dpr / 2, pdfCanvas.height / dpr / 2, zoom);
     return;
   }
 
   if (doc.viewMode === 'continuous' && doc.pdfDoc) {
     const _old = doc.scale;
-    doc.scale = 1;
+    doc.scale = zoom;
     await _continuousRezoom(_old);
     return;
   }
-  doc.scale = 1;
+  doc.scale = zoom;
   if (doc.pdfDoc) {
     await renderPage(doc.currentPage);
   }

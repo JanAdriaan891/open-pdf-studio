@@ -160,7 +160,28 @@
     "thinLines": "Linee sottili (visualizza tutte le linee con larghezza 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Dimensione reale (100%)",
+    "calibrationNone": "Non calibrato per questo schermo (scala {{scale}}%). Al 100% un punto PDF corrisponde a un pixel dello schermo.",
+    "calibrationActive": "Calibrato per questo schermo (scala {{scale}}%): {{ppi}} pixel per pollice.",
+    "calibrate": "Calibra...",
+    "removeCalibration": "Rimuovi",
+    "calibrationHint": "Riguarda solo la visualizzazione a schermo. Stampa, esportazione e misure non cambiano."
+  },
+  "screenCalibration": {
+    "title": "Calibra schermo",
+    "instructions": "Appoggia una carta di credito o un righello allo schermo e regola la dimensione finché la barra è lunga esattamente quanto il riferimento.",
+    "reference": "Riferimento",
+    "referenceCard": "Larghezza di una carta di credito (85,6 mm)",
+    "referenceRuler50": "Righello, 50 mm",
+    "referenceRuler100": "Righello, 100 mm",
+    "size": "Dimensione",
+    "smaller": "Più piccolo",
+    "larger": "Più grande",
+    "pxPerInch": "px/pollice",
+    "measuredLength": "Lunghezza misurata",
+    "apply": "Applica",
+    "displayScale": "Scala dello schermo {{scale}}%. La calibrazione vale solo per gli schermi con questa scala."
   },
   "measurement": {
     "showEdgeLengths": "Mostra le lunghezze dei lati"

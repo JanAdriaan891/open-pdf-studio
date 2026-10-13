@@ -160,7 +160,28 @@
     "thinLines": "خطوط نازک (نمایش تمام خطوط با عرض 1 پیکسل)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "اندازه واقعی (100%)",
+    "calibrationNone": "برای این نمایشگر کالیبره نشده است (مقیاس {{scale}}%). در 100% هر نقطه PDF برابر یک پیکسل صفحه است.",
+    "calibrationActive": "برای این نمایشگر کالیبره شده است (مقیاس {{scale}}%): {{ppi}} پیکسل در هر اینچ.",
+    "calibrate": "کالیبره کردن...",
+    "removeCalibration": "حذف",
+    "calibrationHint": "فقط بر نمایش روی صفحه اثر دارد. چاپ، خروجی گرفتن و اندازه‌گیری‌ها تغییر نمی‌کنند."
+  },
+  "screenCalibration": {
+    "title": "کالیبره کردن نمایشگر",
+    "instructions": "یک کارت بانکی یا خط‌کش را روی صفحه نگه دارید و اندازه را تنظیم کنید تا طول نوار دقیقاً برابر مرجع شود.",
+    "reference": "مرجع",
+    "referenceCard": "عرض کارت بانکی (85.6 میلی‌متر)",
+    "referenceRuler50": "خط‌کش، 50 میلی‌متر",
+    "referenceRuler100": "خط‌کش، 100 میلی‌متر",
+    "size": "اندازه",
+    "smaller": "کوچک‌تر",
+    "larger": "بزرگ‌تر",
+    "pxPerInch": "پیکسل/اینچ",
+    "measuredLength": "طول اندازه‌گیری‌شده",
+    "apply": "اعمال",
+    "displayScale": "مقیاس نمایشگر {{scale}}%. کالیبراسیون فقط برای نمایشگرهایی با این مقیاس اعمال می‌شود."
   },
   "measurement": {
     "showEdgeLengths": "نمایش طول اضلاع"

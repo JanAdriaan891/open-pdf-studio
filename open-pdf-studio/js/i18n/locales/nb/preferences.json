@@ -177,7 +177,28 @@
     "thinLines": "Tynne linjer (vis alle linjer med 1px bredde)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Faktisk størrelse (100 %)",
+    "calibrationNone": "Ikke kalibrert for denne skjermen (skalering {{scale}} %). Ved 100 % er ett PDF-punkt én skjermpiksel.",
+    "calibrationActive": "Kalibrert for denne skjermen (skalering {{scale}} %): {{ppi}} piksler per tomme.",
+    "calibrate": "Kalibrer...",
+    "removeCalibration": "Fjern",
+    "calibrationHint": "Påvirker bare visningen på skjermen. Utskrift, eksport og målinger endres ikke."
+  },
+  "screenCalibration": {
+    "title": "Kalibrer skjerm",
+    "instructions": "Hold et bankkort eller en linjal mot skjermen, og juster størrelsen til streken er nøyaktig like lang som referansen.",
+    "reference": "Referanse",
+    "referenceCard": "Bredden på et bankkort (85,6 mm)",
+    "referenceRuler50": "Linjal, 50 mm",
+    "referenceRuler100": "Linjal, 100 mm",
+    "size": "Størrelse",
+    "smaller": "Mindre",
+    "larger": "Større",
+    "pxPerInch": "px/tomme",
+    "measuredLength": "Målt lengde",
+    "apply": "Bruk",
+    "displayScale": "Skjermskalering {{scale}} %. Kalibreringen gjelder bare for skjermer med denne skaleringen."
   },
   "measurement": {
     "showEdgeLengths": "Vis sidelengder"

@@ -177,7 +177,28 @@
     "thinLines": "Tynde linjer (vis alle linjer med 1px bredde)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Faktisk størrelse (100 %)",
+    "calibrationNone": "Ikke kalibreret til denne skærm (skalering {{scale}} %). Ved 100 % er ét PDF-punkt én skærmpixel.",
+    "calibrationActive": "Kalibreret til denne skærm (skalering {{scale}} %): {{ppi}} pixels pr. tomme.",
+    "calibrate": "Kalibrer...",
+    "removeCalibration": "Fjern",
+    "calibrationHint": "Påvirker kun visningen på skærmen. Udskrivning, eksport og målinger ændres ikke."
+  },
+  "screenCalibration": {
+    "title": "Kalibrer skærm",
+    "instructions": "Hold et betalingskort eller en lineal op mod skærmen, og juster størrelsen, indtil bjælken er præcis lige så lang som referenceobjektet.",
+    "reference": "Referenceobjekt",
+    "referenceCard": "Bredde på betalingskort (85,6 mm)",
+    "referenceRuler50": "Lineal, 50 mm",
+    "referenceRuler100": "Lineal, 100 mm",
+    "size": "Størrelse",
+    "smaller": "Mindre",
+    "larger": "Større",
+    "pxPerInch": "px/tomme",
+    "measuredLength": "Målt længde",
+    "apply": "Anvend",
+    "displayScale": "Skærmskalering {{scale}} %. Kalibreringen gælder kun for skærme med denne skalering."
   },
   "measurement": {
     "showEdgeLengths": "Vis sidelængder"

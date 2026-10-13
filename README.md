@@ -299,7 +299,7 @@ Thumbnails, Bookmarks, Annotations, Attachments, Digital Signatures, Layers, For
 | `T` | Text box tool |
 | `N` | Sticky note tool |
 | `Ctrl+=` / `Ctrl+-` | Zoom in / Zoom out |
-| `Ctrl+0` | Actual size |
+| `Ctrl+0` | Actual size (physical paper size once the display is calibrated in Preferences > Page Display) |
 | `Ctrl+1` | Fit width |
 | `Ctrl+2` | Fit page |
 | `F9` | Toggle navigation panel |

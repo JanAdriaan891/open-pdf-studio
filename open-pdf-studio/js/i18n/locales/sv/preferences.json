@@ -177,7 +177,28 @@
     "thinLines": "Tunna linjer (visa alla linjer med 1px bredd)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Verklig storlek (100 %)",
+    "calibrationNone": "Inte kalibrerad för den här skärmen (skalning {{scale}} %). Vid 100 % är en PDF-punkt en skärmpixel.",
+    "calibrationActive": "Kalibrerad för den här skärmen (skalning {{scale}} %): {{ppi}} pixlar per tum.",
+    "calibrate": "Kalibrera...",
+    "removeCalibration": "Ta bort",
+    "calibrationHint": "Påverkar bara visningen på skärmen. Utskrift, export och mätningar ändras inte."
+  },
+  "screenCalibration": {
+    "title": "Kalibrera skärm",
+    "instructions": "Håll ett bankkort eller en linjal mot skärmen och justera storleken tills stapeln är exakt lika lång som referensen.",
+    "reference": "Referens",
+    "referenceCard": "Bredd på ett bankkort (85,6 mm)",
+    "referenceRuler50": "Linjal, 50 mm",
+    "referenceRuler100": "Linjal, 100 mm",
+    "size": "Storlek",
+    "smaller": "Mindre",
+    "larger": "Större",
+    "pxPerInch": "px/tum",
+    "measuredLength": "Uppmätt längd",
+    "apply": "Använd",
+    "displayScale": "Skärmskalning {{scale}} %. Kalibreringen gäller bara skärmar med den här skalningen."
   },
   "measurement": {
     "showEdgeLengths": "Visa sidlängder"

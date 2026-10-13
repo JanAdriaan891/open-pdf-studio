@@ -177,7 +177,28 @@
     "thinLines": "மெல்லிய கோடுகள் (அனைத்து கோடுகளையும் 1px அகலத்தில் காட்டு)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "உண்மை அளவு (100%)",
+    "calibrationNone": "இந்தத் திரைக்கு அளவுத்திருத்தம் செய்யப்படவில்லை (அளவுகோல் {{scale}}%). 100% இல் ஒரு PDF புள்ளி ஒரு திரை பிக்சலுக்குச் சமம்.",
+    "calibrationActive": "இந்தத் திரைக்கு அளவுத்திருத்தம் செய்யப்பட்டது (அளவுகோல் {{scale}}%): அங்குலத்திற்கு {{ppi}} பிக்சல்கள்.",
+    "calibrate": "அளவுத்திருத்தம்...",
+    "removeCalibration": "அகற்று",
+    "calibrationHint": "திரையில் காண்பதை மட்டுமே பாதிக்கும். அச்சிடுதல், ஏற்றுமதி மற்றும் அளவீடுகள் மாறாது."
+  },
+  "screenCalibration": {
+    "title": "திரையை அளவுத்திருத்தம் செய்",
+    "instructions": "ஒரு கடன் அட்டை அல்லது அளவுகோலைத் திரையில் வைத்து, பட்டை குறிப்பின் அதே நீளமாகும் வரை அளவைச் சரிசெய்யவும்.",
+    "reference": "குறிப்பு",
+    "referenceCard": "கடன் அட்டையின் அகலம் (85.6 மிமீ)",
+    "referenceRuler50": "அளவுகோல், 50 மிமீ",
+    "referenceRuler100": "அளவுகோல், 100 மிமீ",
+    "size": "அளவு",
+    "smaller": "சிறியது",
+    "larger": "பெரியது",
+    "pxPerInch": "பிக்சல்/அங்குலம்",
+    "measuredLength": "அளந்த நீளம்",
+    "apply": "பயன்படுத்து",
+    "displayScale": "திரை அளவுகோல் {{scale}}%. இந்த அளவுத்திருத்தம் இந்த அளவுகோல் உள்ள திரைகளுக்கு மட்டுமே பொருந்தும்."
   },
   "measurement": {
     "showEdgeLengths": "பக்க நீளங்களைக் காட்டு"
