@@ -33,6 +33,7 @@ import { weergaveLijndikte, symboolOpdrachtLijndikte } from './rendering/lijndik
 import { drawImageCropOverlay, activeCropAnnotation } from './image-crop-overlay.js';
 import { fracties as cropFracties, volledigVak as cropVolledigVak } from './crop-geometrie.js';
 import { drawEmbeddedImageOverlay } from '../tools/tools/remove-image-tool.js';
+import { drawScanTextOverlay } from '../tools/tools/scan-text-tool.js';
 import { updateQuickAccessButtons, updateContextualTabs, drawGrid, snapToGrid } from './rendering/ui-state.js';
 import { drawCommentIcon } from './rendering/comment-icons.js';
 import { drawCaret, strikeLine, replaceStrikeColor } from './rendering/caret.js';
@@ -3005,6 +3006,7 @@ export function redrawAnnotations(lightweight = false) {
 
   // Embedded image-removal tool highlights (issue #184).
   drawEmbeddedImageOverlay(annotationCtx, curPage);
+  drawScanTextOverlay(annotationCtx, curPage);
 
   // Blender-style 2D cursor (Shift+right-click places it; hidden until set).
   if (_renderDoc?.cursor2D && _renderDoc.cursor2D.page === curPage) {
@@ -3191,6 +3193,7 @@ function tekenPaginaLagen(ctx, pageNum, width, height, overrideDpr, renderOffset
 
     // Embedded image-removal tool highlights (issue #184).
     drawEmbeddedImageOverlay(ctx, pageNum);
+    drawScanTextOverlay(ctx, pageNum);
   }
 
   // Restore context
