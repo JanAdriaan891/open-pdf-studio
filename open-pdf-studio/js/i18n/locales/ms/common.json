@@ -130,5 +130,6 @@
     "copied": "Keratan disalin — tampalkannya ke lukisan lain",
     "failed": "Pemotongan gagal",
     "clipboardEmpty": "Tiada keratan dalam papan keratan"
-  }
+  },
+  "snippetOutputFailed": "Keratan vektor tidak dapat dipaparkan, jadi eksport atau cetakan dihentikan. Cuba lagi."
 }

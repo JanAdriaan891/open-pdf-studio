@@ -130,5 +130,6 @@
     "copied": "Isječak kopiran — zalijepite ga u drugi crtež",
     "failed": "Izrezivanje nije uspjelo",
     "clipboardEmpty": "U međuspremniku nema isječka"
-  }
+  },
+  "snippetOutputFailed": "Vektorski isječak nije se mogao iscrtati pa je izvoz ili ispis zaustavljen. Pokušajte ponovno."
 }

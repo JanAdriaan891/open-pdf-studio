@@ -130,5 +130,6 @@
     "copied": "Výřez zkopírován — vložte jej do jiného výkresu",
     "failed": "Vyříznutí se nezdařilo",
     "clipboardEmpty": "Ve schránce není žádný výřez"
-  }
+  },
+  "snippetOutputFailed": "Vektorový výřez se nepodařilo vykreslit, proto byl export nebo tisk zastaven. Zkuste to znovu."
 }

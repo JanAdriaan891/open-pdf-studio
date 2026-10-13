@@ -130,5 +130,6 @@
     "copied": "Kesit kopyalandı — başka bir çizime yapıştırın",
     "failed": "Kesme başarısız oldu",
     "clipboardEmpty": "Panoda kesit yok"
-  }
+  },
+  "snippetOutputFailed": "Bir vektör kesit işlenemedi, bu yüzden dışa aktarma veya yazdırma durduruldu. Yeniden deneyin."
 }

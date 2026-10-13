@@ -130,5 +130,6 @@
     "copied": "Retall copiat — enganxa'l en un altre dibuix",
     "failed": "No s'ha pogut retallar",
     "clipboardEmpty": "No hi ha cap retall al porta-retalls"
-  }
+  },
+  "snippetOutputFailed": "No s'ha pogut representar un retall vectorial, així que s'ha aturat l'exportació o la impressió. Torneu-ho a provar."
 }

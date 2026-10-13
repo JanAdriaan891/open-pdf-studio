@@ -130,5 +130,6 @@
     "copied": "Recorte copiado — pégalo en otro dibujo",
     "failed": "No se pudo recortar",
     "clipboardEmpty": "No hay ningún recorte en el portapapeles"
-  }
+  },
+  "snippetOutputFailed": "No se pudo representar un recorte vectorial, por lo que se detuvo la exportación o la impresión. Inténtelo de nuevo."
 }

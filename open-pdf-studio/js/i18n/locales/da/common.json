@@ -130,5 +130,6 @@
     "copied": "Udsnit kopieret — indsæt det i en anden tegning",
     "failed": "Udklip mislykkedes",
     "clipboardEmpty": "Intet udsnit på udklipsholderen"
-  }
+  },
+  "snippetOutputFailed": "Et vektorudsnit kunne ikke gengives, så eksporten eller udskriften blev stoppet. Prøv igen."
 }

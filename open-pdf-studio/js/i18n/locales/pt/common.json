@@ -130,5 +130,6 @@
     "copied": "Recorte copiado — cole-o em outro desenho",
     "failed": "Falha ao recortar",
     "clipboardEmpty": "Nenhum recorte na área de transferência"
-  }
+  },
+  "snippetOutputFailed": "Não foi possível renderizar um recorte vetorial, por isso a exportação ou impressão foi interrompida. Tente novamente."
 }

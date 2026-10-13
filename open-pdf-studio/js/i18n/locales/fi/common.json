@@ -130,5 +130,6 @@
     "copied": "Leike kopioitu — liitä se toiseen piirustukseen",
     "failed": "Leikkaus epäonnistui",
     "clipboardEmpty": "Leikepöydällä ei ole leikettä"
-  }
+  },
+  "snippetOutputFailed": "Vektorileikettä ei voitu piirtää, joten vienti tai tulostus keskeytettiin. Yritä uudelleen."
 }

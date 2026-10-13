@@ -130,5 +130,6 @@
     "copied": "Potongan disalin — tempelkan ke gambar lain",
     "failed": "Pemotongan gagal",
     "clipboardEmpty": "Tidak ada potongan di papan klip"
-  }
+  },
+  "snippetOutputFailed": "Potongan vektor tidak dapat dirender, jadi ekspor atau cetak dihentikan. Coba lagi."
 }

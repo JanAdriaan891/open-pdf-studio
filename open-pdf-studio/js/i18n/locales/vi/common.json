@@ -130,5 +130,6 @@
     "copied": "Đã sao chép đoạn cắt — dán vào bản vẽ khác",
     "failed": "Cắt không thành công",
     "clipboardEmpty": "Không có đoạn cắt nào trong bảng tạm"
-  }
+  },
+  "snippetOutputFailed": "Không thể kết xuất một đoạn cắt vector, nên quá trình xuất hoặc in đã bị dừng. Hãy thử lại."
 }

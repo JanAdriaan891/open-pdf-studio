@@ -130,5 +130,6 @@
     "copied": "Ausschnitt kopiert — in eine andere Zeichnung einfügen",
     "failed": "Ausschneiden fehlgeschlagen",
     "clipboardEmpty": "Kein Ausschnitt in der Zwischenablage"
-  }
+  },
+  "snippetOutputFailed": "Ein Vektorausschnitt konnte nicht gerendert werden, daher wurde der Export oder Druck abgebrochen. Versuchen Sie es erneut."
 }

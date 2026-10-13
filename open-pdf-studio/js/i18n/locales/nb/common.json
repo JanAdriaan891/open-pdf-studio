@@ -130,5 +130,6 @@
     "copied": "Utsnitt kopiert — lim det inn i en annen tegning",
     "failed": "Utklipp mislyktes",
     "clipboardEmpty": "Ingen utsnitt på utklippstavlen"
-  }
+  },
+  "snippetOutputFailed": "Et vektorutsnitt kunne ikke gjengis, så eksporten eller utskriften ble stoppet. Prøv igjen."
 }
