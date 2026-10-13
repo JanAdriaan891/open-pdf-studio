@@ -5,6 +5,7 @@ import { calculateArea, formatMeasurement, formatDimensionText, arcControlPoint,
 import { applyToolTransform } from '../tool-context.js';
 import { randkleurenUitVoorkeur } from '../../annotations/fill-utils.js';
 import { zetRechtopRond } from '../../pdf/weergave-ruimte.js';
+import { documentHeeftSchaal } from '../../annotations/schaal-op-punt.js';
 import {
   enterTypeLengthMode,
   exitTypeLengthMode,
@@ -120,12 +121,12 @@ export const measureDistanceTool = {
       const prefs = state.preferences;
       const currentPage = getActiveDocument()?.currentPage || 1;
       const dist = ctx.calculateDistance(startX, startY, endX, endY, currentPage);
-      // Scale inheritance: when the document has ANY scale source — a scale
-      // region (schaalgebied), scale bar or viewport — the dimension inherits
-      // its scale from that source (calculateDistance resolves the innermost
-      // scale region at the measured point). The manual preference scale only
-      // applies when no source exists at all.
-      const hasScaleSource = getActiveDocument()?.annotations?.some(a => a.type === 'scaleRegion' || a.type === 'scaleBar' || a.type === 'viewport');
+      // Schaal erven: heeft het document een schaalbron (schaalgebied,
+      // schaalbalk, viewport, een viewport uit de PDF zelf of de
+      // documentschaal uit de kalibratie, #554), dan neemt de maat haar schaal
+      // daaruit (calculateDistance zoekt de bron op het gemeten punt). De
+      // handmatige voorkeursschaal geldt alleen zonder enige bron.
+      const hasScaleSource = documentHeeftSchaal(getActiveDocument());
       const dimScale = hasScaleSource ? 0 : (prefs.measureDistDimScale || 0);
       const dimUnit = hasScaleSource ? dist.unit : (prefs.measureDistDimUnit || dist.unit);
       // mm shows whole numbers (no decimals); other units use the user pref.
@@ -236,9 +237,10 @@ export const measureDistanceTool = {
     const hSize = prefs.measureDistHeadSize || 12;
     const fSize = prefs.measureDistFontSize || undefined;
     const dimExt = prefs.measureDistDimExtension !== false; // default ON
-    // Same scale-inheritance rule as the commit path: any scale source
-    // (scale region / bar / viewport) wins over the manual preference scale.
-    const hasScaleSourcePreview = getActiveDocument()?.annotations?.some(a => a.type === 'scaleRegion' || a.type === 'scaleBar' || a.type === 'viewport');
+    // Zelfde regel als bij het vastleggen: elke schaalbron van het document,
+    // ook de kalibratie en de viewports uit de PDF (#554), gaat voor de
+    // handmatige voorkeursschaal.
+    const hasScaleSourcePreview = documentHeeftSchaal(getActiveDocument());
     const dimScale = hasScaleSourcePreview ? 0 : (prefs.measureDistDimScale || 0);
     const dimUnit = prefs.measureDistDimUnit || '';
     // mm shows whole numbers (no decimals); other units use the user pref.

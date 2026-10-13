@@ -250,3 +250,4 @@ js/pdf/scrollbalk-geometrie.test.mjs
 js/tools/greep-strek.test.mjs
 js/pdf/haakjes-rondgang.test.mjs
 js/annotations/kalibratie-schaal.test.mjs
+js/tools/tools/meting-documentschaal.test.mjs
