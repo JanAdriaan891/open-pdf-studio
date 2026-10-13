@@ -30,7 +30,7 @@ import {
   SYSTEEMRASTER_DEFAULTS, SYSTEEMRASTER_PLAAT_RANGE, SYSTEEMRASTER_RANDCONDITIES,
   resolveSysteem, paneelKey, setEdgeProfiel, setPaneelType, setPaneelComponent,
   setRandProfiel, updateSparing, addSparing, systeemSparingen, sparingRegime,
-  buildSysteemraster,
+  sparingRegelsVoorType, buildSysteemraster,
 } from '../../annotations/systeemraster.js';
 import { systeemrasterBuildOpts } from '../../annotations/systeemraster-scale.js';
 import { createDefaultPaneelTypen } from '../../annotations/systeem-typen.js';
@@ -288,6 +288,65 @@ function computeSectionVisibility(type) {
   });
 }
 
+// Paneelvelden van een systeem die van zijn TYPE (of de typebibliotheek)
+// afhangen. Bij een gekoppeld type gelden de TYPE-celmaten (strook: de
+// strookbreedte); een onbevestigde maat van het type is null en toont leeg
+// (#567: geen standaardmaat). Zonder type de instance-maat.
+function _systeemTypeVelden(annotation) {
+  const isSysteem = annotation.type === 'systeemraster';
+  const st = isSysteem ? getSysteemTypeById(annotation.systeemTypeId) : null;
+  const plaat = st
+    ? {
+      plaatBreedteMm: (st.layout === 'strook' ? st.strookBreedteMm : st.celXMm) ?? null,
+      plaatHoogteMm: st.celYMm ?? null,
+    }
+    : {
+      plaatBreedteMm: annotation.plaatBreedteMm ?? SYSTEEMRASTER_DEFAULTS.plaatBreedteMm,
+      plaatHoogteMm: annotation.plaatHoogteMm ?? SYSTEEMRASTER_DEFAULTS.plaatHoogteMm,
+    };
+  return {
+    ...plaat,
+    // Systeem: TYPE-verwijzing (systeemTypeId) + de type-bibliotheek voor de
+    // dropdown. Bij een gekoppeld type tonen de celmaat-/randprofiel-velden
+    // de TYPE-waarden (bewerken schrijft op het type → alle instanties
+    // veranderen mee).
+    sgTypeId: isSysteem ? (annotation.systeemTypeId || null) : null,
+    sgTypeList: isSysteem ? getSysteemTypenData().typen.map(t => ({ id: t.id, naam: t.naam })) : [],
+    // Layout-vorm van het type ('raster'|'strook') — stuurt de labels en
+    // sub-secties (strook/paneel) in de Systeem-sectie.
+    sgLayout: isSysteem ? (st?.layout || 'raster') : 'raster',
+    sgEdgeProfiel: isSysteem
+      ? (st?.edgeProfiel || resolveSysteem(annotation).layers[0].edge.profiel) : 'geen',
+    // Paneel-assortiment van het systeemtype (dropdown in de sub-sectie).
+    sgPaneelTypen: isSysteem
+      ? (st?.paneelTypen || createDefaultPaneelTypen()).map(p => ({ id: p.id, naam: p.naam }))
+      : [],
+    // IFC-pad van het component (onderdelen erven dit pad).
+    sgIfcPad: isSysteem
+      ? `${annotation.ifcCategory || 'IfcCovering'}${annotation.ifcPredefinedType
+        ? ` (${annotation.ifcPredefinedType})` : ''}`
+      : '',
+  };
+}
+
+/**
+ * Na een bevestigde wijziging van de typebibliotheek (#567): ververs alleen de
+ * type-afgeleide velden van het systeem dat het paneel nu toont. Geen nieuwe
+ * selectie, geen selectiemelding naar plugins en geen wissel van paneelmodus;
+ * bij een meervoudige selectie of een ander annotatietype gebeurt er niets.
+ * @returns {boolean} of er ververst is.
+ */
+export function storeVerversSysteemType() {
+  const ann = currentAnnotation;
+  if (!ann || ann.type !== 'systeemraster' || annotProps.multiCount > 0) return false;
+  setAnnotProps({
+    ..._systeemTypeVelden(ann),
+    // Omzetten in de editor wijzigt ook de IFC-kopie op de instance.
+    ifcCategory: ann.ifcCategory || '',
+  });
+  return true;
+}
+
 // Show properties for a single annotation
 export function storeShowProperties(annotation) {
   // De doorhaling van een vervanging (#508) wordt getekend en opgeslagen in de
@@ -444,11 +503,11 @@ export function storeShowProperties(annotation) {
     toonHartlijn: annotation.toonHartlijn === true,
     tagTonen: annotation.tagTonen === true,
     tagTekst: annotation.tagTekst || '',
-    // Systeemraster — bij een gekoppeld systeemtype gelden de TYPE-celmaten.
-    plaatBreedteMm: getSysteemTypeById(annotation.systeemTypeId)?.celXMm
-      ?? annotation.plaatBreedteMm ?? SYSTEEMRASTER_DEFAULTS.plaatBreedteMm,
-    plaatHoogteMm: getSysteemTypeById(annotation.systeemTypeId)?.celYMm
-      ?? annotation.plaatHoogteMm ?? SYSTEEMRASTER_DEFAULTS.plaatHoogteMm,
+    // Systeemraster — plaatmaat (bij een type de TYPE-celmaten), type-
+    // verwijzing en -lijst, layout, randprofiel, assortiment en IFC-pad:
+    // dezelfde velden die storeVerversSysteemType na een typewijziging
+    // ververst.
+    ..._systeemTypeVelden(annotation),
     equalizeX: annotation.equalizeX === true,
     equalizeY: annotation.equalizeY === true,
     randConditie: annotation.randConditie || SYSTEEMRASTER_DEFAULTS.randConditie,
@@ -469,19 +528,8 @@ export function storeShowProperties(annotation) {
     // schrijft op het type → alle instanties veranderen mee).
     sgSysType: annotation.type === 'systeemraster'
       ? resolveSysteem(annotation).type : null,
-    sgTypeId: annotation.type === 'systeemraster'
-      ? (annotation.systeemTypeId || null) : null,
-    sgTypeList: annotation.type === 'systeemraster'
-      ? getSysteemTypenData().typen.map(t => ({ id: t.id, naam: t.naam })) : [],
     sgRasterHoek: annotation.type === 'systeemraster'
       ? (Number(annotation.rasterHoek) || 0) : 0,
-    // Layout-vorm van het type ('raster'|'strook') — stuurt de labels en
-    // sub-secties (strook/paneel) in de Systeem-sectie.
-    sgLayout: annotation.type === 'systeemraster'
-      ? (getSysteemTypeById(annotation.systeemTypeId)?.layout || 'raster') : 'raster',
-    sgEdgeProfiel: annotation.type === 'systeemraster'
-      ? (getSysteemTypeById(annotation.systeemTypeId)?.edgeProfiel
-        || resolveSysteem(annotation).layers[0].edge.profiel) : 'geen',
     // Geselecteerd SUB-ELEMENT (tweede klik): paneel, randsegment of
     // rasterlijn — met de weergavedata voor de "Onderdeel"-sub-sectie.
     sgSelectedSub: annotation.type === 'systeemraster' && annotation.selectedSub
@@ -501,20 +549,10 @@ export function storeShowProperties(annotation) {
         .panels[paneelKey(annotation.selectedSub.ix, annotation.selectedSub.iy)];
       return ov && typeof ov === 'object' ? { ...ov } : null;
     })(),
-    // Paneel-assortiment van het systeemtype (dropdown in de sub-sectie).
-    sgPaneelTypen: annotation.type === 'systeemraster'
-      ? (getSysteemTypeById(annotation.systeemTypeId)?.paneelTypen
-        || createDefaultPaneelTypen()).map(p => ({ id: p.id, naam: p.naam }))
-      : [],
     // Rand-override (raw) van het geselecteerde randsegment ('' = erft).
     sgRandOverride: annotation.type === 'systeemraster' && annotation.selectedSub
       && annotation.selectedSub.kind === 'rand'
       ? (resolveSysteem(annotation).layers[0].edges[String(annotation.selectedSub.seg)] || '')
-      : '',
-    // IFC-pad van het component (onderdelen erven dit pad).
-    sgIfcPad: annotation.type === 'systeemraster'
-      ? `${annotation.ifcCategory || 'IfcCovering'}${annotation.ifcPredefinedType
-        ? ` (${annotation.ifcPredefinedType})` : ''}`
       : '',
     replies: annotation.replies || [],
     multiCount: 0,
@@ -1035,7 +1073,7 @@ function _syncSparingSub(ann) {
   ann.selectedSub = {
     kind: 'sparing', id: sp.id,
     xMm: sp.xMm, yMm: sp.yMm, bMm: sp.bMm, hMm: sp.hMm,
-    regime: sparingRegime(sp.bMm, sp.hMm, st?.sparingRegels, st?.layout || 'raster'),
+    regime: sparingRegime(sp.bMm, sp.hMm, sparingRegelsVoorType(st), st?.layout || 'raster'),
   };
 }
 

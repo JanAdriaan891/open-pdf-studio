@@ -2334,5 +2334,437 @@
       "type": "object"
     },
     "name": "app_facade_element"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "List system types"
+    },
+    "description": "List the reusable system types (suspended ceilings, floor slabs, panel systems) of the app library, or one type by id. Each entry has its stable id, owner, revision, whether the user edited it, the validated definition, unconfirmed dimensions and stored values that fail validation. Compare libraryRevision between calls to detect changes. Reads only.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable id of one system type.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": "app_list_system_types"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Register system type"
+    },
+    "description": "Register a system type owned by MCP under the id mcp:<key>. Repeating the call with the same definition changes nothing (status unchanged), and a definition the user edited in the app is kept (status kept-user-edit) and never overwritten. A different definition replaces an existing mcp:<key> type that the user has not edited (status updated) and redraws every system that uses it. Unknown fields, out-of-range values and layered definitions are rejected. Missing dimensions stay unconfirmed.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "definition": {
+          "additionalProperties": false,
+          "properties": {
+            "categorie": {
+              "enum": [
+                "plafond",
+                "vloer",
+                "wand",
+                "overig"
+              ],
+              "type": "string"
+            },
+            "celXMm": {
+              "description": "Cell width in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "celYMm": {
+              "description": "Cell height in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "edgeProfiel": {
+              "enum": [
+                "geen",
+                "hoeklijn",
+                "schaduwvoeg"
+              ],
+              "type": "string"
+            },
+            "ifcCategory": {
+              "enum": [
+                "IfcCovering",
+                "IfcWall",
+                "IfcSlab",
+                "IfcPlate"
+              ],
+              "type": "string"
+            },
+            "ifcPredefinedType": {
+              "enum": [
+                "CEILING",
+                "FLOORING",
+                "FLOOR",
+                "CLADDING",
+                "ROOFING",
+                null
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lagen": {
+              "description": "Reserved. Schema 1 has one implicit layer; only an empty array is accepted.",
+              "maxItems": 0,
+              "type": "array"
+            },
+            "layout": {
+              "description": "raster: cells in two directions (needs celXMm and celYMm). strook: strips in one direction (needs strookBreedteMm and celYMm).",
+              "enum": [
+                "raster",
+                "strook"
+              ],
+              "type": "string"
+            },
+            "naam": {
+              "description": "Display name (1-200 characters). Not an identity: references use the id.",
+              "type": "string"
+            },
+            "paneelTypen": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "naam": {
+                    "type": "string"
+                  },
+                  "renderStijl": {
+                    "enum": [
+                      "tegel",
+                      "ventilatie",
+                      "licht"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "naam",
+                  "renderStijl"
+                ],
+                "type": "object"
+              },
+              "maxItems": 50,
+              "minItems": 1,
+              "type": "array"
+            },
+            "sparingRegels": {
+              "additionalProperties": false,
+              "properties": {
+                "kleineSparingMaxMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                },
+                "raveelVanafMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "strookBreedteMm": {
+              "description": "Strip width in mm for the strook layout. Left out or null: unconfirmed.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "naam",
+            "categorie",
+            "layout"
+          ],
+          "type": "object"
+        },
+        "key": {
+          "description": "Stable key: lowercase letters, digits, dot, underscore or hyphen (1-64).",
+          "type": "string"
+        },
+        "restore": {
+          "description": "Recreate a type the user removed. Only on an explicit user request.",
+          "type": "boolean"
+        },
+        "schema": {
+          "enum": [
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "key",
+        "definition"
+      ],
+      "type": "object"
+    },
+    "name": "app_register_system_type"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Update system type"
+    },
+    "description": "Update a system type owned by MCP (id mcp:<key>). Pass the revision you last read as expectedRevision; a stale revision is rejected with the current revision. Types of the app or of extensions cannot be changed here. Nested values (sparingRegels, paneelTypen) are replaced as a whole; null clears an optional field.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "changes": {
+          "additionalProperties": false,
+          "properties": {
+            "categorie": {
+              "enum": [
+                "plafond",
+                "vloer",
+                "wand",
+                "overig"
+              ],
+              "type": "string"
+            },
+            "celXMm": {
+              "description": "Cell width in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "celYMm": {
+              "description": "Cell height in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "edgeProfiel": {
+              "enum": [
+                "geen",
+                "hoeklijn",
+                "schaduwvoeg"
+              ],
+              "type": "string"
+            },
+            "ifcCategory": {
+              "enum": [
+                "IfcCovering",
+                "IfcWall",
+                "IfcSlab",
+                "IfcPlate"
+              ],
+              "type": "string"
+            },
+            "ifcPredefinedType": {
+              "enum": [
+                "CEILING",
+                "FLOORING",
+                "FLOOR",
+                "CLADDING",
+                "ROOFING",
+                null
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lagen": {
+              "description": "Reserved. Schema 1 has one implicit layer; only an empty array is accepted.",
+              "maxItems": 0,
+              "type": "array"
+            },
+            "layout": {
+              "description": "raster: cells in two directions (needs celXMm and celYMm). strook: strips in one direction (needs strookBreedteMm and celYMm).",
+              "enum": [
+                "raster",
+                "strook"
+              ],
+              "type": "string"
+            },
+            "naam": {
+              "description": "Display name (1-200 characters). Not an identity: references use the id.",
+              "type": "string"
+            },
+            "paneelTypen": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "naam": {
+                    "type": "string"
+                  },
+                  "renderStijl": {
+                    "enum": [
+                      "tegel",
+                      "ventilatie",
+                      "licht"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "naam",
+                  "renderStijl"
+                ],
+                "type": "object"
+              },
+              "maxItems": 50,
+              "minItems": 1,
+              "type": "array"
+            },
+            "sparingRegels": {
+              "additionalProperties": false,
+              "properties": {
+                "kleineSparingMaxMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                },
+                "raveelVanafMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "strookBreedteMm": {
+              "description": "Strip width in mm for the strook layout. Left out or null: unconfirmed.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "expectedRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "schema": {
+          "enum": [
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "expectedRevision",
+        "changes"
+      ],
+      "type": "object"
+    },
+    "name": "app_update_system_type"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "Open system type editor"
+    },
+    "description": "Open the app's system type editor with the given type selected, or select it in the editor that is already open without discarding unapplied edits. Returns immediately; the user applies or cancels in the app. Does not change any data.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable id of the system type to select.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "name": "app_open_system_type_editor"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "Get system geometry"
+    },
+    "description": "Get the geometry of one system (suspended ceiling, floor slab, panel field) in the active document, computed by the app's own geometry engine: panels with clipped outlines, grid lines, openings, trimmers, edge segments and component positions, in millimetres in the system's own frame (independent of zoom and view rotation; placement maps it onto the page). Includes the document and type revisions and whether every physical dimension is confirmed. Pass expectedDocumentRevision and expectedTypeRevision to reject a stale snapshot. Reads only.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "annotationId": {
+          "description": "Id of the system annotation (type systeemraster) in the active document.",
+          "type": "string"
+        },
+        "expectedDocumentRevision": {
+          "description": "document.revision of an earlier snapshot; a different current revision is rejected.",
+          "type": "string"
+        },
+        "expectedTypeRevision": {
+          "description": "type.revision of an earlier snapshot; a different current revision is rejected.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "schema": {
+          "enum": [
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "annotationId"
+      ],
+      "type": "object"
+    },
+    "name": "app_get_system_geometry"
   }
 ]
