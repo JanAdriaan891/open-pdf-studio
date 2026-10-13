@@ -59,15 +59,26 @@ const tweePunt = await import('../symbols/two-point.js');
 // symbolId krijgen geen sjabloon en houden hun vakgrepen.
 const getTemplate = (id) => (id === 'balk' ? { placement: 'two-point' } : undefined);
 
+// Tekstbreedte zoals de canvas hem meet: hier vast 0,55 x de lettergrootte per
+// teken, uit het font dat handles.js op de context zet.
+const annotationCtx = {
+  font: '16px Arial',
+  measureText(tekst) {
+    const px = Number(/^(\d+(?:\.\d+)?)px/.exec(this.font)?.[1] || 16);
+    return { width: String(tekst ?? '').length * 0.55 * px };
+  },
+};
+
 const grepen = await laadMetStubs('../annotations/handles.js', {
   ...minimummaat, ...greepKeuze, HANDLE_SIZE, HANDLE_TYPES, state,
-  getTemplate, twoPointEndpoints: tweePunt.twoPointEndpoints,
+  getTemplate, twoPointEndpoints: tweePunt.twoPointEndpoints, annotationCtx,
 });
 const { applyResize } = await laadMetStubs('../annotations/transforms.js', {
   ...minimummaat, ...polygonTransform, ...tweePunt, HANDLE_TYPES, state, getTemplate,
 });
 const { greepOorsprong, strekBasispunt, strekLengteTekst } = await laadMetStubs('./greep-strek.js', {
   greepOpScherm: grepen.greepOpScherm,
+  greepPunt: grepen.greepPunt,
   twoPointEndpoints: tweePunt.twoPointEndpoints,
 });
 
@@ -237,6 +248,98 @@ test('sjabloon-eigen greep: het punt van het sjabloon, ongedraaid; zonder punt d
   const ps = { type: 'parametricSymbol', x: 0, y: 0, width: 10, height: 10, rotation: 30 };
   assert.deepEqual(greepOorsprong(ps, 'gevelelement_stijl', () => ({ x: 3, y: 4 })), { x: 3, y: 4 });
   assert.deepEqual(greepOorsprong(ps, 'gevelelement_stijl', () => null), { x: 5, y: 5 });
+});
+
+// ── Vormen zonder x/width/height (#562) ────────────────────────────────────
+// Hun grepen komen uit andere velden: een plugin-vorm voert {x, y, w, h}, een
+// tekst staat op zijn basislijn met de gemeten tekstbreedte, een
+// vrijehandlijn heeft de omhullende van zijn pad. De terugval op
+// orig.x/orig.width gaf NaN of een punt naast de greep.
+
+const PLUGIN_VAK = { type: 'plugin.rect-area', x: 40.5, y: 70.25, w: 60, h: 35, page: 1 };
+const TEKST = { type: 'text', x: 100, y: 200, text: 'Gevel', fontSize: 20, page: 1 };
+const VRIJE_HAND = {
+  type: 'draw', page: 1,
+  path: [{ x: 10, y: 50 }, { x: 35.5, y: 20 }, { x: 80, y: 44 }, { x: 62, y: 90.75 }],
+};
+const HOEKGREPEN = ['tl', 'tr', 'bl', 'br'];
+
+test('plugin-vorm {x, y, w, h}, tekst en vrijehandlijn: elke greep geeft een eindige oorsprong op de getekende greep', () => {
+  for (const [ann, namen] of [[PLUGIN_VAK, MAATGREPEN], [TEKST, HOEKGREPEN], [VRIJE_HAND, HOEKGREPEN]]) {
+    const getekend = grepen.getAnnotationHandles(ann, SCHAAL).map((g) => g.type);
+    assert.deepEqual([...getekend].sort(), [...namen].sort(), `${ann.type}: getekende grepen`);
+    for (const greep of namen) {
+      const verwacht = greepMidden(ann, greep);
+      const o = greepOorsprong(ann, greep);
+      const b = strekBasispunt(ann, greep);
+      for (const [wat, p] of [['snap', o], ['meetlijn', b]]) {
+        assert.ok(p && Number.isFinite(p.x) && Number.isFinite(p.y), `${ann.type} ${greep} ${wat}: ${JSON.stringify(p)}`);
+        assert.ok(dichtbij(p.x, verwacht.x) && dichtbij(p.y, verwacht.y),
+          `${ann.type} ${greep} ${wat}: ${JSON.stringify(p)}, greep op ${JSON.stringify(verwacht)}`);
+      }
+    }
+  }
+  // De tekstgrepen: basislijn onder, een regel hoog, de gemeten breedte breed.
+  const breedte = 'Gevel'.length * 0.55 * 20;
+  assert.deepEqual(greepOorsprong(TEKST, 'tl'), { x: 100, y: 180 });
+  assert.deepEqual(greepOorsprong(TEKST, 'br'), { x: 100 + breedte, y: 200 });
+  // De vrijehandlijn: de omhullende van het pad.
+  assert.deepEqual(greepOorsprong(VRIJE_HAND, 'tl'), { x: 10, y: 20 });
+  assert.deepEqual(strekBasispunt(VRIJE_HAND, 'br'), { x: 80, y: 90.75 });
+});
+
+test('plugin-vorm en vrijehandlijn: een gesnapte greep komt op het snappunt, zonder sprong of inklappen', () => {
+  for (const [ann, namen, velden] of [
+    [PLUGIN_VAK, MAATGREPEN, ['x', 'y', 'w', 'h']],
+    [VRIJE_HAND, HOEKGREPEN, ['path']],
+  ]) {
+    for (const greep of namen) {
+      const opScherm = greepMidden(ann, greep);
+      const snap = { x: opScherm.x + 4.25, y: opScherm.y - 3.5 };
+      const o = greepOorsprong(ann, greep);
+      const metSnap = geschaald(ann, greep, snap.x - o.x, snap.y - o.y);
+      const metCursor = geschaald(ann, greep, snap.x - opScherm.x, snap.y - opScherm.y);
+      for (const k of velden) {
+        assert.deepEqual(metSnap[k], metCursor[k], `${ann.type} ${greep} ${k}`);
+      }
+      // De greep staat op het snappunt, op de as(sen) die hij stuurt: een
+      // randgreep schuift alleen loodrecht op zijn rand.
+      const na = greepMidden(metSnap, greep);
+      assert.ok(Number.isFinite(na.x) && Number.isFinite(na.y), `${ann.type} ${greep}: geen NaN`);
+      const stuurtX = greep !== 't' && greep !== 'b';
+      const stuurtY = greep !== 'l' && greep !== 'r';
+      assert.ok((!stuurtX || dichtbij(na.x, snap.x)) && (!stuurtY || dichtbij(na.y, snap.y)),
+        `${ann.type} ${greep}: greep op (${na.x}, ${na.y}), snappunt (${snap.x}, ${snap.y})`);
+    }
+  }
+});
+
+test('stavenreeks: snap en meetlijn vanaf het wapeningspunt waar de greep staat', async () => {
+  // De eindgrepen van een stavenreeks staan op de staven, niet op de
+  // uiteinden van de aanhaallijn (handleAnchors); de sleep (applyResize)
+  // rekent ook vanaf die staven.
+  const reeks = { type: 'stavenreeks', startX: 0, startY: 0, endX: 100, endY: 0 };
+  const ankers = { start: { x: 5, y: 12 }, end: { x: 95, y: 12 }, mid: { x: 50, y: 12 } };
+  const grepenMetAnkers = await laadMetStubs('../annotations/handles.js', {
+    ...minimummaat, ...greepKeuze, HANDLE_SIZE, HANDLE_TYPES, state, getTemplate, handleAnchors: () => ankers,
+  });
+  const metAnkers = await laadMetStubs('./greep-strek.js', {
+    greepOpScherm: grepenMetAnkers.greepOpScherm,
+    greepPunt: grepenMetAnkers.greepPunt,
+    twoPointEndpoints: tweePunt.twoPointEndpoints,
+  });
+  for (const [greep, verwacht] of [['line_start', ankers.start], ['line_end', ankers.end], ['line_mid', ankers.mid]]) {
+    assert.deepEqual(metAnkers.greepOorsprong(reeks, greep), verwacht, `${greep} snap`);
+    assert.deepEqual(metAnkers.strekBasispunt(reeks, greep), verwacht, `${greep} meetlijn`);
+  }
+});
+
+test('zonder bekende greepplek geeft greepOorsprong null in plaats van NaN', () => {
+  // Een plugin-vorm zonder vak en zonder grepen.
+  assert.equal(greepOorsprong({ type: 'plugin.leeg' }, 'br'), null);
+  assert.equal(strekBasispunt({ type: 'plugin.leeg' }, 'br'), null);
+  // De sleep rekent dan vanaf waar hij begon.
+  assert.match(handleResizeRomp(), /\|\| \{ x: state\.dragStartX, y: state\.dragStartY \}/);
 });
 
 // ── Tooltip-lengte ────────────────────────────────────────────────────────

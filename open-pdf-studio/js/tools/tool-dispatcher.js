@@ -637,8 +637,10 @@ function _handleResize(ctx, e, coords) {
   if (snap.snapped) {
     // Vanaf de greep zoals hij getekend is (ook bij een gedraaide vorm), zodat
     // de greep precies op het snappunt komt in plaats van te verspringen.
+    // Zonder bekende greepplek: vanaf waar de sleep begon (nooit NaN).
     const o = greepOorsprong(state.originalAnnotation, state.activeHandle,
-      (orig, h) => getTemplate(orig.symbolId)?.greepOorsprong?.(orig, h));
+      (orig, h) => getTemplate(orig.symbolId)?.greepOorsprong?.(orig, h))
+      || { x: state.dragStartX, y: state.dragStartY };
     deltaX = snappedX - o.x;
     deltaY = snappedY - o.y;
   } else {
