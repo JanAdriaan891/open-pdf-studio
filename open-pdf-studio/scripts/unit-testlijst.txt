@@ -244,3 +244,6 @@ js/pdf/printerlijst-afnemers.test.mjs
 js/pdf/wiel-scroll.test.mjs
 js/pdf/saver/text-markup-dict.test.mjs
 js/text/leesrichting.test.mjs
+js/ui/chrome/tab-sneltoets.test.mjs
+js/pdf/weergave-per-document.test.mjs
+js/ui/chrome/tab-sneltoets-koppeling.test.mjs

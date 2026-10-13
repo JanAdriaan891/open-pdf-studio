@@ -23,6 +23,7 @@ import {
   viewportNaarScherm,
   viewportZichtbaar,
 } from './weergave-rotatie.js';
+import { maakWeergaveStand, weergaveGeheugen, wisselWeergave } from './weergave-per-document.js';
 
 // ─── Viewport State (singleton via window to survive HMR/dynamic imports) ───
 if (!window.__pdfViewport) {
@@ -970,6 +971,9 @@ function _render() {
 let _suppressNextFit = false;
 export function suppressNextFit() { _suppressNextFit = true; }
 
+// Geeft true terug als de bewaarde weergavestand van een eerder getoond
+// document is teruggezet (tabwissel, #539); de aanroeper haalt dan ook de
+// gecachte scherpe tegel erbij.
 export function setPage(filePath, pageNum, pageW, pageH, originX, originY, rotation, viewRotation = 0) {
   // Detect "first time loading this document" vs "navigating to a different
   // page within the same document". The first case should fit-to-viewport
@@ -991,6 +995,33 @@ export function setPage(filePath, pageNum, pageW, pageH, originX, originY, rotat
   // net als bij een paginarotatie (de afmeting op het scherm wisselt).
   const nieuweWeergave = normaliseerRotatie(viewRotation);
   const isViewRotationChange = normaliseerRotatie(viewport.viewRotation) !== nieuweWeergave;
+
+  // Documentwissel (tabblad, #539): bewaar hoe het vertrekkende document erbij
+  // lag en zoek de bewaarde stand van het aankomende. Vroeger werd elk
+  // document bij terugkomst opnieuw passend gemaakt; wie twee tekeningen met
+  // Ctrl+Tab om en om toont om verschillen te zien, verloor zo bij elke wissel
+  // zijn zoom en uitsnede. MOET vóór het overschrijven van de velden
+  // hieronder: de viewport toont op dit moment nog het vertrekkende document.
+  let herstel = null;
+  if (isNewDocument) {
+    // Een lopende zoom-bevriezing is een momentopname van het VERTREKKENDE
+    // document; _render() zou die anders tot 150 ms lang over het nieuwe
+    // document tekenen.
+    if (_zoomFreezeTimer) clearTimeout(_zoomFreezeTimer);
+    _zoomFreezeTimer = null;
+    _zoomFreezeBitmap = null;
+    const dpr = _getDpr();
+    const canvasMaat = {
+      cssW: _canvas ? _canvas.width / dpr : 0,
+      cssH: _canvas ? _canvas.height / dpr : 0,
+    };
+    herstel = wisselWeergave(weergaveGeheugen(), {
+      vertrek: maakWeergaveStand(viewport, { verankerd: _anchorActive, strikt: _strictAnchor, ...canvasMaat }),
+      openPaden: (state.documents || []).map((d) => d && d.filePath).filter(Boolean),
+      aankomst: { filePath, pageNum, rotation: (rotation || 0) % 360, viewRotation: nieuweWeergave, pageW, pageH },
+      canvas: canvasMaat,
+    });
+  }
 
   // Clear stale raster state on page, document OR rotation change so the
   // unified render loop doesn't keep painting the PREVIOUS bitmap (stretched
@@ -1015,7 +1046,20 @@ export function setPage(filePath, pageNum, pageW, pageH, originX, originY, rotat
   viewport.viewRotation = nieuweWeergave;
   viewport.active = true;
 
-  if (_suppressNextFit) {
+  let hersteld = false;
+  if (herstel && !herstel.opnieuwPassend) {
+    // Terug naar een eerder getoond document: zoom, verschuiving en
+    // ankervlaggen exact zoals de gebruiker het verliet.
+    _suppressNextFit = false;
+    stopPanMomentum();
+    viewport.zoom = herstel.zoom;
+    viewport.offsetX = herstel.offsetX;
+    viewport.offsetY = herstel.offsetY;
+    _anchorActive = herstel.verankerd;
+    _strictAnchor = herstel.strikt;
+    viewport.dirty = true;
+    hersteld = true;
+  } else if (_suppressNextFit) {
     _suppressNextFit = false;
     // suppressNextFit() is used by wheel-driven page nav, which then calls
     // alignPageToTop/Bottom to set its own offset → keep anchor active so
@@ -1039,6 +1083,27 @@ export function setPage(filePath, pageNum, pageW, pageH, originX, originY, rotat
     _strictAnchor = false;
     viewport.dirty = true;
   }
+
+  // Ander document: de paginabitmap ervan staat meestal nog in de cache (bij
+  // een tabwissel altijd, voor de zoom waarop het werd verlaten). Meteen
+  // tonen, zodat het eerstvolgende frame het document volledig laat zien en
+  // niet eerst een witte pagina tot de orchestrator (eigen chunk, dus een
+  // dynamische import verderop in renderPage) hem alsnog aanlevert (#539).
+  // Zelfde keuze als ensureBitmapForCurrentView: de beste beschikbare bucket
+  // onder de 4096 px-asgrens. Geen cache-treffer: niets aan de hand, de
+  // orchestrator vult hem zoals altijd.
+  if (isNewDocument) {
+    const maxAsPt = Math.max(pageW, pageH);
+    if (maxAsPt > 0) {
+      const schaal = Math.min(viewport.zoom * _getDpr(), 4096 / maxAsPt);
+      const gecacht = getBestAvailableBitmap(filePath, pageNum, viewport.rotation, computeZoomBucket(schaal));
+      if (gecacht && gecacht.bitmap) {
+        viewport.currentBitmap = gecacht.bitmap;
+        viewport.dirty = true;
+      }
+    }
+  }
+  return hersteld;
 }
 
 /// Compute the zoom factor needed to fit a page into a canvas under one of
