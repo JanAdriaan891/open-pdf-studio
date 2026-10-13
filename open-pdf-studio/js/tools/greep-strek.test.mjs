@@ -417,8 +417,109 @@ test('_handleResize rekent met de greep-strek-helpers', () => {
   assert.doesNotMatch(romp, /measureScale\)\s*\|\|\s*1/);
 });
 
-test('gedraaide afbeelding: geen gelijke-maat-snap (die zet het vaste punt in het ongedraaide vak terug)', () => {
+// ── Gelijke breedte/hoogte bij een gedraaide afbeelding (#561) ────────────
+// De snap zette het vaste punt terug in het ONGEDRAAIDE vak; dat verschoof het
+// draaipunt en daarmee de vaste greep op het scherm, dus sloeg de sleep hem
+// bij een gedraaide afbeelding over. Nu gaat het vak na de snap om het
+// gedraaide midden terug: de greep tegenover de gesleepte blijft staan.
+
+const { snapImageResize, herankerOmGedraaidMidden } = await laadMetStubs('./image-align-snap.js', { state });
+
+const TEGENOVER = { tl: 'br', tr: 'bl', bl: 'tr', br: 'tl', t: 'b', b: 't', l: 'r', r: 'l' };
+// Referentie: 100 x 70. De gesleepte afbeelding is 120 x 80 (verhouding 1,5).
+const REF = { type: 'image', id: 'ref', page: 1, x: 500, y: 40, width: 100, height: 70 };
+
+/**
+ * Sleept greep `greep` van een afbeelding met draaiing `rotation` zoals
+ * _handleResize: eerst applyResize met de cursor (tot net naast de maat van
+ * de referentie), dan de gelijke-maat-snap.
+ */
+function sleepMetGelijkeMaat(greep, rotation, lockAspectRatio) {
+  const ann = {
+    type: 'image', id: 'img', page: 1, x: 200, y: 150, width: 120, height: 80,
+    originalWidth: 120, originalHeight: 80, rotation, lockAspectRatio,
+  };
+  // Lokale sleep naar 102 x 72 (binnen de tolerantie van 100 x 70), naar
+  // paginaruimte gedraaid.
+  const links = ['tl', 'l', 'bl'].includes(greep), rechts = ['tr', 'r', 'br'].includes(greep);
+  const boven = ['tl', 't', 'tr'].includes(greep), onder = ['bl', 'b', 'br'].includes(greep);
+  const lx = links ? 120 - 102 : rechts ? 102 - 120 : 0;
+  const ly = boven ? 80 - 72 : onder ? 72 - 80 : 0;
+  const rad = rotation * Math.PI / 180;
+  const dx = lx * Math.cos(rad) - ly * Math.sin(rad);
+  const dy = lx * Math.sin(rad) + ly * Math.cos(rad);
+  const voor = geschaald(ann, greep, dx, dy);
+  const box = { x: voor.x, y: voor.y, w: voor.width, h: voor.height };
+  const res = snapImageResize(box, greep, [REF], 5, { lockRatio: lockAspectRatio, aspectRatio: 1.5, rotation });
+  const na = { ...voor, x: res.box.x, y: res.box.y, width: res.box.w, height: res.box.h };
+  return { ann, voor, na, res };
+}
+
+test('gedraaide afbeelding: gelijke maat snapt en de vaste greep blijft op het scherm staan (90, 180, 270 en vrije hoek)', () => {
+  for (const rotation of [0, 90, 180, 270, -90, 33.5, -127]) {
+    for (const vast of [false, true]) {
+      for (const greep of MAATGREPEN) {
+        const label = `${rotation}° ${vast ? 'vaste verhouding' : 'vrij'} ${greep}`;
+        const { ann, voor, na, res } = sleepMetGelijkeMaat(greep, rotation, vast);
+        assert.ok(res.guides.length > 0, `${label}: de snap slaat aan`);
+        // De maat van de referentie: met vaste verhouding op de eerste as
+        // (hoeken en l/r de breedte, t/b de hoogte) en de andere uit de
+        // verhouding; vrij op elke as die de greep stuurt.
+        const stuurtB = !['t', 'b'].includes(greep), stuurtH = !['l', 'r'].includes(greep);
+        if (vast) {
+          if (stuurtB) assert.ok(dichtbij(na.width, 100) && dichtbij(na.height, 100 / 1.5), `${label}: ${na.width} x ${na.height}`);
+          else assert.ok(dichtbij(na.height, 70) && dichtbij(na.width, 70 * 1.5), `${label}: ${na.width} x ${na.height}`);
+        } else {
+          assert.ok(dichtbij(na.width, stuurtB ? 100 : 120), `${label}: breedte ${na.width}`);
+          assert.ok(dichtbij(na.height, stuurtH ? 70 : 80), `${label}: hoogte ${na.height}`);
+        }
+        // De greep tegenover de gesleepte staat op het scherm nog waar hij
+        // vóór de sleep getekend werd.
+        const vastPunt = greepMidden(ann, TEGENOVER[greep]);
+        for (const [wanneer, vorm] of [['voor de snap', voor], ['na de snap', na]]) {
+          const p = greepMidden(vorm, TEGENOVER[greep]);
+          assert.ok(dichtbij(p.x, vastPunt.x, 1e-9) && dichtbij(p.y, vastPunt.y, 1e-9),
+            `${label} ${wanneer}: vaste greep op (${p.x}, ${p.y}), was (${vastPunt.x}, ${vastPunt.y})`);
+        }
+        // Gedraaid: de aanduiding staat op het vak zoals het getekend wordt
+        // en draait mee (ongedraaid blijft ze zoals ze was).
+        if (rotation !== 0) {
+          for (const g of res.guides) {
+            assert.ok(dichtbij(g.box.x, res.box.x) && dichtbij(g.box.y, res.box.y)
+              && dichtbij(g.box.w, res.box.w) && dichtbij(g.box.h, res.box.h), `${label}: aanduiding op het vak`);
+            assert.equal(g.box.rotation, rotation, `${label}: aanduiding draait mee`);
+          }
+        }
+      }
+    }
+  }
+});
+
+test('ongedraaide afbeelding: de gelijke-maat-snap blijft precies zoals hij was', () => {
+  for (const vast of [false, true]) {
+    for (const greep of MAATGREPEN) {
+      const box = { x: 10, y: 20, w: 102, h: 72 };
+      const zonder = snapImageResize(box, greep, [REF], 5, { lockRatio: vast, aspectRatio: 1.5 });
+      const nul = snapImageResize(box, greep, [REF], 5, { lockRatio: vast, aspectRatio: 1.5, rotation: 0 });
+      assert.deepEqual(nul, zonder, `${greep} ${vast}`);
+    }
+  }
+});
+
+test('herankerOmGedraaidMidden: zonder draaiing of zonder maatgreep verandert er niets', () => {
+  const voor = { x: 0, y: 0, w: 10, h: 20 };
+  const na = { x: 3, y: 4, w: 8, h: 16 };
+  assert.deepEqual(herankerOmGedraaidMidden(voor, na, 'br', 0), na);
+  assert.deepEqual(herankerOmGedraaidMidden(voor, na, 'rotate', 45), na);
+  // 180 graden, 'br' gesleept: de vaste greep 'tl' staat op het scherm
+  // rechtsonder (10, 20), dus het kleinere vak ligt links-boven daarvan.
+  const r = herankerOmGedraaidMidden(voor, na, 'br', 180);
+  assert.ok(dichtbij(r.x, 2) && dichtbij(r.y, 4) && r.w === 8 && r.h === 16, JSON.stringify(r));
+});
+
+test('_handleResize geeft de draaiing door aan de gelijke-maat-snap en slaat gedraaide afbeeldingen niet meer over', () => {
   const romp = handleResizeRomp();
-  assert.match(romp,
-    /enableImageAlignSnap && ann\.type === 'image' && _isBoxHandle\s*&& !state\.originalAnnotation\.rotation\)/);
+  assert.doesNotMatch(romp, /!state\.originalAnnotation\.rotation/);
+  assert.match(romp, /enableImageAlignSnap && ann\.type === 'image' && _isBoxHandle\) \{/);
+  assert.match(romp, /snapImageResize\(box, _rh, refs, tol, \{[\s\S]*?rotation: state\.originalAnnotation\.rotation \|\| 0,[\s\S]*?\}\)/);
 });

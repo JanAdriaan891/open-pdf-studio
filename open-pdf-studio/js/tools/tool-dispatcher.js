@@ -663,16 +663,15 @@ function _handleResize(ctx, e, coords) {
   // snaps a single axis and derives the other from the ratio, so the lock is
   // preserved — hence we no longer skip locked images here. Shift is a caller
   // override that we keep respecting via lockRatio below.
-  // Niet bij een gedraaide afbeelding: snapImageResize zet het vaste punt in
-  // het ongedraaide vak terug, dat verschuift het draaipunt en daarmee de
-  // vaste zijde op het scherm.
+  // Een gedraaide afbeelding snapt net zo (#561): snapImageResize zet het
+  // vak daarna om het gedraaide midden terug, zodat de vaste greep op het
+  // scherm blijft staan waar hij getekend is.
   state._imageAlignGuides = null;
   const _rh = state.activeHandle;
   const _isBoxHandle = _rh === 'tl' || _rh === 'tr' || _rh === 'bl' || _rh === 'br' ||
     _rh === 't' || _rh === 'b' || _rh === 'l' || _rh === 'r';
   const _lockRatio = e.shiftKey || ann.lockAspectRatio;
-  if (state.preferences.enableImageAlignSnap && ann.type === 'image' && _isBoxHandle
-      && !state.originalAnnotation.rotation) {
+  if (state.preferences.enableImageAlignSnap && ann.type === 'image' && _isBoxHandle) {
     const excludeIds = new Set([ann.id]);
     const refs = collectImageAlignRefs(resizeDoc?.annotations || [], coords.pageNum, excludeIds);
     const tol = (state.preferences.objectSnapRadius || 12) / resizeScale;
@@ -680,7 +679,9 @@ function _handleResize(ctx, e, coords) {
     const _aspectRatio = state.originalAnnotation.originalWidth && state.originalAnnotation.originalHeight
       ? state.originalAnnotation.originalWidth / state.originalAnnotation.originalHeight
       : (state.originalAnnotation.height ? state.originalAnnotation.width / state.originalAnnotation.height : 1);
-    const res = snapImageResize(box, _rh, refs, tol, { lockRatio: _lockRatio, aspectRatio: _aspectRatio });
+    const res = snapImageResize(box, _rh, refs, tol, {
+      lockRatio: _lockRatio, aspectRatio: _aspectRatio, rotation: state.originalAnnotation.rotation || 0,
+    });
     if (res.guides.length > 0) {
       ann.x = res.box.x; ann.y = res.box.y;
       ann.width = res.box.w; ann.height = res.box.h;
