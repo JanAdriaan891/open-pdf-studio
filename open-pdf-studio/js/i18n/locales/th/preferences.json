@@ -177,7 +177,28 @@
     "thinLines": "เส้นบาง (แสดงเส้นทั้งหมดด้วยความกว้าง 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "ขนาดจริง (100%)",
+    "calibrationNone": "ยังไม่ได้ปรับเทียบสำหรับจอนี้ (มาตราส่วน {{scale}}%) ที่ 100% หนึ่งจุด PDF เท่ากับหนึ่งพิกเซลบนหน้าจอ",
+    "calibrationActive": "ปรับเทียบสำหรับจอนี้แล้ว (มาตราส่วน {{scale}}%): {{ppi}} พิกเซลต่อนิ้ว",
+    "calibrate": "ปรับเทียบ...",
+    "removeCalibration": "ลบ",
+    "calibrationHint": "มีผลเฉพาะการแสดงผลบนหน้าจอ การพิมพ์ การส่งออก และการวัดจะไม่เปลี่ยนแปลง"
+  },
+  "screenCalibration": {
+    "title": "ปรับเทียบจอแสดงผล",
+    "instructions": "ทาบบัตรเครดิตหรือไม้บรรทัดกับหน้าจอ แล้วปรับขนาดจนแถบยาวเท่ากับวัตถุอ้างอิงพอดี",
+    "reference": "วัตถุอ้างอิง",
+    "referenceCard": "ความกว้างบัตรเครดิต (85.6 มม.)",
+    "referenceRuler50": "ไม้บรรทัด 50 มม.",
+    "referenceRuler100": "ไม้บรรทัด 100 มม.",
+    "size": "ขนาด",
+    "smaller": "เล็กลง",
+    "larger": "ใหญ่ขึ้น",
+    "pxPerInch": "พิกเซล/นิ้ว",
+    "measuredLength": "ความยาวที่วัดได้",
+    "apply": "ใช้",
+    "displayScale": "มาตราส่วนจอ {{scale}}% การปรับเทียบใช้ได้เฉพาะกับจอที่มีมาตราส่วนนี้"
   },
   "measurement": {
     "showEdgeLengths": "แสดงความยาวด้าน"

@@ -336,6 +336,109 @@
   color: var(--theme-text, #333);
 }
 
+/* Statusregel met knoppen ernaast (schermkalibratie, #520). */
+.pref-row .pref-status-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--theme-text, #333);
+  padding-right: 8px;
+}
+
+.pref-inline-buttons {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pref-inline-buttons .pref-btn {
+  min-width: 0;
+  padding: 3px 10px;
+}
+
+.pref-inline-buttons .pref-btn:disabled,
+.screen-cal-row .pref-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Schermkalibratie (#520): balk die met een betaalpas of liniaal wordt
+   vergeleken. Rechte hoeken, compact, zoals de overige dialogen. */
+.screen-calibration-dialog {
+  min-width: 460px;
+  max-width: 92vw;
+}
+
+.screen-cal-body {
+  font-size: 11px;
+  color: var(--theme-text, #333);
+}
+
+.screen-cal-text {
+  margin: 0 0 10px;
+  line-height: 1.4;
+  max-width: 520px;
+}
+
+.screen-cal-note {
+  margin: 10px 0 0;
+  opacity: 0.75;
+}
+
+.screen-cal-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.screen-cal-row > label {
+  min-width: 70px;
+}
+
+.screen-cal-ruler-wrap {
+  overflow-x: auto;
+  padding: 6px 0 10px;
+  margin-bottom: 8px;
+}
+
+.screen-cal-ruler {
+  position: relative;
+  height: 28px;
+  box-sizing: border-box;
+  background: var(--theme-surface, #fff);
+  border: 1px solid var(--theme-text, #000);
+}
+
+.screen-cal-tick {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 8px;
+  margin-left: -1px;
+  background: var(--theme-text, #000);
+}
+
+.screen-cal-tick.long {
+  height: 14px;
+}
+
+.screen-cal-slider {
+  flex: 1;
+  min-width: 120px;
+}
+
+.screen-cal-number {
+  width: 64px;
+  padding: 3px 6px;
+  border: 1px solid var(--theme-border, #acacac);
+  border-radius: 0;
+  font-size: 11px;
+  font-family: inherit;
+  background: var(--theme-surface, #fff);
+  color: var(--theme-text, #333);
+}
+
 /* Uitleg onder een instelling die hier niet kan, bv. in de webversie. */
 .pref-row .pref-hint {
   font-size: 11px;

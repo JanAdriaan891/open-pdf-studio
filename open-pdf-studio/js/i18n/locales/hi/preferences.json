@@ -177,7 +177,28 @@
     "thinLines": "पतली रेखाएँ (सभी रेखाओं को 1px चौड़ाई में प्रदर्शित करें)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "वास्तविक आकार (100%)",
+    "calibrationNone": "इस डिस्प्ले के लिए कैलिब्रेट नहीं किया गया (स्केल {{scale}}%)। 100% पर एक PDF पॉइंट एक स्क्रीन पिक्सेल के बराबर है।",
+    "calibrationActive": "इस डिस्प्ले के लिए कैलिब्रेट किया गया (स्केल {{scale}}%): {{ppi}} पिक्सेल प्रति इंच।",
+    "calibrate": "कैलिब्रेट करें...",
+    "removeCalibration": "हटाएँ",
+    "calibrationHint": "केवल स्क्रीन पर देखने को प्रभावित करता है। प्रिंट, निर्यात और माप नहीं बदलते।"
+  },
+  "screenCalibration": {
+    "title": "डिस्प्ले कैलिब्रेट करें",
+    "instructions": "स्क्रीन पर एक क्रेडिट कार्ड या रूलर रखें और आकार तब तक समायोजित करें जब तक पट्टी ठीक संदर्भ जितनी लंबी न हो जाए।",
+    "reference": "संदर्भ",
+    "referenceCard": "क्रेडिट कार्ड की चौड़ाई (85.6 मिमी)",
+    "referenceRuler50": "रूलर, 50 मिमी",
+    "referenceRuler100": "रूलर, 100 मिमी",
+    "size": "आकार",
+    "smaller": "छोटा",
+    "larger": "बड़ा",
+    "pxPerInch": "पिक्सेल/इंच",
+    "measuredLength": "मापी गई लंबाई",
+    "apply": "लागू करें",
+    "displayScale": "डिस्प्ले स्केल {{scale}}%। कैलिब्रेशन केवल इस स्केल वाले डिस्प्ले पर लागू होता है।"
   },
   "measurement": {
     "showEdgeLengths": "भुजाओं की लंबाई दिखाएँ"

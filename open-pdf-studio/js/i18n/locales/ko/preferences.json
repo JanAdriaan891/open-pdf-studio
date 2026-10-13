@@ -160,7 +160,28 @@
     "thinLines": "가는 선 (모든 선을 1px 너비로 표시)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "실제 크기 (100%)",
+    "calibrationNone": "이 디스플레이는 보정되지 않았습니다 (배율 {{scale}}%). 100%에서 PDF 1포인트는 화면 1픽셀입니다.",
+    "calibrationActive": "이 디스플레이는 보정되었습니다 (배율 {{scale}}%): 인치당 {{ppi}}픽셀.",
+    "calibrate": "보정...",
+    "removeCalibration": "제거",
+    "calibrationHint": "화면 표시에만 영향을 줍니다. 인쇄, 내보내기 및 측정은 바뀌지 않습니다."
+  },
+  "screenCalibration": {
+    "title": "디스플레이 보정",
+    "instructions": "신용카드나 자를 화면에 대고 막대 길이가 기준과 정확히 같아질 때까지 크기를 조정하세요.",
+    "reference": "기준",
+    "referenceCard": "신용카드 너비 (85.6mm)",
+    "referenceRuler50": "자, 50mm",
+    "referenceRuler100": "자, 100mm",
+    "size": "크기",
+    "smaller": "작게",
+    "larger": "크게",
+    "pxPerInch": "px/인치",
+    "measuredLength": "측정한 길이",
+    "apply": "적용",
+    "displayScale": "디스플레이 배율 {{scale}}%. 보정은 이 배율의 디스플레이에만 적용됩니다."
   },
   "measurement": {
     "showEdgeLengths": "변 길이 표시"

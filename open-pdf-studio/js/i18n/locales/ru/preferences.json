@@ -177,7 +177,28 @@
     "thinLines": "Тонкие линии (отображать все линии шириной 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Фактический размер (100%)",
+    "calibrationNone": "Не откалиброван для этого экрана (масштаб {{scale}}%). При 100% одна точка PDF равна одному пикселю экрана.",
+    "calibrationActive": "Откалиброван для этого экрана (масштаб {{scale}}%): {{ppi}} пикселей на дюйм.",
+    "calibrate": "Калибровать...",
+    "removeCalibration": "Удалить",
+    "calibrationHint": "Влияет только на отображение на экране. Печать, экспорт и измерения не меняются."
+  },
+  "screenCalibration": {
+    "title": "Калибровка экрана",
+    "instructions": "Приложите к экрану банковскую карту или линейку и меняйте размер, пока полоса не станет точно такой же длины, как эталон.",
+    "reference": "Эталон",
+    "referenceCard": "Ширина банковской карты (85,6 мм)",
+    "referenceRuler50": "Линейка, 50 мм",
+    "referenceRuler100": "Линейка, 100 мм",
+    "size": "Размер",
+    "smaller": "Меньше",
+    "larger": "Больше",
+    "pxPerInch": "пикс./дюйм",
+    "measuredLength": "Измеренная длина",
+    "apply": "Применить",
+    "displayScale": "Масштаб экрана {{scale}}%. Калибровка действует только для экранов с этим масштабом."
   },
   "measurement": {
     "showEdgeLengths": "Показывать длины сторон"

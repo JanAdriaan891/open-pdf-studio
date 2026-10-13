@@ -177,7 +177,28 @@
     "thinLines": "Garisan nipis (paparkan semua garisan dengan lebar 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Saiz Sebenar (100%)",
+    "calibrationNone": "Belum ditentukur untuk paparan ini (skala {{scale}}%). Pada 100%, satu titik PDF ialah satu piksel skrin.",
+    "calibrationActive": "Ditentukur untuk paparan ini (skala {{scale}}%): {{ppi}} piksel per inci.",
+    "calibrate": "Tentukur...",
+    "removeCalibration": "Buang",
+    "calibrationHint": "Hanya mempengaruhi paparan pada skrin. Pencetakan, eksport dan ukuran tidak berubah."
+  },
+  "screenCalibration": {
+    "title": "Tentukur Paparan",
+    "instructions": "Letakkan kad kredit atau pembaris pada skrin dan laraskan saiz sehingga bar sama panjang dengan rujukan.",
+    "reference": "Rujukan",
+    "referenceCard": "Lebar kad kredit (85.6 mm)",
+    "referenceRuler50": "Pembaris, 50 mm",
+    "referenceRuler100": "Pembaris, 100 mm",
+    "size": "Saiz",
+    "smaller": "Lebih kecil",
+    "larger": "Lebih besar",
+    "pxPerInch": "px/inci",
+    "measuredLength": "Panjang yang diukur",
+    "apply": "Guna",
+    "displayScale": "Skala paparan {{scale}}%. Penentukuran hanya terpakai pada paparan dengan skala ini."
   },
   "measurement": {
     "showEdgeLengths": "Tunjukkan panjang sisi"

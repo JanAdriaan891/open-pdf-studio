@@ -177,7 +177,28 @@
     "thinLines": "Ohuet viivat (näytä kaikki viivat 1px leveydellä)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Todellinen koko (100 %)",
+    "calibrationNone": "Ei kalibroitu tälle näytölle (skaalaus {{scale}} %). 100 %:ssa yksi PDF-piste on yksi näytön pikseli.",
+    "calibrationActive": "Kalibroitu tälle näytölle (skaalaus {{scale}} %): {{ppi}} pikseliä tuumalla.",
+    "calibrate": "Kalibroi...",
+    "removeCalibration": "Poista",
+    "calibrationHint": "Vaikuttaa vain näytöllä näkymiseen. Tulostus, vienti ja mittaukset eivät muutu."
+  },
+  "screenCalibration": {
+    "title": "Kalibroi näyttö",
+    "instructions": "Pidä maksukorttia tai viivainta näyttöä vasten ja säädä kokoa, kunnes palkki on täsmälleen yhtä pitkä kuin vertailukohde.",
+    "reference": "Vertailukohde",
+    "referenceCard": "Maksukortin leveys (85,6 mm)",
+    "referenceRuler50": "Viivain, 50 mm",
+    "referenceRuler100": "Viivain, 100 mm",
+    "size": "Koko",
+    "smaller": "Pienempi",
+    "larger": "Suurempi",
+    "pxPerInch": "px/tuuma",
+    "measuredLength": "Mitattu pituus",
+    "apply": "Käytä",
+    "displayScale": "Näytön skaalaus {{scale}} %. Kalibrointi koskee vain näyttöjä, joilla on tämä skaalaus."
   },
   "measurement": {
     "showEdgeLengths": "Näytä sivujen pituudet"

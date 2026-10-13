@@ -160,7 +160,28 @@
     "thinLines": "细线（以1像素宽度显示所有线条）",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "实际大小 (100%)",
+    "calibrationNone": "此显示器未校准（缩放 {{scale}}%）。在 100% 时，一个 PDF 点等于一个屏幕像素。",
+    "calibrationActive": "此显示器已校准（缩放 {{scale}}%）：每英寸 {{ppi}} 像素。",
+    "calibrate": "校准...",
+    "removeCalibration": "移除",
+    "calibrationHint": "仅影响屏幕显示。打印、导出和测量不会改变。"
+  },
+  "screenCalibration": {
+    "title": "校准显示器",
+    "instructions": "将信用卡或直尺贴在屏幕上，调整大小，直到横条与参照物完全等长。",
+    "reference": "参照物",
+    "referenceCard": "信用卡宽度 (85.6 mm)",
+    "referenceRuler50": "直尺，50 mm",
+    "referenceRuler100": "直尺，100 mm",
+    "size": "大小",
+    "smaller": "缩小",
+    "larger": "放大",
+    "pxPerInch": "像素/英寸",
+    "measuredLength": "测量长度",
+    "apply": "应用",
+    "displayScale": "显示器缩放 {{scale}}%。此校准仅适用于该缩放比例的显示器。"
   },
   "measurement": {
     "showEdgeLengths": "显示边长"

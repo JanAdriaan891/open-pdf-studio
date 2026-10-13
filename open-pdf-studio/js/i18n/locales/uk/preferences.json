@@ -177,7 +177,28 @@
     "thinLines": "Тонкі лінії (відображати всі лінії шириною 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Справжній розмір (100%)",
+    "calibrationNone": "Не відкалібровано для цього екрана (масштаб {{scale}}%). При 100% одна точка PDF дорівнює одному пікселю екрана.",
+    "calibrationActive": "Відкалібровано для цього екрана (масштаб {{scale}}%): {{ppi}} пікселів на дюйм.",
+    "calibrate": "Калібрувати...",
+    "removeCalibration": "Видалити",
+    "calibrationHint": "Впливає лише на відображення на екрані. Друк, експорт і вимірювання не змінюються."
+  },
+  "screenCalibration": {
+    "title": "Калібрування екрана",
+    "instructions": "Прикладіть до екрана банківську картку або лінійку й змінюйте розмір, доки смуга не стане точно такої ж довжини, як еталон.",
+    "reference": "Еталон",
+    "referenceCard": "Ширина банківської картки (85,6 мм)",
+    "referenceRuler50": "Лінійка, 50 мм",
+    "referenceRuler100": "Лінійка, 100 мм",
+    "size": "Розмір",
+    "smaller": "Менше",
+    "larger": "Більше",
+    "pxPerInch": "пікс./дюйм",
+    "measuredLength": "Виміряна довжина",
+    "apply": "Застосувати",
+    "displayScale": "Масштаб екрана {{scale}}%. Калібрування діє лише для екранів із цим масштабом."
   },
   "measurement": {
     "showEdgeLengths": "Показувати довжини сторін"

@@ -177,7 +177,28 @@
     "thinLines": "Línies fines (mostra totes les línies amb 1px d'amplada)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Mida real (100%)",
+    "calibrationNone": "No calibrada per a aquesta pantalla (escala {{scale}}%). Al 100%, un punt PDF és un píxel de pantalla.",
+    "calibrationActive": "Calibrada per a aquesta pantalla (escala {{scale}}%): {{ppi}} píxels per polzada.",
+    "calibrate": "Calibra...",
+    "removeCalibration": "Elimina",
+    "calibrationHint": "Només afecta la visualització en pantalla. La impressió, l'exportació i les mesures no canvien."
+  },
+  "screenCalibration": {
+    "title": "Calibra la pantalla",
+    "instructions": "Col·loqueu una targeta de crèdit o un regle contra la pantalla i ajusteu la mida fins que la barra sigui exactament tan llarga com la referència.",
+    "reference": "Referència",
+    "referenceCard": "Amplada d'una targeta de crèdit (85,6 mm)",
+    "referenceRuler50": "Regle, 50 mm",
+    "referenceRuler100": "Regle, 100 mm",
+    "size": "Mida",
+    "smaller": "Més petit",
+    "larger": "Més gran",
+    "pxPerInch": "px/polzada",
+    "measuredLength": "Longitud mesurada",
+    "apply": "Aplica",
+    "displayScale": "Escala de pantalla {{scale}}%. La calibració només s'aplica a pantalles amb aquesta escala."
   },
   "measurement": {
     "showEdgeLengths": "Mostra les longituds dels costats"

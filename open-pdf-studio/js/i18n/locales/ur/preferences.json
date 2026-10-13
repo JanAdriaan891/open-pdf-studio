@@ -177,7 +177,28 @@
     "thinLines": "پتلی لکیریں (تمام لکیریں 1px چوڑائی میں دکھائیں)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "اصل سائز (100%)",
+    "calibrationNone": "اس ڈسپلے کے لیے کیلیبریٹ نہیں کیا گیا (اسکیل {{scale}}%)۔ 100% پر ایک PDF پوائنٹ ایک اسکرین پکسل کے برابر ہے۔",
+    "calibrationActive": "اس ڈسپلے کے لیے کیلیبریٹ کیا گیا (اسکیل {{scale}}%): فی انچ {{ppi}} پکسل۔",
+    "calibrate": "کیلیبریٹ کریں...",
+    "removeCalibration": "ہٹائیں",
+    "calibrationHint": "صرف اسکرین پر دکھائی دینے کو متاثر کرتا ہے۔ پرنٹ، ایکسپورٹ اور پیمائشیں تبدیل نہیں ہوتیں۔"
+  },
+  "screenCalibration": {
+    "title": "ڈسپلے کیلیبریٹ کریں",
+    "instructions": "اسکرین پر کریڈٹ کارڈ یا رولر رکھیں اور سائز اس وقت تک تبدیل کریں جب تک پٹی بالکل حوالے کے برابر لمبی نہ ہو جائے۔",
+    "reference": "حوالہ",
+    "referenceCard": "کریڈٹ کارڈ کی چوڑائی (85.6 ملی میٹر)",
+    "referenceRuler50": "رولر، 50 ملی میٹر",
+    "referenceRuler100": "رولر، 100 ملی میٹر",
+    "size": "سائز",
+    "smaller": "چھوٹا",
+    "larger": "بڑا",
+    "pxPerInch": "پکسل/انچ",
+    "measuredLength": "ناپی گئی لمبائی",
+    "apply": "لاگو کریں",
+    "displayScale": "ڈسپلے اسکیل {{scale}}%۔ کیلیبریشن صرف اس اسکیل والے ڈسپلے پر لاگو ہوتی ہے۔"
   },
   "measurement": {
     "showEdgeLengths": "اضلاع کی لمبائی دکھائیں"

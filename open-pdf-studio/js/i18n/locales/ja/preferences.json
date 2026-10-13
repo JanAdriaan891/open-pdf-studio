@@ -160,7 +160,28 @@
     "thinLines": "細い線（すべての線を1pxの幅で表示）",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "実際のサイズ (100%)",
+    "calibrationNone": "このディスプレイは未調整です (拡大率 {{scale}}%)。100% では PDF の 1 ポイントが画面の 1 ピクセルになります。",
+    "calibrationActive": "このディスプレイは調整済みです (拡大率 {{scale}}%): 1 インチあたり {{ppi}} ピクセル。",
+    "calibrate": "調整...",
+    "removeCalibration": "削除",
+    "calibrationHint": "画面上の表示のみに影響します。印刷、エクスポート、測定は変わりません。"
+  },
+  "screenCalibration": {
+    "title": "ディスプレイの調整",
+    "instructions": "クレジットカードまたは定規を画面に当て、バーの長さが基準とちょうど同じになるまでサイズを調整してください。",
+    "reference": "基準",
+    "referenceCard": "クレジットカードの幅 (85.6 mm)",
+    "referenceRuler50": "定規、50 mm",
+    "referenceRuler100": "定規、100 mm",
+    "size": "サイズ",
+    "smaller": "小さく",
+    "larger": "大きく",
+    "pxPerInch": "px/インチ",
+    "measuredLength": "測定した長さ",
+    "apply": "適用",
+    "displayScale": "ディスプレイの拡大率 {{scale}}%。この調整はこの拡大率のディスプレイにのみ適用されます。"
   },
   "measurement": {
     "showEdgeLengths": "辺の長さを表示"

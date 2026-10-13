@@ -177,7 +177,28 @@
     "thinLines": "קווים דקים (הצגת כל הקווים ברוחב 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "גודל בפועל (100%)",
+    "calibrationNone": "לא כויל עבור מסך זה (קנה מידה {{scale}}%). ב-100%, נקודת PDF אחת שווה לפיקסל מסך אחד.",
+    "calibrationActive": "כויל עבור מסך זה (קנה מידה {{scale}}%): {{ppi}} פיקסלים לאינץ'.",
+    "calibrate": "כיול...",
+    "removeCalibration": "הסרה",
+    "calibrationHint": "משפיע רק על התצוגה במסך. הדפסה, ייצוא ומדידות אינם משתנים."
+  },
+  "screenCalibration": {
+    "title": "כיול מסך",
+    "instructions": "הצמידו כרטיס אשראי או סרגל למסך והתאימו את הגודל עד שאורך הפס יהיה בדיוק כמו אורך הייחוס.",
+    "reference": "ייחוס",
+    "referenceCard": "רוחב כרטיס אשראי (85.6 מ\"מ)",
+    "referenceRuler50": "סרגל, 50 מ\"מ",
+    "referenceRuler100": "סרגל, 100 מ\"מ",
+    "size": "גודל",
+    "smaller": "קטן יותר",
+    "larger": "גדול יותר",
+    "pxPerInch": "פיקסלים/אינץ'",
+    "measuredLength": "אורך שנמדד",
+    "apply": "החל",
+    "displayScale": "קנה מידה של המסך {{scale}}%. הכיול חל רק על מסכים עם קנה מידה זה."
   },
   "measurement": {
     "showEdgeLengths": "הצג את אורכי הצלעות"

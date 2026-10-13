@@ -160,7 +160,28 @@
     "thinLines": "Lignes fines (afficher toutes les lignes avec une largeur de 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Taille réelle (100 %)",
+    "calibrationNone": "Non étalonné pour cet écran (échelle {{scale}} %). À 100 %, un point PDF correspond à un pixel d'écran.",
+    "calibrationActive": "Étalonné pour cet écran (échelle {{scale}} %) : {{ppi}} pixels par pouce.",
+    "calibrate": "Étalonner...",
+    "removeCalibration": "Supprimer",
+    "calibrationHint": "Concerne uniquement l'affichage à l'écran. L'impression, l'exportation et les mesures ne changent pas."
+  },
+  "screenCalibration": {
+    "title": "Étalonner l'écran",
+    "instructions": "Placez une carte bancaire ou une règle contre l'écran et ajustez la taille jusqu'à ce que la barre ait exactement la même longueur que la référence.",
+    "reference": "Référence",
+    "referenceCard": "Largeur d'une carte bancaire (85,6 mm)",
+    "referenceRuler50": "Règle, 50 mm",
+    "referenceRuler100": "Règle, 100 mm",
+    "size": "Taille",
+    "smaller": "Plus petit",
+    "larger": "Plus grand",
+    "pxPerInch": "px/pouce",
+    "measuredLength": "Longueur mesurée",
+    "apply": "Appliquer",
+    "displayScale": "Échelle d'affichage {{scale}} %. L'étalonnage ne s'applique qu'aux écrans ayant cette échelle."
   },
   "measurement": {
     "showEdgeLengths": "Afficher la longueur des côtés"

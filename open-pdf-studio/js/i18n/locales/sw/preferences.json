@@ -177,7 +177,28 @@
     "thinLines": "Mistari nyembamba (onyesha mistari yote kwa upana wa 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Ukubwa Halisi (100%)",
+    "calibrationNone": "Haijasawazishwa kwa skrini hii (kipimo {{scale}}%). Kwa 100%, nukta moja ya PDF ni pikseli moja ya skrini.",
+    "calibrationActive": "Imesawazishwa kwa skrini hii (kipimo {{scale}}%): pikseli {{ppi}} kwa inchi.",
+    "calibrate": "Sawazisha...",
+    "removeCalibration": "Ondoa",
+    "calibrationHint": "Huathiri tu uonyeshaji kwenye skrini. Uchapishaji, uhamishaji na vipimo havibadiliki."
+  },
+  "screenCalibration": {
+    "title": "Sawazisha Skrini",
+    "instructions": "Shikilia kadi ya benki au rula kwenye skrini na urekebishe ukubwa hadi upau uwe na urefu sawa kabisa na kielelezo.",
+    "reference": "Kielelezo",
+    "referenceCard": "Upana wa kadi ya benki (85.6 mm)",
+    "referenceRuler50": "Rula, 50 mm",
+    "referenceRuler100": "Rula, 100 mm",
+    "size": "Ukubwa",
+    "smaller": "Ndogo zaidi",
+    "larger": "Kubwa zaidi",
+    "pxPerInch": "px/inchi",
+    "measuredLength": "Urefu uliopimwa",
+    "apply": "Tumia",
+    "displayScale": "Kipimo cha skrini {{scale}}%. Usawazishaji unatumika tu kwa skrini zenye kipimo hiki."
   },
   "measurement": {
     "showEdgeLengths": "Onyesha urefu wa pande"

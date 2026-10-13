@@ -6,8 +6,8 @@ import { showProperties } from '../ui/panels/properties-panel.js';
 import { redrawAnnotations, redrawContinuous } from './rendering.js';
 import { updateStatusMessage } from '../ui/chrome/status-bar.js';
 import { openDialog } from '../bridge.js';
-import { BUILTIN_STAMP_DEFAULT_WIDTH, BUILTIN_STAMP_DEFAULT_HEIGHT, OVERRIDE_STAMP_DEFAULT_HEIGHT, BUILT_IN_STAMPS } from './stamp-defaults.js';
-import { svgRealSizeMm, stampPlacementSize } from './svg-real-size.js';
+import { BUILTIN_STAMP_DEFAULT_WIDTH, BUILTIN_STAMP_DEFAULT_HEIGHT, BUILT_IN_STAMPS } from './stamp-defaults.js';
+import { overrideStampMaat } from './svg-real-size.js';
 import { stampPxPerMm } from './stamp-scale.js';
 import { rasterizeSvg } from './svg-raster.js';
 import { paginaMaat, rechtopRotatie } from '../pdf/weergave-ruimte.js';
@@ -122,12 +122,11 @@ export async function placeOverrideStamp(x, y) {
     // maat (alle meegeleverde symbolen) blijft het bestaande gedrag gelden:
     // de standaardhoogte, met de breedte uit de beeldverhouding.
     const page = getActiveDocument()?.currentPage || 1;
-    const size = stampPlacementSize({
-      mm: svgRealSizeMm(overrides.stampSvg),
+    // Zelfde berekening als de spookafbeelding van het stempelgereedschap
+    // (tools/text-tool.js), inclusief de gekozen symboolschaal (#357).
+    const size = overrideStampMaat(overrides, {
       pxPerMm: stampPxPerMm(page, x, y),
       aspect,
-      defaultWidth: overrides.stampWidth,
-      defaultHeight: overrides.stampHeight || OVERRIDE_STAMP_DEFAULT_HEIGHT,
       schaal: huidigeSymboolSchaal(),
     });
     stampWidth = size.width;

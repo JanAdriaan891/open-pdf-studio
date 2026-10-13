@@ -299,7 +299,7 @@ Thumbnails, Bookmarks, Annotations, Attachments, Digital Signatures, Layers, For
 | `T` | Text box tool |
 | `N` | Sticky note tool |
 | `Ctrl+=` / `Ctrl+-` | Zoom in / Zoom out |
-| `Ctrl+0` | Actual size |
+| `Ctrl+0` | Actual size (physical paper size once the display is calibrated in Preferences > Page Display) |
 | `Ctrl+1` | Fit width |
 | `Ctrl+2` | Fit page |
 | `F9` | Toggle navigation panel |
@@ -338,6 +338,38 @@ sudo dpkg -i open-pdf-studio_*.deb
 chmod +x open-pdf-studio_*.AppImage
 ./open-pdf-studio_*.AppImage
 ```
+
+**Nix / NixOS (x86_64):**
+
+The repository is a Nix flake. It wraps the released Linux AppImage with
+`appimageTools.wrapType2`, so nothing is compiled and no cargo or npm hashes are
+involved.
+
+```bash
+# Run once without installing
+nix run github:OpenAEC-Foundation/open-pdf-studio
+
+# Install into your user profile (adds the menu entry and icons)
+nix profile install github:OpenAEC-Foundation/open-pdf-studio
+```
+
+On NixOS you can also add it to your system configuration:
+
+```nix
+# flake.nix of your system
+inputs.open-pdf-studio.url = "github:OpenAEC-Foundation/open-pdf-studio";
+
+# configuration.nix (with `inputs` passed through specialArgs)
+environment.systemPackages = [ inputs.open-pdf-studio.packages.x86_64-linux.default ];
+```
+
+Notes:
+- Only `x86_64-linux` is packaged, because releases ship an amd64 AppImage only.
+- The flake points at a fixed release. After publishing a release, update its
+  version and hash with `node open-pdf-studio/scripts/nix-flake-bijwerken.mjs`
+  (it reads the AppImage checksum from the GitHub release; no download needed).
+- If the window stays blank with some GPU drivers, start it with
+  `WEBKIT_DISABLE_DMABUF_RENDERER=1 open-pdf-studio`.
 
 ### Android
 Download the APK from [Releases](https://github.com/OpenAEC-Foundation/OpenPDFStudio/releases/latest).

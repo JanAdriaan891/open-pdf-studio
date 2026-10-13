@@ -177,7 +177,28 @@
     "thinLines": "Đường mảnh (hiển thị tất cả đường với độ rộng 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Kích thước thực (100%)",
+    "calibrationNone": "Chưa hiệu chỉnh cho màn hình này (tỷ lệ {{scale}}%). Ở 100%, một điểm PDF bằng một điểm ảnh màn hình.",
+    "calibrationActive": "Đã hiệu chỉnh cho màn hình này (tỷ lệ {{scale}}%): {{ppi}} điểm ảnh mỗi inch.",
+    "calibrate": "Hiệu chỉnh...",
+    "removeCalibration": "Xóa",
+    "calibrationHint": "Chỉ ảnh hưởng đến hiển thị trên màn hình. In, xuất và đo đạc không thay đổi."
+  },
+  "screenCalibration": {
+    "title": "Hiệu chỉnh màn hình",
+    "instructions": "Áp thẻ tín dụng hoặc thước kẻ lên màn hình và điều chỉnh kích thước cho đến khi thanh dài đúng bằng vật tham chiếu.",
+    "reference": "Tham chiếu",
+    "referenceCard": "Chiều rộng thẻ tín dụng (85,6 mm)",
+    "referenceRuler50": "Thước kẻ, 50 mm",
+    "referenceRuler100": "Thước kẻ, 100 mm",
+    "size": "Kích thước",
+    "smaller": "Nhỏ hơn",
+    "larger": "Lớn hơn",
+    "pxPerInch": "điểm ảnh/inch",
+    "measuredLength": "Chiều dài đo được",
+    "apply": "Áp dụng",
+    "displayScale": "Tỷ lệ màn hình {{scale}}%. Hiệu chỉnh chỉ áp dụng cho màn hình có tỷ lệ này."
   },
   "measurement": {
     "showEdgeLengths": "Hiển thị chiều dài các cạnh"

@@ -160,7 +160,28 @@
     "thinLines": "İnce çizgiler (tüm çizgileri 1px genişliğinde göster)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Gerçek Boyut (%100)",
+    "calibrationNone": "Bu ekran için kalibre edilmedi (ölçek %{{scale}}). %100'de bir PDF noktası bir ekran pikseline eşittir.",
+    "calibrationActive": "Bu ekran için kalibre edildi (ölçek %{{scale}}): inç başına {{ppi}} piksel.",
+    "calibrate": "Kalibre et...",
+    "removeCalibration": "Kaldır",
+    "calibrationHint": "Yalnızca ekrandaki görüntüyü etkiler. Yazdırma, dışa aktarma ve ölçümler değişmez."
+  },
+  "screenCalibration": {
+    "title": "Ekranı Kalibre Et",
+    "instructions": "Ekrana bir kredi kartı veya cetvel tutun ve çubuk referansla tam olarak aynı uzunlukta olana kadar boyutu ayarlayın.",
+    "reference": "Referans",
+    "referenceCard": "Kredi kartı genişliği (85,6 mm)",
+    "referenceRuler50": "Cetvel, 50 mm",
+    "referenceRuler100": "Cetvel, 100 mm",
+    "size": "Boyut",
+    "smaller": "Küçült",
+    "larger": "Büyüt",
+    "pxPerInch": "px/inç",
+    "measuredLength": "Ölçülen uzunluk",
+    "apply": "Uygula",
+    "displayScale": "Ekran ölçeği %{{scale}}. Kalibrasyon yalnızca bu ölçeğe sahip ekranlar için geçerlidir."
   },
   "measurement": {
     "showEdgeLengths": "Kenar uzunluklarını göster"

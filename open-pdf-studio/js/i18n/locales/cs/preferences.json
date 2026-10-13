@@ -177,7 +177,28 @@
     "thinLines": "Tenké čáry (zobrazit všechny čáry o šířce 1px)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Skutečná velikost (100 %)",
+    "calibrationNone": "Pro tento displej nekalibrováno (měřítko {{scale}} %). Při 100 % odpovídá jeden bod PDF jednomu pixelu obrazovky.",
+    "calibrationActive": "Kalibrováno pro tento displej (měřítko {{scale}} %): {{ppi}} pixelů na palec.",
+    "calibrate": "Kalibrovat...",
+    "removeCalibration": "Odebrat",
+    "calibrationHint": "Ovlivňuje pouze zobrazení na obrazovce. Tisk, export a měření se nemění."
+  },
+  "screenCalibration": {
+    "title": "Kalibrace displeje",
+    "instructions": "Přiložte k obrazovce platební kartu nebo pravítko a upravte velikost, dokud nebude pruh přesně stejně dlouhý jako vzor.",
+    "reference": "Vzor",
+    "referenceCard": "Šířka platební karty (85,6 mm)",
+    "referenceRuler50": "Pravítko, 50 mm",
+    "referenceRuler100": "Pravítko, 100 mm",
+    "size": "Velikost",
+    "smaller": "Menší",
+    "larger": "Větší",
+    "pxPerInch": "px/palec",
+    "measuredLength": "Naměřená délka",
+    "apply": "Použít",
+    "displayScale": "Měřítko displeje {{scale}} %. Kalibrace platí jen pro displeje s tímto měřítkem."
   },
   "measurement": {
     "showEdgeLengths": "Zobrazit délky stran"

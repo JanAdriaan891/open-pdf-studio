@@ -160,7 +160,28 @@
     "thinLines": "Dünne Linien (alle Linien mit 1px Breite anzeigen)",
     "panels": "Panels",
     "showPropertiesPanel": "Show Properties Panel by default",
-    "showToolPalette": "Show Tool Palette by default"
+    "showToolPalette": "Show Tool Palette by default",
+    "actualSize": "Tatsächliche Größe (100 %)",
+    "calibrationNone": "Für diesen Bildschirm nicht kalibriert (Skalierung {{scale}} %). Bei 100 % entspricht ein PDF-Punkt einem Bildschirmpixel.",
+    "calibrationActive": "Für diesen Bildschirm kalibriert (Skalierung {{scale}} %): {{ppi}} Pixel pro Zoll.",
+    "calibrate": "Kalibrieren...",
+    "removeCalibration": "Entfernen",
+    "calibrationHint": "Betrifft nur die Bildschirmanzeige. Drucken, Export und Messungen bleiben unverändert."
+  },
+  "screenCalibration": {
+    "title": "Bildschirm kalibrieren",
+    "instructions": "Halten Sie eine Kreditkarte oder ein Lineal an den Bildschirm und passen Sie die Größe an, bis der Balken genau so lang ist wie die Referenz.",
+    "reference": "Referenz",
+    "referenceCard": "Breite einer Kreditkarte (85,6 mm)",
+    "referenceRuler50": "Lineal, 50 mm",
+    "referenceRuler100": "Lineal, 100 mm",
+    "size": "Größe",
+    "smaller": "Kleiner",
+    "larger": "Größer",
+    "pxPerInch": "px/Zoll",
+    "measuredLength": "Gemessene Länge",
+    "apply": "Anwenden",
+    "displayScale": "Bildschirmskalierung {{scale}} %. Die Kalibrierung gilt nur für Bildschirme mit dieser Skalierung."
   },
   "measurement": {
     "showEdgeLengths": "Seitenlängen anzeigen"
