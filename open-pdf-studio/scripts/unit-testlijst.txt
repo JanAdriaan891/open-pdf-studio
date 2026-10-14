@@ -91,6 +91,7 @@ js/annotations/svg-real-size.test.mjs
 js/annotations/svg-stroke-color.test.mjs
 js/annotations/svg-stroke-width.test.mjs
 js/symbols/symbol-scale.test.mjs
+js/symbols/symbol-insert-format.test.mjs
 js/symbols/catalog-opslagkeuze.test.mjs
 js/symbols/linework-catalog.test.mjs
 js/symbols/templates/constructie-bouwplaats.test.mjs
@@ -291,6 +292,7 @@ js/pdf/pdfx-cmyk.test.mjs
 js/core/zoom-display.test.mjs
 js/pdf/render-sharpen.test.mjs
 js/pdf/print-meerperblad.test.mjs
+js/pdf/print-meerperblad-voorbeeld.test.mjs
 js/pdf/flattened-copy.test.mjs
 js/text/wrap-tekst.test.mjs
 js/annotations/offset-geometry.test.mjs
@@ -336,3 +338,4 @@ js/core/mcp-schermafdruk.test.mjs
 js/core/mcp-ui-boom.test.mjs
 js/core/mcp-lint-opdrachten.test.mjs
 js/pdf/wachtwoord-pdf.test.mjs
+js/pdf/page-transition.test.mjs

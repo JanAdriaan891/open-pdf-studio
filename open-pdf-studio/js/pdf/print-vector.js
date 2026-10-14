@@ -25,7 +25,7 @@ import {
   PDFDocument, PDFName, PDFRef, PDFDict, PDFArray, PDFStream,
   pushGraphicsState, popGraphicsState, concatTransformationMatrix, drawObject,
 } from 'pdf-lib';
-import { berekenPlaatsing } from './print-plaatsing.js';
+import { berekenPlaatsing, printPaginaMaat } from './print-plaatsing.js';
 import { knipselMatrix, metInhoud } from './vector-embed.js';
 
 const PT_PER_MM = 72 / 25.4;
@@ -400,9 +400,7 @@ export async function bouwVectorPrintPdf({
     const { index, plaatsing } = werk[i];
     voortgang(i, index);
     opVel = plaatsing.bekend;
-    const maat = plaatsing.bekend
-      ? [plaatsing.vel.breedteMm * PT_PER_MM, plaatsing.vel.hoogteMm * PT_PER_MM]
-      : [plaatsing.paginaPt.breedtePt, plaatsing.paginaPt.hoogtePt];
+    const maat = printPaginaMaat(plaatsing);
     const pagina = pdf.addPage(maat);
 
     // Niet via page.drawPage: die schaalt met de maat van het ongedraaide vak

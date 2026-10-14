@@ -82,7 +82,7 @@
     "orderVertical": "Vertical",
     "orderVerticalReversed": "Vertical invertido",
     "pageBorder": "Imprimir borda da página",
-    "perSheetNote": "Cada página é dimensionada para caber em sua célula, então a escala de página acima não se aplica. A pré-visualização mostra uma única página.",
+    "perSheetNote": "Cada página é dimensionada para caber em sua célula, então a escala de página acima não se aplica.",
     "autoRotate": "Girar automaticamente",
     "autoCenter": "Centralizar automaticamente",
     "advancedOptions": "Opções avançadas de impressão",

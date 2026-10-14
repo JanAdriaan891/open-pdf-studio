@@ -82,7 +82,7 @@
     "orderVertical": "Okomito",
     "orderVerticalReversed": "Okomito obrnuto",
     "pageBorder": "Ispiši obrub stranice",
-    "perSheetNote": "Svaka se stranica prilagođava svojoj ćeliji, pa se gornje skaliranje stranice ne primjenjuje. Pretpregled prikazuje jednu stranicu.",
+    "perSheetNote": "Svaka se stranica prilagođava svojoj ćeliji, pa se gornje skaliranje stranice ne primjenjuje.",
     "autoRotate": "Automatsko rotiranje",
     "autoCenter": "Automatsko centriranje",
     "advancedOptions": "Napredne opcije ispisa",

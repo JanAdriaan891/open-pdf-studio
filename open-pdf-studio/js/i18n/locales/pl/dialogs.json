@@ -82,7 +82,7 @@
     "orderVertical": "Pionowo",
     "orderVerticalReversed": "Pionowo odwrotnie",
     "pageBorder": "Drukuj obramowanie strony",
-    "perSheetNote": "Każda strona jest skalowana do swojej komórki, więc powyższe skalowanie strony nie ma zastosowania. Podgląd pokazuje pojedynczą stronę.",
+    "perSheetNote": "Każda strona jest skalowana do swojej komórki, więc powyższe skalowanie strony nie ma zastosowania.",
     "autoRotate": "Automatyczny obrót",
     "autoCenter": "Automatyczne centrowanie",
     "advancedOptions": "Zaawansowane opcje drukowania",

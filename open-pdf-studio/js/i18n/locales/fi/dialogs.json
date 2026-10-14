@@ -82,7 +82,7 @@
     "orderVertical": "Pystysuunta",
     "orderVerticalReversed": "Pystysuunta käänteinen",
     "pageBorder": "Tulosta sivun reunus",
-    "perSheetNote": "Jokainen sivu skaalataan sopimaan soluunsa, joten yllä oleva sivun skaalaus ei ole käytössä. Esikatselu näyttää yhden sivun.",
+    "perSheetNote": "Jokainen sivu skaalataan sopimaan soluunsa, joten yllä oleva sivun skaalaus ei ole käytössä.",
     "autoRotate": "Automaattinen kierto",
     "autoCenter": "Automaattinen keskitys",
     "advancedOptions": "Tulostuksen lisäasetukset",

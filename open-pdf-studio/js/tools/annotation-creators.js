@@ -1,4 +1,5 @@
 import { huidigeSymboolSchaal } from '../symbols/symbol-scale-store.js';
+import { withSymbolInsertFormat } from '../symbols/symbol-insert-format-store.js';
 import { schaalVakOmMidden } from '../symbols/symbol-scale.js';
 import { state, getActiveDocument } from '../core/state.js';
 import { getColorPickerValue, getLineWidthValue } from '../bridge.js';
@@ -579,6 +580,11 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
 
 function finalizeAnnotation(tool, props) {
   if (!props) return null;
+
+  // Opmaak uit de invoegsessie voor symbolen (#587). Alleen bij tekenen (beide
+  // tekenroutes komen hier langs): buildAnnotationProps blijft zonder, zodat
+  // een symbool of wand via MCP of een plug-in de standaardopmaak houdt.
+  props = withSymbolInsertFormat(tool, props);
 
   // Geen ondergrens in paginapunten meer voor wolk (was 10 pt: een wolk van
   // 8 x 100 pt verviel stil) en redactiemarkering (was 5 pt: een smalle strook
