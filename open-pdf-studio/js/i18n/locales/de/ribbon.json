@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Miniaturansichten öffnen, um Seiten in eine neue Reihenfolge zu ziehen",
     "ocr": "Text erkennen (OCR)",
     "straighten": "Seite Begradigen",
+    "scanText": "Gescannten Text bearbeiten",
+    "scanTextHint": "Klicken Sie auf ein erkanntes Wort, um es zu ersetzen. Das alte Wort im Scan wird abgedeckt.",
+    "scanTextNone": "Kein erkannter Text auf dieser Seite. Führen Sie zuerst Text erkennen (OCR) aus.",
     "shiftPage": "Seite verschieben"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Musterrechteck",
     "lShape": "L-Form",
     "image": "Bild",
-    "removeImage": "Bild entfernen",
+    "removeImage": "Bild bearbeiten",
     "removeImageConfirm": "Dieses Bild von der Seite entfernen? Dadurch wird der PDF-Inhalt bearbeitet; dies kann rückgängig gemacht werden.",
     "removeImageFailed": "Dieses Bild konnte nicht entfernt werden.",
+    "editImageHint": "Klicken Sie auf ein Bild, um es auszuwählen. Ziehen zum Verschieben, Griff ziehen zum Skalieren, Doppelklick zum Ersetzen, Delete zum Entfernen.",
+    "moveImageFailed": "Dieses Bild konnte nicht verschoben werden.",
+    "replaceImageFailed": "Dieses Bild konnte nicht ersetzt werden.",
     "noEmbeddedImages": "Auf dieser Seite wurden keine eingebetteten Bilder gefunden.",
     "lineContinue": "Fortlaufend",
     "lineContinueTip": "Jeder Klick verbindet das nächste Liniensegment mit dem vorherigen. Escape, Rechtsklick oder Doppelklick beendet die Kette.",

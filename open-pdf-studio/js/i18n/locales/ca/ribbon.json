@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Obre les miniatures per arrossegar les pàgines a un ordre nou",
     "ocr": "Reconeixement de text (OCR)",
     "straighten": "Redreça la Pàgina",
+    "scanText": "Edita el text escanejat",
+    "scanTextHint": "Feu clic en una paraula reconeguda per substituir-la. La paraula antiga de l'escaneig queda coberta.",
+    "scanTextNone": "No hi ha text reconegut en aquesta pàgina. Executeu primer Reconeixement de text (OCR).",
     "shiftPage": "Desplaça la pàgina"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Rectangle amb patró",
     "lShape": "Forma en L",
     "image": "Imatge",
-    "removeImage": "Elimina la imatge",
+    "removeImage": "Edita la imatge",
     "removeImageConfirm": "Voleu eliminar aquesta imatge de la pàgina? Això edita el contingut del PDF i es pot desfer.",
     "removeImageFailed": "No s'ha pogut eliminar aquesta imatge.",
+    "editImageHint": "Feu clic en una imatge per seleccionar-la. Arrossegueu per moure-la, arrossegueu una nansa per canviar-ne la mida, feu doble clic per substituir-la i premeu Delete per eliminar-la.",
+    "moveImageFailed": "No s'ha pogut moure aquesta imatge.",
+    "replaceImageFailed": "No s'ha pogut substituir aquesta imatge.",
     "noEmbeddedImages": "No s'han trobat imatges incrustades en aquesta pàgina.",
     "lineContinue": "Contínua",
     "lineContinueTip": "Cada clic uneix el segment de línia següent amb l'anterior. Escape, clic dret o doble clic acaba la sèrie.",

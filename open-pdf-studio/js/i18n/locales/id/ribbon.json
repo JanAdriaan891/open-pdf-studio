@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Buka gambar mini untuk menyeret halaman ke urutan baru",
     "ocr": "Pengenalan Teks (OCR)",
     "straighten": "Luruskan Halaman",
+    "scanText": "Edit Teks Pindaian",
+    "scanTextHint": "Klik kata yang dikenali untuk menggantinya. Kata lama pada pindaian akan ditutupi.",
+    "scanTextNone": "Tidak ada teks yang dikenali di halaman ini. Jalankan Pengenalan Teks (OCR) terlebih dahulu.",
     "shiftPage": "Geser halaman"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Larik persegi",
     "lShape": "Bentuk L",
     "image": "Gambar",
-    "removeImage": "Hapus gambar",
+    "removeImage": "Edit gambar",
     "removeImageConfirm": "Hapus gambar ini dari halaman? Ini mengedit konten PDF dan dapat dibatalkan.",
     "removeImageFailed": "Tidak dapat menghapus gambar ini.",
+    "editImageHint": "Klik gambar untuk memilihnya. Seret untuk memindahkan, seret pegangan untuk mengubah ukuran, klik ganda untuk mengganti, Delete untuk menghapus.",
+    "moveImageFailed": "Tidak dapat memindahkan gambar ini.",
+    "replaceImageFailed": "Tidak dapat mengganti gambar ini.",
     "noEmbeddedImages": "Tidak ada gambar tersemat di halaman ini.",
     "lineContinue": "Bersambung",
     "lineContinueTip": "Setiap klik menyambungkan segmen garis berikutnya ke segmen sebelumnya. Escape, klik kanan, atau klik ganda mengakhiri rangkaian.",

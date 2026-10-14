@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Ouvrir les miniatures pour faire glisser les pages dans un nouvel ordre",
     "ocr": "Reconnaissance de texte (OCR)",
     "straighten": "Redresser la Page",
+    "scanText": "Modifier le texte numérisé",
+    "scanTextHint": "Cliquez sur un mot reconnu pour le remplacer. L'ancien mot de la numérisation est masqué.",
+    "scanTextNone": "Aucun texte reconnu sur cette page. Lancez d'abord Reconnaissance de texte (OCR).",
     "shiftPage": "Décaler la page"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Rectangle à motif",
     "lShape": "Forme en L",
     "image": "Image",
-    "removeImage": "Supprimer l'image",
+    "removeImage": "Modifier l'image",
     "removeImageConfirm": "Supprimer cette image de la page ? Cela modifie le contenu du PDF et peut être annulé.",
     "removeImageFailed": "Impossible de supprimer cette image.",
+    "editImageHint": "Cliquez sur une image pour la sélectionner. Faites-la glisser pour la déplacer, faites glisser une poignée pour la redimensionner, double-cliquez pour la remplacer, Delete pour la supprimer.",
+    "moveImageFailed": "Impossible de déplacer cette image.",
+    "replaceImageFailed": "Impossible de remplacer cette image.",
     "noEmbeddedImages": "Aucune image incorporée trouvée sur cette page.",
     "lineContinue": "Continu",
     "lineContinueTip": "Chaque clic relie le segment suivant au précédent. Escape, clic droit ou double-clic termine la suite.",

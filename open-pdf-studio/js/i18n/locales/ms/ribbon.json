@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Buka lakaran kecil untuk menyeret halaman ke susunan baharu",
     "ocr": "Pengecaman Teks (OCR)",
     "straighten": "Luruskan Halaman",
+    "scanText": "Sunting Teks Imbasan",
+    "scanTextHint": "Klik perkataan yang dikenal pasti untuk menggantikannya. Perkataan lama dalam imbasan akan ditutup.",
+    "scanTextNone": "Tiada teks yang dikenal pasti pada halaman ini. Jalankan Pengecaman Teks (OCR) dahulu.",
     "shiftPage": "Alih halaman"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Tatasusunan segi empat",
     "lShape": "Bentuk L",
     "image": "Imej",
-    "removeImage": "Buang imej",
+    "removeImage": "Sunting imej",
     "removeImageConfirm": "Buang imej ini daripada halaman? Ini menyunting kandungan PDF dan boleh dibuat asal.",
     "removeImageFailed": "Tidak dapat membuang imej ini.",
+    "editImageHint": "Klik imej untuk memilihnya. Seret untuk mengalihkan, seret pemegang untuk mengubah saiz, dwiklik untuk menggantikan, Delete untuk membuang.",
+    "moveImageFailed": "Tidak dapat mengalihkan imej ini.",
+    "replaceImageFailed": "Tidak dapat menggantikan imej ini.",
     "noEmbeddedImages": "Tiada imej terbenam ditemui pada halaman ini.",
     "lineContinue": "Bersambung",
     "lineContinueTip": "Setiap klik menyambungkan segmen garisan seterusnya kepada yang sebelumnya. Escape, klik kanan atau dwiklik menamatkan rangkaian.",

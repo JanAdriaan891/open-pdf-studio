@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Sayfaları yeni bir sıraya sürüklemek için küçük resimleri aç",
     "ocr": "Metin Tanıma (OCR)",
     "straighten": "Sayfayı Düzelt",
+    "scanText": "Taranmış Metni Düzenle",
+    "scanTextHint": "Değiştirmek için tanınan bir kelimeye tıklayın. Taramadaki eski kelime örtülür.",
+    "scanTextNone": "Bu sayfada tanınan metin yok. Önce Metin Tanıma (OCR) çalıştırın.",
     "shiftPage": "Sayfayı kaydır"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Desenli dikdörtgen",
     "lShape": "L şekli",
     "image": "Görüntü",
-    "removeImage": "Görüntüyü kaldır",
+    "removeImage": "Görüntüyü düzenle",
     "removeImageConfirm": "Bu görüntü sayfadan kaldırılsın mı? Bu işlem PDF içeriğini düzenler ve geri alınabilir.",
     "removeImageFailed": "Bu görüntü kaldırılamadı.",
+    "editImageHint": "Seçmek için bir görüntüye tıklayın. Taşımak için sürükleyin, yeniden boyutlandırmak için bir tutamacı sürükleyin, değiştirmek için çift tıklayın, kaldırmak için Delete tuşuna basın.",
+    "moveImageFailed": "Bu görüntü taşınamadı.",
+    "replaceImageFailed": "Bu görüntü değiştirilemedi.",
     "noEmbeddedImages": "Bu sayfada gömülü görüntü bulunamadı.",
     "lineContinue": "Sürekli",
     "lineContinueTip": "Her tıklama sonraki çizgi parçasını öncekine bağlar. Escape, sağ tık veya çift tık seriyi bitirir.",

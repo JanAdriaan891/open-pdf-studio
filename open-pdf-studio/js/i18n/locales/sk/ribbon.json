@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Otvoriť miniatúry a presunúť strany do nového poradia",
     "ocr": "Rozpoznávanie textu (OCR)",
     "straighten": "Narovnať Stránku",
+    "scanText": "Upraviť naskenovaný text",
+    "scanTextHint": "Kliknutím na rozpoznané slovo ho nahradíte. Pôvodné slovo v skene sa zakryje.",
+    "scanTextNone": "Na tejto stránke nie je žiadny rozpoznaný text. Najprv spustite Rozpoznávanie textu (OCR).",
     "shiftPage": "Posunúť stránku"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Obdĺžnikové pole",
     "lShape": "Tvar L",
     "image": "Obrázok",
-    "removeImage": "Odstrániť obrázok",
+    "removeImage": "Upraviť obrázok",
     "removeImageConfirm": "Odstrániť tento obrázok zo strany? Tým sa upraví obsah PDF; akciu je možné vrátiť späť.",
     "removeImageFailed": "Tento obrázok sa nepodarilo odstrániť.",
+    "editImageHint": "Kliknutím na obrázok ho vyberiete. Ťahaním ho presuniete, ťahaním úchytu zmeníte veľkosť, dvojklikom ho nahradíte, klávesom Delete ho odstránite.",
+    "moveImageFailed": "Tento obrázok sa nepodarilo presunúť.",
+    "replaceImageFailed": "Tento obrázok sa nepodarilo nahradiť.",
     "noEmbeddedImages": "Na tejto strane sa nenašli žiadne vložené obrázky.",
     "lineContinue": "Nadväzujúca",
     "lineContinueTip": "Každé kliknutie pripojí ďalší úsek čiary k predchádzajúcemu. Escape, pravé tlačidlo alebo dvojklik sériu ukončí.",

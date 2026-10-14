@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Otvori minijature i povuci stranice u novi redoslijed",
     "ocr": "Prepoznavanje teksta (OCR)",
     "straighten": "Ispravi Stranicu",
+    "scanText": "Uredi skenirani tekst",
+    "scanTextHint": "Kliknite prepoznatu riječ da biste je zamijenili. Stara riječ u skenu bit će prekrivena.",
+    "scanTextNone": "Na ovoj stranici nema prepoznatog teksta. Najprije pokrenite Prepoznavanje teksta (OCR).",
     "shiftPage": "Pomakni stranicu"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Pravokutni niz",
     "lShape": "L-oblik",
     "image": "Slika",
-    "removeImage": "Ukloni sliku",
+    "removeImage": "Uredi sliku",
     "removeImageConfirm": "Ukloniti ovu sliku sa stranice? Time se mijenja sadržaj PDF-a, a radnja se može poništiti.",
     "removeImageFailed": "Ovu sliku nije bilo moguće ukloniti.",
+    "editImageHint": "Kliknite sliku da biste je odabrali. Povucite za premještanje, povucite ručicu za promjenu veličine, dvaput kliknite za zamjenu, Delete za uklanjanje.",
+    "moveImageFailed": "Ovu sliku nije bilo moguće premjestiti.",
+    "replaceImageFailed": "Ovu sliku nije bilo moguće zamijeniti.",
     "noEmbeddedImages": "Na ovoj stranici nisu pronađene ugrađene slike.",
     "lineContinue": "Neprekidno",
     "lineContinueTip": "Svaki klik spaja sljedeći segment linije s prethodnim. Escape, desni klik ili dvostruki klik završava niz.",

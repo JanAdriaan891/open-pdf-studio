@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Avaa pienoiskuvat ja vedä sivut uuteen järjestykseen",
     "ocr": "Tekstintunnistus (OCR)",
     "straighten": "Suorista Sivu",
+    "scanText": "Muokkaa skannattua tekstiä",
+    "scanTextHint": "Korvaa tunnistettu sana napsauttamalla sitä. Skannauksen vanha sana peitetään.",
+    "scanTextNone": "Tällä sivulla ei ole tunnistettua tekstiä. Suorita ensin Tekstintunnistus (OCR).",
     "shiftPage": "Siirrä sivua"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Suorakulmiokuvio",
     "lShape": "L-muoto",
     "image": "Kuva",
-    "removeImage": "Poista kuva",
+    "removeImage": "Muokkaa kuvaa",
     "removeImageConfirm": "Poistetaanko tämä kuva sivulta? Tämä muokkaa PDF:n sisältöä, ja sen voi kumota.",
     "removeImageFailed": "Tätä kuvaa ei voitu poistaa.",
+    "editImageHint": "Valitse kuva napsauttamalla sitä. Siirrä vetämällä, muuta kokoa vetämällä kahvaa, korvaa kaksoisnapsauttamalla ja poista Delete-näppäimellä.",
+    "moveImageFailed": "Tätä kuvaa ei voitu siirtää.",
+    "replaceImageFailed": "Tätä kuvaa ei voitu korvata.",
     "noEmbeddedImages": "Tältä sivulta ei löytynyt upotettuja kuvia.",
     "lineContinue": "Jatkuva",
     "lineContinueTip": "Jokainen napsautus liittää seuraavan viivasegmentin edelliseen. Escape, hiiren oikea painike tai kaksoisnapsautus lopettaa sarjan.",

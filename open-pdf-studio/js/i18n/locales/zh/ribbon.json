@@ -313,6 +313,9 @@
     "reorderPagesTitle": "打开缩略图，拖动页面以重新排序",
     "ocr": "文字識別（OCR）",
     "straighten": "拉直頁面",
+    "scanText": "编辑扫描文本",
+    "scanTextHint": "单击已识别的单词即可替换。扫描中的旧单词会被遮盖。",
+    "scanTextNone": "此页面上没有已识别的文本。请先运行文字識別（OCR）。",
     "shiftPage": "移動頁面"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "矩形阵列",
     "lShape": "L 形",
     "image": "图像",
-    "removeImage": "移除图像",
+    "removeImage": "编辑图像",
     "removeImageConfirm": "要从页面中移除此图像吗？这会编辑 PDF 内容，可以撤销。",
     "removeImageFailed": "无法移除此图像。",
+    "editImageHint": "单击图像将其选中。拖动可移动，拖动控制点可调整大小，双击可替换，按 Delete 可删除。",
+    "moveImageFailed": "无法移动此图像。",
+    "replaceImageFailed": "无法替换此图像。",
     "noEmbeddedImages": "此页面上未找到嵌入的图像。",
     "lineContinue": "连续",
     "lineContinueTip": "每次单击都会将下一条线段连接到上一条。按 Esc、右键或双击结束。",

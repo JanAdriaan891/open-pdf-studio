@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Deschide miniaturile pentru a trage paginile într-o ordine nouă",
     "ocr": "Recunoaștere text (OCR)",
     "straighten": "Îndreaptă Pagina",
+    "scanText": "Editare text scanat",
+    "scanTextHint": "Faceți clic pe un cuvânt recunoscut pentru a-l înlocui. Cuvântul vechi din scanare este acoperit.",
+    "scanTextNone": "Nu există text recunoscut pe această pagină. Rulați mai întâi Recunoaștere text (OCR).",
     "shiftPage": "Deplasează pagina"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Dreptunghi cu model",
     "lShape": "Formă L",
     "image": "Imagine",
-    "removeImage": "Eliminare imagine",
+    "removeImage": "Editare imagine",
     "removeImageConfirm": "Eliminați această imagine de pe pagină? Acest lucru editează conținutul PDF și poate fi anulat.",
     "removeImageFailed": "Imaginea nu a putut fi eliminată.",
+    "editImageHint": "Faceți clic pe o imagine pentru a o selecta. Trageți pentru a o muta, trageți un mâner pentru a o redimensiona, dublu clic pentru a o înlocui, Delete pentru a o elimina.",
+    "moveImageFailed": "Imaginea nu a putut fi mutată.",
+    "replaceImageFailed": "Imaginea nu a putut fi înlocuită.",
     "noEmbeddedImages": "Nu s-au găsit imagini încorporate pe această pagină.",
     "lineContinue": "Continuă",
     "lineContinueTip": "Fiecare clic leagă următorul segment de linie de cel anterior. Escape, clic dreapta sau dublu clic încheie seria.",

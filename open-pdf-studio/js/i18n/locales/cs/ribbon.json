@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Otevřít miniatury a přetáhnout stránky do nového pořadí",
     "ocr": "Rozpoznávání textu (OCR)",
     "straighten": "Narovnat Stránku",
+    "scanText": "Upravit naskenovaný text",
+    "scanTextHint": "Kliknutím na rozpoznané slovo jej nahradíte. Původní slovo ve skenu se zakryje.",
+    "scanTextNone": "Na této stránce není žádný rozpoznaný text. Nejprve spusťte Rozpoznávání textu (OCR).",
     "shiftPage": "Posunout stránku"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Obdélníkové pole",
     "lShape": "Tvar L",
     "image": "Obrázek",
-    "removeImage": "Odebrat obrázek",
+    "removeImage": "Upravit obrázek",
     "removeImageConfirm": "Odebrat tento obrázek ze stránky? Tím se upraví obsah PDF; akci lze vrátit zpět.",
     "removeImageFailed": "Tento obrázek nelze odebrat.",
+    "editImageHint": "Kliknutím na obrázek jej vyberete. Tažením jej přesunete, tažením úchytu změníte velikost, dvojklikem jej nahradíte, klávesou Delete jej odeberete.",
+    "moveImageFailed": "Tento obrázek nelze přesunout.",
+    "replaceImageFailed": "Tento obrázek nelze nahradit.",
     "noEmbeddedImages": "Na této stránce nebyly nalezeny žádné vložené obrázky.",
     "lineContinue": "Navazující",
     "lineContinueTip": "Každé kliknutí připojí další úsek čáry k předchozímu. Escape, pravé tlačítko nebo dvojklik sérii ukončí.",

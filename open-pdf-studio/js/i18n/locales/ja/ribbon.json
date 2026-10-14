@@ -313,6 +313,9 @@
     "reorderPagesTitle": "サムネイルを開き、ページをドラッグして並べ替えます",
     "ocr": "文字認識（OCR）",
     "straighten": "ページを補正",
+    "scanText": "スキャンテキストを編集",
+    "scanTextHint": "認識された単語をクリックすると置き換えられます。スキャン内の元の単語は覆い隠されます。",
+    "scanTextNone": "このページには認識されたテキストがありません。先に文字認識（OCR）を実行してください。",
     "shiftPage": "ページをシフト"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "矩形配列",
     "lShape": "L 字形",
     "image": "画像",
-    "removeImage": "画像を削除",
+    "removeImage": "画像を編集",
     "removeImageConfirm": "この画像をページから削除しますか？PDF の内容が編集されますが、元に戻すことができます。",
     "removeImageFailed": "この画像を削除できませんでした。",
+    "editImageHint": "画像をクリックして選択します。ドラッグで移動、ハンドルのドラッグでサイズ変更、ダブルクリックで置換、Delete キーで削除します。",
+    "moveImageFailed": "この画像を移動できませんでした。",
+    "replaceImageFailed": "この画像を置き換えられませんでした。",
     "noEmbeddedImages": "このページに埋め込み画像は見つかりませんでした。",
     "lineContinue": "連続",
     "lineContinueTip": "クリックするたびに次の線分が前の線分に接続されます。Esc キー、右クリック、またはダブルクリックで終了します。",

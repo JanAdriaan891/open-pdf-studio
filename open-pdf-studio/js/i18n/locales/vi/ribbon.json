@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Mở hình thu nhỏ để kéo các trang theo thứ tự mới",
     "ocr": "Nhận dạng văn bản (OCR)",
     "straighten": "Làm Thẳng Trang",
+    "scanText": "Sửa Văn bản Quét",
+    "scanTextHint": "Nhấp vào một từ đã nhận dạng để thay thế. Từ cũ trong bản quét sẽ được che lại.",
+    "scanTextNone": "Không có văn bản đã nhận dạng trên trang này. Hãy chạy Nhận dạng văn bản (OCR) trước.",
     "shiftPage": "Dịch chuyển trang"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Mảng chữ nhật",
     "lShape": "Hình chữ L",
     "image": "Hình ảnh",
-    "removeImage": "Xóa hình ảnh",
+    "removeImage": "Sửa hình ảnh",
     "removeImageConfirm": "Xóa hình ảnh này khỏi trang? Thao tác này chỉnh sửa nội dung PDF và có thể hoàn tác.",
     "removeImageFailed": "Không thể xóa hình ảnh này.",
+    "editImageHint": "Nhấp vào một hình ảnh để chọn. Kéo để di chuyển, kéo một tay nắm để đổi kích thước, nhấp đúp để thay thế, nhấn Delete để xóa.",
+    "moveImageFailed": "Không thể di chuyển hình ảnh này.",
+    "replaceImageFailed": "Không thể thay thế hình ảnh này.",
     "noEmbeddedImages": "Không tìm thấy hình ảnh nhúng nào trên trang này.",
     "lineContinue": "Liên tục",
     "lineContinueTip": "Mỗi lần nhấp nối đoạn thẳng tiếp theo với đoạn trước. Escape, nhấp chuột phải hoặc nhấp đúp để kết thúc.",

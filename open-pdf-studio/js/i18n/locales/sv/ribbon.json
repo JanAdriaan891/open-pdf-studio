@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Öppna miniatyrerna för att dra sidorna i en ny ordning",
     "ocr": "Textigenkänning (OCR)",
     "straighten": "Räta Ut Sidan",
+    "scanText": "Redigera skannad text",
+    "scanTextHint": "Klicka på ett igenkänt ord för att ersätta det. Det gamla ordet i skanningen täcks över.",
+    "scanTextNone": "Ingen igenkänd text på den här sidan. Kör Textigenkänning (OCR) först.",
     "shiftPage": "Flytta sida"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Rektangulärt mönster",
     "lShape": "L-form",
     "image": "Bild",
-    "removeImage": "Ta bort bild",
+    "removeImage": "Redigera bild",
     "removeImageConfirm": "Ta bort den här bilden från sidan? Detta ändrar PDF-innehållet och kan ångras.",
     "removeImageFailed": "Det gick inte att ta bort den här bilden.",
+    "editImageHint": "Klicka på en bild för att markera den. Dra för att flytta, dra i ett handtag för att ändra storlek, dubbelklicka för att ersätta, Delete för att ta bort.",
+    "moveImageFailed": "Det gick inte att flytta den här bilden.",
+    "replaceImageFailed": "Det gick inte att ersätta den här bilden.",
     "noEmbeddedImages": "Inga inbäddade bilder hittades på den här sidan.",
     "lineContinue": "Kontinuerlig",
     "lineContinueTip": "Varje klick ansluter nästa linjesegment till det föregående. Escape, högerklick eller dubbelklick avslutar serien.",

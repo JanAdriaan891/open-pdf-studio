@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Åbn miniaturerne for at trække siderne i en ny rækkefølge",
     "ocr": "Tekstgenkendelse (OCR)",
     "straighten": "Ret Side",
+    "scanText": "Rediger scannet tekst",
+    "scanTextHint": "Klik på et genkendt ord for at erstatte det. Det gamle ord i scanningen dækkes til.",
+    "scanTextNone": "Ingen genkendt tekst på denne side. Kør Tekstgenkendelse (OCR) først.",
     "shiftPage": "Forskyd side"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Mønsterrektangel",
     "lShape": "L-form",
     "image": "Billede",
-    "removeImage": "Fjern billede",
+    "removeImage": "Rediger billede",
     "removeImageConfirm": "Vil du fjerne dette billede fra siden? Det redigerer PDF-indholdet og kan fortrydes.",
     "removeImageFailed": "Billedet kunne ikke fjernes.",
+    "editImageHint": "Klik på et billede for at markere det. Træk for at flytte, træk i et håndtag for at ændre størrelsen, dobbeltklik for at erstatte, Delete for at fjerne.",
+    "moveImageFailed": "Billedet kunne ikke flyttes.",
+    "replaceImageFailed": "Billedet kunne ikke erstattes.",
     "noEmbeddedImages": "Ingen indlejrede billeder fundet på denne side.",
     "lineContinue": "Sammenhængende",
     "lineContinueTip": "Hvert klik forbinder det næste linjestykke med det forrige. Escape, højreklik eller dobbeltklik afslutter rækken.",

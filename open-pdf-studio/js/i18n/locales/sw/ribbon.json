@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Fungua vijipicha ili kuburuta kurasa kwenye mpangilio mpya",
     "ocr": "Utambuzi wa Maandishi (OCR)",
     "straighten": "Nyoosha Ukurasa",
+    "scanText": "Hariri Maandishi Yaliyochanganuliwa",
+    "scanTextHint": "Bofya neno lililotambuliwa ili kulibadilisha. Neno la zamani kwenye skani hufunikwa.",
+    "scanTextNone": "Hakuna maandishi yaliyotambuliwa kwenye ukurasa huu. Endesha Utambuzi wa Maandishi (OCR) kwanza.",
     "shiftPage": "Hamisha ukurasa"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Mpangilio wa mstatili",
     "lShape": "Umbo la L",
     "image": "Picha",
-    "removeImage": "Ondoa picha",
+    "removeImage": "Hariri picha",
     "removeImageConfirm": "Ondoa picha hii kutoka ukurasa? Hii inahariri maudhui ya PDF na inaweza kutenduliwa.",
     "removeImageFailed": "Haikuweza kuondoa picha hii.",
+    "editImageHint": "Bofya picha ili kuichagua. Buruta ili kuisogeza, buruta kishikio ili kubadilisha ukubwa, bofya mara mbili ili kuweka nyingine badala yake, Delete ili kuiondoa.",
+    "moveImageFailed": "Haikuweza kusogeza picha hii.",
+    "replaceImageFailed": "Haikuweza kubadilisha picha hii.",
     "noEmbeddedImages": "Hakuna picha zilizopachikwa kwenye ukurasa huu.",
     "lineContinue": "Endelevu",
     "lineContinueTip": "Kila mbofyo huunganisha kipande cha mstari kinachofuata na kilichotangulia. Escape, bofya kulia au bofya mara mbili humaliza mfululizo.",

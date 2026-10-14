@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Bélyegképek megnyitása az oldalak új sorrendbe húzásához",
     "ocr": "Szövegfelismerés (OCR)",
     "straighten": "Oldal Egyenesítése",
+    "scanText": "Szkennelt szöveg szerkesztése",
+    "scanTextHint": "Kattintson egy felismert szóra a cseréjéhez. A régi szó a szkennelt képen le lesz takarva.",
+    "scanTextNone": "Ezen az oldalon nincs felismert szöveg. Először futtassa a Szövegfelismerés (OCR) funkciót.",
     "shiftPage": "Oldal eltolása"
   },
   "help": {
@@ -513,9 +516,12 @@
     "patternRect": "Téglalapos kiosztás",
     "lShape": "L-alak",
     "image": "Kép",
-    "removeImage": "Kép eltávolítása",
+    "removeImage": "Kép szerkesztése",
     "removeImageConfirm": "Eltávolítja ezt a képet az oldalról? Ez módosítja a PDF tartalmát, és visszavonható.",
     "removeImageFailed": "Ezt a képet nem sikerült eltávolítani.",
+    "editImageHint": "Kattintson egy képre a kijelöléséhez. Húzza az áthelyezéshez, húzzon egy fogópontot az átméretezéshez, kattintson duplán a cseréhez, a Delete billentyűvel pedig eltávolíthatja.",
+    "moveImageFailed": "Ezt a képet nem sikerült áthelyezni.",
+    "replaceImageFailed": "Ezt a képet nem sikerült lecserélni.",
     "noEmbeddedImages": "Ezen az oldalon nem található beágyazott kép.",
     "lineContinue": "Folytatólagos",
     "lineContinueTip": "Minden kattintás a következő vonalszakaszt az előzőhöz kapcsolja. Az Escape, a jobb gomb vagy a dupla kattintás befejezi a sorozatot.",
