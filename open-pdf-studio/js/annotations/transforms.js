@@ -66,10 +66,8 @@ export function syncMeasurementAfterEdit(ann) {
   if (ann.type === 'measureDistance') {
     syncDimensionMeasurement(ann);
   } else if (ann.type === 'measureArea' && Array.isArray(ann.points) && ann.points.length >= 3) {
-    const r = calculateArea(ann.points, ann.holes, ann.page);
-    ann.measureValue = r.value;
-    ann.measureUnit = r.unit;
-    ann.measureText = formatMeasurement(r);
+    // Same routine as a grip edit, so an area with its own scale keeps it (#536).
+    herberekenVlakMaat(ann);
   } else if (ann.type === 'measurePerimeter' && Array.isArray(ann.points) && ann.points.length >= 2) {
     const r = calculatePerimeter(ann.points, ann.page);
     ann.measureValue = r.value;
