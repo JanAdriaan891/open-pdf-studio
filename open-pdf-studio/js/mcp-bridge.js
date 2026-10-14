@@ -97,8 +97,9 @@ async function waitForActiveLoad(targetDoc, timeoutMs = 30000) {
  *  PNG and return it as a base64 string (no `data:` prefix).
  *
  *  We deliberately do NOT capture the surrounding chrome (toolbars, panels)
- *  — the regression-test harness only cares about the page view. For a
- *  full-window grab the caller can use OS-level screenshotting. */
+ *  — the regression-test harness only cares about the page view. For the
+ *  full window (ribbon, panels, status bar) see `captureWindowView` below
+ *  (app_screenshot_view scope 'window' / 'element', #583). */
 async function compositeCurrentView(maxWidth = 2000) {
   const { getActiveDocument } = await import('./core/state.js');
   const doc = getActiveDocument();
@@ -145,7 +146,65 @@ async function compositeCurrentView(maxWidth = 2000) {
   // Strip the `data:image/png;base64,` prefix so the returned string is
   // pure base64 (matches the existing `screenshot_page` tool's shape).
   const b64 = dataURL.startsWith('data:') ? dataURL.split(',', 2)[1] : dataURL;
-  return { png_base64: b64, width: outW, height: outH };
+  const { rechthoek } = await import('./core/mcp-schermafdruk.js');
+  return {
+    png_base64: b64, width: outW, height: outH,
+    bounds: rechthoek(pdfCanvas.getBoundingClientRect()),
+    devicePixelRatio: window.devicePixelRatio || 1,
+  };
+}
+
+/** Capture the whole window natively (the Tauri command
+ *  `capture_webview_png`, WebView2 CapturePreview on Windows) and crop it
+ *  to `bounds`. The crop and downscale rules live in
+ *  core/mcp-schermafdruk.js; here only the DOM, the canvas and the PNG. */
+async function captureWindowView({ scope, selector, width }) {
+  const { berekenUitsnede, rechthoek } = await import('./core/mcp-schermafdruk.js');
+  const viewport = { width: window.innerWidth, height: window.innerHeight };
+  let bounds = { x: 0, y: 0, width: viewport.width, height: viewport.height };
+  let elementBounds = null;
+  if (scope === 'element') {
+    let el;
+    try {
+      el = document.querySelector(selector);
+    } catch (e) {
+      throw new Error(`invalid selector: ${e?.message ?? e}`);
+    }
+    if (!el) throw new Error(`no element matches: ${selector}`);
+    elementBounds = rechthoek(el.getBoundingClientRect());
+    bounds = elementBounds;
+  }
+  const invoke = tauriInvoke();
+  if (!invoke) throw new Error('window capture needs the desktop app');
+  let png;
+  try {
+    png = await invoke('capture_webview_png');
+  } catch (e) {
+    throw new Error(`${e?.message ?? e}`);
+  }
+  const bytes = png instanceof ArrayBuffer ? png : (Array.isArray(png) ? new Uint8Array(png) : png);
+  const beeld = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
+  try {
+    const u = berekenUitsnede({ bounds, viewport, beeld: { width: beeld.width, height: beeld.height }, maxBreedte: width });
+    if (u.error) throw new Error(u.error);
+    const out = document.createElement('canvas');
+    out.width = u.outW;
+    out.height = u.outH;
+    const ctx = out.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(beeld, u.sx, u.sy, u.sw, u.sh, 0, 0, u.outW, u.outH);
+    const dataURL = out.toDataURL('image/png');
+    const b64 = dataURL.startsWith('data:') ? dataURL.split(',', 2)[1] : dataURL;
+    return {
+      png_base64: b64, width: u.outW, height: u.outH,
+      bounds: u.bounds,
+      ...(elementBounds ? { elementBounds } : {}),
+      devicePixelRatio: window.devicePixelRatio || 1,
+      capture: { width: beeld.width, height: beeld.height },
+    };
+  } finally {
+    beeld.close?.();
+  }
 }
 
 // ─── Per-event handlers ─────────────────────────────────────────────────
@@ -229,15 +288,25 @@ async function handleZoomOut() {
 }
 
 async function handleScreenshotView(params) {
-  const width = Number(params?.width) > 0 ? Number(params.width) : 2000;
+  const { leesSchermafdrukArgumenten } = await import('./core/mcp-schermafdruk.js');
+  const args = leesSchermafdrukArgumenten(params);
+  if (args.error) return { ok: false, error: args.error };
   // Yield one frame so any pending zoom / paint has a chance to land.
   await new Promise((r) => requestAnimationFrame(() => r()));
   await new Promise((r) => requestAnimationFrame(() => r()));
+  if (args.scope === 'document') {
+    try {
+      const out = await compositeCurrentView(args.width);
+      return { ok: true, scope: 'document', ...out };
+    } catch (e) {
+      return { ok: false, scope: 'document', error: `compositeCurrentView: ${e?.message ?? e}` };
+    }
+  }
   try {
-    const out = await compositeCurrentView(width);
-    return { ok: true, ...out };
+    const out = await captureWindowView(args);
+    return { ok: true, scope: args.scope, ...out };
   } catch (e) {
-    return { ok: false, error: `compositeCurrentView: ${e?.message ?? e}` };
+    return { ok: false, scope: args.scope, error: `${e?.message ?? e}` };
   }
 }
 

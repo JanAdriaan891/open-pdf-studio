@@ -111,6 +111,12 @@ A few of the many PDF tools: `app_open_pdf`, `app_new_blank_pdf`,
 authoritative list is in `src-tauri/src/mcp_server.rs` (`handle_tools_list`)
 and documented in `docs/superpowers/specs/2026-05-09-mcp-app-tools.md`.
 
+`app_screenshot_view` captures the page view by default. Pass
+`{"scope":"window"}` for the whole window (ribbon, extension tabs, side
+panels, status bar) or `{"scope":"element","selector":".ribbon-container"}`
+for one element; the result adds the captured `bounds` (CSS px) and
+`devicePixelRatio`. The window and element captures are Windows-only for now.
+
 ## Edit or translate existing page text
 
 Open a PDF, call `app_get_page_text` with a 1-based page number, and use its

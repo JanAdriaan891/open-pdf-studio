@@ -49,7 +49,7 @@
     },
     {
       "name": "app_screenshot_view",
-      "description": "Capture the LIVE app's current page view as a base64 PNG."
+      "description": "Capture the LIVE app as a base64 PNG."
     },
     {
       "name": "app_mouse_move",

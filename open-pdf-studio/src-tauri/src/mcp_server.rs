@@ -652,11 +652,13 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_screenshot_view",
-                "description": "Capture the LIVE app's current page view as a base64 PNG. Composites the PDF canvas with the annotation/highlight overlays (NOT the surrounding chrome — for that use OS-level screenshotting).",
+                "description": "Capture the LIVE app as a base64 PNG. scope 'document' (default) composites the PDF canvas with the annotation/highlight overlays, without the surrounding interface. scope 'window' captures the whole app window as it is shown: ribbon (including extension tabs), side panels such as an extension's workspace panel, the document view and the status bar. scope 'element' crops that window capture to the element matched by `selector`. The longer side is scaled down to `width`. Returns { png_base64, width, height, scope, bounds: { x, y, width, height } (the captured area in CSS px), devicePixelRatio }. 'window' and 'element' use a native capture of the web view and are available on Windows only for now; on other platforms they return an error.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "width": { "type": "integer", "minimum": 1, "default": 2000 }
+                        "width":    { "type": "integer", "minimum": 1, "default": 2000, "description": "Maximum length in px of the longer side of the PNG." },
+                        "scope":    { "type": "string", "enum": ["document", "window", "element"], "default": "document", "description": "'document' (the page view), 'window' (the whole app window) or 'element' (one element, needs selector)." },
+                        "selector": { "type": "string", "description": "CSS selector of the element to capture with scope 'element', e.g. '.ribbon-container', '#left-panel' or '.status-bar'." }
                     },
                     "additionalProperties": false
                 }
