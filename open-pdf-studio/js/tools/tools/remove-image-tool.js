@@ -40,6 +40,11 @@ let _busy = false;
 
 const DOUBLE_CLICK_MS = 450;
 const MIN_SLEEP_PX = 3;
+// Resize cursor per handle (edges straight, corners diagonal).
+const GREEP_CURSOR = {
+  tl: 'nwse-resize', br: 'nwse-resize', tr: 'nesw-resize', bl: 'nesw-resize',
+  t: 'ns-resize', b: 'ns-resize', l: 'ew-resize', r: 'ew-resize',
+};
 
 function t(key, def) {
   return i18next.t(key, { ns: 'ribbon', defaultValue: def });
@@ -200,13 +205,17 @@ export const removeImageTool = {
       ctx.redraw();
     }
     if (ctx.canvas) {
-      ctx.canvas.style.cursor = greep && greep !== 'move' ? 'nwse-resize'
+      ctx.canvas.style.cursor = greep && greep !== 'move' ? GREEP_CURSOR[greep]
         : (greep === 'move' || idx >= 0) ? 'move' : 'crosshair';
     }
   },
 
-  async onPointerDown(ctx) {
+  async onPointerDown(ctx, e) {
     if (_busy) return;
+    // The dispatcher repeats a real double-click as a synthetic pointer-down
+    // (detail 2). The second press already handled it; without this guard it
+    // would start a drag that no pointer-up ever ends.
+    if (e && e.detail === 2) return;
     ensureDetected(ctx.pageNum, ctx.redraw);
     const nu = Date.now();
     const greep = ctx.pageNum === _selPage ? greepOnder(ctx.x, ctx.y) : null;
