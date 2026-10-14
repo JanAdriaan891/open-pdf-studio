@@ -351,7 +351,9 @@ test('de opdrachten staan in de brug, de Rust-server, de metatabel, tools.json e
       destructiveHint: t.destructive, openWorldHint: false, readOnlyHint: t.readOnly, title: t.titel,
     });
   }
-  // Achteraan, in de volgorde van de server.
-  assert.deepEqual(tools.slice(-TOOLS.length).map((t) => t.name), TOOLS.map((t) => t.naam));
-  assert.equal(tools.length, 68);
+  // Aaneengesloten na app_facade_element, in de volgorde van de server; de
+  // extensietools (extensie_tools()) komen daar nog achter.
+  const start = tools.findIndex((t) => t.name === 'app_facade_element') + 1;
+  assert.deepEqual(tools.slice(start, start + TOOLS.length).map((t) => t.name), TOOLS.map((t) => t.naam));
+  assert.equal(tools.length, 71);
 });
