@@ -18,7 +18,7 @@ import { state, getActiveDocument, getPageRotation, getAnnotationBounds } from '
 import { setTool } from '../tools/manager.js';
 import { createAnnotation } from '../annotations/factory.js';
 import { redrawAnnotations } from '../annotations/rendering.js';
-import { beginUndoTransaction, endUndoTransaction, recordAdd, recordModify, recordDelete } from '../core/undo-manager.js';
+import { beginUndoTransaction, endUndoTransaction, recordAdd, recordModify, recordDelete, documentRevisie } from '../core/undo-manager.js';
 import { applyAnnotationBatch } from './annotation-batch.js';
 import { getPageInfoForDocument, readPageContentForDocument, renderPageTileForDocument } from './page-access.js';
 import { extractPageGeometry } from '../tools/pdf-snap-extractor.js';
@@ -32,6 +32,14 @@ import { createRoot, createEffect } from 'solid-js';
 import { createViewNavigation } from './view-navigation.js';
 import { maakBijdrageScope } from './extension-contributions.js';
 import { lintRegister } from './ribbon-tab-registry.js';
+import { gestructureerdeOpdrachten } from './structured-commands.js';
+
+// Een revisionContext.documentId van een extensieopdracht (#575) wijst naar een
+// open document; de revisie is die van de undo-geschiedenis.
+gestructureerdeOpdrachten.zetDocumentRevisie((id) => {
+  const doc = (state.documents || []).find(d => d && d.id === id);
+  return doc ? documentRevisie(doc) : null;
+});
 
 // Wat createViewNavigation van de app nodig heeft (#557). De modules voor
 // selecteren en in beeld brengen worden vooraf geladen (`prepare`), zodat de
@@ -178,6 +186,7 @@ export function createPluginApi(pluginId) {
       systemTypes: true,
       viewNavigation: true,
       ribbonTabs: true,
+      structuredCommands: true,
     },
 
     // --- Annotation type registration ---
@@ -317,8 +326,10 @@ export function createPluginApi(pluginId) {
 
     getDocumentInfo() {
       const doc = getActiveDocument();
+      // revision: verandert bij elke stap in de undo-geschiedenis; geef hem als
+      // revisionContext.documentRevision mee aan een wijzigende opdracht (#575).
       return doc ? { id: doc.id, pageCount: doc.numPages || doc.pdfDoc?.numPages || 0, currentPage: doc.currentPage,
-        name: doc.fileName || null } : null;
+        name: doc.fileName || null, revision: documentRevisie(doc) } : null;
     },
 
     getPageInfo(pageNum, options = {}) {
@@ -441,6 +452,41 @@ export function createPluginApi(pluginId) {
       return lintRegister.afmelden(scope, id);
     },
 
+    // --- Gestructureerde opdrachten (#575): MCP-tool ext_<id>__<name> ---
+    // Invoer- en uitvoerschema, asynchrone handler(args, ctx). De host
+    // controleert de argumenten vóór de handler; zie structured-commands.js.
+    registerCommand(descriptor) {
+      scope.eisActief('structuredCommand', String(descriptor?.name));
+      const opdracht = gestructureerdeOpdrachten.controleer(pluginId, descriptor);
+      scope.voegToe('structuredCommand', opdracht.tool,
+        () => gestructureerdeOpdrachten.verwijder(opdracht.tool, 'EXTENSION_UNLOADED'));
+      try {
+        gestructureerdeOpdrachten.voegToe(opdracht);
+      } catch (e) {
+        scope.verwijder('structuredCommand', opdracht.tool);
+        throw e;
+      }
+      return { tool: opdracht.tool, name: opdracht.name };
+    },
+
+    unregisterCommand(name) {
+      if (typeof name !== 'string') return false;
+      const tool = gestructureerdeOpdrachten.lijst(pluginId).find(c => c.name === name)?.tool;
+      // Alleen wat deze API registreerde (de scope): een oude API haalt na
+      // herladen de opdracht van de nieuwe versie niet weg.
+      if (!tool || !scope.lijst().some(b => b.soort === 'structuredCommand' && b.sleutel === tool)) return false;
+      gestructureerdeOpdrachten.verwijder(tool, 'COMMAND_UNREGISTERED');
+      return scope.verwijder('structuredCommand', tool);
+    },
+
+    /** Roep een eigen opdracht aan langs hetzelfde pad als MCP (bijvoorbeeld
+     *  vanuit de eigen bediening). Geeft altijd { ok, requestId, … }. */
+    runCommand(name, args) {
+      const tool = gestructureerdeOpdrachten.lijst(pluginId).find(c => c.name === name)?.tool;
+      if (!tool) return Promise.resolve({ ok: false, code: 'UNKNOWN_COMMAND', error: `unknown command: ${name}` });
+      return gestructureerdeOpdrachten.roepAan(tool, args, { source: 'api' });
+    },
+
     /** Overzicht van wat deze extensie heeft geregistreerd (app_list_extensions). */
     _bijdragenOverzicht() {
       return {
@@ -449,6 +495,7 @@ export function createPluginApi(pluginId) {
         annotationTypes: [...registeredTypes],
         palettes: [...registeredPalettes],
         propertyPanels: [...registeredPanels],
+        structuredCommands: gestructureerdeOpdrachten.lijst(pluginId),
       };
     },
 

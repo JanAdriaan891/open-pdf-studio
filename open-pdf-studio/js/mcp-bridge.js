@@ -3422,6 +3422,9 @@ const HANDLERS = {
   'mcp:list-extensions':    (p) => import('./plugins/extension-mcp.js').then((m) => m.handleListExtensions(p)),
   'mcp:install-extension':  (p) => import('./plugins/extension-mcp.js').then((m) => m.handleInstallExtension(p)),
   'mcp:reload-extension':   (p) => import('./plugins/extension-mcp.js').then((m) => m.handleReloadExtension(p)),
+  // Gestructureerde opdrachten van extensies (#575); de regels staan in plugins/structured-commands.js
+  'mcp:call-extension-command':   (p) => import('./plugins/structured-commands.js').then((m) => m.handleCallExtensionCommand(p)),
+  'mcp:cancel-extension-command': (p) => import('./plugins/structured-commands.js').then((m) => m.handleCancelExtensionCommand(p)),
   // Assistant — test the AI end-to-end
   'mcp:ai-complete':        handleAiComplete,
   // Accounts introspection — deactivated (cloud accounts feature removed)
@@ -3433,6 +3436,33 @@ const HANDLERS = {
   'mcp:assistant-answer':   handleAssistantAnswer,
   'mcp:assistant-history':  handleAssistantHistory,
 };
+
+/**
+ * Gestructureerde opdrachten van extensies (#575) staan in tools/list van de
+ * MCP-server: na elke wijziging gaat de hele lijst naar Rust
+ * (mcp_set_extension_tools). Het volgnummer loopt ook over een herlading van
+ * de WebView door, zodat Rust een oudere lijst die later aankomt negeert.
+ */
+async function synchroniseerExtensieTools(invoke) {
+  const { gestructureerdeOpdrachten } = await import('./plugins/structured-commands.js');
+  let gepland = false;
+  let teller = 0;
+  const stuur = () => {
+    if (gepland) return;
+    gepland = true;
+    queueMicrotask(async () => {
+      gepland = false;
+      const seq = Math.floor((performance.timeOrigin + performance.now()) * 1000) + (++teller % 1000);
+      try {
+        await invoke('mcp_set_extension_tools', { tools: gestructureerdeOpdrachten.mcpTools(), seq });
+      } catch (e) {
+        console.warn('[mcp-bridge] extension commands not passed to the MCP server:', e);
+      }
+    });
+  };
+  gestructureerdeOpdrachten.abonneer(stuur);
+  stuur();
+}
 
 /** Wire up all `mcp:*` listeners. Safe to call once at startup. Becomes
  *  a no-op when Tauri isn't present (browser dev mode). */
@@ -3481,6 +3511,8 @@ export async function initMcpBridge() {
   }
   window.__mcpBridgeReady = true;
   window.__mcpBridgeEvents = wired;
+  synchroniseerExtensieTools(window.__TAURI__.core.invoke)
+    .catch((e) => console.warn('[mcp-bridge] extension commands unavailable:', e));
   console.log('[mcp-bridge] ready, events:', wired);
   // Notify the Rust side so we can confirm wire-up from outside the WebView
   // (devtools console isn't visible when launched headless).

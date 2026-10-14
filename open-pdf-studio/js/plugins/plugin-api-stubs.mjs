@@ -18,7 +18,7 @@ const STUBS = {
   'tools/manager.js': 'export const setTool = () => {};',
   'annotations/factory.js': 'export const createAnnotation = (x) => x;',
   'annotations/rendering.js': 'export const redrawAnnotations = () => {};',
-  'core/undo-manager.js': 'export const beginUndoTransaction = () => {}, endUndoTransaction = () => {}, recordAdd = () => {}, recordModify = () => {}, recordDelete = () => {};',
+  'core/undo-manager.js': 'export const beginUndoTransaction = () => {}, endUndoTransaction = () => {}, recordAdd = () => {}, recordModify = () => {}, recordDelete = () => {}, documentRevisie = (d) => (d ? `d${d.inhoudRevisie ?? 0}` : null);',
   'plugins/page-access.js': 'export const getPageInfoForDocument = () => null, readPageContentForDocument = () => null, renderPageTileForDocument = () => null;',
   'tools/pdf-snap-extractor.js': 'export const extractPageGeometry = () => null;',
   'annotations/schaal-op-punt.js': 'export const schaalOpPunt = () => null;',

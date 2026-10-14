@@ -314,3 +314,4 @@ js/plugins/extensies-mcp-aansluiting.test.mjs
 js/plugins/opslag-wissel-slot.test.mjs
 js/plugins/plugin-api-opruimen.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
+js/plugins/structured-commands.test.mjs

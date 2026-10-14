@@ -38,8 +38,9 @@ export function isStriktExtensieId(id) {
 }
 
 // Soorten waarvan het eigenaarschap globaal wordt bewaakt. De bestaande
-// soorten (annotatietypen, paletten, panelen) volgen later (§13 van het ontwerp).
-const BEWAAKTE_SOORTEN = new Set(['ribbonTab', 'command']);
+// soorten (annotatietypen, paletten, panelen) volgen later (§13 van het ontwerp);
+// 'structuredCommand' is een opdracht met schema's (#575).
+const BEWAAKTE_SOORTEN = new Set(['ribbonTab', 'command', 'structuredCommand']);
 
 // `${soort}\u0000${sleutel}` -> extensie-id
 const eigenaars = new Map();
