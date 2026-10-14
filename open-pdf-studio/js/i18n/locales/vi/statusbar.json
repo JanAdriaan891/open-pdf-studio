@@ -28,7 +28,8 @@
     "formTextField": "Trường Văn bản Biểu mẫu",
     "formCheckbox": "Hộp kiểm Biểu mẫu",
     "formRadio": "Nút chọn Biểu mẫu",
-    "screenshot": "Chụp màn hình"
+    "screenshot": "Chụp màn hình",
+    "pageLabelPick": "Chọn văn bản cho nhãn trang"
   },
   "toolLabel": "Công cụ:",
   "annotationsLabel": "Chú thích:",

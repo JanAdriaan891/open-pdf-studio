@@ -350,7 +350,8 @@
     "exportComments": "Eksportér kommentarer til datafil...",
     "exportSelectedComments": "Eksportér valgte kommentarer til datafil...",
     "schedules": "Lister",
-    "addPage": "Tilføj side"
+    "addPage": "Tilføj side",
+    "pageLabels": "Sideetiketter (navnegenerator)"
   },
   "scaleBar": {
     "title": "Skalabjælke",

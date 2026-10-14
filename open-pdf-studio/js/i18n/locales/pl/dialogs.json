@@ -951,5 +951,19 @@
     "underlayLimited": "Rozdzielczość obniżona do {{dpi}} dpi",
     "underlayNoMeasure": "Nie dotyczy podkładu; skala pomiarowa pochodzi ze strony",
     "queued": "Jeszcze {{n}} rysunek(-ów) w kolejce"
+  },
+  "pageLabels": {
+    "title": "Etykiety stron",
+    "intro": "Wpisz nazwę strony w polu. „{{select}}” pobiera tekst ze strony: zostaje wstawiony jako {OCR1}, {OCR2}… i odczytany z tego samego miejsca na każdej stronie. Przykład: {OCR1} - {OCR2}",
+    "name": "Nazwa strony:",
+    "pickHint": "Przeciągnij ramkę wokół tekstu, którego chcesz użyć, na przykład numeru rysunku. Esc anuluje.",
+    "noText": "(nie znaleziono tekstu)",
+    "example": "Przykład:",
+    "useOcr": "Użyj OCR, gdy w ramce nie ma tekstu (skanowane arkusze, wolniej)",
+    "read": "Odczytaj wszystkie strony",
+    "reading": "Odczytywanie strony {{done}} z {{total}}...",
+    "colLabel": "Etykieta strony",
+    "ocrLegend": "Strony oznaczone OCR odczytano za pomocą rozpoznawania tekstu; sprawdź je przed zastosowaniem.",
+    "reset": "Przywróć numery stron"
   }
 }

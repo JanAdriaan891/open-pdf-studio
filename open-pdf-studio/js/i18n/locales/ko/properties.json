@@ -350,7 +350,8 @@
     "exportComments": "주석을 데이터 파일로 내보내기...",
     "exportSelectedComments": "선택한 주석을 데이터 파일로 내보내기...",
     "schedules": "일람표",
-    "addPage": "페이지 추가"
+    "addPage": "페이지 추가",
+    "pageLabels": "페이지 레이블(이름 작성기)"
   },
   "scaleBar": {
     "title": "축척 막대",

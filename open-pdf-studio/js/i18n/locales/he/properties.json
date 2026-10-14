@@ -350,7 +350,8 @@
     "exportComments": "ייצא הערות לקובץ נתונים...",
     "exportSelectedComments": "ייצא הערות נבחרות לקובץ נתונים...",
     "schedules": "טבלאות כמויות",
-    "addPage": "הוספת עמוד"
+    "addPage": "הוספת עמוד",
+    "pageLabels": "תוויות עמודים (בונה שמות)"
   },
   "scaleBar": {
     "title": "סרגל קנה מידה",

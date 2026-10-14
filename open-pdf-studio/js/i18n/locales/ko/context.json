@@ -116,7 +116,8 @@
     "deselectAll": "모두 선택 해제",
     "insertFromFile": "파일에서 삽입...",
     "insertFromFileBefore": "이 페이지 앞에...",
-    "insertFromFileAfter": "이 페이지 뒤에..."
+    "insertFromFileAfter": "이 페이지 뒤에...",
+    "pageLabels": "페이지 레이블(이름 작성기)..."
   },
   "textSelection": {
     "highlightSelection": "선택 영역 하이라이트",

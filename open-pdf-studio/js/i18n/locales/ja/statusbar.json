@@ -28,7 +28,8 @@
     "formTextField": "フォームテキストフィールド",
     "formCheckbox": "フォームチェックボックス",
     "formRadio": "フォームラジオボタン",
-    "screenshot": "スクリーンショット"
+    "screenshot": "スクリーンショット",
+    "pageLabelPick": "ページラベルの文字を選択"
   },
   "toolLabel": "ツール：",
   "annotationsLabel": "注釈：",

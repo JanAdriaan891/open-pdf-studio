@@ -1,10 +1,14 @@
-import { Show } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
 import {
   activePage, thumbnailData, draggedPage, setDraggedPage, dropTarget, setDropTarget, placeholderSize,
   selectedPages, selectPage, togglePageSelection, selectPageRange, isPageSelected
 } from '../../stores/panels/thumbnailStore.js';
 import { showThumbnailMenu } from '../../stores/contextMenuStore.js';
 import { dropPositie } from '../../../ui/panels/miniatuur-maat.js';
+import { state } from '../../../core/state.js';
+import { labelVan, heeftEigenLabel } from '../../../pdf/pagina-labels.js';
+import { zetPaginaLabel } from '../../../pdf/pagina-labels-app.js';
+import { useTranslation } from '../../../i18n/useTranslation.js';
 
 // Staan de miniaturen in meerdere kolommen (breed paneel, #579)? Dan zijn de
 // buren links en rechts en valt een gesleepte pagina ervoor of erachter.
@@ -26,6 +30,31 @@ export default function ThumbnailItem(props) {
   const isSelected = () => { selectedPages(); return isPageSelected(props.pageNum); };
 
   const size = () => placeholderSize();
+
+  // Paginalabel (bladnaam, #580) in plaats van het nummer; het nummer staat
+  // dan in de tooltip. Dubbelklikken hernoemt de pagina: Enter bewaart, Esc
+  // breekt af, leeg zet haar terug op haar nummer.
+  const { t: tc } = useTranslation('common');
+  const doc = () => state.documents[state.activeDocumentIndex];
+  const label = () => labelVan(doc()?.pageLabels, props.pageNum);
+  const benoemd = () => heeftEigenLabel(doc()?.pageLabels, props.pageNum);
+  const [hernoemen, setHernoemen] = createSignal(false);
+  let hernoemKlaar = false;
+  const rondHernoemenAf = (waarde) => {
+    if (hernoemKlaar) return;
+    hernoemKlaar = true;
+    setHernoemen(false);
+    const d = doc();
+    if (waarde == null || !d?.pdfDoc) return;
+    const nieuw = waarde.replace(/\s+/g, ' ').trim();
+    if ((nieuw || String(props.pageNum)) === label()) return;
+    zetPaginaLabel(d, props.pageNum, nieuw);
+  };
+  const startHernoemen = (e) => {
+    e.stopPropagation();
+    hernoemKlaar = false;
+    setHernoemen(true);
+  };
 
   const handleClick = (e) => {
     if (e.ctrlKey && e.shiftKey) {
@@ -62,7 +91,7 @@ export default function ThumbnailItem(props) {
         'drop-side': isDropNaast()
       }}
       data-page={props.pageNum}
-      draggable={true}
+      draggable={!hernoemen()}
       onClick={handleClick}
       onContextMenu={handleContextMenu}
       onDragStart={(e) => {
@@ -106,7 +135,33 @@ export default function ThumbnailItem(props) {
             devicePixelRatio, dus scherp ook als het paneel breed is (#579). */}
         <img class="thumbnail-canvas" src={imageData().dataURL} />
       </Show>
-      <div class="thumbnail-label">{props.pageNum}</div>
+      <Show when={hernoemen()} fallback={
+        <div
+          class="thumbnail-label"
+          classList={{ named: benoemd() }}
+          title={benoemd() ? `${tc('page')} ${props.pageNum}` : undefined}
+          onDblClick={startHernoemen}
+        >{label()}</div>
+      }>
+        <input
+          class="thumbnail-label-input"
+          type="text"
+          spellcheck={false}
+          value={benoemd() ? label() : ''}
+          placeholder={String(props.pageNum)}
+          ref={(el) => queueMicrotask(() => { el.focus(); el.select(); })}
+          onClick={(e) => e.stopPropagation()}
+          onDblClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            // Niet naar de miniaturenlijst (Delete verwijdert daar pagina's).
+            e.stopPropagation();
+            if (e.key === 'Enter') { e.preventDefault(); rondHernoemenAf(e.currentTarget.value); }
+            else if (e.key === 'Escape') { e.preventDefault(); rondHernoemenAf(null); }
+          }}
+          onBlur={(e) => rondHernoemenAf(e.currentTarget.value)}
+        />
+      </Show>
     </div>
   );
 }

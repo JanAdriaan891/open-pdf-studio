@@ -28,7 +28,8 @@
     "formTextField": "Campo di testo modulo",
     "formCheckbox": "Casella di controllo modulo",
     "formRadio": "Pulsante di opzione modulo",
-    "screenshot": "Cattura schermata"
+    "screenshot": "Cattura schermata",
+    "pageLabelPick": "Scegli il testo per l'etichetta di pagina"
   },
   "toolLabel": "Strumento:",
   "annotationsLabel": "Annotazioni:",

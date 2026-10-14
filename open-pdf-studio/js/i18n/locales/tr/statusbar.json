@@ -28,7 +28,8 @@
     "formTextField": "Form Metin Alanı",
     "formCheckbox": "Form Onay Kutusu",
     "formRadio": "Form Seçenek Düğmesi",
-    "screenshot": "Ekran Görüntüsü"
+    "screenshot": "Ekran Görüntüsü",
+    "pageLabelPick": "Sayfa Etiketi için Metin Seç"
   },
   "toolLabel": "Araç:",
   "annotationsLabel": "Açıklamalar:",

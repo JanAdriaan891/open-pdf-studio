@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 import { state, getActiveDocument } from '../../core/state.js';
+import { labelVan, heeftEigenLabel } from '../../pdf/pagina-labels.js';
 import { useTranslation, localizeNumber } from '../../i18n/useTranslation.js';
 
 // All page navigation goes through goToPage() so the side effects
@@ -134,6 +135,12 @@ export default function StatusBar() {
     const doc = state.documents[state.activeDocumentIndex];
     return doc ? doc.currentPage : 1;
   };
+  // Bladnaam van de huidige pagina, als het document paginalabels heeft (#580).
+  const currentLabel = () => {
+    const doc = state.documents[state.activeDocumentIndex];
+    const page = doc?.currentPage || 1;
+    return heeftEigenLabel(doc?.pageLabels, page) ? labelVan(doc.pageLabels, page) : '';
+  };
   const totalPages = () => {
     const doc = state.documents[state.activeDocumentIndex];
     return localizeNumber(doc?.pdfDoc?.numPages || 0);
@@ -195,6 +202,9 @@ export default function StatusBar() {
 
           <span class="status-page-info">
             {t('page')} <input type="number" class="status-page-input" tabIndex={-1} value={currentPage()} min="1" onKeyDown={handlePageInput} onBlur={handlePageBlur} /> / <span>{totalPages()}</span>
+            <Show when={currentLabel()}>
+              <span class="status-page-label" title={currentLabel()}>{currentLabel()}</span>
+            </Show>
           </span>
 
           <button class="status-nav-btn" tabIndex={-1} title={t('nextPage')} onClick={goNext}>

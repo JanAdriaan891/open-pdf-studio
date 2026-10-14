@@ -28,7 +28,8 @@
     "formTextField": "Formulartekstfelt",
     "formCheckbox": "Formularafkrydsningsfelt",
     "formRadio": "Formularalternativknap",
-    "screenshot": "Skærmbillede"
+    "screenshot": "Skærmbillede",
+    "pageLabelPick": "Vælg tekst til sideetiket"
   },
   "toolLabel": "Værktøj:",
   "annotationsLabel": "Annotationer:",

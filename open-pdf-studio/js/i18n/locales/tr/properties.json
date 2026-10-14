@@ -350,7 +350,8 @@
     "exportComments": "Yorumları veri dosyasına aktar...",
     "exportSelectedComments": "Seçili yorumları veri dosyasına aktar...",
     "schedules": "Çizelgeler",
-    "addPage": "Sayfa ekle"
+    "addPage": "Sayfa ekle",
+    "pageLabels": "Sayfa etiketleri (ad oluşturucu)"
   },
   "scaleBar": {
     "title": "Ölçek Çubuğu",

@@ -116,7 +116,8 @@
     "deselectAll": "Снять всё выделение",
     "insertFromFile": "Вставить из файла...",
     "insertFromFileBefore": "Перед этой страницей...",
-    "insertFromFileAfter": "После этой страницы..."
+    "insertFromFileAfter": "После этой страницы...",
+    "pageLabels": "Метки страниц (конструктор имён)..."
   },
   "textSelection": {
     "highlightSelection": "Выделить выделенное",

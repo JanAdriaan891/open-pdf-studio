@@ -28,7 +28,8 @@
     "formTextField": "فیلد متنی فرم",
     "formCheckbox": "کادر انتخاب فرم",
     "formRadio": "دکمه رادیویی فرم",
-    "screenshot": "تصویر از صفحه"
+    "screenshot": "تصویر از صفحه",
+    "pageLabelPick": "انتخاب متن برای برچسب صفحه"
   },
   "toolLabel": "ابزار:",
   "annotationsLabel": "حاشیه‌نویسی‌ها:",

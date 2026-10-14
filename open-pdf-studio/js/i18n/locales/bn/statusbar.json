@@ -28,7 +28,8 @@
     "formTextField": "ফর্ম পাঠ্য ক্ষেত্র",
     "formCheckbox": "ফর্ম চেকবক্স",
     "formRadio": "ফর্ম রেডিও বোতাম",
-    "screenshot": "স্ক্রিনশট"
+    "screenshot": "স্ক্রিনশট",
+    "pageLabelPick": "পৃষ্ঠা লেবেলের জন্য লেখা বাছুন"
   },
   "toolLabel": "সরঞ্জাম:",
   "annotationsLabel": "টীকা:",

@@ -28,7 +28,8 @@
     "formTextField": "Camp text formular",
     "formCheckbox": "Caseta de bifat formular",
     "formRadio": "Buton radio formular",
-    "screenshot": "Captura de ecran"
+    "screenshot": "Captura de ecran",
+    "pageLabelPick": "Alegeți textul pentru eticheta paginii"
   },
   "toolLabel": "Instrument:",
   "annotationsLabel": "Adnotari:",

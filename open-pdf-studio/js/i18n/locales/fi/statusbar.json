@@ -28,7 +28,8 @@
     "formTextField": "Lomakkeen tekstikenttä",
     "formCheckbox": "Lomakkeen valintaruutu",
     "formRadio": "Lomakkeen valintapainike",
-    "screenshot": "Kuvakaappaus"
+    "screenshot": "Kuvakaappaus",
+    "pageLabelPick": "Valitse teksti sivun nimiöön"
   },
   "toolLabel": "Työkalu:",
   "annotationsLabel": "Merkinnät:",

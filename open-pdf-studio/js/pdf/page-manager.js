@@ -23,6 +23,7 @@ import { onthoudWerkbestand, losgelatenWerkbestanden, ruimWerkbestandenOp } from
 import { nieuwMergeVerslag, REDEN_VOORBEELD, REDEN_GEEN_PAGINAS } from './merge-verslag.js';
 import { pdfjsBronnen } from '../core/basis-url.js';
 import { zonderKopVoetStromen } from './saver/kopvoet.js';
+import { labelsNaHerladen } from './pagina-labels-app.js';
 
 // Page clipboard for cut/copy/paste
 let pageClipboard = null; // { bytes: Uint8Array, cut: boolean, sourcePageNum: number }
@@ -177,6 +178,11 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
   const oldPath = doc.filePath || `__memory__${doc.id}`;
   if (!oldPath) return;
 
+  // Paginalabels (#580) horen bij een stand van de bytes: de oude stand (die
+  // ongedaan maken terugzet) en de aangeleverde nieuwe (die opnieuw doen laadt).
+  const oudeBytes = getCachedPdfBytes(oldPath);
+  const aangeleverdeBytes = newBytes;
+
   // Kop-/voetteksten die als pagina-inhoud in de oude weergave stonden (#375):
   // het scherm tekent ze zelf, dus uit de nieuwe werkkopie halen — anders
   // staan ze dubbel, en na paginabewerkingen met verouderde nummers.
@@ -300,6 +306,13 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
     doc.pdfViewports = undefined;
     leesViewportsOpnieuw(doc, newBytes);
   }
+
+  // Paginalabels verhuizen mee met hun pagina (#580).
+  await labelsNaHerladen(doc, {
+    oudeBytes,
+    nieuweBytes: aangeleverdeBytes,
+    pageMapping: viewportUpdate?.pageMapping || null,
+  });
 
   // Restore annotations and rotations
   doc.annotations = annotations;

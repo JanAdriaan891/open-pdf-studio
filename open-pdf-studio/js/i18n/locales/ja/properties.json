@@ -350,7 +350,8 @@
     "exportComments": "コメントをデータファイルにエクスポート...",
     "exportSelectedComments": "選択したコメントをデータファイルにエクスポート...",
     "schedules": "集計表",
-    "addPage": "ページを追加"
+    "addPage": "ページを追加",
+    "pageLabels": "ページラベル (名前ビルダー)"
   },
   "scaleBar": {
     "title": "スケールバー",

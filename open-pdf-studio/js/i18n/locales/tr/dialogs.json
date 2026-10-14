@@ -951,5 +951,19 @@
     "underlayLimited": "Çözünürlük {{dpi}} dpi'ye düşürüldü",
     "underlayNoMeasure": "Altlık için geçerli değil; ölçüm ölçeği sayfadan gelir",
     "queued": "Sırada {{n}} çizim daha var"
+  },
+  "pageLabels": {
+    "title": "Sayfa etiketleri",
+    "intro": "Sayfa adını alana yazın. \"{{select}}\" sayfadan metin alır: metin {OCR1}, {OCR2}… olarak eklenir ve her sayfada aynı yerden okunur. Örnek: {OCR1} - {OCR2}",
+    "name": "Sayfa adı:",
+    "pickHint": "Kullanılacak metnin çevresine bir kutu sürükleyin, örneğin çizim numarası. Esc iptal eder.",
+    "noText": "(metin bulunamadı)",
+    "example": "Örnek:",
+    "useOcr": "Kutuda metin yoksa OCR kullan (taranmış paftalar, daha yavaş)",
+    "read": "Tüm sayfaları oku",
+    "reading": "Sayfa {{done}} / {{total}} okunuyor...",
+    "colLabel": "Sayfa etiketi",
+    "ocrLegend": "OCR işaretli sayfalar metin tanıma ile okundu; uygulamadan önce kontrol edin.",
+    "reset": "Sayfa numaralarına sıfırla"
   }
 }

@@ -350,7 +350,8 @@
     "exportComments": "মন্তব্য ডেটা ফাইলে রপ্তানি...",
     "exportSelectedComments": "নির্বাচিত মন্তব্য ডেটা ফাইলে রপ্তানি...",
     "schedules": "শিডিউল",
-    "addPage": "পৃষ্ঠা যোগ করুন"
+    "addPage": "পৃষ্ঠা যোগ করুন",
+    "pageLabels": "পৃষ্ঠা লেবেল (নাম নির্মাতা)"
   },
   "scaleBar": {
     "title": "স্কেল বার",

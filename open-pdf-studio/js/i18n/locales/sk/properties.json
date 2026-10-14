@@ -350,7 +350,8 @@
     "exportComments": "Exportovať komentáre do dátového súboru...",
     "exportSelectedComments": "Exportovať vybrané komentáre do dátového súboru...",
     "schedules": "Výkazy",
-    "addPage": "Pridať stranu"
+    "addPage": "Pridať stranu",
+    "pageLabels": "Menovky strán (tvorba názvov)"
   },
   "scaleBar": {
     "title": "Grafická mierka",

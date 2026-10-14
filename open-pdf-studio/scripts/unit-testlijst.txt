@@ -324,3 +324,6 @@ scripts/cargo-config-draagbaar.test.mjs
 js/ui/panels/bladwijzer-zoeken.test.mjs
 # Miniaturen groeien mee, kolommen en scherpte (#579)
 js/ui/panels/miniatuur-maat.test.mjs
+js/pdf/pagina-labels.test.mjs
+js/pdf/pagina-labels-i18n.test.mjs
+js/pdf/page-manager-paginalabels.test.mjs

@@ -580,6 +580,58 @@
   color: var(--theme-thumbnail-active-label);
 }
 
+/* Paginalabel (bladnaam, #580): afkappen in plaats van de miniatuur verbreden. */
+.thumbnail-label.named {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thumbnail-label-input {
+  margin-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1px 4px;
+  font-size: 11px;
+  font-family: inherit;
+  border: 1px solid var(--theme-accent, #0078d7);
+  border-radius: 0;
+  background: var(--theme-surface, #fff);
+  color: var(--theme-text, #333);
+  outline: none;
+}
+
+/* Knop in de kop van het miniaturenpaneel: de naambouwer voor paginalabels. */
+.thumbnails-header-btn {
+  width: 20px;
+  height: 18px;
+  margin: -2px 2px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: var(--theme-panel-header-text);
+  cursor: default;
+}
+
+.thumbnails-header-btn:hover:not(:disabled) {
+  background: var(--theme-panel-tab-hover);
+  border-color: var(--theme-panel-border);
+}
+
+.thumbnails-header-btn:disabled {
+  opacity: 0.35;
+}
+
+.thumbnails-header-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
 /* Thumbnail drag-and-drop reorder */
 .thumbnail-item.dragging {
   opacity: 0.4;

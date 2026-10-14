@@ -17,6 +17,9 @@ export function createDocument(filePath: string | null = null): DocumentState {
     watermarks: [],
     ocrResults: {},
     bookmarks: [],
+    // Paginalabels (#580): null = gewone paginanummers.
+    pageLabels: null,
+    pageLabelsDirty: false,
     undoStack: [],
     redoStack: [],
     savedUndoStackLength: 0,

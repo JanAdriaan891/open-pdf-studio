@@ -350,7 +350,8 @@
     "exportComments": "Eksportuj komentarze do pliku danych...",
     "exportSelectedComments": "Eksportuj wybrane komentarze do pliku danych...",
     "schedules": "Zestawienia",
-    "addPage": "Dodaj stronę"
+    "addPage": "Dodaj stronę",
+    "pageLabels": "Etykiety stron (kreator nazw)"
   },
   "scaleBar": {
     "title": "Podziałka liniowa",

@@ -116,7 +116,8 @@
     "deselectAll": "সব নির্বাচন বাতিল করুন",
     "insertFromFile": "ফাইল থেকে সন্নিবেশ করুন...",
     "insertFromFileBefore": "এই পৃষ্ঠার আগে...",
-    "insertFromFileAfter": "এই পৃষ্ঠার পরে..."
+    "insertFromFileAfter": "এই পৃষ্ঠার পরে...",
+    "pageLabels": "পৃষ্ঠা লেবেল (নাম নির্মাতা)..."
   },
   "textSelection": {
     "highlightSelection": "নির্বাচন হাইলাইট করুন",

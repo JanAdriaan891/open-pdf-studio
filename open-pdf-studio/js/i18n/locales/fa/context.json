@@ -116,7 +116,8 @@
     "deselectAll": "لغو انتخاب همه",
     "insertFromFile": "درج از فایل...",
     "insertFromFileBefore": "پیش از این صفحه...",
-    "insertFromFileAfter": "پس از این صفحه..."
+    "insertFromFileAfter": "پس از این صفحه...",
+    "pageLabels": "برچسب‌های صفحه (سازنده نام)..."
   },
   "textSelection": {
     "highlightSelection": "برجسته‌سازی انتخاب",

@@ -28,7 +28,8 @@
     "formTextField": "فارم ٹیکسٹ فیلڈ",
     "formCheckbox": "فارم چیک باکس",
     "formRadio": "فارم ریڈیو بٹن",
-    "screenshot": "اسکرین شاٹ"
+    "screenshot": "اسکرین شاٹ",
+    "pageLabelPick": "صفحہ لیبل کے لیے متن منتخب کریں"
   },
   "toolLabel": "ٹول:",
   "annotationsLabel": "تشریحات:",

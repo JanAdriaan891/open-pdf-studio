@@ -382,7 +382,8 @@
     "collapseAll": "ຫຍໍ້ເຂົ້າທັງໝົດ",
     "annotationsMenu": "ເມນູ",
     "schedules": "ຕາຕະລາງລາຍການ",
-    "addPage": "ເພີ່ມໜ້າ"
+    "addPage": "ເພີ່ມໜ້າ",
+    "pageLabels": "ປ້າຍຊື່ໜ້າ (ຕົວສ້າງຊື່)"
   },
   "schedules": {
     "title": "ຕາຕະລາງລາຍການ",

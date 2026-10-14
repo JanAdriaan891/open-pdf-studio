@@ -350,7 +350,8 @@
     "exportComments": "Exportovat komentáře do datového souboru...",
     "exportSelectedComments": "Exportovat vybrané komentáře do datového souboru...",
     "schedules": "Výkazy",
-    "addPage": "Přidat stránku"
+    "addPage": "Přidat stránku",
+    "pageLabels": "Popisky stránek (tvorba názvů)"
   },
   "scaleBar": {
     "title": "Grafické měřítko",

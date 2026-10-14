@@ -28,7 +28,8 @@
     "formTextField": "Sehemu ya Maandishi ya Fomu",
     "formCheckbox": "Kisanduku cha Kuteua cha Fomu",
     "formRadio": "Kitufe cha Kuchagua cha Fomu",
-    "screenshot": "Picha ya Skrini"
+    "screenshot": "Picha ya Skrini",
+    "pageLabelPick": "Chagua Maandishi kwa Lebo ya Ukurasa"
   },
   "toolLabel": "Zana:",
   "annotationsLabel": "Maoni:",

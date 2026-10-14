@@ -951,5 +951,19 @@
     "underlayLimited": "Resolución reducida a {{dpi}} ppp",
     "underlayNoMeasure": "No se aplica a un calco subyacente; la escala de medición viene de la página",
     "queued": "{{n}} dibujo(s) más en la cola"
+  },
+  "pageLabels": {
+    "title": "Etiquetas de página",
+    "intro": "Escriba el nombre de la página en el campo. «{{select}}» toma texto de la página: se inserta como {OCR1}, {OCR2}… y se lee del mismo lugar en cada página. Ejemplo: {OCR1} - {OCR2}",
+    "name": "Nombre de la página:",
+    "pickHint": "Arrastre un recuadro alrededor del texto que desea usar, por ejemplo el número de plano. Esc cancela.",
+    "noText": "(no se encontró texto)",
+    "example": "Ejemplo:",
+    "useOcr": "Usar OCR donde un recuadro no tiene texto (hojas escaneadas, más lento)",
+    "read": "Leer todas las páginas",
+    "reading": "Leyendo la página {{done}} de {{total}}...",
+    "colLabel": "Etiqueta de página",
+    "ocrLegend": "Las páginas marcadas con OCR se leyeron con reconocimiento de texto; revíselas antes de aplicar.",
+    "reset": "Restablecer números de página"
   }
 }

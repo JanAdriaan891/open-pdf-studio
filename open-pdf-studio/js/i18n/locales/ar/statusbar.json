@@ -28,7 +28,8 @@
     "formTextField": "حقل نصي للنموذج",
     "formCheckbox": "خانة اختيار للنموذج",
     "formRadio": "زر اختيار للنموذج",
-    "screenshot": "لقطة شاشة"
+    "screenshot": "لقطة شاشة",
+    "pageLabelPick": "اختيار نص لتسمية الصفحة"
   },
   "toolLabel": "الأداة:",
   "annotationsLabel": "التعليقات:",

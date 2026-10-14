@@ -28,7 +28,8 @@
     "formTextField": "Formular-Textfeld",
     "formCheckbox": "Formular-Kontrollkästchen",
     "formRadio": "Formular-Optionsschaltfläche",
-    "screenshot": "Bildschirmfoto"
+    "screenshot": "Bildschirmfoto",
+    "pageLabelPick": "Text für Seitenbeschriftung wählen"
   },
   "toolLabel": "Werkzeug:",
   "annotationsLabel": "Anmerkungen:",

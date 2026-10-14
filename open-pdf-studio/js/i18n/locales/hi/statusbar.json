@@ -28,7 +28,8 @@
     "formTextField": "फॉर्म टेक्स्ट फ़ील्ड",
     "formCheckbox": "फॉर्म चेकबॉक्स",
     "formRadio": "फॉर्म रेडियो बटन",
-    "screenshot": "स्क्रीनशॉट"
+    "screenshot": "स्क्रीनशॉट",
+    "pageLabelPick": "पृष्ठ लेबल के लिए टेक्स्ट चुनें"
   },
   "toolLabel": "उपकरण:",
   "annotationsLabel": "एनोटेशन:",

@@ -28,7 +28,8 @@
     "formTextField": "Medan Teks Borang",
     "formCheckbox": "Kotak Semak Borang",
     "formRadio": "Butang Radio Borang",
-    "screenshot": "Tangkap Skrin"
+    "screenshot": "Tangkap Skrin",
+    "pageLabelPick": "Pilih Teks untuk Label Halaman"
   },
   "toolLabel": "Alat:",
   "annotationsLabel": "Anotasi:",

@@ -116,7 +116,8 @@
     "deselectAll": "Desmarcar tudo",
     "insertFromFile": "Inserir de arquivo...",
     "insertFromFileBefore": "Antes desta página...",
-    "insertFromFileAfter": "Depois desta página..."
+    "insertFromFileAfter": "Depois desta página...",
+    "pageLabels": "Rótulos de página (gerador de nomes)..."
   },
   "textSelection": {
     "highlightSelection": "Realcar seleção",

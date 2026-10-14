@@ -116,7 +116,8 @@
     "deselectAll": "Odznacz wszystko",
     "insertFromFile": "Wstaw z pliku...",
     "insertFromFileBefore": "Przed tą stroną...",
-    "insertFromFileAfter": "Po tej stronie..."
+    "insertFromFileAfter": "Po tej stronie...",
+    "pageLabels": "Etykiety stron (kreator nazw)..."
   },
   "textSelection": {
     "highlightSelection": "Podkreśl zaznaczenie",

@@ -28,7 +28,8 @@
     "formTextField": "Pole tekstowe formularza",
     "formCheckbox": "Pole wyboru formularza",
     "formRadio": "Przycisk opcji formularza",
-    "screenshot": "Zrzut ekranu"
+    "screenshot": "Zrzut ekranu",
+    "pageLabelPick": "Wybierz tekst etykiety strony"
   },
   "toolLabel": "Narzędzie:",
   "annotationsLabel": "Adnotacje:",

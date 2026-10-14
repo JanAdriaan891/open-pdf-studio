@@ -350,7 +350,8 @@
     "exportComments": "Xuất nhận xét ra tệp dữ liệu...",
     "exportSelectedComments": "Xuất nhận xét đã chọn ra tệp dữ liệu...",
     "schedules": "Bảng thống kê",
-    "addPage": "Thêm trang"
+    "addPage": "Thêm trang",
+    "pageLabels": "Nhãn trang (trình tạo tên)"
   },
   "scaleBar": {
     "title": "Thước tỷ lệ",
