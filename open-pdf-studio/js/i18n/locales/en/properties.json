@@ -157,6 +157,7 @@
     "extension": "Extension",
     "showUnit": "Show unit",
     "showLabel": "Show label",
+    "showEdgeLengths": "Show edge lengths",
     "lineOvershoot": "Dimension line overshoot (mm)",
     "extGap": "Extension line gap (mm)",
     "extOvershoot": "Extension line overshoot (mm)",

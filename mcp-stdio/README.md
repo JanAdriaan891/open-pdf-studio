@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (62 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (71 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 62 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 71 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -105,7 +105,8 @@ The reason this exists — drive Open PDF Studio's assistant from Claude:
 
 A few of the many PDF tools: `app_open_pdf`, `app_new_blank_pdf`,
 `app_go_to_page`, `app_set_zoom` / `app_fit_width`, `app_create_annotation`,
-`app_list_annotations`, `app_get_page_text`, `app_replace_text`, `app_save_pdf`,
+`app_list_annotations`, `app_get_page_text`, `app_replace_text`,
+`app_translate_page`, `app_save_pdf`,
 `app_screenshot_view`. The full,
 authoritative list is in `src-tauri/src/mcp_server.rs` (`handle_tools_list`)
 and documented in `docs/superpowers/specs/2026-05-09-mcp-app-tools.md`.
@@ -133,8 +134,19 @@ over page artwork for MCP replacements. A returned `rasterBackgroundOverlap`
 warning means that an overlapping background image may already contain the
 same words as pixels; those pixels cannot be edited as PDF text. Colour may
 also be `null` for some PDFs; then supply an explicit `#RRGGBB` `color` to
-`app_replace_text`. This API edits one line per call; translate long pages by
-mapping each returned span and reviewing the saved pages. A scanned page with
+`app_replace_text`. That tool edits one line per call. To translate a whole
+page, send all spans of that page in one `app_translate_page` call:
+
+```json
+{"page":1,"replacements":[
+  {"spanId":"42:p1:i0-3","expectedText":"Welcome","newText":"Welkom"},
+  {"spanId":"42:p1:i4-9","expectedText":"Opening hours","newText":"Openingstijden"}]}
+```
+
+It applies the same rules, checks all replacements together on one copy of
+the PDF and adds them as one undo step. It is all or nothing: when one
+replacement fails, nothing changes and `results` gives the error per span.
+Review the saved pages afterwards. A scanned page with
 no selectable text must first go through OCR; pixels in the scan are not
 editable text spans.
 

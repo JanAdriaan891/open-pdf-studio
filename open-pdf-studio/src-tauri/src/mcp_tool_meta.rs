@@ -64,6 +64,11 @@ pub const TOOLS: &[ToolMeta] = &[
     lees("app_assistant_history", "Get assistant conversation"),
     lees("app_list_printers", "List printers"),
     lees("app_list_layers", "List markup layers"),
+    lees("app_list_system_types", "List system types"),
+    // Opent alleen de editor: de gebruiker past toe of annuleert in de app.
+    lees("app_open_system_type_editor", "Open system type editor"),
+    lees("app_get_system_geometry", "Get system geometry"),
+    lees("app_list_extensions", "List extensions"),
     // Voegt iets toe zonder bestaande gegevens te wijzigen.
     voegt_toe("app_new_blank_pdf", "New blank PDF"),
     voegt_toe("app_create_annotation", "Create annotation"),
@@ -80,15 +85,24 @@ pub const TOOLS: &[ToolMeta] = &[
     voegt_toe("app_assistant_answer", "Answer assistant question"),
     voegt_toe("app_mouse_move", "Move pointer"),
     voegt_toe("app_scroll", "Scroll"),
+    // Herladen verliest geen gegevens: dezelfde extensie draait daarna opnieuw.
+    voegt_toe("app_reload_extension", "Reload extension"),
     // Wijzigt of verwijdert bestaande inhoud, of schrijft een bestand.
     wijzigt("app_update_annotation", "Update annotation"),
     wijzigt("app_set_layer", "Change markup layer"),
+    wijzigt("app_update_system_type", "Update system type"),
+    // Registreren kan een bestaande, onbewerkte mcp:-definitie vervangen en
+    // alle systemen met dat type hertekenen: dat wijzigt bestaande gegevens.
+    wijzigt("app_register_system_type", "Register system type"),
+    // Installeren kan een bestaande installatie vervangen (#550).
+    wijzigt("app_install_extension", "Install extension"),
     wijzigt("app_delete_annotation", "Delete annotation"),
     wijzigt("app_undo", "Undo"),
     wijzigt("app_redo", "Redo"),
     wijzigt("app_close_tab", "Close document tab"),
     wijzigt("app_save_pdf", "Save PDF"),
     wijzigt("app_replace_text", "Replace existing page text"),
+    wijzigt("app_translate_page", "Replace page text in bulk"),
     wijzigt("app_export_cad", "Export to CAD drawing"),
     // Afdrukken laat het document ongemoeid, maar is geen leesactie: de ene
     // schrijft een bestand dat een bestaand bestand kan overschrijven, de

@@ -39,6 +39,7 @@ import HandtekeningDetailDialog from './dialogs/HandtekeningDetailDialog.jsx';
 import ViewportScaleDialog from './dialogs/ViewportScaleDialog.jsx';
 import ScaleRegionDialog from './dialogs/ScaleRegionDialog.jsx';
 import MeasuredLengthDialog from './dialogs/MeasuredLengthDialog.jsx';
+import ScreenCalibrationDialog from './dialogs/ScreenCalibrationDialog.jsx';
 import TitleBlockDialog from './dialogs/TitleBlockDialog.jsx';
 import CompareDialog from './compare/CompareDialog.jsx';
 import CadExportDialog from './dialogs/CadExportDialog.jsx';
@@ -101,6 +102,7 @@ const DIALOG_MAP = {
   'viewport-scale': ViewportScaleDialog,
   'scale-region': ScaleRegionDialog,
   'measured-length': MeasuredLengthDialog,
+  'screen-calibration': ScreenCalibrationDialog,
   'compare': CompareDialog,
   'cad-export': CadExportDialog,
   'cad-import': CadImportDialog,

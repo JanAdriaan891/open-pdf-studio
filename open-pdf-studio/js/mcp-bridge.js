@@ -1061,7 +1061,8 @@ function _recomputeMeasureFields(ann, meas, userProps = {}) {
     ann.measurePixels = d.pixels;
     if (!keepText) ann.measureText = meas.formatMeasurement(d);
   } else if (ann.type === 'measureArea') {
-    const a = meas.calculateArea(ann.points, ann.holes, ann.page);
+    // Met de eigen schaal van het vlak als die er is (#536).
+    const a = meas.vlakMeting(ann);
     ann.measureValue = a.value;
     ann.measureUnit = a.unit;
     if (!keepText) ann.measureText = meas.formatMeasurement(a);
@@ -2050,6 +2051,11 @@ async function handleReplaceText(params) {
   return textTools.replaceTextForMcp(params);
 }
 
+async function handleTranslatePage(params) {
+  const textTools = await import('./text/mcp-text-tools.js');
+  return textTools.translatePageForMcp(params);
+}
+
 async function handleSetMeasureScale(params) {
   const pixelsPerUnit = Number(params?.pixelsPerUnit);
   const unit = params?.unit;
@@ -2188,8 +2194,11 @@ async function handleFacadeElement(params) {
 async function handleAiComplete(params) {
   const prompt = params?.prompt;
   if (typeof prompt !== 'string' || !prompt) return { ok: false, error: 'missing params.prompt' };
-  let key = '';
-  try { key = localStorage.getItem('opds-anthropic-key') || ''; } catch { /* no localStorage */ }
+  // Als gast praat de app niet met andere hosts en staat de sleutel nergens (#548).
+  const { externeDienstenAan } = await import('./core/webfuncties.js');
+  if (!externeDienstenAan()) return { ok: false, error: 'AI service is off when hosted' };
+  const { leesAiSleutel } = await import('./core/ai-sleutel.js');
+  const key = leesAiSleutel();
   // Claude (Anthropic) direct — uses the personal key set via the 🔑 button.
   if (!key) return { ok: false, error: 'geen Claude-key gezet (🔑)' };
   const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -2588,11 +2597,15 @@ async function handleUiState(params) {
 //   ribbon:<tab>:<n>      lintknop zonder id, n-de knop op dat tabblad
 //                         (alleen stabiel binnen dezelfde versie)
 //   tool:<naam>           een gereedschap uit het register
+//   ext:<extId>:<item>    een actie van een extensie, ext:<extId>:<item>=<keuze>
+//                         een keuze van haar keuzelijst (#551)
 
 // Elke lintknop (RibbonButton, ook in een RibbonButtonStack) zit in een
 // RibbonGroup. List en run gebruiken dezelfde selector, zodat een positioneel
 // commando (ribbon:tab:n) altijd naar dezelfde knop wijst.
-const LINT_KNOP_SELECTOR = '.ribbon-group .ribbon-btn';
+// Knoppen van extensies (#551) staan als `ext:`-opdracht in het register en
+// tellen hier niet mee, zodat de nummering van ingebouwde knoppen niet verschuift.
+const LINT_KNOP_SELECTOR = '.ribbon-group .ribbon-btn:not([data-ext-command])';
 
 function _knopLabel(el) {
   const lbl = el.querySelector('.ribbon-btn-label');
@@ -2639,6 +2652,12 @@ async function _lintKnoppenPerTab() {
   return uit;
 }
 
+async function _extensieOpdrachten() {
+  const { extensieOpdrachten } = await import('./plugins/extension-commands.js');
+  const i18n = (await import('./i18n/config.js')).default;
+  return extensieOpdrachten.lijst(i18n.language);
+}
+
 async function handleListCommands(params) {
   const filter = typeof params?.filter === 'string' ? params.filter.toLowerCase() : '';
   const lint = await _lintKnoppenPerTab();
@@ -2646,7 +2665,9 @@ async function handleListCommands(params) {
   const gereedschap = registryMod.listToolNames().map((naam) => ({
     command: `tool:${naam}`, tab: null, label: naam, title: '', disabled: false, active: false, stableId: true,
   }));
-  let alles = [...lint, ...gereedschap];
+  // Extensieopdrachten komen uit het register, ook bij een ingeklapt lint (#551).
+  const extensie = await _extensieOpdrachten();
+  let alles = [...lint, ...gereedschap, ...extensie];
   if (filter) {
     alles = alles.filter((c) =>
       (c.command + ' ' + c.label + ' ' + c.title + ' ' + (c.tab || '')).toLowerCase().includes(filter));
@@ -2656,6 +2677,7 @@ async function handleListCommands(params) {
     count: alles.length,
     ribbonCommands: lint.length,
     toolCommands: gereedschap.length,
+    extensionCommands: extensie.length,
     withoutStableId: lint.filter((c) => !c.stableId).length,
     commands: alles,
   };
@@ -2665,6 +2687,11 @@ async function handleRunCommand(params) {
   const command = params?.command;
   if (typeof command !== 'string' || !command) {
     return { ok: false, error: 'missing or invalid params.command — see app_list_commands' };
+  }
+
+  if (command.startsWith('ext:')) {
+    const { voerExtensieOpdrachtUit } = await import('./plugins/extension-commands.js');
+    return voerExtensieOpdrachtUit(command, { source: 'mcp' });
   }
 
   if (command.startsWith('tool:')) {
@@ -3255,6 +3282,58 @@ async function handleSetLayer(params) {
   return r;
 }
 
+// ─── Systeemtypen (#567) ──────────────────────────────────────────────────
+// De regels staan puur in annotations/systeem-typen-mcp.js; hier alleen de
+// host: de registry (één commit-pad met opslaan, hertekenen en melding), de
+// native editor en de geometrie van een systeem in het actieve document.
+// Geen GUI-automatisering, geen preferences-bestand.
+async function _systeemTypenMcp() {
+  const [regels, registry, editor, geometrie] = await Promise.all([
+    import('./annotations/systeem-typen-mcp.js'),
+    import('./annotations/systeem-typen-registry.js'),
+    import('./solid/stores/systeemtypenEditorStore.js'),
+    import('./annotations/systeem-geometrie-app.js'),
+  ]);
+  return {
+    regels,
+    host: {
+      ...registry,
+      openEditor: editor.openSysteemtypenEditor,
+      systeemInstanceGeometrie: geometrie.systeemInstanceGeometrie,
+    },
+  };
+}
+
+/** app_list_system_types — de systeemtypen van de bibliotheek, of één op id. */
+async function handleListSystemTypes(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpLijstSysteemTypen(params ?? {}, host);
+}
+
+/** app_register_system_type — een type onder mcp:<key> registreren. */
+async function handleRegisterSystemType(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpRegistreerSysteemType(params ?? {}, host);
+}
+
+/** app_update_system_type — een MCP-type bijwerken met revisiecontrole. */
+async function handleUpdateSystemType(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpWerkSysteemTypeBij(params ?? {}, host);
+}
+
+/** app_open_system_type_editor — de native editor met dit type geselecteerd. */
+async function handleOpenSystemTypeEditor(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpOpenSysteemTypeEditor(params ?? {}, host);
+}
+
+/** app_get_system_geometry — de geometrie van één systeem in het actieve document. */
+async function handleGetSystemGeometry(params) {
+  const { regels, host } = await _systeemTypenMcp();
+  return regels.mcpSysteemGeometrie(params ?? {}, host);
+}
+
 const HANDLERS = {
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
@@ -3302,6 +3381,7 @@ const HANDLERS = {
   'mcp:get-page-count':     handleGetPageCount,
   'mcp:get-page-text':      handleGetPageText,
   'mcp:replace-text':       handleReplaceText,
+  'mcp:translate-page':     handleTranslatePage,
   // App control: measurement scale
   'mcp:set-measure-scale':  handleSetMeasureScale,
   // Plattegrond: sparingen, ruimten en verankerde maatvoering
@@ -3332,6 +3412,16 @@ const HANDLERS = {
   'mcp:list-layers':        handleListLayers,
   'mcp:create-layer':       handleCreateLayer,
   'mcp:set-layer':          handleSetLayer,
+  // Systeemtypen (#567)
+  'mcp:list-system-types':       handleListSystemTypes,
+  'mcp:register-system-type':    handleRegisterSystemType,
+  'mcp:update-system-type':      handleUpdateSystemType,
+  'mcp:open-system-type-editor': handleOpenSystemTypeEditor,
+  'mcp:get-system-geometry':     handleGetSystemGeometry,
+  // Extensies beheren zonder dialoog (#550); de regels staan in plugins/extension-mcp.js
+  'mcp:list-extensions':    (p) => import('./plugins/extension-mcp.js').then((m) => m.handleListExtensions(p)),
+  'mcp:install-extension':  (p) => import('./plugins/extension-mcp.js').then((m) => m.handleInstallExtension(p)),
+  'mcp:reload-extension':   (p) => import('./plugins/extension-mcp.js').then((m) => m.handleReloadExtension(p)),
   // Assistant — test the AI end-to-end
   'mcp:ai-complete':        handleAiComplete,
   // Accounts introspection — deactivated (cloud accounts feature removed)

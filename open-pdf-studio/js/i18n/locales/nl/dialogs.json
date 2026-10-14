@@ -70,6 +70,19 @@
     "shrinkToPrintable": "Verkleinen tot afdrukbaar gebied",
     "customScale": "Aangepaste schaal",
     "pageZoom": "Paginazoom:",
+    "pagesPerSheet": "Pagina's per vel",
+    "pagesPerSheetLabel": "Pagina's per vel:",
+    "perSheetOne": "1 (normaal)",
+    "perSheetCustom": "Aangepast...",
+    "perSheetGrid": "Kolommen bij rijen:",
+    "perSheetBy": "bij",
+    "pageOrder": "Paginavolgorde:",
+    "orderHorizontal": "Horizontaal",
+    "orderHorizontalReversed": "Horizontaal omgekeerd",
+    "orderVertical": "Verticaal",
+    "orderVerticalReversed": "Verticaal omgekeerd",
+    "pageBorder": "Paginarand afdrukken",
+    "perSheetNote": "Elke pagina wordt passend gemaakt voor zijn cel, dus de paginaschaal hierboven geldt niet. Het voorbeeld toont één pagina.",
     "autoRotate": "Automatisch draaien",
     "autoCenter": "Automatisch centreren",
     "advancedOptions": "Geavanceerde afdrukopties",
@@ -224,7 +237,13 @@
     "allPages": "Alle pagina's",
     "firstPageOnly": "Alleen eerste pagina",
     "range": "Bereik:",
-    "rangePlaceholder": "bijv. 1-5, 8"
+    "rangePlaceholder": "bijv. 1-5, 8",
+    "bates": "Bates-nummering:",
+    "batesHint": "Nummert de pagina's met {bates}: voorvoegsel, nummer met voorloopnullen, achtervoegsel",
+    "batesPrefix": "Voorvoegsel",
+    "batesStart": "Begin",
+    "batesDigits": "Cijfers",
+    "batesSuffix": "Achtervoegsel"
   },
   "manageWatermarks": {
     "title": "Watermerken beheren",
@@ -293,8 +312,8 @@
   "calibration": {
     "title": "Schaalcalibratie",
     "helpText": "Teken een meetlijn van bekende lengte en voer vervolgens de werkelijke afstand hier in.",
-    "knownDistance": "Known distance:",
-    "measuredPixels": "Measured pixels:",
+    "knownDistance": "Bekende afstand:",
+    "measuredPixels": "Gemeten pixels:",
     "methodReference": "Referentielijn",
     "methodRatio": "Schaalverhouding",
     "referenceHelp": "Voer de werkelijke afstand in voor een bekende meetlijn.",
@@ -496,7 +515,7 @@
   },
   "parametricSymbolPicker": {
     "title": "Parametrisch symbool kiezen",
-    "cancel": "Cancel"
+    "cancel": "Annuleren"
   },
   "ocrLanguage": {
     "title": "Tekst herkennen (OCR)",

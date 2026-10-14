@@ -1,6 +1,7 @@
 import { state, getActiveDocument, selectAllOnPage, clearSelection } from '../core/state.js';
 import { undo, redo, recordAdd, recordModify, recordBulkModify, recordClearPage } from '../core/undo-manager.js';
 import { setTool } from './manager.js';
+import { heeftGekozenAfbeelding, wisAfbeeldingSelectie, deleteSelectedEmbeddedImage } from './tools/remove-image-tool.js';
 import { showPreferencesDialog, setAsDefaultStyle } from '../core/preferences.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
 import { copyAndMove } from './edit-ops.js';
@@ -20,7 +21,8 @@ import { toggleAnnotationsListPanel } from '../ui/panels/annotations-list.js';
 import { toggleLeftPanel } from '../ui/panels/left-panel.js';
 import { switchRibbonTab as switchToTab } from '../bridge.js';
 import { openFindBar, closeFindBar, onFindNext } from '../search/find-bar.js';
-import { closeActiveTab } from '../ui/chrome/tabs.js';
+import { closeActiveTab, wisselTabMetSneltoets } from '../ui/chrome/tabs.js';
+import { isTextEntryTarget, tabSneltoetsRichting, maakTabSneltoetsHandler, maakTabWisselaar } from '../ui/chrome/tab-sneltoets.js';
 import { hideProperties, showProperties, showMultiSelectionProperties, togglePropertiesPanel } from '../ui/panels/properties-panel.js';
 import { wisselTagEnRuimte } from '../plattegrond/ruimte-selectie.js';
 import { openDialog, getDialogs } from '../bridge.js';
@@ -233,19 +235,54 @@ function _cadChordTry(letter) {
   return false;
 }
 
-// Handle keydown events
-// Typt de gebruiker in een tekstinvoer? Naast INPUT/TEXTAREA tellen ook
-// contenteditable-editors mee (o.a. de PDF-tekst-editor, die geen textarea
-// meer is). Losse letter-/cijfer-sneltoetsen en spatie mogen een lopende
-// tekstbewerking nooit onderbreken — een toolwissel sluit de editor.
-function isTextEntryTarget(t) {
-  if (!t) return false;
-  if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') return true;
-  if (t.isContentEditable) return true;
-  return typeof t.closest === 'function' && !!t.closest('[contenteditable="true"]');
+// ── Tabblad wisselen: Ctrl+Tab / Ctrl+PageDown en terug (#539) ─────────────
+// Hangt in de capture-fase op window (zie initKeyboardHandlers): daar komt
+// de toets als eerste langs, waar de focus ook staat, en kan geen component
+// hem inslikken. Zelfde tekstinvoer-bewaking als de andere sneltoetsen
+// (isTextEntryTarget, tab-sneltoets.js). De rem laat bij ingedrukt houden
+// geen achterstand ontstaan: een volgende wissel start pas als de vorige in
+// beeld staat, en er wacht er hoogstens één.
+const _tabWisselaar = maakTabWisselaar({
+  wissel: (richting) => wisselTabMetSneltoets(richting),
+  // Na het eerstvolgende frame (requestAnimationFrame + taak erna), met een
+  // vangnet voor een verborgen venster waar geen frames komen.
+  naBeeld: () => new Promise((klaar) => {
+    let gedaan = false;
+    const af = () => { if (!gedaan) { gedaan = true; klaar(); } };
+    requestAnimationFrame(() => setTimeout(af, 0));
+    setTimeout(af, 250);
+  }),
+  wacht: (ms) => new Promise((klaar) => setTimeout(klaar, ms)),
+});
+
+const handleTabSneltoets = maakTabSneltoetsHandler({
+  wisselaar: _tabWisselaar,
+  bewaking: () => ({
+    modaalOpen: isModalOpen()
+      || (typeof getDialogs === 'function' && (getDialogs() || []).length > 0),
+    tekstBewerking: !!(state.isEditingText || state.pdfTextEditState),
+    // Verplaatsen/draaien (G), bijsnijden of een lengte intikken midden in
+    // een tekening: die sessie hoort bij het huidige document.
+    bezigeSessie: isGMoveModeActive() || isGRotateModeActive() || !!state.imageCropMode || typeLengthActive(),
+  }),
+});
+
+// Pijltoetsen die bij een besturingselement horen (#551): de lint-tabstrook
+// wisselt er tabbladen mee, een menu of keuzelijst kiest ermee. Zo'n toets
+// verschuift geen annotaties en bladert niet. Ook een toets die al is
+// afgehandeld (defaultPrevented) laat de selectie staan.
+const PIJL_BESTURING = '[role="tablist"], [role="tab"], [role="menu"], [role="menubar"], [role="listbox"], [role="radiogroup"], select, .ribbon-tabs';
+function pijlVoorBesturing(e) {
+  if (e.defaultPrevented) return true;
+  const t = e.target;
+  return typeof t?.closest === 'function' && !!t.closest(PIJL_BESTURING);
 }
 
 export async function handleKeydown(e) {
+  // De tabwissel-toetsen zijn al afgehandeld (of bewust geweigerd) door
+  // handleTabSneltoets; niets hieronder mag er nog op reageren.
+  if (tabSneltoetsRichting(e)) return;
+
   const ctrl = e.ctrlKey || e.metaKey;
   const shift = e.shiftKey;
   const shortcutKey = typeof e.key === 'string' ? e.key.toLowerCase() : '';
@@ -478,6 +515,11 @@ export async function handleKeydown(e) {
     }
   } else if (e.key === 'Delete') {
     e.preventDefault();
+    if (heeftGekozenAfbeelding()) {
+      // Afbeelding bewerken: Delete verwijdert de gekozen afbeelding uit de pagina.
+      if (!isPdfAReadOnly()) deleteSelectedEmbeddedImage();
+      return;
+    }
     if (isPdfAReadOnly()) { /* block */ }
     else if ((getActiveDocument()?.selectedAnnotations || []).length > 0) {
       // Een vervanging (#508) telt met beide helften, ook in de vraag.
@@ -541,7 +583,9 @@ export async function handleKeydown(e) {
   }
   // Arrow keys: nudge selected annotations (skip when Ctrl held)
   else if (!ctrl && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-    if (isPdfAReadOnly()) { /* block nudge */ }
+    const voorBesturing = pijlVoorBesturing(e);
+    if (voorBesturing) { /* de tabstrook, het menu of de keuzelijst is aan zet */ }
+    else if (isPdfAReadOnly()) { /* block nudge */ }
     else if ((getActiveDocument()?.selectedAnnotations || []).length > 0 && getActiveDocument()?.pdfDoc) {
       // Text markup annotations (and carets, #508) are anchored to text — skip nudge
       const movable = getActiveDocument().selectedAnnotations.filter(a => !isTextAnchored(a));
@@ -573,7 +617,7 @@ export async function handleKeydown(e) {
     // Inhoudsopgave (TOC / bladwijzers) actief → met pijl omhoog/omlaag pagina-voor-
     // pagina door het document lopen i.p.v. de bladwijzerlijst te scrollen (GitHub #248).
     // Draait alleen als de nudge de toets niet al gebruikte (geen selectie) — ook read-only.
-    if (!e.defaultPrevented && (e.key === 'ArrowDown' || e.key === 'ArrowUp')
+    if (!voorBesturing && !e.defaultPrevented && (e.key === 'ArrowDown' || e.key === 'ArrowUp')
         && ['thumbnails', 'bookmarks'].includes(activeTab())
         && !['INPUT', 'TEXTAREA'].includes(e.target?.tagName) && !e.target?.isContentEditable) {
       e.preventDefault();
@@ -720,6 +764,11 @@ export async function handleKeydown(e) {
   //    doet (tool.onEscape → zelfde afrondroutines), daarna selectietool.
   // 3. Teken-tool actief zonder actieve tekening → selectietool.
   // 4. Selectietool actief → selectie legen (bestaand gedrag).
+  else if (e.key === 'Escape' && heeftGekozenAfbeelding()) {
+    // Afbeelding bewerken: Escape wist eerst de gekozen afbeelding.
+    wisAfbeeldingSelectie();
+    return;
+  }
   else if (e.key === 'Escape') {
     // Trede 1: modale dialogen (vanilla overlays + Solid dialogStore), de
     // Edit-Type-editor en de crop-modus handelen Escape volledig zelf af.
@@ -989,6 +1038,9 @@ function handlePaste(e) {
 
 // Initialize keyboard handlers
 export function initKeyboardHandlers() {
+  // Capture-fase op window: vóór alle keydown-luisteraars op document en
+  // daaronder, ook de capture-luisteraars (#539).
+  window.addEventListener('keydown', handleTabSneltoets, true);
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('paste', handlePaste);
   // Focusverlies bijhouden voor de plak-voorrangsregel (zie Ctrl+V hierboven).

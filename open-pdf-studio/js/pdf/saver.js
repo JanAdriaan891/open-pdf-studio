@@ -16,10 +16,13 @@ import { schrijfHatchMeta } from './saver/hatch-meta.js';
 import { schrijfWandJoinMeta } from './saver/wand-join-meta.js';
 import { schrijfPlattegrondMeta } from './saver/plattegrond-meta.js';
 import { maatlijnAnnotatie, kopVullingSleutels } from './saver/maatlijn-opslaan.js';
+import { schrijfMeetvlakSchaal, meetvlakRect } from './saver/meetvlak-opslaan.js';
+import { vlakZijdeTeksten } from '../annotations/measurement.js';
 import { attachVectorAP } from './saver/vector-ap.js';
 import { bytesVan as knipselBytesVan } from '../annotations/vector-snippet-store.js';
 import { getAnnotationStorage, getAnnotIdToFieldName } from './form-layer.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
+import { metOpslagSlot } from '../plugins/opslag-wissel-slot.js';
 import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnnotation } from '../plugins/plugin-pdf.js';
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
@@ -34,6 +37,7 @@ import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrTextLayer, embedOcrFont, loadDefaultOcrFontBytes } from './saver/ocr-text-layer.js';
 import { saveBookmarksToOutline } from './saver/bookmarks.js';
 import { saveStylePresetsToCatalog } from './saver/style-presets.js';
+import { pasBijlagenToe } from './bijlagen.js';
 import { schrijfAnnotatieLagen, ocVoorAnnotatie } from './saver/annotatie-lagen.js';
 import { layersForSave, currentLayerId } from '../annotations/annotatie-lagen.js';
 import { pdfTextString, toWinAnsiText, winAnsiLiteral, asciiPdfName } from './saver/pdf-text.js';
@@ -237,7 +241,12 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   }
   if (!state.documents.includes(activeDoc)) return false;
   const doel = saveAsPath || activeDoc?.saveTargetPath || currentPath;
-  _saveBezig = _savePDFNu(saveAsPath, activeDoc).finally(() => { _saveBezig = null; });
+  // Opslaan en een extensiewissel sluiten elkaar uit (#550): tijdens een
+  // wissel staat het annotatietype van een extensie even niet in het register
+  // en zou de saver die annotaties weglaten. De save begint pas na een lopende
+  // wissel, en een nieuwe wissel wacht tot de save klaar is. _saveBezig staat
+  // meteen, zodat een tweede save ook tijdens het wachten op de eerste wacht.
+  _saveBezig = metOpslagSlot(() => _savePDFNu(saveAsPath, activeDoc)).finally(() => { _saveBezig = null; });
   const gelukt = await _saveBezig;
   if (gelukt && activeDoc) {
     // De vorige uitkomst gold voor het oude bestand: opnieuw verifiëren. Het
@@ -776,8 +785,9 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               lineDict.LE = [PDFName.of(kopNaarLE(startHead)), PDFName.of(kopNaarLE(endHead))];
               lineDict.OPS_HeadSize = headSize;
               // Een kop die /LE niet exact kent (stealth), gaat apart mee.
+              // pdfTextString: een kop uit XFDF kan een los haakje bevatten (#555).
               const koppen = koppenSleutel(startHead, endHead);
-              if (koppen) lineDict.OPS_LineHeads = PDFString.of(koppen);
+              if (koppen) lineDict.OPS_LineHeads = pdfTextString(koppen);
 
               // Interior color for closed arrowheads
               if (hasFill(ann.fillColor)) {
@@ -966,7 +976,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               C: saStrokeColor,
               CA: opacity,
               LE: [PDFName.of(saMapHead(ann.startHead)), PDFName.of(saMapHead(ann.endHead || 'open'))],
-              ...(koppenSleutel(ann.startHead, ann.endHead || 'open') ? { OPS_LineHeads: PDFString.of(koppenSleutel(ann.startHead, ann.endHead || 'open')) } : {}),
+              ...(koppenSleutel(ann.startHead, ann.endHead || 'open') ? { OPS_LineHeads: pdfTextString(koppenSleutel(ann.startHead, ann.endHead || 'open')) } : {}),
               T: pdfTextString(ann.author || 'User'),
               Contents: pdfTextString(ann.subject || ''),
               M: PDFString.of(new Date().toISOString()),
@@ -1176,7 +1186,9 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
             // Map font family + bold/italic to PDF standard font name
             const pdfFontName = mapFontToPdfName(ann.fontFamily, ann.fontBold, ann.fontItalic);
-            const da = `${textColorArr[0]} ${textColorArr[1]} ${textColorArr[2]} rg /${pdfFontName} ${fontSize} Tf`;
+            // Als PDF-naam ('(' -> #28): /DA is een literal string zonder
+            // escapes en een haakje uit een fontnaam sloot hem te vroeg (#555).
+            const da = `${textColorArr[0]} ${textColorArr[1]} ${textColorArr[2]} rg ${PDFName.of(pdfFontName)} ${fontSize} Tf`;
 
             // FreeText color mapping (must match loader):
             //   C entry  = fill/background color (annot.color in pdf.js)
@@ -2209,8 +2221,6 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               // Ontbreken ze (extern herschreven), dan laadt hij als gewone
               // polygon — nooit crashen.
               OPS_Subtype: PDFString.of('systeemraster'),
-              OPS_SgPlaatB: sgP.plaatBreedteMm,
-              OPS_SgPlaatH: sgP.plaatHoogteMm,
               OPS_SgOrigX: sgP.originXMm,
               OPS_SgOrigY: sgP.originYMm,
               OPS_SgEqX: sgP.equalizeX ? 1 : 0,
@@ -2226,6 +2236,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               OPS_SgEdge: pdfTextString(sgOps.edgeProfiel),
               OPS_IfcCategory: pdfTextString(ann.ifcCategory || ''),
             };
+            // Plaatmaat: weg bij een onbevestigde maat van het type (#567) —
+            // de loader vult dan niets in; het type bepaalt de maat.
+            if (sgP.plaatBreedteMm != null) sgDict.OPS_SgPlaatB = sgP.plaatBreedteMm;
+            if (sgP.plaatHoogteMm != null) sgDict.OPS_SgPlaatH = sgP.plaatHoogteMm;
             if (ann.ifcPredefinedType) {
               sgDict.OPS_IfcPredefined = pdfTextString(ann.ifcPredefinedType);
             }
@@ -2319,13 +2333,21 @@ async function _savePDFNu(saveAsPath, activeDoc) {
             for (const pt of ann.points) {
               maVertices.push(convertX(pt.x), convertY(pt.y));
             }
+            // Zijdematen (#536): de teksten uit de annotatie zoals de app hem
+            // toont (annRaw: de schaal hoort bij die plaats), de plaatsing in
+            // het ongedraaide paginaframe van `ann`.
+            const maZijden = ann.measureShowEdgeLengths === true
+              ? vlakZijdeTeksten(annRaw).map(z => ({ index: z.index, tekst: z.tekst }))
+              : null;
+            const maDraaiing = ((pageRot || 0) * Math.PI) / 180;
 
             const maDict = {
               Type: 'Annot',
               Subtype: 'Polygon',
               // Over alle ringen, dus ook over een tweede deel naast de
               // buitenring: buiten de /Rect knipt een andere lezer het weg (#457).
-              Rect: vlakRect(ann, convertX, convertY, 2),
+              // Met zijdematen ook over hun tekst.
+              Rect: meetvlakRect(ann, convertX, convertY, maZijden, maDraaiing),
               Vertices: maVertices,
               C: hexToColorArray(ann.strokeColor || '#ff0000'),
               CA: opacity,
@@ -2341,6 +2363,8 @@ async function _savePDFNu(saveAsPath, activeDoc) {
             }
             annotDict = context.obj(maDict);
             annotDict.set(PDFName.of('BS'), buildBorderStyle(context, borderWidth, ann.borderStyle));
+            // Eigen schaal van het vlak als /Measure (#536).
+            schrijfMeetvlakSchaal(annotDict, ann, context);
             // Arcering: de parameters mee, niet alleen de lijnen in de
             // appearance — anders is de arcering na heropenen weg en schrijft
             // de volgende save een kaal vlak.
@@ -2374,6 +2398,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               hatchScale: ann.hatchScale, hatchAngle: (ann.hatchAngle || 0) - pageRot,
               text: ann.measureShowLabel === false ? '' : ann.measureText,
               labelX: ann.labelX, labelY: ann.labelY,
+              zijdeTeksten: maZijden, draaiing: maDraaiing,
               // Eigen vul-alfa (bv. een extern meetvlak op 30%) ook in de
               // appearance, anders tonen andere lezers het vlak na opslaan dekkend.
               fillAlpha: fillOpacity,
@@ -2909,14 +2934,18 @@ async function _savePDFNu(saveAsPath, activeDoc) {
       }
     }
 
-    // Burn watermarks into the PDF
-    await saveWatermarksToPages(pdfDocLib, pages, activeDoc);
+    // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
+    // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.
+    const watermerkUitkomst = await saveWatermarksToPages(pdfDocLib, pages, activeDoc);
 
     // Save bookmarks to PDF outline
     saveBookmarksToOutline(pdfDocLib, activeDoc);
 
     // Save named line-style presets into the catalog (travel with the PDF)
     saveStylePresetsToCatalog(pdfDocLib, activeDoc.stylePresets || null);
+
+    // Bijlagen die in het paneel zijn toegevoegd of verwijderd (bijlagen.js).
+    pasBijlagenToe(pdfDocLib, activeDoc.bijlagenWijzigingen);
 
     // Vectorknipsels: opruimen wat de vorige stempels en het inbedden achter-
     // lieten, anders groeit het bestand per save met de hele bronpagina. Eerst
@@ -2982,6 +3011,13 @@ async function _savePDFNu(saveAsPath, activeDoc) {
     // alInBasis(): een volgende save op die basis tekent ze niet nogmaals.
     if (activeDoc) markeerGebakken(activeDoc.annotations, outputPath);
 
+    // Kop-/voetteksten staan nu als pagina-inhoud in outputPath (#375).
+    const kopVoetIds = Array.isArray(watermerkUitkomst?.kopVoet) ? watermerkUitkomst.kopVoet : null;
+    if (kopVoetIds && activeDoc) {
+      const { naOpslaanKopVoet } = await import('../watermark/kopvoet-weergave.js');
+      naOpslaanKopVoet(activeDoc, kopVoetIds, outputPath);
+    }
+
     // Ingebakken text-edits zijn nu deel van het bestand: markeer ze als
     // 'baked' zodat een volgende save ze niet NOGMAALS inbakt (dubbele
     // tekstlagen in het bestand, oud/nieuw dat bij zoomen door elkaar
@@ -3046,6 +3082,19 @@ async function _savePDFNu(saveAsPath, activeDoc) {
           '[saver] Verversing na text-edit-save mislukt (weergave kan de oude ' +
           'render tonen tot heropenen):', reloadErr,
         );
+      }
+    }
+
+    // Opgeslagen in het bestand dat ook de weergave is: daar staan de
+    // kop-/voetteksten nu in, en het scherm tekent ze zelf. Herladen zonder
+    // die streams (kopvoet-weergave.js). De bytes hebben de paginadraaiingen
+    // van het document al.
+    if (!saveAsPath && activeDoc?._kopVoetBron && activeDoc._kopVoetBron === activeDoc.filePath) {
+      try {
+        const { haalKopVoetUitWeergave } = await import('../watermark/kopvoet-weergave.js');
+        if (await haalKopVoetUitWeergave(activeDoc, { bytes: savedBytes, rotaties: {} })) markDocumentSaved(activeDoc);
+      } catch (e) {
+        console.warn('[saver] verversen na het opslaan van kop-/voetteksten mislukt:', e);
       }
     }
 
@@ -3120,6 +3169,16 @@ export async function savePDFAs(doc = getActiveDocument()) {
           const { losgelatenWerkbestanden, ruimWerkbestandenOp } = await import('./document-release.js');
           await ruimWerkbestandenOp(doc, losgelatenWerkbestanden(doc, state.documents.filter((d) => d !== doc)));
         } catch (e) { console.warn('[save-as] working files not removed:', e); }
+      }
+    }
+    // De weergave is nu het opgeslagen bestand, met de kop-/voetteksten erin:
+    // zonder die streams herladen, het scherm tekent ze zelf (#375).
+    if (success && doc?._kopVoetBron && doc._kopVoetBron === doc.filePath) {
+      try {
+        const { haalKopVoetUitWeergave } = await import('../watermark/kopvoet-weergave.js');
+        if (await haalKopVoetUitWeergave(doc, { rotaties: {} })) markDocumentSaved(doc);
+      } catch (e) {
+        console.warn('[save-as] verversen na het opslaan van kop-/voetteksten mislukt:', e);
       }
     }
     return success || false;

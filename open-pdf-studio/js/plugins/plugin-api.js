@@ -6,15 +6,15 @@
  */
 
 import { registerAnnotationType, unregisterAnnotationType } from './annotation-type-registry.js';
-import { registerToolPalette, unregisterToolPalette } from './palette-registry.js';
+import { registerToolPalette, unregisterToolPalette, getPalette } from './palette-registry.js';
 import { registerPropertyPanel as _registerPropertyPanel, unregisterPropertyPanel as _unregisterPropertyPanel } from './property-panel-registry.js';
 import {
   registerSelectionListener as _registerSelectionListener,
   unregisterSelectionListener as _unregisterSelectionListener,
 } from './selection-listener-registry.js';
-import { clearAllToolGroups } from './tool-group-state.js';
+import { clearToolGroups, toolGroupIdsOf } from './tool-group-state.js';
 import { setNativePanelHidden } from '../solid/stores/propertiesStore.js';
-import { state, getActiveDocument, getPageRotation } from '../core/state.js';
+import { state, getActiveDocument, getPageRotation, getAnnotationBounds } from '../core/state.js';
 import { setTool } from '../tools/manager.js';
 import { createAnnotation } from '../annotations/factory.js';
 import { redrawAnnotations } from '../annotations/rendering.js';
@@ -24,15 +24,111 @@ import { getPageInfoForDocument, readPageContentForDocument, renderPageTileForDo
 import { extractPageGeometry } from '../tools/pdf-snap-extractor.js';
 import { schaalOpPunt } from '../annotations/schaal-op-punt.js';
 import { getScaleFromRegion } from '../annotations/scale-region.js';
+import * as systeemTypenRegistry from '../annotations/systeem-typen-registry.js';
+import { systeemInstanceGeometrie } from '../annotations/systeem-geometrie-app.js';
+import { openSysteemtypenEditor } from '../solid/stores/systeemtypenEditorStore.js';
+import { createSystemTypeApi } from './system-type-api.js';
 import { createRoot, createEffect } from 'solid-js';
+import { createViewNavigation } from './view-navigation.js';
+import { maakBijdrageScope } from './extension-contributions.js';
+import { lintRegister } from './ribbon-tab-registry.js';
+
+// Wat createViewNavigation van de app nodig heeft (#557). De modules voor
+// selecteren en in beeld brengen worden vooraf geladen (`prepare`), zodat de
+// laatste identiteitscontrole en de selectie zelf in één synchrone stap
+// gebeuren: geen wachtmoment waarin een tabbladwissel ertussen kan komen.
+function viewNavigationHost() {
+  let m = null;
+  return {
+    documents: () => state.documents,
+    activeDocument: () => getActiveDocument(),
+    pageCount: doc => doc?.numPages || doc?.pdfDoc?.numPages || 0,
+    async loadPageAnnotations(doc, pageNum) {
+      const { ensureAnnotationsForPage } = await import('../pdf/loader.js');
+      if (getActiveDocument() !== doc) return;
+      await ensureAnnotationsForPage(pageNum, doc);
+      const started = Date.now();
+      while (doc._annotationPagesReady && !doc._annotationPagesReady.has(pageNum)) {
+        if (getActiveDocument() !== doc || Date.now() - started > 30_000) return;
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+    },
+    async goToPage(doc, pageNum) {
+      // Twee-paginaweergave: staat de pagina al in de getoonde spread, dan
+      // niet navigeren (goToPage zou dat als 'volgende spread' lezen).
+      const anker = p => (p <= 1 ? 1 : (p % 2 === 0 ? p : p - 1));
+      if (doc.facingSpread && anker(pageNum) === anker(doc.currentPage)) return;
+      const { goToPage } = await import('../pdf/renderer.js');
+      if (getActiveDocument() === doc) await goToPage(pageNum);
+    },
+    async prepare() {
+      if (m) return;
+      const [filters, model, panel, list] = await Promise.all([
+        import('../annotations/view-filters.js'),
+        import('../annotations/corrections/model.js'),
+        import('../ui/panels/properties-panel.js'),
+        import('../ui/panels/annotations-list.js'),
+      ]);
+      m = { filters, model, panel, list };
+    },
+    // Verborgen (niet getekend) of op een vergrendelde laag: een klik pakt
+    // zo'n object ook niet.
+    isHidden: (doc, ann) => !!m && m.filters.isAnnotationHiddenInView(ann),
+    isLocked: (doc, ann) => !!m && !m.filters.isAnnotationHiddenInView(ann)
+      && !m.filters.isAnnotationPickableInView(ann),
+    // De gewone selectieroute, zoals een klik in de annotatielijst: een
+    // vervanging (#508) blijft één selectie, het eigenschappenpaneel volgt en
+    // meldt de selectie aan de plugin-listeners.
+    select(doc, anns) {
+      const leden = m.model.expandCorrectionGroups(doc.annotations, anns);
+      const ouder = leden.length > 1 ? m.model.replaceParentOf(leden, doc.annotations) : null;
+      doc.selectedAnnotation = ouder || anns[0];
+      doc.selectedAnnotations = leden;
+      redrawAnnotations();
+      if (ouder) m.panel.showProperties(ouder);
+      else if (leden.length > 1) m.panel.showMultiSelectionProperties();
+      else m.panel.showProperties(anns[0]);
+      m.list.updateAnnotationsList();
+    },
+    // De omhullende van de selectie in het midden van de weergave; even
+    // wachten zoals de annotatielijst doet, tot de paginawissel staat.
+    reveal(doc, anns) {
+      const kaders = anns.map(a => getAnnotationBounds(a)).filter(Boolean);
+      let doel = anns[0];
+      if (kaders.length > 1) {
+        const x = Math.min(...kaders.map(b => b.x)), y = Math.min(...kaders.map(b => b.y));
+        doel = { type: 'box', page: anns[0].page, x, y,
+          width: Math.max(...kaders.map(b => b.x + b.width)) - x,
+          height: Math.max(...kaders.map(b => b.y + b.height)) - y };
+      }
+      setTimeout(() => { if (getActiveDocument() === doc) m.list.scrollToAnnotation(doel); }, 50);
+    },
+  };
+}
 
 export function createPluginApi(pluginId) {
+  // System types (#567): registry, native tool, native editor and the
+  // geometry of system instances as the host. See docs/plugin-systeemtypen.md
+  // for the contract and the lifecycle.
+  const systemTypes = createSystemTypeApi(pluginId, {
+    ...systeemTypenRegistry,
+    systeemInstanceGeometrie,
+    setTool,
+    openEditor: openSysteemtypenEditor,
+  });
+  // Bijdragescope (#550/#551): lint-tabbladen en opdrachten, opgeruimd in _cleanup.
+  const scope = maakBijdrageScope(pluginId);
   const registeredTypes = [];
   const registeredPalettes = [];
   const registeredPanels = [];
   const registeredSelectionListeners = []; // [{typeName, fn}]
   const documentListeners = new Map();
+  let viewNavigation = null;
+  const navigation = () => (viewNavigation ??= createViewNavigation(viewNavigationHost()));
   let disposeDocumentEvents = null;
+  // Verborg deze extensie het eigen eigenschappenpaneel? Alleen dan zet
+  // _cleanup het terug (#550).
+  let verbergtNativePaneel = false;
 
   function ensureDocumentEvents() {
     if (disposeDocumentEvents) return;
@@ -79,57 +175,71 @@ export function createPluginApi(pluginId) {
       annotationBatch: true,
       pageAnalysis: true,
       pluginDocumentEvents: true,
+      systemTypes: true,
+      viewNavigation: true,
+      ribbonTabs: true,
     },
 
     // --- Annotation type registration ---
     registerAnnotationType(typeName, handler) {
+      // Na _cleanup gesloten: een late registratie blijft anders voorgoed staan (#550).
+      scope.eisActief('annotationType', typeName);
       const prefixedName = typeName;
       registerAnnotationType(prefixedName, handler);
       registeredTypes.push(prefixedName);
     },
 
     unregisterAnnotationType(typeName) {
-      unregisterAnnotationType(typeName);
+      // Alleen wat deze API zelf registreerde: een oude API (na herladen) haalt
+      // zo nooit het type van de nieuwe versie weg (#550).
       const idx = registeredTypes.indexOf(typeName);
-      if (idx >= 0) registeredTypes.splice(idx, 1);
+      if (idx < 0) return;
+      unregisterAnnotationType(typeName);
+      registeredTypes.splice(idx, 1);
     },
 
     // --- Tool palette registration ---
     registerToolPalette(descriptor) {
+      scope.eisActief('palette', String(descriptor?.id));
       registerToolPalette(descriptor);
       registeredPalettes.push(descriptor.id);
     },
 
     unregisterToolPalette(id) {
-      unregisterToolPalette(id);
       const idx = registeredPalettes.indexOf(id);
-      if (idx >= 0) registeredPalettes.splice(idx, 1);
+      if (idx < 0) return;
+      unregisterToolPalette(id);
+      registeredPalettes.splice(idx, 1);
     },
 
     // --- Property panel registration (custom edit-form for plugin annotations) ---
     registerPropertyPanel(typeName, renderFn) {
+      scope.eisActief('propertyPanel', typeName);
       _registerPropertyPanel(typeName, renderFn);
       registeredPanels.push(typeName);
     },
 
     unregisterPropertyPanel(typeName) {
-      _unregisterPropertyPanel(typeName);
       const idx = registeredPanels.indexOf(typeName);
-      if (idx >= 0) registeredPanels.splice(idx, 1);
+      if (idx < 0) return;
+      _unregisterPropertyPanel(typeName);
+      registeredPanels.splice(idx, 1);
     },
 
     // --- Selection listener (direct selection-event channel for plugin annotations) ---
     // Listener fires with `annotation` on select and `null` on deselect. Plugins
     // should compare by stable id (not ref) since OPPS may reload annotation refs.
     registerSelectionListener(typeName, fn) {
+      scope.eisActief('selectionListener', typeName);
       _registerSelectionListener(typeName, fn);
       registeredSelectionListeners.push({ typeName, fn });
     },
 
     unregisterSelectionListener(typeName, fn) {
-      _unregisterSelectionListener(typeName, fn);
       const idx = registeredSelectionListeners.findIndex(e => e.typeName === typeName && e.fn === fn);
-      if (idx >= 0) registeredSelectionListeners.splice(idx, 1);
+      if (idx < 0) return;
+      _unregisterSelectionListener(typeName, fn);
+      registeredSelectionListeners.splice(idx, 1);
     },
 
     // --- Native property-panel visibility ---
@@ -137,6 +247,8 @@ export function createPluginApi(pluginId) {
     // editing so all controls live in the plugin's own palette/UI.
     // Pass false to hide, true to restore. Caller is responsible for restoring on deselect.
     setNativePanelVisible(visible) {
+      scope.eisActief('nativePanel', 'visibility');
+      verbergtNativePaneel = !visible;
       setNativePanelHidden(!visible);
     },
 
@@ -150,8 +262,10 @@ export function createPluginApi(pluginId) {
     },
 
     // --- State access (read-only helpers) ---
+    // A detached copy: writing to it changes nothing. System types go through
+    // the system type API below, which validates every change.
     getPreferences() {
-      return state.preferences;
+      return JSON.parse(JSON.stringify(state.preferences));
     },
 
     getCurrentTool() {
@@ -241,6 +355,7 @@ export function createPluginApi(pluginId) {
       if (!['documentChanged', 'pageChanged', 'scaleChanged'].includes(type) || typeof listener !== 'function') {
         throw new TypeError('Unsupported document event or listener');
       }
+      scope.eisActief('documentEvent', type);
       let listeners = documentListeners.get(type);
       if (!listeners) { listeners = new Set(); documentListeners.set(type, listeners); }
       listeners.add(listener);
@@ -284,16 +399,73 @@ export function createPluginApi(pluginId) {
       redrawAnnotations();
     },
 
+    // --- System types (#567) ---
+    // Read detached snapshots, register and update types owned by this
+    // plugin ('ext:<pluginId>#<key>'), pick a type for the native tool, open
+    // the native editor, listen to confirmed changes and read the geometry of
+    // a system instance in the active document.
+    listSystemTypes: systemTypes.listSystemTypes,
+    getSystemType: systemTypes.getSystemType,
+    systemTypeId: systemTypes.systemTypeId,
+    registerSystemType: systemTypes.registerSystemType,
+    updateSystemType: systemTypes.updateSystemType,
+    selectSystemTypeForTool: systemTypes.selectSystemTypeForTool,
+    openSystemTypeEditor: systemTypes.openSystemTypeEditor,
+    onSystemTypesChanged: systemTypes.onSystemTypesChanged,
+    getSystemInstanceGeometry: systemTypes.getSystemInstanceGeometry,
+
+    // --- View navigation and selection (#557) ---
+    // Document-scoped: pass the id from getDocumentInfo(). Each call resolves
+    // to { ok: true, ... } or { ok: false, code, message }; the identity of
+    // the document is checked again after every wait, so a tab switch or
+    // close while a call is pending never selects in another document. A
+    // newer call from the same plugin supersedes an older pending one.
+    navigateToPage(request) {
+      return navigation().navigateToPage(request);
+    },
+
+    selectAnnotations(request) {
+      return navigation().selectAnnotations(request);
+    },
+
+    focusAnnotation(request) {
+      return navigation().focusAnnotation(request);
+    },
+
+    // --- Linttabbladen (#551): alleen data, de host tekent; zie ribbon-tab-registry.js ---
+    registerRibbonTab(descriptor) {
+      return lintRegister.registreer(scope, descriptor);
+    },
+
+    unregisterRibbonTab(id) {
+      return lintRegister.afmelden(scope, id);
+    },
+
+    /** Overzicht van wat deze extensie heeft geregistreerd (app_list_extensions). */
+    _bijdragenOverzicht() {
+      return {
+        ribbonTabs: lintRegister.vanExtensie(pluginId),
+        commands: scope.lijst().filter((b) => b.soort === 'command').length,
+        annotationTypes: [...registeredTypes],
+        palettes: [...registeredPalettes],
+        propertyPanels: [...registeredPanels],
+      };
+    },
+
     // --- Cleanup (called by plugin-manager on deactivate) ---
     _cleanup() {
+      const waarschuwingen = scope.ruimOp();
+      // De gereedschapsgroepen van de eigen paletten, vóór die verdwijnen.
+      const eigenGroepen = toolGroupIdsOf(registeredPalettes.map(id => getPalette(id)));
       registeredTypes.forEach(t => unregisterAnnotationType(t));
       registeredPalettes.forEach(id => unregisterToolPalette(id));
       registeredPanels.forEach(t => _unregisterPropertyPanel(t));
       registeredSelectionListeners.forEach(({ typeName, fn }) => _unregisterSelectionListener(typeName, fn));
-      // Restore native panel visibility on plugin-deactivate so the host UI returns to default.
-      setNativePanelHidden(false);
-      // Reset tool-group sub-tool selections so a fresh activate starts clean.
-      clearAllToolGroups();
+      // Het eigenschappenpaneel en de gereedschapsgroepen per extensie
+      // herstellen, niet globaal: andere extensies houden hun toestand (#550).
+      if (verbergtNativePaneel) setNativePanelHidden(false);
+      verbergtNativePaneel = false;
+      clearToolGroups(eigenGroepen);
       registeredTypes.length = 0;
       registeredPalettes.length = 0;
       registeredPanels.length = 0;
@@ -301,6 +473,10 @@ export function createPluginApi(pluginId) {
       disposeDocumentEvents?.();
       disposeDocumentEvents = null;
       documentListeners.clear();
+      // Only runtime state: stored system types are never removed here, so a
+      // document that references them keeps working.
+      systemTypes.dispose();
+      return waarschuwingen;
     }
   };
 }

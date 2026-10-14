@@ -1,3 +1,4 @@
+import { sharpenPageRgba } from './render-sharpen-pref.js';
 import { state, getNextUntitledName, getActiveDocument } from '../core/state.js';
 import { showLoading, hideLoading } from '../ui/chrome/dialogs.js';
 import { updateAllStatus } from '../ui/chrome/status-bar.js';
@@ -24,6 +25,7 @@ import { resolveGroupLinks } from './loader/correction-load.js';
 import { loadIfNeeded } from './queued-load.js';
 import { leesAnnotatieLagen, pasGelezenLagenToe } from './saver/annotatie-lagen.js';
 import { voegAnnotatiesToe } from './loader/annotaties-toevoegen.js';
+import { pdfjsBronnen } from '../core/basis-url.js';
 
 
 // Convert one batch of pdf.js annotations and push them to doc.annotations,
@@ -109,10 +111,7 @@ export async function reloadDocumentFromBytes(doc, bytes) {
   // Replace the pdf.js document with one loaded from the new bytes
   doc.pdfDoc = await pdfjsLib.getDocument({
     data: bytes.slice(), // copy — pdf.js transfers the buffer
-    cMapUrl: '/pdfjs/web/cmaps/',
-    cMapPacked: true,
-    standardFontDataUrl: '/pdfjs/web/standard_fonts/',
-    wasmUrl: '/pdfjs/web/wasm/',
+    ...pdfjsBronnen(),
     isEvalSupported: false,
     verbosity: 0,
   }).promise;
@@ -163,10 +162,7 @@ function _attachPdfDocGetPageRecovery(doc, filePath) {
         if (!cached) throw e;
         const fresh = await pdfjsLib.getDocument({
           data: cached.slice(),
-          cMapUrl: '/pdfjs/web/cmaps/',
-          cMapPacked: true,
-          standardFontDataUrl: '/pdfjs/web/standard_fonts/',
-    wasmUrl: '/pdfjs/web/wasm/',
+          ...pdfjsBronnen(),
           isEvalSupported: false,
           verbosity: 0,
         }).promise;
@@ -314,7 +310,7 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
           const view = new DataView(bytes.buffer, bytes.byteOffset, 8);
           const w = view.getUint32(0, true);
           const h = view.getUint32(4, true);
-          const rgba = new Uint8ClampedArray(bytes.buffer, bytes.byteOffset + 8, bytes.length - 8);
+          const rgba = sharpenPageRgba(new Uint8ClampedArray(bytes.buffer, bytes.byteOffset + 8, bytes.length - 8), w, h);
           const imageData = new ImageData(rgba, w, h);
           const bitmap = await createImageBitmap(imageData);
           if (isClosed() || doc.pdfDoc || !isActive()) { bitmap.close(); return; }
@@ -365,10 +361,7 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     // Load PDF using pdf.js (this transfers the buffer to a worker)
     doc.pdfDoc = await pdfjsLib.getDocument({
       data: typedArray,
-      cMapUrl: '/pdfjs/web/cmaps/',
-      cMapPacked: true,
-      standardFontDataUrl: '/pdfjs/web/standard_fonts/',
-    wasmUrl: '/pdfjs/web/wasm/',
+      ...pdfjsBronnen(),
       isEvalSupported: false,
       verbosity: 0,
     }).promise;
@@ -543,6 +536,22 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
         if (isClosed()) return;
         if (presets.length > 0) doc.stylePresets = presets;
       }).catch(() => { /* presets zijn optioneel — negeer leesfouten */ });
+    }
+
+    // Titel en kop-/voetteksten uit het bestand (#375): de definities komen
+    // terug in de lijst, zodat een nieuwe save ze vervangt in plaats van er
+    // nog een exemplaar overheen te zetten. Niet-blokkerend, zoals hierboven.
+    {
+      const bron = doc.filePath;
+      getSharedPdfLibDoc(doc).then(async (pdfLibDoc) => {
+        if (isClosed() || !pdfLibDoc) return;
+        const { leesKopVoetUitBestand } = await import('../watermark/kopvoet-weergave.js');
+        if (isClosed()) return;
+        if (leesKopVoetUitBestand(doc, pdfLibDoc, bron) && isActive()) {
+          const { redrawAnnotations, redrawContinuous } = await import('../annotations/rendering.js');
+          if (doc.viewMode === 'continuous') redrawContinuous(); else redrawAnnotations();
+        }
+      }).catch((e) => { console.warn('[loader] kop-/voetteksten niet gelezen:', e); });
     }
 
     // Meetschalen uit de PDF zelf (/VP + /Measure): CAD-plots en de DWG/DXF-
@@ -928,10 +937,7 @@ export async function createBlankPDF(widthPt, heightPt, numPages) {
     // Load into pdf.js for viewing
     doc.pdfDoc = await pdfjsLib.getDocument({
       data: typedArray,
-      cMapUrl: '/pdfjs/web/cmaps/',
-      cMapPacked: true,
-      standardFontDataUrl: '/pdfjs/web/standard_fonts/',
-    wasmUrl: '/pdfjs/web/wasm/',
+      ...pdfjsBronnen(),
       isEvalSupported: false,
       verbosity: 0,
     }).promise;

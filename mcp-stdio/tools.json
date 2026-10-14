@@ -1031,6 +1031,64 @@
       "destructiveHint": true,
       "openWorldHint": false,
       "readOnlyHint": false,
+      "title": "Replace page text in bulk"
+    },
+    "description": "Replace many text spans of one page in a single call, for example to translate the page. Takes spans from app_get_page_text with their exact expected text. All or nothing: if any replacement fails, nothing changes and the result lists the error per span. Same rules as app_replace_text (in-place removal, fit to the original width, full fallback font when the subset lacks glyphs), checked together on one copy of the PDF and applied as one undo step. Changes stay pending until app_save_pdf is called.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "page": {
+          "description": "1-based page number; defaults to the page of the first spanId.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "replacements": {
+          "description": "One entry per span to replace, each on one line.",
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "description": "Required only when the source fill colour could not be recovered.",
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "type": "string"
+              },
+              "expectedText": {
+                "description": "Exact current text returned for that span.",
+                "type": "string"
+              },
+              "newText": {
+                "description": "Replacement text on one line (may be empty to delete).",
+                "type": "string"
+              },
+              "spanId": {
+                "description": "Opaque span ID from app_get_page_text.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "spanId",
+              "expectedText",
+              "newText"
+            ],
+            "type": "object"
+          },
+          "maxItems": 500,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "replacements"
+      ],
+      "type": "object"
+    },
+    "name": "app_translate_page"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
       "title": "Set measurement scale"
     },
     "description": "Set the active document's measurement scale calibration (pixels per unit + unit, e.g. ~2.835 px/mm for 1:1 at 72 dpi) and recalculate every measurement annotation.",
@@ -1242,7 +1300,7 @@
       "readOnlyHint": true,
       "title": "List app commands"
     },
-    "description": "List EVERY function the app exposes: each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool. Use this to discover how a feature is called before running it with app_run_command. Command ids: 'ribbon:#<id>' (stable), 'ribbon:<tab>:<n>' (button without an id, only stable within one version), 'tool:<name>'. Optional `filter` narrows by text (matches id, label, title or tab).",
+    "description": "List EVERY function the app exposes: each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool. Use this to discover how a feature is called before running it with app_run_command. Command ids: 'ribbon:#<id>' (stable), 'ribbon:<tab>:<n>' (button without an id, only stable within one version), 'tool:<name>'. Optional `filter` narrows by text (matches id, label, title or tab). Extension actions appear as 'ext:<extensionId>:<itemId>'.",
     "inputSchema": {
       "additionalProperties": false,
       "properties": {
@@ -2334,5 +2392,521 @@
       "type": "object"
     },
     "name": "app_facade_element"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "List system types"
+    },
+    "description": "List the reusable system types (suspended ceilings, floor slabs, panel systems) of the app library, or one type by id. Each entry has its stable id, owner, revision, whether the user edited it, the validated definition, unconfirmed dimensions and stored values that fail validation. Compare libraryRevision between calls to detect changes. Reads only.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable id of one system type.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": "app_list_system_types"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Register system type"
+    },
+    "description": "Register a system type owned by MCP under the id mcp:<key>. Repeating the call with the same definition changes nothing (status unchanged), and a definition the user edited in the app is kept (status kept-user-edit) and never overwritten. A different definition replaces an existing mcp:<key> type that the user has not edited (status updated) and redraws every system that uses it. Unknown fields, out-of-range values and layered definitions are rejected. Missing dimensions stay unconfirmed.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "definition": {
+          "additionalProperties": false,
+          "properties": {
+            "categorie": {
+              "enum": [
+                "plafond",
+                "vloer",
+                "wand",
+                "overig"
+              ],
+              "type": "string"
+            },
+            "celXMm": {
+              "description": "Cell width in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "celYMm": {
+              "description": "Cell height in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "edgeProfiel": {
+              "enum": [
+                "geen",
+                "hoeklijn",
+                "schaduwvoeg"
+              ],
+              "type": "string"
+            },
+            "ifcCategory": {
+              "enum": [
+                "IfcCovering",
+                "IfcWall",
+                "IfcSlab",
+                "IfcPlate"
+              ],
+              "type": "string"
+            },
+            "ifcPredefinedType": {
+              "enum": [
+                "CEILING",
+                "FLOORING",
+                "FLOOR",
+                "CLADDING",
+                "ROOFING",
+                null
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lagen": {
+              "description": "Reserved. Schema 1 has one implicit layer; only an empty array is accepted.",
+              "maxItems": 0,
+              "type": "array"
+            },
+            "layout": {
+              "description": "raster: cells in two directions (needs celXMm and celYMm). strook: strips in one direction (needs strookBreedteMm and celYMm).",
+              "enum": [
+                "raster",
+                "strook"
+              ],
+              "type": "string"
+            },
+            "naam": {
+              "description": "Display name (1-200 characters). Not an identity: references use the id.",
+              "type": "string"
+            },
+            "paneelTypen": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "naam": {
+                    "type": "string"
+                  },
+                  "renderStijl": {
+                    "enum": [
+                      "tegel",
+                      "ventilatie",
+                      "licht"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "naam",
+                  "renderStijl"
+                ],
+                "type": "object"
+              },
+              "maxItems": 50,
+              "minItems": 1,
+              "type": "array"
+            },
+            "sparingRegels": {
+              "additionalProperties": false,
+              "properties": {
+                "kleineSparingMaxMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                },
+                "raveelVanafMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "strookBreedteMm": {
+              "description": "Strip width in mm for the strook layout. Left out or null: unconfirmed.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "naam",
+            "categorie",
+            "layout"
+          ],
+          "type": "object"
+        },
+        "key": {
+          "description": "Stable key: lowercase letters, digits, dot, underscore or hyphen (1-64).",
+          "type": "string"
+        },
+        "restore": {
+          "description": "Recreate a type the user removed. Only on an explicit user request.",
+          "type": "boolean"
+        },
+        "schema": {
+          "enum": [
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "key",
+        "definition"
+      ],
+      "type": "object"
+    },
+    "name": "app_register_system_type"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Update system type"
+    },
+    "description": "Update a system type owned by MCP (id mcp:<key>). Pass the revision you last read as expectedRevision; a stale revision is rejected with the current revision. Types of the app or of extensions cannot be changed here. Nested values (sparingRegels, paneelTypen) are replaced as a whole; null clears an optional field.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "changes": {
+          "additionalProperties": false,
+          "properties": {
+            "categorie": {
+              "enum": [
+                "plafond",
+                "vloer",
+                "wand",
+                "overig"
+              ],
+              "type": "string"
+            },
+            "celXMm": {
+              "description": "Cell width in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "celYMm": {
+              "description": "Cell height in mm. Left out or null: unconfirmed, no default is applied.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "edgeProfiel": {
+              "enum": [
+                "geen",
+                "hoeklijn",
+                "schaduwvoeg"
+              ],
+              "type": "string"
+            },
+            "ifcCategory": {
+              "enum": [
+                "IfcCovering",
+                "IfcWall",
+                "IfcSlab",
+                "IfcPlate"
+              ],
+              "type": "string"
+            },
+            "ifcPredefinedType": {
+              "enum": [
+                "CEILING",
+                "FLOORING",
+                "FLOOR",
+                "CLADDING",
+                "ROOFING",
+                null
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lagen": {
+              "description": "Reserved. Schema 1 has one implicit layer; only an empty array is accepted.",
+              "maxItems": 0,
+              "type": "array"
+            },
+            "layout": {
+              "description": "raster: cells in two directions (needs celXMm and celYMm). strook: strips in one direction (needs strookBreedteMm and celYMm).",
+              "enum": [
+                "raster",
+                "strook"
+              ],
+              "type": "string"
+            },
+            "naam": {
+              "description": "Display name (1-200 characters). Not an identity: references use the id.",
+              "type": "string"
+            },
+            "paneelTypen": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "naam": {
+                    "type": "string"
+                  },
+                  "renderStijl": {
+                    "enum": [
+                      "tegel",
+                      "ventilatie",
+                      "licht"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "naam",
+                  "renderStijl"
+                ],
+                "type": "object"
+              },
+              "maxItems": 50,
+              "minItems": 1,
+              "type": "array"
+            },
+            "sparingRegels": {
+              "additionalProperties": false,
+              "properties": {
+                "kleineSparingMaxMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                },
+                "raveelVanafMm": {
+                  "maximum": 20000,
+                  "minimum": 10,
+                  "type": "number"
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "strookBreedteMm": {
+              "description": "Strip width in mm for the strook layout. Left out or null: unconfirmed.",
+              "maximum": 20000,
+              "minimum": 50,
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "expectedRevision": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "schema": {
+          "enum": [
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "expectedRevision",
+        "changes"
+      ],
+      "type": "object"
+    },
+    "name": "app_update_system_type"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "Open system type editor"
+    },
+    "description": "Open the app's system type editor with the given type selected, or select it in the editor that is already open without discarding unapplied edits. Returns immediately; the user applies or cancels in the app. Does not change any data.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Stable id of the system type to select.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "name": "app_open_system_type_editor"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "Get system geometry"
+    },
+    "description": "Get the geometry of one system (suspended ceiling, floor slab, panel field) in the active document, computed by the app's own geometry engine: panels with clipped outlines, grid lines, openings, trimmers, edge segments and component positions, in millimetres in the system's own frame (independent of zoom and view rotation; placement maps it onto the page). Includes the document and type revisions and whether every physical dimension is confirmed. Pass expectedDocumentRevision and expectedTypeRevision to reject a stale snapshot. Reads only.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "annotationId": {
+          "description": "Id of the system annotation (type systeemraster) in the active document.",
+          "type": "string"
+        },
+        "expectedDocumentRevision": {
+          "description": "document.revision of an earlier snapshot; a different current revision is rejected.",
+          "type": "string"
+        },
+        "expectedTypeRevision": {
+          "description": "type.revision of an earlier snapshot; a different current revision is rejected.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "schema": {
+          "enum": [
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "annotationId"
+      ],
+      "type": "object"
+    },
+    "name": "app_get_system_geometry"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "List extensions"
+    },
+    "description": "List the app's extensions: every installed and every loaded extension with its id, name, version, installed version, whether it is loaded and activated, its status (active, failed, notLoaded, busy), the code and message of the last failure, who made the last change (ui, mcp or startup) and whether it uses an old-style id. Broken folders in the extensions directory are listed under problems instead of being skipped. Reads only.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "includeContributions": {
+          "description": "Also list each extension's registered contributions (ribbon tabs, command count, annotation types, palettes, property panels). Default false.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "name": "app_list_extensions"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Install extension"
+    },
+    "description": "Install or update an extension from a local .oppx package, without a file dialog and without restarting the app: the package is checked and unpacked by the app, then the new version is activated. If the new version fails to load or activate, the previous working version is restored and stays active (rolledBack: true). Open PDF tabs and unsaved changes are not touched. Returns ok, outcome (installed, updated, unchanged), id, version, previousVersion, activated and the registered contributions, or ok: false with an error code such as PATH_NOT_ALLOWED, PACKAGE_INVALID, MANIFEST_INVALID, ALREADY_INSTALLED, VERSION_NOT_NEWER, MODULE_LOAD_FAILED or ACTIVATION_FAILED.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotencyKey": {
+          "description": "Caller-chosen key for this install request. Repeating a call with the same key, path and replace returns the stored result without installing again; the same key with a different path or replace is refused.",
+          "maxLength": 128,
+          "minLength": 8,
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "type": "string"
+        },
+        "path": {
+          "description": "Absolute path to a local .oppx package. Relative paths, network shares and URLs are refused.",
+          "type": "string"
+        },
+        "replace": {
+          "description": "What to do when the extension id is already installed: 'never' refuses, 'ifNewer' replaces only a lower version, 'always' replaces (also a downgrade). An identical package (same SHA-256) is always reported as 'unchanged'.",
+          "enum": [
+            "never",
+            "ifNewer",
+            "always"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "replace",
+        "idempotencyKey"
+      ],
+      "type": "object"
+    },
+    "name": "app_install_extension"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Reload extension"
+    },
+    "description": "Reload an installed extension from disk: deactivate it, remove everything it registered (ribbon tabs, commands, annotation types, palettes, panels) and activate it again, without restarting the app. If the reloaded code fails, the previous code is activated again (rolledBack: true). Returns ok, outcome 'reloaded', id, version, activated and contributions, or ok: false with an error code such as NOT_INSTALLED, MODULE_LOAD_FAILED or ACTIVATION_FAILED.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Extension id from app_list_extensions.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "name": "app_reload_extension"
   }
 ]

@@ -28,10 +28,16 @@ import { trimTool } from './trim-tool.js';
 import { extendTool } from './extend-tool.js';
 import { arrayTool } from './array-tool.js';
 import { removeImageTool } from './remove-image-tool.js';
+import { scanTextTool } from './scan-text-tool.js';
 import { splitTool, breakTool } from './split-tool.js';
 import { lengthenTool } from './lengthen-tool.js';
+import { offsetTool } from './offset-tool.js';
+import { stretchTool } from './stretch-tool.js';
+import { enlargeTool } from './enlarge-tool.js';
 import { dimChainAddTool, dimChainRemoveTool } from './dimension-chain-tool.js';
 import { radiusTool, diameterTool } from './dimension-radius-tool.js';
+import { filletTool, chamferTool } from './corner-tools.js';
+import { spotCoordTool } from './spot-coord-tool.js';
 
 export function registerAllTools() {
   // Navigation / selection
@@ -131,6 +137,7 @@ export function registerAllTools() {
 
   // Remove an image that is embedded in the PDF page content (issue #184)
   registerTool('removeImage', removeImageTool);
+  registerTool('scanText', scanTextTool);
 
   // CAD tools
   registerTool('trim', trimTool);
@@ -139,8 +146,17 @@ export function registerAllTools() {
   registerTool('split', splitTool);
   registerTool('break', breakTool);
   registerTool('lengthen', lengthenTool);
+  // CAD-stijl: parallel kopieën, hoekpunten uitrekken, uniform schalen
+  registerTool('offset', offsetTool);
+  registerTool('stretch', stretchTool);
+  registerTool('enlarge', enlargeTool);
 
   // Radius / diameter dimensioning (measureDistance with a prefixed label)
   registerTool('radius', radiusTool);
   registerTool('diameter', diameterTool);
+
+  // Hoekbewerkingen (CAD-stijl fillet / chamfer) en spot-coördinaat
+  registerTool('fillet', filletTool);
+  registerTool('chamfer', chamferTool);
+  registerTool('spotCoord', spotCoordTool);
 }

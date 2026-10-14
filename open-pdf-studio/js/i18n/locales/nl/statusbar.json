@@ -52,9 +52,9 @@
   "formFieldsMessage": "Dit document bevat interactieve formuliervelden. U kunt het formulier invullen en uw gegevens opslaan.",
   "enableEditing": "Bewerken inschakelen",
   "pdfAConformance": "Dit document voldoet aan de PDF/A-norm.",
-  "renameError": "Failed to rename file: {{error}}",
-  "renameInvalidChars": "File name cannot contain  / : * ? \" < > |",
-  "renameFileExists": "A file with this name already exists.",
+  "renameError": "Bestand hernoemen mislukt: {{error}}",
+  "renameInvalidChars": "Bestandsnaam mag niet bevatten:  / : * ? \" < > |",
+  "renameFileExists": "Er bestaat al een bestand met deze naam.",
   "page": "Pagina",
   "engineTitle": "Weergave-engine van de huidige weergave",
   "engine": {
@@ -90,6 +90,7 @@
   },
   "boxWidthAbbr": "B",
   "boxHeightAbbr": "H",
+  "boxSizeHint": "Typ een waarde + Enter — of klik ernaast om toe te passen",
   "ocr": {
     "progress": {
       "starting": "Tekst herkennen...",
