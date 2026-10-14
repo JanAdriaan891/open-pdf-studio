@@ -82,7 +82,7 @@
     "orderVertical": "Loddrett",
     "orderVerticalReversed": "Loddrett omvendt",
     "pageBorder": "Skriv ut sidekant",
-    "perSheetNote": "Hver side skaleres for å passe i sin celle, så sideskaleringen ovenfor gjelder ikke. Forhåndsvisningen viser én side.",
+    "perSheetNote": "Hver side skaleres for å passe i sin celle, så sideskaleringen ovenfor gjelder ikke.",
     "autoRotate": "Autoroter",
     "autoCenter": "Autosentrer",
     "advancedOptions": "Avanserte utskriftsalternativer",

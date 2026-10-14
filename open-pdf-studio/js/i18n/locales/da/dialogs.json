@@ -82,7 +82,7 @@
     "orderVertical": "Lodret",
     "orderVerticalReversed": "Lodret omvendt",
     "pageBorder": "Udskriv sidekant",
-    "perSheetNote": "Hver side skaleres, så den passer i sin celle, så sideskaleringen ovenfor gælder ikke. Forhåndsvisningen viser en enkelt side.",
+    "perSheetNote": "Hver side skaleres, så den passer i sin celle, så sideskaleringen ovenfor gælder ikke.",
     "autoRotate": "Auto-roter",
     "autoCenter": "Auto-centrer",
     "advancedOptions": "Avancerede udskriftsindstillinger",

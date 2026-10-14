@@ -4,10 +4,17 @@
 // op het gekozen vel gelegd): die pagina's worden ingebed en in een raster van
 // kolommen x rijen op nieuwe vellen gezet, elk verkleind tot de cel. Zo werken
 // raster- en vectorpad allebei zonder eigen n-up-code.
+//
+// Het voorbeeld in de printdialoog (voorbeeldMeerPerBlad) rekent met dezelfde
+// regels: dezelfde plaatsing van elke pagina op haar eigen printpagina
+// (print-plaatsing.js), hetzelfde vel (kiesBlad) en dezelfde cellen
+// (velIndeling). Wat het voorbeeld toont is dus wat er uit de printer komt.
 
 import { PDFDocument, rgb } from 'pdf-lib';
+import { berekenPlaatsing, printPaginaMaat, margesVoor } from './print-plaatsing.js';
 
 const PT_PER_MM = 72 / 25.4;
+const MM_PER_PT = 25.4 / 72;
 /** Witruimte rond het raster (buiten het bedrukbare gebied van de meeste printers). */
 export const BLAD_MARGE_PT = 8 * PT_PER_MM;
 /** Witruimte tussen twee cellen. */
@@ -111,6 +118,131 @@ export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, 
 }
 
 /**
+ * De cellen van één vel: per pagina op dat vel (`maten`, in printvolgorde,
+ * {breedte, hoogte} in pt) haar cel en haar plek (plaatsInCel, PDF-
+ * coördinaten in pt). De afdruk en het voorbeeld gebruiken allebei deze regel.
+ * @returns {{k:number, kol:number, rij:number, x:number, y:number,
+ *            breedte:number, hoogte:number, schaal:number}[]}
+ */
+export function velIndeling({ bladB, bladH, kolommen, rijen, volgorde = 'horizontal', maten }) {
+  return maten.slice(0, kolommen * rijen).map((m, k) => {
+    const { kol, rij } = celVoorVolgnummer(k, kolommen, rijen, volgorde);
+    return {
+      k, kol, rij,
+      ...plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB: m.breedte, paginaH: m.hoogte }),
+    };
+  });
+}
+
+/** Pagina's per vel: kolommen x rijen, of 1 zonder raster. */
+function perVel(raster) {
+  return isMeerPerBlad(raster) ? raster.kolommen * raster.rijen : 1;
+}
+
+/** Hoeveel vellen `aantalPaginas` pagina's worden (zonder raster: één per pagina). */
+export function aantalVellen(aantalPaginas, raster) {
+  return Math.ceil(Math.max(0, aantalPaginas) / perVel(raster));
+}
+
+/** De pagina's (uit `paginas`, in printvolgorde) op vel `velIndex` (vanaf 0). */
+export function paginasOpVel(paginas, velIndex, raster) {
+  const n = perVel(raster);
+  return paginas.slice(velIndex * n, velIndex * n + n);
+}
+
+/**
+ * Per vel meerdere pagina's: de schaalkeuze telt dan niet. Elke bronpagina
+ * wordt passend en gecentreerd op haar printpagina gezet, die daarna in zijn
+ * cel komt.
+ */
+export function schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) {
+  return isMeerPerBlad(meerPerBlad)
+    ? { schaling: 'fit', zoom: 100, centreren: true }
+    : { schaling, zoom, centreren };
+}
+
+/**
+ * Het voorbeeld van één vel bij meerdere pagina's per vel, zoals de
+ * printopdracht het bouwt: elke pagina eerst op haar printpagina
+ * (berekenPlaatsing met de keuzes van de dialoog, de schaalkeuze vervalt),
+ * dan het vel (kiesBlad, uit de eerste pagina van de hele afdruk) en de
+ * cellen (velIndeling).
+ *
+ * @param {{ meerPerBlad: {kolommen:number, rijen:number, volgorde?:string, rand?:boolean}|null,
+ *           keuzes: { papier: object|'pagina'|null, orientatie?: string,
+ *                     schaling?: string, zoom?: number, centreren?: boolean },
+ *           eerstePagina: {breedtePt:number, hoogtePt:number},
+ *           paginas: {breedtePt:number, hoogtePt:number}[] }} p
+ *   eerstePagina = de eerste pagina van de afdruk (zoals getoond, met
+ *   draaiing); paginas = de pagina's op dit vel, in printvolgorde.
+ * @returns {null | {
+ *   bekend: boolean,
+ *   vel: {breedteMm:number, hoogteMm:number, orientatie:'portrait'|'landscape'},
+ *   marges: {links:number, boven:number, rechts:number, onder:number},
+ *   bedrukbaar: {x:number, y:number, breedte:number, hoogte:number},
+ *   rand: boolean, schaal: number|null,
+ *   cellen: { k:number, plaatsing:object, schaal:number,
+ *             opVel:{x:number, y:number, breedte:number, hoogte:number} }[] }}
+ *   Rechthoeken in mm vanaf de linkerbovenhoek van het vel. Per cel:
+ *   plaatsing = de pagina op haar printpagina (print-plaatsing.js), opVel =
+ *   waar die printpagina op het vel komt, schaal = de verkleining daarbij.
+ *   schaal = de schaal van de eerste pagina van het vel op het papier.
+ *   null bij één pagina per vel of een onbruikbare paginamaat.
+ */
+export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, paginas }) {
+  if (!isMeerPerBlad(meerPerBlad) || !keuzes) return null;
+  const { kolommen, rijen, volgorde = 'horizontal', rand = false } = meerPerBlad;
+  const { papier: vel = null, orientatie = 'auto', schaling, zoom, centreren } = keuzes;
+  const celKeuzes = { papier: vel, orientatie, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
+  const plaats = (pagina) => berekenPlaatsing({ ...celKeuzes, pagina });
+  const maat = (plaatsing) => {
+    const [breedte, hoogte] = printPaginaMaat(plaatsing);
+    return { breedte, hoogte };
+  };
+
+  const eerste = plaats(eerstePagina);
+  const plaatsingen = (paginas || []).map(plaats);
+  if (!eerste || plaatsingen.some((p) => !p)) return null;
+
+  // Zoals metMeerPerBlad in print-job.js: alleen een vel met maten telt als
+  // papier; anders volgt het vel de eerste printpagina.
+  const papier = vel && typeof vel === 'object' ? vel : null;
+  const { bladB, bladH } = kiesBlad({ papier, orientatie, eerstePagina: maat(eerste), kolommen, rijen });
+  const velB = bladB * MM_PER_PT;
+  const velH = bladH * MM_PER_PT;
+  const stand = bladB > bladH ? 'landscape' : 'portrait';
+
+  const cellen = velIndeling({ bladB, bladH, kolommen, rijen, volgorde, maten: plaatsingen.map(maat) })
+    .map((c) => ({
+      k: c.k,
+      plaatsing: plaatsingen[c.k],
+      schaal: c.schaal,
+      opVel: {
+        x: c.x * MM_PER_PT,
+        y: (bladH - c.y - c.hoogte) * MM_PER_PT,
+        breedte: c.breedte * MM_PER_PT,
+        hoogte: c.hoogte * MM_PER_PT,
+      },
+    }));
+
+  const marges = margesVoor(papier && papier.bedrukbaar, stand, velB, velH);
+  return {
+    bekend: eerste.bekend,
+    vel: { breedteMm: velB, hoogteMm: velH, orientatie: stand },
+    marges,
+    bedrukbaar: {
+      x: marges.links,
+      y: marges.boven,
+      breedte: velB - marges.links - marges.rechts,
+      hoogte: velH - marges.boven - marges.onder,
+    },
+    rand: !!rand,
+    schaal: cellen.length ? cellen[0].plaatsing.schaal * cellen[0].schaal : null,
+    cellen,
+  };
+}
+
+/**
  * Bouw de print-PDF met meerdere pagina's per vel uit `pdf` (één pagina per
  * bronpagina). Geeft een nieuw PDFDocument; zonder meer dan één per vel komt
  * `pdf` zelf terug.
@@ -140,13 +272,11 @@ export async function maakMeerPerBlad(pdf, opties) {
   const perBlad = kolommen * rijen;
   for (let start = 0; start < bron.length; start += perBlad) {
     const blad = uit.addPage([bladB, bladH]);
-    for (let k = 0; k < perBlad && start + k < bron.length; k++) {
-      const i = start + k;
-      const { kol, rij } = celVoorVolgnummer(k, kolommen, rijen, volgorde);
-      const p = plaatsInCel({
-        bladB, bladH, kolommen, rijen, kol, rij, paginaB: maten[i].breedte, paginaH: maten[i].hoogte,
-      });
-      blad.drawPage(ingebed[i], { x: p.x, y: p.y, width: p.breedte, height: p.hoogte });
+    const cellen = velIndeling({
+      bladB, bladH, kolommen, rijen, volgorde, maten: maten.slice(start, start + perBlad),
+    });
+    for (const p of cellen) {
+      blad.drawPage(ingebed[start + p.k], { x: p.x, y: p.y, width: p.breedte, height: p.hoogte });
       if (rand) {
         blad.drawRectangle({
           x: p.x, y: p.y, width: p.breedte, height: p.hoogte,

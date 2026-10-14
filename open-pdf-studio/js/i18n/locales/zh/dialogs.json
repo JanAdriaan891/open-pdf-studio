@@ -82,7 +82,7 @@
     "orderVertical": "纵向",
     "orderVerticalReversed": "纵向（反向）",
     "pageBorder": "打印页面边框",
-    "perSheetNote": "每页都会缩放以适合其单元格，因此上方的页面缩放设置不适用。预览仅显示单个页面。",
+    "perSheetNote": "每页都会缩放以适合其单元格，因此上方的页面缩放设置不适用。",
     "autoRotate": "自动旋转",
     "autoCenter": "自动居中",
     "advancedOptions": "高级打印选项",

@@ -82,7 +82,7 @@
     "orderVertical": "縦方向",
     "orderVerticalReversed": "縦方向（逆順）",
     "pageBorder": "ページの境界線を印刷",
-    "perSheetNote": "各ページはセルに収まるように拡大縮小されるため、上のページの拡大縮小設定は適用されません。プレビューには 1 ページだけが表示されます。",
+    "perSheetNote": "各ページはセルに収まるように拡大縮小されるため、上のページの拡大縮小設定は適用されません。",
     "autoRotate": "自動回転",
     "autoCenter": "自動中央配置",
     "advancedOptions": "印刷の詳細オプション",

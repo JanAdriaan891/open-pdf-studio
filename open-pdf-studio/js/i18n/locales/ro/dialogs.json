@@ -82,7 +82,7 @@
     "orderVertical": "Vertical",
     "orderVerticalReversed": "Vertical inversat",
     "pageBorder": "Tipărire chenar pagină",
-    "perSheetNote": "Fiecare pagină este scalată pentru a încăpea în celula sa, deci scalarea paginii de mai sus nu se aplică. Previzualizarea arată o singură pagină.",
+    "perSheetNote": "Fiecare pagină este scalată pentru a încăpea în celula sa, deci scalarea paginii de mai sus nu se aplică.",
     "autoRotate": "Rotire automata",
     "autoCenter": "Centrare automata",
     "advancedOptions": "Optiuni avansate de tiparire",

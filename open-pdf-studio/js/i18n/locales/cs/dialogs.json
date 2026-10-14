@@ -82,7 +82,7 @@
     "orderVertical": "Svisle",
     "orderVerticalReversed": "Svisle obráceně",
     "pageBorder": "Tisknout okraj stránky",
-    "perSheetNote": "Každá stránka se přizpůsobí své buňce, takže výše uvedené měřítko stránky se nepoužije. Náhled zobrazuje jedinou stránku.",
+    "perSheetNote": "Každá stránka se přizpůsobí své buňce, takže výše uvedené měřítko stránky se nepoužije.",
     "autoRotate": "Automatické otočení",
     "autoCenter": "Automatické vystředění",
     "advancedOptions": "Pokročilé možnosti tisku",

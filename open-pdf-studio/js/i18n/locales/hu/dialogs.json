@@ -82,7 +82,7 @@
     "orderVertical": "Függőleges",
     "orderVerticalReversed": "Függőleges, fordított",
     "pageBorder": "Oldalszegély nyomtatása",
-    "perSheetNote": "Minden oldal a cellájához igazodik, ezért a fenti oldalméretezés nem érvényes. Az előnézet egyetlen oldalt mutat.",
+    "perSheetNote": "Minden oldal a cellájához igazodik, ezért a fenti oldalméretezés nem érvényes.",
     "autoRotate": "Automatikus forgatás",
     "autoCenter": "Automatikus középre igazítás",
     "advancedOptions": "Haladó nyomtatási beállítások",
