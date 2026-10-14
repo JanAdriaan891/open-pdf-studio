@@ -108,9 +108,9 @@ const KEYS = ['nextTab', 'previousTab'];
 const ENGELS = { nextTab: 'Next Tab', previousTab: 'Previous Tab' };
 const tabsVan = (locale) => JSON.parse(readFileSync(join(LOCALES, locale, 'common.json'), 'utf8')).tabs || {};
 
-test('alle 39 talen hebben de namen van de tabwissel', () => {
+test('alle 40 talen hebben de namen van de tabwissel', () => {
   const locales = readdirSync(LOCALES);
-  assert.equal(locales.length, 39);
+  assert.equal(locales.length, 40);
   for (const locale of locales) {
     const t = tabsVan(locale);
     for (const key of KEYS) {

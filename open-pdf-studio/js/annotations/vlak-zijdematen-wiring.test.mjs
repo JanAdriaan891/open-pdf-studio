@@ -58,7 +58,7 @@ test('de gereedschapsstandaard staat bij de andere standaarden van het meetvlak'
 
 test('alle talen hebben de tekst, vertaald', () => {
   const talen = readdirSync(LOCALES);
-  assert.equal(talen.length, 39);
+  assert.equal(talen.length, 40);
   for (const bestand of ['properties.json', 'preferences.json']) {
     const lees = (taal) => JSON.parse(readFileSync(new URL(`${taal}/${bestand}`, LOCALES), 'utf8'));
     const en = lees('en').measurement.showEdgeLengths;

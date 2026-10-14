@@ -23,9 +23,9 @@ function teksten(taal) {
   return uit;
 }
 
-test('alle 39 talen hebben dezelfde kalibratiesleutels als het Engels, niet leeg', () => {
+test('alle 40 talen hebben dezelfde kalibratiesleutels als het Engels, niet leeg', () => {
   const talen = readdirSync(LOCALES);
-  assert.equal(talen.length, 39);
+  assert.equal(talen.length, 40);
   const en = teksten('en');
   assert.equal(Object.keys(en).length, PAGINA.length + 13);
   for (const taal of talen) {
