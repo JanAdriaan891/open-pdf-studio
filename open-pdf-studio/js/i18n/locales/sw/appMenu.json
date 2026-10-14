@@ -207,7 +207,9 @@
     "confirmUninstall": "Una uhakika unataka kuondoa \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" kimeondolewa",
     "uninstallError": "Imeshindwa kuondoa kiendelezi",
-    "by": "na"
+    "by": "na",
+    "activationFailed": "Haitumiki: {{error}}",
+    "viaMcp": "Kupitia muunganisho wa AI"
   },
   "annotateScreenshot": "Weka Maelezo kwenye Picha ya Skrini ya Ubao wa Kunakili"
 }

@@ -207,7 +207,9 @@
     "confirmUninstall": "Are you sure you want to uninstall \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" has been uninstalled",
     "uninstallError": "Failed to uninstall extension",
-    "by": "by"
+    "by": "by",
+    "activationFailed": "Not active: {{error}}",
+    "viaMcp": "Via the AI connection"
   },
   "annotateScreenshot": "Annotate Clipboard Screenshot"
 }

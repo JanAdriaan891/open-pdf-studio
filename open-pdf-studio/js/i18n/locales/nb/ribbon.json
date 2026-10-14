@@ -493,7 +493,9 @@
     "comingSoon": "Kommer snart",
     "collapseRibbon": "Skjul båndet",
     "expandRibbon": "Vis båndet",
-    "more": "Mer"
+    "more": "Mer",
+    "moreTabs": "Flere faner",
+    "extensionTabFailed": "Denne utvidelsesfanen kunne ikke vises."
   },
   "drawing": {
     "structural": "Konstruksjon",

@@ -493,7 +493,9 @@
     "comingSoon": "Už čoskoro",
     "collapseRibbon": "Zbaliť pás s nástrojmi",
     "expandRibbon": "Rozbaliť pás s nástrojmi",
-    "more": "Viac"
+    "more": "Viac",
+    "moreTabs": "Ďalšie karty",
+    "extensionTabFailed": "Túto kartu rozšírenia sa nepodarilo zobraziť."
   },
   "drawing": {
     "structural": "Konštrukcia",

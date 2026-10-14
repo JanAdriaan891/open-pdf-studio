@@ -207,7 +207,9 @@
     "confirmUninstall": "هل تريد بالتأكيد إلغاء تثبيت \"{{name}}\"؟",
     "uninstallSuccess": "تم إلغاء تثبيت \"{{name}}\"",
     "uninstallError": "فشل إلغاء تثبيت الإضافة",
-    "by": "بواسطة"
+    "by": "بواسطة",
+    "activationFailed": "غير نشط: {{error}}",
+    "viaMcp": "عبر اتصال الذكاء الاصطناعي"
   },
   "annotateScreenshot": "إضافة تعليقات إلى لقطة الشاشة من الحافظة"
 }

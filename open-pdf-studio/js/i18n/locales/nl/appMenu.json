@@ -207,7 +207,9 @@
     "confirmUninstall": "Weet je zeker dat je \"{{name}}\" wilt verwijderen?",
     "uninstallSuccess": "\"{{name}}\" is verwijderd",
     "uninstallError": "Extensie verwijderen mislukt",
-    "by": "door"
+    "by": "door",
+    "activationFailed": "Niet actief: {{error}}",
+    "viaMcp": "Via de AI-koppeling"
   },
   "annotateScreenshot": "Klembord-schermafbeelding annoteren"
 }

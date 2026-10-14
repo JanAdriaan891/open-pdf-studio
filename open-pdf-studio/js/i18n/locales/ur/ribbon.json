@@ -493,7 +493,9 @@
     "comingSoon": "جلد آ رہا ہے",
     "collapseRibbon": "ربن سمیٹیں",
     "expandRibbon": "ربن پھیلائیں",
-    "more": "مزید"
+    "more": "مزید",
+    "moreTabs": "مزید ٹیبز",
+    "extensionTabFailed": "اس ایکسٹینشن کا ٹیب دکھایا نہیں جا سکا۔"
   },
   "drawing": {
     "structural": "اسٹرکچرل",

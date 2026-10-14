@@ -207,7 +207,9 @@
     "confirmUninstall": "Справді видалити \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" видалено",
     "uninstallError": "Не вдалося видалити розширення",
-    "by": "від"
+    "by": "від",
+    "activationFailed": "Неактивне: {{error}}",
+    "viaMcp": "Через підключення ШІ"
   },
   "annotateScreenshot": "Анотувати знімок екрана з буфера обміну"
 }

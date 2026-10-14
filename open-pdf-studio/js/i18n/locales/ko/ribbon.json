@@ -493,7 +493,9 @@
     "comingSoon": "곧 제공 예정",
     "collapseRibbon": "리본 접기",
     "expandRibbon": "리본 펼치기",
-    "more": "더 보기"
+    "more": "더 보기",
+    "moreTabs": "탭 더 보기",
+    "extensionTabFailed": "이 확장 탭을 표시할 수 없습니다."
   },
   "drawing": {
     "structural": "구조",

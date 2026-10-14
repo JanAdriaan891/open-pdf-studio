@@ -448,7 +448,9 @@
     "comingSoon": "Binnenkort beschikbaar",
     "collapseRibbon": "Lint inklappen",
     "expandRibbon": "Lint uitklappen",
-    "more": "Meer"
+    "more": "Meer",
+    "moreTabs": "Meer tabbladen",
+    "extensionTabFailed": "Dit tabblad van de extensie kon niet worden weergegeven."
   },
   "drawing": {
     "selection": "Selectie",

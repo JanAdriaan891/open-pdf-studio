@@ -207,7 +207,9 @@
     "confirmUninstall": "¿Seguro que desea desinstalar «{{name}}»?",
     "uninstallSuccess": "«{{name}}» se ha desinstalado",
     "uninstallError": "No se pudo desinstalar la extensión",
-    "by": "por"
+    "by": "por",
+    "activationFailed": "No activa: {{error}}",
+    "viaMcp": "Mediante la conexión de IA"
   },
   "annotateScreenshot": "Anotar captura de pantalla del portapapeles"
 }

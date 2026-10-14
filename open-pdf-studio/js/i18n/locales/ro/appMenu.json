@@ -207,7 +207,9 @@
     "confirmUninstall": "Sigur doriți să dezinstalați „{{name}}”?",
     "uninstallSuccess": "„{{name}}” a fost dezinstalată",
     "uninstallError": "Dezinstalarea extensiei a eșuat",
-    "by": "de"
+    "by": "de",
+    "activationFailed": "Inactivă: {{error}}",
+    "viaMcp": "Prin conexiunea AI"
   },
   "annotateScreenshot": "Adnotare captură de ecran din clipboard"
 }

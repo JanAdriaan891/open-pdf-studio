@@ -493,7 +493,9 @@
     "comingSoon": "به‌زودی",
     "collapseRibbon": "جمع کردن نوار ابزار",
     "expandRibbon": "باز کردن نوار ابزار",
-    "more": "بیشتر"
+    "more": "بیشتر",
+    "moreTabs": "زبانه‌های بیشتر",
+    "extensionTabFailed": "این زبانهٔ افزونه نمایش داده نشد."
   },
   "drawing": {
     "structural": "سازه‌ای",

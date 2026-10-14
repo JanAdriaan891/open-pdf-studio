@@ -493,7 +493,9 @@
     "comingSoon": "Aviat disponible",
     "collapseRibbon": "Redueix la cinta",
     "expandRibbon": "Amplia la cinta",
-    "more": "Més"
+    "more": "Més",
+    "moreTabs": "Més pestanyes",
+    "extensionTabFailed": "No s'ha pogut mostrar aquesta pestanya de l'extensió."
   },
   "drawing": {
     "structural": "Estructura",

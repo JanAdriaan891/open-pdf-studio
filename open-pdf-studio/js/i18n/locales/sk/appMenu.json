@@ -207,7 +207,9 @@
     "confirmUninstall": "Naozaj chcete odinštalovať „{{name}}“?",
     "uninstallSuccess": "„{{name}}“ bolo odinštalované",
     "uninstallError": "Odinštalovanie rozšírenia zlyhalo",
-    "by": "autor:"
+    "by": "autor:",
+    "activationFailed": "Neaktívne: {{error}}",
+    "viaMcp": "Cez pripojenie AI"
   },
   "annotateScreenshot": "Anotovať snímku obrazovky zo schránky"
 }

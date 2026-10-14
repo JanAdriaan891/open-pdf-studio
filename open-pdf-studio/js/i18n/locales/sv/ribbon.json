@@ -493,7 +493,9 @@
     "comingSoon": "Kommer snart",
     "collapseRibbon": "Fäll ihop menyfliksområdet",
     "expandRibbon": "Fäll ut menyfliksområdet",
-    "more": "Mer"
+    "more": "Mer",
+    "moreTabs": "Fler flikar",
+    "extensionTabFailed": "Den här tilläggsfliken kunde inte visas."
   },
   "drawing": {
     "structural": "Konstruktion",

@@ -493,7 +493,9 @@
     "comingSoon": "Uskoro",
     "collapseRibbon": "Sažmi vrpcu",
     "expandRibbon": "Proširi vrpcu",
-    "more": "Više"
+    "more": "Više",
+    "moreTabs": "Više kartica",
+    "extensionTabFailed": "Ovu karticu proširenja nije moguće prikazati."
   },
   "drawing": {
     "structural": "Konstrukcija",

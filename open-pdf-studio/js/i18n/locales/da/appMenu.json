@@ -207,7 +207,9 @@
     "confirmUninstall": "Er du sikker på, at du vil afinstallere \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" er blevet afinstalleret",
     "uninstallError": "Udvidelsen kunne ikke afinstalleres",
-    "by": "af"
+    "by": "af",
+    "activationFailed": "Ikke aktiv: {{error}}",
+    "viaMcp": "Via AI-forbindelsen"
   },
   "annotateScreenshot": "Annotér skærmbillede fra udklipsholderen"
 }

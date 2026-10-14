@@ -207,7 +207,9 @@
     "confirmUninstall": "Yakin ingin mencopot \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" telah dicopot",
     "uninstallError": "Gagal mencopot ekstensi",
-    "by": "oleh"
+    "by": "oleh",
+    "activationFailed": "Tidak aktif: {{error}}",
+    "viaMcp": "Melalui koneksi AI"
   },
   "annotateScreenshot": "Anotasi Tangkapan Layar dari Papan Klip"
 }

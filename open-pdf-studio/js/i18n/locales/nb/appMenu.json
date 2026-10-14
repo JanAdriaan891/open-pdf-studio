@@ -207,7 +207,9 @@
     "confirmUninstall": "Er du sikker på at du vil avinstallere «{{name}}»?",
     "uninstallSuccess": "«{{name}}» er avinstallert",
     "uninstallError": "Kunne ikke avinstallere utvidelsen",
-    "by": "av"
+    "by": "av",
+    "activationFailed": "Ikke aktiv: {{error}}",
+    "viaMcp": "Via AI-tilkoblingen"
   },
   "annotateScreenshot": "Lag merknad på skjermbilde fra utklippstavlen"
 }

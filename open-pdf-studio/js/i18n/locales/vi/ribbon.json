@@ -493,7 +493,9 @@
     "comingSoon": "Sắp ra mắt",
     "collapseRibbon": "Thu gọn ribbon",
     "expandRibbon": "Mở rộng ribbon",
-    "more": "Thêm"
+    "more": "Thêm",
+    "moreTabs": "Thêm thẻ",
+    "extensionTabFailed": "Không thể hiển thị thẻ của tiện ích mở rộng này."
   },
   "drawing": {
     "structural": "Kết cấu",

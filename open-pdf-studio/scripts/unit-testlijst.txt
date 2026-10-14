@@ -301,3 +301,16 @@ js/tools/maat-vorm-eindpunt.test.mjs
 js/tools/embedded-image-edit.test.mjs
 js/tools/embedded-image-drag.test.mjs
 js/tools/scan-text-geom.test.mjs
+# Extensies beheren via MCP en eigen linttabbladen (#550, #551)
+js/plugins/extension-contributions.test.mjs
+js/plugins/svg-pictogram.test.mjs
+js/plugins/ribbon-tab-registry.test.mjs
+js/plugins/extension-commands.test.mjs
+js/solid/components/ribbon/ribbon-toetsenbord.test.mjs
+js/plugins/extension-lifecycle.test.mjs
+js/plugins/extension-mcp.test.mjs
+js/plugins/oppx-testpakket.test.mjs
+js/plugins/extensies-mcp-aansluiting.test.mjs
+js/plugins/opslag-wissel-slot.test.mjs
+js/plugins/plugin-api-opruimen.test.mjs
+js/tools/pijl-in-tabstrook.test.mjs

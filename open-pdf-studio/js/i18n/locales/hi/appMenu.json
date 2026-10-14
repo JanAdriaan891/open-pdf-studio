@@ -207,7 +207,9 @@
     "confirmUninstall": "क्या आप वाकई \"{{name}}\" को अनइंस्टॉल करना चाहते हैं?",
     "uninstallSuccess": "\"{{name}}\" अनइंस्टॉल कर दिया गया",
     "uninstallError": "एक्सटेंशन अनइंस्टॉल करने में विफल",
-    "by": "द्वारा"
+    "by": "द्वारा",
+    "activationFailed": "सक्रिय नहीं: {{error}}",
+    "viaMcp": "AI कनेक्शन के माध्यम से"
   },
   "annotateScreenshot": "क्लिपबोर्ड स्क्रीनशॉट पर एनोटेट करें"
 }

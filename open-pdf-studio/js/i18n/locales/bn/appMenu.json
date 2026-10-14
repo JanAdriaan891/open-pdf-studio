@@ -207,7 +207,9 @@
     "confirmUninstall": "আপনি কি নিশ্চিত যে \"{{name}}\" আনইনস্টল করতে চান?",
     "uninstallSuccess": "\"{{name}}\" আনইনস্টল করা হয়েছে",
     "uninstallError": "এক্সটেনশন আনইনস্টল করতে ব্যর্থ",
-    "by": "নির্মাতা"
+    "by": "নির্মাতা",
+    "activationFailed": "সক্রিয় নয়: {{error}}",
+    "viaMcp": "AI সংযোগের মাধ্যমে"
   },
   "annotateScreenshot": "ক্লিপবোর্ডের স্ক্রিনশটে টীকা যোগ করুন"
 }

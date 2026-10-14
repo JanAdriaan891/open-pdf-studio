@@ -207,7 +207,9 @@
     "confirmUninstall": "Czy na pewno chcesz odinstalować \"{{name}}\"?",
     "uninstallSuccess": "Odinstalowano \"{{name}}\"",
     "uninstallError": "Nie udało się odinstalować rozszerzenia",
-    "by": "autor:"
+    "by": "autor:",
+    "activationFailed": "Nieaktywne: {{error}}",
+    "viaMcp": "Przez połączenie AI"
   },
   "annotateScreenshot": "Dodaj adnotacje do zrzutu ekranu ze schowka"
 }

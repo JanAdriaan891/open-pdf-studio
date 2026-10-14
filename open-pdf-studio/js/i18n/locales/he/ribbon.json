@@ -493,7 +493,9 @@
     "comingSoon": "בקרוב",
     "collapseRibbon": "כיווץ רצועת הכלים",
     "expandRibbon": "הרחבת רצועת הכלים",
-    "more": "עוד"
+    "more": "עוד",
+    "moreTabs": "כרטיסיות נוספות",
+    "extensionTabFailed": "לא ניתן היה להציג את הכרטיסייה של ההרחבה הזו."
   },
   "drawing": {
     "structural": "קונסטרוקציה",

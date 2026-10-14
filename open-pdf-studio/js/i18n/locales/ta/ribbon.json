@@ -493,7 +493,9 @@
     "comingSoon": "விரைவில்",
     "collapseRibbon": "ரிப்பனைச் சுருக்கு",
     "expandRibbon": "ரிப்பனை விரி",
-    "more": "மேலும்"
+    "more": "மேலும்",
+    "moreTabs": "மேலும் தாவல்கள்",
+    "extensionTabFailed": "இந்த நீட்டிப்புத் தாவலைக் காட்ட முடியவில்லை."
   },
   "drawing": {
     "structural": "கட்டமைப்பு",

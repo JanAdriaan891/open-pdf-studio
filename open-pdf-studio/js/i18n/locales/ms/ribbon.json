@@ -493,7 +493,9 @@
     "comingSoon": "Akan datang",
     "collapseRibbon": "Kuncupkan reben",
     "expandRibbon": "Kembangkan reben",
-    "more": "Lagi"
+    "more": "Lagi",
+    "moreTabs": "Lagi tab",
+    "extensionTabFailed": "Tab sambungan ini tidak dapat dipaparkan."
   },
   "drawing": {
     "structural": "Struktur",

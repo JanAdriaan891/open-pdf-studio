@@ -207,7 +207,9 @@
     "confirmUninstall": "Opravdu chcete odinstalovat „{{name}}“?",
     "uninstallSuccess": "„{{name}}“ bylo odinstalováno",
     "uninstallError": "Odinstalace rozšíření se nezdařila",
-    "by": "autor:"
+    "by": "autor:",
+    "activationFailed": "Neaktivní: {{error}}",
+    "viaMcp": "Přes připojení AI"
   },
   "annotateScreenshot": "Anotovat snímek obrazovky ze schránky"
 }

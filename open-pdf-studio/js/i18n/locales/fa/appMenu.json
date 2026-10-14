@@ -207,7 +207,9 @@
     "confirmUninstall": "آیا مطمئن هستید که می‌خواهید «{{name}}» را حذف نصب کنید؟",
     "uninstallSuccess": "«{{name}}» حذف نصب شد",
     "uninstallError": "حذف نصب افزونه ناموفق بود",
-    "by": "از"
+    "by": "از",
+    "activationFailed": "غیرفعال: {{error}}",
+    "viaMcp": "از طریق اتصال هوش مصنوعی"
   },
   "annotateScreenshot": "حاشیه‌نویسی روی تصویر صفحه از کلیپ‌بورد"
 }

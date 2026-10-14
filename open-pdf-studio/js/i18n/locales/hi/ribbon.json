@@ -493,7 +493,9 @@
     "comingSoon": "जल्द आ रहा है",
     "collapseRibbon": "रिबन संक्षिप्त करें",
     "expandRibbon": "रिबन विस्तृत करें",
-    "more": "और"
+    "more": "और",
+    "moreTabs": "और टैब",
+    "extensionTabFailed": "यह एक्सटेंशन टैब प्रदर्शित नहीं किया जा सका।"
   },
   "drawing": {
     "structural": "संरचनात्मक",

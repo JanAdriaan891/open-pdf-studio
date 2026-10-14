@@ -493,7 +493,9 @@
     "comingSoon": "শীঘ্রই আসছে",
     "collapseRibbon": "রিবন সংকুচিত করুন",
     "expandRibbon": "রিবন প্রসারিত করুন",
-    "more": "আরও"
+    "more": "আরও",
+    "moreTabs": "আরও ট্যাব",
+    "extensionTabFailed": "এই এক্সটেনশন ট্যাবটি দেখানো যায়নি।"
   },
   "drawing": {
     "structural": "কাঠামোগত",

@@ -493,7 +493,9 @@
     "comingSoon": "Очаквайте скоро",
     "collapseRibbon": "Свиване на лентата",
     "expandRibbon": "Разгъване на лентата",
-    "more": "Още"
+    "more": "Още",
+    "moreTabs": "Още раздели",
+    "extensionTabFailed": "Този раздел на разширението не можа да бъде показан."
   },
   "drawing": {
     "structural": "Конструкции",

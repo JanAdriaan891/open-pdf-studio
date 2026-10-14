@@ -493,7 +493,9 @@
     "comingSoon": "Segera hadir",
     "collapseRibbon": "Ciutkan ribbon",
     "expandRibbon": "Bentangkan ribbon",
-    "more": "Lainnya"
+    "more": "Lainnya",
+    "moreTabs": "Tab lainnya",
+    "extensionTabFailed": "Tab ekstensi ini tidak dapat ditampilkan."
   },
   "drawing": {
     "structural": "Struktur",

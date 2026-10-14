@@ -493,7 +493,9 @@
     "comingSoon": "Yakında",
     "collapseRibbon": "Şeridi daralt",
     "expandRibbon": "Şeridi genişlet",
-    "more": "Daha fazla"
+    "more": "Daha fazla",
+    "moreTabs": "Diğer sekmeler",
+    "extensionTabFailed": "Bu uzantı sekmesi görüntülenemedi."
   },
   "drawing": {
     "structural": "Yapısal",

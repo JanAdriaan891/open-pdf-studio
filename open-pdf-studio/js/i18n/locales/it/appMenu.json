@@ -207,7 +207,9 @@
     "confirmUninstall": "Disinstallare davvero \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" è stata disinstallata",
     "uninstallError": "Disinstallazione dell'estensione non riuscita",
-    "by": "di"
+    "by": "di",
+    "activationFailed": "Non attiva: {{error}}",
+    "viaMcp": "Tramite la connessione IA"
   },
   "annotateScreenshot": "Annota screenshot dagli appunti"
 }

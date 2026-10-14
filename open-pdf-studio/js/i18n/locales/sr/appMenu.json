@@ -207,7 +207,9 @@
     "confirmUninstall": "Да ли сигурно желите да деинсталирате „{{name}}“?",
     "uninstallSuccess": "„{{name}}“ је деинсталирано",
     "uninstallError": "Деинсталација проширења није успела",
-    "by": "аутор:"
+    "by": "аутор:",
+    "activationFailed": "Није активно: {{error}}",
+    "viaMcp": "Преко AI везе"
   },
   "annotateScreenshot": "Анотирај снимак екрана из оставе"
 }

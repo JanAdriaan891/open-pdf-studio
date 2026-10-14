@@ -207,7 +207,9 @@
     "confirmUninstall": "\"{{name}}\" kaldırılsın mı?",
     "uninstallSuccess": "\"{{name}}\" kaldırıldı",
     "uninstallError": "Uzantı kaldırılamadı",
-    "by": "geliştiren:"
+    "by": "geliştiren:",
+    "activationFailed": "Etkin değil: {{error}}",
+    "viaMcp": "Yapay zekâ bağlantısı üzerinden"
   },
   "annotateScreenshot": "Panodaki Ekran Görüntüsüne Açıklama Ekle"
 }

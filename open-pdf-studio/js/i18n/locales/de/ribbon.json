@@ -493,7 +493,9 @@
     "comingSoon": "Demnächst verfügbar",
     "collapseRibbon": "Menüband einklappen",
     "expandRibbon": "Menüband ausklappen",
-    "more": "Mehr"
+    "more": "Mehr",
+    "moreTabs": "Weitere Registerkarten",
+    "extensionTabFailed": "Diese Registerkarte der Erweiterung konnte nicht angezeigt werden."
   },
   "drawing": {
     "structural": "Tragwerk",

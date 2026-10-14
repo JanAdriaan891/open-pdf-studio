@@ -207,7 +207,9 @@
     "confirmUninstall": "Adakah anda pasti mahu menyahpasang \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" telah dinyahpasang",
     "uninstallError": "Gagal menyahpasang sambungan",
-    "by": "oleh"
+    "by": "oleh",
+    "activationFailed": "Tidak aktif: {{error}}",
+    "viaMcp": "Melalui sambungan AI"
   },
   "annotateScreenshot": "Anotasi Tangkapan Skrin Papan Keratan"
 }

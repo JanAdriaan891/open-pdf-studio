@@ -493,7 +493,9 @@
     "comingSoon": "قريبًا",
     "collapseRibbon": "طي الشريط",
     "expandRibbon": "توسيع الشريط",
-    "more": "المزيد"
+    "more": "المزيد",
+    "moreTabs": "مزيد من علامات التبويب",
+    "extensionTabFailed": "تعذّر عرض علامة تبويب هذه الإضافة."
   },
   "drawing": {
     "structural": "إنشائي",

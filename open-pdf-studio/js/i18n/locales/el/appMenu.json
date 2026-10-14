@@ -207,7 +207,9 @@
     "confirmUninstall": "Θέλετε σίγουρα να απεγκαταστήσετε το \"{{name}}\";",
     "uninstallSuccess": "Το \"{{name}}\" απεγκαταστάθηκε",
     "uninstallError": "Η απεγκατάσταση της επέκτασης απέτυχε",
-    "by": "από"
+    "by": "από",
+    "activationFailed": "Μη ενεργό: {{error}}",
+    "viaMcp": "Μέσω της σύνδεσης AI"
   },
   "annotateScreenshot": "Σχολιασμός στιγμιότυπου οθόνης από το πρόχειρο"
 }

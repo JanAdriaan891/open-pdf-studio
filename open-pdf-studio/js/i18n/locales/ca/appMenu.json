@@ -207,7 +207,9 @@
     "confirmUninstall": "Segur que voleu desinstal·lar «{{name}}»?",
     "uninstallSuccess": "«{{name}}» s'ha desinstal·lat",
     "uninstallError": "No s'ha pogut desinstal·lar l'extensió",
-    "by": "per"
+    "by": "per",
+    "activationFailed": "No actiu: {{error}}",
+    "viaMcp": "Mitjançant la connexió d'IA"
   },
   "annotateScreenshot": "Anota una captura de pantalla del porta-retalls"
 }

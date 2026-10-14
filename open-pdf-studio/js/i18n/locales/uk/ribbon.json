@@ -493,7 +493,9 @@
     "comingSoon": "Незабаром",
     "collapseRibbon": "Згорнути стрічку",
     "expandRibbon": "Розгорнути стрічку",
-    "more": "Ще"
+    "more": "Ще",
+    "moreTabs": "Інші вкладки",
+    "extensionTabFailed": "Не вдалося показати цю вкладку розширення."
   },
   "drawing": {
     "structural": "Конструкції",

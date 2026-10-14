@@ -493,7 +493,9 @@
     "comingSoon": "Ускоро",
     "collapseRibbon": "Скупи траку",
     "expandRibbon": "Прошири траку",
-    "more": "Још"
+    "more": "Још",
+    "moreTabs": "Још картица",
+    "extensionTabFailed": "Ова картица проширења није могла да се прикаже."
   },
   "drawing": {
     "structural": "Конструкција",

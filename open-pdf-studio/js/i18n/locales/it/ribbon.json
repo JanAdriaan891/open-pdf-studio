@@ -493,7 +493,9 @@
     "comingSoon": "Prossimamente",
     "collapseRibbon": "Comprimi barra multifunzione",
     "expandRibbon": "Espandi barra multifunzione",
-    "more": "Altro"
+    "more": "Altro",
+    "moreTabs": "Altre schede",
+    "extensionTabFailed": "Impossibile visualizzare questa scheda dell'estensione."
   },
   "drawing": {
     "structural": "Strutture",

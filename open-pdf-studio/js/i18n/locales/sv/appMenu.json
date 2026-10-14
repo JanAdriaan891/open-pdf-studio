@@ -207,7 +207,9 @@
     "confirmUninstall": "Vill du verkligen avinstallera \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" har avinstallerats",
     "uninstallError": "Det gick inte att avinstallera tillägget",
-    "by": "av"
+    "by": "av",
+    "activationFailed": "Inte aktiv: {{error}}",
+    "viaMcp": "Via AI-anslutningen"
   },
   "annotateScreenshot": "Kommentera skärmbild från Urklipp"
 }

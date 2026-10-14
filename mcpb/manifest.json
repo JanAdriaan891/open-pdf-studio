@@ -302,6 +302,18 @@
     {
       "name": "app_get_system_geometry",
       "description": "Get the geometry of one system (suspended ceiling, floor slab, panel field) in the active document, computed by the app's own geometry engine: panels with clipped outlines, grid lines, openings, trimmers, edge segments and component positions, in millimetres in the system's own frame (independent of zoom and view rotation; placement maps it onto the page)."
+    },
+    {
+      "name": "app_list_extensions",
+      "description": "List the app's extensions: every installed and every loaded extension with its id, name, version, installed version, whether it is loaded and activated, its status (active, failed, notLoaded, busy), the code and message of the last failure, who made the last change (ui, mcp or startup) and whether it uses an old-style id."
+    },
+    {
+      "name": "app_install_extension",
+      "description": "Install or update an extension from a local .oppx package, without a file dialog and without restarting the app: the package is checked and unpacked by the app, then the new version is activated."
+    },
+    {
+      "name": "app_reload_extension",
+      "description": "Reload an installed extension from disk: deactivate it, remove everything it registered (ribbon tabs, commands, annotation types, palettes, panels) and activate it again, without restarting the app."
     }
   ],
   "keywords": [

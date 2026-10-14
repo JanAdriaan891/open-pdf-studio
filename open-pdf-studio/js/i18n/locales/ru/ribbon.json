@@ -493,7 +493,9 @@
     "comingSoon": "Скоро",
     "collapseRibbon": "Свернуть ленту",
     "expandRibbon": "Развернуть ленту",
-    "more": "Ещё"
+    "more": "Ещё",
+    "moreTabs": "Другие вкладки",
+    "extensionTabFailed": "Не удалось отобразить эту вкладку расширения."
   },
   "drawing": {
     "structural": "Конструкции",

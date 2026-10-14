@@ -493,7 +493,9 @@
     "comingSoon": "近日公開",
     "collapseRibbon": "リボンを折りたたむ",
     "expandRibbon": "リボンを展開",
-    "more": "その他"
+    "more": "その他",
+    "moreTabs": "その他のタブ",
+    "extensionTabFailed": "この拡張機能のタブを表示できませんでした。"
   },
   "drawing": {
     "structural": "構造",

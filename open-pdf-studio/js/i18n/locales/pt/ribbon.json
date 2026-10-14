@@ -493,7 +493,9 @@
     "comingSoon": "Em breve",
     "collapseRibbon": "Recolher faixa de opções",
     "expandRibbon": "Expandir faixa de opções",
-    "more": "Mais"
+    "more": "Mais",
+    "moreTabs": "Mais abas",
+    "extensionTabFailed": "Não foi possível exibir esta aba da extensão."
   },
   "drawing": {
     "structural": "Estrutura",

@@ -207,7 +207,9 @@
     "confirmUninstall": "Tem certeza de que deseja desinstalar \"{{name}}\"?",
     "uninstallSuccess": "\"{{name}}\" foi desinstalada",
     "uninstallError": "Falha ao desinstalar a extensão",
-    "by": "por"
+    "by": "por",
+    "activationFailed": "Inativa: {{error}}",
+    "viaMcp": "Pela conexão de IA"
   },
   "annotateScreenshot": "Anotar captura de tela da área de transferência"
 }

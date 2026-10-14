@@ -207,7 +207,9 @@
     "confirmUninstall": "Bạn có chắc muốn gỡ cài đặt \"{{name}}\"?",
     "uninstallSuccess": "Đã gỡ cài đặt \"{{name}}\"",
     "uninstallError": "Gỡ cài đặt tiện ích mở rộng thất bại",
-    "by": "bởi"
+    "by": "bởi",
+    "activationFailed": "Không hoạt động: {{error}}",
+    "viaMcp": "Qua kết nối AI"
   },
   "annotateScreenshot": "Chú thích ảnh chụp màn hình từ bảng tạm"
 }

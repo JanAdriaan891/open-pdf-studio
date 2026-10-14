@@ -207,7 +207,9 @@
     "confirmUninstall": "「{{name}}」をアンインストールしてもよろしいですか？",
     "uninstallSuccess": "「{{name}}」をアンインストールしました",
     "uninstallError": "拡張機能のアンインストールに失敗しました",
-    "by": "作成者："
+    "by": "作成者：",
+    "activationFailed": "無効: {{error}}",
+    "viaMcp": "AI 接続経由"
   },
   "annotateScreenshot": "クリップボードのスクリーンショットに注釈を付ける"
 }

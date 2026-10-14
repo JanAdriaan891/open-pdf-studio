@@ -207,7 +207,9 @@
     "confirmUninstall": "להסיר את ההתקנה של \"{{name}}\"?",
     "uninstallSuccess": "ההתקנה של \"{{name}}\" הוסרה",
     "uninstallError": "הסרת ההתקנה של ההרחבה נכשלה",
-    "by": "מאת"
+    "by": "מאת",
+    "activationFailed": "לא פעיל: {{error}}",
+    "viaMcp": "דרך חיבור הבינה המלאכותית"
   },
   "annotateScreenshot": "הוספת הערות לצילום מסך מהלוח"
 }

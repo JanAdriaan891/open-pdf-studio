@@ -493,7 +493,9 @@
     "comingSoon": "Próximamente",
     "collapseRibbon": "Contraer cinta",
     "expandRibbon": "Expandir cinta",
-    "more": "Más"
+    "more": "Más",
+    "moreTabs": "Más pestañas",
+    "extensionTabFailed": "No se pudo mostrar esta pestaña de la extensión."
   },
   "drawing": {
     "structural": "Estructura",

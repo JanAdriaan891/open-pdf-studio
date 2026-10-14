@@ -493,7 +493,9 @@
     "comingSoon": "即将推出",
     "collapseRibbon": "折叠功能区",
     "expandRibbon": "展开功能区",
-    "more": "更多"
+    "more": "更多",
+    "moreTabs": "更多选项卡",
+    "extensionTabFailed": "无法显示此扩展的选项卡。"
   },
   "drawing": {
     "structural": "结构",

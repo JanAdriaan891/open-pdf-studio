@@ -207,7 +207,9 @@
     "confirmUninstall": "ต้องการถอนการติดตั้ง \"{{name}}\" หรือไม่",
     "uninstallSuccess": "ถอนการติดตั้ง \"{{name}}\" แล้ว",
     "uninstallError": "ถอนการติดตั้งส่วนขยายไม่สำเร็จ",
-    "by": "โดย"
+    "by": "โดย",
+    "activationFailed": "ไม่ได้ใช้งาน: {{error}}",
+    "viaMcp": "ผ่านการเชื่อมต่อ AI"
   },
   "annotateScreenshot": "ใส่คำอธิบายประกอบภาพหน้าจอจากคลิปบอร์ด"
 }

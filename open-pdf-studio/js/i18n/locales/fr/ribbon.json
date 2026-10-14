@@ -493,7 +493,9 @@
     "comingSoon": "Bientôt disponible",
     "collapseRibbon": "Réduire le ruban",
     "expandRibbon": "Développer le ruban",
-    "more": "Plus"
+    "more": "Plus",
+    "moreTabs": "Plus d'onglets",
+    "extensionTabFailed": "Impossible d'afficher cet onglet de l'extension."
   },
   "drawing": {
     "structural": "Structure",

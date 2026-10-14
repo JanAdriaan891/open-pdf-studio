@@ -207,7 +207,9 @@
     "confirmUninstall": "Biztosan eltávolítja ezt: „{{name}}”?",
     "uninstallSuccess": "„{{name}}” eltávolítva",
     "uninstallError": "A bővítmény eltávolítása sikertelen",
-    "by": "készítő:"
+    "by": "készítő:",
+    "activationFailed": "Nem aktív: {{error}}",
+    "viaMcp": "Az MI-kapcsolaton keresztül"
   },
   "annotateScreenshot": "Vágólapon lévő képernyőkép jegyzetelése"
 }

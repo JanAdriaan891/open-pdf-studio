@@ -207,7 +207,9 @@
     "confirmUninstall": "Jeste li sigurni da želite deinstalirati „{{name}}“?",
     "uninstallSuccess": "„{{name}}“ je deinstalirano",
     "uninstallError": "Deinstalacija proširenja nije uspjela",
-    "by": "autor:"
+    "by": "autor:",
+    "activationFailed": "Nije aktivno: {{error}}",
+    "viaMcp": "Putem AI veze"
   },
   "annotateScreenshot": "Označi snimku zaslona iz međuspremnika"
 }

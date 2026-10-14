@@ -9,6 +9,7 @@ pub mod cad_export;
 pub mod cad_import;
 pub mod datamap;
 mod email;
+pub mod extensie_installatie;
 pub mod linux_runtime;
 pub mod logboek;
 pub mod mcp_app_bridge;
@@ -1512,10 +1513,9 @@ fn install_plugin(path: String) -> Result<serde_json::Value, String> {
         .and_then(|v| v.as_str())
         .ok_or("plugin.json must have an 'id' field")?;
 
-    // Validate plugin id (prevent path traversal)
-    if plugin_id.contains("..") || plugin_id.contains('/') || plugin_id.contains('\\') {
-        return Err("Invalid plugin id".to_string());
-    }
+    // Strikte id-controle (#550): "" of "." wees naar de pluginmap zelf en
+    // "C:" ontsnapte via Path::join.
+    extensie_installatie::valideer_extensie_id(plugin_id).map_err(|f| f.message)?;
 
     let plugins_dir = get_plugins_dir();
     let plugin_dir = plugins_dir.join(plugin_id);
@@ -1558,27 +1558,25 @@ fn install_plugin(path: String) -> Result<serde_json::Value, String> {
 
 #[tauri::command]
 fn uninstall_plugin(id: String) -> Result<bool, String> {
-    // Validate id
-    if id.contains("..") || id.contains('/') || id.contains('\\') {
-        return Err("Invalid plugin id".to_string());
-    }
+    // Strikt of een veilig oud id; nooit de pluginmap zelf of daarbuiten (#550).
+    extensie_installatie::controleer_bestaand_id(&id)?;
 
     let plugins_dir = get_plugins_dir();
     let plugin_dir = plugins_dir.join(&id);
 
-    if plugin_dir.exists() {
-        fs::remove_dir_all(&plugin_dir).map_err(|e| format!("Failed to remove plugin: {}", e))?;
-    }
-
-    Ok(true)
+    // Niet tijdens een lopende installatie van een extensie.
+    extensie_installatie::met_wisselslot(|| {
+        if plugin_dir.exists() {
+            fs::remove_dir_all(&plugin_dir).map_err(|e| format!("Failed to remove plugin: {}", e))?;
+        }
+        Ok(true)
+    })
 }
 
 #[tauri::command]
 fn read_plugin_file(plugin_id: String, file_path: String) -> Result<String, String> {
-    // Validate inputs
-    if plugin_id.contains("..") || plugin_id.contains('/') || plugin_id.contains('\\') {
-        return Err("Invalid plugin id".to_string());
-    }
+    // Validate inputs: strikt of een veilig oud id (#550)
+    extensie_installatie::controleer_bestaand_id(&plugin_id)?;
     if file_path.contains("..") {
         return Err("Invalid file path".to_string());
     }
@@ -2853,6 +2851,12 @@ pub fn run(opts: StartupOpts) {
             install_plugin,
             uninstall_plugin,
             read_plugin_file,
+            // Extensies installeren en herladen zonder dialoog (#550)
+            extensie_installatie::extensie_lijst,
+            extensie_installatie::extensie_inspecteer,
+            extensie_installatie::extensie_installeer,
+            extensie_installatie::extensie_bevestig,
+            extensie_installatie::extensie_terugdraaien,
             render_pdf_page,
             ocr_pdf_page,
             worker_pool_ready,

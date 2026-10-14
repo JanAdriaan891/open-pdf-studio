@@ -493,7 +493,9 @@
     "comingSoon": "Inakuja hivi karibuni",
     "collapseRibbon": "Kunja utepe",
     "expandRibbon": "Panua utepe",
-    "more": "Zaidi"
+    "more": "Zaidi",
+    "moreTabs": "Vichupo zaidi",
+    "extensionTabFailed": "Kichupo hiki cha kiendelezi hakikuweza kuonyeshwa."
   },
   "drawing": {
     "structural": "Muundo",

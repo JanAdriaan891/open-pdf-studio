@@ -207,7 +207,9 @@
     "confirmUninstall": "Möchten Sie „{{name}}“ wirklich deinstallieren?",
     "uninstallSuccess": "„{{name}}“ wurde deinstalliert",
     "uninstallError": "Erweiterung konnte nicht deinstalliert werden",
-    "by": "von"
+    "by": "von",
+    "activationFailed": "Nicht aktiv: {{error}}",
+    "viaMcp": "Über die KI-Verbindung"
   },
   "annotateScreenshot": "Screenshot aus Zwischenablage kommentieren"
 }

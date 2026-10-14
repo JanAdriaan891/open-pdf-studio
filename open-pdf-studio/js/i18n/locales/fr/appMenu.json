@@ -207,7 +207,9 @@
     "confirmUninstall": "Voulez-vous vraiment désinstaller « {{name}} » ?",
     "uninstallSuccess": "« {{name}} » a été désinstallé",
     "uninstallError": "Échec de la désinstallation de l'extension",
-    "by": "par"
+    "by": "par",
+    "activationFailed": "Inactive : {{error}}",
+    "viaMcp": "Via la connexion IA"
   },
   "annotateScreenshot": "Annoter une capture d'écran du presse-papiers"
 }

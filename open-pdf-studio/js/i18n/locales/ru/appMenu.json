@@ -207,7 +207,9 @@
     "confirmUninstall": "Вы действительно хотите удалить «{{name}}»?",
     "uninstallSuccess": "«{{name}}» удалено",
     "uninstallError": "Не удалось удалить расширение",
-    "by": "автор:"
+    "by": "автор:",
+    "activationFailed": "Неактивно: {{error}}",
+    "viaMcp": "Через подключение ИИ"
   },
   "annotateScreenshot": "Аннотировать снимок экрана из буфера обмена"
 }

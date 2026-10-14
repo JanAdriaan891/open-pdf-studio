@@ -493,7 +493,9 @@
     "comingSoon": "Wkrótce",
     "collapseRibbon": "Zwiń wstążkę",
     "expandRibbon": "Rozwiń wstążkę",
-    "more": "Więcej"
+    "more": "Więcej",
+    "moreTabs": "Więcej kart",
+    "extensionTabFailed": "Nie można wyświetlić tej karty rozszerzenia."
   },
   "drawing": {
     "structural": "Konstrukcja",
