@@ -152,11 +152,11 @@ function disableBrowserShortcuts() {
       return;
     }
     // Ctrl+Shift+I (DevTools), Ctrl+Shift+J (Console), Ctrl+Shift+C (Inspect element)
-    if (e.shiftKey && ['I', 'J', 'C'].includes(e.key)) {
+    if (e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
     // F5 refresh, Ctrl+R refresh (allow in dev mode)
-    if ((e.key === 'r' || e.key === 'R') && !window.__devMode) {
+    if (e.key.toLowerCase() === 'r' && !window.__devMode) {
       e.preventDefault();
     }
   }, true);
