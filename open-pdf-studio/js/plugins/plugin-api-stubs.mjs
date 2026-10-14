@@ -14,16 +14,16 @@ import { fileURLToPath } from 'node:url';
 const JS = new URL('../', import.meta.url).href;
 
 const STUBS = {
-  'core/state.js': 'export const state = { preferences: {} }; export const getActiveDocument = () => null; export const getPageRotation = () => 0;',
+  'core/state.js': 'export const state = { preferences: {} }; export const getActiveDocument = () => null; export const getPageRotation = () => 0; export const getAnnotationBounds = () => null;',
   'tools/manager.js': 'export const setTool = () => {};',
   'annotations/factory.js': 'export const createAnnotation = (x) => x;',
   'annotations/rendering.js': 'export const redrawAnnotations = () => {};',
   'core/undo-manager.js': 'export const beginUndoTransaction = () => {}, endUndoTransaction = () => {}, recordAdd = () => {}, recordModify = () => {}, recordDelete = () => {};',
-  'plugins/annotation-batch.js': 'export const applyAnnotationBatch = () => {};',
   'plugins/page-access.js': 'export const getPageInfoForDocument = () => null, readPageContentForDocument = () => null, renderPageTileForDocument = () => null;',
   'tools/pdf-snap-extractor.js': 'export const extractPageGeometry = () => null;',
   'annotations/schaal-op-punt.js': 'export const schaalOpPunt = () => null;',
   'annotations/scale-region.js': 'export const getScaleFromRegion = () => null;',
+  'annotations/systeem-geometrie-app.js': 'export const systeemInstanceGeometrie = () => null;',
   'solid/stores/propertiesStore.js': 'export const setNativePanelHidden = (v) => { (globalThis.__nativePaneelVerborgen ??= []).push(v); };',
 };
 
