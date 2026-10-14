@@ -329,3 +329,6 @@ js/pdf/pagina-labels-i18n.test.mjs
 js/pdf/page-manager-paginalabels.test.mjs
 js/plugins/structured-commands.test.mjs
 js/plugins/system-instance-panels.test.mjs
+# Agenttaken van extensies zonder assistentvenster (#556)
+js/plugins/agent-tasks.test.mjs
+js/plugins/agent-tasks-plugin-api.test.mjs

@@ -116,6 +116,14 @@
       "description": "Return the LIVE assistant conversation: { ok, messages:[{ role, content }] }."
     },
     {
+      "name": "app_agent_task_pending",
+      "description": "Take the oldest structured agent task that an extension submitted, without the assistant window: the task moves from pending to running and no other client gets it."
+    },
+    {
+      "name": "app_agent_task_result",
+      "description": "Answer a running agent task by its id (from app_agent_task_pending) with either result, an object that must match the task's resultSchema (unknown fields are refused), or error { message, code } when the task cannot be done."
+    },
+    {
       "name": "app_create_annotation",
       "description": "Create an annotation on the LIVE app's active document WITHOUT synthetic mouse input."
     },

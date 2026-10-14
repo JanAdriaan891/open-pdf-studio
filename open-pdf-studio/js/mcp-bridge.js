@@ -3435,6 +3435,9 @@ const HANDLERS = {
   'mcp:assistant-pending':  handleAssistantPending,
   'mcp:assistant-answer':   handleAssistantAnswer,
   'mcp:assistant-history':  handleAssistantHistory,
+  // Agenttaken van extensies (#556): zonder assistentvenster; de regels staan in plugins/agent-tasks.js
+  'mcp:agent-task-pending': (p) => import('./plugins/agent-tasks.js').then((m) => m.handleAgentTaskPending(p)),
+  'mcp:agent-task-result':  (p) => import('./plugins/agent-tasks.js').then((m) => m.handleAgentTaskResult(p)),
 };
 
 /**
