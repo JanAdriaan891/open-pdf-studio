@@ -15,6 +15,7 @@ import { hasPendingRestore } from '../../core/reader-mode-tracking.js';
 import { actiefNaSluiten } from '../../pdf/handtekeningen/opslaan.js';
 import { compareActive, compareFocused, focusCompareTab, blurCompareTab } from '../../compare/compare-store.js';
 import { volgendTabDoel, voerTabWisselUit } from './tab-sneltoets.js';
+import { isBeveiligdDocument } from '../../pdf/wachtwoord-pdf.js';
 
 /**
  * Create a new tab for a document
@@ -255,7 +256,9 @@ export async function closeTab(index, force = false, dialogAction = null) {
   // MCP-brug en tests, die geen OS-dialoog kunnen bedienen maar wél de echte
   // sluitvolgorde (opslaan → opruimen → sluiten) moeten doorlopen.
   let vorigActief = null;
-  if (!force && doc.modified) {
+  // Een met een wachtwoord geopende PDF is alleen-lezen en kan niet
+  // opgeslagen worden: niets te vragen.
+  if (!force && doc.modified && !isBeveiligdDocument(doc)) {
     const action = dialogAction || await showUnsavedChangesDialog(doc.fileName);
     if (action === 'cancel') return false;
     if (action === 'save') {
@@ -314,6 +317,11 @@ export async function closeTab(index, force = false, dialogAction = null) {
   // anders blijft het bestand vergrendeld tot de app afsluit. (#345)
   if (doc.saveTargetPath && doc.saveTargetPath !== doc.filePath) {
     await unlockFile(doc.saveTargetPath);
+  }
+  // Met een wachtwoord geopend: de lock staat op het origineel, het document
+  // rendert uit een ontsleutelde werkkopie (die gaat hieronder weg).
+  if (doc.originalFilePath && doc.originalFilePath !== doc.filePath) {
+    await unlockFile(doc.originalFilePath);
   }
   if (doc._renderTemp && doc.filePath && !doc.isUntitled) {
     try {
@@ -383,6 +391,17 @@ export async function closeTab(index, force = false, dialogAction = null) {
   // De interface is bijgewerkt; nu pas wachten tot alles is vrijgegeven.
   await vrijgave;
 
+  // De ontsleutelde werkkopie van een beveiligde PDF weg, nu de caches en de
+  // worker-processen hem hebben losgelaten. Rust verwijdert alleen bestanden
+  // in zijn eigen map; wat nog in gebruik is, ruimt het afsluiten of de
+  // volgende start op.
+  if (isBeveiligdDocument(doc) && doc.filePath && doc.filePath !== doc.originalFilePath
+      && !state.documents.some((d) => d.filePath === doc.filePath)) {
+    try {
+      await window.__TAURI__?.core?.invoke?.('release_protected_pdf', { path: doc.filePath });
+    } catch (e) { console.warn('[tabs] werkkopie van beveiligde PDF niet verwijderd:', e); }
+  }
+
   return true;
 }
 
@@ -448,6 +467,15 @@ export async function renameDocument(index, newName) {
   if (index < 0 || index >= state.documents.length) return false;
 
   const doc = state.documents[index];
+
+  // Met een wachtwoord geopend: alleen-lezen, ook de bestandsnaam. (Het pad
+  // zou bovendien de werkkopie zijn, niet het origineel.)
+  if (isBeveiligdDocument(doc)) {
+    const { showMessage } = await import('../../solid/stores/dialogStore.js');
+    const i18next = (await import('../../i18n/config.js')).default;
+    showMessage(i18next.t('protectedPdfReadOnly'));
+    return false;
+  }
 
   // Untitled docs — trigger Save As instead
   if (!doc.filePath) {

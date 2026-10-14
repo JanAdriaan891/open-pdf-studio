@@ -107,5 +107,6 @@
   "searchResultsTitle": "Resultaten ({{count}})",
   "searchResultPage": "Pagina {{page}}",
   "searchHitsOne": "1 treffer",
-  "searchHitsMany": "{{count}} treffers"
+  "searchHitsMany": "{{count}} treffers",
+  "passwordProtectedBar": "Beveiligd met een wachtwoord: alleen-lezen geopend."
 }

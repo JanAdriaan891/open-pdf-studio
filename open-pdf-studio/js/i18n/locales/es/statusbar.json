@@ -107,5 +107,6 @@
   "searchResultsTitle": "Resultados ({{count}})",
   "searchResultPage": "Página {{page}}",
   "searchHitsOne": "1 coincidencia",
-  "searchHitsMany": "{{count}} coincidencias"
+  "searchHitsMany": "{{count}} coincidencias",
+  "passwordProtectedBar": "Protegido con contraseña: abierto en modo de solo lectura."
 }

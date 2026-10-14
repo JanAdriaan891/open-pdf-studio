@@ -107,5 +107,6 @@
   "searchResultsTitle": "Risultati ({{count}})",
   "searchResultPage": "Pagina {{page}}",
   "searchHitsOne": "1 corrispondenza",
-  "searchHitsMany": "{{count}} corrispondenze"
+  "searchHitsMany": "{{count}} corrispondenze",
+  "passwordProtectedBar": "Protetto da password: aperto in sola lettura."
 }

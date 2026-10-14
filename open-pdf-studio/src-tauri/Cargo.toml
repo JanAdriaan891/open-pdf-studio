@@ -1,6 +1,6 @@
 [package]
 name = "open-pdf-studio"
-version = "2026.42.5"
+version = "2026.42.6"
 description = "A free, open-source PDF annotation editor"
 authors = ["OpenAEC Foundation"]
 license = "LGPL-3.0-or-later"
@@ -52,6 +52,9 @@ open-pdf-cad = { path = "../../open-pdf-cad" }
 open-pdf-cmyk = { path = "../../open-pdf-cmyk" }
 image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
 pdfium-render = { version = "0.9.4", features = ["thread_safe", "image_025"] }
+# Ontsleutelen van PDF's met een wachtwoord (src/beveiligde_pdf.rs): een paar
+# PDFium-functies die pdfium-render niet aanbiedt. Zelfde versie als pdfium-render.
+libloading = "0.9"
 clap = { version = "4", features = ["derive"] }
 
 # OpenAEC Accounts ("Sign in with OpenAEC", accounts.rs): PKCE + OS-keyring

@@ -107,5 +107,6 @@
   "searchResultsTitle": "결과 ({{count}})",
   "searchResultPage": "{{page}} 페이지",
   "searchHitsOne": "1개 일치",
-  "searchHitsMany": "{{count}}개 일치"
+  "searchHitsMany": "{{count}}개 일치",
+  "passwordProtectedBar": "암호로 보호됨: 읽기 전용으로 열렸습니다."
 }

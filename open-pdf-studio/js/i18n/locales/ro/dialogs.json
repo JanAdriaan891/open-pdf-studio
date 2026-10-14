@@ -965,5 +965,11 @@
     "colLabel": "Eticheta paginii",
     "ocrLegend": "Paginile marcate OCR au fost citite prin recunoașterea textului; verificați-le înainte de aplicare.",
     "reset": "Revenire la numerele paginilor"
+  },
+  "pdfPassword": {
+    "title": "Este necesară parola",
+    "message": "„{{fileName}}” este protejat cu parolă. Introduceți parola pentru a-l deschide doar în citire.",
+    "label": "Parolă:",
+    "wrong": "Parolă greșită, încercați din nou."
   }
 }

@@ -965,5 +965,11 @@
     "colLabel": "Sidetikett",
     "ocrLegend": "Sidor märkta OCR lästes med textigenkänning; kontrollera dem innan du tillämpar.",
     "reset": "Återställ till sidnummer"
+  },
+  "pdfPassword": {
+    "title": "Lösenord krävs",
+    "message": "”{{fileName}}” är skyddad med lösenord. Ange lösenordet för att öppna den skrivskyddad.",
+    "label": "Lösenord:",
+    "wrong": "Fel lösenord, försök igen."
   }
 }

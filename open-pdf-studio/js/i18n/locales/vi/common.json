@@ -171,5 +171,6 @@
     "failed": "Cắt không thành công",
     "clipboardEmpty": "Không có đoạn cắt nào trong bảng tạm"
   },
-  "snippetOutputFailed": "Không thể kết xuất một đoạn cắt vector, nên quá trình xuất hoặc in đã bị dừng. Hãy thử lại."
+  "snippetOutputFailed": "Không thể kết xuất một đoạn cắt vector, nên quá trình xuất hoặc in đã bị dừng. Hãy thử lại.",
+  "protectedPdfReadOnly": "Tài liệu này được mở bằng mật khẩu và ở chế độ chỉ đọc. Không thể lưu."
 }

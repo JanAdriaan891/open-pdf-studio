@@ -26,6 +26,7 @@ import { metOpslagSlot } from '../plugins/opslag-wissel-slot.js';
 import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnnotation } from '../plugins/plugin-pdf.js';
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
+import { opslaanGeweigerd } from './wachtwoord-pdf.js';
 
 // Sub-modules
 import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
@@ -200,8 +201,18 @@ function pageCompensationForAp(w, h, pageRot) {
 // het bijgewerkte document. (#345)
 let _saveBezig = null;
 
+/** Meldt en weigert het opslaan van een met een wachtwoord geopende PDF. */
+function weigerOpslaanBeveiligd(doc) {
+  if (!opslaanGeweigerd(doc)) return false;
+  showMessage(i18next.t('protectedPdfReadOnly'));
+  return true;
+}
+
 export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getActiveDocument()) {
   if (!activeDoc?.pdfDoc || !state.documents.includes(activeDoc)) return false;
+  // Met een wachtwoord geopend: alleen-lezen, nooit opslaan (ook niet als
+  // kopie), zodat het origineel beveiligd blijft (wachtwoord-pdf.js).
+  if (weigerOpslaanBeveiligd(activeDoc)) return false;
   const currentPath = activeDoc?.filePath;
   // Redirect to "Save As" for untitled docs. These now have a temp-file
   // `filePath` (so they render via the real pipeline), so we ALSO check the
@@ -3127,6 +3138,7 @@ export async function savePDFAs(doc = getActiveDocument()) {
     showMessage(i18next.t('noPdfLoaded'));
     return false;
   }
+  if (weigerOpslaanBeveiligd(doc)) return false;
 
   // Standaard het eigen pad. Een naamloos document staat in een tijdelijk
   // bestand: stel dan de tabbladnaam met .pdf voor in een normale map.

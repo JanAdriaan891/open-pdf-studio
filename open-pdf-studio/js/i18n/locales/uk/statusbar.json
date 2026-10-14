@@ -107,5 +107,6 @@
   "searchResultsTitle": "Результати ({{count}})",
   "searchResultPage": "Сторінка {{page}}",
   "searchHitsOne": "1 збіг",
-  "searchHitsMany": "Збігів: {{count}}"
+  "searchHitsMany": "Збігів: {{count}}",
+  "passwordProtectedBar": "Захищено паролем: відкрито лише для читання."
 }

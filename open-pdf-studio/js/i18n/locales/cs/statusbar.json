@@ -107,5 +107,6 @@
   "searchResultsTitle": "Výsledky ({{count}})",
   "searchResultPage": "Stránka {{page}}",
   "searchHitsOne": "1 shoda",
-  "searchHitsMany": "Shod: {{count}}"
+  "searchHitsMany": "Shod: {{count}}",
+  "passwordProtectedBar": "Chráněno heslem: otevřeno jen pro čtení."
 }

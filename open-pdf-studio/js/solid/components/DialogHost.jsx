@@ -36,6 +36,7 @@ import WhatsNewDialog from './dialogs/WhatsNewDialog.jsx';
 import ShortcutsDialog from './dialogs/ShortcutsDialog.jsx';
 import ExtensionsDialog from './dialogs/ExtensionsDialog.jsx';
 import ConfirmDialog from './dialogs/ConfirmDialog.jsx';
+import PasswordDialog from './dialogs/PasswordDialog.jsx';
 import HandtekeningDetailDialog from './dialogs/HandtekeningDetailDialog.jsx';
 import ViewportScaleDialog from './dialogs/ViewportScaleDialog.jsx';
 import ScaleRegionDialog from './dialogs/ScaleRegionDialog.jsx';
@@ -109,6 +110,7 @@ const DIALOG_MAP = {
   'cad-export': CadExportDialog,
   'cad-import': CadImportDialog,
   'annotation-layer-delete': AnnotationLayerDeleteDialog,
+  'pdf-password': PasswordDialog,
 };
 
 export default function DialogHost() {

@@ -965,5 +965,11 @@
     "colLabel": "Sayfa etiketi",
     "ocrLegend": "OCR işaretli sayfalar metin tanıma ile okundu; uygulamadan önce kontrol edin.",
     "reset": "Sayfa numaralarına sıfırla"
+  },
+  "pdfPassword": {
+    "title": "Parola gerekli",
+    "message": "\"{{fileName}}\" parola ile korunuyor. Salt okunur açmak için parolayı girin.",
+    "label": "Parola:",
+    "wrong": "Yanlış parola, tekrar deneyin."
   }
 }

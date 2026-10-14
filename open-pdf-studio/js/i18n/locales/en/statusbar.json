@@ -107,5 +107,6 @@
   "searchResultsTitle": "Results ({{count}})",
   "searchResultPage": "Page {{page}}",
   "searchHitsOne": "1 match",
-  "searchHitsMany": "{{count}} matches"
+  "searchHitsMany": "{{count}} matches",
+  "passwordProtectedBar": "Protected with a password: opened read-only."
 }

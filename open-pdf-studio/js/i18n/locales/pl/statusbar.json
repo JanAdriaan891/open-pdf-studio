@@ -107,5 +107,6 @@
   "searchResultsTitle": "Wyniki ({{count}})",
   "searchResultPage": "Strona {{page}}",
   "searchHitsOne": "1 dopasowanie",
-  "searchHitsMany": "Dopasowania: {{count}}"
+  "searchHitsMany": "Dopasowania: {{count}}",
+  "passwordProtectedBar": "Chroniony hasłem: otwarty tylko do odczytu."
 }

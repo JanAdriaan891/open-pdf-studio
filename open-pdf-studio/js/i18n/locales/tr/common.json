@@ -171,5 +171,6 @@
     "failed": "Kesme başarısız oldu",
     "clipboardEmpty": "Panoda kesit yok"
   },
-  "snippetOutputFailed": "Bir vektör kesit işlenemedi, bu yüzden dışa aktarma veya yazdırma durduruldu. Yeniden deneyin."
+  "snippetOutputFailed": "Bir vektör kesit işlenemedi, bu yüzden dışa aktarma veya yazdırma durduruldu. Yeniden deneyin.",
+  "protectedPdfReadOnly": "Bu belge parola ile açıldı ve salt okunurdur. Kaydedilemez."
 }

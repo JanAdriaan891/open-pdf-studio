@@ -965,5 +965,11 @@
     "colLabel": "Oldalcímke",
     "ocrLegend": "Az OCR jelölésű oldalakat szövegfelismeréssel olvasta be; alkalmazás előtt ellenőrizze őket.",
     "reset": "Visszaállítás oldalszámokra"
+  },
+  "pdfPassword": {
+    "title": "Jelszó szükséges",
+    "message": "A(z) „{{fileName}}” jelszóval védett. Írja be a jelszót a csak olvasható megnyitáshoz.",
+    "label": "Jelszó:",
+    "wrong": "Hibás jelszó, próbálja újra."
   }
 }

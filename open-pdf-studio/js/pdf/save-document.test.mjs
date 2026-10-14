@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
+import { opslaanGeweigerd, markeerBeveiligd } from './wachtwoord-pdf.js';
 
 // Execute the production save functions with controlled I/O. The app imports
 // require a webview; only those dependencies and dynamic imports are replaced.
@@ -35,6 +36,8 @@ function harness() {
     writeBinaryFileAtomic: async (path, bytes) => { writes.push({ path, source: new TextDecoder().decode(bytes) }); },
     isTauri: () => false, markeerGebakken() {}, hidePdfABar() {}, stripPdfAMetadata() {},
     i18next: { t: x => x }, showMessage() {}, window: {},
+    // Met een wachtwoord geopend: nooit opslaan (wachtwoord-pdf.js, echt).
+    opslaanGeweigerd,
     console: { error() {}, warn() {} },
     saveFileDialog: async () => 'copy.pdf',
     // Het slot tegen een extensiewissel (#550): standaard loopt er geen.
@@ -202,6 +205,27 @@ test('saving aborts before writing when a page has model annotations but is not 
   assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
   assert.deepEqual(h.writes, []);
   assert.equal(h.a.modified, true);
+});
+
+test('a PDF opened with a password is never saved: Save, Save As and a given path all refuse', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  let dialoog = 0;
+  h.deps.saveFileDialog = async () => { dialoog++; return 'copy.pdf'; };
+  h.a.filePath = 'C:/Temp/opds-beveiligd/1-0123456789abcdef.pdf';
+  markeerBeveiligd(h.a, 'D:/Projecten/contract.pdf');
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.equal(await h.api.savePDF('D:/elders.pdf', { zonderHandtekeningVraag: true }), false);
+  assert.equal(await h.api.savePDFAs(h.a), false);
+  assert.deepEqual(h.writes, []);
+  assert.equal(dialoog, 0, 'no Save As dialog either');
+  assert.deepEqual(meldingen, ['protectedPdfReadOnly', 'protectedPdfReadOnly', 'protectedPdfReadOnly']);
+  // Het andere document slaat gewoon op.
+  h.switchToB();
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), true);
+  assert.equal(h.writes.length, 1);
+  assert.equal(h.writes[0].path, 'b.pdf');
 });
 
 test('a save writes the attachment changes of the document being saved (#376)', async () => {

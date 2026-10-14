@@ -3700,7 +3700,7 @@ dependencies = [
 
 [[package]]
 name = "open-pdf-studio"
-version = "2026.42.5"
+version = "2026.42.6"
 dependencies = [
  "anyhow",
  "axum",
@@ -3717,6 +3717,7 @@ dependencies = [
  "hmac",
  "image",
  "keyring",
+ "libloading 0.9.0",
  "log",
  "lopdf",
  "memmap2",

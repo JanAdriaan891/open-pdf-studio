@@ -107,5 +107,6 @@
   "searchResultsTitle": "Sonuçlar ({{count}})",
   "searchResultPage": "Sayfa {{page}}",
   "searchHitsOne": "1 eşleşme",
-  "searchHitsMany": "{{count}} eşleşme"
+  "searchHitsMany": "{{count}} eşleşme",
+  "passwordProtectedBar": "Parola ile korunuyor: salt okunur açıldı."
 }

@@ -171,5 +171,6 @@
     "failed": "Pemotongan gagal",
     "clipboardEmpty": "Tidak ada potongan di papan klip"
   },
-  "snippetOutputFailed": "Potongan vektor tidak dapat dirender, jadi ekspor atau cetak dihentikan. Coba lagi."
+  "snippetOutputFailed": "Potongan vektor tidak dapat dirender, jadi ekspor atau cetak dihentikan. Coba lagi.",
+  "protectedPdfReadOnly": "Dokumen ini dibuka dengan kata sandi dan hanya dapat dibaca. Dokumen ini tidak dapat disimpan."
 }

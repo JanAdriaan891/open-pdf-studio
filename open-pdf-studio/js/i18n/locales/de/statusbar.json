@@ -107,5 +107,6 @@
   "searchResultsTitle": "Ergebnisse ({{count}})",
   "searchResultPage": "Seite {{page}}",
   "searchHitsOne": "1 Treffer",
-  "searchHitsMany": "{{count}} Treffer"
+  "searchHitsMany": "{{count}} Treffer",
+  "passwordProtectedBar": "Mit Kennwort geschützt: schreibgeschützt geöffnet."
 }

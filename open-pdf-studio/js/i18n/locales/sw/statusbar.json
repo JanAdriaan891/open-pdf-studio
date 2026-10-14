@@ -107,5 +107,6 @@
   "searchResultsTitle": "Matokeo ({{count}})",
   "searchResultPage": "Ukurasa {{page}}",
   "searchHitsOne": "Tokeo 1",
-  "searchHitsMany": "Matokeo {{count}}"
+  "searchHitsMany": "Matokeo {{count}}",
+  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu."
 }

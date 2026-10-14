@@ -107,5 +107,6 @@
   "searchResultsTitle": "Резултати ({{count}})",
   "searchResultPage": "Страница {{page}}",
   "searchHitsOne": "1 подударање",
-  "searchHitsMany": "Подударања: {{count}}"
+  "searchHitsMany": "Подударања: {{count}}",
+  "passwordProtectedBar": "Заштићено лозинком: отворено само за читање."
 }

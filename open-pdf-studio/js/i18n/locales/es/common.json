@@ -171,5 +171,6 @@
     "failed": "No se pudo recortar",
     "clipboardEmpty": "No hay ningún recorte en el portapapeles"
   },
-  "snippetOutputFailed": "No se pudo representar un recorte vectorial, por lo que se detuvo la exportación o la impresión. Inténtelo de nuevo."
+  "snippetOutputFailed": "No se pudo representar un recorte vectorial, por lo que se detuvo la exportación o la impresión. Inténtelo de nuevo.",
+  "protectedPdfReadOnly": "Este documento se abrió con una contraseña y es de solo lectura. No se puede guardar."
 }

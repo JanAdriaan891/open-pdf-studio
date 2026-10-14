@@ -107,5 +107,6 @@
   "searchResultsTitle": "Αποτελέσματα ({{count}})",
   "searchResultPage": "Σελίδα {{page}}",
   "searchHitsOne": "1 αποτέλεσμα",
-  "searchHitsMany": "{{count}} αποτελέσματα"
+  "searchHitsMany": "{{count}} αποτελέσματα",
+  "passwordProtectedBar": "Προστατεύεται με κωδικό πρόσβασης: άνοιξε μόνο για ανάγνωση."
 }

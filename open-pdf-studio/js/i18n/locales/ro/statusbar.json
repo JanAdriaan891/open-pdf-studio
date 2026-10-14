@@ -107,5 +107,6 @@
   "searchResultsTitle": "Rezultate ({{count}})",
   "searchResultPage": "Pagina {{page}}",
   "searchHitsOne": "1 potrivire",
-  "searchHitsMany": "Potriviri: {{count}}"
+  "searchHitsMany": "Potriviri: {{count}}",
+  "passwordProtectedBar": "Protejat cu parolă: deschis doar în citire."
 }

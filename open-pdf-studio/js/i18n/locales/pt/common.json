@@ -171,5 +171,6 @@
     "failed": "Falha ao recortar",
     "clipboardEmpty": "Nenhum recorte na área de transferência"
   },
-  "snippetOutputFailed": "Não foi possível renderizar um recorte vetorial, por isso a exportação ou impressão foi interrompida. Tente novamente."
+  "snippetOutputFailed": "Não foi possível renderizar um recorte vetorial, por isso a exportação ou impressão foi interrompida. Tente novamente.",
+  "protectedPdfReadOnly": "Este documento foi aberto com uma senha e é somente leitura. Não pode ser salvo."
 }

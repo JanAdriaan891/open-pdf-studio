@@ -107,5 +107,6 @@
   "searchResultsTitle": "結果 ({{count}})",
   "searchResultPage": "{{page}} ページ",
   "searchHitsOne": "1 件",
-  "searchHitsMany": "{{count}} 件"
+  "searchHitsMany": "{{count}} 件",
+  "passwordProtectedBar": "パスワードで保護されています: 読み取り専用で開きました。"
 }

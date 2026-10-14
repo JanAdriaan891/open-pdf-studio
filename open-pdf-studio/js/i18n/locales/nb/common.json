@@ -171,5 +171,6 @@
     "failed": "Utklipp mislyktes",
     "clipboardEmpty": "Ingen utsnitt på utklippstavlen"
   },
-  "snippetOutputFailed": "Et vektorutsnitt kunne ikke gjengis, så eksporten eller utskriften ble stoppet. Prøv igjen."
+  "snippetOutputFailed": "Et vektorutsnitt kunne ikke gjengis, så eksporten eller utskriften ble stoppet. Prøv igjen.",
+  "protectedPdfReadOnly": "Dette dokumentet ble åpnet med passord og er skrivebeskyttet. Det kan ikke lagres."
 }

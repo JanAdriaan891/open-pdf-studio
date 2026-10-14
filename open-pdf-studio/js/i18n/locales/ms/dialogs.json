@@ -965,5 +965,11 @@
     "colLabel": "Label halaman",
     "ocrLegend": "Halaman bertanda OCR dibaca dengan pengecaman teks; semak sebelum menggunakan.",
     "reset": "Set semula kepada nombor halaman"
+  },
+  "pdfPassword": {
+    "title": "Kata laluan diperlukan",
+    "message": "\"{{fileName}}\" dilindungi dengan kata laluan. Masukkan kata laluan untuk membukanya dalam mod baca sahaja.",
+    "label": "Kata laluan:",
+    "wrong": "Kata laluan salah, cuba lagi."
   }
 }

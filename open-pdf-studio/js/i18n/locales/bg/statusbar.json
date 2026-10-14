@@ -107,5 +107,6 @@
   "searchResultsTitle": "Резултати ({{count}})",
   "searchResultPage": "Страница {{page}}",
   "searchHitsOne": "1 съвпадение",
-  "searchHitsMany": "{{count}} съвпадения"
+  "searchHitsMany": "{{count}} съвпадения",
+  "passwordProtectedBar": "Защитен с парола: отворен само за четене."
 }

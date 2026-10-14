@@ -107,5 +107,6 @@
   "searchResultsTitle": "תוצאות ({{count}})",
   "searchResultPage": "עמוד {{page}}",
   "searchHitsOne": "תוצאה אחת",
-  "searchHitsMany": "{{count}} תוצאות"
+  "searchHitsMany": "{{count}} תוצאות",
+  "passwordProtectedBar": "מוגן בסיסמה: נפתח לקריאה בלבד."
 }

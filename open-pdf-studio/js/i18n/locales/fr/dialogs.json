@@ -965,5 +965,11 @@
     "colLabel": "Étiquette de page",
     "ocrLegend": "Les pages marquées OCR ont été lues par reconnaissance de texte ; vérifiez-les avant d'appliquer.",
     "reset": "Rétablir les numéros de page"
+  },
+  "pdfPassword": {
+    "title": "Mot de passe requis",
+    "message": "« {{fileName}} » est protégé par un mot de passe. Saisissez le mot de passe pour l’ouvrir en lecture seule.",
+    "label": "Mot de passe :",
+    "wrong": "Mot de passe incorrect, réessayez."
   }
 }

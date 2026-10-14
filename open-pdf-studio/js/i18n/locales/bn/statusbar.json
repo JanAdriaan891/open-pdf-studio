@@ -107,5 +107,6 @@
   "searchResultsTitle": "ফলাফল ({{count}})",
   "searchResultPage": "পৃষ্ঠা {{page}}",
   "searchHitsOne": "1টি মিল",
-  "searchHitsMany": "{{count}}টি মিল"
+  "searchHitsMany": "{{count}}টি মিল",
+  "passwordProtectedBar": "পাসওয়ার্ড দিয়ে সুরক্ষিত: শুধু পড়ার জন্য খোলা হয়েছে।"
 }

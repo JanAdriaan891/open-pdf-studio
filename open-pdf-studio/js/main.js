@@ -90,6 +90,7 @@ import { addRecentFile } from './mobile/recent-files.js';
 // Tauri API
 import { isTauri, isMobile, isDevMode, getOpenedFiles, loadSession, saveSession, fileExists, isDefaultPdfApp, openDefaultAppsSettings, extractFileName } from './core/platform.js';
 import { sessieHerstelBeleid } from './core/sessie-herstel.js';
+import { sessieBestanden, bronPad } from './pdf/wachtwoord-pdf.js';
 
 // Open PDF files: tabs created instantly, loads serialized through ONE global
 // queue - also across separate openFiles() calls (the Windows single-instance
@@ -100,7 +101,13 @@ const openFiles = createFileOpenQueue({
   createTab,
   switchToTab,
   loadPDF,
-  onLoaded: (filePath) => addRecentFile(filePath, extractFileName(filePath)),
+  // Only a file that really opened: not one whose password dialog was
+  // cancelled (its tab is closed again) or that failed to load.
+  onLoaded: (filePath) => {
+    if (state.documents.some(d => d.pdfDoc && bronPad(d) === filePath)) {
+      addRecentFile(filePath, extractFileName(filePath));
+    }
+  },
 });
 
 // Register open-files listener immediately (before init) so events from the
@@ -458,9 +465,9 @@ async function saveSessionData() {
   try {
     // Skip untitled docs: their filePath is a temp file that gets deleted on
     // close — restoring it next launch would open a dangling/empty path.
-    const openFiles = state.documents
-      .filter(doc => doc.filePath && !doc.isUntitled)
-      .map(doc => doc.filePath);
+    // A PDF opened with a password is stored by its ORIGINAL path, never by
+    // its decrypted working copy: the next launch asks the password again.
+    const openFiles = sessieBestanden(state.documents);
 
     const sessionData = {
       openFiles: openFiles,

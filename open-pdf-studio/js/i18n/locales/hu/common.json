@@ -171,5 +171,6 @@
     "failed": "A kivágás nem sikerült",
     "clipboardEmpty": "Nincs kivágás a vágólapon"
   },
-  "snippetOutputFailed": "Egy vektoros kivágást nem sikerült megjeleníteni, ezért az exportálás vagy a nyomtatás leállt. Próbálja újra."
+  "snippetOutputFailed": "Egy vektoros kivágást nem sikerült megjeleníteni, ezért az exportálás vagy a nyomtatás leállt. Próbálja újra.",
+  "protectedPdfReadOnly": "Ez a dokumentum jelszóval lett megnyitva, és csak olvasható. Nem menthető."
 }

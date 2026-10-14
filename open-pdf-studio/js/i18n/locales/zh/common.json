@@ -171,5 +171,6 @@
     "failed": "剪切失败",
     "clipboardEmpty": "剪贴板中没有片段"
   },
-  "snippetOutputFailed": "无法渲染矢量片段，因此已停止导出或打印。请重试。"
+  "snippetOutputFailed": "无法渲染矢量片段，因此已停止导出或打印。请重试。",
+  "protectedPdfReadOnly": "此文档使用密码打开，为只读。无法保存。"
 }

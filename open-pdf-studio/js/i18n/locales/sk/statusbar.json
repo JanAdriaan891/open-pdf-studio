@@ -107,5 +107,6 @@
   "searchResultsTitle": "Výsledky ({{count}})",
   "searchResultPage": "Strana {{page}}",
   "searchHitsOne": "1 zhoda",
-  "searchHitsMany": "Zhôd: {{count}}"
+  "searchHitsMany": "Zhôd: {{count}}",
+  "passwordProtectedBar": "Chránené heslom: otvorené iba na čítanie."
 }

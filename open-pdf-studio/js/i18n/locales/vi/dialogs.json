@@ -965,5 +965,11 @@
     "colLabel": "Nhãn của trang",
     "ocrLegend": "Các trang đánh dấu OCR được đọc bằng nhận dạng văn bản; hãy kiểm tra trước khi áp dụng.",
     "reset": "Đặt lại về số trang"
+  },
+  "pdfPassword": {
+    "title": "Cần mật khẩu",
+    "message": "\"{{fileName}}\" được bảo vệ bằng mật khẩu. Nhập mật khẩu để mở ở chế độ chỉ đọc.",
+    "label": "Mật khẩu:",
+    "wrong": "Sai mật khẩu, hãy thử lại."
   }
 }

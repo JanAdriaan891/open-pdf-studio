@@ -171,5 +171,6 @@
     "failed": "Wycinanie nie powiodło się",
     "clipboardEmpty": "Brak wycinka w schowku"
   },
-  "snippetOutputFailed": "Nie udało się wyrenderować wycinka wektorowego, dlatego eksport lub drukowanie zostało przerwane. Spróbuj ponownie."
+  "snippetOutputFailed": "Nie udało się wyrenderować wycinka wektorowego, dlatego eksport lub drukowanie zostało przerwane. Spróbuj ponownie.",
+  "protectedPdfReadOnly": "Ten dokument został otwarty z hasłem i jest tylko do odczytu. Nie można go zapisać."
 }

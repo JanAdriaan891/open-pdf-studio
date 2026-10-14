@@ -171,5 +171,6 @@
     "failed": "Kukata kumeshindwa",
     "clipboardEmpty": "Hakuna kipande kwenye ubao wa kunakili"
   },
-  "snippetOutputFailed": "Kipande cha vekta hakikuweza kuchorwa, kwa hivyo uhamishaji au uchapishaji umesimamishwa. Jaribu tena."
+  "snippetOutputFailed": "Kipande cha vekta hakikuweza kuchorwa, kwa hivyo uhamishaji au uchapishaji umesimamishwa. Jaribu tena.",
+  "protectedPdfReadOnly": "Hati hii ilifunguliwa kwa nenosiri na ni ya kusoma tu. Haiwezi kuhifadhiwa."
 }

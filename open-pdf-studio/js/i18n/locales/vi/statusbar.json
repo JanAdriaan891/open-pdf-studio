@@ -107,5 +107,6 @@
   "searchResultsTitle": "Kết quả ({{count}})",
   "searchResultPage": "Trang {{page}}",
   "searchHitsOne": "1 kết quả",
-  "searchHitsMany": "{{count}} kết quả"
+  "searchHitsMany": "{{count}} kết quả",
+  "passwordProtectedBar": "Được bảo vệ bằng mật khẩu: đã mở ở chế độ chỉ đọc."
 }
