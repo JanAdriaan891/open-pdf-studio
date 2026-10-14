@@ -207,7 +207,9 @@
     "confirmUninstall": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຖອນການຕິດຕັ້ງ \"{{name}}\"?",
     "uninstallSuccess": "ຖອນການຕິດຕັ້ງ \"{{name}}\" ແລ້ວ",
     "uninstallError": "ຖອນການຕິດຕັ້ງສ່ວນຂະຫຍາຍບໍ່ສຳເລັດ",
-    "by": "ໂດຍ"
+    "by": "ໂດຍ",
+    "activationFailed": "ບໍ່ໄດ້ເປີດໃຊ້: {{error}}",
+    "viaMcp": "ຜ່ານການເຊື່ອມຕໍ່ AI"
   },
   "annotateScreenshot": "ບັນທຶກໂນ້ດໃສ່ຮູບພາບໜ້າຈໍຈາກຄລິບບອດ"
 }

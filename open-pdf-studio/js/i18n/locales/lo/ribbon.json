@@ -446,7 +446,9 @@
     "comingSoon": "ກຳລັງພັດທະນາ",
     "collapseRibbon": "ຫຍໍ້ແຖບເມນູ",
     "expandRibbon": "ຂະຫຍາຍແຖບເມນູ",
-    "more": "ເພີ່ມເຕີມ"
+    "more": "ເພີ່ມເຕີມ",
+    "moreTabs": "ແຖບເພີ່ມເຕີມ",
+    "extensionTabFailed": "ບໍ່ສາມາດສະແດງແຖບຂອງສ່ວນຂະຫຍາຍນີ້ໄດ້."
   },
   "drawing": {
     "selection": "ການເລືອກ",

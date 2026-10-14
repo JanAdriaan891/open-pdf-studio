@@ -122,10 +122,10 @@ test('de tabstrook laat pijltoetsen met een modificatietoets en al afgehandelde 
   assert.match(ribbon, /const opToets = \(e\) => \{\n\s*if \(e\.defaultPrevented \|\| e\.altKey \|\| e\.ctrlKey \|\| e\.metaKey \|\| e\.shiftKey\) return;/);
 });
 
-test('de vier nieuwe sleutels staan in alle 39 talen', () => {
+test('de vier nieuwe sleutels staan in alle 40 talen', () => {
   const map = new URL('../i18n/locales/', import.meta.url);
   const talen = readdirSync(map).filter((d) => !d.includes('.'));
-  assert.equal(talen.length, 39);
+  assert.equal(talen.length, 40);
   for (const taal of talen) {
     const menu = JSON.parse(readFileSync(new URL(`${taal}/appMenu.json`, map), 'utf8'));
     const lint = JSON.parse(readFileSync(new URL(`${taal}/ribbon.json`, map), 'utf8'));
