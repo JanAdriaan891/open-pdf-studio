@@ -318,3 +318,5 @@ js/tools/pijl-in-tabstrook.test.mjs
 js/tools/sneltoetsen-caps-lock.test.mjs
 # Snellere pdf-lib-standaarden voor inlezen en opslaan (#581)
 js/pdf/pdf-lib-snelheid.test.mjs
+# Draagbare Cargo-instellingen, geen absolute paden (#582)
+scripts/cargo-config-draagbaar.test.mjs
