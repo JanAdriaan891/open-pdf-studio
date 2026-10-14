@@ -28,7 +28,15 @@ const DEF = { naam: 'Mineraal', categorie: 'plafond', layout: 'raster', celXMm: 
 const EXT_ID = 'ext:test.synthetisch#mineraal';
 
 const tellers = () => globalThis.__stubCalls || {};
-const rust = () => new Promise((r) => setTimeout(r, 30));
+// Opslaan en hertekenen lopen via een dynamische import (door de laadhaken).
+// Naast andere testbestanden duurt dat soms langer dan één timer van 30 ms;
+// wacht daarom een paar rondes, elk na dezelfde imports.
+const rust = async () => {
+  for (let i = 0; i < 3; i++) {
+    await Promise.all([import('../../core/preferences.js'), import('../../annotations/rendering.js')]);
+    await new Promise((r) => setTimeout(r, 30));
+  }
+};
 const kloon = (x) => JSON.parse(JSON.stringify(x));
 
 let documenten;
