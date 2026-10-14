@@ -281,6 +281,8 @@
     "addChildBookmark": "Subbladwijzer toevoegen",
     "editBookmark": "Bladwijzer bewerken",
     "deleteBookmark": "Bladwijzer verwijderen",
+    "findBookmark": "Zoeken...",
+    "findBookmarkTip": "Typ om naar een bladwijzer te springen. Enter opent hem, nog eens Enter gaat naar de volgende treffer.",
     "addAttachment": "Bijlage toevoegen",
     "openAttachment": "Bijlage openen",
     "saveAttachment": "Bijlage opslaan",
@@ -328,7 +330,8 @@
     "exportSelectedComments": "Geselecteerde opmerkingen exporteren naar gegevensbestand...",
     "measurements": "Metingen",
     "schedules": "Staten",
-    "addPage": "Pagina toevoegen"
+    "addPage": "Pagina toevoegen",
+    "pageLabels": "Paginalabels (naambouwer)"
   },
   "scaleBar": {
     "title": "Schaalbalk",
@@ -677,5 +680,9 @@
     "refused": "Niet mogelijk: {{reason}}",
     "reasonTooNarrow": "een veld wordt te smal",
     "reasonFrame": "het kader kan niet verschuiven of verdwijnen"
+  },
+  "scopedPanel": {
+    "stale": "Dit object is elders gewijzigd. Het formulier toont de huidige waarden; uw wijzigingen zijn niet toegepast.",
+    "failed": "De wijzigingen konden niet worden toegepast: {{error}}"
   }
 }

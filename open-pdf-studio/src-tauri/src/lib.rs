@@ -13,6 +13,7 @@ pub mod extensie_installatie;
 pub mod linux_runtime;
 pub mod logboek;
 pub mod mcp_app_bridge;
+pub mod mcp_extensie_tools;
 pub mod mcp_koppeling;
 pub mod mcp_server;
 pub mod mcp_tool_meta;
@@ -38,6 +39,8 @@ pub mod print_windows;
 pub mod render_to_png;
 pub mod window_mgmt;
 pub mod startup_diagnostics;
+// Vensteropname voor app_screenshot_view (#583); buiten Windows een nette fout.
+pub mod webview_opname;
 pub mod worker_pool;
 
 pub struct StartupOpts {
@@ -2576,6 +2579,7 @@ pub fn run(opts: StartupOpts) {
         .manage(cad_import::CadImportState::default())
         .manage(pool.clone())
         .manage(mcp_app_bridge::McpAppBridge::new())
+        .manage(mcp_extensie_tools::ExtensieTools::default())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
@@ -2897,6 +2901,8 @@ pub fn run(opts: StartupOpts) {
             allow_fs_scope,
             mcp_app_bridge::app_response,
             mcp_app_bridge::mcp_bridge_ready,
+            mcp_extensie_tools::mcp_set_extension_tools,
+            webview_opname::capture_webview_png,
             mcp_koppeling::mcp_instellen,
             mcp_koppeling::mcp_status,
             accounts::accounts_sign_in,

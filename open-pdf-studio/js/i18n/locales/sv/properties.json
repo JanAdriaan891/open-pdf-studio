@@ -302,6 +302,8 @@
     "addChildBookmark": "Lägg till underbokmärke",
     "editBookmark": "Redigera bokmärke",
     "deleteBookmark": "Radera bokmärke",
+    "findBookmark": "Sök...",
+    "findBookmarkTip": "Skriv för att hoppa till ett bokmärke. Enter öppnar det, Enter igen går till nästa träff.",
     "addAttachment": "Lägg till bilaga",
     "openAttachment": "Öppna bilaga",
     "saveAttachment": "Spara bilaga",
@@ -348,7 +350,8 @@
     "exportComments": "Exportera kommentarer till datafil...",
     "exportSelectedComments": "Exportera valda kommentarer till datafil...",
     "schedules": "Förteckningar",
-    "addPage": "Lägg till sida"
+    "addPage": "Lägg till sida",
+    "pageLabels": "Sidetiketter (namnbyggare)"
   },
   "scaleBar": {
     "title": "Skalstock",
@@ -677,5 +680,9 @@
     "refused": "Inte möjligt: {{reason}}",
     "reasonTooNarrow": "ett fack skulle bli för smalt",
     "reasonFrame": "den yttre karmen kan inte flyttas eller tas bort"
+  },
+  "scopedPanel": {
+    "stale": "Det här objektet har ändrats någon annanstans. Formuläret visar de aktuella värdena; dina ändringar tillämpades inte.",
+    "failed": "Det gick inte att tillämpa ändringarna: {{error}}"
   }
 }

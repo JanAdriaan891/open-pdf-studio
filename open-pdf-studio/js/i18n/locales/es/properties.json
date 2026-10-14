@@ -302,6 +302,8 @@
     "addChildBookmark": "Agregar marcador secundario",
     "editBookmark": "Editar marcador",
     "deleteBookmark": "Eliminar marcador",
+    "findBookmark": "Buscar...",
+    "findBookmarkTip": "Escriba para saltar a un marcador. Intro lo abre; Intro de nuevo pasa a la siguiente coincidencia.",
     "addAttachment": "Agregar adjunto",
     "openAttachment": "Abrir adjunto",
     "saveAttachment": "Guardar adjunto",
@@ -348,7 +350,8 @@
     "exportComments": "Exportar comentarios a archivo de datos...",
     "exportSelectedComments": "Exportar comentarios seleccionados a archivo de datos...",
     "schedules": "Listados",
-    "addPage": "Añadir página"
+    "addPage": "Añadir página",
+    "pageLabels": "Etiquetas de página (generador de nombres)"
   },
   "scaleBar": {
     "title": "Barra de escala",
@@ -677,5 +680,9 @@
     "refused": "No es posible: {{reason}}",
     "reasonTooNarrow": "un paño quedaría demasiado estrecho",
     "reasonFrame": "el marco exterior no se puede mover ni eliminar"
+  },
+  "scopedPanel": {
+    "stale": "Este objeto se ha modificado en otro lugar. El formulario muestra los valores actuales; sus cambios no se han aplicado.",
+    "failed": "No se pudieron aplicar los cambios: {{error}}"
   }
 }

@@ -951,5 +951,19 @@
     "underlayLimited": "Ubora wa picha umepunguzwa hadi dpi {{dpi}}",
     "underlayNoMeasure": "Haitumiki kwa tabaka la chini; kipimo cha upimaji kinatoka kwenye ukurasa",
     "queued": "Michoro {{n}} zaidi kwenye foleni"
+  },
+  "pageLabels": {
+    "title": "Lebo za kurasa",
+    "intro": "Andika jina la ukurasa kwenye sehemu. \"{{select}}\" huchukua maandishi kutoka kwenye ukurasa: huingizwa kama {OCR1}, {OCR2}… na kusomwa kutoka mahali palepale kwenye kila ukurasa. Mfano: {OCR1} - {OCR2}",
+    "name": "Jina la ukurasa:",
+    "pickHint": "Buruta kisanduku kuzunguka maandishi ya kutumia, kwa mfano namba ya mchoro. Esc kughairi.",
+    "noText": "(hakuna maandishi yaliyopatikana)",
+    "example": "Mfano:",
+    "useOcr": "Tumia OCR pale kisanduku kisipokuwa na maandishi (karatasi zilizoskaniwa, polepole zaidi)",
+    "read": "Soma kurasa zote",
+    "reading": "Inasoma ukurasa {{done}} kati ya {{total}}...",
+    "colLabel": "Lebo ya ukurasa",
+    "ocrLegend": "Kurasa zilizowekwa alama ya OCR zilisomwa kwa utambuzi wa maandishi; zikague kabla ya kutekeleza.",
+    "reset": "Rejesha namba za kurasa"
   }
 }

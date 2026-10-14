@@ -302,6 +302,8 @@
     "addChildBookmark": "Tilføj underbogmærke",
     "editBookmark": "Rediger bogmærke",
     "deleteBookmark": "Slet bogmærke",
+    "findBookmark": "Søg...",
+    "findBookmarkTip": "Skriv for at springe til et bogmærke. Enter åbner det, Enter igen går til næste resultat.",
     "addAttachment": "Tilføj vedhæftning",
     "openAttachment": "Åbn vedhæftning",
     "saveAttachment": "Gem vedhæftning",
@@ -348,7 +350,8 @@
     "exportComments": "Eksportér kommentarer til datafil...",
     "exportSelectedComments": "Eksportér valgte kommentarer til datafil...",
     "schedules": "Lister",
-    "addPage": "Tilføj side"
+    "addPage": "Tilføj side",
+    "pageLabels": "Sideetiketter (navnegenerator)"
   },
   "scaleBar": {
     "title": "Skalabjælke",
@@ -677,5 +680,9 @@
     "refused": "Ikke muligt: {{reason}}",
     "reasonTooNarrow": "et felt ville blive for smalt",
     "reasonFrame": "den ydre ramme kan ikke flyttes eller fjernes"
+  },
+  "scopedPanel": {
+    "stale": "Dette objekt er blevet ændret et andet sted. Formularen viser de aktuelle værdier; dine ændringer blev ikke anvendt.",
+    "failed": "Ændringerne kunne ikke anvendes: {{error}}"
   }
 }

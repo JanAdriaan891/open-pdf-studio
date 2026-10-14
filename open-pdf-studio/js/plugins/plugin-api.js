@@ -7,7 +7,7 @@
 
 import { registerAnnotationType, unregisterAnnotationType } from './annotation-type-registry.js';
 import { registerToolPalette, unregisterToolPalette, getPalette } from './palette-registry.js';
-import { registerPropertyPanel as _registerPropertyPanel, unregisterPropertyPanel as _unregisterPropertyPanel } from './property-panel-registry.js';
+import { registerPropertyPanel as _registerPropertyPanel, unregisterPropertyPanel as _unregisterPropertyPanel, hasPropertyPanel } from './property-panel-registry.js';
 import {
   registerSelectionListener as _registerSelectionListener,
   unregisterSelectionListener as _unregisterSelectionListener,
@@ -18,7 +18,7 @@ import { state, getActiveDocument, getPageRotation, getAnnotationBounds } from '
 import { setTool } from '../tools/manager.js';
 import { createAnnotation } from '../annotations/factory.js';
 import { redrawAnnotations } from '../annotations/rendering.js';
-import { beginUndoTransaction, endUndoTransaction, recordAdd, recordModify, recordDelete } from '../core/undo-manager.js';
+import { beginUndoTransaction, endUndoTransaction, recordAdd, recordModify, recordDelete, documentRevisie } from '../core/undo-manager.js';
 import { applyAnnotationBatch } from './annotation-batch.js';
 import { getPageInfoForDocument, readPageContentForDocument, renderPageTileForDocument } from './page-access.js';
 import { extractPageGeometry } from '../tools/pdf-snap-extractor.js';
@@ -28,10 +28,22 @@ import * as systeemTypenRegistry from '../annotations/systeem-typen-registry.js'
 import { systeemInstanceGeometrie } from '../annotations/systeem-geometrie-app.js';
 import { openSysteemtypenEditor } from '../solid/stores/systeemtypenEditorStore.js';
 import { createSystemTypeApi } from './system-type-api.js';
-import { createRoot, createEffect } from 'solid-js';
+import { createRoot, createEffect, createSignal } from 'solid-js';
 import { createViewNavigation } from './view-navigation.js';
-import { maakBijdrageScope } from './extension-contributions.js';
+import { maakBijdrageScope, ExtensionContributionError } from './extension-contributions.js';
 import { lintRegister } from './ribbon-tab-registry.js';
+import { gestructureerdeOpdrachten } from './structured-commands.js';
+import { createSystemInstanceApi } from './system-instance-api.js';
+import { systeemInstanceHost } from './system-instance-app.js';
+import { instancePanelen } from './system-instance-panels.js';
+import { agentTaken } from './agent-tasks.js';
+
+// Een revisionContext.documentId van een extensieopdracht (#575) wijst naar een
+// open document; de revisie is die van de undo-geschiedenis.
+gestructureerdeOpdrachten.zetDocumentRevisie((id) => {
+  const doc = (state.documents || []).find(d => d && d.id === id);
+  return doc ? documentRevisie(doc) : null;
+});
 
 // Wat createViewNavigation van de app nodig heeft (#557). De modules voor
 // selecteren en in beeld brengen worden vooraf geladen (`prepare`), zodat de
@@ -106,6 +118,94 @@ function viewNavigationHost() {
   };
 }
 
+// ─── Agenttaken (#556) ───────────────────────────────────────────────────────
+// De host van agent-tasks.js: documentidentiteit, de pagina van een annotatie
+// en het toepassen van een batch. De regels zelf staan in agent-tasks.js.
+
+// Volgnummer per pdf.js-document. Een vervangen bron (pagina's ingevoegd of
+// verwijderd, zoeken en vervangen) krijgt een nieuw object en dus een nieuw
+// nummer; opslaan laat het object staan.
+const bronNummers = new WeakMap();
+let volgendBronNummer = 1;
+
+function bronVingerafdruk(doc) {
+  const pdf = doc.pdfDoc;
+  if (!pdf || typeof pdf !== 'object') return 'none';
+  if (!bronNummers.has(pdf)) bronNummers.set(pdf, volgendBronNummer++);
+  const vinger = Array.isArray(pdf.fingerprints) ? (pdf.fingerprints[0] || '') : '';
+  return `${vinger || 'pdf'}:${pdf.numPages || 0}:${bronNummers.get(pdf)}`;
+}
+
+// De bevestigde schaal van een pagina: die van het document plus de
+// gekalibreerde gebieden op de pagina (dezelfde bronnen als scaleChanged).
+function schaalVanPagina(doc, page) {
+  const s = doc.measureScale;
+  const vanDocument = s && Number.isFinite(s.pixelsPerUnit) && s.pixelsPerUnit > 0
+    ? { pixelsPerUnit: s.pixelsPerUnit, unit: s.unit ?? null, scaleRatio: s.scaleRatio ?? null } : null;
+  const regions = [];
+  for (const a of doc.annotations || []) {
+    if (a?.page !== page || !['scaleRegion', 'scaleBar', 'viewport'].includes(a.type)) continue;
+    regions.push({ annotationId: a.id, type: a.type, x: a.x ?? null, y: a.y ?? null, width: a.width ?? null,
+      height: a.height ?? null, scaleString: a.scaleString ?? null, pixelsPerUnit: a.pixelsPerUnit ?? null, unit: a.unit ?? null });
+  }
+  for (const vp of doc.pdfViewports?.[page] || []) {
+    regions.push({ annotationId: null, type: 'pdfViewport', x: vp.x, y: vp.y, width: vp.width, height: vp.height,
+      scaleString: vp.ratio ?? null, pixelsPerUnit: vp.pixelsPerUnit, unit: vp.unit ?? null });
+  }
+  return vanDocument || regions.length ? { document: vanDocument, regions } : null;
+}
+
+const zoekDocument = (documentId) => (state.documents || []).find(d => d && String(d.id) === String(documentId)) || null;
+
+function agentTaakHost() {
+  return {
+    identiteit(documentId, page) {
+      const doc = zoekDocument(documentId);
+      if (!doc) return { open: false };
+      const scale = schaalVanPagina(doc, page);
+      return {
+        open: true, actief: getActiveDocument() === doc, documentId: doc.id,
+        pageCount: doc.numPages || doc.pdfDoc?.numPages || 0,
+        sourceFingerprint: bronVingerafdruk(doc),
+        pageRotation: doc.pageRotations?.[page] || 0,
+        scale, scaleSignature: JSON.stringify(scale),
+      };
+    },
+    annotatiePagina(documentId, annotationId) {
+      return zoekDocument(documentId)?.annotations?.find(a => a.id === annotationId)?.page ?? null;
+    },
+    // Het register heeft het document net gecontroleerd; hier nog één keer
+    // of het ook het actieve is, want de batch werkt op het actieve document.
+    toepassen(documentId, operations) {
+      const doc = getActiveDocument();
+      if (!doc || String(doc.id) !== String(documentId)) throw new Error('The task document is not the active document');
+      return applyAnnotationBatch(doc, operations, {
+        createAnnotation, beginUndoTransaction, endUndoTransaction,
+        recordAdd, recordModify, recordDelete, redraw: redrawAnnotations,
+      });
+    },
+  };
+}
+
+// Eén controle voor alle extensies: bij elke wissel van tabblad, bron, pagina
+// of schaal worden openstaande taken die niet meer kloppen geannuleerd. Een
+// nieuwe of afgeronde taak laat het effect opnieuw lopen (tik), zodat het
+// ook de documenten van nieuwe taken volgt.
+let agentTakenGekoppeld = false;
+function koppelAgentTaken() {
+  if (agentTakenGekoppeld) return;
+  agentTakenGekoppeld = true;
+  agentTaken.zetHost(agentTaakHost());
+  createRoot(() => {
+    const [tik, zetTik] = createSignal(0);
+    agentTaken.abonneer(() => zetTik(n => n + 1));
+    createEffect(() => {
+      tik();
+      agentTaken.controleer();
+    });
+  });
+}
+
 export function createPluginApi(pluginId) {
   // System types (#567): registry, native tool, native editor and the
   // geometry of system instances as the host. See docs/plugin-systeemtypen.md
@@ -116,8 +216,14 @@ export function createPluginApi(pluginId) {
     setTool,
     openEditor: openSysteemtypenEditor,
   });
+  // Systeem-instances (#574): snapshots, koppelingen en wijzigingen met een
+  // revisiecontrole; zie docs/plugin-systeemtypen.md §16.
+  const systemInstances = createSystemInstanceApi(pluginId, systeemInstanceHost());
   // Bijdragescope (#550/#551): lint-tabbladen en opdrachten, opgeruimd in _cleanup.
   const scope = maakBijdrageScope(pluginId);
+  // Agenttaken (#556) van dit API-exemplaar: een oude API ruimt na herladen
+  // alleen haar eigen taken op.
+  const agentEigenaar = agentTaken.maakEigenaar(pluginId);
   const registeredTypes = [];
   const registeredPalettes = [];
   const registeredPanels = [];
@@ -178,6 +284,10 @@ export function createPluginApi(pluginId) {
       systemTypes: true,
       viewNavigation: true,
       ribbonTabs: true,
+      structuredCommands: true,
+      systemInstanceLinks: true,
+      scopedPropertyPanels: true,
+      agentTasks: true,
     },
 
     // --- Annotation type registration ---
@@ -215,8 +325,15 @@ export function createPluginApi(pluginId) {
     // --- Property panel registration (custom edit-form for plugin annotations) ---
     registerPropertyPanel(typeName, renderFn) {
       scope.eisActief('propertyPanel', typeName);
+      // Geen stille vervanging (#574): het paneel van een andere extensie voor
+      // hetzelfde type blijft staan. Voor native systeem-instances is er
+      // registerSystemInstancePanel.
+      if (hasPropertyPanel(typeName) && !registeredPanels.includes(typeName)) {
+        throw new ExtensionContributionError('CONTRIBUTION_CONFLICT',
+          `a property panel for "${typeName}" is already registered by another extension`);
+      }
       _registerPropertyPanel(typeName, renderFn);
-      registeredPanels.push(typeName);
+      if (!registeredPanels.includes(typeName)) registeredPanels.push(typeName);
     },
 
     unregisterPropertyPanel(typeName) {
@@ -317,8 +434,10 @@ export function createPluginApi(pluginId) {
 
     getDocumentInfo() {
       const doc = getActiveDocument();
+      // revision: verandert bij elke stap in de undo-geschiedenis; geef hem als
+      // revisionContext.documentRevision mee aan een wijzigende opdracht (#575).
       return doc ? { id: doc.id, pageCount: doc.numPages || doc.pdfDoc?.numPages || 0, currentPage: doc.currentPage,
-        name: doc.fileName || null } : null;
+        name: doc.fileName || null, revision: documentRevisie(doc) } : null;
     },
 
     getPageInfo(pageNum, options = {}) {
@@ -414,6 +533,37 @@ export function createPluginApi(pluginId) {
     onSystemTypesChanged: systemTypes.onSystemTypesChanged,
     getSystemInstanceGeometry: systemTypes.getSystemInstanceGeometry,
 
+    // --- Systeem-instances (#574) ---
+    // Losgekoppelde snapshots van native systemen in het actieve document,
+    // koppelen aan deze extensie met eigen gegevens, en wijzigen (eigen
+    // gegevens, systeemtype, tag) met revisiecontrole en één undo-stap.
+    // Hoeveelheden komen uit de geometriesnapshot.
+    getSystemInstance: systemInstances.getSystemInstance,
+    listSystemInstances: systemInstances.listSystemInstances,
+    linkSystemInstance: systemInstances.linkSystemInstance,
+    updateSystemInstance: systemInstances.updateSystemInstance,
+    unlinkSystemInstance: systemInstances.unlinkSystemInstance,
+    getSystemInstanceQuantities: systemInstances.getSystemInstanceQuantities,
+
+    /** Een eigen formulier in het eigenschappenpaneel, alleen voor passende
+     *  systeem-instances; zie system-instance-panels.js. */
+    registerSystemInstancePanel(descriptor) {
+      scope.eisActief('systemInstancePanel', String(descriptor?.id));
+      const entry = instancePanelen.controleer(pluginId, descriptor);
+      scope.voegToe('systemInstancePanel', entry.id, () => instancePanelen.verwijder(pluginId, entry.id));
+      try {
+        instancePanelen.voegToe(entry);
+      } catch (e) {
+        scope.verwijder('systemInstancePanel', entry.id);
+        throw e;
+      }
+      return { id: entry.id };
+    },
+
+    unregisterSystemInstancePanel(id) {
+      return typeof id === 'string' ? scope.verwijder('systemInstancePanel', id) : false;
+    },
+
     // --- View navigation and selection (#557) ---
     // Document-scoped: pass the id from getDocumentInfo(). Each call resolves
     // to { ok: true, ... } or { ok: false, code, message }; the identity of
@@ -441,6 +591,59 @@ export function createPluginApi(pluginId) {
       return lintRegister.afmelden(scope, id);
     },
 
+    // --- Gestructureerde opdrachten (#575): MCP-tool ext_<id>__<name> ---
+    // Invoer- en uitvoerschema, asynchrone handler(args, ctx). De host
+    // controleert de argumenten vóór de handler; zie structured-commands.js.
+    registerCommand(descriptor) {
+      scope.eisActief('structuredCommand', String(descriptor?.name));
+      const opdracht = gestructureerdeOpdrachten.controleer(pluginId, descriptor);
+      scope.voegToe('structuredCommand', opdracht.tool,
+        () => gestructureerdeOpdrachten.verwijder(opdracht.tool, 'EXTENSION_UNLOADED'));
+      try {
+        gestructureerdeOpdrachten.voegToe(opdracht);
+      } catch (e) {
+        scope.verwijder('structuredCommand', opdracht.tool);
+        throw e;
+      }
+      return { tool: opdracht.tool, name: opdracht.name };
+    },
+
+    unregisterCommand(name) {
+      if (typeof name !== 'string') return false;
+      const tool = gestructureerdeOpdrachten.lijst(pluginId).find(c => c.name === name)?.tool;
+      // Alleen wat deze API registreerde (de scope): een oude API haalt na
+      // herladen de opdracht van de nieuwe versie niet weg.
+      if (!tool || !scope.lijst().some(b => b.soort === 'structuredCommand' && b.sleutel === tool)) return false;
+      gestructureerdeOpdrachten.verwijder(tool, 'COMMAND_UNREGISTERED');
+      return scope.verwijder('structuredCommand', tool);
+    },
+
+    /** Roep een eigen opdracht aan langs hetzelfde pad als MCP (bijvoorbeeld
+     *  vanuit de eigen bediening). Geeft altijd { ok, requestId, … }. */
+    runCommand(name, args) {
+      const tool = gestructureerdeOpdrachten.lijst(pluginId).find(c => c.name === name)?.tool;
+      if (!tool) return Promise.resolve({ ok: false, code: 'UNKNOWN_COMMAND', error: `unknown command: ${name}` });
+      return gestructureerdeOpdrachten.roepAan(tool, args, { source: 'api' });
+    },
+
+    // --- Agent tasks (#556) ---
+    // Submit a structured task for an MCP agent without opening the assistant
+    // window. Returns a handle with taskId, result (a promise), status,
+    // onStatus, cancel and applyAnnotationBatch. The task is tied to the
+    // document, page, source, rotation and scale at submission; a change
+    // cancels it and a late result is refused. See
+    // docs/plugin-page-analysis-api.md.
+    submitAgentTask(request) {
+      scope.eisActief('agentTask', String(request?.kind));
+      koppelAgentTaken();
+      return agentTaken.dienIn(agentEigenaar, request);
+    },
+
+    /** Is an MCP agent taking tasks? Tasks are never routed to another provider. */
+    getAgentTaskAvailability() {
+      return agentTaken.beschikbaarheid();
+    },
+
     /** Overzicht van wat deze extensie heeft geregistreerd (app_list_extensions). */
     _bijdragenOverzicht() {
       return {
@@ -449,12 +652,17 @@ export function createPluginApi(pluginId) {
         annotationTypes: [...registeredTypes],
         palettes: [...registeredPalettes],
         propertyPanels: [...registeredPanels],
+        systemInstancePanels: instancePanelen.vanExtensie(pluginId),
+        structuredCommands: gestructureerdeOpdrachten.lijst(pluginId),
       };
     },
 
     // --- Cleanup (called by plugin-manager on deactivate) ---
     _cleanup() {
       const waarschuwingen = scope.ruimOp();
+      // Eerst de statusluisteraars weg, dan alle openstaande taken annuleren
+      // en voltooide, nog niet toegepaste resultaten intrekken (#556).
+      agentTaken.ruimOp(agentEigenaar);
       // De gereedschapsgroepen van de eigen paletten, vóór die verdwijnen.
       const eigenGroepen = toolGroupIdsOf(registeredPalettes.map(id => getPalette(id)));
       registeredTypes.forEach(t => unregisterAnnotationType(t));
@@ -476,6 +684,7 @@ export function createPluginApi(pluginId) {
       // Only runtime state: stored system types are never removed here, so a
       // document that references them keeps working.
       systemTypes.dispose();
+      systemInstances.dispose();
       return waarschuwingen;
     }
   };

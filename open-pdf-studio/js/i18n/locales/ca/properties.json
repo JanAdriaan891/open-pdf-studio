@@ -302,6 +302,8 @@
     "addChildBookmark": "Afegeix un marcador fill",
     "editBookmark": "Edita el marcador",
     "deleteBookmark": "Suprimeix el marcador",
+    "findBookmark": "Cerca...",
+    "findBookmarkTip": "Escriviu per anar a un marcador. Retorn l'obre; Retorn de nou va a la coincidència següent.",
     "addAttachment": "Afegeix un adjunt",
     "openAttachment": "Obre l'adjunt",
     "saveAttachment": "Desa l'adjunt",
@@ -354,7 +356,8 @@
     "collapseAll": "Reduir-ho tot",
     "annotationsMenu": "Menú",
     "schedules": "Llistats",
-    "addPage": "Afegeix una pàgina"
+    "addPage": "Afegeix una pàgina",
+    "pageLabels": "Etiquetes de pàgina (generador de noms)"
   },
   "scaleBar": {
     "title": "Barra d'escala",
@@ -683,5 +686,9 @@
     "refused": "No és possible: {{reason}}",
     "reasonTooNarrow": "un mòdul quedaria massa estret",
     "reasonFrame": "el marc exterior no es pot moure ni eliminar"
+  },
+  "scopedPanel": {
+    "stale": "Aquest objecte s'ha modificat en un altre lloc. El formulari mostra els valors actuals; els vostres canvis no s'han aplicat.",
+    "failed": "No s'han pogut aplicar els canvis: {{error}}"
   }
 }

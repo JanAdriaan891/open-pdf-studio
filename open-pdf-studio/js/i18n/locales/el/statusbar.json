@@ -28,7 +28,8 @@
     "formTextField": "Πεδίο κειμένου φόρμας",
     "formCheckbox": "Πλαίσιο ελέγχου φόρμας",
     "formRadio": "Κουμπί επιλογής φόρμας",
-    "screenshot": "Στιγμιότυπο οθόνης"
+    "screenshot": "Στιγμιότυπο οθόνης",
+    "pageLabelPick": "Επιλογή κειμένου για ετικέτα σελίδας"
   },
   "toolLabel": "Εργαλείο:",
   "annotationsLabel": "Σχολιασμοί:",

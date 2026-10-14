@@ -951,5 +951,19 @@
     "underlayLimited": "Rozlíšenie znížené na {{dpi}} dpi",
     "underlayNoMeasure": "Neplatí pre podklad; mierka pochádza zo strany",
     "queued": "V rade čaká ešte {{n}} výkres(ov)"
+  },
+  "pageLabels": {
+    "title": "Menovky strán",
+    "intro": "Do poľa napíšte názov strany. „{{select}}“ prevezme text zo strany: vloží sa ako {OCR1}, {OCR2}… a číta sa z rovnakého miesta na každej strane. Príklad: {OCR1} - {OCR2}",
+    "name": "Názov strany:",
+    "pickHint": "Potiahnutím ohraničte text, ktorý chcete použiť, napríklad číslo výkresu. Esc zruší.",
+    "noText": "(nenašiel sa žiadny text)",
+    "example": "Príklad:",
+    "useOcr": "Použiť OCR tam, kde v rámčeku nie je text (naskenované listy, pomalšie)",
+    "read": "Načítať všetky strany",
+    "reading": "Načítava sa strana {{done}} z {{total}}...",
+    "colLabel": "Menovka strany",
+    "ocrLegend": "Strany označené OCR boli načítané rozpoznávaním textu; pred použitím ich skontrolujte.",
+    "reset": "Obnoviť čísla strán"
   }
 }

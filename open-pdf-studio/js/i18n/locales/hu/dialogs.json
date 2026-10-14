@@ -951,5 +951,19 @@
     "underlayLimited": "A felbontás {{dpi}} dpi-re csökkentve",
     "underlayNoMeasure": "Alátétre nem vonatkozik; a méretarány az oldalról jön",
     "queued": "Még {{n}} rajz a várólistán"
+  },
+  "pageLabels": {
+    "title": "Oldalcímkék",
+    "intro": "Írja be az oldal nevét a mezőbe. A „{{select}}” szöveget vesz át az oldalról: {OCR1}, {OCR2}… formában kerül be, és minden oldalon ugyanarról a helyről olvassa be. Példa: {OCR1} - {OCR2}",
+    "name": "Oldal neve:",
+    "pickHint": "Húzzon keretet a használni kívánt szöveg köré, például a rajzszám köré. Az Esc megszakítja.",
+    "noText": "(nem található szöveg)",
+    "example": "Példa:",
+    "useOcr": "OCR használata, ahol a keretben nincs szöveg (szkennelt lapok, lassabb)",
+    "read": "Összes oldal beolvasása",
+    "reading": "Oldal beolvasása: {{done}} / {{total}}...",
+    "colLabel": "Oldalcímke",
+    "ocrLegend": "Az OCR jelölésű oldalakat szövegfelismeréssel olvasta be; alkalmazás előtt ellenőrizze őket.",
+    "reset": "Visszaállítás oldalszámokra"
   }
 }

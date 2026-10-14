@@ -116,7 +116,8 @@
     "deselectAll": "Kijelölés megszüntetése",
     "insertFromFile": "Beszúrás fájlból...",
     "insertFromFileBefore": "Ezen oldal elé...",
-    "insertFromFileAfter": "Ezen oldal után..."
+    "insertFromFileAfter": "Ezen oldal után...",
+    "pageLabels": "Oldalcímkék (névkészítő)..."
   },
   "textSelection": {
     "highlightSelection": "Kijelölés kiemelése",

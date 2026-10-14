@@ -302,6 +302,8 @@
     "addChildBookmark": "Alt yer imi ekle",
     "editBookmark": "Yer imini düzenle",
     "deleteBookmark": "Yer imini sil",
+    "findBookmark": "Bul...",
+    "findBookmarkTip": "Bir yer imine atlamak için yazın. Enter onu açar, tekrar Enter sonraki eşleşmeye gider.",
     "addAttachment": "Ek ekle",
     "openAttachment": "Eki aç",
     "saveAttachment": "Eki kaydet",
@@ -348,7 +350,8 @@
     "exportComments": "Yorumları veri dosyasına aktar...",
     "exportSelectedComments": "Seçili yorumları veri dosyasına aktar...",
     "schedules": "Çizelgeler",
-    "addPage": "Sayfa ekle"
+    "addPage": "Sayfa ekle",
+    "pageLabels": "Sayfa etiketleri (ad oluşturucu)"
   },
   "scaleBar": {
     "title": "Ölçek Çubuğu",
@@ -677,5 +680,9 @@
     "refused": "Mümkün değil: {{reason}}",
     "reasonTooNarrow": "bir bölme çok dar olur",
     "reasonFrame": "dış kasa taşınamaz veya kaldırılamaz"
+  },
+  "scopedPanel": {
+    "stale": "Bu nesne başka bir yerde değiştirildi. Form geçerli değerleri gösteriyor; değişiklikleriniz uygulanmadı.",
+    "failed": "Değişiklikler uygulanamadı: {{error}}"
   }
 }

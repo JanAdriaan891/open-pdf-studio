@@ -951,5 +951,19 @@
     "underlayLimited": "Upplösning sänkt till {{dpi}} dpi",
     "underlayNoMeasure": "Gäller inte för ett underlag; mätskalan kommer från sidan",
     "queued": "{{n}} ritning(ar) till i kön"
+  },
+  "pageLabels": {
+    "title": "Sidetiketter",
+    "intro": "Skriv sidans namn i fältet. ”{{select}}” hämtar text från sidan: den infogas som {OCR1}, {OCR2}… och läses från samma ställe på varje sida. Exempel: {OCR1} - {OCR2}",
+    "name": "Sidnamn:",
+    "pickHint": "Dra en ram runt texten som ska användas, till exempel ritningsnumret. Esc avbryter.",
+    "noText": "(ingen text hittades)",
+    "example": "Exempel:",
+    "useOcr": "Använd OCR där en ram saknar text (skannade blad, långsammare)",
+    "read": "Läs alla sidor",
+    "reading": "Läser sida {{done}} av {{total}}...",
+    "colLabel": "Sidetikett",
+    "ocrLegend": "Sidor märkta OCR lästes med textigenkänning; kontrollera dem innan du tillämpar.",
+    "reset": "Återställ till sidnummer"
   }
 }

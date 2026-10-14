@@ -520,6 +520,11 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
       if (isClosed()) return;
       doc.bookmarks = await loadBookmarksFromPdf(doc.pdfDoc);
       if (isClosed()) return;
+      // Paginalabels (bladnamen, #580) uit /PageLabels.
+      const { laadPaginaLabels } = await import('./pagina-labels-app.js');
+      if (isClosed()) return;
+      await laadPaginaLabels(doc);
+      if (isClosed()) return;
     }
     console.log(`[PERF] bookmarks DONE: ${(performance.now() - _t0).toFixed(0)}ms`);
 

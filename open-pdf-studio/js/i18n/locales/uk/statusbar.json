@@ -28,7 +28,8 @@
     "formTextField": "Текстове поле форми",
     "formCheckbox": "Прапорець форми",
     "formRadio": "Перемикач форми",
-    "screenshot": "Знімок екрана"
+    "screenshot": "Знімок екрана",
+    "pageLabelPick": "Вибір тексту для мітки сторінки"
   },
   "toolLabel": "Інструмент:",
   "annotationsLabel": "Анотації:",

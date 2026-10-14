@@ -4905,3 +4905,144 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
   border: 1px solid var(--theme-border, #d4d4d4);
   background: var(--theme-bg, #f5f5f5);
 }
+
+/* ===== Paginalabels: naambouwer (#580) ===== */
+.page-labels-dialog { width: 560px; max-width: 94vw; }
+.page-labels-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--theme-text, #333);
+}
+.page-labels-intro {
+  color: var(--theme-text-secondary, #666);
+  line-height: 1.5;
+}
+.page-labels-row { display: flex; align-items: center; gap: 6px; }
+.page-labels-label { flex-shrink: 0; }
+.page-labels-field {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  border: 1px solid var(--theme-border, #acacac);
+  border-radius: 0;
+  font-size: 12px;
+  font-family: Consolas, 'Courier New', monospace;
+  background: var(--theme-surface, #fff);
+  color: var(--theme-text, inherit);
+  user-select: text;
+}
+.page-labels-field:focus { outline: none; border-color: var(--theme-accent, #0078d7); }
+.page-labels-regions {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--theme-border, #d4d4d4);
+  background: var(--theme-surface, #fff);
+}
+.page-labels-region {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 4px 2px 6px;
+  min-width: 0;
+}
+.page-labels-region + .page-labels-region { border-top: 1px solid var(--theme-border, #e5e5e5); }
+.page-labels-token {
+  width: 56px;
+  flex-shrink: 0;
+  font-family: Consolas, 'Courier New', monospace;
+  color: var(--theme-accent, #0078d7);
+}
+.page-labels-sample {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.page-labels-sample.empty { font-weight: 400; color: var(--theme-text-secondary, #888); }
+.page-labels-region-page { flex-shrink: 0; color: var(--theme-text-secondary, #888); }
+.page-labels-remove {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: var(--theme-text-secondary, #666);
+}
+.page-labels-remove:hover { background: #e81123; color: #fff; }
+.page-labels-example {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-labels-check { display: flex; align-items: center; gap: 6px; }
+.page-labels-check input { margin: 0; }
+.page-labels-actions { display: flex; align-items: center; gap: 8px; min-height: 24px; }
+.page-labels-progress { color: var(--theme-text-secondary, #666); }
+.page-labels-table-wrap {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--theme-border, #d4d4d4);
+  background: var(--theme-surface, #fff);
+}
+.page-labels-table { width: 100%; border-collapse: collapse; }
+.page-labels-table th {
+  position: sticky;
+  top: 0;
+  padding: 3px 6px;
+  text-align: start;
+  font-weight: 600;
+  background: var(--theme-bg, #f5f5f5);
+  border-bottom: 1px solid var(--theme-border, #d4d4d4);
+}
+.page-labels-table td { padding: 1px 6px; border-bottom: 1px solid var(--theme-border, #eeeeee); }
+.page-labels-col-page { width: 70px; white-space: nowrap; color: var(--theme-text-secondary, #666); }
+.page-labels-ocr {
+  margin-inline-start: 6px;
+  padding: 0 3px;
+  font-size: 9px;
+  border: 1px solid #c27c0e;
+  color: #c27c0e;
+}
+.page-labels-table td input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-size: 11px;
+  font-family: inherit;
+  background: transparent;
+  color: var(--theme-text, inherit);
+  user-select: text;
+}
+.page-labels-table td input:focus { outline: none; border-color: var(--theme-accent, #0078d7); background: var(--theme-surface, #fff); }
+.page-labels-legend { color: var(--theme-text-secondary, #888); }
+.page-labels-footer-right { display: flex; gap: 6px; }
+.page-labels-body .pref-btn:disabled,
+.page-labels-footer-right .pref-btn:disabled { opacity: 0.5; }
+
+/* Aanwijzing boven de pagina terwijl de gebruiker een vak sleept. */
+.page-label-pick-bar {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1500;
+  padding: 5px 12px;
+  font-size: 12px;
+  background: var(--theme-notifbar-bg, #fff4ce);
+  border: 1px solid var(--theme-notifbar-border, #e1c16e);
+  color: var(--theme-notifbar-text, #333);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  white-space: nowrap;
+}

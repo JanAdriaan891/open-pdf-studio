@@ -116,7 +116,8 @@
     "deselectAll": "Fravælg alle",
     "insertFromFile": "Indsæt fra fil...",
     "insertFromFileBefore": "Før denne side...",
-    "insertFromFileAfter": "Efter denne side..."
+    "insertFromFileAfter": "Efter denne side...",
+    "pageLabels": "Sideetiketter (navnegenerator)..."
   },
   "textSelection": {
     "highlightSelection": "Fremhæv markering",

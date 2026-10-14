@@ -47,7 +47,8 @@ const r3 = (v) => {
 };
 
 // JSON met gesorteerde sleutels: volgorde-onafhankelijke vingerafdruk.
-function canoniek(v) {
+// Ook gebruikt voor de instancerevisie (systeem-instance-links.js, #574).
+export function canoniek(v) {
   if (Array.isArray(v)) return `[${v.map(canoniek).join(',')}]`;
   if (v && typeof v === 'object') {
     return `{${Object.keys(v).filter(k => v[k] !== undefined).sort()
@@ -57,7 +58,7 @@ function canoniek(v) {
 }
 
 // 53-bits hash (cyrb53): genoeg om wijzigingen te herkennen; geen beveiliging.
-function hash53(tekst) {
+export function hash53(tekst) {
   let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
   for (let i = 0; i < tekst.length; i++) {
     const c = tekst.charCodeAt(i);

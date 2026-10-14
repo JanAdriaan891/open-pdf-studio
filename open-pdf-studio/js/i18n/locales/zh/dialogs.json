@@ -951,5 +951,19 @@
     "underlayLimited": "分辨率已降至 {{dpi}} dpi",
     "underlayNoMeasure": "不适用于底图；测量比例来自页面",
     "queued": "队列中还有 {{n}} 张图纸"
+  },
+  "pageLabels": {
+    "title": "页面标签",
+    "intro": "在字段中输入页面名称。“{{select}}”从页面上提取文字：以 {OCR1}、{OCR2}… 的形式插入，并在每一页的相同位置读取。示例：{OCR1} - {OCR2}",
+    "name": "页面名称：",
+    "pickHint": "在要使用的文字（例如图号）周围拖出一个框。按 Esc 取消。",
+    "noText": "（未找到文字）",
+    "example": "示例：",
+    "useOcr": "框内没有文字时使用 OCR（扫描图纸，较慢）",
+    "read": "读取所有页面",
+    "reading": "正在读取第 {{done}} 页，共 {{total}} 页...",
+    "colLabel": "页面的标签",
+    "ocrLegend": "标有 OCR 的页面是通过文字识别读取的；应用前请检查。",
+    "reset": "恢复为页码"
   }
 }

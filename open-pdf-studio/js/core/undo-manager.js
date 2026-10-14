@@ -18,9 +18,23 @@ function clonePlainValue(value) {
 function syncModifiedState() {
   const doc = getActiveDocument();
   if (!doc) return;
+  // Elke stap in de undo-geschiedenis (ook ongedaan maken en opnieuw) geeft
+  // het document een nieuwe inhoudsrevisie (#575, documentRevisie).
+  doc.inhoudRevisie = (Number.isInteger(doc.inhoudRevisie) ? doc.inhoudRevisie : 0) + 1;
   const isClean = doc.savedUndoStackLength >= 0 &&
                   (doc.undoStack || []).length === doc.savedUndoStackLength;
   doc.modified = !isClean;
+}
+
+/**
+ * De inhoudsrevisie van een document ('d<n>'): verandert bij elke wijziging
+ * die in de undo-geschiedenis komt, en bij ongedaan maken en opnieuw. Een
+ * vergelijking met een eerder gelezen revisie zegt dus of het document sinds
+ * dat moment is gewijzigd (#575: revisionContext van extensieopdrachten).
+ */
+export function documentRevisie(doc) {
+  if (!doc) return null;
+  return `d${Number.isInteger(doc.inhoudRevisie) ? doc.inhoudRevisie : 0}`;
 }
 
 // Per-document undo stack stored on the document object
@@ -959,6 +973,9 @@ export function flushPropertyChange() {
     const isClean = targetDoc.savedUndoStackLength >= 0 &&
                     targetDoc.undoStack.length === targetDoc.savedUndoStackLength;
     targetDoc.modified = !isClean;
+    // Kleur, lijndikte enz. uit het eigenschappenpaneel komen hier binnen,
+    // niet via execute(): ook dan de miniatuur van die pagina verversen (#579).
+    if (targetDoc.id === getActiveDocument()?.id) scheduleThumbnailRefresh(cmd);
   }
 
   pendingPropertyChange = null;

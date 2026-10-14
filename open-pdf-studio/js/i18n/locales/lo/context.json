@@ -122,7 +122,8 @@
     "deselectAll": "ຍົກເລີກການເລືອກທັງໝົດ",
     "insertFromFile": "ແຊກຈາກໄຟລ໌...",
     "insertFromFileBefore": "ກ່ອນໜ້ານີ້...",
-    "insertFromFileAfter": "ຫຼັງໜ້ານີ້..."
+    "insertFromFileAfter": "ຫຼັງໜ້ານີ້...",
+    "pageLabels": "ປ້າຍຊື່ໜ້າ (ຕົວສ້າງຊື່)..."
   },
   "textSelection": {
     "highlightSelection": "ເນັ້ນສີຂໍ້ຄວາມທີ່ເລືອກ",

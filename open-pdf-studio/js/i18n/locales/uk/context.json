@@ -116,7 +116,8 @@
     "deselectAll": "Зняти весь вибір",
     "insertFromFile": "Вставити з файлу...",
     "insertFromFileBefore": "Перед цією сторінкою...",
-    "insertFromFileAfter": "Після цієї сторінки..."
+    "insertFromFileAfter": "Після цієї сторінки...",
+    "pageLabels": "Мітки сторінок (конструктор назв)..."
   },
   "textSelection": {
     "highlightSelection": "Виділити виділене",

@@ -302,6 +302,8 @@
     "addChildBookmark": "Gyermek könyvjelző hozzáadása",
     "editBookmark": "Könyvjelző szerkesztése",
     "deleteBookmark": "Könyvjelző törlése",
+    "findBookmark": "Keresés...",
+    "findBookmarkTip": "Gépeljen egy könyvjelzőre ugráshoz. Az Enter megnyitja, újabb Enter a következő találatra lép.",
     "addAttachment": "Melléklet hozzáadása",
     "openAttachment": "Melléklet megnyitása",
     "saveAttachment": "Melléklet mentése",
@@ -348,7 +350,8 @@
     "exportComments": "Megjegyzések exportálása adatfájlba...",
     "exportSelectedComments": "Kijelölt megjegyzések exportálása adatfájlba...",
     "schedules": "Kimutatások",
-    "addPage": "Oldal hozzáadása"
+    "addPage": "Oldal hozzáadása",
+    "pageLabels": "Oldalcímkék (névkészítő)"
   },
   "scaleBar": {
     "title": "Aránymérték",
@@ -677,5 +680,9 @@
     "refused": "Nem lehetséges: {{reason}}",
     "reasonTooNarrow": "egy mező túl keskeny lenne",
     "reasonFrame": "a külső tok nem mozgatható és nem távolítható el"
+  },
+  "scopedPanel": {
+    "stale": "Ezt az objektumot máshol módosították. Az űrlap az aktuális értékeket mutatja; a módosításai nem lettek alkalmazva.",
+    "failed": "A módosítások nem alkalmazhatók: {{error}}"
   }
 }

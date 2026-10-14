@@ -302,6 +302,8 @@
     "addChildBookmark": "하위 책갈피 추가",
     "editBookmark": "책갈피 편집",
     "deleteBookmark": "책갈피 삭제",
+    "findBookmark": "찾기...",
+    "findBookmarkTip": "입력하면 책갈피로 이동합니다. Enter로 열고, 다시 Enter를 누르면 다음 항목으로 이동합니다.",
     "addAttachment": "첨부 파일 추가",
     "openAttachment": "첨부 파일 열기",
     "saveAttachment": "첨부 파일 저장",
@@ -348,7 +350,8 @@
     "exportComments": "주석을 데이터 파일로 내보내기...",
     "exportSelectedComments": "선택한 주석을 데이터 파일로 내보내기...",
     "schedules": "일람표",
-    "addPage": "페이지 추가"
+    "addPage": "페이지 추가",
+    "pageLabels": "페이지 레이블(이름 작성기)"
   },
   "scaleBar": {
     "title": "축척 막대",
@@ -677,5 +680,9 @@
     "refused": "불가능: {{reason}}",
     "reasonTooNarrow": "구획이 너무 좁아집니다",
     "reasonFrame": "외곽 프레임은 이동하거나 제거할 수 없습니다"
+  },
+  "scopedPanel": {
+    "stale": "이 개체는 다른 곳에서 변경되었습니다. 양식에 현재 값이 표시됩니다. 변경 내용은 적용되지 않았습니다.",
+    "failed": "변경 내용을 적용할 수 없습니다: {{error}}"
   }
 }

@@ -302,6 +302,8 @@
     "addChildBookmark": "Dodaj podređenu knjižnu oznaku",
     "editBookmark": "Uredi knjižnu oznaku",
     "deleteBookmark": "Obriši knjižnu oznaku",
+    "findBookmark": "Traži...",
+    "findBookmarkTip": "Upišite za skok na knjižnu oznaku. Enter je otvara, ponovni Enter ide na sljedeće podudaranje.",
     "addAttachment": "Dodaj privitak",
     "openAttachment": "Otvori privitak",
     "saveAttachment": "Spremi privitak",
@@ -348,7 +350,8 @@
     "exportComments": "Izvezi komentare u podatkovnu datoteku...",
     "exportSelectedComments": "Izvezi odabrane komentare u podatkovnu datoteku...",
     "schedules": "Iskazi",
-    "addPage": "Dodaj stranicu"
+    "addPage": "Dodaj stranicu",
+    "pageLabels": "Oznake stranica (izrada naziva)"
   },
   "scaleBar": {
     "title": "Grafičko mjerilo",
@@ -677,5 +680,9 @@
     "refused": "Nije moguće: {{reason}}",
     "reasonTooNarrow": "polje bi postalo preusko",
     "reasonFrame": "vanjski okvir ne može se pomaknuti ni ukloniti"
+  },
+  "scopedPanel": {
+    "stale": "Ovaj je objekt promijenjen na drugom mjestu. Obrazac prikazuje trenutačne vrijednosti; vaše promjene nisu primijenjene.",
+    "failed": "Promjene nije moguće primijeniti: {{error}}"
   }
 }

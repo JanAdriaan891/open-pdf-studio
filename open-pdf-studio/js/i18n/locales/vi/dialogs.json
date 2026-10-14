@@ -951,5 +951,19 @@
     "underlayLimited": "Độ phân giải đã giảm xuống {{dpi}} dpi",
     "underlayNoMeasure": "Không áp dụng cho lớp nền; tỷ lệ đo lấy từ trang",
     "queued": "Còn {{n}} bản vẽ trong hàng đợi"
+  },
+  "pageLabels": {
+    "title": "Nhãn trang",
+    "intro": "Nhập tên trang vào ô. \"{{select}}\" lấy văn bản trên trang: văn bản được chèn dưới dạng {OCR1}, {OCR2}… và được đọc tại cùng vị trí trên mọi trang. Ví dụ: {OCR1} - {OCR2}",
+    "name": "Tên trang:",
+    "pickHint": "Kéo một khung quanh văn bản cần dùng, ví dụ số bản vẽ. Nhấn Esc để hủy.",
+    "noText": "(không tìm thấy văn bản)",
+    "example": "Ví dụ:",
+    "useOcr": "Dùng OCR khi khung không có văn bản (bản quét, chậm hơn)",
+    "read": "Đọc tất cả các trang",
+    "reading": "Đang đọc trang {{done}}/{{total}}...",
+    "colLabel": "Nhãn của trang",
+    "ocrLegend": "Các trang đánh dấu OCR được đọc bằng nhận dạng văn bản; hãy kiểm tra trước khi áp dụng.",
+    "reset": "Đặt lại về số trang"
   }
 }

@@ -116,7 +116,8 @@
     "deselectAll": "Bỏ chọn tất cả",
     "insertFromFile": "Chèn từ tệp...",
     "insertFromFileBefore": "Trước trang này...",
-    "insertFromFileAfter": "Sau trang này..."
+    "insertFromFileAfter": "Sau trang này...",
+    "pageLabels": "Nhãn trang (trình tạo tên)..."
   },
   "textSelection": {
     "highlightSelection": "Tô sáng Vùng chọn",

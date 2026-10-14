@@ -28,7 +28,8 @@
     "formTextField": "表单文本字段",
     "formCheckbox": "表单复选框",
     "formRadio": "表单单选按钮",
-    "screenshot": "截图"
+    "screenshot": "截图",
+    "pageLabelPick": "选择页面标签文字"
   },
   "toolLabel": "工具：",
   "annotationsLabel": "批注：",

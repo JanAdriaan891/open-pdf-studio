@@ -28,7 +28,8 @@
     "formTextField": "Tekstualno polje obrasca",
     "formCheckbox": "Potvrdni okvir obrasca",
     "formRadio": "Radio gumb obrasca",
-    "screenshot": "Snimka zaslona"
+    "screenshot": "Snimka zaslona",
+    "pageLabelPick": "Odabir teksta za oznaku stranice"
   },
   "toolLabel": "Alat:",
   "annotationsLabel": "Oznake:",

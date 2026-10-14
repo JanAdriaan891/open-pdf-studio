@@ -314,3 +314,24 @@ js/plugins/extensies-mcp-aansluiting.test.mjs
 js/plugins/opslag-wissel-slot.test.mjs
 js/plugins/plugin-api-opruimen.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
+# Ctrl-sneltoetsen met Caps Lock aan (#577)
+js/tools/sneltoetsen-caps-lock.test.mjs
+# Snellere pdf-lib-standaarden voor inlezen en opslaan (#581)
+js/pdf/pdf-lib-snelheid.test.mjs
+# Draagbare Cargo-instellingen, geen absolute paden (#582)
+scripts/cargo-config-draagbaar.test.mjs
+# Bladwijzerpaneel: huidige bladwijzer en zoekveld (#578)
+js/ui/panels/bladwijzer-zoeken.test.mjs
+# Miniaturen groeien mee, kolommen en scherpte (#579)
+js/ui/panels/miniatuur-maat.test.mjs
+js/pdf/pagina-labels.test.mjs
+js/pdf/pagina-labels-i18n.test.mjs
+js/pdf/page-manager-paginalabels.test.mjs
+js/plugins/structured-commands.test.mjs
+js/plugins/system-instance-panels.test.mjs
+# Agenttaken van extensies zonder assistentvenster (#556)
+js/plugins/agent-tasks.test.mjs
+js/plugins/agent-tasks-plugin-api.test.mjs
+js/core/mcp-schermafdruk.test.mjs
+js/core/mcp-ui-boom.test.mjs
+js/core/mcp-lint-opdrachten.test.mjs

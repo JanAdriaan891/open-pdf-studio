@@ -876,7 +876,7 @@ Alle drie lopen via `tool_app_request` naar de WebView. De handlers in
 {
   "type": "object",
   "properties": {
-    "includeContributions": { "type": "boolean", "description": "Also list each extension's registered contributions (ribbon tabs, command count, annotation types, palettes, property panels). Default false." }
+    "includeContributions": { "type": "boolean", "description": "Also list each extension's registered contributions (ribbon tabs, command count, annotation types, palettes, property panels, and structured commands with their input and output schemas). Default false." }
   },
   "additionalProperties": false
 }
@@ -895,7 +895,8 @@ Resultaat:
     "status": "active", "error": null, "source": "mcp", "installedVia": "mcp", "legacyId": false,
     "lastChange": { "action": "updated", "at": "2026-10-13T09:12:03Z", "source": "mcp" },
     "contributions": { "ribbonTabs": ["nl.voorbeeld.kozijnen.main"], "commands": 3,
-                       "annotationTypes": [], "palettes": [], "propertyPanels": [] }
+                       "annotationTypes": [], "palettes": [], "propertyPanels": [],
+                       "structuredCommands": [] }
   }],
   "problems": [{ "folder": "kapot", "code": "MANIFEST_INVALID", "error": "plugin.json is not valid JSON" }]
 }
@@ -1101,6 +1102,41 @@ genoemd.
   `handle_tools_list`. Voegt feat/567 ook iets toe na
   `facade_element_tool()`, dan botst dat met de staart van
   `handle_tools_list`; die regels gewoon allebei houden.
+
+### 8.6 Lint en panelen ontdekken en nalezen (#584)
+
+Een agent moet de bediening van een geladen extensie kunnen vinden,
+uitvoeren en controleren zonder schermautomatisering.
+
+- **Tabbladen als opdracht.** `app_list_commands` zet elk linttabblad
+  vooraan als `ribbon-tab:<tab>` (`kind: 'tab'`, `extension` bij een
+  geregistreerd tabblad), ook de tabbladen van extensies. `app_run_command`
+  activeert zo'n tabblad.
+- **Tabbladen uit de DOM, niet uit een vaste lijst.** Zoeken, opsommen en
+  uitvoeren lopen alle tabknoppen `.ribbon-tab` langs (zonder Bestand): eerst
+  de ingebouwde in vaste volgorde, dan de rest in DOM-volgorde. Een tabknop
+  heet naar zijn `data-tab`, of `#<id>` zonder. Geregistreerde
+  extensietabbladen (§5) leveren hun knoppen als `ext:`-opdracht uit het
+  register, met het tab-id in `tab`; een tabblad dat een extensie zelf in de
+  DOM zette, levert de zichtbare knoppen van zijn zichtbare inhoud als
+  `ribbon:#<id>` of `ribbon:<tab>:<n>`. De nummering van ingebouwde knoppen
+  verandert niet.
+- **`activatedTab`.** `app_click_element` meldt het tabblad dat de aanroep
+  activeerde: van de knop zelf als een tabknop is aangeklikt (ook een
+  extensietabblad), anders het tabblad waar de klik naartoe wisselde, anders
+  dat wat het zoeken opende. `activeTab` is het actieve tabblad daarna.
+- **`app_read_ui`.** Leest een compacte toegankelijkheidsboom: rol, naam en
+  alleen de staat die geldt (`disabled`, `checked`, `pressed`, `selected`,
+  `expanded`, `active`, `focused`, `readonly`, `hidden`), met `value` en
+  `valueText` voor velden. Lintknoppen en keuzes dragen hun `command`.
+  Zonder selector: lint, zijpanelen, balken boven het document, zwevende
+  paletten, open dialogen en statusbalk; met een selector de elementen die hij
+  aanwijst. Grenzen `maxDepth`, `maxNodes` en `maxText`; `truncated` meldt
+  wat wegviel. Alleen lezen: geen tabwissel.
+
+De regels staan in zuivere modules met eenheidstests:
+`js/core/mcp-lint-opdrachten.js` (id's, volgorde, `activatedTab`) en
+`js/core/mcp-ui-boom.js` (de boom). De brug doet alleen de DOM.
 
 ## 9. Beveiliging
 
@@ -1440,9 +1476,8 @@ Elke stap begint met de test. Alle acht stappen zijn uitgevoerd.
   hetzelfde type of palet-id registreren, overschrijven elkaar nog. Het
   paneel en de gereedschapsgroepen worden wel al per extensie hersteld
   (§4). De scope uit §4 is daar al geschikt voor.
-- Een publieke `api.registerCommand` voor opdrachten zonder knop. Het
-  opdrachtregister ondersteunt dat al, maar het issue vraagt alleen om
-  opdrachten voor lintacties.
+- ~~Een publieke `api.registerCommand` voor opdrachten zonder knop.~~
+  Gebouwd voor #575 als gestructureerde opdracht met schema's (§16).
 - Een `app_uninstall_extension`.
 - Pakketten met meerdere bestanden: relatieve imports vanuit een Blob-URL
   werken niet, dus `index.js` blijft een enkele bundel.
@@ -1490,3 +1525,349 @@ Ze zijn hierboven al verwerkt; dit is het overzicht.
 | Een extensie met een oud id was via het paneel niet meer bij te werken | Een oud id mag een bestaande installatie met precies dat id bijwerken (§7.2) | Rust `oud_id_bijwerken` |
 | De dialoog weigerde pakketten op een netwerkshare | Bron mee naar de native kant; UNC alleen via MCP verboden (§7.2) | Rust `netwerkpaden_alleen_via_de_dialoog`; `extension-lifecycle.test.mjs` |
 | De README van `mcp-stdio` noemde nog 62 tools | 65 | aansluitingstest |
+
+## 16. Gestructureerde opdrachten van extensies (#575)
+
+Een `ext:`-opdracht (§6) is een knop: zonder argumenten, en het resultaat
+is wat de knop teruggeeft. Een agent die een dienst van een extensie wil
+gebruiken, heeft meer nodig. Denk aan pagina's importeren in een nieuwe
+tekening, koppelingen tussen pagina en bron beschrijven, een projectsysteem
+toewijzen of hoeveelheidslabels verversen. Daarvoor zijn getypeerde
+argumenten nodig, een gecontroleerd resultaat en een stabiel aanvraag-id.
+Bij een wijziging is er ook bescherming nodig tegen dubbel uitvoeren en
+tegen een verouderde toestand. Dit is de omgekeerde richting van #556: daar
+geeft een extensie een taak aan de agent, hier roept de agent de extensie
+aan. Dat gaat zonder DOM, zonder bestandsdialoog en zonder het
+assistentgesprek.
+
+### 16.1 Bestanden
+
+| Bestand | Rol |
+|---|---|
+| `js/plugins/json-schema-subset.js` | Strikte deelverzameling van JSON Schema: schema controleren en normaliseren, waarde controleren, `local-path`. |
+| `js/plugins/structured-commands.js` | Register en dispatcher (`gestructureerdeOpdrachten`), plus de MCP-handlers `handleCallExtensionCommand` en `handleCancelExtensionCommand`. Zuiver. |
+| `js/plugins/plugin-api.js` | `registerCommand`, `unregisterCommand`, `runCommand`, `features.structuredCommands`, `getDocumentInfo().revision` en `structuredCommands` in `_bijdragenOverzicht()`. |
+| `js/core/undo-manager.js` | `documentRevisie(doc)`: de inhoudsrevisie `d<n>`, die bij elke stap in de undo-geschiedenis ophoogt. |
+| `js/mcp-bridge.js` | `mcp:call-extension-command`, `mcp:cancel-extension-command`, en de lijst naar Rust (`mcp_set_extension_tools`). |
+| `src-tauri/src/mcp_extensie_tools.rs` | Bewaart en controleert de lijst uit de WebView; het Tauri-commando `mcp_set_extension_tools`. |
+| `src-tauri/src/mcp_server.rs` | `tools/list` met de extensietools, de route voor `ext_`-namen, `app_call_extension_command` en `notifications/cancelled`. |
+| `js/plugins/structured-commands.test.mjs` | Eenheidstests en de aansluiting op brug, Rust, `tools.json` en manifest. |
+
+### 16.2 Registreren
+
+```js
+if (api.features?.structuredCommands) {
+  const { tool } = api.registerCommand({
+    name: 'assign_system',                       // a-z, 0-9, enkele '_'; hooguit 48 tekens
+    title: { en: 'Assign project system', nl: 'Projectsysteem toewijzen' },
+    description: 'Assign a technical project system to a linked ceiling.',
+    effect: 'mutate',                            // 'read' (standaard) of 'mutate'
+    timeoutMs: 30000,                            // 1000-120000, standaard 30000
+    inputSchema: {
+      type: 'object',
+      properties: {
+        annotationId: { type: 'string', minLength: 1 },
+        systemId: { type: 'string', enum: ['p-600', 'p-625'] },
+      },
+      required: ['annotationId', 'systemId'],
+    },
+    outputSchema: {
+      type: 'object',
+      properties: { revision: { type: 'string' } },
+      required: ['revision'],
+    },
+    async handler(args, ctx) {
+      // Dezelfde dienstcode als de eigen bediening van de extensie.
+      return dienst.wijsToe(args, { signal: ctx.signal });
+    },
+  });
+  // tool === 'ext_nl_voorbeeld_plafond__assign_system'
+}
+```
+
+- **Naamruimte.** De toolnaam is `ext_` + het extensie-id met `_` voor
+  `.` + `__` + de naam. Een extensie-id bevat nooit `_`, dus de naam is
+  terug te rekenen naar de extensie (`extensieUitTool`). Geen vaste tool
+  begint met `ext_`, en een andere extensie kan dezelfde naam niet krijgen.
+  De toolnaam is hooguit 64 tekens. Een langere naam geeft
+  `INVALID_CONTRIBUTION`, met de vraag om een kortere naam.
+- **Fouten bij registreren** (allemaal `ExtensionContributionError`):
+  - `INVALID_CONTRIBUTION`: een onbekend veld, een ongeldige naam of
+    tekst, een schema buiten de deelverzameling van §16.3, een
+    invoerschema dat `idempotencyKey` of `revisionContext` definieert, of
+    een open invoerschema bij `mutate`;
+  - `CONTRIBUTION_CONFLICT`: de naam bestaat al;
+  - `LIMIT_EXCEEDED`: meer dan 32 opdrachten;
+  - `EXTENSION_INACTIVE`: na `_cleanup`.
+- **Afmelden.** `api.unregisterCommand(name)` haalt alleen weg wat deze API
+  registreerde. Een oude API raakt na herladen de opdracht van de nieuwe
+  versie niet. Lopende aanroepen krijgen `COMMAND_UNREGISTERED`.
+- **Zelf aanroepen.** `api.runCommand(name, args)` loopt langs precies
+  dezelfde controles als MCP (`source: 'api'`). De eigen bediening en een
+  agent nemen zo hetzelfde pad.
+- **Overzicht.** `app_list_extensions` met `includeContributions` geeft per
+  extensie `structuredCommands`: `{ tool, extension, name, title,
+  description, effect, timeoutMs, inputSchema, outputSchema }`. Het
+  invoerschema is het gepubliceerde schema (§16.4).
+
+### 16.3 Schema's
+
+Alleen de trefwoorden hieronder zijn toegestaan. Elk ander trefwoord
+(`oneOf`, `anyOf`, `allOf`, `$ref`, `patternProperties`, `if`, …) geeft bij
+het registreren `INVALID_CONTRIBUTION`. Zo belooft een schema nooit een
+controle die de host niet doet.
+
+| Soort | Trefwoorden |
+|---|---|
+| Algemeen | `type` (een of meer van `object`, `array`, `string`, `number`, `integer`, `boolean`, `null`), `enum`, `const`, `title`, `description`, `default`, `examples` |
+| Object | `properties`, `required` (moet in `properties` staan), `additionalProperties` (alleen `true` of `false`) |
+| Lijst | `items` (één schema), `minItems`, `maxItems`, `uniqueItems` |
+| Tekst | `minLength`, `maxLength` (in tekens), `pattern` (met de vlag `u`), `format: 'local-path'` (§16.8) |
+| Getal | `minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum` |
+
+- Elk schema heeft `type`, `enum` of `const`. De wortel van het invoer- en
+  het uitvoerschema is `type: 'object'`.
+- **Afwijking van JSON Schema, met opzet:** een object-schema zonder
+  `additionalProperties` krijgt `false`. Een onbekend veld wordt dus
+  geweigerd, tenzij het schema `additionalProperties: true` zegt. Het
+  gepubliceerde schema in `tools/list` noemt de `false` expliciet. Een
+  client leest dus hetzelfde als wat de host controleert.
+- Een wijzigende opdracht heeft een gesloten invoerschema. Een open schema
+  zou een agent velden laten meegeven die niemand controleert.
+- Grenzen: een schema is hooguit 64 KB en 16 niveaus diep, een `enum` heeft
+  hooguit 256 waarden en een `pattern` hooguit 512 tekens.
+- `default` is alleen beschrijving: de host vult niets in.
+
+### 16.4 In `tools/list`
+
+Na elke wijziging van het register stuurt de WebView de hele lijst naar
+Rust (`invoke('mcp_set_extension_tools', { tools, seq })`, in een microtaak
+samengevoegd). Rust controleert de vorm en vervangt de bewaarde lijst:
+
+- een naam `ext_…` met `__`, hooguit 64 tekens en uniek;
+- een beschrijving, een object-schema, een titel en de twee hints;
+- samen hooguit 256 tools en 2 MB.
+
+Een kapotte lijst wordt in zijn geheel geweigerd; de vorige blijft dan
+staan. Het volgnummer `seq` is een tijdstempel in microseconden. Het loopt
+dus ook na een herlading van de WebView door, en een trage, oudere lijst
+zet niets terug.
+
+`tools/list` geeft eerst de vaste gereedschappen van het profiel en
+daarachter de extensietools:
+
+```json
+{ "name": "ext_nl_voorbeeld_plafond__assign_system",
+  "description": "Assign a technical project system to a linked ceiling. (Extension nl.voorbeeld.plafond.)",
+  "inputSchema": { "type": "object", "properties": { "annotationId": {…}, "systemId": {…},
+                   "idempotencyKey": {…}, "revisionContext": {…} },
+                   "required": ["annotationId", "systemId", "idempotencyKey", "revisionContext"],
+                   "additionalProperties": false },
+  "annotations": { "title": "Assign project system", "readOnlyHint": false,
+                   "destructiveHint": true, "openWorldHint": false } }
+```
+
+- `readOnlyHint` is `true` bij `effect: 'read'` en `destructiveHint` is
+  `true` bij `effect: 'mutate'`. Claude vraagt dus bij elke wijzigende
+  opdracht om toestemming.
+- Een `tools/call` met een `ext_`-naam die geen geladen extensie
+  registreert, geeft een JSON-RPC-fout (`INVALID_PARAMS`). Een oude tool is
+  na herladen of verwijderen dus meteen weg.
+- De extensietools staan in beide profielen; ze zijn geen
+  ontwikkelgereedschap.
+- **Geen pushmelding.** De server is HTTP zonder stroom en kan geen
+  `notifications/tools/list_changed` sturen (`listChanged: false`). Een
+  client die zijn lijst las voordat de extensie geladen was, ziet de nieuwe
+  tools pas na opnieuw verbinden. Daarom is er ook de vaste tool
+  **`app_call_extension_command`** (`{ tool, arguments }`, meta
+  `wijzigt`). Die doet dezelfde aanroep, met de opdracht als argument. De
+  schema's staan in `app_list_extensions` met `includeContributions`. De
+  vaste lijst komt daarmee op 72 publieke tools.
+- `mcp-stdio/tools.json` en de manifest bevatten alleen de vaste tools. De
+  stdio-brug stuurt `tools/list` door naar de app, dus een client via de
+  brug ziet de extensietools ook.
+
+### 16.5 Een aanroep
+
+Rust stuurt `mcp:call-extension-command` met `{ tool, arguments, rpcId }`;
+voor `app_call_extension_command` is dat `{ generic: true, call, rpcId }`.
+Rust wacht 125 s. De WebView houdt zich aan de tijdgrens van de opdracht
+(hooguit 120 s) en antwoordt dus altijd eerder. De dispatcher controleert
+in deze volgorde, en de handler draait pas als alles klopt:
+
+1. `EXTENSION_BUSY` als de extensie wordt geïnstalleerd of herladen. Dat
+   geldt ook als de opdracht op dat moment even niet geregistreerd is.
+2. `UNKNOWN_COMMAND`.
+3. `arguments` is een JSON-object van hooguit 1 MB.
+4. Bij een leesopdracht mogen `idempotencyKey` en `revisionContext` niet
+   meekomen.
+5. De argumenten (zonder die twee velden) tegen het invoerschema. Een fout
+   geeft `INVALID_ARGUMENT` met `details: [{ path, message }]`
+   (JSON-pointer, hooguit 20).
+6. Bij `mutate`: `idempotencyKey` en `revisionContext` (§16.6), dan de
+   idempotentie, dan de documentrevisie.
+7. `COMMAND_BUSY` als er al 8 handlers van dezelfde opdracht lopen.
+
+De handler krijgt een JSON-kloon van de argumenten en een bevroren `ctx`:
+`{ requestId, tool, command, extensionId, source: 'mcp'|'api', signal,
+idempotencyKey, revisionContext }`. Bij een leesopdracht zijn de laatste
+twee `null`.
+
+**Resultaat.** Altijd een object, nooit een afwijzing. Zoals bij de andere
+app-tools staat het in `content[0].text` en blijft `isError` `false`:
+
+```json
+{ "ok": true, "requestId": "xc-mgq2k1o0-7", "tool": "ext_nl_voorbeeld_plafond__assign_system",
+  "extension": "nl.voorbeeld.plafond", "command": "assign_system",
+  "result": { "revision": "i1-0c4f…" }, "replayed": false }
+```
+
+- `requestId` is per aanroep uniek en staat in elk antwoord, ook bij een
+  fout. De handler kent hetzelfde id (`ctx.requestId`). Een herhaling met
+  dezelfde idempotentiesleutel geeft het antwoord van de oorspronkelijke
+  aanvraag terug, met diens `requestId` en met `replayed: true`.
+- Het resultaat moet een JSON-object zijn (anders `RESULT_INVALID`). Het is
+  hooguit 256 KB (anders `RESULT_TOO_LARGE`) en past op het uitvoerschema
+  (anders `RESULT_INVALID` met `details`).
+- Gooit de handler een fout met een `code` van hoofdletters, cijfers en `_`
+  (3-48 tekens), dan wordt dat de foutcode. Een voorbeeld is de eigen
+  `STALE_REVISION` van een projectrevisie. `details` gaat mee als het JSON
+  is en hooguit 16 KB. Een `AbortError` wordt `COMMAND_CANCELLED`; elke
+  andere fout wordt `COMMAND_FAILED`.
+
+| Code | Betekenis |
+|---|---|
+| `INVALID_ARGUMENT` | Argumenten, `idempotencyKey` of `revisionContext` ongeldig. De handler draaide niet. |
+| `UNKNOWN_COMMAND` | Geen geladen extensie met deze opdracht. |
+| `EXTENSION_BUSY` | De extensie wordt geïnstalleerd of herladen; probeer het later opnieuw. |
+| `DOCUMENT_NOT_FOUND` | `revisionContext.documentId` is geen open document. |
+| `STALE_REVISION` | De documentrevisie (of, vanuit de handler, een eigen revisie) is verouderd; zie `details.currentRevision`. |
+| `IDEMPOTENCY_KEY_REUSED` | Dezelfde sleutel met andere argumenten of een andere context. |
+| `COMMAND_BUSY` | Er lopen al 8 aanroepen van deze opdracht. |
+| `COMMAND_TIMEOUT` | Niet binnen `timeoutMs` klaar. Het signaal is afgebroken; de handler kan nog afronden. |
+| `COMMAND_CANCELLED` | Afgebroken door de client (`notifications/cancelled`), of de handler gaf een `AbortError`. |
+| `EXTENSION_UNLOADED` | De extensie werd uitgezet of herladen terwijl de aanroep liep. |
+| `COMMAND_UNREGISTERED` | De extensie meldde de opdracht af terwijl de aanroep liep. |
+| `RESULT_INVALID`, `RESULT_TOO_LARGE` | Het resultaat past niet op het uitvoerschema of is te groot. |
+| `COMMAND_FAILED` | De handler gooide een fout zonder eigen code. |
+
+### 16.6 Wijzigende opdrachten: idempotentie en revisies
+
+Het gepubliceerde invoerschema van een `mutate`-opdracht krijgt twee
+verplichte velden van de host. Een extensie mag ze niet zelf definiëren.
+
+**`idempotencyKey`**: 8-128 tekens uit `A-Z a-z 0-9 . _ : -`, gekozen door
+de aanroeper. Per `(tool, sleutel)` geldt:
+
+- Zelfde sleutel, zelfde argumenten en context, wijziging geslaagd: het
+  bewaarde antwoord komt terug met `replayed: true` en de handler draait
+  niet opnieuw. Zo maakt een herhaling geen tweede PDF of tweede
+  annotatiebatch.
+- Zelfde sleutel terwijl de eerste aanroep nog loopt (ook na een
+  `COMMAND_TIMEOUT`): de tweede aanroep wacht op dezelfde uitkomst, met
+  dezelfde tijdgrens.
+- Zelfde sleutel, andere argumenten of context: `IDEMPOTENCY_KEY_REUSED`.
+- Een mislukte wijziging wordt niet bewaard. Er is niets gebeurd, dus
+  dezelfde sleutel mag opnieuw. Een `INVALID_ARGUMENT` komt niet eens tot
+  de idempotentie.
+- De sleutels gelden per app-sessie en staan in het geheugen: hooguit 500
+  geslaagde antwoorden, 24 uur lang. Ze horen bij de toolnaam en blijven
+  dus over een herlading van de extensie heen bestaan. Had de oude versie
+  de wijziging al gedaan, dan krijgt een herhaling na herladen dat
+  antwoord.
+- De idempotentie komt vóór de revisiecontrole. Een herhaling na een
+  geslaagde wijziging draagt de revisie van vóór die wijziging, en moet
+  toch het bewaarde antwoord krijgen.
+
+**`revisionContext`**: `{ documentId, documentRevision }`,
+`{ sourceRevision }`, of alle drie (elk 1-128 tekens).
+
+- `documentId` met `documentRevision` controleert de host zelf, vóór de
+  handler. Het document moet open zijn (anders `DOCUMENT_NOT_FOUND`) en
+  `documentRevisie(doc)` moet gelijk zijn (anders `STALE_REVISION` met
+  `currentRevision`). De revisie is `d<n>` en verandert bij elke stap in de
+  undo-geschiedenis, ook bij ongedaan maken en opnieuw. Een extensie leest
+  hem met `api.getDocumentInfo().revision` en geeft hem in haar
+  leesresultaten door aan de agent. De id's komen uit
+  `getDocumentInfo().id` en `app_list_tabs`.
+- `sourceRevision` is van de extensie zelf (een project- of bronrevisie).
+  De host geeft hem door in `ctx.revisionContext`. De handler controleert
+  hem en gooit bij een verouderde waarde een fout met
+  `code: 'STALE_REVISION'`.
+
+De dispatcher wijzigt zelf geen document en wisselt geen tabblad. Andere
+open tabbladen en hun gewijzigd-vlag blijven dus ongemoeid. Wat de handler
+wijzigt, loopt via de gewone API, bijvoorbeeld `applyAnnotationBatch` (één
+undo-stap).
+
+### 16.7 Tijdgrens, annuleren en herladen
+
+- Elke aanroep heeft een eigen `AbortController`. Het signaal gaat af bij
+  de tijdgrens (`COMMAND_TIMEOUT`), bij `notifications/cancelled` van de
+  client (`COMMAND_CANCELLED`), bij `unregisterCommand`
+  (`COMMAND_UNREGISTERED`) en bij uitzetten of herladen van de extensie
+  (`EXTENSION_UNLOADED`). De aanroeper krijgt die uitkomst meteen.
+- **Ongeldig maken.** Na het afbreken bereikt een laat resultaat van de
+  handler de aanroeper niet meer, en de opdracht is uit het register en
+  uit `tools/list`. Een handler die wijzigt, kijkt vóór het vastleggen naar
+  `ctx.signal.aborted`. Rondt hij toch af, dan onthoudt de idempotentie dat
+  resultaat. Een herhaling krijgt dan dat resultaat in plaats van een
+  tweede wijziging.
+- **Annuleren door de client.** Rust geeft het JSON-RPC-id van de
+  `tools/call` mee als `rpcId`. Op `notifications/cancelled` met
+  `requestId` stuurt Rust `mcp:cancel-extension-command`, en de dispatcher
+  annuleert de lopende aanroepen met dat id. Over HTTP delen alle clients
+  één server: twee clients met hetzelfde JSON-RPC-id kunnen elkaars
+  aanroep annuleren. Dat is een bewuste grens; een wijziging is daarna met
+  dezelfde sleutel veilig te herhalen.
+- **Herladen** ruimt via de bijdragescope (§4) de opdrachten op
+  (`structuredCommand` is een bewaakte soort) en annuleert hun lopende
+  aanroepen. De nieuwe versie registreert dezelfde namen opnieuw. De lijst
+  naar Rust wordt in zijn geheel vervangen, dus er ontstaan geen dubbele
+  tools.
+
+### 16.8 Bestandspaden en handles
+
+- De dispatcher geeft de handler alleen JSON door. Hij geeft geen
+  bestandstoegang, opent niets en verruimt geen rechten. Wat een handler
+  met een pad kan, hangt alleen af van wat de extensie al kon.
+- `format: 'local-path'` controleert alleen de vorm. Het pad is absoluut en
+  lokaal (`C:\…`, `C:/…` of `/…`), zonder netwerkshare, apparaatpad
+  (`\\?\`, `\\.\`), URL, `..`-segment of stuurtekens, en hooguit 4096
+  tekens. Een pad dat daar niet aan voldoet, geeft `INVALID_ARGUMENT`
+  voordat de extensie het ziet. Of het bestand bestaat of gelezen mag
+  worden, beslist deze controle niet.
+- Voor open documenten zijn er **handles** in plaats van paden: het
+  document-id uit `app_list_tabs` of `getDocumentInfo()`, met de revisie
+  uit §16.6. Een headless aanroeper hoeft dan geen pad te kennen, en de
+  extensie hoeft geen bestand te openen.
+- In dit pad is geen bestandsdialoog. Een opdracht die een dialoog nodig
+  heeft, hoort niet als gestructureerde opdracht.
+
+### 16.9 Tests
+
+`js/plugins/structured-commands.test.mjs` (in `scripts/unit-testlijst.txt`)
+controleert:
+
+- schema's buiten de deelverzameling, onbekende velden met het pad in de
+  foutmelding, en `local-path`;
+- toolnamen en registratiefouten;
+- registreren via de echte `createPluginApi` (met `plugin-api-stubs.mjs`)
+  en de vorm in `tools/list`;
+- een ongeldig veld wordt geweigerd vóór de handler;
+- drie gelijktijdige aanroepen krijgen elk hun eigen resultaat en
+  `requestId`;
+- een herhaalde wijziging maakt één resultaat, ook gelijktijdig, en een
+  andere aanroep met dezelfde sleutel wordt geweigerd;
+- een mislukte wijziging is herhaalbaar;
+- een verouderde documentrevisie en een onbekend document worden geweigerd
+  zonder andere documenten te raken;
+- het uitvoerschema;
+- de tijdgrens, met een later bewaard resultaat;
+- herladen annuleert, ruimt op en laat precies één tool achter;
+- annuleren op `rpcId`, en `EXTENSION_BUSY`;
+- `app_call_extension_command`;
+- de aansluiting op brug, Rust, metatabel, `tools.json` en manifest.
+
+In Rust: `mcp_extensie_tools::tests` (namen, lijst, een oudere lijst
+negeren) en `extensieopdrachten_zijn_aan_te_roepen_via_mcp`.

@@ -116,7 +116,8 @@
     "deselectAll": "Auswahl aufheben",
     "insertFromFile": "Aus Datei einfügen...",
     "insertFromFileBefore": "Vor dieser Seite...",
-    "insertFromFileAfter": "Nach dieser Seite..."
+    "insertFromFileAfter": "Nach dieser Seite...",
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)..."
   },
   "textSelection": {
     "highlightSelection": "Auswahl hervorheben",

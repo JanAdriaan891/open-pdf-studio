@@ -116,7 +116,8 @@
     "deselectAll": "Поништи цео избор",
     "insertFromFile": "Уметни из датотеке...",
     "insertFromFileBefore": "Испред ове странице...",
-    "insertFromFileAfter": "Иза ове странице..."
+    "insertFromFileAfter": "Иза ове странице...",
+    "pageLabels": "Ознаке страница (израда назива)..."
   },
   "textSelection": {
     "highlightSelection": "Истакни избор",

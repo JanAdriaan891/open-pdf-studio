@@ -302,6 +302,8 @@
     "addChildBookmark": "Lisää alikirjanmerkki",
     "editBookmark": "Muokkaa kirjanmerkkia",
     "deleteBookmark": "Poista kirjanmerkki",
+    "findBookmark": "Etsi...",
+    "findBookmarkTip": "Kirjoita siirtyäksesi kirjanmerkkiin. Enter avaa sen, uusi Enter siirtyy seuraavaan osumaan.",
     "addAttachment": "Lisää liite",
     "openAttachment": "Avaa liite",
     "saveAttachment": "Tallenna liite",
@@ -348,7 +350,8 @@
     "exportComments": "Vie kommentit datatiedostoon...",
     "exportSelectedComments": "Vie valitut kommentit datatiedostoon...",
     "schedules": "Luettelot",
-    "addPage": "Lisää sivu"
+    "addPage": "Lisää sivu",
+    "pageLabels": "Sivujen nimiöt (nimien muodostus)"
   },
   "scaleBar": {
     "title": "Mittakaavajana",
@@ -677,5 +680,9 @@
     "refused": "Ei mahdollista: {{reason}}",
     "reasonTooNarrow": "kentästä tulisi liian kapea",
     "reasonFrame": "ulkokarmia ei voi siirtää eikä poistaa"
+  },
+  "scopedPanel": {
+    "stale": "Tätä objektia on muutettu muualla. Lomake näyttää nykyiset arvot; muutoksiasi ei otettu käyttöön.",
+    "failed": "Muutoksia ei voitu ottaa käyttöön: {{error}}"
   }
 }

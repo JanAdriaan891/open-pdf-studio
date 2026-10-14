@@ -302,6 +302,8 @@
     "addChildBookmark": "הוספת סימנייה בת",
     "editBookmark": "עריכת סימנייה",
     "deleteBookmark": "מחיקת סימנייה",
+    "findBookmark": "חיפוש...",
+    "findBookmarkTip": "הקלידו כדי לקפוץ לסימנייה. Enter פותח אותה, Enter נוסף עובר להתאמה הבאה.",
     "addAttachment": "הוספת קובץ מצורף",
     "openAttachment": "פתיחת קובץ מצורף",
     "saveAttachment": "שמירת קובץ מצורף",
@@ -348,7 +350,8 @@
     "exportComments": "ייצא הערות לקובץ נתונים...",
     "exportSelectedComments": "ייצא הערות נבחרות לקובץ נתונים...",
     "schedules": "טבלאות כמויות",
-    "addPage": "הוספת עמוד"
+    "addPage": "הוספת עמוד",
+    "pageLabels": "תוויות עמודים (בונה שמות)"
   },
   "scaleBar": {
     "title": "סרגל קנה מידה",
@@ -677,5 +680,9 @@
     "refused": "לא אפשרי: {{reason}}",
     "reasonTooNarrow": "שדה היה נעשה צר מדי",
     "reasonFrame": "לא ניתן להזיז או להסיר את המשקוף החיצוני"
+  },
+  "scopedPanel": {
+    "stale": "אובייקט זה שונה במקום אחר. הטופס מציג את הערכים הנוכחיים; השינויים שלך לא הוחלו.",
+    "failed": "לא ניתן היה להחיל את השינויים: {{error}}"
   }
 }

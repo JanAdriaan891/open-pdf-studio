@@ -285,6 +285,9 @@ export async function handleKeydown(e) {
 
   const ctrl = e.ctrlKey || e.metaKey;
   const shift = e.shiftKey;
+  // Letter van een Ctrl-sneltoets, altijd in kleine letters: met Caps Lock aan
+  // geeft e.key een hoofdletter zonder dat Shift is ingedrukt (#577). Alleen
+  // `shift` onderscheidt dus Ctrl+S van Ctrl+Shift+S.
   const shortcutKey = typeof e.key === 'string' ? e.key.toLowerCase() : '';
 
   // Allow certain shortcuts even when in input fields
@@ -314,7 +317,7 @@ export async function handleKeydown(e) {
   }
 
   // Handle find-related shortcuts even in inputs
-  if (ctrl && e.key === 'f') {
+  if (ctrl && !shift && shortcutKey === 'f') {
     e.preventDefault();
     openFindBar();
     return;
@@ -469,19 +472,19 @@ export async function handleKeydown(e) {
   }
 
   // File shortcuts
-  if (ctrl && e.key === 'n') {
+  if (ctrl && !shift && shortcutKey === 'n') {
     e.preventDefault();
     showNewDocDialog();
-  } else if (ctrl && e.key === 'o') {
+  } else if (ctrl && !shift && shortcutKey === 'o') {
     e.preventDefault();
     openPDFFile();
-  } else if (ctrl && shift && e.key === 'S') {
+  } else if (ctrl && shift && shortcutKey === 's') {
     e.preventDefault();
     savePDFAs();
-  } else if (ctrl && e.key === 's') {
+  } else if (ctrl && shortcutKey === 's') {
     e.preventDefault();
     savePDF();
-  } else if (ctrl && e.key === 'w') {
+  } else if (ctrl && !shift && shortcutKey === 'w') {
     e.preventDefault();
     closeActiveTab();
   }
@@ -499,7 +502,7 @@ export async function handleKeydown(e) {
   } else if (ctrl && shift && shortcutKey === 'z') {
     e.preventDefault();
     redo();
-  } else if (ctrl && !shift && e.key === 'a') {
+  } else if (ctrl && !shift && shortcutKey === 'a') {
     // Ctrl+A: Select all annotations on current page
     e.preventDefault();
     const _selDoc = getActiveDocument();
@@ -631,7 +634,7 @@ export async function handleKeydown(e) {
     }
   }
 
-  else if (ctrl && shift && e.key === 'C') {
+  else if (ctrl && shift && shortcutKey === 'c') {
     e.preventDefault();
     let confirmed = false;
     if (window.__TAURI__?.dialog?.ask) {
@@ -647,7 +650,7 @@ export async function handleKeydown(e) {
       hideProperties();
       redraw();
     }
-  } else if (ctrl && !shift && (e.key === 'x' || e.key === 'X')) {
+  } else if (ctrl && !shift && shortcutKey === 'x') {
     // Knippen: kopieer de selectie naar het interne klembord (en, voor
     // afbeeldingen, naar het systeemklembord) en verwijder haar daarna.
     // Zonder deze tak deed Ctrl+X niets — knippen bestond alleen als naam.
@@ -667,7 +670,7 @@ export async function handleKeydown(e) {
       hideProperties();
       redraw();
     }
-  } else if (ctrl && !shift && e.key === 'c') {
+  } else if (ctrl && !shift && shortcutKey === 'c') {
     // Copy selected annotations (if none selected, let native copy handle text selection)
     const _copyDoc = getActiveDocument();
     const selected = _copyDoc ? _copyDoc.selectedAnnotations : [];
@@ -676,7 +679,7 @@ export async function handleKeydown(e) {
       if (selected.length > 1) copyAnnotations(selected);
       else copyAnnotation(selected[0]);
     }
-  } else if (ctrl && shift && (e.key === 'V' || e.key === 'v')) {
+  } else if (ctrl && shift && shortcutKey === 'v') {
     // Plakken op plaats (paste in place) — GitHub #269: plak het interne
     // clipboard op de HUIDIGE pagina op exact de gekopieerde coördinaten.
     // preventDefault mag hier wél — dit pad gebruikt alleen het interne
@@ -685,7 +688,7 @@ export async function handleKeydown(e) {
     if (!getActiveDocument()?.pdfDoc) return;
     if (isPdfAReadOnly()) return;
     import('../annotations/clipboard.js').then(({ pasteAnnotationsInPlace }) => pasteAnnotationsInPlace());
-  } else if (ctrl && !shift && e.key === 'v') {
+  } else if (ctrl && !shift && shortcutKey === 'v') {
     // An annotation copied inside the app must be pasted directly. Asking the
     // native Clipboard API first can open a WebView permission prompt and
     // indefinitely postpone the internal paste (notably for line annotations).
@@ -748,10 +751,10 @@ export async function handleKeydown(e) {
   } else if (ctrl && e.key === ',') {
     e.preventDefault();
     showPreferencesDialog();
-  } else if (ctrl && e.key === 'd') {
+  } else if (ctrl && !shift && shortcutKey === 'd') {
     e.preventDefault();
     showDocPropertiesDialog();
-  } else if (ctrl && (e.key === 'l' || e.key === 'L')) {
+  } else if (ctrl && shortcutKey === 'l') {
     e.preventDefault();
     toggleFullscreen();
   }
@@ -928,8 +931,9 @@ export async function handleKeydown(e) {
     }
   }
 
-  // Tool shortcuts (only if PDF is loaded)
-  else if (getActiveDocument()?.pdfDoc) {
+  // Tool shortcuts (only if PDF is loaded). Nooit met Ctrl: een Ctrl-letter
+  // die hierboven niet is afgehandeld, wisselt geen gereedschap (#577).
+  else if (!ctrl && getActiveDocument()?.pdfDoc) {
     const pdfaLocked = isPdfAReadOnly();
     if (e.key === 'v' || e.key === 'V') {
       e.preventDefault();

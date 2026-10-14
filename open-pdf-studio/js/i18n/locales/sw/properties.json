@@ -302,6 +302,8 @@
     "addChildBookmark": "Ongeza alamisho dogo",
     "editBookmark": "Hariri alamisho",
     "deleteBookmark": "Futa alamisho",
+    "findBookmark": "Tafuta...",
+    "findBookmarkTip": "Andika ili kuruka hadi alamisho. Enter inaifungua, Enter tena inaenda kwenye inayolingana inayofuata.",
     "addAttachment": "Ongeza kiambatisho",
     "openAttachment": "Fungua kiambatisho",
     "saveAttachment": "Hifadhi kiambatisho",
@@ -348,7 +350,8 @@
     "exportComments": "Hamisha maoni kwenye faili ya data...",
     "exportSelectedComments": "Hamisha maoni yaliyochaguliwa kwenye faili ya data...",
     "schedules": "Majedwali ya orodha",
-    "addPage": "Ongeza ukurasa"
+    "addPage": "Ongeza ukurasa",
+    "pageLabels": "Lebo za kurasa (kiunda majina)"
   },
   "scaleBar": {
     "title": "Upau wa Kipimo",
@@ -677,5 +680,9 @@
     "refused": "Haiwezekani: {{reason}}",
     "reasonTooNarrow": "kisehemu kingekuwa chembamba mno",
     "reasonFrame": "fremu ya nje haiwezi kusogezwa au kuondolewa"
+  },
+  "scopedPanel": {
+    "stale": "Kitu hiki kimebadilishwa mahali pengine. Fomu inaonyesha thamani za sasa; mabadiliko yako hayakutumika.",
+    "failed": "Imeshindwa kutumia mabadiliko: {{error}}"
   }
 }

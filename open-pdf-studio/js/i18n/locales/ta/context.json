@@ -116,7 +116,8 @@
     "deselectAll": "அனைத்தையும் தேர்வுநீக்கு",
     "insertFromFile": "கோப்பிலிருந்து செருகு...",
     "insertFromFileBefore": "இந்தப் பக்கத்திற்கு முன்...",
-    "insertFromFileAfter": "இந்தப் பக்கத்திற்குப் பின்..."
+    "insertFromFileAfter": "இந்தப் பக்கத்திற்குப் பின்...",
+    "pageLabels": "பக்க லேபிள்கள் (பெயர் உருவாக்கி)..."
   },
   "textSelection": {
     "highlightSelection": "தேர்வை முன்னிலைப்படுத்து",

@@ -17,6 +17,7 @@ import { vlakSchaalUitMeasure } from '../../annotations/vlak-zijden.js';
 import { heeft as heeftKnipselBron } from '../../annotations/vector-snippet-store.js';
 import { syncTwoPointGeometry } from '../../symbols/two-point.js';
 import { systeemFromOps, sparingenFromJson } from '../../annotations/systeemraster.js';
+import { linksUitJson } from '../../annotations/systeem-instance-links.js';
 import { systeemTypeFromJson, ifcPredefinedNaLaden } from '../../annotations/systeem-typen.js';
 import { ensureSysteemType, getSysteemTypeById } from '../../annotations/systeem-typen-registry.js';
 import { computeTextboxContentHeight } from '../../annotations/rendering/shapes.js';
@@ -788,6 +789,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
             system: sgSystem,
             sparingen: sparingenFromJson(extraColors.sgSparingenJson),
             systeemTypeId: sgTypeId,
+            // Koppelingen van extensies (#574); ongeldige items vallen weg.
+            extensionLinks: linksUitJson(extraColors.sgExtLinksJson),
             // Met een gevonden type is het TYPE leidend (#567): geen verzonnen
             // CEILING voor een type zonder predefined type.
             ifcPredefinedType: ifcPredefinedNaLaden({

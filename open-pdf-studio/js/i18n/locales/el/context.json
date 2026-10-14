@@ -116,7 +116,8 @@
     "deselectAll": "Αποεπιλογή όλων",
     "insertFromFile": "Εισαγωγή από αρχείο...",
     "insertFromFileBefore": "Πριν από αυτήν τη σελίδα...",
-    "insertFromFileAfter": "Μετά από αυτήν τη σελίδα..."
+    "insertFromFileAfter": "Μετά από αυτήν τη σελίδα...",
+    "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)..."
   },
   "textSelection": {
     "highlightSelection": "Επισήμανση επιλογής",

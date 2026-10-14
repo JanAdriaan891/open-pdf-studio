@@ -302,6 +302,8 @@
     "addChildBookmark": "Adicionar marcador filho",
     "editBookmark": "Editar marcador",
     "deleteBookmark": "Excluir marcador",
+    "findBookmark": "Localizar...",
+    "findBookmarkTip": "Digite para ir até um marcador. Enter o abre; Enter novamente vai para a próxima correspondência.",
     "addAttachment": "Adicionar anexo",
     "openAttachment": "Abrir anexo",
     "saveAttachment": "Salvar anexo",
@@ -348,7 +350,8 @@
     "exportComments": "Exportar comentários para arquivo de dados...",
     "exportSelectedComments": "Exportar comentários selecionados para arquivo de dados...",
     "schedules": "Quadros",
-    "addPage": "Adicionar página"
+    "addPage": "Adicionar página",
+    "pageLabels": "Rótulos de página (gerador de nomes)"
   },
   "scaleBar": {
     "title": "Barra de escala",
@@ -677,5 +680,9 @@
     "refused": "Não é possível: {{reason}}",
     "reasonTooNarrow": "um módulo ficaria estreito demais",
     "reasonFrame": "o caixilho externo não pode ser movido nem removido"
+  },
+  "scopedPanel": {
+    "stale": "Este objeto foi alterado em outro lugar. O formulário mostra os valores atuais; as alterações não foram aplicadas.",
+    "failed": "Não foi possível aplicar as alterações: {{error}}"
   }
 }

@@ -3700,7 +3700,7 @@ dependencies = [
 
 [[package]]
 name = "open-pdf-studio"
-version = "2026.42.0"
+version = "2026.42.4"
 dependencies = [
  "anyhow",
  "axum",
@@ -3758,7 +3758,9 @@ dependencies = [
  "tokio",
  "url",
  "urlencoding",
+ "webview2-com",
  "whoami",
+ "windows 0.61.3",
  "windows-sys 0.59.0",
  "x509-cert",
  "zeroize",

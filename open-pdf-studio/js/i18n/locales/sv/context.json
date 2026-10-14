@@ -116,7 +116,8 @@
     "deselectAll": "Avmarkera alla",
     "insertFromFile": "Infoga från fil...",
     "insertFromFileBefore": "Före den här sidan...",
-    "insertFromFileAfter": "Efter den här sidan..."
+    "insertFromFileAfter": "Efter den här sidan...",
+    "pageLabels": "Sidetiketter (namnbyggare)..."
   },
   "textSelection": {
     "highlightSelection": "Markera markering",

@@ -302,6 +302,8 @@
     "addChildBookmark": "添加子书签",
     "editBookmark": "编辑书签",
     "deleteBookmark": "删除书签",
+    "findBookmark": "查找...",
+    "findBookmarkTip": "输入以跳转到书签。按 Enter 打开，再按 Enter 转到下一个匹配项。",
     "addAttachment": "添加附件",
     "openAttachment": "打开附件",
     "saveAttachment": "保存附件",
@@ -348,7 +350,8 @@
     "exportComments": "将批注导出到数据文件...",
     "exportSelectedComments": "将选定批注导出到数据文件...",
     "schedules": "明细表",
-    "addPage": "添加页面"
+    "addPage": "添加页面",
+    "pageLabels": "页面标签（名称生成器）"
   },
   "scaleBar": {
     "title": "比例尺",
@@ -677,5 +680,9 @@
     "refused": "无法执行：{{reason}}",
     "reasonTooNarrow": "某个分格会变得过窄",
     "reasonFrame": "外框不能移动或删除"
+  },
+  "scopedPanel": {
+    "stale": "此对象已在其他位置更改。表单显示当前值；您的更改未应用。",
+    "failed": "无法应用更改：{{error}}"
   }
 }

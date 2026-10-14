@@ -29,6 +29,7 @@ function harness() {
     saveTextEditsToPages: async (_pdf, _pages, doc) => owners.push(doc),
     saveWatermarksToPages: async (_pdf, _pages, doc) => owners.push(doc),
     saveBookmarksToOutline: (_pdf, doc) => owners.push(doc), saveStylePresetsToCatalog() {},
+    slaPaginaLabelsOp: (_pdf, doc) => owners.push(doc),
     pasBijlagenToe: (_pdf, wijzigingen) => attachmentEdits.push(wijzigingen),
     unlockFile: async () => {}, lockFile: async () => {},
     writeBinaryFileAtomic: async (path, bytes) => { writes.push({ path, source: new TextDecoder().decode(bytes) }); },

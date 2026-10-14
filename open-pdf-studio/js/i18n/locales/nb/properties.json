@@ -302,6 +302,8 @@
     "addChildBookmark": "Legg til underbokmerke",
     "editBookmark": "Rediger bokmerke",
     "deleteBookmark": "Slett bokmerke",
+    "findBookmark": "Søk...",
+    "findBookmarkTip": "Skriv for å hoppe til et bokmerke. Enter åpner det, Enter igjen går til neste treff.",
     "addAttachment": "Legg til vedlegg",
     "openAttachment": "Åpne vedlegg",
     "saveAttachment": "Lagre vedlegg",
@@ -348,7 +350,8 @@
     "exportComments": "Eksporter kommentarer til datafil...",
     "exportSelectedComments": "Eksporter valgte kommentarer til datafil...",
     "schedules": "Lister",
-    "addPage": "Legg til side"
+    "addPage": "Legg til side",
+    "pageLabels": "Sideetiketter (navnebygger)"
   },
   "scaleBar": {
     "title": "Målestokklinjal",
@@ -677,5 +680,9 @@
     "refused": "Ikke mulig: {{reason}}",
     "reasonTooNarrow": "et felt ville blitt for smalt",
     "reasonFrame": "den ytre rammen kan ikke flyttes eller fjernes"
+  },
+  "scopedPanel": {
+    "stale": "Dette objektet er endret et annet sted. Skjemaet viser gjeldende verdier; endringene dine ble ikke tatt i bruk.",
+    "failed": "Kunne ikke ta i bruk endringene: {{error}}"
   }
 }

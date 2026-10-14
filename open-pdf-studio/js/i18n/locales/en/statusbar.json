@@ -28,7 +28,8 @@
     "formTextField": "Form Text Field",
     "formCheckbox": "Form Checkbox",
     "formRadio": "Form Radio Button",
-    "screenshot": "Screenshot"
+    "screenshot": "Screenshot",
+    "pageLabelPick": "Pick Text for Page Label"
   },
   "toolLabel": "Tool:",
   "annotationsLabel": "Annotations:",

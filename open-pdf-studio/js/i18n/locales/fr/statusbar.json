@@ -28,7 +28,8 @@
     "formTextField": "Champ de texte de formulaire",
     "formCheckbox": "Case à cocher de formulaire",
     "formRadio": "Bouton radio de formulaire",
-    "screenshot": "Capture d'écran"
+    "screenshot": "Capture d'écran",
+    "pageLabelPick": "Choisir le texte de l'étiquette de page"
   },
   "toolLabel": "Outil :",
   "annotationsLabel": "Annotations :",

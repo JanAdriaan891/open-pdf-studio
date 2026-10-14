@@ -302,6 +302,8 @@
     "addChildBookmark": "Thêm dấu trang con",
     "editBookmark": "Sửa dấu trang",
     "deleteBookmark": "Xóa dấu trang",
+    "findBookmark": "Tìm...",
+    "findBookmarkTip": "Gõ để chuyển đến một dấu trang. Enter để mở, nhấn Enter lần nữa để đến kết quả tiếp theo.",
     "addAttachment": "Thêm tệp đính kèm",
     "openAttachment": "Mở tệp đính kèm",
     "saveAttachment": "Lưu tệp đính kèm",
@@ -348,7 +350,8 @@
     "exportComments": "Xuất nhận xét ra tệp dữ liệu...",
     "exportSelectedComments": "Xuất nhận xét đã chọn ra tệp dữ liệu...",
     "schedules": "Bảng thống kê",
-    "addPage": "Thêm trang"
+    "addPage": "Thêm trang",
+    "pageLabels": "Nhãn trang (trình tạo tên)"
   },
   "scaleBar": {
     "title": "Thước tỷ lệ",
@@ -677,5 +680,9 @@
     "refused": "Không thể thực hiện: {{reason}}",
     "reasonTooNarrow": "một ô sẽ trở nên quá hẹp",
     "reasonFrame": "không thể di chuyển hoặc xóa khung ngoài"
+  },
+  "scopedPanel": {
+    "stale": "Đối tượng này đã được thay đổi ở nơi khác. Biểu mẫu hiển thị các giá trị hiện tại; các thay đổi của bạn chưa được áp dụng.",
+    "failed": "Không thể áp dụng các thay đổi: {{error}}"
   }
 }

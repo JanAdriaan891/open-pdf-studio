@@ -302,6 +302,8 @@
     "addChildBookmark": "Adaugare semn de carte copil",
     "editBookmark": "Editare semn de carte",
     "deleteBookmark": "Stergere semn de carte",
+    "findBookmark": "Găsire...",
+    "findBookmarkTip": "Tastați pentru a sări la un semn de carte. Enter îl deschide, Enter din nou trece la următoarea potrivire.",
     "addAttachment": "Adaugare atasament",
     "openAttachment": "Deschidere atasament",
     "saveAttachment": "Salvare atasament",
@@ -348,7 +350,8 @@
     "exportComments": "Exportă comentarii în fișier de date...",
     "exportSelectedComments": "Exportă comentariile selectate în fișier de date...",
     "schedules": "Extrase",
-    "addPage": "Adăugare pagină"
+    "addPage": "Adăugare pagină",
+    "pageLabels": "Etichete de pagină (generator de nume)"
   },
   "scaleBar": {
     "title": "Bară de scară",
@@ -677,5 +680,9 @@
     "refused": "Nu este posibil: {{reason}}",
     "reasonTooNarrow": "un câmp ar deveni prea îngust",
     "reasonFrame": "rama exterioară nu poate fi mutată sau eliminată"
+  },
+  "scopedPanel": {
+    "stale": "Acest obiect a fost modificat în altă parte. Formularul afișează valorile curente; modificările dvs. nu au fost aplicate.",
+    "failed": "Modificările nu au putut fi aplicate: {{error}}"
   }
 }

@@ -951,5 +951,19 @@
     "underlayLimited": "Razlučivost smanjena na {{dpi}} dpi",
     "underlayNoMeasure": "Ne odnosi se na podlogu; mjerilo dolazi sa stranice",
     "queued": "Još {{n}} crtež(a) u redu čekanja"
+  },
+  "pageLabels": {
+    "title": "Oznake stranica",
+    "intro": "Upišite naziv stranice u polje. „{{select}}” preuzima tekst sa stranice: umeće se kao {OCR1}, {OCR2}… i čita s istog mjesta na svakoj stranici. Primjer: {OCR1} - {OCR2}",
+    "name": "Naziv stranice:",
+    "pickHint": "Povucite okvir oko teksta koji želite koristiti, na primjer broja nacrta. Esc odustaje.",
+    "noText": "(tekst nije pronađen)",
+    "example": "Primjer:",
+    "useOcr": "Koristi OCR gdje okvir nema teksta (skenirani listovi, sporije)",
+    "read": "Pročitaj sve stranice",
+    "reading": "Čitanje stranice {{done}} od {{total}}...",
+    "colLabel": "Oznaka stranice",
+    "ocrLegend": "Stranice označene s OCR pročitane su prepoznavanjem teksta; provjerite ih prije primjene.",
+    "reset": "Vrati na brojeve stranica"
   }
 }

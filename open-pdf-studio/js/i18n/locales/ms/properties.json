@@ -302,6 +302,8 @@
     "addChildBookmark": "Tambah penanda buku anak",
     "editBookmark": "Sunting penanda buku",
     "deleteBookmark": "Padam penanda buku",
+    "findBookmark": "Cari...",
+    "findBookmarkTip": "Taip untuk melompat ke penanda buku. Enter membukanya, Enter sekali lagi pergi ke padanan seterusnya.",
     "addAttachment": "Tambah lampiran",
     "openAttachment": "Buka lampiran",
     "saveAttachment": "Simpan lampiran",
@@ -348,7 +350,8 @@
     "exportComments": "Eksport komen ke fail data...",
     "exportSelectedComments": "Eksport komen terpilih ke fail data...",
     "schedules": "Jadual",
-    "addPage": "Tambah halaman"
+    "addPage": "Tambah halaman",
+    "pageLabels": "Label halaman (pembina nama)"
   },
   "scaleBar": {
     "title": "Bar Skala",
@@ -677,5 +680,9 @@
     "refused": "Tidak boleh: {{reason}}",
     "reasonTooNarrow": "satu petak akan menjadi terlalu sempit",
     "reasonFrame": "bingkai luar tidak boleh dialihkan atau dibuang"
+  },
+  "scopedPanel": {
+    "stale": "Objek ini telah diubah di tempat lain. Borang memaparkan nilai semasa; perubahan anda tidak digunakan.",
+    "failed": "Perubahan tidak dapat digunakan: {{error}}"
   }
 }

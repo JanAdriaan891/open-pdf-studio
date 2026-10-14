@@ -28,7 +28,8 @@
     "formTextField": "Skjema-tekstfelt",
     "formCheckbox": "Skjema-avkrysningsboks",
     "formRadio": "Skjema-radioknapp",
-    "screenshot": "Skjermbilde"
+    "screenshot": "Skjermbilde",
+    "pageLabelPick": "Velg tekst for sideetikett"
   },
   "toolLabel": "Verktøy:",
   "annotationsLabel": "Merknader:",

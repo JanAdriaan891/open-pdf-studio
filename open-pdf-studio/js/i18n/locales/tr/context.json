@@ -116,7 +116,8 @@
     "deselectAll": "Tüm Seçimi Kaldır",
     "insertFromFile": "Dosyadan Ekle...",
     "insertFromFileBefore": "Bu Sayfadan Önce...",
-    "insertFromFileAfter": "Bu Sayfadan Sonra..."
+    "insertFromFileAfter": "Bu Sayfadan Sonra...",
+    "pageLabels": "Sayfa Etiketleri (Ad Oluşturucu)..."
   },
   "textSelection": {
     "highlightSelection": "Seçimi Vurgula",

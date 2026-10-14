@@ -302,6 +302,8 @@
     "addChildBookmark": "Dodaj zakładkę podrzędną",
     "editBookmark": "Edytuj zakładkę",
     "deleteBookmark": "Usuń zakładkę",
+    "findBookmark": "Znajdź...",
+    "findBookmarkTip": "Wpisz, aby przejść do zakładki. Enter ją otwiera, kolejny Enter przechodzi do następnego wyniku.",
     "addAttachment": "Dodaj załącznik",
     "openAttachment": "Otwórz załącznik",
     "saveAttachment": "Zapisz załącznik",
@@ -348,7 +350,8 @@
     "exportComments": "Eksportuj komentarze do pliku danych...",
     "exportSelectedComments": "Eksportuj wybrane komentarze do pliku danych...",
     "schedules": "Zestawienia",
-    "addPage": "Dodaj stronę"
+    "addPage": "Dodaj stronę",
+    "pageLabels": "Etykiety stron (kreator nazw)"
   },
   "scaleBar": {
     "title": "Podziałka liniowa",
@@ -677,5 +680,9 @@
     "refused": "Niemożliwe: {{reason}}",
     "reasonTooNarrow": "pole stałoby się zbyt wąskie",
     "reasonFrame": "zewnętrznej ościeżnicy nie można przesunąć ani usunąć"
+  },
+  "scopedPanel": {
+    "stale": "Ten obiekt został zmieniony w innym miejscu. Formularz pokazuje bieżące wartości; Twoje zmiany nie zostały zastosowane.",
+    "failed": "Nie można zastosować zmian: {{error}}"
   }
 }

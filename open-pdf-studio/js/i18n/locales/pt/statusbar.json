@@ -28,7 +28,8 @@
     "formTextField": "Campo de texto de formulário",
     "formCheckbox": "Caixa de seleção de formulário",
     "formRadio": "Botão de opção de formulário",
-    "screenshot": "Captura de tela"
+    "screenshot": "Captura de tela",
+    "pageLabelPick": "Escolher texto para o rótulo da página"
   },
   "toolLabel": "Ferramenta:",
   "annotationsLabel": "Anotações:",

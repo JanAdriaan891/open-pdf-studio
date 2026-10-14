@@ -37,6 +37,7 @@ import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrTextLayer, embedOcrFont, loadDefaultOcrFontBytes } from './saver/ocr-text-layer.js';
 import { saveBookmarksToOutline } from './saver/bookmarks.js';
 import { saveStylePresetsToCatalog } from './saver/style-presets.js';
+import { slaPaginaLabelsOp } from './pagina-labels.js';
 import { pasBijlagenToe } from './bijlagen.js';
 import { schrijfAnnotatieLagen, ocVoorAnnotatie } from './saver/annotatie-lagen.js';
 import { layersForSave, currentLayerId } from '../annotations/annotatie-lagen.js';
@@ -60,6 +61,7 @@ import { buildBetonbalk, approxTextWidth as betonbalkApproxTextWidth } from '../
 import { betonbalkBuildOpts } from '../annotations/betonbalk-scale.js';
 import { effectiveDraftingLineWidth } from '../annotations/drafting-rules.js';
 import { buildSysteemraster, systeemToOps, sparingenToJson } from '../annotations/systeemraster.js';
+import { linksNaarJson } from '../annotations/systeem-instance-links.js';
 import { systeemTypeToJson } from '../annotations/systeem-typen.js';
 import { getSysteemTypeById } from '../annotations/systeem-typen-registry.js';
 import { systeemrasterBuildOpts } from '../annotations/systeemraster-scale.js';
@@ -2272,6 +2274,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
                 || getSysteemTypeById(ann.systeemTypeId));
               if (sgTypeJson) sgDict.OPS_SgTypeDef = pdfTextString(sgTypeJson);
             }
+            // Koppelingen van extensies (#574): hun eigen gegevens per
+            // extensie, als JSON; alleen geldige koppelingen.
+            const sgLinksJson = linksNaarJson(ann);
+            if (sgLinksJson) sgDict.OPS_SgExtLinks = pdfTextString(sgLinksJson);
             annotDict = context.obj(sgDict);
             annotDict.set(PDFName.of('BS'), buildBorderStyle(context, borderWidth, 'solid'));
 
@@ -2943,6 +2949,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
     // Save named line-style presets into the catalog (travel with the PDF)
     saveStylePresetsToCatalog(pdfDocLib, activeDoc.stylePresets || null);
+
+    // Paginalabels (bladnamen, #580) als /PageLabels; alleen na een bewerking,
+    // zodat een andere nummering in het bestand ongemoeid blijft.
+    slaPaginaLabelsOp(pdfDocLib, activeDoc);
 
     // Bijlagen die in het paneel zijn toegevoegd of verwijderd (bijlagen.js).
     pasBijlagenToe(pdfDocLib, activeDoc.bijlagenWijzigingen);

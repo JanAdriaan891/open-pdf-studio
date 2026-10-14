@@ -302,6 +302,8 @@
     "addChildBookmark": "Unterlesezeichen hinzufügen",
     "editBookmark": "Lesezeichen bearbeiten",
     "deleteBookmark": "Lesezeichen löschen",
+    "findBookmark": "Suchen...",
+    "findBookmarkTip": "Tippen, um zu einem Lesezeichen zu springen. Enter öffnet es, erneut Enter springt zum nächsten Treffer.",
     "addAttachment": "Anhang hinzufügen",
     "openAttachment": "Anhang öffnen",
     "saveAttachment": "Anhang speichern",
@@ -348,7 +350,8 @@
     "exportComments": "Kommentare in Datendatei exportieren...",
     "exportSelectedComments": "Ausgewählte Kommentare in Datendatei exportieren...",
     "schedules": "Listen",
-    "addPage": "Seite hinzufügen"
+    "addPage": "Seite hinzufügen",
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",
@@ -677,5 +680,9 @@
     "refused": "Nicht möglich: {{reason}}",
     "reasonTooNarrow": "ein Feld würde zu schmal",
     "reasonFrame": "der äußere Rahmen kann nicht verschoben oder entfernt werden"
+  },
+  "scopedPanel": {
+    "stale": "Dieses Objekt wurde an anderer Stelle geändert. Das Formular zeigt die aktuellen Werte; Ihre Änderungen wurden nicht übernommen.",
+    "failed": "Die Änderungen konnten nicht übernommen werden: {{error}}"
   }
 }

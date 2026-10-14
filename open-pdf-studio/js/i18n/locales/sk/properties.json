@@ -302,6 +302,8 @@
     "addChildBookmark": "Pridať podzáložku",
     "editBookmark": "Upraviť záložku",
     "deleteBookmark": "Odstrániť záložku",
+    "findBookmark": "Nájsť...",
+    "findBookmarkTip": "Píšte pre prechod na záložku. Enter ju otvorí, ďalší Enter prejde na ďalšiu zhodu.",
     "addAttachment": "Pridať prílohu",
     "openAttachment": "Otvoriť prílohu",
     "saveAttachment": "Uložiť prílohu",
@@ -348,7 +350,8 @@
     "exportComments": "Exportovať komentáre do dátového súboru...",
     "exportSelectedComments": "Exportovať vybrané komentáre do dátového súboru...",
     "schedules": "Výkazy",
-    "addPage": "Pridať stranu"
+    "addPage": "Pridať stranu",
+    "pageLabels": "Menovky strán (tvorba názvov)"
   },
   "scaleBar": {
     "title": "Grafická mierka",
@@ -677,5 +680,9 @@
     "refused": "Nie je možné: {{reason}}",
     "reasonTooNarrow": "pole by bolo príliš úzke",
     "reasonFrame": "vonkajší rám nie je možné presunúť ani odobrať"
+  },
+  "scopedPanel": {
+    "stale": "Tento objekt bol zmenený inde. Formulár zobrazuje aktuálne hodnoty; vaše zmeny neboli použité.",
+    "failed": "Zmeny sa nepodarilo použiť: {{error}}"
   }
 }

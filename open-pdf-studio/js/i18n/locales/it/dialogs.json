@@ -951,5 +951,19 @@
     "underlayLimited": "Risoluzione ridotta a {{dpi}} dpi",
     "underlayNoMeasure": "Non si applica a un sottofondo; la scala di misura viene dalla pagina",
     "queued": "Altri {{n}} disegni in coda"
+  },
+  "pageLabels": {
+    "title": "Etichette di pagina",
+    "intro": "Digita il nome della pagina nel campo. «{{select}}» preleva testo dalla pagina: viene inserito come {OCR1}, {OCR2}… e letto nello stesso punto di ogni pagina. Esempio: {OCR1} - {OCR2}",
+    "name": "Nome della pagina:",
+    "pickHint": "Trascina un riquadro attorno al testo da usare, ad esempio il numero della tavola. Esc annulla.",
+    "noText": "(nessun testo trovato)",
+    "example": "Esempio:",
+    "useOcr": "Usa l'OCR dove un riquadro non contiene testo (tavole scansionate, più lento)",
+    "read": "Leggi tutte le pagine",
+    "reading": "Lettura della pagina {{done}} di {{total}}...",
+    "colLabel": "Etichetta di pagina",
+    "ocrLegend": "Le pagine contrassegnate OCR sono state lette con il riconoscimento del testo; controllale prima di applicare.",
+    "reset": "Ripristina i numeri di pagina"
   }
 }
