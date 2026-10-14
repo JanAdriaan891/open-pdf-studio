@@ -28,6 +28,7 @@ import { trimTool } from './trim-tool.js';
 import { extendTool } from './extend-tool.js';
 import { arrayTool } from './array-tool.js';
 import { removeImageTool } from './remove-image-tool.js';
+import { scanTextTool } from './scan-text-tool.js';
 import { splitTool, breakTool } from './split-tool.js';
 import { lengthenTool } from './lengthen-tool.js';
 import { offsetTool } from './offset-tool.js';
@@ -136,6 +137,7 @@ export function registerAllTools() {
 
   // Remove an image that is embedded in the PDF page content (issue #184)
   registerTool('removeImage', removeImageTool);
+  registerTool('scanText', scanTextTool);
 
   // CAD tools
   registerTool('trim', trimTool);

@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Open thumbnails to drag pages into a new order",
     "ocr": "Recognize Text (OCR)",
     "straighten": "Straighten Page",
+    "scanText": "Edit Scan Text",
+    "scanTextHint": "Click a recognised word to replace it. The old word in the scan is covered.",
+    "scanTextNone": "No recognised text on this page. Run Recognize Text (OCR) first.",
     "shiftPage": "Shift Page"
   },
   "help": {

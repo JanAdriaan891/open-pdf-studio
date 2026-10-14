@@ -313,6 +313,9 @@
     "reorderPagesTitle": "Open miniaturen om pagina’s in een nieuwe volgorde te slepen",
     "ocr": "Tekst herkennen (OCR)",
     "straighten": "Pagina Rechtzetten",
+    "scanText": "Gescande tekst bewerken",
+    "scanTextHint": "Klik op een herkend woord om het te vervangen. Het oude woord in de scan wordt afgedekt.",
+    "scanTextNone": "Geen herkende tekst op deze pagina. Voer eerst Tekst herkennen (OCR) uit.",
     "shiftPage": "Pagina verschuiven"
   },
   "help": {
