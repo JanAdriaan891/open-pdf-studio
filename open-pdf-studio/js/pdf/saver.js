@@ -41,7 +41,7 @@ import { slaPaginaLabelsOp } from './pagina-labels.js';
 import { pasBijlagenToe } from './bijlagen.js';
 import { schrijfAnnotatieLagen, ocVoorAnnotatie } from './saver/annotatie-lagen.js';
 import { layersForSave, currentLayerId } from '../annotations/annotatie-lagen.js';
-import { pdfTextString, toWinAnsiText, winAnsiLiteral, asciiPdfName } from './saver/pdf-text.js';
+import { heeftNietWinAnsi, pdfTextString, toWinAnsiText, winAnsiLiteral, asciiPdfName } from './saver/pdf-text.js';
 import { typemachineVak, typemachineRegelBreedte } from './saver/typemachine.js';
 import { catmullRomSpline } from '../tools/tools/spline-tool.js';
 import { catmullRomToBezier, splineArrowEndTangent } from '../annotations/spline-arrow-geometry.js';
@@ -309,6 +309,11 @@ async function _savePDFNu(saveAsPath, activeDoc) {
     }
 
     // Get the PDF pages
+    let cjkApFont = null;
+    const cjkFontVoorAp = async () => {
+      if (!cjkApFont) cjkApFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes());
+      return cjkApFont;
+    };
     const pages = pdfDocLib.getPages();
     const context = pdfDocLib.context;
 
@@ -1447,6 +1452,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               // baseline), so other viewers break + place lines identically and
               // long labels no longer overflow the box.
               const ftUsedFonts = new Set();
+              let ftCjkGebruikt = false;
               if (ann.text) {
                 const ftFontSize = ann.fontSize || 14;
                 const [tr, tg, tb] = ann.textColor ? hexToRgb(ann.textColor) : [0, 0, 0];
@@ -1455,7 +1461,11 @@ async function _savePDFNu(saveAsPath, activeDoc) {
                 // 90/270-rotated pages ann.width/height were remapped into
                 // PDF space and would wrap against the wrong dimension.
                 // Layout over de tekst die de WinAnsi-font echt toont.
-                const apTekstvak = winAnsiTekstvak(ann);
+                // Tekst die WinAnsi niet kan tonen (Chinees e.d.) gaat met een
+                // ingebed CJK-font de appearance in, anders staan er vraagtekens.
+                const cjkTekst = heeftNietWinAnsi(ann.text);
+                const cjkFont = cjkTekst ? await cjkFontVoorAp() : null;
+                const apTekstvak = cjkFont ? ann : winAnsiTekstvak(ann);
                 const layout = layoutTextboxForExport(
                   pageSwapsDims ? { ...apTekstvak, width: visW, height: visH } : apTekstvak);
                 const pad = layout.padding;
@@ -1489,6 +1499,12 @@ async function _savePDFNu(saveAsPath, activeDoc) {
                   // PDF-tekstruimte vanzelf door na elke Tj.
                   const chunks = (ln.chunks && ln.chunks.length) ? ln.chunks : [{ text: ln.text, bold: !!ann.fontBold, italic: !!ann.fontItalic }];
                   for (const c of chunks) {
+                    if (cjkFont && heeftNietWinAnsi(c.text)) {
+                      ftStreamContent += `/OPSCjk ${ftFontSize} Tf\n${cjkFont.encodeText(c.text).toString()} Tj\n`;
+                      huidigFont = 'OPSCjk';
+                      ftCjkGebruikt = true;
+                      continue;
+                    }
                     const f = mapFontToPdfName(ann.fontFamily, c.bold, c.italic);
                     ftUsedFonts.add(f);
                     if (f !== huidigFont) { ftStreamContent += `/${f} ${ftFontSize} Tf\n`; huidigFont = f; }
@@ -1515,6 +1531,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               for (const f of ftUsedFonts) {
                 ftFontResources[f] = tekstvakFontDict(context, f);
               }
+              if (ftCjkGebruikt) ftFontResources.OPSCjk = (await cjkFontVoorAp()).ref;
 
               // Use absolute BBox (same as Rect) with Matrix to translate origin
               const apStreamDict = {

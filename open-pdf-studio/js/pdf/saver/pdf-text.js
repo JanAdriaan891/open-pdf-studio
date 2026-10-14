@@ -110,6 +110,16 @@ export function toWinAnsiText(text, { newlines = 'keep' } = {}) {
 }
 
 /**
+ * Bevat de tekst tekens die een WinAnsi-font niet kan tonen (bijv. Chinees)?
+ * @param {unknown} text
+ * @returns {boolean}
+ */
+export function heeftNietWinAnsi(text) {
+  const s = String(text ?? '');
+  return toWinAnsiText(s) !== s;
+}
+
+/**
  * Inhoud van een PDF literal string (zonder de omringende haakjes) voor een
  * font in /WinAnsiEncoding, in puur ASCII. `\`, `(` en `)` krijgen een
  * backslash, WinAnsi-codes vanaf 0x80 worden een octale escape van drie
