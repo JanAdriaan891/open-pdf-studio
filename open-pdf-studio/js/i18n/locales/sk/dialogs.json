@@ -965,5 +965,11 @@
     "colLabel": "Menovka strany",
     "ocrLegend": "Strany označené OCR boli načítané rozpoznávaním textu; pred použitím ich skontrolujte.",
     "reset": "Obnoviť čísla strán"
+  },
+  "pdfPassword": {
+    "title": "Vyžaduje sa heslo",
+    "message": "„{{fileName}}“ je chránený heslom. Zadajte heslo a otvorte ho iba na čítanie.",
+    "label": "Heslo:",
+    "wrong": "Nesprávne heslo, skúste to znova."
   }
 }

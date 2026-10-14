@@ -965,5 +965,11 @@
     "colLabel": "Paginalabel",
     "ocrLegend": "Pagina's met OCR zijn met tekstherkenning gelezen; controleer ze voordat u toepast.",
     "reset": "Terug naar paginanummers"
+  },
+  "pdfPassword": {
+    "title": "Wachtwoord vereist",
+    "message": "\"{{fileName}}\" is beveiligd met een wachtwoord. Voer het wachtwoord in om het alleen-lezen te openen.",
+    "label": "Wachtwoord:",
+    "wrong": "Onjuist wachtwoord, probeer het opnieuw."
   }
 }

@@ -171,5 +171,6 @@
     "failed": "Leikkaus epäonnistui",
     "clipboardEmpty": "Leikepöydällä ei ole leikettä"
   },
-  "snippetOutputFailed": "Vektorileikettä ei voitu piirtää, joten vienti tai tulostus keskeytettiin. Yritä uudelleen."
+  "snippetOutputFailed": "Vektorileikettä ei voitu piirtää, joten vienti tai tulostus keskeytettiin. Yritä uudelleen.",
+  "protectedPdfReadOnly": "Tämä asiakirja avattiin salasanalla ja on vain luku -tilassa. Sitä ei voi tallentaa."
 }

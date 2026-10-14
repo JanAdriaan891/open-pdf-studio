@@ -965,5 +965,11 @@
     "colLabel": "Etykieta strony",
     "ocrLegend": "Strony oznaczone OCR odczytano za pomocą rozpoznawania tekstu; sprawdź je przed zastosowaniem.",
     "reset": "Przywróć numery stron"
+  },
+  "pdfPassword": {
+    "title": "Wymagane hasło",
+    "message": "Plik „{{fileName}}” jest chroniony hasłem. Wprowadź hasło, aby otworzyć go tylko do odczytu.",
+    "label": "Hasło:",
+    "wrong": "Nieprawidłowe hasło, spróbuj ponownie."
   }
 }

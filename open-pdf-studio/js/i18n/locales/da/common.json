@@ -171,5 +171,6 @@
     "failed": "Udklip mislykkedes",
     "clipboardEmpty": "Intet udsnit på udklipsholderen"
   },
-  "snippetOutputFailed": "Et vektorudsnit kunne ikke gengives, så eksporten eller udskriften blev stoppet. Prøv igen."
+  "snippetOutputFailed": "Et vektorudsnit kunne ikke gengives, så eksporten eller udskriften blev stoppet. Prøv igen.",
+  "protectedPdfReadOnly": "Dette dokument blev åbnet med en adgangskode og er skrivebeskyttet. Det kan ikke gemmes."
 }

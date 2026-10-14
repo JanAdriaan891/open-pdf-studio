@@ -171,5 +171,6 @@
     "failed": "Pemotongan gagal",
     "clipboardEmpty": "Tiada keratan dalam papan keratan"
   },
-  "snippetOutputFailed": "Keratan vektor tidak dapat dipaparkan, jadi eksport atau cetakan dihentikan. Cuba lagi."
+  "snippetOutputFailed": "Keratan vektor tidak dapat dipaparkan, jadi eksport atau cetakan dihentikan. Cuba lagi.",
+  "protectedPdfReadOnly": "Dokumen ini dibuka dengan kata laluan dan hanya boleh dibaca. Ia tidak boleh disimpan."
 }

@@ -171,5 +171,6 @@
     "failed": "Decuparea a eșuat",
     "clipboardEmpty": "Niciun decupaj în clipboard"
   },
-  "snippetOutputFailed": "Un decupaj vectorial nu a putut fi randat, așa că exportul sau tipărirea a fost oprită. Încercați din nou."
+  "snippetOutputFailed": "Un decupaj vectorial nu a putut fi randat, așa că exportul sau tipărirea a fost oprită. Încercați din nou.",
+  "protectedPdfReadOnly": "Acest document a fost deschis cu o parolă și este doar în citire. Nu poate fi salvat."
 }

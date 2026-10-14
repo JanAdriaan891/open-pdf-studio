@@ -171,5 +171,6 @@
     "failed": "잘라내기에 실패했습니다",
     "clipboardEmpty": "클립보드에 스니펫이 없습니다"
   },
-  "snippetOutputFailed": "벡터 스니펫을 렌더링할 수 없어 내보내기 또는 인쇄를 중단했습니다. 다시 시도하세요."
+  "snippetOutputFailed": "벡터 스니펫을 렌더링할 수 없어 내보내기 또는 인쇄를 중단했습니다. 다시 시도하세요.",
+  "protectedPdfReadOnly": "이 문서는 암호로 열렸으며 읽기 전용입니다. 저장할 수 없습니다."
 }

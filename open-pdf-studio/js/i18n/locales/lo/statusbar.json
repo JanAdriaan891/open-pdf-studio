@@ -107,5 +107,6 @@
   "searchResultsTitle": "ຜົນການຄົ້ນຫາ ({{count}})",
   "searchResultPage": "ໜ້າ {{page}}",
   "searchHitsOne": "ພົບ 1 ລາຍການ",
-  "searchHitsMany": "ພົບ {{count}} ລາຍການ"
+  "searchHitsMany": "ພົບ {{count}} ລາຍການ",
+  "passwordProtectedBar": "ປ້ອງກັນດ້ວຍລະຫັດຜ່ານ: ເປີດແບບອ່ານຢ່າງດຽວ."
 }

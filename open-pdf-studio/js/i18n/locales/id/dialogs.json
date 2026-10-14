@@ -965,5 +965,11 @@
     "colLabel": "Label halaman",
     "ocrLegend": "Halaman bertanda OCR dibaca dengan pengenalan teks; periksa sebelum menerapkan.",
     "reset": "Kembalikan ke nomor halaman"
+  },
+  "pdfPassword": {
+    "title": "Kata sandi diperlukan",
+    "message": "\"{{fileName}}\" dilindungi kata sandi. Masukkan kata sandi untuk membukanya dalam mode hanya baca.",
+    "label": "Kata sandi:",
+    "wrong": "Kata sandi salah, coba lagi."
   }
 }

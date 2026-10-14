@@ -171,5 +171,6 @@
     "copied": "Snippet copied — paste it into another drawing",
     "failed": "Cutting failed",
     "clipboardEmpty": "No snippet on the clipboard"
-  }
+  },
+  "protectedPdfReadOnly": "This document was opened with a password and is read-only. It cannot be saved."
 }

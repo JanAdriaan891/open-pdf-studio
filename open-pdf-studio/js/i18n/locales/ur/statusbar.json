@@ -107,5 +107,6 @@
   "searchResultsTitle": "نتائج ({{count}})",
   "searchResultPage": "صفحہ {{page}}",
   "searchHitsOne": "1 مماثلت",
-  "searchHitsMany": "{{count}} مماثلتیں"
+  "searchHitsMany": "{{count}} مماثلتیں",
+  "passwordProtectedBar": "پاس ورڈ سے محفوظ: صرف پڑھنے کے لیے کھولا گیا۔"
 }

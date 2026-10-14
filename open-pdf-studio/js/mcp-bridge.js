@@ -236,10 +236,29 @@ async function handleOpenPdf(params) {
   tabsMod.switchToTab(tabIndex);
   const doc = stateMod.state.documents[tabIndex];
   if (!doc.pdfDoc) {
+    // A PDF with an open password shows the password dialog and waits for
+    // the user; the bridge answers right away instead of blocking until a
+    // timeout. The load continues in the app once the password is entered.
+    const pwStore = await import('./solid/stores/wachtwoordDialoogStore.js');
+    let stopListening = () => {};
+    const passwordAsked = new Promise((resolve) => {
+      stopListening = pwStore.bijWachtwoordVraag(() => resolve('password'));
+    });
+    const loading = loaderMod.loadPDF(path, tabIndex).then(() => 'loaded');
+    let first;
     try {
-      await loaderMod.loadPDF(path, tabIndex);
+      first = await Promise.race([loading, passwordAsked]);
     } catch (e) {
       return { ok: false, error: `loadPDF: ${e?.message ?? e}` };
+    } finally {
+      stopListening();
+    }
+    if (first === 'password') {
+      loading.catch(() => {});
+      return { ok: true, dialog: 'pdf-password', file_path: path, tab_id: tabIndex };
+    }
+    if (!stateMod.state.documents.includes(doc)) {
+      return { ok: false, error: 'the document was closed while loading', file_path: path };
     }
   }
   const ready = await waitForActiveLoad(doc, 30000);
@@ -1938,6 +1957,10 @@ async function handleListTabs() {
       pageCount: d.pdfDoc?.numPages ?? 0,
       isUntitled: !!d.isUntitled,
       currentPage: d.currentPage ?? null,
+      // Opened with a password: read-only; filePath is then the decrypted
+      // working copy and originalFilePath the user's file.
+      passwordProtected: !!d.passwordProtected,
+      originalFilePath: d.originalFilePath ?? null,
       annotationCount: (d.annotations || []).length,
     })),
   };
@@ -2023,6 +2046,11 @@ async function handleSavePdf(params) {
   const stateMod = await import('./core/state.js');
   const doc = stateMod.getActiveDocument();
   if (!doc?.pdfDoc) return { ok: false, error: 'no active document' };
+  // Opened with a password: read-only, never saved (not even as a copy).
+  const pwMod = await import('./pdf/wachtwoord-pdf.js');
+  if (pwMod.opslaanGeweigerd(doc)) {
+    return { ok: false, error: 'document is read-only: it was opened with a password and cannot be saved', readOnly: true };
+  }
   if (!path && (!doc.filePath || doc.isUntitled)) {
     // savePDF() without a real path falls through to the Save As file picker
     // — never acceptable on a headless bridge. The caller must supply a path.

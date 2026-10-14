@@ -965,5 +965,11 @@
     "colLabel": "Lebo ya ukurasa",
     "ocrLegend": "Kurasa zilizowekwa alama ya OCR zilisomwa kwa utambuzi wa maandishi; zikague kabla ya kutekeleza.",
     "reset": "Rejesha namba za kurasa"
+  },
+  "pdfPassword": {
+    "title": "Nenosiri linahitajika",
+    "message": "\"{{fileName}}\" imelindwa kwa nenosiri. Weka nenosiri ili kuifungua kwa kusoma tu.",
+    "label": "Nenosiri:",
+    "wrong": "Nenosiri si sahihi, jaribu tena."
   }
 }

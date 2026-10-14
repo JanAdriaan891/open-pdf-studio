@@ -107,5 +107,6 @@
   "searchResultsTitle": "Hasil ({{count}})",
   "searchResultPage": "Halaman {{page}}",
   "searchHitsOne": "1 hasil",
-  "searchHitsMany": "{{count}} hasil"
+  "searchHitsMany": "{{count}} hasil",
+  "passwordProtectedBar": "Dilindungi kata sandi: dibuka dalam mode hanya baca."
 }

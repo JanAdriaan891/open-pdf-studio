@@ -107,5 +107,6 @@
   "searchResultsTitle": "Resultater ({{count}})",
   "searchResultPage": "Side {{page}}",
   "searchHitsOne": "1 match",
-  "searchHitsMany": "{{count}} match"
+  "searchHitsMany": "{{count}} match",
+  "passwordProtectedBar": "Beskyttet med adgangskode: åbnet skrivebeskyttet."
 }

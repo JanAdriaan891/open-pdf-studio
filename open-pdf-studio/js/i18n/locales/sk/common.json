@@ -171,5 +171,6 @@
     "failed": "Vystrihnutie zlyhalo",
     "clipboardEmpty": "V schránke nie je žiadny výrez"
   },
-  "snippetOutputFailed": "Vektorový výrez sa nepodarilo vykresliť, preto bol export alebo tlač zastavený. Skúste to znova."
+  "snippetOutputFailed": "Vektorový výrez sa nepodarilo vykresliť, preto bol export alebo tlač zastavený. Skúste to znova.",
+  "protectedPdfReadOnly": "Tento dokument bol otvorený s heslom a je iba na čítanie. Nedá sa uložiť."
 }

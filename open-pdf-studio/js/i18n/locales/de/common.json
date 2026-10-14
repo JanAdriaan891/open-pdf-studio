@@ -171,5 +171,6 @@
     "failed": "Ausschneiden fehlgeschlagen",
     "clipboardEmpty": "Kein Ausschnitt in der Zwischenablage"
   },
-  "snippetOutputFailed": "Ein Vektorausschnitt konnte nicht gerendert werden, daher wurde der Export oder Druck abgebrochen. Versuchen Sie es erneut."
+  "snippetOutputFailed": "Ein Vektorausschnitt konnte nicht gerendert werden, daher wurde der Export oder Druck abgebrochen. Versuchen Sie es erneut.",
+  "protectedPdfReadOnly": "Dieses Dokument wurde mit einem Kennwort geöffnet und ist schreibgeschützt. Es kann nicht gespeichert werden."
 }

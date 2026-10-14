@@ -171,5 +171,6 @@
     "failed": "Échec de la découpe",
     "clipboardEmpty": "Aucune découpe dans le presse-papiers"
   },
-  "snippetOutputFailed": "Une découpe vectorielle n'a pas pu être rendue ; l'export ou l'impression a donc été arrêté. Réessayez."
+  "snippetOutputFailed": "Une découpe vectorielle n'a pas pu être rendue ; l'export ou l'impression a donc été arrêté. Réessayez.",
+  "protectedPdfReadOnly": "Ce document a été ouvert avec un mot de passe et est en lecture seule. Il ne peut pas être enregistré."
 }

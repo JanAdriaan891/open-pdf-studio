@@ -965,5 +965,11 @@
     "colLabel": "Oznaka stranice",
     "ocrLegend": "Stranice označene s OCR pročitane su prepoznavanjem teksta; provjerite ih prije primjene.",
     "reset": "Vrati na brojeve stranica"
+  },
+  "pdfPassword": {
+    "title": "Potrebna je lozinka",
+    "message": "„{{fileName}}” zaštićen je lozinkom. Unesite lozinku da biste ga otvorili samo za čitanje.",
+    "label": "Lozinka:",
+    "wrong": "Pogrešna lozinka, pokušajte ponovno."
   }
 }

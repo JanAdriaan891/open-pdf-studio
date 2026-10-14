@@ -171,5 +171,6 @@
     "copied": "Knipsel gekopieerd — plak het in een andere tekening",
     "failed": "Knippen mislukt",
     "clipboardEmpty": "Geen knipsel op het klembord"
-  }
+  },
+  "protectedPdfReadOnly": "Dit document is met een wachtwoord geopend en is alleen-lezen. Het kan niet worden opgeslagen."
 }

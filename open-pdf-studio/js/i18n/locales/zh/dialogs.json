@@ -965,5 +965,11 @@
     "colLabel": "页面的标签",
     "ocrLegend": "标有 OCR 的页面是通过文字识别读取的；应用前请检查。",
     "reset": "恢复为页码"
+  },
+  "pdfPassword": {
+    "title": "需要密码",
+    "message": "“{{fileName}}”受密码保护。输入密码以只读方式打开。",
+    "label": "密码：",
+    "wrong": "密码错误，请重试。"
   }
 }

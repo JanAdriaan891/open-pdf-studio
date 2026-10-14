@@ -965,5 +965,11 @@
     "colLabel": "Seitenbeschriftung",
     "ocrLegend": "Mit OCR markierte Seiten wurden per Texterkennung gelesen; prüfen Sie sie vor dem Anwenden.",
     "reset": "Auf Seitenzahlen zurücksetzen"
+  },
+  "pdfPassword": {
+    "title": "Kennwort erforderlich",
+    "message": "„{{fileName}}“ ist mit einem Kennwort geschützt. Geben Sie das Kennwort ein, um die Datei schreibgeschützt zu öffnen.",
+    "label": "Kennwort:",
+    "wrong": "Falsches Kennwort, bitte erneut versuchen."
   }
 }

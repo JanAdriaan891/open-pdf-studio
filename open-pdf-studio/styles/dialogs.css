@@ -4626,6 +4626,58 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
   width: 82px;
 }
 
+/* Wachtwoord van een beveiligde PDF (PasswordDialog.jsx) */
+.pdf-password-dialog {
+  width: 380px;
+  max-width: calc(100vw - 32px);
+}
+
+.pdf-password-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+  cursor: default;
+}
+
+.pdf-password-message {
+  margin: 0;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.pdf-password-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdf-password-row input {
+  flex: 1;
+  height: 22px;
+  padding: 0 4px;
+  border: 1px solid var(--theme-border, #ababab);
+  border-radius: 0;
+  font-size: 12px;
+  background: var(--theme-surface, #ffffff);
+  color: var(--theme-text, #333);
+}
+
+.pdf-password-error {
+  color: #c42b1c;
+}
+
+.pdf-password-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+.pdf-password-footer .pref-btn {
+  cursor: default;
+}
+
 /* CAD-uitwisseling: export naar DXF/DWG en import van DWG/DXF (#400).
    Windows-Forms-stijl: rechte hoeken, compact, thema-kleuren. */
 .cad-dialog { width: 600px; }

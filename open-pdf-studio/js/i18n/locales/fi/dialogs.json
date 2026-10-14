@@ -965,5 +965,11 @@
     "colLabel": "Sivun nimiö",
     "ocrLegend": "OCR-merkityt sivut luettiin tekstintunnistuksella; tarkista ne ennen käyttöönottoa.",
     "reset": "Palauta sivunumerot"
+  },
+  "pdfPassword": {
+    "title": "Salasana vaaditaan",
+    "message": "”{{fileName}}” on suojattu salasanalla. Avaa se vain luku -tilassa antamalla salasana.",
+    "label": "Salasana:",
+    "wrong": "Väärä salasana, yritä uudelleen."
   }
 }

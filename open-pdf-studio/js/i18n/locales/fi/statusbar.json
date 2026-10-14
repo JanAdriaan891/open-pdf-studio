@@ -107,5 +107,6 @@
   "searchResultsTitle": "Tulokset ({{count}})",
   "searchResultPage": "Sivu {{page}}",
   "searchHitsOne": "1 osuma",
-  "searchHitsMany": "{{count}} osumaa"
+  "searchHitsMany": "{{count}} osumaa",
+  "passwordProtectedBar": "Suojattu salasanalla: avattu vain luku -tilassa."
 }

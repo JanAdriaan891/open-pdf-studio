@@ -107,5 +107,6 @@
   "searchResultsTitle": "முடிவுகள் ({{count}})",
   "searchResultPage": "பக்கம் {{page}}",
   "searchHitsOne": "1 பொருத்தம்",
-  "searchHitsMany": "{{count}} பொருத்தங்கள்"
+  "searchHitsMany": "{{count}} பொருத்தங்கள்",
+  "passwordProtectedBar": "கடவுச்சொல்லால் பாதுகாக்கப்பட்டது: படிக்க மட்டும் திறக்கப்பட்டது."
 }

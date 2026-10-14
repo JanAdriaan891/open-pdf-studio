@@ -965,5 +965,11 @@
     "colLabel": "Etiqueta de página",
     "ocrLegend": "Las páginas marcadas con OCR se leyeron con reconocimiento de texto; revíselas antes de aplicar.",
     "reset": "Restablecer números de página"
+  },
+  "pdfPassword": {
+    "title": "Se requiere contraseña",
+    "message": "«{{fileName}}» está protegido con contraseña. Introduzca la contraseña para abrirlo en modo de solo lectura.",
+    "label": "Contraseña:",
+    "wrong": "Contraseña incorrecta, inténtelo de nuevo."
   }
 }

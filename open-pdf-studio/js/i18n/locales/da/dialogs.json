@@ -965,5 +965,11 @@
     "colLabel": "Sideetiket",
     "ocrLegend": "Sider markeret med OCR er læst med tekstgenkendelse; kontroller dem, før du anvender.",
     "reset": "Nulstil til sidetal"
+  },
+  "pdfPassword": {
+    "title": "Adgangskode påkrævet",
+    "message": "\"{{fileName}}\" er beskyttet med en adgangskode. Angiv adgangskoden for at åbne den skrivebeskyttet.",
+    "label": "Adgangskode:",
+    "wrong": "Forkert adgangskode, prøv igen."
   }
 }

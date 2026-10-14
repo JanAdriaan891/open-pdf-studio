@@ -965,5 +965,11 @@
     "colLabel": "Rótulo da página",
     "ocrLegend": "As páginas marcadas com OCR foram lidas por reconhecimento de texto; verifique-as antes de aplicar.",
     "reset": "Redefinir para números de página"
+  },
+  "pdfPassword": {
+    "title": "Senha necessária",
+    "message": "\"{{fileName}}\" está protegido por senha. Digite a senha para abri-lo somente para leitura.",
+    "label": "Senha:",
+    "wrong": "Senha incorreta, tente novamente."
   }
 }

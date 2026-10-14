@@ -965,5 +965,11 @@
     "colLabel": "Etiqueta de pàgina",
     "ocrLegend": "Les pàgines marcades amb OCR s'han llegit amb reconeixement de text; comproveu-les abans d'aplicar.",
     "reset": "Restableix els números de pàgina"
+  },
+  "pdfPassword": {
+    "title": "Cal una contrasenya",
+    "message": "«{{fileName}}» està protegit amb una contrasenya. Introduïu la contrasenya per obrir-lo només de lectura.",
+    "label": "Contrasenya:",
+    "wrong": "Contrasenya incorrecta, torneu-ho a provar."
   }
 }

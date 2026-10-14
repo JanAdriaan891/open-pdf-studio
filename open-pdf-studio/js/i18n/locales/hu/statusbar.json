@@ -107,5 +107,6 @@
   "searchResultsTitle": "Találatok ({{count}})",
   "searchResultPage": "{{page}}. oldal",
   "searchHitsOne": "1 találat",
-  "searchHitsMany": "{{count}} találat"
+  "searchHitsMany": "{{count}} találat",
+  "passwordProtectedBar": "Jelszóval védett: csak olvasásra megnyitva."
 }

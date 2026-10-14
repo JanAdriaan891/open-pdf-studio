@@ -107,5 +107,6 @@
   "searchResultsTitle": "Keputusan ({{count}})",
   "searchResultPage": "Halaman {{page}}",
   "searchHitsOne": "1 padanan",
-  "searchHitsMany": "{{count}} padanan"
+  "searchHitsMany": "{{count}} padanan",
+  "passwordProtectedBar": "Dilindungi dengan kata laluan: dibuka dalam mod baca sahaja."
 }

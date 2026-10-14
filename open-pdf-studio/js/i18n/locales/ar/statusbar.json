@@ -107,5 +107,6 @@
   "searchResultsTitle": "النتائج ({{count}})",
   "searchResultPage": "صفحة {{page}}",
   "searchHitsOne": "نتيجة واحدة",
-  "searchHitsMany": "{{count}} نتائج"
+  "searchHitsMany": "{{count}} نتائج",
+  "passwordProtectedBar": "محمي بكلمة مرور: تم الفتح للقراءة فقط."
 }

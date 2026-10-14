@@ -107,5 +107,6 @@
   "searchResultsTitle": "ผลลัพธ์ ({{count}})",
   "searchResultPage": "หน้า {{page}}",
   "searchHitsOne": "1 รายการ",
-  "searchHitsMany": "{{count}} รายการ"
+  "searchHitsMany": "{{count}} รายการ",
+  "passwordProtectedBar": "ป้องกันด้วยรหัสผ่าน: เปิดแบบอ่านอย่างเดียว"
 }
