@@ -9,7 +9,7 @@ import test from 'node:test';
 import { PDFDocument, PDFName, PDFString, PDFHexString } from 'pdf-lib';
 
 import {
-  pdfTextString, decodePdfTextObject, toWinAnsiText, winAnsiLiteral, asciiPdfName,
+  heeftNietWinAnsi, pdfTextString, decodePdfTextObject, toWinAnsiText, winAnsiLiteral, asciiPdfName,
 } from './pdf-text.js';
 import { tokenizeContentStream } from '../../text/content-stream-text.js';
 import { extractAnnotationColors } from '../loader/color-extraction.js';
@@ -291,4 +291,11 @@ test('asciiPdfName laat ASCII staan en valt terug zonder bruikbare tekens', () =
   assert.equal(asciiPdfName('Prijs € 22', 'Draft'), 'Prijs  22');
   assert.equal(asciiPdfName('中文', 'Draft'), 'Draft');
   assert.equal(asciiPdfName(undefined, 'Image'), 'Image');
+});
+
+test('heeftNietWinAnsi: Chinees ja, Latijn en euroteken nee', () => {
+  assert.equal(heeftNietWinAnsi('圖則不按實際比例'), true);
+  assert.equal(heeftNietWinAnsi('DD104 Lot 3676 € é'), false);
+  assert.equal(heeftNietWinAnsi(''), false);
+  assert.equal(heeftNietWinAnsi(undefined), false);
 });
