@@ -16,6 +16,8 @@
 // Elementen zonder eigen rol (div, span) verschijnen niet zelf: hun kinderen
 // schuiven een niveau op en hun losse tekst wordt een knoop met rol 'text'.
 
+import { tabNaam } from './mcp-lint-opdrachten.js';
+
 export const UI_GRENZEN = Object.freeze({
   maxDepth: Object.freeze({ standaard: 12, min: 1, max: 40 }),
   maxNodes: Object.freeze({ standaard: 400, min: 1, max: 3000 }),
@@ -233,10 +235,12 @@ export function bouwUiBoom(gebieden, invoer = {}) {
   // App-koppelingen: het tabblad-id en de opdracht voor app_run_command.
   function koppelingenVan(el, rol, keuzelijst) {
     const uit = {};
-    const dataTab = attr(el, 'data-tab');
-    if (dataTab && heeftKlasse(el, 'ribbon-tab')) {
-      uit.tab = dataTab;
-      uit.command = `ribbon-tab:${dataTab}`;
+    if (heeftKlasse(el, 'ribbon-tab') && !heeftKlasse(el, 'file-tab')) {
+      const tab = tabNaam({ dataTab: attr(el, 'data-tab') || '', id: el.id || '', ariaControls: attr(el, 'aria-controls') || '' });
+      if (tab) {
+        uit.tab = tab;
+        uit.command = `ribbon-tab:${tab}`;
+      }
     }
     if (attr(el, 'data-ext-command')) uit.command = attr(el, 'data-ext-command');
     else if (heeftKlasse(el, 'ribbon-btn') && el.id) uit.command = `ribbon:#${el.id}`;
