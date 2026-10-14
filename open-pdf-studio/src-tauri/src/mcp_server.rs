@@ -557,6 +557,51 @@ fn extensie_tools() -> Vec<Value> {
     ]
 }
 
+/// Agenttaken van extensies (#556): een MCP-agent pakt een gestructureerde
+/// taak op en levert een gestructureerd resultaat, zonder assistentvenster en
+/// zonder chatbericht. De regels staan in js/plugins/agent-tasks.js.
+fn agent_task_pending_tool() -> Value {
+    json!({
+        "name": "app_agent_task_pending",
+        "description": "Take the oldest structured agent task that an extension submitted, without the assistant window: the task moves from pending to running and no other client gets it. Returns { ok, task, waiting }; task is null when no task waits. A task has id, kind, extensionId, document { id, page, pageCount, sourceFingerprint, pageRotation, scale }, context (only the fields the extension chose to share), resultSchema (what the answer must match), createdAt, deadline (ms timestamps) and attemptsLeft. No conversation, file name or other tasks are shared. Answer with app_agent_task_result before the deadline; the task is cancelled when the user switches or closes the document, or when its source, page or scale changes.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "kind": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{0,63}$", "description": "Only take a task of this kind, for example floorplan.recognize. Left out: the oldest task of any kind." }
+            },
+            "additionalProperties": false
+        }
+    })
+}
+
+/// Het antwoord op precies die ene taak: een resultaat dat aan het
+/// resultaatschema van de taak voldoet, of een fout.
+fn agent_task_result_tool() -> Value {
+    json!({
+        "name": "app_agent_task_result",
+        "description": "Answer a running agent task by its id (from app_agent_task_pending) with either result, an object that must match the task's resultSchema (unknown fields are refused), or error { message, code } when the task cannot be done. The answer goes only to the extension that submitted this task, as a proposal: nothing is drawn until the extension applies it to the same document. Returns { ok, id, status }. A result that does not match returns ok false, code INVALID_RESULT, errors and attemptsLeft: send a corrected result; after the last attempt the task fails. Other codes: UNKNOWN_TASK, TASK_NOT_CLAIMED, TASK_NOT_RUNNING (with status and reason, for a task that was cancelled, failed or answered already) and STALE_TASK (the document, source, page or scale changed; the task is cancelled).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "id": { "type": "string", "description": "Task id from app_agent_task_pending." },
+                "result": { "type": "object", "description": "The structured result; it must match the task's resultSchema." },
+                "error": {
+                    "type": "object",
+                    "description": "Instead of result: why the task cannot be done.",
+                    "properties": {
+                        "code": { "type": "string", "pattern": "^[A-Za-z0-9_.-]{1,64}$", "description": "Optional machine-readable code." },
+                        "message": { "type": "string", "maxLength": 2000, "description": "What went wrong." }
+                    },
+                    "required": ["message"],
+                    "additionalProperties": false
+                }
+            },
+            "required": ["id"],
+            "additionalProperties": false
+        }
+    })
+}
+
 /// Handle `tools/list`. Tasks 7-9 will append their tool descriptors to
 /// this array.
 fn handle_tools_list() -> Value {
@@ -961,6 +1006,9 @@ fn handle_tools_list() -> Value {
                 "description": "Return the LIVE assistant conversation: { ok, messages:[{ role, content }] }. Use to verify a delivered answer landed in the window.",
                 "inputSchema": { "type": "object", "properties": {}, "additionalProperties": false }
             },
+            // Agenttaken van extensies (#556)
+            agent_task_pending_tool(),
+            agent_task_result_tool(),
             {
                 "name": "app_create_annotation",
                 "description": "Create an annotation on the LIVE app's active document WITHOUT synthetic mouse input. Builds the same object the interactive tool would, pushes it onto the document, records an undo step and redraws. Geometry goes in `props` (page coordinates at 100% zoom): line/arrow/measureDistance need startX/startY/endX/endY; box/circle/highlight/cloud/polygon/textbox/callout/scaleRegion need x/y/width/height; polyline/filledArea/measureArea/measurePerimeter need points:[{x,y},...]; spline needs controlPoints; draw needs path; comment needs x/y. Optional style props (color, strokeColor, fillColor, lineWidth, opacity, text, fontSize, scaleString, units, leaderStartX/Y, leaderEndX/Y, dimShowUnit (measureDistance: false shows the number only), dimLineOvershootMm / dimExtGapMm / dimExtOvershootMm (measureDistance: overshoot of the dimension line, gap and overshoot of the extension lines, in paper mm), measureShowLabel (measureArea: false hides its own label), ...) override the tool defaults. measure* annotations get measureText computed from the document scale automatically. Returns the new annotation id.",
@@ -1527,6 +1575,9 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_assistant_pending"  => tool_app_request(state, "mcp:assistant-pending",   &arguments, Duration::from_secs(10)).await,
         "app_assistant_answer"   => tool_app_request(state, "mcp:assistant-answer",    &arguments, Duration::from_secs(10)).await,
         "app_assistant_history"  => tool_app_request(state, "mcp:assistant-history",   &arguments, Duration::from_secs(10)).await,
+        // Agenttaken van extensies (#556): alleen de wachtrij, dus korte grenzen.
+        "app_agent_task_pending" => tool_app_request(state, "mcp:agent-task-pending",  &arguments, Duration::from_secs(10)).await,
+        "app_agent_task_result"  => tool_app_request(state, "mcp:agent-task-result",   &arguments, Duration::from_secs(10)).await,
         "app_create_annotation"  => tool_app_request(state, "mcp:create-annotation",  &arguments, Duration::from_secs(15)).await,
         "app_list_annotations"   => tool_app_request(state, "mcp:list-annotations",   &arguments, Duration::from_secs(10)).await,
         "app_get_annotation"     => tool_app_request(state, "mcp:get-annotation",     &arguments, Duration::from_secs(10)).await,
@@ -2197,7 +2248,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 71);
+        assert_eq!(arr.len(), 73);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
@@ -2270,6 +2321,36 @@ mod tests {
         assert!(meta("app_install_extension").unwrap().wijzigt, "installeren kan een installatie vervangen");
         let herladen = meta("app_reload_extension").unwrap();
         assert!(!herladen.alleen_lezen && !herladen.wijzigt);
+    }
+
+    #[test]
+    fn agenttaken_zijn_te_beantwoorden_via_mcp() {
+        let v = handle_tools_list();
+        let tools = v["tools"].as_array().unwrap();
+        let zoek = |naam: &str| {
+            tools.iter()
+                .find(|t| t["name"] == naam)
+                .unwrap_or_else(|| panic!("{naam} staat in de lijst"))
+                .clone()
+        };
+        let ophalen = zoek("app_agent_task_pending");
+        assert_eq!(ophalen["inputSchema"]["additionalProperties"], false);
+        assert_eq!(ophalen["inputSchema"]["properties"]["kind"]["type"], "string");
+        assert!(ophalen["inputSchema"].get("required").is_none());
+        let antwoord = zoek("app_agent_task_result");
+        assert_eq!(antwoord["inputSchema"]["required"], json!(["id"]));
+        assert_eq!(antwoord["inputSchema"]["properties"]["error"]["required"], json!(["message"]));
+        assert_eq!(antwoord["inputSchema"]["properties"]["error"]["additionalProperties"], false);
+        // Direct na de assistent-relay, in deze volgorde.
+        let pos = |naam: &str| tools.iter().position(|t| t["name"] == naam).unwrap();
+        assert_eq!(pos("app_agent_task_pending"), pos("app_assistant_history") + 1);
+        assert_eq!(pos("app_agent_task_result"), pos("app_agent_task_pending") + 1);
+        use crate::mcp_tool_meta::{beschikbaar, meta, Profiel};
+        for naam in ["app_agent_task_pending", "app_agent_task_result"] {
+            let m = meta(naam).unwrap();
+            assert!(!m.alleen_lezen && !m.wijzigt, "{naam}: wijzigt geen documentgegevens");
+            assert!(beschikbaar(naam, Profiel::Publiek), "{naam} hoort in het publieke profiel");
+        }
     }
 
     #[test]

@@ -28,10 +28,11 @@ import * as systeemTypenRegistry from '../annotations/systeem-typen-registry.js'
 import { systeemInstanceGeometrie } from '../annotations/systeem-geometrie-app.js';
 import { openSysteemtypenEditor } from '../solid/stores/systeemtypenEditorStore.js';
 import { createSystemTypeApi } from './system-type-api.js';
-import { createRoot, createEffect } from 'solid-js';
+import { createRoot, createEffect, createSignal } from 'solid-js';
 import { createViewNavigation } from './view-navigation.js';
 import { maakBijdrageScope } from './extension-contributions.js';
 import { lintRegister } from './ribbon-tab-registry.js';
+import { agentTaken } from './agent-tasks.js';
 
 // Wat createViewNavigation van de app nodig heeft (#557). De modules voor
 // selecteren en in beeld brengen worden vooraf geladen (`prepare`), zodat de
@@ -106,6 +107,94 @@ function viewNavigationHost() {
   };
 }
 
+// ─── Agenttaken (#556) ───────────────────────────────────────────────────────
+// De host van agent-tasks.js: documentidentiteit, de pagina van een annotatie
+// en het toepassen van een batch. De regels zelf staan in agent-tasks.js.
+
+// Volgnummer per pdf.js-document. Een vervangen bron (pagina's ingevoegd of
+// verwijderd, zoeken en vervangen) krijgt een nieuw object en dus een nieuw
+// nummer; opslaan laat het object staan.
+const bronNummers = new WeakMap();
+let volgendBronNummer = 1;
+
+function bronVingerafdruk(doc) {
+  const pdf = doc.pdfDoc;
+  if (!pdf || typeof pdf !== 'object') return 'none';
+  if (!bronNummers.has(pdf)) bronNummers.set(pdf, volgendBronNummer++);
+  const vinger = Array.isArray(pdf.fingerprints) ? (pdf.fingerprints[0] || '') : '';
+  return `${vinger || 'pdf'}:${pdf.numPages || 0}:${bronNummers.get(pdf)}`;
+}
+
+// De bevestigde schaal van een pagina: die van het document plus de
+// gekalibreerde gebieden op de pagina (dezelfde bronnen als scaleChanged).
+function schaalVanPagina(doc, page) {
+  const s = doc.measureScale;
+  const vanDocument = s && Number.isFinite(s.pixelsPerUnit) && s.pixelsPerUnit > 0
+    ? { pixelsPerUnit: s.pixelsPerUnit, unit: s.unit ?? null, scaleRatio: s.scaleRatio ?? null } : null;
+  const regions = [];
+  for (const a of doc.annotations || []) {
+    if (a?.page !== page || !['scaleRegion', 'scaleBar', 'viewport'].includes(a.type)) continue;
+    regions.push({ annotationId: a.id, type: a.type, x: a.x ?? null, y: a.y ?? null, width: a.width ?? null,
+      height: a.height ?? null, scaleString: a.scaleString ?? null, pixelsPerUnit: a.pixelsPerUnit ?? null, unit: a.unit ?? null });
+  }
+  for (const vp of doc.pdfViewports?.[page] || []) {
+    regions.push({ annotationId: null, type: 'pdfViewport', x: vp.x, y: vp.y, width: vp.width, height: vp.height,
+      scaleString: vp.ratio ?? null, pixelsPerUnit: vp.pixelsPerUnit, unit: vp.unit ?? null });
+  }
+  return vanDocument || regions.length ? { document: vanDocument, regions } : null;
+}
+
+const zoekDocument = (documentId) => (state.documents || []).find(d => d && String(d.id) === String(documentId)) || null;
+
+function agentTaakHost() {
+  return {
+    identiteit(documentId, page) {
+      const doc = zoekDocument(documentId);
+      if (!doc) return { open: false };
+      const scale = schaalVanPagina(doc, page);
+      return {
+        open: true, actief: getActiveDocument() === doc, documentId: doc.id,
+        pageCount: doc.numPages || doc.pdfDoc?.numPages || 0,
+        sourceFingerprint: bronVingerafdruk(doc),
+        pageRotation: doc.pageRotations?.[page] || 0,
+        scale, scaleSignature: JSON.stringify(scale),
+      };
+    },
+    annotatiePagina(documentId, annotationId) {
+      return zoekDocument(documentId)?.annotations?.find(a => a.id === annotationId)?.page ?? null;
+    },
+    // Het register heeft het document net gecontroleerd; hier nog één keer
+    // of het ook het actieve is, want de batch werkt op het actieve document.
+    toepassen(documentId, operations) {
+      const doc = getActiveDocument();
+      if (!doc || String(doc.id) !== String(documentId)) throw new Error('The task document is not the active document');
+      return applyAnnotationBatch(doc, operations, {
+        createAnnotation, beginUndoTransaction, endUndoTransaction,
+        recordAdd, recordModify, recordDelete, redraw: redrawAnnotations,
+      });
+    },
+  };
+}
+
+// Eén controle voor alle extensies: bij elke wissel van tabblad, bron, pagina
+// of schaal worden openstaande taken die niet meer kloppen geannuleerd. Een
+// nieuwe of afgeronde taak laat het effect opnieuw lopen (tik), zodat het
+// ook de documenten van nieuwe taken volgt.
+let agentTakenGekoppeld = false;
+function koppelAgentTaken() {
+  if (agentTakenGekoppeld) return;
+  agentTakenGekoppeld = true;
+  agentTaken.zetHost(agentTaakHost());
+  createRoot(() => {
+    const [tik, zetTik] = createSignal(0);
+    agentTaken.abonneer(() => zetTik(n => n + 1));
+    createEffect(() => {
+      tik();
+      agentTaken.controleer();
+    });
+  });
+}
+
 export function createPluginApi(pluginId) {
   // System types (#567): registry, native tool, native editor and the
   // geometry of system instances as the host. See docs/plugin-systeemtypen.md
@@ -118,6 +207,9 @@ export function createPluginApi(pluginId) {
   });
   // Bijdragescope (#550/#551): lint-tabbladen en opdrachten, opgeruimd in _cleanup.
   const scope = maakBijdrageScope(pluginId);
+  // Agenttaken (#556) van dit API-exemplaar: een oude API ruimt na herladen
+  // alleen haar eigen taken op.
+  const agentEigenaar = agentTaken.maakEigenaar(pluginId);
   const registeredTypes = [];
   const registeredPalettes = [];
   const registeredPanels = [];
@@ -178,6 +270,7 @@ export function createPluginApi(pluginId) {
       systemTypes: true,
       viewNavigation: true,
       ribbonTabs: true,
+      agentTasks: true,
     },
 
     // --- Annotation type registration ---
@@ -441,6 +534,24 @@ export function createPluginApi(pluginId) {
       return lintRegister.afmelden(scope, id);
     },
 
+    // --- Agent tasks (#556) ---
+    // Submit a structured task for an MCP agent without opening the assistant
+    // window. Returns a handle with taskId, result (a promise), status,
+    // onStatus, cancel and applyAnnotationBatch. The task is tied to the
+    // document, page, source, rotation and scale at submission; a change
+    // cancels it and a late result is refused. See
+    // docs/plugin-page-analysis-api.md.
+    submitAgentTask(request) {
+      scope.eisActief('agentTask', String(request?.kind));
+      koppelAgentTaken();
+      return agentTaken.dienIn(agentEigenaar, request);
+    },
+
+    /** Is an MCP agent taking tasks? Tasks are never routed to another provider. */
+    getAgentTaskAvailability() {
+      return agentTaken.beschikbaarheid();
+    },
+
     /** Overzicht van wat deze extensie heeft geregistreerd (app_list_extensions). */
     _bijdragenOverzicht() {
       return {
@@ -455,6 +566,9 @@ export function createPluginApi(pluginId) {
     // --- Cleanup (called by plugin-manager on deactivate) ---
     _cleanup() {
       const waarschuwingen = scope.ruimOp();
+      // Eerst de statusluisteraars weg, dan alle openstaande taken annuleren
+      // en voltooide, nog niet toegepaste resultaten intrekken (#556).
+      agentTaken.ruimOp(agentEigenaar);
       // De gereedschapsgroepen van de eigen paletten, vóór die verdwijnen.
       const eigenGroepen = toolGroupIdsOf(registeredPalettes.map(id => getPalette(id)));
       registeredTypes.forEach(t => unregisterAnnotationType(t));

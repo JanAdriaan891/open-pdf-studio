@@ -3,7 +3,9 @@
 // paginatoegang, het eigenschappenpaneel) worden kleine stubs. De registers
 // (annotatietypen, paletten, panelen, selectieluisteraars, gereedschapsgroepen,
 // lint en opdrachten) blijven echt. setNativePanelHidden telt zijn aanroepen in
-// globalThis.__nativePaneelVerborgen.
+// globalThis.__nativePaneelVerborgen. De documenten staan in
+// globalThis.__stubState (documents, activeDocumentIndex) en de ongedaan-
+// maakstappen worden geteld in globalThis.__undoAanroepen (#556).
 //
 // Gebruik: register('./plugin-api-stubs.mjs', import.meta.url) en daarna de
 // modules met een dynamische import() laden.
@@ -14,11 +16,11 @@ import { fileURLToPath } from 'node:url';
 const JS = new URL('../', import.meta.url).href;
 
 const STUBS = {
-  'core/state.js': 'export const state = { preferences: {} }; export const getActiveDocument = () => null; export const getPageRotation = () => 0; export const getAnnotationBounds = () => null;',
+  'core/state.js': 'export const state = (globalThis.__stubState ??= { preferences: {}, documents: [], activeDocumentIndex: -1 }); export const getActiveDocument = () => state.documents[state.activeDocumentIndex] || null; export const getPageRotation = (p) => getActiveDocument()?.pageRotations?.[p] || 0; export const getAnnotationBounds = () => null;',
   'tools/manager.js': 'export const setTool = () => {};',
   'annotations/factory.js': 'export const createAnnotation = (x) => x;',
   'annotations/rendering.js': 'export const redrawAnnotations = () => {};',
-  'core/undo-manager.js': 'export const beginUndoTransaction = () => {}, endUndoTransaction = () => {}, recordAdd = () => {}, recordModify = () => {}, recordDelete = () => {};',
+  'core/undo-manager.js': 'const u = (globalThis.__undoAanroepen ??= []); export const beginUndoTransaction = () => { u.push("begin"); }, endUndoTransaction = () => { u.push("end"); }, recordAdd = (a) => { u.push(`add:${a?.id}`); }, recordModify = (id) => { u.push(`modify:${id}`); }, recordDelete = (a) => { u.push(`delete:${a?.id}`); };',
   'plugins/page-access.js': 'export const getPageInfoForDocument = () => null, readPageContentForDocument = () => null, renderPageTileForDocument = () => null;',
   'tools/pdf-snap-extractor.js': 'export const extractPageGeometry = () => null;',
   'annotations/schaal-op-punt.js': 'export const schaalOpPunt = () => null;',

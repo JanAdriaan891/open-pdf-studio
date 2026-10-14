@@ -83,6 +83,10 @@ pub const TOOLS: &[ToolMeta] = &[
     voegt_toe("app_assistant_ask", "Ask assistant"),
     voegt_toe("app_assistant_pending", "Take pending assistant question"),
     voegt_toe("app_assistant_answer", "Answer assistant question"),
+    // Agenttaken (#556): verandert alleen de taakwachtrij; een resultaat is een
+    // voorstel dat de extensie zelf toepast.
+    voegt_toe("app_agent_task_pending", "Take pending agent task"),
+    voegt_toe("app_agent_task_result", "Answer agent task"),
     voegt_toe("app_mouse_move", "Move pointer"),
     voegt_toe("app_scroll", "Scroll"),
     // Herladen verliest geen gegevens: dezelfde extensie draait daarna opnieuw.
