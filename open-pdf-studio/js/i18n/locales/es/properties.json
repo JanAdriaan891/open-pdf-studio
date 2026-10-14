@@ -680,5 +680,9 @@
     "refused": "No es posible: {{reason}}",
     "reasonTooNarrow": "un paño quedaría demasiado estrecho",
     "reasonFrame": "el marco exterior no se puede mover ni eliminar"
+  },
+  "scopedPanel": {
+    "stale": "Este objeto se ha modificado en otro lugar. El formulario muestra los valores actuales; sus cambios no se han aplicado.",
+    "failed": "No se pudieron aplicar los cambios: {{error}}"
   }
 }

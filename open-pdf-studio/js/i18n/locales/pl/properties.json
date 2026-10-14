@@ -680,5 +680,9 @@
     "refused": "Niemożliwe: {{reason}}",
     "reasonTooNarrow": "pole stałoby się zbyt wąskie",
     "reasonFrame": "zewnętrznej ościeżnicy nie można przesunąć ani usunąć"
+  },
+  "scopedPanel": {
+    "stale": "Ten obiekt został zmieniony w innym miejscu. Formularz pokazuje bieżące wartości; Twoje zmiany nie zostały zastosowane.",
+    "failed": "Nie można zastosować zmian: {{error}}"
   }
 }

@@ -680,5 +680,9 @@
     "refused": "Nu este posibil: {{reason}}",
     "reasonTooNarrow": "un câmp ar deveni prea îngust",
     "reasonFrame": "rama exterioară nu poate fi mutată sau eliminată"
+  },
+  "scopedPanel": {
+    "stale": "Acest obiect a fost modificat în altă parte. Formularul afișează valorile curente; modificările dvs. nu au fost aplicate.",
+    "failed": "Modificările nu au putut fi aplicate: {{error}}"
   }
 }

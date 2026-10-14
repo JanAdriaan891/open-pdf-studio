@@ -680,5 +680,9 @@
     "refused": "Ikke muligt: {{reason}}",
     "reasonTooNarrow": "et felt ville blive for smalt",
     "reasonFrame": "den ydre ramme kan ikke flyttes eller fjernes"
+  },
+  "scopedPanel": {
+    "stale": "Dette objekt er blevet ændret et andet sted. Formularen viser de aktuelle værdier; dine ændringer blev ikke anvendt.",
+    "failed": "Ændringerne kunne ikke anvendes: {{error}}"
   }
 }

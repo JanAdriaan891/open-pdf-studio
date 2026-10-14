@@ -7,7 +7,7 @@
 
 import { registerAnnotationType, unregisterAnnotationType } from './annotation-type-registry.js';
 import { registerToolPalette, unregisterToolPalette, getPalette } from './palette-registry.js';
-import { registerPropertyPanel as _registerPropertyPanel, unregisterPropertyPanel as _unregisterPropertyPanel } from './property-panel-registry.js';
+import { registerPropertyPanel as _registerPropertyPanel, unregisterPropertyPanel as _unregisterPropertyPanel, hasPropertyPanel } from './property-panel-registry.js';
 import {
   registerSelectionListener as _registerSelectionListener,
   unregisterSelectionListener as _unregisterSelectionListener,
@@ -18,7 +18,7 @@ import { state, getActiveDocument, getPageRotation, getAnnotationBounds } from '
 import { setTool } from '../tools/manager.js';
 import { createAnnotation } from '../annotations/factory.js';
 import { redrawAnnotations } from '../annotations/rendering.js';
-import { beginUndoTransaction, endUndoTransaction, recordAdd, recordModify, recordDelete } from '../core/undo-manager.js';
+import { beginUndoTransaction, endUndoTransaction, recordAdd, recordModify, recordDelete, documentRevisie } from '../core/undo-manager.js';
 import { applyAnnotationBatch } from './annotation-batch.js';
 import { getPageInfoForDocument, readPageContentForDocument, renderPageTileForDocument } from './page-access.js';
 import { extractPageGeometry } from '../tools/pdf-snap-extractor.js';
@@ -30,8 +30,19 @@ import { openSysteemtypenEditor } from '../solid/stores/systeemtypenEditorStore.
 import { createSystemTypeApi } from './system-type-api.js';
 import { createRoot, createEffect } from 'solid-js';
 import { createViewNavigation } from './view-navigation.js';
-import { maakBijdrageScope } from './extension-contributions.js';
+import { maakBijdrageScope, ExtensionContributionError } from './extension-contributions.js';
 import { lintRegister } from './ribbon-tab-registry.js';
+import { gestructureerdeOpdrachten } from './structured-commands.js';
+import { createSystemInstanceApi } from './system-instance-api.js';
+import { systeemInstanceHost } from './system-instance-app.js';
+import { instancePanelen } from './system-instance-panels.js';
+
+// Een revisionContext.documentId van een extensieopdracht (#575) wijst naar een
+// open document; de revisie is die van de undo-geschiedenis.
+gestructureerdeOpdrachten.zetDocumentRevisie((id) => {
+  const doc = (state.documents || []).find(d => d && d.id === id);
+  return doc ? documentRevisie(doc) : null;
+});
 
 // Wat createViewNavigation van de app nodig heeft (#557). De modules voor
 // selecteren en in beeld brengen worden vooraf geladen (`prepare`), zodat de
@@ -116,6 +127,9 @@ export function createPluginApi(pluginId) {
     setTool,
     openEditor: openSysteemtypenEditor,
   });
+  // Systeem-instances (#574): snapshots, koppelingen en wijzigingen met een
+  // revisiecontrole; zie docs/plugin-systeemtypen.md §16.
+  const systemInstances = createSystemInstanceApi(pluginId, systeemInstanceHost());
   // Bijdragescope (#550/#551): lint-tabbladen en opdrachten, opgeruimd in _cleanup.
   const scope = maakBijdrageScope(pluginId);
   const registeredTypes = [];
@@ -178,6 +192,9 @@ export function createPluginApi(pluginId) {
       systemTypes: true,
       viewNavigation: true,
       ribbonTabs: true,
+      structuredCommands: true,
+      systemInstanceLinks: true,
+      scopedPropertyPanels: true,
     },
 
     // --- Annotation type registration ---
@@ -215,8 +232,15 @@ export function createPluginApi(pluginId) {
     // --- Property panel registration (custom edit-form for plugin annotations) ---
     registerPropertyPanel(typeName, renderFn) {
       scope.eisActief('propertyPanel', typeName);
+      // Geen stille vervanging (#574): het paneel van een andere extensie voor
+      // hetzelfde type blijft staan. Voor native systeem-instances is er
+      // registerSystemInstancePanel.
+      if (hasPropertyPanel(typeName) && !registeredPanels.includes(typeName)) {
+        throw new ExtensionContributionError('CONTRIBUTION_CONFLICT',
+          `a property panel for "${typeName}" is already registered by another extension`);
+      }
       _registerPropertyPanel(typeName, renderFn);
-      registeredPanels.push(typeName);
+      if (!registeredPanels.includes(typeName)) registeredPanels.push(typeName);
     },
 
     unregisterPropertyPanel(typeName) {
@@ -317,8 +341,10 @@ export function createPluginApi(pluginId) {
 
     getDocumentInfo() {
       const doc = getActiveDocument();
+      // revision: verandert bij elke stap in de undo-geschiedenis; geef hem als
+      // revisionContext.documentRevision mee aan een wijzigende opdracht (#575).
       return doc ? { id: doc.id, pageCount: doc.numPages || doc.pdfDoc?.numPages || 0, currentPage: doc.currentPage,
-        name: doc.fileName || null } : null;
+        name: doc.fileName || null, revision: documentRevisie(doc) } : null;
     },
 
     getPageInfo(pageNum, options = {}) {
@@ -414,6 +440,37 @@ export function createPluginApi(pluginId) {
     onSystemTypesChanged: systemTypes.onSystemTypesChanged,
     getSystemInstanceGeometry: systemTypes.getSystemInstanceGeometry,
 
+    // --- Systeem-instances (#574) ---
+    // Losgekoppelde snapshots van native systemen in het actieve document,
+    // koppelen aan deze extensie met eigen gegevens, en wijzigen (eigen
+    // gegevens, systeemtype, tag) met revisiecontrole en één undo-stap.
+    // Hoeveelheden komen uit de geometriesnapshot.
+    getSystemInstance: systemInstances.getSystemInstance,
+    listSystemInstances: systemInstances.listSystemInstances,
+    linkSystemInstance: systemInstances.linkSystemInstance,
+    updateSystemInstance: systemInstances.updateSystemInstance,
+    unlinkSystemInstance: systemInstances.unlinkSystemInstance,
+    getSystemInstanceQuantities: systemInstances.getSystemInstanceQuantities,
+
+    /** Een eigen formulier in het eigenschappenpaneel, alleen voor passende
+     *  systeem-instances; zie system-instance-panels.js. */
+    registerSystemInstancePanel(descriptor) {
+      scope.eisActief('systemInstancePanel', String(descriptor?.id));
+      const entry = instancePanelen.controleer(pluginId, descriptor);
+      scope.voegToe('systemInstancePanel', entry.id, () => instancePanelen.verwijder(pluginId, entry.id));
+      try {
+        instancePanelen.voegToe(entry);
+      } catch (e) {
+        scope.verwijder('systemInstancePanel', entry.id);
+        throw e;
+      }
+      return { id: entry.id };
+    },
+
+    unregisterSystemInstancePanel(id) {
+      return typeof id === 'string' ? scope.verwijder('systemInstancePanel', id) : false;
+    },
+
     // --- View navigation and selection (#557) ---
     // Document-scoped: pass the id from getDocumentInfo(). Each call resolves
     // to { ok: true, ... } or { ok: false, code, message }; the identity of
@@ -441,6 +498,41 @@ export function createPluginApi(pluginId) {
       return lintRegister.afmelden(scope, id);
     },
 
+    // --- Gestructureerde opdrachten (#575): MCP-tool ext_<id>__<name> ---
+    // Invoer- en uitvoerschema, asynchrone handler(args, ctx). De host
+    // controleert de argumenten vóór de handler; zie structured-commands.js.
+    registerCommand(descriptor) {
+      scope.eisActief('structuredCommand', String(descriptor?.name));
+      const opdracht = gestructureerdeOpdrachten.controleer(pluginId, descriptor);
+      scope.voegToe('structuredCommand', opdracht.tool,
+        () => gestructureerdeOpdrachten.verwijder(opdracht.tool, 'EXTENSION_UNLOADED'));
+      try {
+        gestructureerdeOpdrachten.voegToe(opdracht);
+      } catch (e) {
+        scope.verwijder('structuredCommand', opdracht.tool);
+        throw e;
+      }
+      return { tool: opdracht.tool, name: opdracht.name };
+    },
+
+    unregisterCommand(name) {
+      if (typeof name !== 'string') return false;
+      const tool = gestructureerdeOpdrachten.lijst(pluginId).find(c => c.name === name)?.tool;
+      // Alleen wat deze API registreerde (de scope): een oude API haalt na
+      // herladen de opdracht van de nieuwe versie niet weg.
+      if (!tool || !scope.lijst().some(b => b.soort === 'structuredCommand' && b.sleutel === tool)) return false;
+      gestructureerdeOpdrachten.verwijder(tool, 'COMMAND_UNREGISTERED');
+      return scope.verwijder('structuredCommand', tool);
+    },
+
+    /** Roep een eigen opdracht aan langs hetzelfde pad als MCP (bijvoorbeeld
+     *  vanuit de eigen bediening). Geeft altijd { ok, requestId, … }. */
+    runCommand(name, args) {
+      const tool = gestructureerdeOpdrachten.lijst(pluginId).find(c => c.name === name)?.tool;
+      if (!tool) return Promise.resolve({ ok: false, code: 'UNKNOWN_COMMAND', error: `unknown command: ${name}` });
+      return gestructureerdeOpdrachten.roepAan(tool, args, { source: 'api' });
+    },
+
     /** Overzicht van wat deze extensie heeft geregistreerd (app_list_extensions). */
     _bijdragenOverzicht() {
       return {
@@ -449,6 +541,8 @@ export function createPluginApi(pluginId) {
         annotationTypes: [...registeredTypes],
         palettes: [...registeredPalettes],
         propertyPanels: [...registeredPanels],
+        systemInstancePanels: instancePanelen.vanExtensie(pluginId),
+        structuredCommands: gestructureerdeOpdrachten.lijst(pluginId),
       };
     },
 
@@ -476,6 +570,7 @@ export function createPluginApi(pluginId) {
       // Only runtime state: stored system types are never removed here, so a
       // document that references them keeps working.
       systemTypes.dispose();
+      systemInstances.dispose();
       return waarschuwingen;
     }
   };

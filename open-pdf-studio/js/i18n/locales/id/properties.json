@@ -680,5 +680,9 @@
     "refused": "Tidak mungkin: {{reason}}",
     "reasonTooNarrow": "sebuah petak akan menjadi terlalu sempit",
     "reasonFrame": "kusen luar tidak dapat dipindahkan atau dihapus"
+  },
+  "scopedPanel": {
+    "stale": "Objek ini telah diubah di tempat lain. Formulir menampilkan nilai saat ini; perubahan Anda tidak diterapkan.",
+    "failed": "Perubahan tidak dapat diterapkan: {{error}}"
   }
 }

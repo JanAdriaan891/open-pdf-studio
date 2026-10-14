@@ -680,5 +680,9 @@
     "refused": "Haiwezekani: {{reason}}",
     "reasonTooNarrow": "kisehemu kingekuwa chembamba mno",
     "reasonFrame": "fremu ya nje haiwezi kusogezwa au kuondolewa"
+  },
+  "scopedPanel": {
+    "stale": "Kitu hiki kimebadilishwa mahali pengine. Fomu inaonyesha thamani za sasa; mabadiliko yako hayakutumika.",
+    "failed": "Imeshindwa kutumia mabadiliko: {{error}}"
   }
 }

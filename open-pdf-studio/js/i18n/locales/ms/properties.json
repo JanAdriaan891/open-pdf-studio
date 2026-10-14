@@ -680,5 +680,9 @@
     "refused": "Tidak boleh: {{reason}}",
     "reasonTooNarrow": "satu petak akan menjadi terlalu sempit",
     "reasonFrame": "bingkai luar tidak boleh dialihkan atau dibuang"
+  },
+  "scopedPanel": {
+    "stale": "Objek ini telah diubah di tempat lain. Borang memaparkan nilai semasa; perubahan anda tidak digunakan.",
+    "failed": "Perubahan tidak dapat digunakan: {{error}}"
   }
 }

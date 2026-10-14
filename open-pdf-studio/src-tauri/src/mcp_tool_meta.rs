@@ -91,6 +91,9 @@ pub const TOOLS: &[ToolMeta] = &[
     wijzigt("app_update_annotation", "Update annotation"),
     wijzigt("app_set_layer", "Change markup layer"),
     wijzigt("app_update_system_type", "Update system type"),
+    // Een extensieopdracht kan bestaande inhoud wijzigen (#575); de eigen
+    // ext_-tools krijgen hun hints van de opdracht zelf (mcp_extensie_tools.rs).
+    wijzigt("app_call_extension_command", "Run extension command"),
     // Registreren kan een bestaande, onbewerkte mcp:-definitie vervangen en
     // alle systemen met dat type hertekenen: dat wijzigt bestaande gegevens.
     wijzigt("app_register_system_type", "Register system type"),

@@ -44,6 +44,7 @@ use serde_json::{json, Value};
 use tauri::{AppHandle, Manager};
 
 use crate::mcp_app_bridge::{self, McpAppBridge};
+use crate::mcp_extensie_tools::{self, ExtensieTools};
 use crate::mcp_tool_meta::{beschikbaar, meta, Profiel};
 
 /// Per-server state. Cloned (cheaply, via Arc) into every request handler.
@@ -472,6 +473,26 @@ fn get_system_geometry_tool() -> Value {
     })
 }
 
+/// `app_call_extension_command` (#575): een gestructureerde opdracht van een
+/// geladen extensie aanroepen. Elke opdracht staat ook als eigen tool
+/// (`ext_<extensie>__<opdracht>`) in tools/list; deze vaste tool is er voor
+/// een client die zijn lijst las voordat de extensie geladen was.
+fn call_extension_command_tool() -> Value {
+    json!({
+        "name": "app_call_extension_command",
+        "description": "Run a structured command of a loaded extension. Every such command is also listed as its own tool named ext_<extension>__<command>; use this tool when that tool is not in your list, for example after installing or reloading an extension. app_list_extensions with includeContributions lists each command with its input and output schema. The arguments are checked against the input schema before the extension runs; a mutating command also needs idempotencyKey and revisionContext. Returns ok, requestId, extension, command and result, or ok: false with an error code such as UNKNOWN_COMMAND, INVALID_ARGUMENT, STALE_REVISION, IDEMPOTENCY_KEY_REUSED, COMMAND_TIMEOUT or EXTENSION_UNLOADED.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "tool":      { "type": "string", "description": "Tool name of the extension command, ext_<extension>__<command>." },
+                "arguments": { "type": "object", "description": "Arguments for the command, as described by its input schema.", "additionalProperties": true }
+            },
+            "required": ["tool"],
+            "additionalProperties": false
+        }
+    })
+}
+
 /// Beschrijving van `app_facade_element`: het gevelelement (#475) — een
 /// vliesgevel of kozijn als één object met stijlen op de veldgrenzen en een
 /// paneel per veld.
@@ -523,7 +544,7 @@ fn extensie_tools() -> Vec<Value> {
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    "includeContributions": { "type": "boolean", "description": "Also list each extension's registered contributions (ribbon tabs, command count, annotation types, palettes, property panels). Default false." }
+                    "includeContributions": { "type": "boolean", "description": "Also list each extension's registered contributions (ribbon tabs, command count, annotation types, palettes, property panels, and structured commands with their input and output schemas). Default false." }
                 },
                 "additionalProperties": false
             }
@@ -1452,7 +1473,9 @@ fn handle_tools_list() -> Value {
             register_system_type_tool(),
             update_system_type_tool(),
             open_system_type_editor_tool(),
-            get_system_geometry_tool()
+            get_system_geometry_tool(),
+            // Opdrachten van extensies (#575)
+            call_extension_command_tool()
         ]
     });
     if let Some(tools) = lijst["tools"].as_array_mut() {
@@ -1580,6 +1603,8 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_update_system_type"      => tool_app_request(state, "mcp:update-system-type",      &arguments, Duration::from_secs(10)).await,
         "app_open_system_type_editor" => tool_app_request(state, "mcp:open-system-type-editor", &arguments, Duration::from_secs(10)).await,
         "app_get_system_geometry"     => tool_app_request(state, "mcp:get-system-geometry",     &arguments, Duration::from_secs(10)).await,
+        // Opdrachten van extensies (#575); zonder JSON-RPC-id (mcp_handler geeft dat mee).
+        "app_call_extension_command" => extensie_aanroep(state, name, params, &Value::Null).await,
         // Extensies (#550): installeren pakt uit en activeert; de JS-kant breekt eerder af.
         "app_list_extensions"    => tool_app_request(state, "mcp:list-extensions",    &arguments, Duration::from_secs(10)).await,
         "app_install_extension"  => tool_app_request(state, "mcp:install-extension",  &arguments, Duration::from_secs(60)).await,
@@ -1589,6 +1614,46 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
             format!("method not found: {other}"),
         )),
     }
+}
+
+/// Een aanroep van een extensieopdracht (#575): een `ext_`-tool zelf, of
+/// `app_call_extension_command`. De WebView controleert de argumenten tegen
+/// het schema van de opdracht en houdt zich aan de tijdgrens van de opdracht
+/// (hooguit 120 s); Rust wacht iets langer. Het JSON-RPC-id gaat mee, zodat
+/// `notifications/cancelled` precies deze aanroep kan annuleren.
+async fn extensie_aanroep(
+    state: &AppState,
+    naam: &str,
+    params: &Value,
+    rpc_id: &Value,
+) -> Result<Value, (i32, String)> {
+    let arguments = params.get("arguments").cloned().unwrap_or(Value::Null);
+    let payload = if naam == "app_call_extension_command" {
+        json!({ "generic": true, "call": arguments, "rpcId": rpc_id })
+    } else {
+        json!({ "tool": naam, "arguments": arguments, "rpcId": rpc_id })
+    };
+    tool_app_request(state, "mcp:call-extension-command", &payload, Duration::from_secs(125)).await
+}
+
+/// Registreert een geladen extensie deze `ext_`-tool?
+fn extensie_tool_bekend(state: &AppState, naam: &str) -> bool {
+    state
+        .app_handle
+        .as_ref()
+        .and_then(|app| app.try_state::<ExtensieTools>())
+        .map_or(false, |et| et.bevat(naam))
+}
+
+/// De vaste lijst plus de opdrachten van geladen extensies (#575).
+fn tools_list_met_extensies(state: &AppState) -> Value {
+    let mut lijst = tools_list_voor(state.profiel);
+    if let Some(et) = state.app_handle.as_ref().and_then(|app| app.try_state::<ExtensieTools>()) {
+        if let Some(tools) = lijst["tools"].as_array_mut() {
+            tools.extend(et.lijst());
+        }
+    }
+    lijst
 }
 
 /// `app_set_window_size` — resize the main window from the Rust side.
@@ -2068,12 +2133,32 @@ async fn mcp_handler(
 
     let response = match method {
         "initialize" => rpc_result(id, handle_initialize()),
-        "tools/list" => rpc_result(id, tools_list_voor(state.profiel)),
+        "tools/list" => rpc_result(id, tools_list_met_extensies(&state)),
         "tools/call" => {
             let empty = Value::Null;
             let params = body.get("params").unwrap_or(&empty);
             let naam = params.get("name").and_then(|v| v.as_str()).unwrap_or("");
-            if !beschikbaar(naam, state.profiel) {
+            if naam.starts_with(mcp_extensie_tools::VOORVOEGSEL) {
+                // Opdracht van een extensie (#575): alleen als een geladen
+                // extensie hem registreert.
+                if !extensie_tool_bekend(&state, naam) {
+                    rpc_error(
+                        id,
+                        jsonrpc_error::INVALID_PARAMS,
+                        format!("tool '{naam}' is not available: no loaded extension registers it (see app_list_extensions)"),
+                    )
+                } else {
+                    match extensie_aanroep(&state, naam, params, &id).await {
+                        Ok(value) => rpc_result(id, value),
+                        Err((code, msg)) => rpc_error(id, code, msg),
+                    }
+                }
+            } else if naam == "app_call_extension_command" && beschikbaar(naam, state.profiel) {
+                match extensie_aanroep(&state, naam, params, &id).await {
+                    Ok(value) => rpc_result(id, value),
+                    Err((code, msg)) => rpc_error(id, code, msg),
+                }
+            } else if !beschikbaar(naam, state.profiel) {
                 rpc_error(
                     id,
                     jsonrpc_error::INVALID_PARAMS,
@@ -2090,6 +2175,18 @@ async fn mcp_handler(
         // id and expect no response. We still send back an empty result for
         // robustness; the harness ignores unknown ids.
         "notifications/initialized" | "initialized" => rpc_result(id, json!({})),
+        // Een client breekt een lopende aanroep af (#575): alleen opdrachten
+        // van extensies zijn af te breken; die krijgen hun AbortSignal.
+        "notifications/cancelled" => {
+            let request_id = body.get("params").and_then(|p| p.get("requestId")).cloned();
+            if let (Some(_), Some(rid)) = (&state.app_handle, request_id) {
+                let st = state.clone();
+                tauri::async_runtime::spawn(async move {
+                    let _ = tool_app_request(&st, "mcp:cancel-extension-command", &json!({ "rpcId": rid }), Duration::from_secs(5)).await;
+                });
+            }
+            rpc_result(id, json!({}))
+        }
         other => rpc_error(
             id,
             jsonrpc_error::METHOD_NOT_FOUND,
@@ -2197,7 +2294,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 71);
+        assert_eq!(arr.len(), 72);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
@@ -2270,6 +2367,26 @@ mod tests {
         assert!(meta("app_install_extension").unwrap().wijzigt, "installeren kan een installatie vervangen");
         let herladen = meta("app_reload_extension").unwrap();
         assert!(!herladen.alleen_lezen && !herladen.wijzigt);
+    }
+
+    #[test]
+    fn extensieopdrachten_zijn_aan_te_roepen_via_mcp() {
+        let v = handle_tools_list();
+        let tool = v["tools"].as_array().unwrap().iter()
+            .find(|t| t["name"] == "app_call_extension_command")
+            .expect("app_call_extension_command staat in de lijst")
+            .clone();
+        assert_eq!(tool["inputSchema"]["required"], json!(["tool"]));
+        assert_eq!(tool["inputSchema"]["additionalProperties"], false);
+        assert!(tool["description"].as_str().unwrap().contains("ext_<extension>__<command>"));
+        assert!(crate::mcp_tool_meta::meta("app_call_extension_command").unwrap().wijzigt);
+        // Zonder app is er geen extensielijst: alleen de vaste gereedschappen.
+        let state = AppState::nieuw(Profiel::Publiek, 9999, None);
+        assert_eq!(
+            tools_list_met_extensies(&state)["tools"].as_array().unwrap().len(),
+            tools_list_voor(Profiel::Publiek)["tools"].as_array().unwrap().len()
+        );
+        assert!(!extensie_tool_bekend(&state, "ext_a__x"));
     }
 
     #[test]

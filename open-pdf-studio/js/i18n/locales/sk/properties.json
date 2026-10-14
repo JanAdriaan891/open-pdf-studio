@@ -680,5 +680,9 @@
     "refused": "Nie je možné: {{reason}}",
     "reasonTooNarrow": "pole by bolo príliš úzke",
     "reasonFrame": "vonkajší rám nie je možné presunúť ani odobrať"
+  },
+  "scopedPanel": {
+    "stale": "Tento objekt bol zmenený inde. Formulár zobrazuje aktuálne hodnoty; vaše zmeny neboli použité.",
+    "failed": "Zmeny sa nepodarilo použiť: {{error}}"
   }
 }

@@ -1214,3 +1214,302 @@ worden hier niet gestart:
   bewerkt nog de instance-velden `plaatBreedteMm/plaatHoogteMm`, niet het
   type. Bij een instance met type heeft dat geen effect op de tekening. Dat
   gedrag bestond al en is hier niet veranderd.
+
+## 16. Gekoppelde systeem-instances en eigen eigenschappenformulieren (#574)
+
+Een technische extensie wil een eigen eigenschappenformulier tonen als een
+native systeem (bijvoorbeeld een plafond) geselecteerd wordt dat bij haar
+hoort. Gewone native instances en andere extensies houden hun gewone
+eigenschappen. Tot nu toe kon dat alleen met
+`registerPropertyPanel(typeName, renderFn)`. Dat bewaart één renderer per
+annotatietype: wie hem voor `systeemraster` registreert, krijgt elke
+instance en vervangt stil de renderer van een andere extensie. Dit
+hoofdstuk beschrijft het afgebakende contract dat daarvoor in de plaats
+komt. Het sluit aan op de systeemtypen (§4) en de geometriesnapshot
+(§12a).
+
+### 16.1 Bestanden
+
+| Bestand | Rol |
+|---|---|
+| `js/annotations/systeem-instance-links.js` | Puur: koppelingen normaliseren, naar en uit JSON (PDF), de instancerevisie, `kenSysteemTypeToe` (de typekeuze van het eigenschappenpaneel) en `systeemHoeveelheden`. |
+| `js/plugins/system-instance-api.js` | Snapshots, koppelen, wijzigen en loskoppelen, met een geïnjecteerde host (zelfde patroon als `system-type-api.js`). |
+| `js/plugins/system-instance-app.js` | De echte host: undo-stap, opnieuw tekenen, paneel verversen. |
+| `js/plugins/system-instance-panels.js` | Register van de formulieren en de host van de open formulieren (Toepassen, Annuleren, opruimen). Puur, zonder DOM. |
+| `js/solid/components/properties-panel/ScopedInstancePanels.jsx` | Tekent de passende formulieren onder de native secties, met Toepassen en Annuleren. |
+| `js/plugins/selection-listener-registry.js` | `onAnySelectionChange`: intern, voor het paneel. |
+| `js/pdf/saver.js`, `js/pdf/loader/color-extraction.js`, `js/pdf/loader/annotation-converter.js` | `OPS_SgExtLinks` opslaan en laden. |
+| `js/plugins/system-instance-panels.test.mjs` | Eenheidstests (§16.9). |
+
+### 16.2 Koppeling en eigendom
+
+Een instance hoort bij een extensie op een van twee manieren:
+
+- **Koppeling.** `ann.extensionLinks[<extensie-id>] = { revision, data }`.
+  `data` is van de extensie: een JSON-object van hooguit 16 KB,
+  bijvoorbeeld het gekozen technische projectsysteem en of de
+  hoeveelheidslabels aan staan. `revision` telt per wijziging van `data`.
+  Een instance kan aan hooguit 8 extensies gekoppeld zijn. De koppeling
+  reist mee in de PDF als `OPS_SgExtLinks` (JSON-tekst) op het
+  systeemraster-woordenboek. De loader houdt alleen geldige items over
+  (`normaliseerLinks`); onzin valt stil weg.
+- **Eigen type.** Een instance met een systeemtype van de extensie
+  (`ext:<id>#<key>`, §3) hoort er ook bij, zonder koppeling (`ownedType`).
+
+Productidentiteit blijft zo bij de extensie (§1): de constructie staat in
+de native instance en het type, de technische keuze in de koppeling.
+
+### 16.3 Plugin-API
+
+```js
+if (api.features?.systemInstanceLinks && api.features?.scopedPropertyPanels) {
+  api.getSystemInstance(annotationId)              // snapshot | null
+  api.listSystemInstances()                        // [{ annotationId, page, revision, linked, ownedType }]
+  api.linkSystemInstance(annotationId, { expectedRevision, data })      // { status: 'linked'|'unchanged', instance }
+  api.updateSystemInstance(annotationId, { expectedRevision, data?, systemTypeId?, showTag? })
+                                                   // { status: 'updated'|'unchanged', instance }
+  api.unlinkSystemInstance(annotationId, { expectedRevision })          // { status: 'unlinked'|'unchanged', instance }
+  api.getSystemInstanceQuantities(annotationId, { expectedRevision? })  // §16.6
+  api.registerSystemInstancePanel(descriptor)      // §16.4
+  api.unregisterSystemInstancePanel(id)
+}
+```
+
+Alles werkt in het actieve document, alleen op annotaties van type
+`systeemraster`.
+
+**Snapshot** (losgekoppeld; schrijven erin verandert niets):
+
+```js
+{
+  schema: 1, annotationId: 'sg-1', documentId: 'doc-3', page: 1,
+  revision: 'i1-…',            // instancerevisie, §16.5
+  geometryRevision: 'g1-…',    // = document.revision van de geometriesnapshot (§12a.5)
+  locked: false,
+  native: { systemTypeId: 'st-plafond-600x600', showTag: true, ifcCategory: 'IfcCovering' },
+  type: { …SystemTypeSnapshot… } | null,   // §4.2
+  link: { revision: 2, data: { … } } | null,   // alleen de EIGEN koppeling
+  ownedType: false,
+  linkedExtensions: ['nl.voorbeeld.plafond'],  // wie gekoppeld is, zonder hun data
+}
+```
+
+**Wijzigen.** `updateSystemInstance` wijzigt alleen een instance die bij de
+extensie hoort: gekoppeld, of met een eigen type (anders `not-linked`). Bij
+een eigen type zonder koppeling maakt eigen `data` de koppeling alsnog
+(revisie 1). Wat er kan:
+
+- `data`: de eigen data, in haar geheel vervangen (`link.revision + 1`);
+- `systemTypeId`: een bestaand type of `null`. Dit volgt dezelfde regel als
+  de typekeuze in het eigenschappenpaneel (`kenSysteemTypeToe`, nu door
+  beide gebruikt): verwijzing, IFC-categorie en voorgedefinieerd type. Zo
+  kiest een extensie een "projectsysteem" op het native type;
+- `showTag`: de native tag aan of uit.
+
+Elke wijziging die echt iets verandert, is precies één undo-stap
+(`recordModify`). Daarna wordt de tekening opnieuw getekend en ververst het
+eigenschappenpaneel als de instance geselecteerd is. Een wijziging zonder
+verschil geeft `unchanged` en geen undo-stap.
+
+**Foutcodes** (`SysteemTypeFout`, `code`): `invalid-argument` (onbekend
+veld, verkeerd type, data geen JSON-object of groter dan 16 KB),
+`no-document`, `not-found`, `stale-revision` (met `currentRevision`),
+`not-linked`, `locked` (een vergrendelde instance, zoals in het native
+paneel), `unknown-type`, `limit-exceeded` (8 koppelingen), `disposed` (na
+`_cleanup`; lezen blijft werken) en `invalid-owner`.
+
+### 16.4 `registerSystemInstancePanel`
+
+```js
+api.registerSystemInstancePanel({
+  id: 'technisch',                      // a-z, 0-9, '-'; uniek binnen de extensie
+  title: { en: 'Technical', nl: 'Technisch' },   // hooguit 60 tekens
+  matches: 'linked',                    // 'linked' | 'ownedType' | 'linkedOrOwnedType' | (snapshot) => boolean
+  order: 0,                             // -1000..1000, standaard 0
+  render(container, ctx) {
+    // ctx.instance: bevroren snapshot (§16.3) van deze extensie
+    // ctx.setDraft({ data?, systemTypeId?, showTag? }) of ctx.setDraft(null)
+    // ctx.getDraft(), ctx.apply(), ctx.cancel(), ctx.signal
+    …
+    return () => { /* opruimen */ };
+  },
+});
+```
+
+- **Passen.** Het formulier verschijnt alleen bij precies één
+  geselecteerde systeem-instance van het actieve document waarop `matches`
+  past. `linked` en `ownedType` zijn de ondersteunde markeringen (§16.2).
+  Een eigen predicaat krijgt een bevroren kopie van de snapshot van de
+  eigen extensie en past alleen bij `true`. Een predicaat dat gooit, past
+  niet (met een waarschuwing in de console). Een gewone instance krijgt dus
+  geen formulier en houdt het native paneel.
+- **Plaats.** Elk passend formulier is een eigen, inklapbare sectie onder
+  de native secties (na de `registerPropertyPanel`-renderer, vóór
+  Acties). De extensie tekent in haar eigen `container`; de host tekent de
+  titel, Toepassen en Annuleren in Windows-stijl (hoekig, standaardcursor,
+  `common.apply`/`common.cancel`).
+- **Conflicten** zijn bepaald en er wordt nooit iets vervangen. Passen er
+  meerdere formulieren, dan krijgt elk een eigen sectie, in de volgorde
+  `order`, dan extensie-id, dan paneel-id. Hetzelfde `id` twee keer binnen
+  één extensie geeft `CONTRIBUTION_CONFLICT`. Het native formulier blijft
+  altijd staan. Grenzen: 4 formulieren per extensie. Een fout in de
+  descriptor geeft `INVALID_CONTRIBUTION`, na `_cleanup` volgt
+  `EXTENSION_INACTIVE`.
+- **`registerPropertyPanel` blijft** voor annotatietypen van de extensie
+  zelf, met één verandering: een renderer voor een type waarvoor een andere
+  extensie al een renderer heeft, geeft nu `CONTRIBUTION_CONFLICT` in plaats
+  van die stil te vervangen. Dezelfde extensie mag haar eigen renderer
+  opnieuw registreren, en na herladen kan de nieuwe versie hem weer
+  registreren.
+
+### 16.5 Werkversie, Toepassen en Annuleren
+
+- Het formulier werkt op een werkversie: `ctx.setDraft(changes)` met
+  `data`, `systemTypeId` en/of `showTag`. Een ander veld geeft een
+  `TypeError`. Zolang er een werkversie is, zijn Toepassen en Annuleren
+  aan; bij een vergrendelde instance blijft Toepassen uit.
+- **Toepassen** (de knop of `ctx.apply()`) roept namens de extensie
+  `updateSystemInstance` aan, met `expectedRevision` uit de snapshot van
+  het formulier. Na succes is er één undo-stap, en het formulier komt
+  opnieuw met de nieuwe snapshot (`render` opnieuw, de vorige
+  opruimfunctie eerst).
+- **Annuleren** (de knop of `ctx.cancel()`) gooit de werkversie weg en
+  tekent het formulier opnieuw met de huidige waarden. Er wordt niets
+  geschreven.
+- **Verouderd.** Is de instance intussen elders gewijzigd (bijvoorbeeld
+  via MCP, of de contour is verschoven), dan weigert Toepassen met
+  `stale-revision` en verandert er niets. Het formulier komt opnieuw met
+  de huidige waarden en meldt `properties:scopedPanel.stale`. Een andere
+  fout laat de werkversie staan en toont
+  `properties:scopedPanel.failed` met de foutmelding. Beide teksten staan
+  in alle 40 talen.
+- **Elders gewijzigd terwijl het formulier openstaat.** Verandert de
+  instance terwijl er een werkversie is (de app meldt de selectie dan
+  opnieuw, bijvoorbeeld na een wijziging via MCP of ongedaan maken), dan
+  vervalt de werkversie. Het formulier komt opnieuw met de huidige waarden
+  en dezelfde melding `scopedPanel.stale`. Zonder werkversie komt het
+  formulier gewoon opnieuw, zonder melding.
+- **Instancerevisie** (`'i1-…'`): een vingerafdruk van de geometrierevisie
+  (§12a.5), het type, de tag, de vergrendeling en alle koppelingen. Elke
+  wijziging die de snapshot verandert, verandert dus ook de revisie. Een
+  verschuiving van de instance maakt een openstaande werkversie verouderd;
+  een wijziging aan een ander object niet.
+- **Ongedaan maken en opnieuw** herstellen de annotatie. De app meldt de
+  selectie daarna opnieuw, dus het formulier toont de herstelde waarden.
+
+### 16.6 Opruimen en levenscyclus
+
+Het formulier wordt opgeruimd bij een andere selectie, bij deselecteren,
+bij een meervoudige selectie, bij een tabwissel (het paneel meldt dan een
+lege selectie), bij een nieuwe revisie, bij het dichtklappen of verbergen
+van het paneel en bij het uitzetten of herladen van de extensie. Opruimen
+betekent: de opruimfunctie van `render` draait, `ctx.signal` gaat af en
+`ctx.setDraft`, `apply` en `cancel` doen daarna niets meer.
+
+Het paneel volgt de selectie met `onAnySelectionChange`. Dat is een interne
+luisteraar in `selection-listener-registry.js` die bij elke
+`fireSelectionChange` meeluistert: selecteren, verversen, deselecteren en
+tabwissel. Het volgt het register met `instancePanelen.abonneer`. Beide
+luisteraars en de host gaan weg als het paneel verdwijnt. `_cleanup` haalt
+de formulieren via de bijdragescope weg (`systemInstancePanel`) en zet de
+instance-API dicht. Er blijft dus geen luisteraar van de extensie achter.
+`app_list_extensions` met `includeContributions` noemt
+`systemInstancePanels`.
+
+### 16.7 Hoeveelheden
+
+`getSystemInstanceQuantities` rekent alleen met de gedocumenteerde
+geometriesnapshot (§12a.3, `systeemHoeveelheden`), nooit met een eigen kopie
+van de geometrie-engine:
+
+```js
+{ schema: 1, annotationId, document: { id, revision }, type: { id, revision } | null,
+  confirmed, unconfirmed, units: { area: 'm2', length: 'm' },
+  area, perimeter,                                   // contour (m², m)
+  panels: { total, full, edge, byType: { tegel: 22, licht: 2 } },
+  components: { total, bySymbol: { … } },
+  openings: { total, byRegime: { klein: 1 } },
+  edges: { byProfile: { schaduwvoeg: 12.4 } },       // m per randprofiel
+  strips: { total, fit } }
+```
+
+Bij een onbevestigde maat zijn er geen panelen (`total: 0`) en is
+`confirmed` `false`; er wordt nooit een aantal verzonnen. Met
+`expectedRevision` wordt een verouderde instance geweigerd. De
+documentrevisie van de geometrie staat in `document.revision`.
+
+### 16.8 MCP
+
+De technische eigenschappen zijn van de extensie. Daarom levert de app geen
+vaste tools voor "projectsysteem kiezen" of "labels schakelen". De
+extensie publiceert die diensten zelf als gestructureerde opdrachten
+(#575, `docs/extensies-mcp-en-ribbon.md` §16), met dezelfde dienstcode als
+haar formulier:
+
+| Opdracht (voorbeeld) | effect | Doet |
+|---|---|---|
+| `get_instance_properties` | read | `getSystemInstance` + `getSystemInstanceQuantities` |
+| `apply_instance_properties` | mutate | `updateSystemInstance` met `data` |
+| `select_project_system` | mutate | `updateSystemInstance` met `data` en `systemTypeId` |
+| `toggle_quantity_labels` | mutate | `updateSystemInstance` met `data` (en eventueel `showTag`) |
+
+Een agent geeft daarbij de instancerevisie mee als
+`revisionContext.sourceRevision`. De handler geeft die door als
+`expectedRevision`, en een verouderde revisie wordt `STALE_REVISION` (met
+`currentRevision`). Een herhaling met dezelfde `idempotencyKey` maakt geen
+tweede undo-stap. Er is geen DOM-automatisering en geen bestandsdialoog
+nodig. De test in §16.9 doet precies dit met een synthetische extensie.
+
+### 16.9 Tests
+
+`js/plugins/system-instance-panels.test.mjs` (in `scripts/unit-testlijst.txt`)
+controleert:
+
+- koppelingen normaliseren, en ze door opslaan en laden halen met pdf-lib
+  en de echte `extractAnnotationColors` (ook met tekens buiten ASCII);
+- de bron van saver, kleurextractie en converter;
+- de instancerevisie, en `kenSysteemTypeToe` als gedeelde regel met het
+  eigenschappenpaneel;
+- de hoeveelheden uit de echte `systeemGeometrie`, ook onbevestigd;
+- losgekoppelde snapshots, zonder de data van andere extensies;
+- koppelen, wijzigen en loskoppelen met revisiecontrole, native validatie
+  en één undo-stap, en ongedaan maken;
+- het acceptatiescenario: twee instances van hetzelfde type, waarvan één
+  gekoppeld. Alleen die toont het formulier, de gewone niet. Wisselen
+  tussen gekoppelde instances ververst het formulier. Deselecteren en een
+  tabwissel ruimen op. Annuleren en een verouderde revisie wijzigen niets.
+  Toepassen is één undo-stap, en ongedaan maken herstelt het formulier.
+  Uitzetten ruimt op zonder luisteraars achter te laten;
+- een wijziging elders terwijl er een werkversie openstaat (melding, geen
+  melding zonder werkversie);
+- conflicten en volgorde, een bevroren predicaatsnapshot en een gooiend
+  predicaat, en `ownedType`;
+- de plug-in-API (registreren, `_cleanup`, `EXTENSION_INACTIVE`) en
+  `registerPropertyPanel` zonder stille vervanging;
+- de algemene selectieluisteraar;
+- de MCP-opdrachten van een synthetische extensie (lezen, projectsysteem
+  kiezen, labels schakelen, herhaling, verouderde revisie, ongeldig
+  argument);
+- de aansluiting in het paneel, de CSS (hoekig, standaardcursor) en de
+  teksten in alle 40 talen.
+
+### 16.10 Grenzen
+
+- Het formulier staat ónder de native secties en vervangt ze niet. Wie
+  alles zelf wil tonen, heeft nog `setNativePanelVisible(false)`, maar dat
+  geldt voor het hele paneel.
+- Alleen `data`, `systemTypeId` en `showTag` zijn via de API te wijzigen.
+  Contour, sparingen en overrides blijven van de native bewerking. De
+  constructiegeometrie wijzigt een extensie dus niet buiten de native
+  editor om.
+- Bij een meervoudige selectie verschijnt geen formulier.
+- Kopiëren of dupliceren van een gekoppelde instance neemt de koppeling
+  mee, net als de andere velden van de annotatie. Een extensie die per
+  instance iets unieks bewaart, controleert dat zelf
+  (`listSystemInstances`).
+- De opslagsleutel `OPS_SgExtLinks` is getest met pdf-lib en de echte
+  kleurextractie; de volledige opslag-rondgang in de app (opslaan en
+  heropenen van een document met gekoppelde instances) staat nog open.
+- Een live controle in de echte app (twee instances, formulier, Toepassen,
+  ongedaan maken, uitzetten) staat nog open; de tests draaien op de echte
+  modules met stubs voor de app.

@@ -680,5 +680,9 @@
     "refused": "Nicht möglich: {{reason}}",
     "reasonTooNarrow": "ein Feld würde zu schmal",
     "reasonFrame": "der äußere Rahmen kann nicht verschoben oder entfernt werden"
+  },
+  "scopedPanel": {
+    "stale": "Dieses Objekt wurde an anderer Stelle geändert. Das Formular zeigt die aktuellen Werte; Ihre Änderungen wurden nicht übernommen.",
+    "failed": "Die Änderungen konnten nicht übernommen werden: {{error}}"
   }
 }

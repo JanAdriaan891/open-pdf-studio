@@ -352,8 +352,8 @@ test('de opdrachten staan in de brug, de Rust-server, de metatabel, tools.json e
     });
   }
   // Aaneengesloten na app_facade_element, in de volgorde van de server; de
-  // extensietools (extensie_tools()) komen daar nog achter.
+  // opdrachttool (#575) en de extensietools (extensie_tools()) komen daar nog achter.
   const start = tools.findIndex((t) => t.name === 'app_facade_element') + 1;
   assert.deepEqual(tools.slice(start, start + TOOLS.length).map((t) => t.name), TOOLS.map((t) => t.naam));
-  assert.equal(tools.length, 71);
+  assert.equal(tools.length, 72);
 });
