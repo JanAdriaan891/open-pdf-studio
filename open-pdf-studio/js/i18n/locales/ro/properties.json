@@ -302,6 +302,8 @@
     "addChildBookmark": "Adaugare semn de carte copil",
     "editBookmark": "Editare semn de carte",
     "deleteBookmark": "Stergere semn de carte",
+    "findBookmark": "Găsire...",
+    "findBookmarkTip": "Tastați pentru a sări la un semn de carte. Enter îl deschide, Enter din nou trece la următoarea potrivire.",
     "addAttachment": "Adaugare atasament",
     "openAttachment": "Deschidere atasament",
     "saveAttachment": "Salvare atasament",

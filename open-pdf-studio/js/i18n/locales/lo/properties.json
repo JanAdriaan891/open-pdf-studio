@@ -334,6 +334,8 @@
     "addChildBookmark": "ເພີ່ມບຸກມາກຍ່ອຍ",
     "editBookmark": "ແກ້ໄຂບຸກມາກ",
     "deleteBookmark": "ລຶບບຸກມາກ",
+    "findBookmark": "ຊອກຫາ...",
+    "findBookmarkTip": "ພິມເພື່ອໄປຫາບຸກມາກ. ກົດ Enter ເພື່ອເປີດ, ກົດ Enter ອີກຄັ້ງເພື່ອໄປຫາລາຍການທີ່ກົງກັນຕໍ່ໄປ.",
     "addAttachment": "ເພີ່ມໄຟລ໌ຕິດຄັດ",
     "openAttachment": "ເປີດໄຟລ໌ຕິດຄັດ",
     "saveAttachment": "ບັນທຶກໄຟລ໌ຕິດຄັດ",

@@ -416,6 +416,37 @@
 }
 
 /* Bookmarks Panel (inside left panel) */
+/* Zoekveld in de kop (#578): springt naar een bladwijzer, filtert niet.
+   Negatieve marge houdt de kop even hoog als die van de andere panelen. */
+.bookmarks-search {
+  flex: 1;
+  min-width: 50px;
+  max-width: 180px;
+  height: 19px;
+  margin: -3px 0 -3px 8px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: normal;
+  border: 1px solid var(--theme-panel-border);
+  border-radius: 0;
+  background: var(--theme-bg, #fff);
+  color: var(--theme-panel-header-text);
+  box-sizing: border-box;
+}
+
+.bookmarks-search:focus {
+  outline: none;
+  border-color: var(--theme-panel-accent);
+}
+
+.bookmarks-search.no-match {
+  border-color: #e81123;
+}
+
+.bookmarks-search:disabled {
+  opacity: 0.5;
+}
+
 .bookmarks-toolbar {
   display: flex;
   gap: 2px;
@@ -482,6 +513,18 @@
 
 .bookmark-item.selected {
   background: var(--theme-thumbnail-active-bg);
+}
+
+/* Bladwijzer van de pagina in beeld (#578): zachte achtergrond. Na .selected,
+   zodat hij ook na een klik op de bladwijzer zichtbaar blijft (in het
+   standaardthema is de selectiekleur gelijk aan de paneelachtergrond). */
+.bookmark-item.current {
+  background: var(--theme-thumbnail-hover);
+}
+
+/* Treffer van het zoekveld: streep links, de lijst blijft volledig */
+.bookmark-item.found {
+  box-shadow: inset 3px 0 0 var(--theme-thumbnail-active-border);
 }
 
 .bookmark-arrow {

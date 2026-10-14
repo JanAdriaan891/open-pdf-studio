@@ -959,6 +959,9 @@ export function flushPropertyChange() {
     const isClean = targetDoc.savedUndoStackLength >= 0 &&
                     targetDoc.undoStack.length === targetDoc.savedUndoStackLength;
     targetDoc.modified = !isClean;
+    // Kleur, lijndikte enz. uit het eigenschappenpaneel komen hier binnen,
+    // niet via execute(): ook dan de miniatuur van die pagina verversen (#579).
+    if (targetDoc.id === getActiveDocument()?.id) scheduleThumbnailRefresh(cmd);
   }
 
   pendingPropertyChange = null;

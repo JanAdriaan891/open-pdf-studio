@@ -302,6 +302,8 @@
     "addChildBookmark": "Aggiungi segnalibro secondario",
     "editBookmark": "Modifica segnalibro",
     "deleteBookmark": "Elimina segnalibro",
+    "findBookmark": "Trova...",
+    "findBookmarkTip": "Digita per passare a un segnalibro. Invio lo apre, Invio di nuovo passa alla corrispondenza successiva.",
     "addAttachment": "Aggiungi allegato",
     "openAttachment": "Apri allegato",
     "saveAttachment": "Salva allegato",

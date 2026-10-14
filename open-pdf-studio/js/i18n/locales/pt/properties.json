@@ -302,6 +302,8 @@
     "addChildBookmark": "Adicionar marcador filho",
     "editBookmark": "Editar marcador",
     "deleteBookmark": "Excluir marcador",
+    "findBookmark": "Localizar...",
+    "findBookmarkTip": "Digite para ir até um marcador. Enter o abre; Enter novamente vai para a próxima correspondência.",
     "addAttachment": "Adicionar anexo",
     "openAttachment": "Abrir anexo",
     "saveAttachment": "Salvar anexo",

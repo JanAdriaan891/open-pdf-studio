@@ -302,6 +302,8 @@
     "addChildBookmark": "子しおりを追加",
     "editBookmark": "しおりを編集",
     "deleteBookmark": "しおりを削除",
+    "findBookmark": "検索...",
+    "findBookmarkTip": "入力するとしおりへ移動します。Enter で開き、もう一度 Enter で次の一致へ移動します。",
     "addAttachment": "添付ファイルを追加",
     "openAttachment": "添付ファイルを開く",
     "saveAttachment": "添付ファイルを保存",

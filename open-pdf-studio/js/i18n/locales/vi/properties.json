@@ -302,6 +302,8 @@
     "addChildBookmark": "Thêm dấu trang con",
     "editBookmark": "Sửa dấu trang",
     "deleteBookmark": "Xóa dấu trang",
+    "findBookmark": "Tìm...",
+    "findBookmarkTip": "Gõ để chuyển đến một dấu trang. Enter để mở, nhấn Enter lần nữa để đến kết quả tiếp theo.",
     "addAttachment": "Thêm tệp đính kèm",
     "openAttachment": "Mở tệp đính kèm",
     "saveAttachment": "Lưu tệp đính kèm",

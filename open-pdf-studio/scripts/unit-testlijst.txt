@@ -320,3 +320,7 @@ js/tools/sneltoetsen-caps-lock.test.mjs
 js/pdf/pdf-lib-snelheid.test.mjs
 # Draagbare Cargo-instellingen, geen absolute paden (#582)
 scripts/cargo-config-draagbaar.test.mjs
+# Bladwijzerpaneel: huidige bladwijzer en zoekveld (#578)
+js/ui/panels/bladwijzer-zoeken.test.mjs
+# Miniaturen groeien mee, kolommen en scherpte (#579)
+js/ui/panels/miniatuur-maat.test.mjs

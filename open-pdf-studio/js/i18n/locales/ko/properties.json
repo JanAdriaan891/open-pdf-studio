@@ -302,6 +302,8 @@
     "addChildBookmark": "하위 책갈피 추가",
     "editBookmark": "책갈피 편집",
     "deleteBookmark": "책갈피 삭제",
+    "findBookmark": "찾기...",
+    "findBookmarkTip": "입력하면 책갈피로 이동합니다. Enter로 열고, 다시 Enter를 누르면 다음 항목으로 이동합니다.",
     "addAttachment": "첨부 파일 추가",
     "openAttachment": "첨부 파일 열기",
     "saveAttachment": "첨부 파일 저장",

@@ -302,6 +302,8 @@
     "addChildBookmark": "Ajouter un sous-signet",
     "editBookmark": "Modifier le signet",
     "deleteBookmark": "Supprimer le signet",
+    "findBookmark": "Rechercher...",
+    "findBookmarkTip": "Tapez pour aller à un signet. Entrée l'ouvre, Entrée à nouveau passe au résultat suivant.",
     "addAttachment": "Ajouter une pièce jointe",
     "openAttachment": "Ouvrir la pièce jointe",
     "saveAttachment": "Enregistrer la pièce jointe",

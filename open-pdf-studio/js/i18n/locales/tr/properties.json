@@ -302,6 +302,8 @@
     "addChildBookmark": "Alt yer imi ekle",
     "editBookmark": "Yer imini düzenle",
     "deleteBookmark": "Yer imini sil",
+    "findBookmark": "Bul...",
+    "findBookmarkTip": "Bir yer imine atlamak için yazın. Enter onu açar, tekrar Enter sonraki eşleşmeye gider.",
     "addAttachment": "Ek ekle",
     "openAttachment": "Eki aç",
     "saveAttachment": "Eki kaydet",

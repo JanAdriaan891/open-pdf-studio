@@ -302,6 +302,8 @@
     "addChildBookmark": "ذیلی بک مارک شامل کریں",
     "editBookmark": "بک مارک میں ترمیم کریں",
     "deleteBookmark": "بک مارک حذف کریں",
+    "findBookmark": "تلاش...",
+    "findBookmarkTip": "کسی بک مارک پر جانے کے لیے ٹائپ کریں۔ Enter اسے کھولتا ہے، دوبارہ Enter اگلے مماثل پر لے جاتا ہے۔",
     "addAttachment": "منسلکہ شامل کریں",
     "openAttachment": "منسلکہ کھولیں",
     "saveAttachment": "منسلکہ محفوظ کریں",

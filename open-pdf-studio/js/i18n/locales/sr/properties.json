@@ -302,6 +302,8 @@
     "addChildBookmark": "Додај подобележивач",
     "editBookmark": "Уреди обележивач",
     "deleteBookmark": "Обриши обележивач",
+    "findBookmark": "Пронађи...",
+    "findBookmarkTip": "Куцајте да бисте скочили на обележивач. Enter га отвара, поновни Enter иде на следеће подударање.",
     "addAttachment": "Додај прилог",
     "openAttachment": "Отвори прилог",
     "saveAttachment": "Сачувај прилог",

@@ -302,6 +302,8 @@
     "addChildBookmark": "เพิ่มบุ๊กมาร์กย่อย",
     "editBookmark": "แก้ไขบุ๊กมาร์ก",
     "deleteBookmark": "ลบบุ๊กมาร์ก",
+    "findBookmark": "ค้นหา...",
+    "findBookmarkTip": "พิมพ์เพื่อข้ามไปยังบุ๊กมาร์ก กด Enter เพื่อเปิด กด Enter อีกครั้งเพื่อไปยังรายการที่ตรงกันถัดไป",
     "addAttachment": "เพิ่มไฟล์แนบ",
     "openAttachment": "เปิดไฟล์แนบ",
     "saveAttachment": "บันทึกไฟล์แนบ",

@@ -302,6 +302,8 @@
     "addChildBookmark": "Dodaj zakładkę podrzędną",
     "editBookmark": "Edytuj zakładkę",
     "deleteBookmark": "Usuń zakładkę",
+    "findBookmark": "Znajdź...",
+    "findBookmarkTip": "Wpisz, aby przejść do zakładki. Enter ją otwiera, kolejny Enter przechodzi do następnego wyniku.",
     "addAttachment": "Dodaj załącznik",
     "openAttachment": "Otwórz załącznik",
     "saveAttachment": "Zapisz załącznik",

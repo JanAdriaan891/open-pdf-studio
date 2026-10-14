@@ -302,6 +302,8 @@
     "addChildBookmark": "चाइल्ड बुकमार्क जोड़ें",
     "editBookmark": "बुकमार्क संपादित करें",
     "deleteBookmark": "बुकमार्क हटाएं",
+    "findBookmark": "खोजें...",
+    "findBookmarkTip": "किसी बुकमार्क पर जाने के लिए टाइप करें। Enter उसे खोलता है, फिर से Enter अगले मिलान पर ले जाता है।",
     "addAttachment": "अनुलग्नक जोड़ें",
     "openAttachment": "अनुलग्नक खोलें",
     "saveAttachment": "अनुलग्नक सहेजें",

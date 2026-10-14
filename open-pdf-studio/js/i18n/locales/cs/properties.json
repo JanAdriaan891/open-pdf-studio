@@ -302,6 +302,8 @@
     "addChildBookmark": "Přidat podřízenou záložku",
     "editBookmark": "Upravit záložku",
     "deleteBookmark": "Smazat záložku",
+    "findBookmark": "Najít...",
+    "findBookmarkTip": "Pište pro přechod na záložku. Enter ji otevře, další Enter přejde na další shodu.",
     "addAttachment": "Přidat přílohu",
     "openAttachment": "Otevřít přílohu",
     "saveAttachment": "Uložit přílohu",

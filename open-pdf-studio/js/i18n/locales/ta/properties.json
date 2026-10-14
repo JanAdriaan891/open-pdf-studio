@@ -302,6 +302,8 @@
     "addChildBookmark": "குழந்தை புத்தகக்குறி சேர்",
     "editBookmark": "புத்தகக்குறியைத் திருத்து",
     "deleteBookmark": "புத்தகக்குறியை நீக்கு",
+    "findBookmark": "தேடு...",
+    "findBookmarkTip": "புத்தகக்குறிக்குச் செல்ல தட்டச்சு செய்யவும். Enter அதைத் திறக்கும், மீண்டும் Enter அடுத்த பொருத்தத்திற்குச் செல்லும்.",
     "addAttachment": "இணைப்பைச் சேர்",
     "openAttachment": "இணைப்பைத் திற",
     "saveAttachment": "இணைப்பைச் சேமி",
