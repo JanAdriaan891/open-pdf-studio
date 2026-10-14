@@ -91,7 +91,14 @@ test('zoeken loopt alle tabknoppen in de DOM langs, ook die van extensies', () =
   const knoppen = stuk('function _lintTabKnoppen()', '\n}\n');
   assert.match(knoppen, /document\.querySelectorAll\('\.ribbon-tab'\)/);
   assert.match(knoppen, /classList\.contains\('file-tab'\)\) continue;/);
-  assert.match(knoppen, /getAttribute\('data-tab'\) \|\| \(el\.id \? `#\$\{el\.id\}` : ''\)/);
+  assert.match(knoppen, /const tab = _naamVanTabKnop\(el\);/);
+  // De naam komt uit tabNaam: data-tab, #id of het paneel uit aria-controls.
+  const naam = stuk('function _naamVanTabKnop', '\n}\n');
+  assert.match(naam, /tabNaam\(\{/);
+  assert.match(naam, /ariaControls: el\.getAttribute\('aria-controls'\)/);
+  // Het actieve tabblad komt uit de DOM, met de lintstore als terugval.
+  const actief = stuk('async function _actiefTabblad', '\n}\n');
+  assert.match(actief, /return actiefTabblad\(knoppen, storeTab\);/);
   const zoek = stuk('async function _findElementAcrossTabs', '\n}\n');
   assert.match(zoek, /tabVolgorde\(_lintTabKnoppen\(\)\.map\(\(t\) => t\.tab\), originalTab\)/);
 });
@@ -124,4 +131,31 @@ test('app_run_command: ext eerst, dan tool, dan de lint-opdrachten via leesLintO
   assert.ok(volgorde.every((i, n) => i > 0 && (n === 0 || i > volgorde[n - 1])), `volgorde ${volgorde}`);
   assert.match(run, /const knop = _tabKnop\(lint\.tab\);[\s\S]*?knop\.click\(\);[\s\S]*?activatedTab: lint\.tab/);
   assert.match(run, /if \(soort === 'extension'\) \{[\s\S]*?run as ext: commands/);
+});
+
+test('tabnaam: data-tab, dan #id, dan het paneel uit aria-controls', async () => {
+  const { tabNaam } = await import('./mcp-lint-opdrachten.js');
+  assert.equal(tabNaam({ dataTab: 'home', id: 'x', ariaControls: 'tab-y' }), 'home');
+  assert.equal(tabNaam({ id: 'mijn-tab', ariaControls: 'tab-y' }), '#mijn-tab');
+  // Een extensie die zelf een tabknop in de DOM zet met alleen aria-controls
+  // naar haar paneel `tab-<naam>` (zoals de ingebouwde panelen heten).
+  assert.equal(tabNaam({ ariaControls: 'tab-inteco' }), 'inteco');
+  assert.equal(tabNaam({ ariaControls: 'acme-panel' }), 'acme-panel');
+  assert.equal(tabNaam({ ariaControls: 'tab-' }), 'tab-');
+  assert.equal(tabNaam({}), null);
+  assert.equal(tabNaam(), null);
+});
+
+test('actief tabblad: de DOM gaat voor de lintstore, een extensietabblad wint', async () => {
+  const { actiefTabblad } = await import('./mcp-lint-opdrachten.js');
+  const k = (tab, actief = false) => ({ tab, actief });
+  // Een extensietabblad dat zichzelf toont: de store weet daar niets van.
+  assert.equal(actiefTabblad([k('home'), k('view'), k('inteco', true)], 'home'), 'inteco');
+  assert.equal(actiefTabblad([k('home', true), k('view')], 'home'), 'home');
+  // Twee knoppen actief: het niet-ingebouwde tabblad is het getoonde.
+  assert.equal(actiefTabblad([k('home', true), k('inteco', true)], 'home'), 'inteco');
+  assert.equal(actiefTabblad([k('home', true), k('view', true)], 'view'), 'view');
+  // Geen enkele knop actief: terugvallen op de store.
+  assert.equal(actiefTabblad([k('home'), k('view')], 'view'), 'view');
+  assert.equal(actiefTabblad([], null), null);
 });

@@ -330,3 +330,22 @@ test('app_read_ui in tools.json (direct na app_run_command) en de manifest; 75 p
   assert.deepEqual(manifest.tools.map((t) => t.name), tools.map((t) => t.name));
   assert.ok(def.description.startsWith(manifest.tools[i + 1].description.replace(/\.$/, '')));
 });
+
+test('een tabknop die een extensie zelf in de DOM zet, met alleen aria-controls, krijgt tab-id en opdracht', () => {
+  const lint = el('div', { class: 'ribbon-container' }, [
+    el('div', { class: 'ribbon-tabs', role: 'tablist' }, [
+      el('button', { class: 'ribbon-tab file-tab', id: 'file-tab' }, ['Bestand']),
+      el('button', { class: 'ribbon-tab', 'data-tab': 'home', role: 'tab', 'aria-selected': 'false' }, ['Start']),
+      el('button', { class: 'ribbon-tab active', type: 'button', role: 'tab', 'aria-controls': 'tab-inteco', 'aria-selected': 'true' }, ['Inteco']),
+      el('button', { class: 'ribbon-tab', id: 'eigen-tab', role: 'tab' }, ['Eigen']),
+    ]),
+  ]);
+  const { regions } = bouwUiBoom([{ region: 'ribbon', elements: [lint] }], { zoekOpId: zoekOpIdIn(lint) });
+  const tablist = regions[0].nodes[0].children[0];
+  assert.deepEqual(tablist.children.map((k) => [k.name, k.tab ?? null, k.command ?? null]), [
+    ['Bestand', null, null],
+    ['Start', 'home', 'ribbon-tab:home'],
+    ['Inteco', 'inteco', 'ribbon-tab:inteco'],
+    ['Eigen', '#eigen-tab', 'ribbon-tab:#eigen-tab'],
+  ]);
+});
