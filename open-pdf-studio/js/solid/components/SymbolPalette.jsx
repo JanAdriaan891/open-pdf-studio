@@ -126,6 +126,8 @@ function selectSymbol(symbol) {
       wallPattern: symbol.wall.pattern,
       wallDikteMm: symbol.wall.dikteMm || 100,
       ifcCategory: ifcCategoryForSymbol(symbol),
+      // Uit het palet: hoort bij de invoegsessie voor symbolen (#587).
+      symbolInsert: true,
     };
     setTool('wall');
     return;
@@ -150,27 +152,11 @@ function selectSymbol(symbol) {
     // (en de saver/loader-roundtrip) de herkomst kent — zie nenIfcMap.js.
     symbolId: symbol.id,
     ifcPredefinedType: nenIfcForSymbolId(symbol.id)?.ifcPredefinedType,
+    // Invoegmodus voor symbolen (#587): de opmaakwerkbalk stelt de opmaak in
+    // voor de volgende plaatsingen. setTool() start of behoudt de sessie en
+    // bouwt de spookafbeelding onder de cursor (met die opmaak erin).
+    symbolInsert: true,
   };
-  // Pre-cache rasterized preview image for cursor preview
-  const blob = new Blob([effectiveSvg], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
-  const img = new Image();
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    const scale = 2;
-    canvas.width = img.naturalWidth * scale;
-    canvas.height = img.naturalHeight * scale;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    URL.revokeObjectURL(url);
-    const pngImg = new Image();
-    pngImg.onload = () => {
-      if (state.toolOverrides) state.toolOverrides._previewImg = pngImg;
-    };
-    pngImg.src = canvas.toDataURL('image/png');
-  };
-  img.onerror = () => URL.revokeObjectURL(url);
-  img.src = url;
   setTool('stamp');
 }
 

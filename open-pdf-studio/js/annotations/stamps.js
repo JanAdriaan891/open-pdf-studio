@@ -1,4 +1,5 @@
 import { huidigeSymboolSchaal } from '../symbols/symbol-scale-store.js';
+import { symbolInsertStampFormat } from '../symbols/symbol-insert-format-store.js';
 import { state, getActiveDocument, imageCache } from '../core/state.js';
 import { createAnnotation } from './factory.js';
 import { recordAdd } from '../core/undo-manager.js';
@@ -135,6 +136,21 @@ export async function placeOverrideStamp(x, y) {
     stampY = y - stampHeight / 2;
   }
 
+  // Opmaak uit de invoegsessie (#587): kleur en lijndikte gaan de SVG-bron
+  // in (een symbool wordt als raster getekend), dekking en mengmodus op de
+  // annotatie. De lijndikte rekent met de werkelijke plaatsingsbreedte; de
+  // beeldverhouding verandert niet, dus de maat hierboven blijft geldig.
+  let stampSvg = overrides.stampSvg || null;
+  const opmaak = stampSvg ? symbolInsertStampFormat(overrides, stampWidth) : null;
+  if (opmaak && opmaak.svg && opmaak.svg !== stampSvg) {
+    const opgemaakt = await rasterizeSvg(opmaak.svg);
+    if (opgemaakt) {
+      img = opgemaakt.img;
+      dataUrl = opgemaakt.dataUrl;
+      stampSvg = opmaak.svg;
+    }
+  }
+
   const imageId = 'stamp_' + Date.now();
   imageCache.set(imageId, img);
 
@@ -150,7 +166,7 @@ export async function placeOverrideStamp(x, y) {
     height: stampHeight,
     stampName: overrides.stampName || 'Custom',
     stampText: '',
-    stampSvg: overrides.stampSvg || null,
+    stampSvg,
     // Original (unedited) source SVG for this symbol type. Kept so the
     // "Edit Type" editor can resolve/update the correct type override even
     // after the stamp's rendered geometry has been replaced.
@@ -162,6 +178,7 @@ export async function placeOverrideStamp(x, y) {
     originalHeight: img.naturalHeight,
     color: '#000000',
     opacity: 1,
+    ...(opmaak ? opmaak.props : {}),
     // Rechtop op het scherm in een gedraaide weergave (#200); een stempel die
     // de pagina vult, volgt de pagina.
     rotation: overrides.stampFillPage ? 0 : rechtopRotatie(),

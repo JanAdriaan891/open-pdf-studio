@@ -91,6 +91,7 @@ js/annotations/svg-real-size.test.mjs
 js/annotations/svg-stroke-color.test.mjs
 js/annotations/svg-stroke-width.test.mjs
 js/symbols/symbol-scale.test.mjs
+js/symbols/symbol-insert-format.test.mjs
 js/symbols/catalog-opslagkeuze.test.mjs
 js/symbols/linework-catalog.test.mjs
 js/symbols/templates/constructie-bouwplaats.test.mjs

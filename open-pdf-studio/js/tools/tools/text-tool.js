@@ -1,6 +1,7 @@
 import { applyToolTransform } from '../tool-context.js';
 import { overrideStampMaat } from '../../annotations/svg-real-size.js';
 import { huidigeSymboolSchaal } from '../../symbols/symbol-scale-store.js';
+import { symbolInsertPreviewStyle } from '../../symbols/symbol-insert-format-store.js';
 import { stampPxPerMm } from '../../annotations/stamp-scale.js';
 import { getActiveDocument } from '../../core/state.js';
 import { zetRechtopRond } from '../../pdf/weergave-ruimte.js';
@@ -74,7 +75,11 @@ export const stampTool = {
     applyToolTransform(canvasCtx);
     // Zoals hij geplaatst wordt: rechtop op het scherm, ook gedraaid (#200).
     zetRechtopRond(canvasCtx, ctx.x, ctx.y);
-    canvasCtx.globalAlpha = 0.6;
+    // Gekozen dekking en mengmodus uit de invoegsessie (#587) tellen mee;
+    // kleur en lijndikte zitten al in het voorbeeldraster.
+    const stijl = symbolInsertPreviewStyle();
+    canvasCtx.globalAlpha = 0.6 * stijl.opacity;
+    if (stijl.blendMode === 'multiply') canvasCtx.globalCompositeOperation = 'multiply';
     canvasCtx.drawImage(previewImg, ctx.x - w / 2, ctx.y - h / 2, w, h);
     canvasCtx.restore();
   },
