@@ -5,6 +5,7 @@
 
 mod accounts;
 mod atomic_file;
+pub mod beveiligde_pdf;
 pub mod cad_export;
 pub mod cad_import;
 pub mod datamap;
@@ -2567,6 +2568,7 @@ pub fn run(opts: StartupOpts) {
     let mut builder = tauri::Builder::default()
         .manage(OpenedFiles(Mutex::new(opened_files)))
         .manage(LockedFiles(Mutex::new(HashMap::new())))
+        .manage(beveiligde_pdf::BeveiligdeKopieen::default())
         .manage(print_instelling::PrinterDevmodes::default())
         .manage(PdfBytesCache(Mutex::new(HashMap::new())))
         .manage(DocHandleCache(Mutex::new(HashMap::new())))
@@ -2689,6 +2691,13 @@ pub fn run(opts: StartupOpts) {
                     cad_import::sweep_previews(&voorbeelden, cad_import::PREVIEW_MAX_AGE);
                 });
             }
+
+            // Ontsleutelde werkkopieën van PDF's met een wachtwoord die van een
+            // vorige keer zijn blijven staan (beveiligde_pdf.rs). Kopieën van
+            // een andere, nog draaiende instantie blijven staan.
+            std::thread::spawn(|| {
+                beveiligde_pdf::ruim_oude_kopieen_op(&beveiligde_pdf::werkmap());
+            });
 
             // Grant FS plugin scope for command-line files (file association)
             for path in app.state::<OpenedFiles>().0.lock().unwrap().iter() {
@@ -2899,6 +2908,8 @@ pub fn run(opts: StartupOpts) {
             cad_import::cad_import_limits,
             cad_import::cad_import_dir,
             allow_fs_scope,
+            beveiligde_pdf::open_protected_pdf,
+            beveiligde_pdf::release_protected_pdf,
             mcp_app_bridge::app_response,
             mcp_app_bridge::mcp_bridge_ready,
             mcp_extensie_tools::mcp_set_extension_tools,
@@ -2930,6 +2941,11 @@ pub fn run(opts: StartupOpts) {
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
         .run(|_app, _event| {
+            // Bij afsluiten de ontsleutelde werkkopieën van deze instantie
+            // opruimen (best effort; wat blijft staan ruimt de volgende start op).
+            if let tauri::RunEvent::Exit = &_event {
+                beveiligde_pdf::ruim_eigen_kopieen_op(&_app.state::<beveiligde_pdf::BeveiligdeKopieen>());
+            }
             // macOS (en iOS) leveren een dubbelklik in Finder NIET als
             // argv-argument aan (zoals Windows/Linux), maar als Apple Event
             // dat Tauri doorgeeft als RunEvent::Opened { urls }. Zonder deze
