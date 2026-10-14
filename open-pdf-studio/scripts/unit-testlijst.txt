@@ -332,3 +332,6 @@ js/plugins/system-instance-panels.test.mjs
 # Agenttaken van extensies zonder assistentvenster (#556)
 js/plugins/agent-tasks.test.mjs
 js/plugins/agent-tasks-plugin-api.test.mjs
+js/core/mcp-schermafdruk.test.mjs
+js/core/mcp-ui-boom.test.mjs
+js/core/mcp-lint-opdrachten.test.mjs

@@ -39,6 +39,8 @@ pub mod print_windows;
 pub mod render_to_png;
 pub mod window_mgmt;
 pub mod startup_diagnostics;
+// Vensteropname voor app_screenshot_view (#583); buiten Windows een nette fout.
+pub mod webview_opname;
 pub mod worker_pool;
 
 pub struct StartupOpts {
@@ -2900,6 +2902,7 @@ pub fn run(opts: StartupOpts) {
             mcp_app_bridge::app_response,
             mcp_app_bridge::mcp_bridge_ready,
             mcp_extensie_tools::mcp_set_extension_tools,
+            webview_opname::capture_webview_png,
             mcp_koppeling::mcp_instellen,
             mcp_koppeling::mcp_status,
             accounts::accounts_sign_in,

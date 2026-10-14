@@ -381,6 +381,27 @@ fn system_type_definition_schema(register: bool) -> Value {
     schema
 }
 
+/// `app_read_ui` (#584): de interface als compacte toegankelijkheidsboom
+/// lezen (rol, naam, staat), zodat een agent kan nalezen wat een klik deed.
+/// De regels staan in js/core/mcp-ui-boom.js.
+fn read_ui_tool() -> Value {
+    json!({
+        "name": "app_read_ui",
+        "description": "Read the LIVE app's interface as a compact accessibility-style tree, to check what a click did without a screenshot. Each node has a role (button, tab, tabpanel, group, combobox, option, checkbox, status, text, ...), a name and only the state that applies: disabled, checked, pressed, selected, expanded, active, focused, readonly, plus value/valueText for inputs. Ribbon tabs carry `tab` and the `command` 'ribbon-tab:<tab>'; ribbon buttons and extension controls carry the `command` that app_run_command runs. Without `selector` it reads the ribbon (only the active tab's content exists), the side panels, the bars above the document, floating palettes, open dialogs and the status bar, each as a region. With `selector` it reads the matching elements instead, for example an extension's panel. Reads only: it never switches ribbon tabs. maxDepth, maxNodes and maxText keep the output small; `truncated` says when something was left out.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "selector":      { "type": "string", "description": "CSS selector of the element(s) to read, e.g. '.ribbon-container', '#left-panel' or '.status-bar'. Default: the standard regions." },
+                "maxDepth":      { "type": "integer", "minimum": 1, "maximum": 40, "default": 12, "description": "Maximum depth of the tree." },
+                "maxNodes":      { "type": "integer", "minimum": 1, "maximum": 3000, "default": 400, "description": "Maximum number of nodes over all regions together." },
+                "maxText":       { "type": "integer", "minimum": 8, "maximum": 1000, "default": 80, "description": "Maximum length of a name, description or value." },
+                "includeHidden": { "type": "boolean", "default": false, "description": "Also list hidden elements, marked with state.hidden." }
+            },
+            "additionalProperties": false
+        }
+    })
+}
+
 /// `app_list_system_types` (#567): de bibliotheek met systeemtypen lezen.
 fn list_system_types_tool() -> Value {
     json!({
@@ -718,11 +739,13 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_screenshot_view",
-                "description": "Capture the LIVE app's current page view as a base64 PNG. Composites the PDF canvas with the annotation/highlight overlays (NOT the surrounding chrome — for that use OS-level screenshotting).",
+                "description": "Capture the LIVE app as a base64 PNG. scope 'document' (default) composites the PDF canvas with the annotation/highlight overlays, without the surrounding interface. scope 'window' captures the whole app window as it is shown: ribbon (including extension tabs), side panels such as an extension's workspace panel, the document view and the status bar. scope 'element' crops that window capture to the element matched by `selector`. The longer side is scaled down to `width`. Returns { png_base64, width, height, scope, bounds: { x, y, width, height } (the captured area in CSS px), devicePixelRatio }. 'window' and 'element' use a native capture of the web view and are available on Windows only for now; on other platforms they return an error.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "width": { "type": "integer", "minimum": 1, "default": 2000 }
+                        "width":    { "type": "integer", "minimum": 1, "default": 2000, "description": "Maximum length in px of the longer side of the PNG." },
+                        "scope":    { "type": "string", "enum": ["document", "window", "element"], "default": "document", "description": "'document' (the page view), 'window' (the whole app window) or 'element' (one element, needs selector)." },
+                        "selector": { "type": "string", "description": "CSS selector of the element to capture with scope 'element', e.g. '.ribbon-container', '#left-panel' or '.status-bar'." }
                     },
                     "additionalProperties": false
                 }
@@ -903,7 +926,7 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_click_element",
-                "description": "Click an arbitrary DOM element in the LIVE app by CSS selector (usually '#button-id'). If the element lives on an inactive ribbon tab, the matching tab is activated first (the ribbon only renders the active tab's content). Returns { ok, found, disabled, clicked, activatedTab }. Disabled elements are reported but NOT clicked. Set searchTabs=false to probe only the current DOM (e.g. for dialogs) without touching the ribbon tabs.",
+                "description": "Click an arbitrary DOM element in the LIVE app by CSS selector (usually '#button-id'). If the element lives on an inactive ribbon tab, the matching tab is activated first (the ribbon only renders the active tab's content). Returns { ok, found, disabled, clicked, activatedTab, activeTab }: activatedTab is the ribbon tab this call activated (the tab the search opened, the tab whose button was clicked, also an extension tab, or the tab the click switched to), activeTab the ribbon tab active afterwards. Disabled elements are reported but NOT clicked. Set searchTabs=false to probe only the current DOM (e.g. for dialogs) without touching the ribbon tabs.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
@@ -1371,7 +1394,7 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_list_commands",
-                "description": "List EVERY function the app exposes: each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool. Use this to discover how a feature is called before running it with app_run_command. Command ids: 'ribbon:#<id>' (stable), 'ribbon:<tab>:<n>' (button without an id, only stable within one version), 'tool:<name>'. Optional `filter` narrows by text (matches id, label, title or tab). Extension actions appear as 'ext:<extensionId>:<itemId>'.",
+                "description": "List EVERY function the app exposes: each ribbon tab, each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool. Use this to discover how a feature is called before running it with app_run_command. Command ids: 'ribbon-tab:<tab>' (activate a ribbon tab), 'ribbon:#<id>' (stable), 'ribbon:<tab>:<n>' (button without an id, only stable within one version), 'tool:<name>'. Optional `filter` narrows by text (matches id, label, title or tab). Tabs and buttons that an extension adds carry the extension tab id in `tab`, including tabs an extension put into the ribbon itself. Extension actions appear as 'ext:<extensionId>:<itemId>'.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
@@ -1382,16 +1405,17 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_run_command",
-                "description": "Run any command returned by app_list_commands: clicks the ribbon button (switching to its tab first) or activates the tool. Disabled buttons are refused.",
+                "description": "Run any command returned by app_list_commands: activates a ribbon tab ('ribbon-tab:<tab>'), clicks the ribbon button (switching to its tab first), runs an extension action ('ext:...') or activates the tool. Disabled buttons are refused.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
-                        "command": { "type": "string", "description": "Command id from app_list_commands, e.g. 'ribbon:#btn-vector-snippet' or 'tool:measureArea'." }
+                        "command": { "type": "string", "description": "Command id from app_list_commands, e.g. 'ribbon:#btn-vector-snippet', 'ribbon-tab:view' or 'tool:measureArea'." }
                     },
                     "required": ["command"],
                     "additionalProperties": false
                 }
             },
+            read_ui_tool(),
             {
                 "name": "app_snippet_cut",
                 "description": "Cut a rectangular area from a page of the active document as a VECTOR snippet (not a raster screenshot) and put it on the app's snippet clipboard. Coordinates are app points (top-left origin, 100% zoom). Paste it into any open document with app_snippet_paste.",
@@ -1628,6 +1652,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_structural_layout"  => tool_app_request(state, "mcp:structural-layout",  &arguments, Duration::from_secs(60)).await,
         "app_list_commands"      => tool_app_request(state, "mcp:list-commands",      &arguments, Duration::from_secs(30)).await,
         "app_run_command"        => tool_app_request(state, "mcp:run-command",        &arguments, Duration::from_secs(20)).await,
+        "app_read_ui"            => tool_app_request(state, "mcp:read-ui",            &arguments, Duration::from_secs(10)).await,
         "app_snippet_cut"        => tool_app_request(state, "mcp:snippet-cut",        &arguments, Duration::from_secs(60)).await,
         "app_snippet_paste"      => tool_app_request(state, "mcp:snippet-paste",      &arguments, Duration::from_secs(15)).await,
         "app_snippet_flatten"    => tool_app_request(state, "mcp:snippet-flatten",    &arguments, Duration::from_secs(10)).await,
@@ -2345,7 +2370,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 74);
+        assert_eq!(arr.len(), 75);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
@@ -2468,6 +2493,25 @@ mod tests {
             assert!(!m.alleen_lezen && !m.wijzigt, "{naam}: wijzigt geen documentgegevens");
             assert!(beschikbaar(naam, Profiel::Publiek), "{naam} hoort in het publieke profiel");
         }
+    }
+
+    #[test]
+    fn interface_is_te_lezen_via_mcp() {
+        let v = handle_tools_list();
+        let tools = v["tools"].as_array().unwrap();
+        let lezen = tools.iter().find(|t| t["name"] == "app_read_ui").expect("app_read_ui staat in de lijst");
+        let schema = &lezen["inputSchema"];
+        assert_eq!(schema["additionalProperties"], false);
+        assert!(schema.get("required").is_none(), "zonder argumenten leest hij de standaardgebieden");
+        assert_eq!(schema["properties"]["maxNodes"]["maximum"], 3000);
+        assert_eq!(schema["properties"]["includeHidden"]["type"], "boolean");
+        assert!(crate::mcp_tool_meta::meta("app_read_ui").unwrap().alleen_lezen);
+        // Direct na app_run_command, in dezelfde volgorde als de brug en tools.json.
+        let namen: Vec<&str> = tools.iter().map(|t| t["name"].as_str().unwrap()).collect();
+        let i = namen.iter().position(|n| *n == "app_run_command").unwrap();
+        assert_eq!(namen[i + 1], "app_read_ui");
+        let lijst = tools.iter().find(|t| t["name"] == "app_list_commands").unwrap();
+        assert!(lijst["description"].as_str().unwrap().contains("'ribbon-tab:<tab>'"));
     }
 
     #[test]
@@ -2924,6 +2968,7 @@ mod tests {
             "app_structural_layout",
             "app_list_commands",
             "app_run_command",
+            "app_read_ui",
             "app_snippet_cut",
             "app_snippet_paste",
             "app_snippet_flatten",

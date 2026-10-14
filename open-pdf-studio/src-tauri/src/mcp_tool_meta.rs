@@ -61,6 +61,8 @@ pub const TOOLS: &[ToolMeta] = &[
     lees("app_get_page_text", "Read existing page text"),
     lees("app_get_takeoff", "Get quantity take-off"),
     lees("app_list_commands", "List app commands"),
+    // Leest de interface; wisselt geen linttabblad (#584).
+    lees("app_read_ui", "Read interface state"),
     lees("app_assistant_history", "Get assistant conversation"),
     lees("app_list_printers", "List printers"),
     lees("app_list_layers", "List markup layers"),
