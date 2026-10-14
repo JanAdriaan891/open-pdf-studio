@@ -1102,6 +1102,41 @@ genoemd.
   `facade_element_tool()`, dan botst dat met de staart van
   `handle_tools_list`; die regels gewoon allebei houden.
 
+### 8.6 Lint en panelen ontdekken en nalezen (#584)
+
+Een agent moet de bediening van een geladen extensie kunnen vinden,
+uitvoeren en controleren zonder schermautomatisering.
+
+- **Tabbladen als opdracht.** `app_list_commands` zet elk linttabblad
+  vooraan als `ribbon-tab:<tab>` (`kind: 'tab'`, `extension` bij een
+  geregistreerd tabblad), ook de tabbladen van extensies. `app_run_command`
+  activeert zo'n tabblad.
+- **Tabbladen uit de DOM, niet uit een vaste lijst.** Zoeken, opsommen en
+  uitvoeren lopen alle tabknoppen `.ribbon-tab` langs (zonder Bestand): eerst
+  de ingebouwde in vaste volgorde, dan de rest in DOM-volgorde. Een tabknop
+  heet naar zijn `data-tab`, of `#<id>` zonder. Geregistreerde
+  extensietabbladen (§5) leveren hun knoppen als `ext:`-opdracht uit het
+  register, met het tab-id in `tab`; een tabblad dat een extensie zelf in de
+  DOM zette, levert de zichtbare knoppen van zijn zichtbare inhoud als
+  `ribbon:#<id>` of `ribbon:<tab>:<n>`. De nummering van ingebouwde knoppen
+  verandert niet.
+- **`activatedTab`.** `app_click_element` meldt het tabblad dat de aanroep
+  activeerde: van de knop zelf als een tabknop is aangeklikt (ook een
+  extensietabblad), anders het tabblad waar de klik naartoe wisselde, anders
+  dat wat het zoeken opende. `activeTab` is het actieve tabblad daarna.
+- **`app_read_ui`.** Leest een compacte toegankelijkheidsboom: rol, naam en
+  alleen de staat die geldt (`disabled`, `checked`, `pressed`, `selected`,
+  `expanded`, `active`, `focused`, `readonly`, `hidden`), met `value` en
+  `valueText` voor velden. Lintknoppen en keuzes dragen hun `command`.
+  Zonder selector: lint, zijpanelen, balken boven het document, zwevende
+  paletten, open dialogen en statusbalk; met een selector de elementen die hij
+  aanwijst. Grenzen `maxDepth`, `maxNodes` en `maxText`; `truncated` meldt
+  wat wegviel. Alleen lezen: geen tabwissel.
+
+De regels staan in zuivere modules met eenheidstests:
+`js/core/mcp-lint-opdrachten.js` (id's, volgorde, `activatedTab`) en
+`js/core/mcp-ui-boom.js` (de boom). De brug doet alleen de DOM.
+
 ## 9. Beveiliging
 
 - **Vertrouwensmodel.** De MCP-server draait alleen als de gebruiker de

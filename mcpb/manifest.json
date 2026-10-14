@@ -217,11 +217,15 @@
     },
     {
       "name": "app_list_commands",
-      "description": "List EVERY function the app exposes: each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool."
+      "description": "List EVERY function the app exposes: each ribbon tab, each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool."
     },
     {
       "name": "app_run_command",
-      "description": "Run any command returned by app_list_commands: clicks the ribbon button (switching to its tab first) or activates the tool."
+      "description": "Run any command returned by app_list_commands: activates a ribbon tab ('ribbon-tab:<tab>'), clicks the ribbon button (switching to its tab first), runs an extension action ('ext:...') or activates the tool."
+    },
+    {
+      "name": "app_read_ui",
+      "description": "Read the LIVE app's interface as a compact accessibility-style tree, to check what a click did without a screenshot."
     },
     {
       "name": "app_snippet_cut",

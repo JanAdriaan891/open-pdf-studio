@@ -315,3 +315,5 @@ js/plugins/opslag-wissel-slot.test.mjs
 js/plugins/plugin-api-opruimen.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
 js/core/mcp-schermafdruk.test.mjs
+js/core/mcp-ui-boom.test.mjs
+js/core/mcp-lint-opdrachten.test.mjs

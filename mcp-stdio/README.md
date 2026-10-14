@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (71 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (72 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 71 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 72 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -116,6 +116,13 @@ and documented in `docs/superpowers/specs/2026-05-09-mcp-app-tools.md`.
 panels, status bar) or `{"scope":"element","selector":".ribbon-container"}`
 for one element; the result adds the captured `bounds` (CSS px) and
 `devicePixelRatio`. The window and element captures are Windows-only for now.
+
+`app_list_commands` lists every ribbon tab as `ribbon-tab:<tab>` (extension
+tabs included) and the buttons of extension tabs with the extension tab id in
+`tab`; `app_run_command` runs them. To check what a click did, `app_read_ui`
+returns a compact accessibility-style tree (role, name, state such as
+disabled, checked, selected, expanded and value) of the ribbon, the side
+panels and the status bar, or of the elements a `selector` matches.
 
 ## Edit or translate existing page text
 
