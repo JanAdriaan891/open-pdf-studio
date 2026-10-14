@@ -23,6 +23,9 @@ window.addEventListener('unhandledrejection', (e) => {
 });
 
 // Core modules
+// Snellere pdf-lib-standaarden voor elke load en save (#581); als eerste,
+// vóór elk module dat pdf-lib gebruikt.
+import './pdf/pdf-lib-snelheid.js';
 import { state } from './core/state.js';
 import { loadPreferences, savePreferences } from './core/preferences.js';
 import { initDomElements } from './ui/dom-elements.js';

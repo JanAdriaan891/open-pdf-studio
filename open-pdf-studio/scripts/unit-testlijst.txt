@@ -316,3 +316,5 @@ js/plugins/plugin-api-opruimen.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
 # Ctrl-sneltoetsen met Caps Lock aan (#577)
 js/tools/sneltoetsen-caps-lock.test.mjs
+# Snellere pdf-lib-standaarden voor inlezen en opslaan (#581)
+js/pdf/pdf-lib-snelheid.test.mjs
