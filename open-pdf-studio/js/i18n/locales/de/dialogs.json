@@ -82,7 +82,7 @@
     "orderVertical": "Vertikal",
     "orderVerticalReversed": "Vertikal umgekehrt",
     "pageBorder": "Seitenrahmen drucken",
-    "perSheetNote": "Jede Seite wird auf ihre Zelle skaliert, daher gilt die obige Seitenskalierung nicht. Die Vorschau zeigt eine einzelne Seite.",
+    "perSheetNote": "Jede Seite wird auf ihre Zelle skaliert, daher gilt die obige Seitenskalierung nicht.",
     "autoRotate": "Automatisch drehen",
     "autoCenter": "Automatisch zentrieren",
     "advancedOptions": "Erweiterte Druckoptionen",

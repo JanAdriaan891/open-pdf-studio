@@ -82,7 +82,7 @@
     "orderVertical": "Dọc",
     "orderVerticalReversed": "Dọc ngược",
     "pageBorder": "In viền trang",
-    "perSheetNote": "Mỗi trang được co giãn cho vừa ô của nó, nên tỷ lệ trang ở trên không áp dụng. Bản xem trước chỉ hiển thị một trang.",
+    "perSheetNote": "Mỗi trang được co giãn cho vừa ô của nó, nên tỷ lệ trang ở trên không áp dụng.",
     "autoRotate": "Tự động Xoay",
     "autoCenter": "Tự động Căn giữa",
     "advancedOptions": "Tùy chọn In Nâng cao",

@@ -82,7 +82,7 @@
     "orderVertical": "Verticale",
     "orderVerticalReversed": "Verticale invertito",
     "pageBorder": "Stampa bordo pagina",
-    "perSheetNote": "Ogni pagina viene ridimensionata per adattarsi alla sua cella, quindi il ridimensionamento della pagina sopra non si applica. L'anteprima mostra una sola pagina.",
+    "perSheetNote": "Ogni pagina viene ridimensionata per adattarsi alla sua cella, quindi il ridimensionamento della pagina sopra non si applica.",
     "autoRotate": "Rotazione automatica",
     "autoCenter": "Centratura automatica",
     "advancedOptions": "Opzioni di stampa avanzate",

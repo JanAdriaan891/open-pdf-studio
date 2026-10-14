@@ -82,7 +82,7 @@
     "orderVertical": "Vertical",
     "orderVerticalReversed": "Vertical reversed",
     "pageBorder": "Print page border",
-    "perSheetNote": "Each page is scaled to fit its cell, so the page scaling above does not apply. The preview shows a single page.",
+    "perSheetNote": "Each page is scaled to fit its cell, so the page scaling above does not apply.",
     "autoRotate": "Auto-Rotate",
     "autoCenter": "Auto-Center",
     "advancedOptions": "Advanced Print Options",

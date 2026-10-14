@@ -15,7 +15,7 @@ import {
 } from './print-plaatsing.js';
 import { bouwVectorPrintPdf, maakTegelRaster, vakkenUitRaster, vakOpVel } from './print-vector.js';
 import { markeringenVoorInhoud } from '../solid/stores/print-instellingen.js';
-import { maakMeerPerBlad, isMeerPerBlad } from './print-meerperblad.js';
+import { maakMeerPerBlad, isMeerPerBlad, schaalVoorMeerPerBlad } from './print-meerperblad.js';
 import {
   startPrintProgress, updatePrintProgress, finishPrintProgress, failPrintProgress,
 } from '../solid/stores/printProgressStore.js';
@@ -240,13 +240,6 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
   if (!isMeerPerBlad(meerPerBlad)) return pdf;
   const papier = vel && typeof vel === 'object' ? vel : null;
   return maakMeerPerBlad(pdf, { ...meerPerBlad, papier, orientatie });
-}
-
-/** Per vel meerdere pagina's: de schaalkeuze telt dan niet. */
-function schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) {
-  return isMeerPerBlad(meerPerBlad)
-    ? { schaling: 'fit', zoom: 100, centreren: true }
-    : { schaling, zoom, centreren };
 }
 
 /**

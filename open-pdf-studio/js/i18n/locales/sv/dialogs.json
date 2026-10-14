@@ -82,7 +82,7 @@
     "orderVertical": "Lodrät",
     "orderVerticalReversed": "Lodrät omvänd",
     "pageBorder": "Skriv ut sidkant",
-    "perSheetNote": "Varje sida skalas för att passa sin cell, så sidskalningen ovan gäller inte. Förhandsvisningen visar en enda sida.",
+    "perSheetNote": "Varje sida skalas för att passa sin cell, så sidskalningen ovan gäller inte.",
     "autoRotate": "Autorotera",
     "autoCenter": "Autocentrera",
     "advancedOptions": "Avancerade utskriftsalternativ",

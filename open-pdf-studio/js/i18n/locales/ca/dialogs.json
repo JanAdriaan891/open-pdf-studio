@@ -82,7 +82,7 @@
     "orderVertical": "Vertical",
     "orderVerticalReversed": "Vertical invertit",
     "pageBorder": "Imprimeix la vora de la pàgina",
-    "perSheetNote": "Cada pàgina s'escala per encabir-se a la seva cel·la, de manera que l'escalat de pàgina de dalt no s'aplica. La previsualització mostra una sola pàgina.",
+    "perSheetNote": "Cada pàgina s'escala per encabir-se a la seva cel·la, de manera que l'escalat de pàgina de dalt no s'aplica.",
     "autoRotate": "Gira automàticament",
     "autoCenter": "Centra automàticament",
     "advancedOptions": "Opcions d'impressió avançades",

@@ -82,7 +82,7 @@
     "orderVertical": "세로 방향",
     "orderVerticalReversed": "세로 방향(역순)",
     "pageBorder": "페이지 테두리 인쇄",
-    "perSheetNote": "각 페이지가 셀에 맞게 크기 조정되므로 위의 페이지 크기 조정은 적용되지 않습니다. 미리 보기에는 한 페이지만 표시됩니다.",
+    "perSheetNote": "각 페이지가 셀에 맞게 크기 조정되므로 위의 페이지 크기 조정은 적용되지 않습니다.",
     "autoRotate": "자동 회전",
     "autoCenter": "자동 가운데 맞춤",
     "advancedOptions": "고급 인쇄 옵션",

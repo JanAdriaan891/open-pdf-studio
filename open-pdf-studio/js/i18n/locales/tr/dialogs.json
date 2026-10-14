@@ -82,7 +82,7 @@
     "orderVertical": "Dikey",
     "orderVerticalReversed": "Dikey, ters",
     "pageBorder": "Sayfa kenarlığını yazdır",
-    "perSheetNote": "Her sayfa kendi hücresine sığacak şekilde ölçeklenir; bu nedenle yukarıdaki sayfa ölçeklendirmesi uygulanmaz. Önizleme tek bir sayfa gösterir.",
+    "perSheetNote": "Her sayfa kendi hücresine sığacak şekilde ölçeklenir; bu nedenle yukarıdaki sayfa ölçeklendirmesi uygulanmaz.",
     "autoRotate": "Otomatik Döndür",
     "autoCenter": "Otomatik Ortala",
     "advancedOptions": "Gelişmiş Yazdırma Seçenekleri",

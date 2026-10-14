@@ -82,7 +82,7 @@
     "orderVertical": "Menegak",
     "orderVerticalReversed": "Menegak terbalik",
     "pageBorder": "Cetak sempadan halaman",
-    "perSheetNote": "Setiap halaman diskalakan supaya muat dalam selnya, jadi penskalaan halaman di atas tidak terpakai. Pratonton memaparkan satu halaman sahaja.",
+    "perSheetNote": "Setiap halaman diskalakan supaya muat dalam selnya, jadi penskalaan halaman di atas tidak terpakai.",
     "autoRotate": "Putar Automatik",
     "autoCenter": "Tengah Automatik",
     "advancedOptions": "Pilihan Cetakan Lanjutan",

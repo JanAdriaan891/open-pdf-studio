@@ -82,7 +82,7 @@
     "orderVertical": "Vertical",
     "orderVerticalReversed": "Vertical invertido",
     "pageBorder": "Imprimir borde de página",
-    "perSheetNote": "Cada página se escala para ajustarse a su celda, por lo que no se aplica el escalado de página anterior. La vista previa muestra una sola página.",
+    "perSheetNote": "Cada página se escala para ajustarse a su celda, por lo que no se aplica el escalado de página anterior.",
     "autoRotate": "Rotar automáticamente",
     "autoCenter": "Centrar automáticamente",
     "advancedOptions": "Opciones avanzadas de impresión",
