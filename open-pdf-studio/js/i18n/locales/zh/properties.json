@@ -677,5 +677,9 @@
     "refused": "无法执行：{{reason}}",
     "reasonTooNarrow": "某个分格会变得过窄",
     "reasonFrame": "外框不能移动或删除"
+  },
+  "scopedPanel": {
+    "stale": "此对象已在其他位置更改。表单显示当前值；您的更改未应用。",
+    "failed": "无法应用更改：{{error}}"
   }
 }

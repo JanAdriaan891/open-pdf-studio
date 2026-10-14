@@ -677,5 +677,9 @@
     "refused": "Není možné: {{reason}}",
     "reasonTooNarrow": "pole by bylo příliš úzké",
     "reasonFrame": "vnější rám nelze přesunout ani odebrat"
+  },
+  "scopedPanel": {
+    "stale": "Tento objekt byl změněn jinde. Formulář zobrazuje aktuální hodnoty; vaše změny nebyly použity.",
+    "failed": "Změny nelze použít: {{error}}"
   }
 }

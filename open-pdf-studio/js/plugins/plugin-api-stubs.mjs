@@ -3,7 +3,9 @@
 // paginatoegang, het eigenschappenpaneel) worden kleine stubs. De registers
 // (annotatietypen, paletten, panelen, selectieluisteraars, gereedschapsgroepen,
 // lint en opdrachten) blijven echt. setNativePanelHidden telt zijn aanroepen in
-// globalThis.__nativePaneelVerborgen.
+// globalThis.__nativePaneelVerborgen. Voor #574/#575 zijn het actieve document
+// (globalThis.__actiefDocument), de open documenten (__documenten), de
+// undo-stappen (__undoStappen) en de geometrie (__systeemGeometrie) instelbaar.
 //
 // Gebruik: register('./plugin-api-stubs.mjs', import.meta.url) en daarna de
 // modules met een dynamische import() laden.
@@ -14,16 +16,16 @@ import { fileURLToPath } from 'node:url';
 const JS = new URL('../', import.meta.url).href;
 
 const STUBS = {
-  'core/state.js': 'export const state = { preferences: {} }; export const getActiveDocument = () => null; export const getPageRotation = () => 0; export const getAnnotationBounds = () => null;',
+  'core/state.js': 'export const state = { preferences: {}, get documents() { return globalThis.__documenten ?? []; } }; export const getActiveDocument = () => globalThis.__actiefDocument ?? null; export const getPageRotation = () => 0; export const getAnnotationBounds = () => null;',
   'tools/manager.js': 'export const setTool = () => {};',
   'annotations/factory.js': 'export const createAnnotation = (x) => x;',
-  'annotations/rendering.js': 'export const redrawAnnotations = () => {};',
-  'core/undo-manager.js': 'export const beginUndoTransaction = () => {}, endUndoTransaction = () => {}, recordAdd = () => {}, recordModify = () => {}, recordDelete = () => {}, documentRevisie = (d) => (d ? `d${d.inhoudRevisie ?? 0}` : null);',
+  'annotations/rendering.js': 'export const redrawAnnotations = () => {}; export const redrawContinuous = () => {};',
+  'core/undo-manager.js': 'export const beginUndoTransaction = () => {}, endUndoTransaction = () => {}, recordAdd = () => {}, recordModify = (...a) => { (globalThis.__undoStappen ??= []).push(a); }, recordDelete = () => {}, documentRevisie = (d) => (d ? `d${d.inhoudRevisie ?? 0}` : null);',
   'plugins/page-access.js': 'export const getPageInfoForDocument = () => null, readPageContentForDocument = () => null, renderPageTileForDocument = () => null;',
   'tools/pdf-snap-extractor.js': 'export const extractPageGeometry = () => null;',
   'annotations/schaal-op-punt.js': 'export const schaalOpPunt = () => null;',
   'annotations/scale-region.js': 'export const getScaleFromRegion = () => null;',
-  'annotations/systeem-geometrie-app.js': 'export const systeemInstanceGeometrie = () => null;',
+  'annotations/systeem-geometrie-app.js': 'export const systeemInstanceGeometrie = (...a) => globalThis.__systeemGeometrie?.(...a) ?? null; export const systeemGeometrieRevisie = (ann) => `g1-${JSON.stringify(ann?.points ?? null)}`;',
   'solid/stores/propertiesStore.js': 'export const setNativePanelHidden = (v) => { (globalThis.__nativePaneelVerborgen ??= []).push(v); };',
 };
 

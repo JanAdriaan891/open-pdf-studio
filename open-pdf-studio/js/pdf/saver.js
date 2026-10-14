@@ -60,6 +60,7 @@ import { buildBetonbalk, approxTextWidth as betonbalkApproxTextWidth } from '../
 import { betonbalkBuildOpts } from '../annotations/betonbalk-scale.js';
 import { effectiveDraftingLineWidth } from '../annotations/drafting-rules.js';
 import { buildSysteemraster, systeemToOps, sparingenToJson } from '../annotations/systeemraster.js';
+import { linksNaarJson } from '../annotations/systeem-instance-links.js';
 import { systeemTypeToJson } from '../annotations/systeem-typen.js';
 import { getSysteemTypeById } from '../annotations/systeem-typen-registry.js';
 import { systeemrasterBuildOpts } from '../annotations/systeemraster-scale.js';
@@ -2272,6 +2273,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
                 || getSysteemTypeById(ann.systeemTypeId));
               if (sgTypeJson) sgDict.OPS_SgTypeDef = pdfTextString(sgTypeJson);
             }
+            // Koppelingen van extensies (#574): hun eigen gegevens per
+            // extensie, als JSON; alleen geldige koppelingen.
+            const sgLinksJson = linksNaarJson(ann);
+            if (sgLinksJson) sgDict.OPS_SgExtLinks = pdfTextString(sgLinksJson);
             annotDict = context.obj(sgDict);
             annotDict.set(PDFName.of('BS'), buildBorderStyle(context, borderWidth, 'solid'));
 

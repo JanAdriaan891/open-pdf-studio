@@ -683,5 +683,9 @@
     "refused": "No és possible: {{reason}}",
     "reasonTooNarrow": "un mòdul quedaria massa estret",
     "reasonFrame": "el marc exterior no es pot moure ni eliminar"
+  },
+  "scopedPanel": {
+    "stale": "Aquest objecte s'ha modificat en un altre lloc. El formulari mostra els valors actuals; els vostres canvis no s'han aplicat.",
+    "failed": "No s'han pogut aplicar els canvis: {{error}}"
   }
 }

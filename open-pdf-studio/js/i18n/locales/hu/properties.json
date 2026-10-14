@@ -677,5 +677,9 @@
     "refused": "Nem lehetséges: {{reason}}",
     "reasonTooNarrow": "egy mező túl keskeny lenne",
     "reasonFrame": "a külső tok nem mozgatható és nem távolítható el"
+  },
+  "scopedPanel": {
+    "stale": "Ezt az objektumot máshol módosították. Az űrlap az aktuális értékeket mutatja; a módosításai nem lettek alkalmazva.",
+    "failed": "A módosítások nem alkalmazhatók: {{error}}"
   }
 }

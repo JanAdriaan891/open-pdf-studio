@@ -677,5 +677,9 @@
     "refused": "Não é possível: {{reason}}",
     "reasonTooNarrow": "um módulo ficaria estreito demais",
     "reasonFrame": "o caixilho externo não pode ser movido nem removido"
+  },
+  "scopedPanel": {
+    "stale": "Este objeto foi alterado em outro lugar. O formulário mostra os valores atuais; as alterações não foram aplicadas.",
+    "failed": "Não foi possível aplicar as alterações: {{error}}"
   }
 }

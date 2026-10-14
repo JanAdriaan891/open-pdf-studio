@@ -677,5 +677,9 @@
     "refused": "Impossible : {{reason}}",
     "reasonTooNarrow": "une travée deviendrait trop étroite",
     "reasonFrame": "le cadre extérieur ne peut pas être déplacé ni supprimé"
+  },
+  "scopedPanel": {
+    "stale": "Cet objet a été modifié ailleurs. Le formulaire affiche les valeurs actuelles ; vos modifications n'ont pas été appliquées.",
+    "failed": "Impossible d'appliquer les modifications : {{error}}"
   }
 }

@@ -677,5 +677,9 @@
     "refused": "Niet mogelijk: {{reason}}",
     "reasonTooNarrow": "een veld wordt te smal",
     "reasonFrame": "het kader kan niet verschuiven of verdwijnen"
+  },
+  "scopedPanel": {
+    "stale": "Dit object is elders gewijzigd. Het formulier toont de huidige waarden; uw wijzigingen zijn niet toegepast.",
+    "failed": "De wijzigingen konden niet worden toegepast: {{error}}"
   }
 }

@@ -677,5 +677,9 @@
     "refused": "Ei mahdollista: {{reason}}",
     "reasonTooNarrow": "kentästä tulisi liian kapea",
     "reasonFrame": "ulkokarmia ei voi siirtää eikä poistaa"
+  },
+  "scopedPanel": {
+    "stale": "Tätä objektia on muutettu muualla. Lomake näyttää nykyiset arvot; muutoksiasi ei otettu käyttöön.",
+    "failed": "Muutoksia ei voitu ottaa käyttöön: {{error}}"
   }
 }

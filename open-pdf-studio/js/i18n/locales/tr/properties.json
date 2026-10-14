@@ -677,5 +677,9 @@
     "refused": "Mümkün değil: {{reason}}",
     "reasonTooNarrow": "bir bölme çok dar olur",
     "reasonFrame": "dış kasa taşınamaz veya kaldırılamaz"
+  },
+  "scopedPanel": {
+    "stale": "Bu nesne başka bir yerde değiştirildi. Form geçerli değerleri gösteriyor; değişiklikleriniz uygulanmadı.",
+    "failed": "Değişiklikler uygulanamadı: {{error}}"
   }
 }

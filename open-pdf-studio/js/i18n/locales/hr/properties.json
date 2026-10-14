@@ -677,5 +677,9 @@
     "refused": "Nije moguće: {{reason}}",
     "reasonTooNarrow": "polje bi postalo preusko",
     "reasonFrame": "vanjski okvir ne može se pomaknuti ni ukloniti"
+  },
+  "scopedPanel": {
+    "stale": "Ovaj je objekt promijenjen na drugom mjestu. Obrazac prikazuje trenutačne vrijednosti; vaše promjene nisu primijenjene.",
+    "failed": "Promjene nije moguće primijeniti: {{error}}"
   }
 }

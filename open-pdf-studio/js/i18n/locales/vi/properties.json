@@ -677,5 +677,9 @@
     "refused": "Không thể thực hiện: {{reason}}",
     "reasonTooNarrow": "một ô sẽ trở nên quá hẹp",
     "reasonFrame": "không thể di chuyển hoặc xóa khung ngoài"
+  },
+  "scopedPanel": {
+    "stale": "Đối tượng này đã được thay đổi ở nơi khác. Biểu mẫu hiển thị các giá trị hiện tại; các thay đổi của bạn chưa được áp dụng.",
+    "failed": "Không thể áp dụng các thay đổi: {{error}}"
   }
 }

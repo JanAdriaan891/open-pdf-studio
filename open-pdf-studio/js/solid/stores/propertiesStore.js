@@ -34,6 +34,7 @@ import {
 } from '../../annotations/systeemraster.js';
 import { systeemrasterBuildOpts } from '../../annotations/systeemraster-scale.js';
 import { createDefaultPaneelTypen } from '../../annotations/systeem-typen.js';
+import { kenSysteemTypeToe } from '../../annotations/systeem-instance-links.js';
 import {
   getSysteemTypeById, getSysteemTypenData, updateSysteemType,
 } from '../../annotations/systeem-typen-registry.js';
@@ -970,15 +971,10 @@ function _clampFontSize(value) {
 function _applySysteemProp(ann, key, value) {
   const num = (v) => parseFloat(String(v).replace(',', '.'));
   switch (key) {
-    case 'sgTypeId': {
-      ann.systeemTypeId = value || undefined;
-      const st = getSysteemTypeById(ann.systeemTypeId);
-      if (st) {
-        ann.ifcCategory = st.ifcCategory;
-        ann.ifcPredefinedType = st.ifcPredefinedType;
-      }
+    case 'sgTypeId':
+      // Dezelfde regel als de plugin-API (#574): systeem-instance-links.js.
+      kenSysteemTypeToe(ann, value || undefined, getSysteemTypeById(value || undefined));
       break;
-    }
     case 'sgTypeCelX': case 'sgTypeCelY': {
       const n = num(value);
       if (!Number.isFinite(n) || !(n > 0)) break;

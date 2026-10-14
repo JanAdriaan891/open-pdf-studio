@@ -677,5 +677,9 @@
     "refused": "Non possibile: {{reason}}",
     "reasonTooNarrow": "un campo diventerebbe troppo stretto",
     "reasonFrame": "il telaio esterno non può essere spostato né rimosso"
+  },
+  "scopedPanel": {
+    "stale": "Questo oggetto è stato modificato altrove. Il modulo mostra i valori attuali; le modifiche non sono state applicate.",
+    "failed": "Impossibile applicare le modifiche: {{error}}"
   }
 }
