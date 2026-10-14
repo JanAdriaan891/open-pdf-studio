@@ -23,6 +23,9 @@ window.addEventListener('unhandledrejection', (e) => {
 });
 
 // Core modules
+// Snellere pdf-lib-standaarden voor elke load en save (#581); als eerste,
+// vóór elk module dat pdf-lib gebruikt.
+import './pdf/pdf-lib-snelheid.js';
 import { state } from './core/state.js';
 import { loadPreferences, savePreferences } from './core/preferences.js';
 import { initDomElements } from './ui/dom-elements.js';
@@ -152,11 +155,11 @@ function disableBrowserShortcuts() {
       return;
     }
     // Ctrl+Shift+I (DevTools), Ctrl+Shift+J (Console), Ctrl+Shift+C (Inspect element)
-    if (e.shiftKey && ['I', 'J', 'C'].includes(e.key)) {
+    if (e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
     // F5 refresh, Ctrl+R refresh (allow in dev mode)
-    if ((e.key === 'r' || e.key === 'R') && !window.__devMode) {
+    if (e.key.toLowerCase() === 'r' && !window.__devMode) {
       e.preventDefault();
     }
   }, true);

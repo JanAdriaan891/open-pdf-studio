@@ -207,7 +207,8 @@ export default function SignatureDialog(props) {
   }
 
   function onKeyDown(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    // Ook met Caps Lock aan (e.key is dan 'Z', #577).
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && (e.key || '').toLowerCase() === 'z') {
       e.preventDefault();
       e.stopPropagation();
       pad.undo();

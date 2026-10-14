@@ -29,7 +29,8 @@ export default function ThumbnailsPanel() {
   };
 
   const handleKeyDown = async (e) => {
-    if (e.ctrlKey && e.key === 'a') {
+    // Ook met Caps Lock aan (e.key is dan 'A', #577).
+    if (e.ctrlKey && !e.shiftKey && (e.key || '').toLowerCase() === 'a') {
       e.preventDefault();
       selectAllPages();
     } else if (e.key === 'Escape') {
