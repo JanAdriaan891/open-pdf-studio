@@ -256,7 +256,13 @@
     "allPages": "ທຸກໜ້າ",
     "firstPageOnly": "ສະເພາະໜ້າທຳອິດ",
     "range": "ໄລຍະ:",
-    "rangePlaceholder": "ຕົວຢ່າງ: 1-5, 8"
+    "rangePlaceholder": "ຕົວຢ່າງ: 1-5, 8",
+    "bates": "ການໃສ່ເລກ Bates:",
+    "batesHint": "ໃສ່ເລກໜ້າດ້ວຍ {bates}: ຄຳນຳໜ້າ, ຕົວເລກທີ່ມີເລກສູນນຳໜ້າ, ຄຳຕໍ່ທ້າຍ",
+    "batesPrefix": "ຄຳນຳໜ້າ",
+    "batesStart": "ເລີ່ມຕົ້ນ",
+    "batesDigits": "ຈຳນວນຫຼັກ",
+    "batesSuffix": "ຄຳຕໍ່ທ້າຍ"
   },
   "manageWatermarks": {
     "title": "ຈັດການລາຍນ້ຳ",
