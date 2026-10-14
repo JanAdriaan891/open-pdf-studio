@@ -316,3 +316,5 @@ js/plugins/plugin-api-opruimen.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
 # Bladwijzerpaneel: huidige bladwijzer en zoekveld (#578)
 js/ui/panels/bladwijzer-zoeken.test.mjs
+# Miniaturen groeien mee, kolommen en scherpte (#579)
+js/ui/panels/miniatuur-maat.test.mjs
