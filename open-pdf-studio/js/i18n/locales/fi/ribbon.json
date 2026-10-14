@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Lisää"
+    "more": "Lisää",
+    "moreTabs": "Lisää välilehtiä",
+    "extensionTabFailed": "Tätä laajennuksen välilehteä ei voitu näyttää."
   },
   "drawing": {
     "structural": "Structural",

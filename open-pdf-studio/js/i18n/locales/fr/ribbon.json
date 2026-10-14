@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Plus"
+    "more": "Plus",
+    "moreTabs": "Plus d'onglets",
+    "extensionTabFailed": "Impossible d'afficher cet onglet de l'extension."
   },
   "drawing": {
     "structural": "Structural",

@@ -99,5 +99,9 @@
     "exportCad": "نقشه CAD (DXF، DWG)",
     "exportCadDesc": "برون‌بری نقشه برداری به DXF یا DWG با لایه‌ها، مقیاس و محدوده"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "غیرفعال: {{error}}",
+    "viaMcp": "از طریق اتصال هوش مصنوعی"
+  }
 }

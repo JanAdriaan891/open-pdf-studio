@@ -99,5 +99,9 @@
     "exportCad": "Rysunek CAD (DXF, DWG)",
     "exportCadDesc": "Eksportuj rysunek wektorowy do DXF lub DWG z warstwami, skalą i obszarem"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Nieaktywne: {{error}}",
+    "viaMcp": "Przez połączenie AI"
+  }
 }

@@ -99,5 +99,9 @@
     "exportCad": "CAD-rajz (DXF, DWG)",
     "exportCadDesc": "A vektoros rajz exportálása DXF vagy DWG formátumba rétegekkel, méretaránnyal és területtel"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Nem aktív: {{error}}",
+    "viaMcp": "Az MI-kapcsolaton keresztül"
+  }
 }

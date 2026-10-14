@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Περισσότερα"
+    "more": "Περισσότερα",
+    "moreTabs": "Περισσότερες καρτέλες",
+    "extensionTabFailed": "Δεν ήταν δυνατή η εμφάνιση αυτής της καρτέλας επέκτασης."
   },
   "drawing": {
     "structural": "Structural",

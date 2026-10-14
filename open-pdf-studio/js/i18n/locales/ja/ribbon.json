@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "その他"
+    "more": "その他",
+    "moreTabs": "その他のタブ",
+    "extensionTabFailed": "この拡張機能のタブを表示できませんでした。"
   },
   "drawing": {
     "structural": "Structural",

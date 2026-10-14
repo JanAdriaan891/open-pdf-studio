@@ -99,5 +99,9 @@
     "exportCad": "שרטוט CAD (DXF, DWG)",
     "exportCadDesc": "ייצוא השרטוט הווקטורי ל-DXF או ל-DWG עם שכבות, קנה מידה ואזור"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "לא פעיל: {{error}}",
+    "viaMcp": "דרך חיבור הבינה המלאכותית"
+  }
 }

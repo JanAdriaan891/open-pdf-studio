@@ -99,5 +99,9 @@
     "exportCad": "Mchoro wa CAD (DXF, DWG)",
     "exportCadDesc": "Hamisha mchoro wa vekta kwenda DXF au DWG pamoja na tabaka, skeli na eneo"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Haitumiki: {{error}}",
+    "viaMcp": "Kupitia muunganisho wa AI"
+  }
 }

@@ -99,5 +99,9 @@
     "exportCad": "Desen CAD (DXF, DWG)",
     "exportCadDesc": "Exportă desenul vectorial în DXF sau DWG, cu straturi, scară și zonă"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Inactivă: {{error}}",
+    "viaMcp": "Prin conexiunea AI"
+  }
 }

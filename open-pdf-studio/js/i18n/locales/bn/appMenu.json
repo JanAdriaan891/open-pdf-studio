@@ -99,5 +99,9 @@
     "exportCad": "CAD অঙ্কন (DXF, DWG)",
     "exportCadDesc": "স্তর, স্কেল ও এলাকাসহ ভেক্টর অঙ্কন DXF বা DWG-তে রপ্তানি করুন"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "সক্রিয় নয়: {{error}}",
+    "viaMcp": "AI সংযোগের মাধ্যমে"
+  }
 }

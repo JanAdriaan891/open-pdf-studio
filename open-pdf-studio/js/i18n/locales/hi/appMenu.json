@@ -99,5 +99,9 @@
     "exportCad": "CAD ड्राइंग (DXF, DWG)",
     "exportCadDesc": "वेक्टर ड्राइंग को परतों, पैमाने और क्षेत्र के साथ DXF या DWG में निर्यात करें"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "सक्रिय नहीं: {{error}}",
+    "viaMcp": "AI कनेक्शन के माध्यम से"
+  }
 }

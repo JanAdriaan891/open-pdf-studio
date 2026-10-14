@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Több"
+    "more": "Több",
+    "moreTabs": "További lapok",
+    "extensionTabFailed": "Ezt a bővítménylapot nem sikerült megjeleníteni."
   },
   "drawing": {
     "structural": "Structural",

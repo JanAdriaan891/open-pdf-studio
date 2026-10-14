@@ -99,5 +99,9 @@
     "exportCad": "Чертёж CAD (DXF, DWG)",
     "exportCadDesc": "Экспорт векторного чертежа в DXF или DWG со слоями, масштабом и областью"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Неактивно: {{error}}",
+    "viaMcp": "Через подключение ИИ"
+  }
 }

@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Více"
+    "more": "Více",
+    "moreTabs": "Další karty",
+    "extensionTabFailed": "Tuto kartu rozšíření nelze zobrazit."
   },
   "drawing": {
     "structural": "Structural",

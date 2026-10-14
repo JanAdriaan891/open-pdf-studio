@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Още"
+    "more": "Още",
+    "moreTabs": "Още раздели",
+    "extensionTabFailed": "Този раздел на разширението не можа да бъде показан."
   },
   "drawing": {
     "structural": "Structural",

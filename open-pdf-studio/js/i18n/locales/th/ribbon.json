@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "เพิ่มเติม"
+    "more": "เพิ่มเติม",
+    "moreTabs": "แท็บเพิ่มเติม",
+    "extensionTabFailed": "ไม่สามารถแสดงแท็บของส่วนขยายนี้ได้"
   },
   "drawing": {
     "structural": "Structural",

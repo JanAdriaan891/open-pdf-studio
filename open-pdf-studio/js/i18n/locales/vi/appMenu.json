@@ -99,5 +99,9 @@
     "exportCad": "Bản vẽ CAD (DXF, DWG)",
     "exportCadDesc": "Xuất bản vẽ vectơ sang DXF hoặc DWG kèm lớp, tỷ lệ và vùng"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Không hoạt động: {{error}}",
+    "viaMcp": "Qua kết nối AI"
+  }
 }

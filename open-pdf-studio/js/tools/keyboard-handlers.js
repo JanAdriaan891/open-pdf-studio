@@ -245,6 +245,17 @@ function isTextEntryTarget(t) {
   return typeof t.closest === 'function' && !!t.closest('[contenteditable="true"]');
 }
 
+// Pijltoetsen die bij een besturingselement horen (#551): de lint-tabstrook
+// wisselt er tabbladen mee, een menu of keuzelijst kiest ermee. Zo'n toets
+// verschuift geen annotaties en bladert niet. Ook een toets die al is
+// afgehandeld (defaultPrevented) laat de selectie staan.
+const PIJL_BESTURING = '[role="tablist"], [role="tab"], [role="menu"], [role="menubar"], [role="listbox"], [role="radiogroup"], select, .ribbon-tabs';
+function pijlVoorBesturing(e) {
+  if (e.defaultPrevented) return true;
+  const t = e.target;
+  return typeof t?.closest === 'function' && !!t.closest(PIJL_BESTURING);
+}
+
 export async function handleKeydown(e) {
   const ctrl = e.ctrlKey || e.metaKey;
   const shift = e.shiftKey;
@@ -541,7 +552,9 @@ export async function handleKeydown(e) {
   }
   // Arrow keys: nudge selected annotations (skip when Ctrl held)
   else if (!ctrl && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-    if (isPdfAReadOnly()) { /* block nudge */ }
+    const voorBesturing = pijlVoorBesturing(e);
+    if (voorBesturing) { /* de tabstrook, het menu of de keuzelijst is aan zet */ }
+    else if (isPdfAReadOnly()) { /* block nudge */ }
     else if ((getActiveDocument()?.selectedAnnotations || []).length > 0 && getActiveDocument()?.pdfDoc) {
       // Text markup annotations (and carets, #508) are anchored to text — skip nudge
       const movable = getActiveDocument().selectedAnnotations.filter(a => !isTextAnchored(a));
@@ -573,7 +586,7 @@ export async function handleKeydown(e) {
     // Inhoudsopgave (TOC / bladwijzers) actief → met pijl omhoog/omlaag pagina-voor-
     // pagina door het document lopen i.p.v. de bladwijzerlijst te scrollen (GitHub #248).
     // Draait alleen als de nudge de toets niet al gebruikte (geen selectie) — ook read-only.
-    if (!e.defaultPrevented && (e.key === 'ArrowDown' || e.key === 'ArrowUp')
+    if (!voorBesturing && !e.defaultPrevented && (e.key === 'ArrowDown' || e.key === 'ArrowUp')
         && ['thumbnails', 'bookmarks'].includes(activeTab())
         && !['INPUT', 'TEXTAREA'].includes(e.target?.tagName) && !e.target?.isContentEditable) {
       e.preventDefault();

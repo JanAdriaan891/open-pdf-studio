@@ -64,6 +64,7 @@ pub const TOOLS: &[ToolMeta] = &[
     lees("app_assistant_history", "Get assistant conversation"),
     lees("app_list_printers", "List printers"),
     lees("app_list_layers", "List markup layers"),
+    lees("app_list_extensions", "List extensions"),
     // Voegt iets toe zonder bestaande gegevens te wijzigen.
     voegt_toe("app_new_blank_pdf", "New blank PDF"),
     voegt_toe("app_create_annotation", "Create annotation"),
@@ -80,9 +81,13 @@ pub const TOOLS: &[ToolMeta] = &[
     voegt_toe("app_assistant_answer", "Answer assistant question"),
     voegt_toe("app_mouse_move", "Move pointer"),
     voegt_toe("app_scroll", "Scroll"),
+    // Herladen verliest geen gegevens: dezelfde extensie draait daarna opnieuw.
+    voegt_toe("app_reload_extension", "Reload extension"),
     // Wijzigt of verwijdert bestaande inhoud, of schrijft een bestand.
     wijzigt("app_update_annotation", "Update annotation"),
     wijzigt("app_set_layer", "Change markup layer"),
+    // Installeren kan een bestaande installatie vervangen (#550).
+    wijzigt("app_install_extension", "Install extension"),
     wijzigt("app_delete_annotation", "Delete annotation"),
     wijzigt("app_undo", "Undo"),
     wijzigt("app_redo", "Redo"),

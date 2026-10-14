@@ -2588,11 +2588,15 @@ async function handleUiState(params) {
 //   ribbon:<tab>:<n>      lintknop zonder id, n-de knop op dat tabblad
 //                         (alleen stabiel binnen dezelfde versie)
 //   tool:<naam>           een gereedschap uit het register
+//   ext:<extId>:<item>    een actie van een extensie, ext:<extId>:<item>=<keuze>
+//                         een keuze van haar keuzelijst (#551)
 
 // Elke lintknop (RibbonButton, ook in een RibbonButtonStack) zit in een
 // RibbonGroup. List en run gebruiken dezelfde selector, zodat een positioneel
 // commando (ribbon:tab:n) altijd naar dezelfde knop wijst.
-const LINT_KNOP_SELECTOR = '.ribbon-group .ribbon-btn';
+// Knoppen van extensies (#551) staan als `ext:`-opdracht in het register en
+// tellen hier niet mee, zodat de nummering van ingebouwde knoppen niet verschuift.
+const LINT_KNOP_SELECTOR = '.ribbon-group .ribbon-btn:not([data-ext-command])';
 
 function _knopLabel(el) {
   const lbl = el.querySelector('.ribbon-btn-label');
@@ -2639,6 +2643,12 @@ async function _lintKnoppenPerTab() {
   return uit;
 }
 
+async function _extensieOpdrachten() {
+  const { extensieOpdrachten } = await import('./plugins/extension-commands.js');
+  const i18n = (await import('./i18n/config.js')).default;
+  return extensieOpdrachten.lijst(i18n.language);
+}
+
 async function handleListCommands(params) {
   const filter = typeof params?.filter === 'string' ? params.filter.toLowerCase() : '';
   const lint = await _lintKnoppenPerTab();
@@ -2646,7 +2656,9 @@ async function handleListCommands(params) {
   const gereedschap = registryMod.listToolNames().map((naam) => ({
     command: `tool:${naam}`, tab: null, label: naam, title: '', disabled: false, active: false, stableId: true,
   }));
-  let alles = [...lint, ...gereedschap];
+  // Extensieopdrachten komen uit het register, ook bij een ingeklapt lint (#551).
+  const extensie = await _extensieOpdrachten();
+  let alles = [...lint, ...gereedschap, ...extensie];
   if (filter) {
     alles = alles.filter((c) =>
       (c.command + ' ' + c.label + ' ' + c.title + ' ' + (c.tab || '')).toLowerCase().includes(filter));
@@ -2656,6 +2668,7 @@ async function handleListCommands(params) {
     count: alles.length,
     ribbonCommands: lint.length,
     toolCommands: gereedschap.length,
+    extensionCommands: extensie.length,
     withoutStableId: lint.filter((c) => !c.stableId).length,
     commands: alles,
   };
@@ -2665,6 +2678,11 @@ async function handleRunCommand(params) {
   const command = params?.command;
   if (typeof command !== 'string' || !command) {
     return { ok: false, error: 'missing or invalid params.command — see app_list_commands' };
+  }
+
+  if (command.startsWith('ext:')) {
+    const { voerExtensieOpdrachtUit } = await import('./plugins/extension-commands.js');
+    return voerExtensieOpdrachtUit(command, { source: 'mcp' });
   }
 
   if (command.startsWith('tool:')) {
@@ -3332,6 +3350,10 @@ const HANDLERS = {
   'mcp:list-layers':        handleListLayers,
   'mcp:create-layer':       handleCreateLayer,
   'mcp:set-layer':          handleSetLayer,
+  // Extensies beheren zonder dialoog (#550); de regels staan in plugins/extension-mcp.js
+  'mcp:list-extensions':    (p) => import('./plugins/extension-mcp.js').then((m) => m.handleListExtensions(p)),
+  'mcp:install-extension':  (p) => import('./plugins/extension-mcp.js').then((m) => m.handleInstallExtension(p)),
+  'mcp:reload-extension':   (p) => import('./plugins/extension-mcp.js').then((m) => m.handleReloadExtension(p)),
   // Assistant — test the AI end-to-end
   'mcp:ai-complete':        handleAiComplete,
   // Accounts introspection — deactivated (cloud accounts feature removed)

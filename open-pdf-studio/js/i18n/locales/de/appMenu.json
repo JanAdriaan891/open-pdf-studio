@@ -99,5 +99,9 @@
     "exportCad": "CAD-Zeichnung (DXF, DWG)",
     "exportCadDesc": "Vektorzeichnung als DXF oder DWG exportieren, mit Ebenen, Maßstab und Bereich"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Nicht aktiv: {{error}}",
+    "viaMcp": "Über die KI-Verbindung"
+  }
 }

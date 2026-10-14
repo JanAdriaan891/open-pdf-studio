@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Više"
+    "more": "Više",
+    "moreTabs": "Više kartica",
+    "extensionTabFailed": "Ovu karticu proširenja nije moguće prikazati."
   },
   "drawing": {
     "structural": "Structural",

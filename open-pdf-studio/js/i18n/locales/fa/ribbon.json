@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "بیشتر"
+    "more": "بیشتر",
+    "moreTabs": "زبانه‌های بیشتر",
+    "extensionTabFailed": "این زبانهٔ افزونه نمایش داده نشد."
   },
   "drawing": {
     "structural": "Structural",

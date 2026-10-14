@@ -443,7 +443,9 @@
     "comingSoon": "Coming soon",
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "More"
+    "more": "More",
+    "moreTabs": "More tabs",
+    "extensionTabFailed": "This extension tab could not be displayed."
   },
   "drawing": {
     "selection": "Selection",

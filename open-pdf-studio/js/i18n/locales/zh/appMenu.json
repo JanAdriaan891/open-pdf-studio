@@ -99,5 +99,9 @@
     "exportCad": "CAD 图纸(DXF、DWG)",
     "exportCadDesc": "将矢量图纸连同图层、比例和范围导出为 DXF 或 DWG"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "未激活：{{error}}",
+    "viaMcp": "通过 AI 连接"
+  }
 }

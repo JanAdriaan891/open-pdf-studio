@@ -35,6 +35,8 @@ function harness() {
     i18next: { t: x => x }, showMessage() {}, window: {},
     console: { error() {}, warn() {} },
     saveFileDialog: async () => 'copy.pdf',
+    // Het slot tegen een extensiewissel (#550): standaard loopt er geen.
+    metOpslagSlot: async fn => fn(),
     loadModule: async path => {
       if (path.includes('verificatie')) return { bevestigOpslaanMetHandtekeningen: async () => true };
       if (path.includes('opslaan')) return { moetOpnieuwVerifieren: () => false, opslaanAlsStandaardPad: doc => doc.filePath };
@@ -62,6 +64,45 @@ test('tab switch during signature verification still saves A to the requested pa
   assert.ok(h.owners.every(doc => doc === h.a));
   assert.equal(h.a.modified, false);
   assert.equal(h.b.modified, true);
+});
+
+test('saving waits for a running extension switch before it reads the document (#550)', async () => {
+  const h = harness(), wissel = deferred();
+  h.deps.metOpslagSlot = fn => wissel.promise.then(fn);
+  const saving = h.api.savePDF('copy-of-a.pdf');
+  await new Promise(r => setTimeout(r, 5));
+  assert.deepEqual(h.writes, [], 'nothing is written during the switch');
+  assert.deepEqual(h.owners, []);
+  wissel.resolve();
+  assert.equal(await saving, true);
+  assert.deepEqual(h.writes, [{ path: 'copy-of-a.pdf', source: 'a.pdf' }]);
+});
+
+test('the extension slot is taken after the signature question and held for the whole write (#550)', async () => {
+  const h = harness(), log = [];
+  const original = h.deps.loadModule;
+  h.deps.loadModule = async path => path.includes('verificatie')
+    ? { bevestigOpslaanMetHandtekeningen: async () => { log.push('question'); return true; } }
+    : original(path);
+  h.deps.metOpslagSlot = async fn => { log.push('slot taken'); try { return await fn(); } finally { log.push('slot released'); } };
+  const write = h.deps.writeBinaryFileAtomic;
+  h.deps.writeBinaryFileAtomic = async (path, bytes) => { log.push('write'); return write(path, bytes); };
+  assert.equal(await h.api.savePDF('copy-of-a.pdf'), true);
+  assert.deepEqual(log, ['question', 'slot taken', 'write', 'slot released']);
+});
+
+test('a second save while the first waits for the slot waits for the first one (#550)', async () => {
+  const h = harness(), wissel = deferred();
+  let requests = 0;
+  h.deps.metOpslagSlot = fn => { requests++; return wissel.promise.then(fn); };
+  const first = h.api.savePDF('first.pdf');
+  await new Promise(r => setTimeout(r, 5));
+  const second = h.api.savePDF('second.pdf');
+  await new Promise(r => setTimeout(r, 5));
+  assert.equal(requests, 1, 'the second save does not start its own write next to the first');
+  wissel.resolve();
+  assert.deepEqual([await first, await second], [true, true]);
+  assert.deepEqual(h.writes.map(w => w.path), ['first.pdf', 'second.pdf']);
 });
 
 test('tab switch during parsing keeps all serialization helpers and clean state on A', async () => {

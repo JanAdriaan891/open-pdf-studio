@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "और"
+    "more": "और",
+    "moreTabs": "और टैब",
+    "extensionTabFailed": "यह एक्सटेंशन टैब प्रदर्शित नहीं किया जा सका।"
   },
   "drawing": {
     "structural": "Structural",

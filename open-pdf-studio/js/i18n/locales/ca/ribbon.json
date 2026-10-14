@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Més"
+    "more": "Més",
+    "moreTabs": "Més pestanyes",
+    "extensionTabFailed": "No s'ha pogut mostrar aquesta pestanya de l'extensió."
   },
   "drawing": {
     "structural": "Structural",

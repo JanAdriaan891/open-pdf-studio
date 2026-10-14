@@ -99,5 +99,9 @@
     "exportCad": "Výkres CAD (DXF, DWG)",
     "exportCadDesc": "Exportovat vektorový výkres do DXF nebo DWG s hladinami, měřítkem a oblastí"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Neaktivní: {{error}}",
+    "viaMcp": "Přes připojení AI"
+  }
 }

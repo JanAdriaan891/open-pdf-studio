@@ -99,5 +99,9 @@
     "exportCad": "Desenho CAD (DXF, DWG)",
     "exportCadDesc": "Exportar o desenho vetorial para DXF ou DWG, com camadas, escala e zona"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Inativa: {{error}}",
+    "viaMcp": "Pela conexão de IA"
+  }
 }

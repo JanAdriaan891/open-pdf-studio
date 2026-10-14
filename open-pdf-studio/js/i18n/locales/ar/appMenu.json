@@ -99,5 +99,9 @@
     "exportCad": "رسم CAD (DXF، DWG)",
     "exportCadDesc": "تصدير الرسم المتجه إلى DXF أو DWG مع الطبقات والمقياس والمنطقة"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "غير نشط: {{error}}",
+    "viaMcp": "عبر اتصال الذكاء الاصطناعي"
+  }
 }

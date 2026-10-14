@@ -99,5 +99,9 @@
     "exportCad": "CAD 도면(DXF, DWG)",
     "exportCadDesc": "벡터 도면을 도면층, 축척, 영역과 함께 DXF 또는 DWG로 내보내기"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "비활성: {{error}}",
+    "viaMcp": "AI 연결을 통해"
+  }
 }

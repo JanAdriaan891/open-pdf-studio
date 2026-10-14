@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Mer"
+    "more": "Mer",
+    "moreTabs": "Fler flikar",
+    "extensionTabFailed": "Den här tilläggsfliken kunde inte visas."
   },
   "drawing": {
     "structural": "Structural",

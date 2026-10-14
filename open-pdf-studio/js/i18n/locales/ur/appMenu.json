@@ -99,5 +99,9 @@
     "exportCad": "CAD ڈرائنگ (DXF، DWG)",
     "exportCadDesc": "ویکٹر ڈرائنگ کو پرتوں، پیمانے اور حصے کے ساتھ DXF یا DWG میں برآمد کریں"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "فعال نہیں: {{error}}",
+    "viaMcp": "AI کنکشن کے ذریعے"
+  }
 }

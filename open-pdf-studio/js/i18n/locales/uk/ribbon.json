@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Ще"
+    "more": "Ще",
+    "moreTabs": "Інші вкладки",
+    "extensionTabFailed": "Не вдалося показати цю вкладку розширення."
   },
   "drawing": {
     "structural": "Structural",

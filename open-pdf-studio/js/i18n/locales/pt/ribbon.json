@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Mais"
+    "more": "Mais",
+    "moreTabs": "Mais abas",
+    "extensionTabFailed": "Não foi possível exibir esta aba da extensão."
   },
   "drawing": {
     "structural": "Structural",

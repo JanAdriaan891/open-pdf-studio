@@ -99,5 +99,9 @@
     "exportCad": "CAD-ritning (DXF, DWG)",
     "exportCadDesc": "Exportera vektorritningen till DXF eller DWG med lager, skala och område"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Inte aktiv: {{error}}",
+    "viaMcp": "Via AI-anslutningen"
+  }
 }

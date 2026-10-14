@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "மேலும்"
+    "more": "மேலும்",
+    "moreTabs": "மேலும் தாவல்கள்",
+    "extensionTabFailed": "இந்த நீட்டிப்புத் தாவலைக் காட்ட முடியவில்லை."
   },
   "drawing": {
     "structural": "Structural",

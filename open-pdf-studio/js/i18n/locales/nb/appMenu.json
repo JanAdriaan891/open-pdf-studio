@@ -99,5 +99,9 @@
     "exportCad": "CAD-tegning (DXF, DWG)",
     "exportCadDesc": "Eksporter vektortegningen til DXF eller DWG med lag, målestokk og utsnitt"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Ikke aktiv: {{error}}",
+    "viaMcp": "Via AI-tilkoblingen"
+  }
 }

@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Mai multe"
+    "more": "Mai multe",
+    "moreTabs": "Mai multe file",
+    "extensionTabFailed": "Această filă a extensiei nu a putut fi afișată."
   },
   "drawing": {
     "structural": "Structural",

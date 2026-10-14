@@ -244,3 +244,16 @@ js/pdf/printerlijst-afnemers.test.mjs
 js/pdf/wiel-scroll.test.mjs
 js/pdf/saver/text-markup-dict.test.mjs
 js/text/leesrichting.test.mjs
+# Extensies beheren via MCP en eigen linttabbladen (#550, #551)
+js/plugins/extension-contributions.test.mjs
+js/plugins/svg-pictogram.test.mjs
+js/plugins/ribbon-tab-registry.test.mjs
+js/plugins/extension-commands.test.mjs
+js/solid/components/ribbon/ribbon-toetsenbord.test.mjs
+js/plugins/extension-lifecycle.test.mjs
+js/plugins/extension-mcp.test.mjs
+js/plugins/oppx-testpakket.test.mjs
+js/plugins/extensies-mcp-aansluiting.test.mjs
+js/plugins/opslag-wissel-slot.test.mjs
+js/plugins/plugin-api-opruimen.test.mjs
+js/tools/pijl-in-tabstrook.test.mjs

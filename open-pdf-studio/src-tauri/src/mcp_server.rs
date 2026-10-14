@@ -380,10 +380,54 @@ fn facade_element_tool() -> Value {
     })
 }
 
+/// Extensies beheren via MCP (#550): opvragen, installeren uit een lokaal
+/// `.oppx`-pakket en herladen, zonder dialoog en zonder herstart.
+fn extensie_tools() -> Vec<Value> {
+    vec![
+        json!({
+            "name": "app_list_extensions",
+            "description": "List the app's extensions: every installed and every loaded extension with its id, name, version, installed version, whether it is loaded and activated, its status (active, failed, notLoaded, busy), the code and message of the last failure, who made the last change (ui, mcp or startup) and whether it uses an old-style id. Broken folders in the extensions directory are listed under problems instead of being skipped. Reads only.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "includeContributions": { "type": "boolean", "description": "Also list each extension's registered contributions (ribbon tabs, command count, annotation types, palettes, property panels). Default false." }
+                },
+                "additionalProperties": false
+            }
+        }),
+        json!({
+            "name": "app_install_extension",
+            "description": "Install or update an extension from a local .oppx package, without a file dialog and without restarting the app: the package is checked and unpacked by the app, then the new version is activated. If the new version fails to load or activate, the previous working version is restored and stays active (rolledBack: true). Open PDF tabs and unsaved changes are not touched. Returns ok, outcome (installed, updated, unchanged), id, version, previousVersion, activated and the registered contributions, or ok: false with an error code such as PATH_NOT_ALLOWED, PACKAGE_INVALID, MANIFEST_INVALID, ALREADY_INSTALLED, VERSION_NOT_NEWER, MODULE_LOAD_FAILED or ACTIVATION_FAILED.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": { "type": "string", "description": "Absolute path to a local .oppx package. Relative paths, network shares and URLs are refused." },
+                    "replace": { "type": "string", "enum": ["never", "ifNewer", "always"], "description": "What to do when the extension id is already installed: 'never' refuses, 'ifNewer' replaces only a lower version, 'always' replaces (also a downgrade). An identical package (same SHA-256) is always reported as 'unchanged'." },
+                    "idempotencyKey": { "type": "string", "minLength": 8, "maxLength": 128, "pattern": "^[A-Za-z0-9._:-]+$", "description": "Caller-chosen key for this install request. Repeating a call with the same key, path and replace returns the stored result without installing again; the same key with a different path or replace is refused." }
+                },
+                "required": ["path", "replace", "idempotencyKey"],
+                "additionalProperties": false
+            }
+        }),
+        json!({
+            "name": "app_reload_extension",
+            "description": "Reload an installed extension from disk: deactivate it, remove everything it registered (ribbon tabs, commands, annotation types, palettes, panels) and activate it again, without restarting the app. If the reloaded code fails, the previous code is activated again (rolledBack: true). Returns ok, outcome 'reloaded', id, version, activated and contributions, or ok: false with an error code such as NOT_INSTALLED, MODULE_LOAD_FAILED or ACTIVATION_FAILED.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "description": "Extension id from app_list_extensions." }
+                },
+                "required": ["id"],
+                "additionalProperties": false
+            }
+        }),
+    ]
+}
+
 /// Handle `tools/list`. Tasks 7-9 will append their tool descriptors to
 /// this array.
 fn handle_tools_list() -> Value {
-    json!({
+    let mut lijst = json!({
         "tools": [
             {
                 "name": "list_test_pdfs",
@@ -1096,7 +1140,7 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_list_commands",
-                "description": "List EVERY function the app exposes: each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool. Use this to discover how a feature is called before running it with app_run_command. Command ids: 'ribbon:#<id>' (stable), 'ribbon:<tab>:<n>' (button without an id, only stable within one version), 'tool:<name>'. Optional `filter` narrows by text (matches id, label, title or tab).",
+                "description": "List EVERY function the app exposes: each ribbon button on every tab (label, tab, disabled/active state) plus every drawing tool. Use this to discover how a feature is called before running it with app_run_command. Command ids: 'ribbon:#<id>' (stable), 'ribbon:<tab>:<n>' (button without an id, only stable within one version), 'tool:<name>'. Optional `filter` narrows by text (matches id, label, title or tab). Extension actions appear as 'ext:<extensionId>:<itemId>'.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
@@ -1242,7 +1286,11 @@ fn handle_tools_list() -> Value {
             floorplan_tool(),
             facade_element_tool()
         ]
-    })
+    });
+    if let Some(tools) = lijst["tools"].as_array_mut() {
+        tools.extend(extensie_tools());
+    }
+    lijst
 }
 
 /// De `tools/list` voor een profiel: gefilterd, en elk gereedschap met de
@@ -1357,6 +1405,10 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_list_layers"        => tool_app_request(state, "mcp:list-layers",        &arguments, Duration::from_secs(10)).await,
         "app_create_layer"       => tool_app_request(state, "mcp:create-layer",       &arguments, Duration::from_secs(10)).await,
         "app_set_layer"          => tool_app_request(state, "mcp:set-layer",          &arguments, Duration::from_secs(10)).await,
+        // Extensies (#550): installeren pakt uit en activeert; de JS-kant breekt eerder af.
+        "app_list_extensions"    => tool_app_request(state, "mcp:list-extensions",    &arguments, Duration::from_secs(10)).await,
+        "app_install_extension"  => tool_app_request(state, "mcp:install-extension",  &arguments, Duration::from_secs(60)).await,
+        "app_reload_extension"   => tool_app_request(state, "mcp:reload-extension",   &arguments, Duration::from_secs(30)).await,
         other => Err((
             jsonrpc_error::METHOD_NOT_FOUND,
             format!("method not found: {other}"),
@@ -1970,7 +2022,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 62);
+        assert_eq!(arr.len(), 65);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
@@ -2023,6 +2075,26 @@ mod tests {
         let maak = meta("app_create_layer").unwrap();
         assert!(!maak.alleen_lezen && !maak.wijzigt);
         assert!(meta("app_set_layer").unwrap().wijzigt);
+    }
+
+    #[test]
+    fn extensies_zijn_te_beheren_via_mcp() {
+        let v = handle_tools_list();
+        let zoek = |naam: &str| {
+            v["tools"].as_array().unwrap().iter()
+                .find(|t| t["name"] == naam)
+                .unwrap_or_else(|| panic!("{naam} staat in de lijst"))
+                .clone()
+        };
+        assert_eq!(zoek("app_install_extension")["inputSchema"]["required"], json!(["path", "replace", "idempotencyKey"]));
+        assert_eq!(zoek("app_install_extension")["inputSchema"]["properties"]["replace"]["enum"], json!(["never", "ifNewer", "always"]));
+        assert_eq!(zoek("app_reload_extension")["inputSchema"]["required"], json!(["id"]));
+        assert!(zoek("app_list_commands")["description"].as_str().unwrap().contains("'ext:<extensionId>:<itemId>'"));
+        use crate::mcp_tool_meta::meta;
+        assert!(meta("app_list_extensions").unwrap().alleen_lezen);
+        assert!(meta("app_install_extension").unwrap().wijzigt, "installeren kan een installatie vervangen");
+        let herladen = meta("app_reload_extension").unwrap();
+        assert!(!herladen.alleen_lezen && !herladen.wijzigt);
     }
 
     #[test]
@@ -2494,6 +2566,9 @@ mod tests {
             "app_list_layers",
             "app_create_layer",
             "app_set_layer",
+            "app_list_extensions",
+            "app_install_extension",
+            "app_reload_extension",
         ] {
             assert!(names.contains(&tool), "missing tool: {tool} (got {names:?})");
             let descr = arr.iter().find(|t| t["name"] == tool).unwrap();

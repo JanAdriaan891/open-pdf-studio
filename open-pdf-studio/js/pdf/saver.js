@@ -20,6 +20,7 @@ import { attachVectorAP } from './saver/vector-ap.js';
 import { bytesVan as knipselBytesVan } from '../annotations/vector-snippet-store.js';
 import { getAnnotationStorage, getAnnotIdToFieldName } from './form-layer.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
+import { metOpslagSlot } from '../plugins/opslag-wissel-slot.js';
 import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnnotation } from '../plugins/plugin-pdf.js';
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
@@ -237,7 +238,12 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   }
   if (!state.documents.includes(activeDoc)) return false;
   const doel = saveAsPath || activeDoc?.saveTargetPath || currentPath;
-  _saveBezig = _savePDFNu(saveAsPath, activeDoc).finally(() => { _saveBezig = null; });
+  // Opslaan en een extensiewissel sluiten elkaar uit (#550): tijdens een
+  // wissel staat het annotatietype van een extensie even niet in het register
+  // en zou de saver die annotaties weglaten. De save begint pas na een lopende
+  // wissel, en een nieuwe wissel wacht tot de save klaar is. _saveBezig staat
+  // meteen, zodat een tweede save ook tijdens het wachten op de eerste wacht.
+  _saveBezig = metOpslagSlot(() => _savePDFNu(saveAsPath, activeDoc)).finally(() => { _saveBezig = null; });
   const gelukt = await _saveBezig;
   if (gelukt && activeDoc) {
     // De vorige uitkomst gold voor het oude bestand: opnieuw verifiëren. Het

@@ -99,5 +99,9 @@
     "exportCad": "CAD crtež (DXF, DWG)",
     "exportCadDesc": "Izvezi vektorski crtež u DXF ili DWG sa slojevima, mjerilom i područjem"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Nije aktivno: {{error}}",
+    "viaMcp": "Putem AI veze"
+  }
 }

@@ -99,5 +99,9 @@
     "exportCad": "CAD 図面 (DXF, DWG)",
     "exportCadDesc": "ベクター図面を画層・縮尺・範囲付きで DXF または DWG にエクスポート"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "無効: {{error}}",
+    "viaMcp": "AI 接続経由"
+  }
 }

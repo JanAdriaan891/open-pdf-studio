@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Więcej"
+    "more": "Więcej",
+    "moreTabs": "Więcej kart",
+    "extensionTabFailed": "Nie można wyświetlić tej karty rozszerzenia."
   },
   "drawing": {
     "structural": "Structural",

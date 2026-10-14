@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "더 보기"
+    "more": "더 보기",
+    "moreTabs": "탭 더 보기",
+    "extensionTabFailed": "이 확장 탭을 표시할 수 없습니다."
   },
   "drawing": {
     "structural": "Structural",

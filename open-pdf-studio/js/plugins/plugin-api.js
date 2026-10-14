@@ -6,13 +6,13 @@
  */
 
 import { registerAnnotationType, unregisterAnnotationType } from './annotation-type-registry.js';
-import { registerToolPalette, unregisterToolPalette } from './palette-registry.js';
+import { registerToolPalette, unregisterToolPalette, getPalette } from './palette-registry.js';
 import { registerPropertyPanel as _registerPropertyPanel, unregisterPropertyPanel as _unregisterPropertyPanel } from './property-panel-registry.js';
 import {
   registerSelectionListener as _registerSelectionListener,
   unregisterSelectionListener as _unregisterSelectionListener,
 } from './selection-listener-registry.js';
-import { clearAllToolGroups } from './tool-group-state.js';
+import { clearToolGroups, toolGroupIdsOf } from './tool-group-state.js';
 import { setNativePanelHidden } from '../solid/stores/propertiesStore.js';
 import { state, getActiveDocument, getPageRotation } from '../core/state.js';
 import { setTool } from '../tools/manager.js';
@@ -25,14 +25,21 @@ import { extractPageGeometry } from '../tools/pdf-snap-extractor.js';
 import { schaalOpPunt } from '../annotations/schaal-op-punt.js';
 import { getScaleFromRegion } from '../annotations/scale-region.js';
 import { createRoot, createEffect } from 'solid-js';
+import { maakBijdrageScope } from './extension-contributions.js';
+import { lintRegister } from './ribbon-tab-registry.js';
 
 export function createPluginApi(pluginId) {
+  // Bijdragescope (#550/#551): lint-tabbladen en opdrachten, opgeruimd in _cleanup.
+  const scope = maakBijdrageScope(pluginId);
   const registeredTypes = [];
   const registeredPalettes = [];
   const registeredPanels = [];
   const registeredSelectionListeners = []; // [{typeName, fn}]
   const documentListeners = new Map();
   let disposeDocumentEvents = null;
+  // Verborg deze extensie het eigen eigenschappenpaneel? Alleen dan zet
+  // _cleanup het terug (#550).
+  let verbergtNativePaneel = false;
 
   function ensureDocumentEvents() {
     if (disposeDocumentEvents) return;
@@ -79,57 +86,69 @@ export function createPluginApi(pluginId) {
       annotationBatch: true,
       pageAnalysis: true,
       pluginDocumentEvents: true,
+      ribbonTabs: true,
     },
 
     // --- Annotation type registration ---
     registerAnnotationType(typeName, handler) {
+      // Na _cleanup gesloten: een late registratie blijft anders voorgoed staan (#550).
+      scope.eisActief('annotationType', typeName);
       const prefixedName = typeName;
       registerAnnotationType(prefixedName, handler);
       registeredTypes.push(prefixedName);
     },
 
     unregisterAnnotationType(typeName) {
-      unregisterAnnotationType(typeName);
+      // Alleen wat deze API zelf registreerde: een oude API (na herladen) haalt
+      // zo nooit het type van de nieuwe versie weg (#550).
       const idx = registeredTypes.indexOf(typeName);
-      if (idx >= 0) registeredTypes.splice(idx, 1);
+      if (idx < 0) return;
+      unregisterAnnotationType(typeName);
+      registeredTypes.splice(idx, 1);
     },
 
     // --- Tool palette registration ---
     registerToolPalette(descriptor) {
+      scope.eisActief('palette', String(descriptor?.id));
       registerToolPalette(descriptor);
       registeredPalettes.push(descriptor.id);
     },
 
     unregisterToolPalette(id) {
-      unregisterToolPalette(id);
       const idx = registeredPalettes.indexOf(id);
-      if (idx >= 0) registeredPalettes.splice(idx, 1);
+      if (idx < 0) return;
+      unregisterToolPalette(id);
+      registeredPalettes.splice(idx, 1);
     },
 
     // --- Property panel registration (custom edit-form for plugin annotations) ---
     registerPropertyPanel(typeName, renderFn) {
+      scope.eisActief('propertyPanel', typeName);
       _registerPropertyPanel(typeName, renderFn);
       registeredPanels.push(typeName);
     },
 
     unregisterPropertyPanel(typeName) {
-      _unregisterPropertyPanel(typeName);
       const idx = registeredPanels.indexOf(typeName);
-      if (idx >= 0) registeredPanels.splice(idx, 1);
+      if (idx < 0) return;
+      _unregisterPropertyPanel(typeName);
+      registeredPanels.splice(idx, 1);
     },
 
     // --- Selection listener (direct selection-event channel for plugin annotations) ---
     // Listener fires with `annotation` on select and `null` on deselect. Plugins
     // should compare by stable id (not ref) since OPPS may reload annotation refs.
     registerSelectionListener(typeName, fn) {
+      scope.eisActief('selectionListener', typeName);
       _registerSelectionListener(typeName, fn);
       registeredSelectionListeners.push({ typeName, fn });
     },
 
     unregisterSelectionListener(typeName, fn) {
-      _unregisterSelectionListener(typeName, fn);
       const idx = registeredSelectionListeners.findIndex(e => e.typeName === typeName && e.fn === fn);
-      if (idx >= 0) registeredSelectionListeners.splice(idx, 1);
+      if (idx < 0) return;
+      _unregisterSelectionListener(typeName, fn);
+      registeredSelectionListeners.splice(idx, 1);
     },
 
     // --- Native property-panel visibility ---
@@ -137,6 +156,8 @@ export function createPluginApi(pluginId) {
     // editing so all controls live in the plugin's own palette/UI.
     // Pass false to hide, true to restore. Caller is responsible for restoring on deselect.
     setNativePanelVisible(visible) {
+      scope.eisActief('nativePanel', 'visibility');
+      verbergtNativePaneel = !visible;
       setNativePanelHidden(!visible);
     },
 
@@ -241,6 +262,7 @@ export function createPluginApi(pluginId) {
       if (!['documentChanged', 'pageChanged', 'scaleChanged'].includes(type) || typeof listener !== 'function') {
         throw new TypeError('Unsupported document event or listener');
       }
+      scope.eisActief('documentEvent', type);
       let listeners = documentListeners.get(type);
       if (!listeners) { listeners = new Set(); documentListeners.set(type, listeners); }
       listeners.add(listener);
@@ -284,16 +306,40 @@ export function createPluginApi(pluginId) {
       redrawAnnotations();
     },
 
+    // --- Linttabbladen (#551): alleen data, de host tekent; zie ribbon-tab-registry.js ---
+    registerRibbonTab(descriptor) {
+      return lintRegister.registreer(scope, descriptor);
+    },
+
+    unregisterRibbonTab(id) {
+      return lintRegister.afmelden(scope, id);
+    },
+
+    /** Overzicht van wat deze extensie heeft geregistreerd (app_list_extensions). */
+    _bijdragenOverzicht() {
+      return {
+        ribbonTabs: lintRegister.vanExtensie(pluginId),
+        commands: scope.lijst().filter((b) => b.soort === 'command').length,
+        annotationTypes: [...registeredTypes],
+        palettes: [...registeredPalettes],
+        propertyPanels: [...registeredPanels],
+      };
+    },
+
     // --- Cleanup (called by plugin-manager on deactivate) ---
     _cleanup() {
+      const waarschuwingen = scope.ruimOp();
+      // De gereedschapsgroepen van de eigen paletten, vóór die verdwijnen.
+      const eigenGroepen = toolGroupIdsOf(registeredPalettes.map(id => getPalette(id)));
       registeredTypes.forEach(t => unregisterAnnotationType(t));
       registeredPalettes.forEach(id => unregisterToolPalette(id));
       registeredPanels.forEach(t => _unregisterPropertyPanel(t));
       registeredSelectionListeners.forEach(({ typeName, fn }) => _unregisterSelectionListener(typeName, fn));
-      // Restore native panel visibility on plugin-deactivate so the host UI returns to default.
-      setNativePanelHidden(false);
-      // Reset tool-group sub-tool selections so a fresh activate starts clean.
-      clearAllToolGroups();
+      // Het eigenschappenpaneel en de gereedschapsgroepen per extensie
+      // herstellen, niet globaal: andere extensies houden hun toestand (#550).
+      if (verbergtNativePaneel) setNativePanelHidden(false);
+      verbergtNativePaneel = false;
+      clearToolGroups(eigenGroepen);
       registeredTypes.length = 0;
       registeredPalettes.length = 0;
       registeredPanels.length = 0;
@@ -301,6 +347,7 @@ export function createPluginApi(pluginId) {
       disposeDocumentEvents?.();
       disposeDocumentEvents = null;
       documentListeners.clear();
+      return waarschuwingen;
     }
   };
 }

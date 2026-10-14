@@ -99,5 +99,9 @@
     "exportCad": "Dessin CAO (DXF, DWG)",
     "exportCadDesc": "Exporter le dessin vectoriel en DXF ou DWG, avec calques, échelle et zone"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Inactive : {{error}}",
+    "viaMcp": "Via la connexion IA"
+  }
 }

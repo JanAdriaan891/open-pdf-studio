@@ -1,3 +1,4 @@
+import { createRenderEffect } from 'solid-js';
 import { autoShrinkLabel } from './autoShrinkLabel.js';
 import { isTauri } from '../../../core/platform.js';
 import { knopUitInBrowser, meldingTekst } from '../../../core/webfuncties.js';
@@ -18,12 +19,15 @@ export default function RibbonButton(props) {
     <button
       class={`ribbon-btn${props.size === 'small' ? ' small' : ''}${props.size === 'medium' ? ' medium' : ''}${props.active ? ' active' : ''}${props.iconOnly ? ' icon-only' : ''}${props.extraClass ? ' ' + props.extraClass : ''}`}
       id={props.id}
+      data-ext-command={props.extCommand}
+      aria-pressed={props.pressed}
       title={titel()}
       disabled={props.disabled || geenWebvariant()}
       onClick={props.onClick}
       style={props.style}
     >
-      <div class="ribbon-btn-icon" style={props.iconStyle} ref={el => { if (props.icon) el.innerHTML = props.icon; }}>
+      {/* Het pictogram volgt de prop: een extensie kan het via update() wisselen (#551). */}
+      <div class="ribbon-btn-icon" style={props.iconStyle} ref={el => createRenderEffect(() => { if (props.icon || el.innerHTML) el.innerHTML = props.icon || ''; })}>
       </div>
       {!props.iconOnly && (
         <span class="ribbon-btn-label" ref={el => autoShrinkLabel(el)}>{props.label}</span>

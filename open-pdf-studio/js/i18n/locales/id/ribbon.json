@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Lainnya"
+    "more": "Lainnya",
+    "moreTabs": "Tab lainnya",
+    "extensionTabFailed": "Tab ekstensi ini tidak dapat ditampilkan."
   },
   "drawing": {
     "structural": "Structural",

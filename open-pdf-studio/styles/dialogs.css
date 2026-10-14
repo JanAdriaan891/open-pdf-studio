@@ -3653,6 +3653,23 @@
   color: var(--theme-app-menu-shortcut);
 }
 
+/* Extensie die via de AI-koppeling is geïnstalleerd of bijgewerkt (#550). */
+.ext-card-badge {
+  padding: 0 4px;
+  font-size: 10px;
+  border: 1px solid var(--theme-app-menu-divider);
+  color: var(--theme-app-menu-shortcut);
+  white-space: nowrap;
+}
+
+/* Extensie die niet actief is, met de foutcode van de laatste poging. */
+.ext-card-status {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: var(--theme-error-text, #991b1b);
+  word-break: break-word;
+}
+
 .ext-uninstall-btn {
   flex-shrink: 0;
   width: 28px;

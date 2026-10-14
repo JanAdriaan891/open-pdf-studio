@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Још"
+    "more": "Још",
+    "moreTabs": "Још картица",
+    "extensionTabFailed": "Ова картица проширења није могла да се прикаже."
   },
   "drawing": {
     "structural": "Structural",

@@ -99,5 +99,9 @@
     "exportCad": "CAD வரைபடம் (DXF, DWG)",
     "exportCadDesc": "வெக்டர் வரைபடத்தை அடுக்குகள், அளவுகோல், பகுதியுடன் DXF அல்லது DWG ஆக ஏற்றுமதி செய்"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "செயலில் இல்லை: {{error}}",
+    "viaMcp": "AI இணைப்பு வழியாக"
+  }
 }

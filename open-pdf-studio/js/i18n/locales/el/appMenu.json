@@ -99,5 +99,9 @@
     "exportCad": "Σχέδιο CAD (DXF, DWG)",
     "exportCadDesc": "Εξαγωγή του διανυσματικού σχεδίου σε DXF ή DWG με επίπεδα, κλίμακα και περιοχή"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Μη ενεργό: {{error}}",
+    "viaMcp": "Μέσω της σύνδεσης AI"
+  }
 }

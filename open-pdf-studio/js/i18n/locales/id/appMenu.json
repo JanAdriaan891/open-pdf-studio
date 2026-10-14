@@ -99,5 +99,9 @@
     "exportCad": "Gambar CAD (DXF, DWG)",
     "exportCadDesc": "Ekspor gambar vektor ke DXF atau DWG dengan lapisan, skala, dan area"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "extensionsPanel": {
+    "activationFailed": "Tidak aktif: {{error}}",
+    "viaMcp": "Melalui koneksi AI"
+  }
 }

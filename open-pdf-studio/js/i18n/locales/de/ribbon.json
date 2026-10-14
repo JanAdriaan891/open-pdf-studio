@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Mehr"
+    "more": "Mehr",
+    "moreTabs": "Weitere Registerkarten",
+    "extensionTabFailed": "Diese Registerkarte der Erweiterung konnte nicht angezeigt werden."
   },
   "drawing": {
     "structural": "Structural",

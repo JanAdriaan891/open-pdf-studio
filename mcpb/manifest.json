@@ -278,6 +278,18 @@
     {
       "name": "app_facade_element",
       "description": "Draw and edit a facade element in a floor plan: a curtain wall or a window frame, as ONE object along a line with an outer frame, mullions on the field boundaries and a panel in every field."
+    },
+    {
+      "name": "app_list_extensions",
+      "description": "List the app's extensions: every installed and every loaded extension with its id, name, version, installed version, whether it is loaded and activated, its status (active, failed, notLoaded, busy), the code and message of the last failure, who made the last change (ui, mcp or startup) and whether it uses an old-style id."
+    },
+    {
+      "name": "app_install_extension",
+      "description": "Install or update an extension from a local .oppx package, without a file dialog and without restarting the app: the package is checked and unpacked by the app, then the new version is activated."
+    },
+    {
+      "name": "app_reload_extension",
+      "description": "Reload an installed extension from disk: deactivate it, remove everything it registered (ribbon tabs, commands, annotation types, palettes, panels) and activate it again, without restarting the app."
     }
   ],
   "keywords": [

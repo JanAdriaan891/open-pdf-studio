@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Thêm"
+    "more": "Thêm",
+    "moreTabs": "Thêm thẻ",
+    "extensionTabFailed": "Không thể hiển thị thẻ của tiện ích mở rộng này."
   },
   "drawing": {
     "structural": "Structural",

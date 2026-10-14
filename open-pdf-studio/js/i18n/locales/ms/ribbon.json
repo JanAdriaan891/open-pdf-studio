@@ -314,7 +314,9 @@
   "common": {
     "collapseRibbon": "Collapse ribbon",
     "expandRibbon": "Expand ribbon",
-    "more": "Lagi"
+    "more": "Lagi",
+    "moreTabs": "Lagi tab",
+    "extensionTabFailed": "Tab sambungan ini tidak dapat dipaparkan."
   },
   "drawing": {
     "structural": "Structural",
