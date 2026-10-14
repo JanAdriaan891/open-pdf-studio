@@ -28,7 +28,8 @@
     "formCheckbox": "Formulier selectievakje",
     "formRadio": "Formulier keuzerondje",
     "screenshot": "Schermafbeelding",
-    "cloudPolyline": "Wolk-polylijn"
+    "cloudPolyline": "Wolk-polylijn",
+    "pageLabelPick": "Tekst kiezen voor paginalabel"
   },
   "toolLabel": "Gereedschap:",
   "annotationsLabel": "Annotaties:",

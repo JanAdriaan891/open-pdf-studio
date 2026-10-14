@@ -116,7 +116,8 @@
     "deselectAll": "Batalkan Semua Pilihan",
     "insertFromFile": "Sisipkan dari Berkas...",
     "insertFromFileBefore": "Sebelum Halaman Ini...",
-    "insertFromFileAfter": "Setelah Halaman Ini..."
+    "insertFromFileAfter": "Setelah Halaman Ini...",
+    "pageLabels": "Label Halaman (Pembuat Nama)..."
   },
   "textSelection": {
     "highlightSelection": "Sorot Pilihan",

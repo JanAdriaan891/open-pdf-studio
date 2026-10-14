@@ -28,7 +28,8 @@
     "formTextField": "Formulärtextfält",
     "formCheckbox": "Formulärkryssruta",
     "formRadio": "Formuläralternativknapp",
-    "screenshot": "Skärmbild"
+    "screenshot": "Skärmbild",
+    "pageLabelPick": "Välj text för sidetikett"
   },
   "toolLabel": "Verktyg:",
   "annotationsLabel": "Anteckningar:",

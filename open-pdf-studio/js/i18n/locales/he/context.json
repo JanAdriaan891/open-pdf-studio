@@ -116,7 +116,8 @@
     "deselectAll": "ביטול כל הבחירה",
     "insertFromFile": "הוספה מקובץ...",
     "insertFromFileBefore": "לפני עמוד זה...",
-    "insertFromFileAfter": "אחרי עמוד זה..."
+    "insertFromFileAfter": "אחרי עמוד זה...",
+    "pageLabels": "תוויות עמודים (בונה שמות)..."
   },
   "textSelection": {
     "highlightSelection": "הדגשת הבחירה",

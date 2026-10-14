@@ -116,7 +116,8 @@
     "deselectAll": "Desselecciona-ho tot",
     "insertFromFile": "Insereix des d'un fitxer...",
     "insertFromFileBefore": "Abans d'aquesta pàgina...",
-    "insertFromFileAfter": "Després d'aquesta pàgina..."
+    "insertFromFileAfter": "Després d'aquesta pàgina...",
+    "pageLabels": "Etiquetes de pàgina (generador de noms)..."
   },
   "textSelection": {
     "highlightSelection": "Ressalta la selecció",

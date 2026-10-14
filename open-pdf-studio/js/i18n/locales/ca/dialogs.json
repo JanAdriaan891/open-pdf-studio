@@ -951,5 +951,19 @@
     "underlayLimited": "Resolució reduïda a {{dpi}} ppp",
     "underlayNoMeasure": "No s'aplica a un calc de fons; l'escala de mesura ve de la pàgina",
     "queued": "{{n}} dibuix(os) més a la cua"
+  },
+  "pageLabels": {
+    "title": "Etiquetes de pàgina",
+    "intro": "Escriviu el nom de la pàgina al camp. «{{select}}» agafa text de la pàgina: s'insereix com a {OCR1}, {OCR2}… i es llegeix del mateix lloc a cada pàgina. Exemple: {OCR1} - {OCR2}",
+    "name": "Nom de la pàgina:",
+    "pickHint": "Arrossegueu un requadre al voltant del text que voleu fer servir, per exemple el número del plànol. Esc cancel·la.",
+    "noText": "(no s'ha trobat text)",
+    "example": "Exemple:",
+    "useOcr": "Utilitza l'OCR on un requadre no té text (fulls escanejats, més lent)",
+    "read": "Llegeix totes les pàgines",
+    "reading": "S'està llegint la pàgina {{done}} de {{total}}...",
+    "colLabel": "Etiqueta de pàgina",
+    "ocrLegend": "Les pàgines marcades amb OCR s'han llegit amb reconeixement de text; comproveu-les abans d'aplicar.",
+    "reset": "Restableix els números de pàgina"
   }
 }

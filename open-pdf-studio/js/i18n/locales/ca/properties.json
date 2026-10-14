@@ -354,7 +354,8 @@
     "collapseAll": "Reduir-ho tot",
     "annotationsMenu": "Menú",
     "schedules": "Llistats",
-    "addPage": "Afegeix una pàgina"
+    "addPage": "Afegeix una pàgina",
+    "pageLabels": "Etiquetes de pàgina (generador de noms)"
   },
   "scaleBar": {
     "title": "Barra d'escala",

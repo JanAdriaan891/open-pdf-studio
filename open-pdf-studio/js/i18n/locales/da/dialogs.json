@@ -951,5 +951,19 @@
     "underlayLimited": "Opløsning nedsat til {{dpi}} dpi",
     "underlayNoMeasure": "Gælder ikke for et underlag; målestokken kommer fra siden",
     "queued": "{{n}} tegning(er) mere i køen"
+  },
+  "pageLabels": {
+    "title": "Sideetiketter",
+    "intro": "Skriv sidens navn i feltet. \"{{select}}\" henter tekst fra siden: den indsættes som {OCR1}, {OCR2}… og læses fra samme sted på hver side. Eksempel: {OCR1} - {OCR2}",
+    "name": "Sidenavn:",
+    "pickHint": "Træk en ramme om den tekst, der skal bruges, for eksempel tegningsnummeret. Esc annullerer.",
+    "noText": "(ingen tekst fundet)",
+    "example": "Eksempel:",
+    "useOcr": "Brug OCR, hvor en ramme ikke har tekst (scannede ark, langsommere)",
+    "read": "Læs alle sider",
+    "reading": "Læser side {{done}} af {{total}}...",
+    "colLabel": "Sideetiket",
+    "ocrLegend": "Sider markeret med OCR er læst med tekstgenkendelse; kontroller dem, før du anvender.",
+    "reset": "Nulstil til sidetal"
   }
 }

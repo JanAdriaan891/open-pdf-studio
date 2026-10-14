@@ -950,5 +950,19 @@
     "underlayLimited": "Resolution reduced to {{dpi}} dpi",
     "underlayNoMeasure": "Not applicable to an underlay; the measuring scale comes from the page",
     "queued": "{{n}} more drawing(s) queued"
+  },
+  "pageLabels": {
+    "title": "Page labels",
+    "intro": "Type the page name in the field. \"{{select}}\" picks text on the page: it is inserted as {OCR1}, {OCR2}… and read from the same place on every page. Example: {OCR1} - {OCR2}",
+    "name": "Page name:",
+    "pickHint": "Drag a box around the text to use, for example the drawing number. Esc cancels.",
+    "noText": "(no text found)",
+    "example": "Example:",
+    "useOcr": "Use OCR where a box has no text (scanned sheets, slower)",
+    "read": "Read all pages",
+    "reading": "Reading page {{done}} of {{total}}...",
+    "colLabel": "Page label",
+    "ocrLegend": "Pages marked OCR were read by text recognition; check them before applying.",
+    "reset": "Reset to page numbers"
   }
 }

@@ -348,7 +348,8 @@
     "exportComments": "Eksporter kommentarer til datafil...",
     "exportSelectedComments": "Eksporter valgte kommentarer til datafil...",
     "schedules": "Lister",
-    "addPage": "Legg til side"
+    "addPage": "Legg til side",
+    "pageLabels": "Sideetiketter (navnebygger)"
   },
   "scaleBar": {
     "title": "Målestokklinjal",

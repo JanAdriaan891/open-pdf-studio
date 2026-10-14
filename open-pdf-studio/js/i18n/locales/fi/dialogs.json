@@ -951,5 +951,19 @@
     "underlayLimited": "Tarkkuus laskettu {{dpi}} dpi:hin",
     "underlayNoMeasure": "Ei koske taustakuvaa; mittakaava tulee sivulta",
     "queued": "Jonossa vielä {{n}} piirustus(ta)"
+  },
+  "pageLabels": {
+    "title": "Sivujen nimiöt",
+    "intro": "Kirjoita sivun nimi kenttään. ”{{select}}” poimii tekstiä sivulta: se lisätään muodossa {OCR1}, {OCR2}… ja luetaan samasta kohdasta jokaiselta sivulta. Esimerkki: {OCR1} - {OCR2}",
+    "name": "Sivun nimi:",
+    "pickHint": "Vedä kehys käytettävän tekstin ympärille, esimerkiksi piirustusnumeron. Esc peruuttaa.",
+    "noText": "(tekstiä ei löytynyt)",
+    "example": "Esimerkki:",
+    "useOcr": "Käytä OCR:ää, kun kehyksessä ei ole tekstiä (skannatut arkit, hitaampi)",
+    "read": "Lue kaikki sivut",
+    "reading": "Luetaan sivua {{done}}/{{total}}...",
+    "colLabel": "Sivun nimiö",
+    "ocrLegend": "OCR-merkityt sivut luettiin tekstintunnistuksella; tarkista ne ennen käyttöönottoa.",
+    "reset": "Palauta sivunumerot"
   }
 }

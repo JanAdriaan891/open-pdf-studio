@@ -37,6 +37,7 @@ import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrTextLayer, embedOcrFont, loadDefaultOcrFontBytes } from './saver/ocr-text-layer.js';
 import { saveBookmarksToOutline } from './saver/bookmarks.js';
 import { saveStylePresetsToCatalog } from './saver/style-presets.js';
+import { slaPaginaLabelsOp } from './pagina-labels.js';
 import { pasBijlagenToe } from './bijlagen.js';
 import { schrijfAnnotatieLagen, ocVoorAnnotatie } from './saver/annotatie-lagen.js';
 import { layersForSave, currentLayerId } from '../annotations/annotatie-lagen.js';
@@ -2943,6 +2944,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
     // Save named line-style presets into the catalog (travel with the PDF)
     saveStylePresetsToCatalog(pdfDocLib, activeDoc.stylePresets || null);
+
+    // Paginalabels (bladnamen, #580) als /PageLabels; alleen na een bewerking,
+    // zodat een andere nummering in het bestand ongemoeid blijft.
+    slaPaginaLabelsOp(pdfDocLib, activeDoc);
 
     // Bijlagen die in het paneel zijn toegevoegd of verwijderd (bijlagen.js).
     pasBijlagenToe(pdfDocLib, activeDoc.bijlagenWijzigingen);

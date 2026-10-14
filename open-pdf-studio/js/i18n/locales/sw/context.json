@@ -116,7 +116,8 @@
     "deselectAll": "Ondoa Uteuzi Wote",
     "insertFromFile": "Ingiza kutoka Faili...",
     "insertFromFileBefore": "Kabla ya Ukurasa Huu...",
-    "insertFromFileAfter": "Baada ya Ukurasa Huu..."
+    "insertFromFileAfter": "Baada ya Ukurasa Huu...",
+    "pageLabels": "Lebo za Kurasa (Kiunda Majina)..."
   },
   "textSelection": {
     "highlightSelection": "Angaza Chaguo",

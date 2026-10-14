@@ -116,7 +116,8 @@
     "deselectAll": "Poista kaikki valinnat",
     "insertFromFile": "Lisää tiedostosta...",
     "insertFromFileBefore": "Ennen tätä sivua...",
-    "insertFromFileAfter": "Tämän sivun jälkeen..."
+    "insertFromFileAfter": "Tämän sivun jälkeen...",
+    "pageLabels": "Sivujen nimiöt (nimien muodostus)..."
   },
   "textSelection": {
     "highlightSelection": "Korosta valinta",

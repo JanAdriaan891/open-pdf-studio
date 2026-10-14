@@ -348,7 +348,8 @@
     "exportComments": "Exportă comentarii în fișier de date...",
     "exportSelectedComments": "Exportă comentariile selectate în fișier de date...",
     "schedules": "Extrase",
-    "addPage": "Adăugare pagină"
+    "addPage": "Adăugare pagină",
+    "pageLabels": "Etichete de pagină (generator de nume)"
   },
   "scaleBar": {
     "title": "Bară de scară",

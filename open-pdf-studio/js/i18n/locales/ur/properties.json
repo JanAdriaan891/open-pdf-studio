@@ -348,7 +348,8 @@
     "exportComments": "تبصرے ڈیٹا فائل میں برآمد کریں...",
     "exportSelectedComments": "منتخب تبصرے ڈیٹا فائل میں برآمد کریں...",
     "schedules": "شیڈولز",
-    "addPage": "صفحہ شامل کریں"
+    "addPage": "صفحہ شامل کریں",
+    "pageLabels": "صفحہ لیبلز (نام ساز)"
   },
   "scaleBar": {
     "title": "اسکیل بار",

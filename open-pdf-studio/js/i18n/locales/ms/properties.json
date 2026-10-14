@@ -348,7 +348,8 @@
     "exportComments": "Eksport komen ke fail data...",
     "exportSelectedComments": "Eksport komen terpilih ke fail data...",
     "schedules": "Jadual",
-    "addPage": "Tambah halaman"
+    "addPage": "Tambah halaman",
+    "pageLabels": "Label halaman (pembina nama)"
   },
   "scaleBar": {
     "title": "Bar Skala",

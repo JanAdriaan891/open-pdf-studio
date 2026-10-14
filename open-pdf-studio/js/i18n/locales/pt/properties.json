@@ -348,7 +348,8 @@
     "exportComments": "Exportar comentários para arquivo de dados...",
     "exportSelectedComments": "Exportar comentários selecionados para arquivo de dados...",
     "schedules": "Quadros",
-    "addPage": "Adicionar página"
+    "addPage": "Adicionar página",
+    "pageLabels": "Rótulos de página (gerador de nomes)"
   },
   "scaleBar": {
     "title": "Barra de escala",

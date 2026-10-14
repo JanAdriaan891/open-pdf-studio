@@ -951,5 +951,19 @@
     "underlayLimited": "Resolusi diturunkan menjadi {{dpi}} dpi",
     "underlayNoMeasure": "Tidak berlaku untuk lapisan dasar; skala ukur berasal dari halaman",
     "queued": "{{n}} gambar lagi dalam antrean"
+  },
+  "pageLabels": {
+    "title": "Label halaman",
+    "intro": "Ketik nama halaman di kolom. \"{{select}}\" mengambil teks dari halaman: teks disisipkan sebagai {OCR1}, {OCR2}… dan dibaca dari tempat yang sama di setiap halaman. Contoh: {OCR1} - {OCR2}",
+    "name": "Nama halaman:",
+    "pickHint": "Seret kotak di sekitar teks yang ingin dipakai, misalnya nomor gambar. Esc untuk batal.",
+    "noText": "(teks tidak ditemukan)",
+    "example": "Contoh:",
+    "useOcr": "Gunakan OCR jika kotak tidak berisi teks (lembar hasil pindai, lebih lambat)",
+    "read": "Baca semua halaman",
+    "reading": "Membaca halaman {{done}} dari {{total}}...",
+    "colLabel": "Label halaman",
+    "ocrLegend": "Halaman bertanda OCR dibaca dengan pengenalan teks; periksa sebelum menerapkan.",
+    "reset": "Kembalikan ke nomor halaman"
   }
 }

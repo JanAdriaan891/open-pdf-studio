@@ -28,7 +28,8 @@
     "formTextField": "Bidang Teks Formulir",
     "formCheckbox": "Kotak Centang Formulir",
     "formRadio": "Tombol Radio Formulir",
-    "screenshot": "Tangkapan Layar"
+    "screenshot": "Tangkapan Layar",
+    "pageLabelPick": "Pilih Teks untuk Label Halaman"
   },
   "toolLabel": "Alat:",
   "annotationsLabel": "Anotasi:",

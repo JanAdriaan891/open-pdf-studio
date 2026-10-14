@@ -951,5 +951,19 @@
     "underlayLimited": "Resolução reduzida para {{dpi}} ppp",
     "underlayNoMeasure": "Não se aplica a um decalque de fundo; a escala de medição vem da página",
     "queued": "Mais {{n}} desenho(s) em fila"
+  },
+  "pageLabels": {
+    "title": "Rótulos de página",
+    "intro": "Digite o nome da página no campo. \"{{select}}\" pega texto da página: ele é inserido como {OCR1}, {OCR2}… e lido do mesmo lugar em cada página. Exemplo: {OCR1} - {OCR2}",
+    "name": "Nome da página:",
+    "pickHint": "Arraste uma caixa em volta do texto que deseja usar, por exemplo o número da prancha. Esc cancela.",
+    "noText": "(nenhum texto encontrado)",
+    "example": "Exemplo:",
+    "useOcr": "Usar OCR quando a caixa não tiver texto (folhas digitalizadas, mais lento)",
+    "read": "Ler todas as páginas",
+    "reading": "Lendo a página {{done}} de {{total}}...",
+    "colLabel": "Rótulo da página",
+    "ocrLegend": "As páginas marcadas com OCR foram lidas por reconhecimento de texto; verifique-as antes de aplicar.",
+    "reset": "Redefinir para números de página"
   }
 }

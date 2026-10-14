@@ -28,7 +28,8 @@
     "formTextField": "Текстовое поле формы",
     "formCheckbox": "Флажок формы",
     "formRadio": "Переключатель формы",
-    "screenshot": "Снимок экрана"
+    "screenshot": "Снимок экрана",
+    "pageLabelPick": "Выбор текста для метки страницы"
   },
   "toolLabel": "Инструмент:",
   "annotationsLabel": "Аннотации:",

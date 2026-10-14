@@ -951,5 +951,19 @@
     "underlayLimited": "Rozlišení sníženo na {{dpi}} dpi",
     "underlayNoMeasure": "Neplatí pro podklad; měřítko pochází ze stránky",
     "queued": "Ve frontě čeká ještě {{n}} výkres(ů)"
+  },
+  "pageLabels": {
+    "title": "Popisky stránek",
+    "intro": "Do pole napište název stránky. „{{select}}“ převezme text ze stránky: vloží se jako {OCR1}, {OCR2}… a čte se ze stejného místa na každé stránce. Příklad: {OCR1} - {OCR2}",
+    "name": "Název stránky:",
+    "pickHint": "Tažením ohraničte text, který chcete použít, například číslo výkresu. Esc zruší.",
+    "noText": "(text nenalezen)",
+    "example": "Příklad:",
+    "useOcr": "Použít OCR tam, kde v rámečku není text (naskenované listy, pomalejší)",
+    "read": "Načíst všechny stránky",
+    "reading": "Načítání stránky {{done}} z {{total}}...",
+    "colLabel": "Popisek stránky",
+    "ocrLegend": "Stránky označené OCR byly načteny rozpoznáváním textu; před použitím je zkontrolujte.",
+    "reset": "Obnovit čísla stránek"
   }
 }

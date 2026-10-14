@@ -116,7 +116,8 @@
     "deselectAll": "सभी का चयन हटाएं",
     "insertFromFile": "फ़ाइल से डालें...",
     "insertFromFileBefore": "इस पृष्ठ से पहले...",
-    "insertFromFileAfter": "इस पृष्ठ के बाद..."
+    "insertFromFileAfter": "इस पृष्ठ के बाद...",
+    "pageLabels": "पृष्ठ लेबल (नाम निर्माता)..."
   },
   "textSelection": {
     "highlightSelection": "चयन हाइलाइट करें",

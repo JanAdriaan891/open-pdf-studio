@@ -951,5 +951,19 @@
     "underlayLimited": "Resolusi dikurangkan kepada {{dpi}} dpi",
     "underlayNoMeasure": "Tidak terpakai untuk lapisan dasar; skala ukuran datang daripada halaman",
     "queued": "{{n}} lagi lukisan dalam giliran"
+  },
+  "pageLabels": {
+    "title": "Label halaman",
+    "intro": "Taip nama halaman dalam medan. \"{{select}}\" mengambil teks daripada halaman: teks dimasukkan sebagai {OCR1}, {OCR2}… dan dibaca dari tempat yang sama pada setiap halaman. Contoh: {OCR1} - {OCR2}",
+    "name": "Nama halaman:",
+    "pickHint": "Seret kotak di sekeliling teks yang hendak digunakan, contohnya nombor lukisan. Esc untuk batal.",
+    "noText": "(tiada teks ditemui)",
+    "example": "Contoh:",
+    "useOcr": "Gunakan OCR jika kotak tiada teks (helaian diimbas, lebih perlahan)",
+    "read": "Baca semua halaman",
+    "reading": "Membaca halaman {{done}} daripada {{total}}...",
+    "colLabel": "Label halaman",
+    "ocrLegend": "Halaman bertanda OCR dibaca dengan pengecaman teks; semak sebelum menggunakan.",
+    "reset": "Set semula kepada nombor halaman"
   }
 }

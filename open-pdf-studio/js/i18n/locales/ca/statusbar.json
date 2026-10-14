@@ -28,7 +28,8 @@
     "formTextField": "Camp de text de formulari",
     "formCheckbox": "Casella de verificació de formulari",
     "formRadio": "Botó d'opció de formulari",
-    "screenshot": "Captura de pantalla"
+    "screenshot": "Captura de pantalla",
+    "pageLabelPick": "Tria text per a l'etiqueta de pàgina"
   },
   "toolLabel": "Eina:",
   "annotationsLabel": "Anotacions:",

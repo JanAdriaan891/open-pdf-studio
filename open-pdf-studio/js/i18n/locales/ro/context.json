@@ -116,7 +116,8 @@
     "deselectAll": "Deselectare totală",
     "insertFromFile": "Inserare din fișier...",
     "insertFromFileBefore": "Înainte de această pagină...",
-    "insertFromFileAfter": "După această pagină..."
+    "insertFromFileAfter": "După această pagină...",
+    "pageLabels": "Etichete de pagină (generator de nume)..."
   },
   "textSelection": {
     "highlightSelection": "Evidentiare selectie",

@@ -116,7 +116,8 @@
     "deselectAll": "إلغاء تحديد الكل",
     "insertFromFile": "إدراج من ملف...",
     "insertFromFileBefore": "قبل هذه الصفحة...",
-    "insertFromFileAfter": "بعد هذه الصفحة..."
+    "insertFromFileAfter": "بعد هذه الصفحة...",
+    "pageLabels": "تسميات الصفحات (منشئ الأسماء)..."
   },
   "textSelection": {
     "highlightSelection": "تمييز التحديد",

@@ -116,7 +116,8 @@
     "deselectAll": "ยกเลิกการเลือกทั้งหมด",
     "insertFromFile": "แทรกจากไฟล์...",
     "insertFromFileBefore": "ก่อนหน้านี้...",
-    "insertFromFileAfter": "หลังหน้านี้..."
+    "insertFromFileAfter": "หลังหน้านี้...",
+    "pageLabels": "ป้ายชื่อหน้า (ตัวสร้างชื่อ)..."
   },
   "textSelection": {
     "highlightSelection": "เน้นข้อความที่เลือก",

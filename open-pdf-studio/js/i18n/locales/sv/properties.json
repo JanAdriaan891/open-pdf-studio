@@ -348,7 +348,8 @@
     "exportComments": "Exportera kommentarer till datafil...",
     "exportSelectedComments": "Exportera valda kommentarer till datafil...",
     "schedules": "Förteckningar",
-    "addPage": "Lägg till sida"
+    "addPage": "Lägg till sida",
+    "pageLabels": "Sidetiketter (namnbyggare)"
   },
   "scaleBar": {
     "title": "Skalstock",

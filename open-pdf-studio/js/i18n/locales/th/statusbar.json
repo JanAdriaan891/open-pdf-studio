@@ -28,7 +28,8 @@
     "formTextField": "ฟิลด์ข้อความแบบฟอร์ม",
     "formCheckbox": "ช่องทำเครื่องหมายแบบฟอร์ม",
     "formRadio": "ปุ่มตัวเลือกแบบฟอร์ม",
-    "screenshot": "จับภาพหน้าจอ"
+    "screenshot": "จับภาพหน้าจอ",
+    "pageLabelPick": "เลือกข้อความสำหรับป้ายชื่อหน้า"
   },
   "toolLabel": "เครื่องมือ:",
   "annotationsLabel": "คำอธิบายประกอบ:",

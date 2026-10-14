@@ -951,5 +951,19 @@
     "underlayLimited": "Résolution réduite à {{dpi}} ppp",
     "underlayNoMeasure": "Sans effet pour un fond de plan ; l'échelle de mesure vient de la page",
     "queued": "{{n}} dessin(s) de plus en attente"
+  },
+  "pageLabels": {
+    "title": "Étiquettes de page",
+    "intro": "Saisissez le nom de la page dans le champ. « {{select}} » prend du texte sur la page : il est inséré sous la forme {OCR1}, {OCR2}… et lu au même endroit sur chaque page. Exemple : {OCR1} - {OCR2}",
+    "name": "Nom de la page :",
+    "pickHint": "Tracez un cadre autour du texte à utiliser, par exemple le numéro de plan. Échap pour annuler.",
+    "noText": "(aucun texte trouvé)",
+    "example": "Exemple :",
+    "useOcr": "Utiliser l'OCR lorsqu'un cadre ne contient pas de texte (feuilles numérisées, plus lent)",
+    "read": "Lire toutes les pages",
+    "reading": "Lecture de la page {{done}} sur {{total}}...",
+    "colLabel": "Étiquette de page",
+    "ocrLegend": "Les pages marquées OCR ont été lues par reconnaissance de texte ; vérifiez-les avant d'appliquer.",
+    "reset": "Rétablir les numéros de page"
   }
 }

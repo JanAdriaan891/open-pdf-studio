@@ -348,7 +348,8 @@
     "exportComments": "Megjegyzések exportálása adatfájlba...",
     "exportSelectedComments": "Kijelölt megjegyzések exportálása adatfájlba...",
     "schedules": "Kimutatások",
-    "addPage": "Oldal hozzáadása"
+    "addPage": "Oldal hozzáadása",
+    "pageLabels": "Oldalcímkék (névkészítő)"
   },
   "scaleBar": {
     "title": "Aránymérték",

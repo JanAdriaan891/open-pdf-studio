@@ -951,5 +951,19 @@
     "underlayLimited": "Rezoluție redusă la {{dpi}} dpi",
     "underlayNoMeasure": "Nu se aplică unui fundal; scara de măsurare vine de la pagină",
     "queued": "Încă {{n}} desen(e) în coadă"
+  },
+  "pageLabels": {
+    "title": "Etichete de pagină",
+    "intro": "Introduceți numele paginii în câmp. „{{select}}” preia text de pe pagină: este inserat ca {OCR1}, {OCR2}… și citit din același loc pe fiecare pagină. Exemplu: {OCR1} - {OCR2}",
+    "name": "Numele paginii:",
+    "pickHint": "Trageți un chenar în jurul textului de folosit, de exemplu numărul planșei. Esc anulează.",
+    "noText": "(nu s-a găsit text)",
+    "example": "Exemplu:",
+    "useOcr": "Folosește OCR unde chenarul nu are text (planșe scanate, mai lent)",
+    "read": "Citește toate paginile",
+    "reading": "Se citește pagina {{done}} din {{total}}...",
+    "colLabel": "Eticheta paginii",
+    "ocrLegend": "Paginile marcate OCR au fost citite prin recunoașterea textului; verificați-le înainte de aplicare.",
+    "reset": "Revenire la numerele paginilor"
   }
 }

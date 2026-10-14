@@ -951,5 +951,19 @@
     "underlayLimited": "Resolutie verlaagd naar {{dpi}} dpi",
     "underlayNoMeasure": "Niet van toepassing op een onderlegger; de meetschaal komt van de pagina",
     "queued": "Nog {{n}} tekening(en) in de wachtrij"
+  },
+  "pageLabels": {
+    "title": "Paginalabels",
+    "intro": "Typ de paginanaam in het veld. „{{select}}” neemt tekst van de pagina over: die komt erin als {OCR1}, {OCR2}… en wordt op elke pagina op dezelfde plek gelezen. Voorbeeld: {OCR1} - {OCR2}",
+    "name": "Paginanaam:",
+    "pickHint": "Sleep een vak om de tekst die u wilt gebruiken, bijvoorbeeld het tekeningnummer. Esc breekt af.",
+    "noText": "(geen tekst gevonden)",
+    "example": "Voorbeeld:",
+    "useOcr": "OCR gebruiken waar een vak geen tekst heeft (gescande bladen, langzamer)",
+    "read": "Alle pagina's lezen",
+    "reading": "Pagina {{done}} van {{total}} lezen...",
+    "colLabel": "Paginalabel",
+    "ocrLegend": "Pagina's met OCR zijn met tekstherkenning gelezen; controleer ze voordat u toepast.",
+    "reset": "Terug naar paginanummers"
   }
 }

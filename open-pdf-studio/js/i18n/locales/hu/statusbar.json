@@ -28,7 +28,8 @@
     "formTextField": "Űrlap szövegmező",
     "formCheckbox": "Űrlap jelölőnégyzet",
     "formRadio": "Űrlap rádiógomb",
-    "screenshot": "Képernyőkép"
+    "screenshot": "Képernyőkép",
+    "pageLabelPick": "Szöveg kiválasztása oldalcímkéhez"
   },
   "toolLabel": "Eszköz:",
   "annotationsLabel": "Annotációk:",

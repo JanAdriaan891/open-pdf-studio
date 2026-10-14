@@ -28,7 +28,8 @@
     "formTextField": "양식 텍스트 필드",
     "formCheckbox": "양식 확인란",
     "formRadio": "양식 라디오 버튼",
-    "screenshot": "스크린샷"
+    "screenshot": "스크린샷",
+    "pageLabelPick": "페이지 레이블용 텍스트 선택"
   },
   "toolLabel": "도구:",
   "annotationsLabel": "주석:",

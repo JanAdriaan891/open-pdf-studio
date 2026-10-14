@@ -19,6 +19,7 @@ import { measureAngleTool } from './angle-tool.js';
 import { commentTool, textTool, stampTool, signatureTool, editTextTool } from './text-tool.js';
 import { calibrationPickTool } from './calibration-pick-tool.js';
 import { scaleMeasureTool } from './scale-measure-tool.js';
+import { labelGebiedTool, LABEL_GEBIED_TOOL } from './label-gebied-tool.js';
 import { pluginClickTool } from './plugin-tool.js';
 import { viewportTool } from './viewport-tool.js';
 import { scaleRegionTool } from './scale-region-tool.js';
@@ -114,6 +115,9 @@ export function registerAllTools() {
 
   // Temporary 2-click distance pick for scale regions ("Meet op tekening")
   registerTool('scaleMeasure', scaleMeasureTool);
+
+  // Vak slepen voor de naambouwer van de paginalabels (#580)
+  registerTool(LABEL_GEBIED_TOOL, labelGebiedTool);
 
   // Scale bar
   registerTool('scaleBar', scaleBarTool);

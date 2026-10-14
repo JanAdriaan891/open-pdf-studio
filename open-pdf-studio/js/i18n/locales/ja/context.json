@@ -116,7 +116,8 @@
     "deselectAll": "すべて選択解除",
     "insertFromFile": "ファイルから挿入...",
     "insertFromFileBefore": "このページの前に...",
-    "insertFromFileAfter": "このページの後に..."
+    "insertFromFileAfter": "このページの後に...",
+    "pageLabels": "ページラベル (名前ビルダー)..."
   },
   "textSelection": {
     "highlightSelection": "選択範囲をハイライト",

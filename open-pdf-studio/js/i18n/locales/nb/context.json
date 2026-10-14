@@ -116,7 +116,8 @@
     "deselectAll": "Fjern alle valg",
     "insertFromFile": "Sett inn fra fil...",
     "insertFromFileBefore": "Før denne siden...",
-    "insertFromFileAfter": "Etter denne siden..."
+    "insertFromFileAfter": "Etter denne siden...",
+    "pageLabels": "Sideetiketter (navnebygger)..."
   },
   "textSelection": {
     "highlightSelection": "Uthev utvalg",

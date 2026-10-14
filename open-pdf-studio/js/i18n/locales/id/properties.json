@@ -348,7 +348,8 @@
     "exportComments": "Ekspor komentar ke file data...",
     "exportSelectedComments": "Ekspor komentar terpilih ke file data...",
     "schedules": "Daftar",
-    "addPage": "Tambah halaman"
+    "addPage": "Tambah halaman",
+    "pageLabels": "Label halaman (pembuat nama)"
   },
   "scaleBar": {
     "title": "Batang Skala",

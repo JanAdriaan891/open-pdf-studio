@@ -348,7 +348,8 @@
     "exportComments": "Kommentare in Datendatei exportieren...",
     "exportSelectedComments": "Ausgewählte Kommentare in Datendatei exportieren...",
     "schedules": "Listen",
-    "addPage": "Seite hinzufügen"
+    "addPage": "Seite hinzufügen",
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",

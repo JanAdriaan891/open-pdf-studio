@@ -348,7 +348,8 @@
     "exportComments": "Izvezi komentare u podatkovnu datoteku...",
     "exportSelectedComments": "Izvezi odabrane komentare u podatkovnu datoteku...",
     "schedules": "Iskazi",
-    "addPage": "Dodaj stranicu"
+    "addPage": "Dodaj stranicu",
+    "pageLabels": "Oznake stranica (izrada naziva)"
   },
   "scaleBar": {
     "title": "Grafičko mjerilo",

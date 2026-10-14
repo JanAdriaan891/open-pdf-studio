@@ -116,7 +116,8 @@
     "deselectAll": "Zrušit výběr všeho",
     "insertFromFile": "Vložit ze souboru...",
     "insertFromFileBefore": "Před tuto stránku...",
-    "insertFromFileAfter": "Za tuto stránku..."
+    "insertFromFileAfter": "Za tuto stránku...",
+    "pageLabels": "Popisky stránek (tvorba názvů)..."
   },
   "textSelection": {
     "highlightSelection": "Zvýraznit výběr",

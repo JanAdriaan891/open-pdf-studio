@@ -348,7 +348,8 @@
     "exportComments": "Hamisha maoni kwenye faili ya data...",
     "exportSelectedComments": "Hamisha maoni yaliyochaguliwa kwenye faili ya data...",
     "schedules": "Majedwali ya orodha",
-    "addPage": "Ongeza ukurasa"
+    "addPage": "Ongeza ukurasa",
+    "pageLabels": "Lebo za kurasa (kiunda majina)"
   },
   "scaleBar": {
     "title": "Upau wa Kipimo",

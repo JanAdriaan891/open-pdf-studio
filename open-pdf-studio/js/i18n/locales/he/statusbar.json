@@ -28,7 +28,8 @@
     "formTextField": "שדה טקסט בטופס",
     "formCheckbox": "תיבת סימון בטופס",
     "formRadio": "לחצן בחירה בטופס",
-    "screenshot": "צילום מסך"
+    "screenshot": "צילום מסך",
+    "pageLabelPick": "בחירת טקסט לתווית עמוד"
   },
   "toolLabel": "כלי:",
   "annotationsLabel": "הערות:",
