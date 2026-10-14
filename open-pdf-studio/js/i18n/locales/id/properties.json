@@ -302,6 +302,8 @@
     "addChildBookmark": "Tambah penanda anak",
     "editBookmark": "Edit penanda",
     "deleteBookmark": "Hapus penanda",
+    "findBookmark": "Cari...",
+    "findBookmarkTip": "Ketik untuk melompat ke penanda. Enter membukanya, Enter lagi menuju kecocokan berikutnya.",
     "addAttachment": "Tambah lampiran",
     "openAttachment": "Buka lampiran",
     "saveAttachment": "Simpan lampiran",

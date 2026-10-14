@@ -281,6 +281,8 @@
     "addChildBookmark": "Subbladwijzer toevoegen",
     "editBookmark": "Bladwijzer bewerken",
     "deleteBookmark": "Bladwijzer verwijderen",
+    "findBookmark": "Zoeken...",
+    "findBookmarkTip": "Typ om naar een bladwijzer te springen. Enter opent hem, nog eens Enter gaat naar de volgende treffer.",
     "addAttachment": "Bijlage toevoegen",
     "openAttachment": "Bijlage openen",
     "saveAttachment": "Bijlage opslaan",

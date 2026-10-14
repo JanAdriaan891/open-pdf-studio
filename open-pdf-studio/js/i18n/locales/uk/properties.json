@@ -302,6 +302,8 @@
     "addChildBookmark": "Додати дочірню закладку",
     "editBookmark": "Редагувати закладку",
     "deleteBookmark": "Видалити закладку",
+    "findBookmark": "Знайти...",
+    "findBookmarkTip": "Почніть вводити, щоб перейти до закладки. Enter відкриває її, повторний Enter — наступний збіг.",
     "addAttachment": "Додати вкладення",
     "openAttachment": "Відкрити вкладення",
     "saveAttachment": "Зберегти вкладення",

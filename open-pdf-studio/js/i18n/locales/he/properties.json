@@ -302,6 +302,8 @@
     "addChildBookmark": "הוספת סימנייה בת",
     "editBookmark": "עריכת סימנייה",
     "deleteBookmark": "מחיקת סימנייה",
+    "findBookmark": "חיפוש...",
+    "findBookmarkTip": "הקלידו כדי לקפוץ לסימנייה. Enter פותח אותה, Enter נוסף עובר להתאמה הבאה.",
     "addAttachment": "הוספת קובץ מצורף",
     "openAttachment": "פתיחת קובץ מצורף",
     "saveAttachment": "שמירת קובץ מצורף",

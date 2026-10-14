@@ -314,3 +314,5 @@ js/plugins/extensies-mcp-aansluiting.test.mjs
 js/plugins/opslag-wissel-slot.test.mjs
 js/plugins/plugin-api-opruimen.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
+# Bladwijzerpaneel: huidige bladwijzer en zoekveld (#578)
+js/ui/panels/bladwijzer-zoeken.test.mjs

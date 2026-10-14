@@ -302,6 +302,8 @@
     "addChildBookmark": "চাইল্ড বুকমার্ক যোগ করুন",
     "editBookmark": "বুকমার্ক সম্পাদনা করুন",
     "deleteBookmark": "বুকমার্ক মুছুন",
+    "findBookmark": "খুঁজুন...",
+    "findBookmarkTip": "কোনো বুকমার্কে যেতে টাইপ করুন। Enter সেটি খোলে, আবার Enter পরের মিলে যায়।",
     "addAttachment": "সংযুক্তি যোগ করুন",
     "openAttachment": "সংযুক্তি খুলুন",
     "saveAttachment": "সংযুক্তি সংরক্ষণ করুন",

@@ -302,6 +302,8 @@
     "addChildBookmark": "Gyermek könyvjelző hozzáadása",
     "editBookmark": "Könyvjelző szerkesztése",
     "deleteBookmark": "Könyvjelző törlése",
+    "findBookmark": "Keresés...",
+    "findBookmarkTip": "Gépeljen egy könyvjelzőre ugráshoz. Az Enter megnyitja, újabb Enter a következő találatra lép.",
     "addAttachment": "Melléklet hozzáadása",
     "openAttachment": "Melléklet megnyitása",
     "saveAttachment": "Melléklet mentése",

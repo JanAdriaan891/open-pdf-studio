@@ -302,6 +302,8 @@
     "addChildBookmark": "Lägg till underbokmärke",
     "editBookmark": "Redigera bokmärke",
     "deleteBookmark": "Radera bokmärke",
+    "findBookmark": "Sök...",
+    "findBookmarkTip": "Skriv för att hoppa till ett bokmärke. Enter öppnar det, Enter igen går till nästa träff.",
     "addAttachment": "Lägg till bilaga",
     "openAttachment": "Öppna bilaga",
     "saveAttachment": "Spara bilaga",

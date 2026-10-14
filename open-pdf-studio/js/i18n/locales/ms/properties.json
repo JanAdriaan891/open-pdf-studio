@@ -302,6 +302,8 @@
     "addChildBookmark": "Tambah penanda buku anak",
     "editBookmark": "Sunting penanda buku",
     "deleteBookmark": "Padam penanda buku",
+    "findBookmark": "Cari...",
+    "findBookmarkTip": "Taip untuk melompat ke penanda buku. Enter membukanya, Enter sekali lagi pergi ke padanan seterusnya.",
     "addAttachment": "Tambah lampiran",
     "openAttachment": "Buka lampiran",
     "saveAttachment": "Simpan lampiran",

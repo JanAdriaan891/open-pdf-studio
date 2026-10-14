@@ -334,6 +334,8 @@
     "addChildBookmark": "Add child bookmark",
     "editBookmark": "Edit bookmark",
     "deleteBookmark": "Delete bookmark",
+    "findBookmark": "Find...",
+    "findBookmarkTip": "Type to jump to a bookmark. Enter opens it, Enter again goes to the next match.",
     "addAttachment": "Add attachment",
     "openAttachment": "Open attachment",
     "saveAttachment": "Save attachment",

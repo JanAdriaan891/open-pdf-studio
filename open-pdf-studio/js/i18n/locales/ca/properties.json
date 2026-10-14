@@ -302,6 +302,8 @@
     "addChildBookmark": "Afegeix un marcador fill",
     "editBookmark": "Edita el marcador",
     "deleteBookmark": "Suprimeix el marcador",
+    "findBookmark": "Cerca...",
+    "findBookmarkTip": "Escriviu per anar a un marcador. Retorn l'obre; Retorn de nou va a la coincidència següent.",
     "addAttachment": "Afegeix un adjunt",
     "openAttachment": "Obre l'adjunt",
     "saveAttachment": "Desa l'adjunt",

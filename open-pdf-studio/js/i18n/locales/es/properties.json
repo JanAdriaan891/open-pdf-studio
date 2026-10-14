@@ -302,6 +302,8 @@
     "addChildBookmark": "Agregar marcador secundario",
     "editBookmark": "Editar marcador",
     "deleteBookmark": "Eliminar marcador",
+    "findBookmark": "Buscar...",
+    "findBookmarkTip": "Escriba para saltar a un marcador. Intro lo abre; Intro de nuevo pasa a la siguiente coincidencia.",
     "addAttachment": "Agregar adjunto",
     "openAttachment": "Abrir adjunto",
     "saveAttachment": "Guardar adjunto",

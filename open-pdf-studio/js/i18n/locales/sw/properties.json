@@ -302,6 +302,8 @@
     "addChildBookmark": "Ongeza alamisho dogo",
     "editBookmark": "Hariri alamisho",
     "deleteBookmark": "Futa alamisho",
+    "findBookmark": "Tafuta...",
+    "findBookmarkTip": "Andika ili kuruka hadi alamisho. Enter inaifungua, Enter tena inaenda kwenye inayolingana inayofuata.",
     "addAttachment": "Ongeza kiambatisho",
     "openAttachment": "Fungua kiambatisho",
     "saveAttachment": "Hifadhi kiambatisho",
