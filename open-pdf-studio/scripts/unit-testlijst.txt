@@ -345,3 +345,4 @@ js/pdf/page-transition.test.mjs
 js/mobile/mobiele-gereedschappen.test.mjs
 js/core/oude-webview.test.mjs
 scripts/oude-webview.test.mjs
+scripts/android-config.test.mjs
