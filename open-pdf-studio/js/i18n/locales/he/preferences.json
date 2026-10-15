@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "צבע הערה ברירת מחדל",
     "defaultLineWidth": "עובי קו ברירת מחדל",
     "defaultFontSize": "גודל גופן ברירת מחדל",
+    "paperSizeUnit": "יחידת מידה לגדלים (תמונה, סרגל קנה מידה)",
     "highlightOpacity": "אטימות הדגשה (%)",
     "angleSnap": "הצמדת זווית (מקש Shift)",
     "objectSnapping": "הצמדת אובייקטים",

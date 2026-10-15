@@ -247,6 +247,9 @@
     "linkImageTitle": "ลิงก์รูปภาพ",
     "imageFilter": "รูปภาพ"
   },
+  "sizeUnit": {
+    "tooltip": "หน่วยของขนาด"
+  },
   "multiSelect": "เลือก {{count}} คำอธิบายประกอบ",
   "pdfText": "ข้อความ PDF",
   "types": {

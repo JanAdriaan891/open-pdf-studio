@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Zadana boja oznaka",
     "defaultLineWidth": "Zadana širina linije",
     "defaultFontSize": "Zadana veličina fonta",
+    "paperSizeUnit": "Jedinica za dimenzije (slika, grafičko mjerilo)",
     "highlightOpacity": "Prozirnost isticanja (%)",
     "angleSnap": "Kutno privlačenje (tipka Shift)",
     "objectSnapping": "Privlačenje objekata",

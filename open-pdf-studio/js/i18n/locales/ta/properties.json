@@ -247,6 +247,9 @@
     "linkImageTitle": "படத்தை இணை",
     "imageFilter": "படங்கள்"
   },
+  "sizeUnit": {
+    "tooltip": "அளவுகளின் அலகு"
+  },
   "multiSelect": "{{count}} குறிப்புரைகள் தேர்ந்தெடுக்கப்பட்டன",
   "pdfText": "PDF உரை",
   "types": {

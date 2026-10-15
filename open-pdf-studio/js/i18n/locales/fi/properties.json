@@ -247,6 +247,9 @@
     "linkImageTitle": "Linkitä kuva",
     "imageFilter": "Kuvat"
   },
+  "sizeUnit": {
+    "tooltip": "Mittojen yksikkö"
+  },
   "multiSelect": "{{count}} merkintää valittu",
   "pdfText": "PDF-teksti",
   "types": {

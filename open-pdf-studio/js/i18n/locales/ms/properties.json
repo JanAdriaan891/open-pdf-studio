@@ -247,6 +247,9 @@
     "linkImageTitle": "Pautkan imej",
     "imageFilter": "Imej"
   },
+  "sizeUnit": {
+    "tooltip": "Unit saiz"
+  },
   "multiSelect": "{{count}} anotasi dipilih",
   "pdfText": "Teks PDF",
   "types": {

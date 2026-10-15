@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Rangi Chaguo-msingi ya Maoni",
     "defaultLineWidth": "Upana Chaguo-msingi wa Mstari",
     "defaultFontSize": "Ukubwa Chaguo-msingi wa Herufi",
+    "paperSizeUnit": "Kipimo cha Ukubwa (Picha, Upau wa Kipimo)",
     "highlightOpacity": "Uwazi wa Kuangaza (%)",
     "angleSnap": "Kupachika Pembe (Kitufe cha Shift)",
     "objectSnapping": "Kupachika Vitu",

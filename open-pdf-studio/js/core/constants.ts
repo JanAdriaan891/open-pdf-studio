@@ -301,6 +301,10 @@ export const DEFAULT_PREFERENCES: Preferences = {
   zoomDpi: 110,
   // Page text sharpening 0-4 (0 = as rendered).
   pageSharpen: 2,
+  // Unit for paper sizes in the properties panel (image width/height, scale
+  // bar height): 'mm' | 'cm' | 'in' | 'pt' (#598). Display only — the model
+  // stays in page points.
+  paperSizeUnit: 'pt',
 
   // Panels
   propertiesPanelVisible: true,

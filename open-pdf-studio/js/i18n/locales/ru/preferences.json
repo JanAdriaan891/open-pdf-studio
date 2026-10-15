@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Цвет аннотации по умолчанию",
     "defaultLineWidth": "Толщина линии по умолчанию",
     "defaultFontSize": "Размер шрифта по умолчанию",
+    "paperSizeUnit": "Единица размеров (изображение, масштабная линейка)",
     "highlightOpacity": "Непрозрачность выделения (%)",
     "angleSnap": "Привязка угла (клавиша Shift)",
     "objectSnapping": "Привязка к объектам",

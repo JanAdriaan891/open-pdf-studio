@@ -247,6 +247,9 @@
     "linkImageTitle": "ছবি লিঙ্ক করুন",
     "imageFilter": "ছবি"
   },
+  "sizeUnit": {
+    "tooltip": "মাপের একক"
+  },
   "multiSelect": "{{count}} টীকা নির্বাচিত",
   "pdfText": "PDF পাঠ্য",
   "types": {

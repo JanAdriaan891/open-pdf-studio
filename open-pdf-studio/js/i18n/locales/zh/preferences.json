@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "默认批注颜色",
     "defaultLineWidth": "默认线宽",
     "defaultFontSize": "默认字体大小",
+    "paperSizeUnit": "尺寸单位（图像、比例尺）",
     "highlightOpacity": "高亮不透明度 (%)",
     "angleSnap": "角度捕捉（Shift 键）",
     "objectSnapping": "对象捕捉",

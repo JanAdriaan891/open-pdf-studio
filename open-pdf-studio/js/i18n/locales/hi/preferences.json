@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "डिफ़ॉल्ट एनोटेशन रंग",
     "defaultLineWidth": "डिफ़ॉल्ट रेखा चौड़ाई",
     "defaultFontSize": "डिफ़ॉल्ट फ़ॉन्ट आकार",
+    "paperSizeUnit": "आकार की इकाई (छवि, स्केल बार)",
     "highlightOpacity": "हाइलाइट अपारदर्शिता (%)",
     "angleSnap": "कोण स्नैप (Shift कुंजी)",
     "objectSnapping": "ऑब्जेक्ट स्नैपिंग",

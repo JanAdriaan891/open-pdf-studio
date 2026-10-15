@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Oletusmerkintäväri",
     "defaultLineWidth": "Oletusviivan leveys",
     "defaultFontSize": "Oletuskirjasinkoko",
+    "paperSizeUnit": "Mittojen yksikkö (kuva, mittakaavajana)",
     "highlightOpacity": "Korostuksen peittävyys (%)",
     "angleSnap": "Kulman lukitus (Shift-näppäin)",
     "objectSnapping": "Kohteen kiinnitys",

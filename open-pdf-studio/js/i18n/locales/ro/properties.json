@@ -247,6 +247,9 @@
     "linkImageTitle": "Legare imagine",
     "imageFilter": "Imagini"
   },
+  "sizeUnit": {
+    "tooltip": "Unitate pentru dimensiuni"
+  },
   "multiSelect": "{{count}} adnotari selectate",
   "pdfText": "Text PDF",
   "types": {

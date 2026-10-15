@@ -227,6 +227,9 @@
     "linkImageTitle": "Afbeelding koppelen",
     "imageFilter": "Afbeeldingen"
   },
+  "sizeUnit": {
+    "tooltip": "Eenheid voor maten"
+  },
   "multiSelect": "{{count}} annotaties geselecteerd",
   "pdfText": "PDF-tekst",
   "types": {

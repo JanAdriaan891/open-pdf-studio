@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Standard annotationsfarve",
     "defaultLineWidth": "Standard linjebredde",
     "defaultFontSize": "Standard skriftstørrelse",
+    "paperSizeUnit": "Enhed for mål (billede, skalabjælke)",
     "highlightOpacity": "Fremhævningsgennemsigtighed (%)",
     "angleSnap": "Vinkelsnap (Shift-tast)",
     "objectSnapping": "Objektsnapping",

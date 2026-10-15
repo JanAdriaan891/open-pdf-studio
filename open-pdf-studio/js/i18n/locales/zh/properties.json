@@ -247,6 +247,9 @@
     "linkImageTitle": "链接图像",
     "imageFilter": "图像"
   },
+  "sizeUnit": {
+    "tooltip": "尺寸单位"
+  },
   "multiSelect": "已选择 {{count}} 个批注",
   "pdfText": "PDF 文本",
   "types": {

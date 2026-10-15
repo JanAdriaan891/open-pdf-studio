@@ -247,6 +247,9 @@
     "linkImageTitle": "Propojit obrázek",
     "imageFilter": "Obrázky"
   },
+  "sizeUnit": {
+    "tooltip": "Jednotka rozměrů"
+  },
   "multiSelect": "{{count}} anotací vybráno",
   "pdfText": "PDF text",
   "types": {

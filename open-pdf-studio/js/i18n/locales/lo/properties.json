@@ -279,6 +279,9 @@
     "linkImageTitle": "ເຊື່ອມໂຍງຮູບພາບ",
     "imageFilter": "ຮູບພາບ"
   },
+  "sizeUnit": {
+    "tooltip": "ຫົວໜ່ວຍຂະໜາດ"
+  },
   "multiSelect": "{{count}} ລາຍການຄຳອະທິບາຍຖືກເລືອກແລ້ວ",
   "pdfText": "ຂໍ້ຄວາມ PDF",
   "types": {

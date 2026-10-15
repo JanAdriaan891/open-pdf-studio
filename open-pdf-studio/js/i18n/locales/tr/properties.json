@@ -247,6 +247,9 @@
     "linkImageTitle": "Görüntü bağla",
     "imageFilter": "Görüntüler"
   },
+  "sizeUnit": {
+    "tooltip": "Boyut birimi"
+  },
   "multiSelect": "{{count}} açıklama seçildi",
   "pdfText": "PDF Metni",
   "types": {

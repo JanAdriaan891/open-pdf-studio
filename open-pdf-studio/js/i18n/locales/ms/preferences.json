@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Warna Anotasi Lalai",
     "defaultLineWidth": "Lebar Garisan Lalai",
     "defaultFontSize": "Saiz Fon Lalai",
+    "paperSizeUnit": "Unit Saiz (Imej, Bar Skala)",
     "highlightOpacity": "Kelegapan Sorotan (%)",
     "angleSnap": "Perakaman Sudut (kekunci Shift)",
     "objectSnapping": "Perakaman Objek",

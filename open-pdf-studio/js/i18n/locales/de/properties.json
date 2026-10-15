@@ -247,6 +247,9 @@
     "linkImageTitle": "Bild verknüpfen",
     "imageFilter": "Bilder"
   },
+  "sizeUnit": {
+    "tooltip": "Einheit für Abmessungen"
+  },
   "multiSelect": "{{count}} Anmerkungen ausgewählt",
   "pdfText": "PDF-Text",
   "types": {

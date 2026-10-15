@@ -247,6 +247,9 @@
     "linkImageTitle": "Liên kết hình ảnh",
     "imageFilter": "Hình ảnh"
   },
+  "sizeUnit": {
+    "tooltip": "Đơn vị kích thước"
+  },
   "multiSelect": "Đã chọn {{count}} chú thích",
   "pdfText": "Văn bản PDF",
   "types": {

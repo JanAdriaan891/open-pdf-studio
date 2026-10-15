@@ -247,6 +247,9 @@
     "linkImageTitle": "Collega immagine",
     "imageFilter": "Immagini"
   },
+  "sizeUnit": {
+    "tooltip": "Unità delle dimensioni"
+  },
   "multiSelect": "{{count}} annotazioni selezionate",
   "pdfText": "Testo PDF",
   "types": {

@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "இயல்புநிலை குறிப்புரை நிறம்",
     "defaultLineWidth": "இயல்புநிலை கோட்டு அகலம்",
     "defaultFontSize": "இயல்புநிலை எழுத்துரு அளவு",
+    "paperSizeUnit": "அளவுகளின் அலகு (படம், அளவுகோல் பட்டை)",
     "highlightOpacity": "முன்னிலைப்படுத்தல் ஒளிபுகாமை (%)",
     "angleSnap": "கோண பொருத்தம் (Shift விசை)",
     "objectSnapping": "பொருள் பொருத்தம்",
