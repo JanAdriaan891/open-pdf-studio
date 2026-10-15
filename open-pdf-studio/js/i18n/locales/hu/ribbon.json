@@ -266,6 +266,8 @@
     "swap": "Régi és új felcserélése",
     "overlayDesc": "Mindkét PDF egymásra helyezve",
     "sideDesc": "Két PDF egymás mellett, szinkronizálva",
+    "split": "Elválasztó vonal",
+    "splitDesc": "Húzzon egy vonalat a régi és az új megjelenítéséhez",
     "legendOld": "Csak a régiben",
     "legendNew": "Csak az újban",
     "legendBoth": "Változatlan",

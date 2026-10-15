@@ -266,6 +266,8 @@
     "swap": "Tukar lama dan baru",
     "overlayDesc": "Kedua PDF ditumpuk satu di atas yang lain",
     "sideDesc": "Dua PDF berdampingan, tersinkronisasi",
+    "split": "Garis pemisah",
+    "splitDesc": "Seret garis untuk menampilkan versi lama dan baru",
     "legendOld": "Hanya di versi lama",
     "legendNew": "Hanya di versi baru",
     "legendBoth": "Tidak berubah",

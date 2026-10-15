@@ -266,6 +266,8 @@
     "swap": "Prohodit starý a nový",
     "overlayDesc": "Obě PDF přes sebe",
     "sideDesc": "Dvě PDF vedle sebe, synchronizovaně",
+    "split": "Dělicí čára",
+    "splitDesc": "Přetažením čáry zobrazíte staré a nové",
     "legendOld": "Pouze ve starém",
     "legendNew": "Pouze v novém",
     "legendBoth": "Beze změny",
