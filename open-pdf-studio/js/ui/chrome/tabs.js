@@ -8,6 +8,7 @@ import { generateThumbnails, clearThumbnails, clearThumbnailCache, refreshActive
 import { cancelAnnotationLoading, hidePdfABar } from '../../pdf/loader.js';
 import { savePDF } from '../../pdf/saver.js';
 import { unlockFile, lockFile, renameFile, fileExists } from '../../core/platform.js';
+import { bestandsnaamUitPad } from '../../core/bestandsnaam.js';
 import { cancelPendingZoom } from '../setup/navigation-events.js';
 import { closeAllPopups } from '../../bridge.js';
 import { persistReaderPosition, restoreReaderPosition } from '../../pdf/reader-mode-view.js';
@@ -535,7 +536,7 @@ export async function renameDocument(index, newName) {
     const doc = getActiveDocument();
     if (doc) {
       doc.filePath = newPath;
-      doc.fileName = newPath ? newPath.split(/[\\/]/).pop() : 'Untitled';
+      doc.fileName = (newPath && bestandsnaamUitPad(newPath)) || 'Untitled';
     }
     updateWindowTitle();
     return true;

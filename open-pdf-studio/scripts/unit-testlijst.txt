@@ -346,3 +346,6 @@ js/mobile/mobiele-gereedschappen.test.mjs
 js/core/oude-webview.test.mjs
 scripts/oude-webview.test.mjs
 scripts/android-config.test.mjs
+js/core/fout-bericht.test.mjs
+js/core/bestandsnaam.test.mjs
+js/mobile/ipc-wekker.test.mjs

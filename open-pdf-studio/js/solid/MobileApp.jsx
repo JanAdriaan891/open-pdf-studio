@@ -20,6 +20,8 @@ import { openDialog } from './stores/dialogStore.js';
 import { setTool } from '../tools/manager.js';
 import { savePDF, savePDFAs } from '../pdf/saver.js';
 import { MOBIELE_GEREEDSCHAPPEN } from '../mobile/mobiele-gereedschappen.js';
+import { foutBericht } from '../core/fout-bericht.js';
+import { startIpcWekker } from '../mobile/ipc-wekker.js';
 
 export default function MobileApp() {
   const { t } = useTranslation('common');
@@ -74,7 +76,14 @@ export default function MobileApp() {
     };
     document.addEventListener('selectionchange', selectionHandler);
 
+    // Terug uit de bestandskiezer: een wachtend antwoord van de plug-in
+    // doorhalen (#596, zie ipc-wekker.js).
+    const stopWekker = isTauri()
+      ? startIpcWekker({ ping: () => window.__TAURI__?.core?.invoke('plugin:app|version').catch(() => {}) })
+      : () => {};
+
     onCleanup(() => {
+      stopWekker();
       document.removeEventListener('selectionchange', selectionHandler);
       if (barsTimer) clearTimeout(barsTimer);
     });
@@ -132,7 +141,7 @@ export default function MobileApp() {
       addRecentFile(file.name, file.name);
       setRecentFiles(getRecentFiles());
     } catch (err) {
-      alert('Failed to load PDF: ' + (err.message || err));
+      alert('Failed to load PDF: ' + foutBericht(err));
       console.warn('Failed to load PDF:', err);
     }
     e.target.value = '';
