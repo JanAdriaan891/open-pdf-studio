@@ -1,4 +1,5 @@
 import { leesOpslag, verwijderOpslag } from './opslag.js';
+import { bestandsnaamUitPad } from './bestandsnaam.js';
 import { gastObject } from './gehost.js';
 import { rustRenderPadBeschikbaar } from '../pdf/render-route.js';
 
@@ -120,16 +121,9 @@ export async function hostVersies(id) {
 // Extract a display-friendly file name from a path or content:// URI
 export function extractFileName(pathOrUri) {
   if (!pathOrUri) return 'Document';
-  // content:// URIs: try to decode and extract last segment
-  if (pathOrUri.startsWith('content://')) {
-    const decoded = decodeURIComponent(pathOrUri);
-    // Try common patterns: .../document/primary:Download/file.pdf or raw:/storage/.../file.pdf
-    const match = decoded.match(/[/:]([^/:]+\.pdf)$/i);
-    if (match) return match[1];
-    // Fallback: last path segment
-    const segments = decoded.split(/[/:]+/).filter(Boolean);
-    return segments[segments.length - 1] || 'Document';
-  }
+  // content:// URIs (Android): de weergavenaam van de ContentResolver, of
+  // een leesbare naam uit de URI zelf (#596).
+  if (pathOrUri.startsWith('content://')) return bestandsnaamUitPad(pathOrUri);
   // Regular filesystem path
   const parts = pathOrUri.replace(/\\/g, '/').split('/');
   return parts[parts.length - 1] || 'Document';

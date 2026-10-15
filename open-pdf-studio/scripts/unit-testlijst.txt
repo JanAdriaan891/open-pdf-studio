@@ -296,6 +296,8 @@ js/core/zoom-display.test.mjs
 js/pdf/render-sharpen.test.mjs
 js/pdf/print-meerperblad.test.mjs
 js/pdf/print-meerperblad-voorbeeld.test.mjs
+js/pdf/print-poster.test.mjs
+js/pdf/print-poster-voorbeeld.test.mjs
 js/pdf/flattened-copy.test.mjs
 js/text/wrap-tekst.test.mjs
 js/annotations/offset-geometry.test.mjs
@@ -343,3 +345,9 @@ js/core/mcp-lint-opdrachten.test.mjs
 js/pdf/wachtwoord-pdf.test.mjs
 js/pdf/page-transition.test.mjs
 js/mobile/mobiele-gereedschappen.test.mjs
+js/core/oude-webview.test.mjs
+scripts/oude-webview.test.mjs
+scripts/android-config.test.mjs
+js/core/fout-bericht.test.mjs
+js/core/bestandsnaam.test.mjs
+js/mobile/ipc-wekker.test.mjs
