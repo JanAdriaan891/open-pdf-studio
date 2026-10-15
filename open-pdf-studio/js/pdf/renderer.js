@@ -1,6 +1,6 @@
 import { cssPxPerPtAt100, nextScaleStep } from '../core/zoom-display.js';
 import { state, getActiveDocument, getPageRotation, setPageRotation } from '../core/state.js';
-import { isTauri, invoke } from '../core/platform.js';
+import { isTauri, isMobile, heeftRustRenderer, invoke } from '../core/platform.js';
 import { pdfjsFallbackNodig } from './render-route.js';
 import { bepaalOverlayMaat, pasOverlayMaatToe } from './overlay-canvas-size.js';
 import { paginaGetekend } from './pagina-getekend.js';
@@ -346,7 +346,8 @@ async function _renderPageImpl(pageNum) {
 
   // Try Rust open-pdf-render first (pure Rust, fast), fall back to PDF.js
   const _t0 = performance.now();
-  const _canUseTauri = isTauri();
+  // Alleen het bureaublad heeft PDFium; mobiel tekent met PDF.js (#593).
+  const _canUseTauri = heeftRustRenderer();
   const _hasFilePath = !!doc.filePath;
   let _skipBitmapRender = false;
 
@@ -576,7 +577,8 @@ async function _renderPageImpl(pageNum) {
   // dimensions) — the user sees "one big white screen" instead of an A4
   // page. Render directly to pdf-canvas via PDF.js for blank docs.
   if (pdfjsFallbackNodig({
-    inTauri: _canUseTauri,
+    inTauri: isTauri(),
+    mobiel: isMobile(),
     hasFilePath: _hasFilePath,
     viewportNamHetOver: _skipBitmapRender,
   })) {
@@ -807,7 +809,7 @@ export async function renderPageOffscreen(pageNum) {
   // Zonder Tauri (webversie) of zonder bestandspad kan PDFium niet; dan tekent
   // PDF.js. Dit is GEEN stille terugval voor een Rust-fout — die blijft hard
   // falen hieronder, zodat een rasterbug zichtbaar blijft.
-  if (pdfjsFallbackNodig({ inTauri: isTauri(), hasFilePath: !!doc.filePath })) {
+  if (pdfjsFallbackNodig({ inTauri: isTauri(), mobiel: isMobile(), hasFilePath: !!doc.filePath })) {
     try {
       await tekenPaginaMetPdfJs(page, viewport, pdfCanvas);
       if (_isStaleDoc(doc)) return;
@@ -1240,7 +1242,7 @@ async function renderContinuousPage(pageNum) {
   const pdfCtxEl = pdfCanvasEl.getContext('2d');
 
   // Webversie/documenten zonder pad: PDF.js tekent. Zie render-route.js.
-  const _pdfjsPad = pdfjsFallbackNodig({ inTauri: isTauri(), hasFilePath: !!doc.filePath });
+  const _pdfjsPad = pdfjsFallbackNodig({ inTauri: isTauri(), mobiel: isMobile(), hasFilePath: !!doc.filePath });
 
   // ─── PERF FIX #2 + #3 (BARN measurement scaffold) ───────────────────
   //  (#1 — de DPR-factor laten vallen — is teruggedraaid, issue #549: de
@@ -2050,7 +2052,7 @@ async function _runPrefetch(centerPage, waited) {
 // Cache-only mirror of renderPage()'s cold vector path: analyze → extract →
 // prepareImages. Never touches #pdf-canvas or the viewport singleton.
 async function _prefetchOnePage(doc, pageNum, centerPage) {
-  if (!isTauri() || !doc.filePath) return;
+  if (!heeftRustRenderer() || !doc.filePath) return;
   if (state.renderEngineOverride != null) return; // user forced a raster engine
   const rotation = getPageRotation(pageNum);
   const vr = await import('./vector-renderer.js');

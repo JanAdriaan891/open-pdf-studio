@@ -6,7 +6,7 @@ import { setViewMode, fitPage } from './renderer.js';
 import { generateThumbnails, refreshActiveTab } from '../ui/panels/left-panel.js';
 import { createTab, closeTab, updateWindowTitle, markDocumentModified } from '../ui/chrome/tabs.js';
 import * as pdfjsLib from 'pdfjs-dist';
-import { isTauri, readBinaryFile, openFileDialog, lockFile, invoke } from '../core/platform.js';
+import { isTauri, isMobile, heeftRustRenderer, readBinaryFile, openFileDialog, lockFile, invoke } from '../core/platform.js';
 import { PDFDocument } from 'pdf-lib';
 import { resetAnnotationStorage } from './form-layer.js';
 import { addRecentFile, getRecentFiles } from '../mobile/recent-files.js';
@@ -324,8 +324,11 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     // vóór de progressieve tegels in de rij staan. Het progressieve pad
     // levert de eerste content daar zelf. (isHeavyPage cachet per bestand;
     // de check zelf kost ~100 ms eenmalig.)
+    // Het Rust-pad (PDFium, lopdf) bestaat alleen op het bureaublad; mobiel
+    // slaat pre-render, analyse en prefetch over en tekent met PDF.js (#593).
+    const _rustPad = heeftRustRenderer();
     let _skipPre = false;
-    if (filePath && isTauri()) {
+    if (filePath && _rustPad) {
       try {
         const prog = await import('./progressive-render.js');
         _skipPre = !!(state.preferences && state.preferences.progressiveRender)
@@ -339,11 +342,11 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     // PDF.js parses the same bytes — on large documents that doubles peak
     // memory during boot and can take the whole load down. Skip it then.
     let _poolReady = false;
-    if (filePath && isTauri() && !_skipPre) {
+    if (filePath && _rustPad && !_skipPre) {
       try { _poolReady = await invoke('worker_pool_ready'); } catch { _poolReady = false; }
       if (!_poolReady) console.log('[prog-guard] worker pool not ready → cold-open pre-render skipped');
     }
-    if (filePath && isTauri() && !_skipPre && _poolReady) {
+    if (filePath && _rustPad && !_skipPre && _poolReady) {
       const { renderPdfPage: _renderPdfPage } = await import('./engine-router.js');
       _renderPdfPage({
         path: filePath,
@@ -386,8 +389,6 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
       if (isTauri()) {
         // Lock the file to prevent other apps from writing while we have it open
         // (skip on Android — content:// URIs don't support filesystem locking)
-        const { isMobile } = await import('../core/platform.js');
-        if (isClosed()) return;
         if (!isMobile()) {
           await lockFile(filePath);
           if (isClosed()) return;
@@ -477,7 +478,7 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     // time the user navigates anywhere, the result is a cached HashMap
     // lookup. Total batch cost on NKD1a: ~50 ms total instead of ~600 ms
     // × 7 pages sequentially as the user scrolls.
-    if (filePath && isTauri() && doc.pdfDoc.numPages > 1) {
+    if (filePath && _rustPad && doc.pdfDoc.numPages > 1) {
       const _abT0 = performance.now();
       const allPages = Array.from({ length: doc.pdfDoc.numPages }, (_, i) => i);
       window.__TAURI__.core.invoke('analyze_page_type_batch', {
@@ -766,7 +767,7 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     // analyze_page_type_batch earlier in loadPDF), so the per-page analyze
     // invoke is microseconds. Concurrency=2 keeps interactive renders
     // responsive.
-    if (filePath && isTauri()) {
+    if (filePath && _rustPad) {
       (async () => {
         try {
           const vr = await import('./vector-renderer.js');

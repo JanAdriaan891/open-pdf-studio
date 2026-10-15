@@ -789,7 +789,10 @@ async function renderMiniatuur(pdfDoc, pageNum, doc, doel) {
   // vector content is rendered (fast). Image decoding is skipped because
   // it can take 17+ seconds per page for complex PDFs, blocking the Rust
   // backend and preventing page navigation.
-  if (doc?.filePath && window.__TAURI__) {
+  // Alleen op het bureaublad: op Android/iOS zit er geen PDFium in de app
+  // (#593) en tekent PDF.js hieronder de miniatuur.
+  const { heeftRustRenderer } = await import('../../core/platform.js');
+  if (doc?.filePath && heeftRustRenderer()) {
     try {
       const { invoke } = window.__TAURI__.core;
       // Pass the in-session user rotation so the Rust render matches the main
