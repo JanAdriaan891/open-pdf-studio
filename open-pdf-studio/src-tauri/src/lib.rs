@@ -2683,6 +2683,14 @@ pub fn run(opts: StartupOpts) {
 
     builder
         .setup(move |app| {
+            // Mobiel (#596): voorkeuren, sessie en catalogi in de schrijfbare
+            // app-datamap, vóór er een commando draait dat ze leest.
+            #[cfg(mobile)]
+            match app.path().app_local_data_dir() {
+                Ok(map) => datamap::zet_platform_map(map),
+                Err(e) => eprintln!("[startup] geen app-datamap: {e}"),
+            }
+
             // Als eerste, zodat alles wat hierna met `log::` gemeld wordt ook
             // ergens aankomt. Zonder logger zijn die macro's lege hulzen.
             // Mislukt het opzetten, dan draait de app gewoon door.

@@ -90,7 +90,8 @@ export const VOORKEUREN_NAAM = 'pdfEditorPreferences';
 /**
  * Het thema-script dat vóór de app-boot draait, zodat het verkeerde thema
  * niet even flitst. Het is een gewoon script in de pagina — het kan niets
- * importeren — en vite.config.js plakt het inline in index.html. De tekst
+ * importeren — en scripts/oude-webview.mjs zet het in het eigen bestand
+ * vóór de app-boot (geen inline script, #596). De tekst
  * staat hier, zodat ook deze ene lezer de sleutel uit dezelfde bron haalt.
  * 'system' volgt de media-query: die volgt in de webview ook het OS-thema
  * (de vensterwaarde van Tauri is een belofte en dus hier niet te lezen).

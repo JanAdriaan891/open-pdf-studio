@@ -108,10 +108,15 @@ test('het thema-script vóór de boot leest de sleutel met voorvoegsel', () => {
   assert.equal(draai({ [sleutel]: 'kapot' }), undefined, 'gooit niet');
 });
 
-test('index.html krijgt het thema-script inline, er is geen los bestand meer', () => {
+test('index.html krijgt het thema-script via de bouwstap, zonder inline script (#596)', () => {
   const html = fs.readFileSync(path.join(app, 'index.html'), 'utf8');
   assert.match(html, /<!-- opds:thema-vooraf -->/);
   assert.doesNotMatch(html, /theme-init\.js/);
+  // De Android-WebView weigert inline scripts (CSP met hashes): elk script
+  // in de pagina heeft een src.
+  for (const [tag] of html.matchAll(/<script\b[^>]*>/g)) {
+    assert.match(tag, /\ssrc=/, `inline script in index.html: ${tag}`);
+  }
   assert.equal(fs.existsSync(path.join(app, 'public', 'js', 'theme-init.js')), false);
 });
 

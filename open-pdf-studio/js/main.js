@@ -26,6 +26,9 @@ window.addEventListener('unhandledrejection', (e) => {
 // Snellere pdf-lib-standaarden voor elke load en save (#581); als eerste,
 // vóór elk module dat pdf-lib gebruikt.
 import './pdf/pdf-lib-snelheid.js';
+// Polyfills voor oudere Android-WebViews (#596): vóór PDF.js en de rest van
+// de app (pdf-lib hierboven heeft ze niet nodig).
+import './core/oude-webview-start.js';
 import { state } from './core/state.js';
 import { loadPreferences, savePreferences } from './core/preferences.js';
 import { initDomElements } from './ui/dom-elements.js';

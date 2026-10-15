@@ -12,6 +12,8 @@ import { resetAnnotationStorage } from './form-layer.js';
 import { addRecentFile, getRecentFiles } from '../mobile/recent-files.js';
 import { resumeReaderTracking } from './reader-mode-view.js';
 import { extractFileName } from '../core/platform.js';
+import { foutBericht } from '../core/fout-bericht.js';
+import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
 import i18next from '../i18n/config.js';
 import { showMessage, refreshAnnotationLayers } from '../bridge.js';
 import { verifieerHandtekeningen } from './handtekeningen/verificatie.js';
@@ -507,7 +509,7 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     {
       // Een beveiligde PDF heet naar het origineel, niet naar zijn werkkopie.
       const zichtbaarPad = bronPad(doc);
-      doc.fileName = zichtbaarPad ? zichtbaarPad.split(/[\\/]/).pop() : 'Untitled';
+      doc.fileName = (zichtbaarPad && bestandsnaamUitPad(zichtbaarPad)) || 'Untitled';
     }
 
     // Reset annotation state (per-document)
@@ -852,7 +854,7 @@ export async function loadPDF(filePath, docIndex, preloadedData = null) {
     if (isClosed()) return;
     console.error('Error loading PDF:', error);
     if (isActive()) {
-      showMessage(i18next.t('failedToLoadPdf', { error: error.message }));
+      showMessage(i18next.t('failedToLoadPdf', { error: foutBericht(error) }));
     }
   } finally {
     doc._isLoading = false;
@@ -1077,7 +1079,7 @@ export async function createBlankPDF(widthPt, heightPt, numPages) {
 
   } catch (error) {
     console.error('Error creating blank PDF:', error);
-    showMessage(i18next.t('failedToCreateDocument', { error: error.message }));
+    showMessage(i18next.t('failedToCreateDocument', { error: foutBericht(error) }));
   } finally {
     hideLoading();
   }

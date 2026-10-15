@@ -289,6 +289,11 @@ export async function generateThumbnails() {
   if (!activeDoc || !activeDoc.pdfDoc) {
     return;
   }
+  // De mobiele weergave heeft geen miniaturenpaneel: alle pagina's op de
+  // achtergrond met PDF.js tekenen hield de hoofdthread op een zwaar
+  // document tientallen seconden bezet (#596).
+  const { isMobile } = await import('../../core/platform.js');
+  if (isMobile()) return;
 
   const pdfDoc = activeDoc.pdfDoc;
   const docId = activeDoc.id;
