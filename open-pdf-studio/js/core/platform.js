@@ -1,5 +1,6 @@
 import { leesOpslag, verwijderOpslag } from './opslag.js';
 import { gastObject } from './gehost.js';
+import { rustRenderPadBeschikbaar } from '../pdf/render-route.js';
 
 /**
  * Tauri API wrapper module
@@ -160,6 +161,12 @@ export function isMobile() {
     _isMobile = false;
   }
   return _isMobile;
+}
+
+// Kan het Rust-renderpad (PDFium) hier draaien? Niet in de browser en niet op
+// Android/iOS: daar zit geen PDFium in de app (#593). Zie pdf/render-route.js.
+export function heeftRustRenderer() {
+  return rustRenderPadBeschikbaar({ inTauri: isTauri(), mobiel: isMobile() });
 }
 
 // Get Tauri APIs from global object

@@ -107,6 +107,10 @@ const openFiles = createFileOpenQueue({
     if (state.documents.some(d => d.pdfDoc && bronPad(d) === filePath)) {
       addRecentFile(filePath, extractFileName(filePath));
     }
+    // Op een telefoon past de pagina in het scherm, net als bij Openen in de
+    // mobiele weergave; "Openen met" uit een andere app komt hier binnen (#593).
+    const actief = state.documents[state.activeDocumentIndex];
+    if (isMobile() && actief?.pdfDoc && bronPad(actief) === filePath) fitPage();
   },
 });
 

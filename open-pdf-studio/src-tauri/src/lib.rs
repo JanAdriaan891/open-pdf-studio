@@ -105,6 +105,33 @@ fn get_opened_file(state: tauri::State<OpenedFiles>) -> Vec<String> {
     state.0.lock().unwrap().clone()
 }
 
+/// Welk document opent een `RunEvent::Opened`-URL, als het een PDF is?
+///
+/// - `file://` (macOS Finder, iOS): het bestandspad, alleen voor een `.pdf`.
+/// - `content://` (Android, #593): de URI zelf. "Openen met" vanuit een
+///   bestandsbeheerder of mailapp levert geen pad maar een content-URI, vaak
+///   zonder `.pdf` aan het eind (`.../document/msf%3A1234`). Het intent-filter
+///   dat tauri-build uit `bundle.fileAssociations` maakt, laat alleen
+///   `application/pdf` door; de fs-plugin leest de URI via de ContentResolver.
+///   Op het bureaublad komt een content-URI nooit voor en telt hij niet.
+///
+/// Andere schema's (de deep-link-plugin, https) laten we met rust.
+#[cfg_attr(
+    not(any(test, target_os = "macos", target_os = "ios", target_os = "android")),
+    allow(dead_code)
+)]
+fn geopend_pdf_document(url: &url::Url, android: bool) -> Option<String> {
+    match url.scheme() {
+        "file" => url
+            .to_file_path()
+            .ok()
+            .map(|p| p.to_string_lossy().to_string())
+            .filter(|p| p.to_lowercase().ends_with(".pdf")),
+        "content" if android => Some(url.as_str().to_string()),
+        _ => None,
+    }
+}
+
 #[tauri::command]
 fn get_session_file_path() -> String {
     if let Some(data_dir) = datamap::lokale_datamap() {
@@ -2965,25 +2992,35 @@ pub fn run(opts: StartupOpts) {
             //
             // Custom-scheme-URLs (deep-link-plugin) hebben scheme != "file"
             // en passeren dit filter niet — geen botsing met die plugin.
-            #[cfg(any(target_os = "macos", target_os = "ios"))]
+            //
+            // Android (#593): "Openen met" uit een andere app komt als
+            // VIEW/SEND-intent binnen; tao zet de data-URI om in hetzelfde
+            // RunEvent::Opened. Dat is een content://-URI, geen pad: zonder
+            // deze tak verscheen de app wel, maar bleef het document weg (de
+            // deep-link-plugin negeert content://, het hoort niet bij zijn
+            // domein). Zie geopend_pdf_document().
+            #[cfg(any(target_os = "macos", target_os = "ios", target_os = "android"))]
             if let tauri::RunEvent::Opened { urls } = &_event {
+                let android = cfg!(target_os = "android");
                 let files: Vec<String> = urls
                     .iter()
-                    .filter(|url| url.scheme() == "file")
-                    .filter_map(|url| url.to_file_path().ok())
-                    .map(|p| p.to_string_lossy().to_string())
-                    .filter(|p| p.to_lowercase().ends_with(".pdf"))
+                    .filter_map(|url| geopend_pdf_document(url, android))
                     .collect();
                 if !files.is_empty() {
-                    for path in &files {
+                    for path in files.iter().filter(|p| !p.starts_with("content://")) {
                         let _ = _app.fs_scope().allow_file(path);
                     }
                     {
                         let state = _app.state::<OpenedFiles>();
                         let mut buffered = state.0.lock().unwrap();
-                        buffered.extend(files.iter().cloned());
+                        for path in &files {
+                            if !buffered.contains(path) {
+                                buffered.push(path.clone());
+                            }
+                        }
                     }
                     let _ = _app.emit("open-files", &files);
+                    #[cfg(desktop)]
                     if let Some(window) = _app.get_webview_window("main") {
                         let _ = window.unminimize();
                         let _ = window.set_focus();
@@ -2991,4 +3028,49 @@ pub fn run(opts: StartupOpts) {
                 }
             }
         });
+}
+
+#[cfg(test)]
+mod geopend_document_tests {
+    use super::geopend_pdf_document;
+
+    fn url(s: &str) -> url::Url {
+        url::Url::parse(s).expect("geldige URL")
+    }
+
+    #[test]
+    fn android_content_uri_opent_ook_zonder_pdf_extensie() {
+        // "Openen met" uit een bestandsbeheerder (#593): opaak document-id.
+        let uri = "content://com.android.providers.downloads.documents/document/msf%3A1234";
+        assert_eq!(geopend_pdf_document(&url(uri), true).as_deref(), Some(uri));
+        let uri = "content://media/external/file/42";
+        assert_eq!(geopend_pdf_document(&url(uri), true).as_deref(), Some(uri));
+    }
+
+    #[test]
+    fn content_uri_telt_alleen_op_android() {
+        let uri = url("content://com.example.provider/plan.pdf");
+        assert_eq!(geopend_pdf_document(&uri, false), None);
+    }
+
+    #[test]
+    fn bestands_url_wordt_een_pad_en_alleen_voor_pdf() {
+        let pad = std::env::temp_dir().join("Plan.PDF");
+        let bestand = url::Url::from_file_path(&pad).expect("absoluut pad");
+        for android in [false, true] {
+            assert_eq!(
+                geopend_pdf_document(&bestand, android),
+                Some(pad.to_string_lossy().to_string())
+            );
+        }
+        let tekst = url::Url::from_file_path(std::env::temp_dir().join("notities.txt")).unwrap();
+        assert_eq!(geopend_pdf_document(&tekst, true), None);
+    }
+
+    #[test]
+    fn deep_links_en_web_urls_blijven_buiten_beschouwing() {
+        for s in ["openpdfstudio://open/x.pdf", "https://open/x.pdf", "http://example.com/a.pdf"] {
+            assert_eq!(geopend_pdf_document(&url(s), true), None, "{s}");
+        }
+    }
 }
