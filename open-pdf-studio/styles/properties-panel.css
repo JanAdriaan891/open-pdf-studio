@@ -422,7 +422,7 @@
 .color-hex {
   font-size: 11px;
   color: var(--theme-text-secondary);
-  font-family: 'Consolas', 'Monaco', monospace;
+  font-family: var(--ui-font-mono);
 }
 
 /* Color Palette Picker - Dropdown Style */
@@ -469,7 +469,7 @@
 .color-picker-button .color-hex {
   font-size: 11px;
   color: var(--theme-text);
-  font-family: 'Consolas', 'Monaco', monospace;
+  font-family: var(--ui-font-mono);
   flex: 1;
 }
 

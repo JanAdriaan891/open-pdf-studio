@@ -2615,7 +2615,7 @@
   justify-content: center;
   padding: 0;
   color: var(--theme-text, #333);
-  font-family: "Segoe UI Symbol", "Segoe UI", sans-serif;
+  font-family: inherit;
 }
 .print-preview-nav-btn:hover:not(:disabled) { background: var(--theme-hover, #d4e8fc); border-color: var(--theme-accent, #84b8e8); }
 .print-preview-nav-btn:active:not(:disabled) { background: var(--theme-active, #b8d4f0); }
@@ -3001,7 +3001,7 @@
 
 .hf-bates-example {
   align-self: center;
-  font-family: Consolas, 'Courier New', monospace;
+  font-family: var(--ui-font-mono);
   font-size: 11px;
   color: var(--theme-text-secondary, #666);
 }
@@ -3510,7 +3510,7 @@
   padding: 6px 8px;
   margin: 0 3px;
   font-size: 13px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--ui-font);
   color: #1a1a1a;
   user-select: text;
   scrollbar-width: thin;
@@ -3639,7 +3639,7 @@
   display: inline-block;
   padding: 1px 6px;
   font-size: 11px;
-  font-family: 'Segoe UI', Consolas, monospace;
+  font-family: var(--ui-font);
   background: var(--theme-bg, #f0f0f0);
   border: 1px solid var(--theme-border, #ccc);
   border-radius: 3px;
@@ -4251,7 +4251,7 @@
   background: var(--theme-hover, #f0f0f0);
   color: var(--theme-text, #333);
   padding: 1px 4px;
-  font-family: Consolas, "Courier New", monospace;
+  font-family: var(--ui-font-mono);
   font-size: 11px;
 }
 .whats-new-dialog .wn-release-body .wn-code {
@@ -4260,7 +4260,7 @@
   border: 1px solid var(--theme-border, #e0e0e0);
   padding: 8px 10px;
   margin: 6px 0;
-  font-family: Consolas, "Courier New", monospace;
+  font-family: var(--ui-font-mono);
   font-size: 11px;
   overflow-x: auto;
   white-space: pre;
@@ -4882,7 +4882,7 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
   background: var(--theme-surface, #fff);
 }
 .cad-color:disabled { opacity: 0.5; }
-.cad-input-code { width: 66px; font-family: Consolas, 'Courier New', monospace; text-transform: uppercase; }
+.cad-input-code { width: 66px; font-family: var(--ui-font-mono); text-transform: uppercase; }
 /* Een lang pad toont zijn eind: daar staat de map die ertoe doet. */
 /* Een pad wordt aan het begin afgekapt (het eind zegt het meest): daarvoor
    staat de richting bewust andersom; de uitlijning volgt het venster en
@@ -4980,7 +4980,7 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
   border: 1px solid var(--theme-border, #acacac);
   border-radius: 0;
   font-size: 12px;
-  font-family: Consolas, 'Courier New', monospace;
+  font-family: var(--ui-font-mono);
   background: var(--theme-surface, #fff);
   color: var(--theme-text, inherit);
   user-select: text;
@@ -5003,7 +5003,7 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .page-labels-token {
   width: 56px;
   flex-shrink: 0;
-  font-family: Consolas, 'Courier New', monospace;
+  font-family: var(--ui-font-mono);
   color: var(--theme-accent, #0078d7);
 }
 .page-labels-sample {
