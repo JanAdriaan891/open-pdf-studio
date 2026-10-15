@@ -31,8 +31,27 @@ test('alle gekozen instellingen komen terug', () => {
     sheetRows: 4,
     sheetOrder: 'vertical-reversed',
     sheetBorder: true,
+    posterScale: 50,
+    posterOverlap: 7.5,
+    posterCutMarks: false,
+    posterLabels: false,
+    posterOnlyLarge: false,
   };
   assert.deepEqual(herstelPrintInstellingen(gekozen), gekozen);
+});
+
+test('posterafdruk: Type "Poster" en de tegelkeuzes komen terug, rommel valt terug', () => {
+  assert.equal(herstelPrintInstellingen({ scaling: 'poster' }).scaling, 'poster');
+  const s = herstelPrintInstellingen({
+    posterScale: 5000, posterOverlap: -4, posterCutMarks: 'ja', posterLabels: 0, posterOnlyLarge: null,
+  });
+  assert.equal(s.posterScale, 400);
+  assert.equal(s.posterOverlap, 0);
+  assert.equal(s.posterCutMarks, true);
+  assert.equal(s.posterLabels, true);
+  assert.equal(s.posterOnlyLarge, true);
+  assert.equal(herstelPrintInstellingen({ posterOverlap: 'x' }).posterOverlap, 10);
+  assert.equal(herstelPrintInstellingen({ posterOverlap: 99 }).posterOverlap, 50);
 });
 
 test('pagina\'s per vel: een getal uit een oud bestand telt, rommel valt terug', () => {

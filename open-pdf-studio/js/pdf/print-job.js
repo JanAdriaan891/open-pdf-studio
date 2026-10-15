@@ -16,6 +16,7 @@ import {
 import { bouwVectorPrintPdf, maakTegelRaster, vakkenUitRaster, vakOpVel } from './print-vector.js';
 import { markeringenVoorInhoud } from '../solid/stores/print-instellingen.js';
 import { maakMeerPerBlad, isMeerPerBlad, schaalVoorMeerPerBlad } from './print-meerperblad.js';
+import { maakPoster } from './print-poster.js';
 import {
   startPrintProgress, updatePrintProgress, finishPrintProgress, failPrintProgress,
 } from '../solid/stores/printProgressStore.js';
@@ -159,10 +160,12 @@ async function bronBytesVan(doc) {
  *           orientatie?:'auto'|'portrait'|'landscape',
  *           vel?: {breedteMm:number, hoogteMm:number}|'pagina'|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
+ *           poster?: object|null,
  *           openen?: ((pad:string) => void)|null,
  *           afgebroken?: () => boolean }} opts
  *   vel 'pagina' = elke pagina haar eigen vel, in de gekozen stand
- *   (print-plaatsing.js); openen: achter de knop "Openen" op de melding na
+ *   (print-plaatsing.js); poster = de tegelkeuzes van de posterafdruk
+ *   (print-poster.js, posterOpties) of null; openen: achter de knop "Openen" op de melding na
  *   afloop; afgebroken: wordt vlak vóór het schrijven gevraagd — zegt hij ja,
  *   dan komt er geen bestand (de MCP-opdracht `app_print_to_pdf` gebruikt dat
  *   voor haar eigen tijdgrens, zie print-opdracht.js).
@@ -170,10 +173,12 @@ async function bronBytesVan(doc) {
  */
 export async function slaPrintOpAlsPdf({
   pages, pad, orientatie = 'auto', vel = null, schaling: schalingKeuze = 'fit', zoom: zoomKeuze = 100,
-  centreren: centrerenKeuze = true, meerPerBlad = null,
+  centreren: centrerenKeuze = true, meerPerBlad: meerPerBladKeuze = null, poster = null,
   inhoud = 'doc-and-markups', openen = null, afgebroken = () => false,
 }) {
-  const { schaling, zoom, centreren } = schaalVoorMeerPerBlad(meerPerBlad, schalingKeuze, zoomKeuze, centrerenKeuze);
+  const {
+    vel: bronVel, meerPerBlad, schaling, zoom, centreren,
+  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze);
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -191,7 +196,7 @@ export async function slaPrintOpAlsPdf({
       ({ pdf } = await bouwVectorPrintPdf({
         bronBytes: await bronBytesVan(doc),
         paginas: pages.map((pageNum) => ({ index: pageNum - 1, extraRotatie: getPageRotation(pageNum) })),
-        keuzes: { papier: vel, orientatie, schaling, zoom, centreren },
+        keuzes: { papier: bronVel, orientatie, schaling, zoom, centreren },
         beelden: ({ index, plaatsing }) => markeringBeelden(index + 1, plaatsing, markeringen),
         voortgang: (i, index) => voortgang(i, index + 1),
       }));
@@ -199,11 +204,12 @@ export async function slaPrintOpAlsPdf({
       console.warn('[print] vector print PDF failed; falling back to page images:', e);
       gerasterd = true;
       ({ pdf } = await bouwPrintPdf({
-        doc, pages, orientatie, vel, schaling, zoom, centreren, inhoud, voortgang,
+        doc, pages, orientatie, vel: bronVel, schaling, zoom, centreren, inhoud, voortgang,
       }));
     }
 
     pdf = await metMeerPerBlad(pdf, meerPerBlad, vel, orientatie);
+    pdf = await metPoster(pdf, poster, { vel, orientatie, pages, doc });
 
     updatePrintProgress(i18next.t('dialogs:print.progress.saving'), pages.length / total);
     // Afgebroken (de tijdgrens van een MCP-opdracht): niets wegschrijven, want
@@ -243,6 +249,34 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
 }
 
 /**
+ * Posterafdruk (print-poster.js): de bronpagina's eerst elk op hun eigen maat
+ * (papier null, passend = 1:1), daarna in tegels over de vellen. De
+ * schaalkeuze en het aantal per vel tellen dan niet: de tegelschaal vervangt
+ * ze. Zonder poster: de keuzes zoals ze zijn.
+ */
+function bronKeuzes(poster, vel, meerPerBlad, schaling, zoom, centreren) {
+  if (poster) return { vel: null, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
+  return { vel, meerPerBlad, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
+}
+
+/** Het label van een tegel in de taal van de app (print-poster.js, posterLabel). */
+function posterVertaling(waarden) {
+  return i18next.t('dialogs:print.posterLabelText', waarden);
+}
+
+/** De naam van het document, voor de labels en de printjob. */
+function documentNaam(doc) {
+  return doc.fileName || (doc.filePath ? doc.filePath.split(/[\\/]/).pop() : '') || '';
+}
+
+async function metPoster(pdf, poster, { vel, orientatie, pages, doc }) {
+  if (!poster) return pdf;
+  return maakPoster(pdf, {
+    papier: vel, orientatie, opties: poster, paginaNummers: pages, bestand: documentNaam(doc), vertaal: posterVertaling,
+  });
+}
+
+/**
  * Run a print job in the background. Fire-and-forget: the caller closes the
  * dialog first, this drives the floating progress bar.
  *
@@ -254,7 +288,10 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
  *           orientatie?:'auto'|'portrait'|'landscape', papier?:string,
  *           vel?: {breedteMm:number, hoogteMm:number}|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
+ *           poster?: object|null,
  *           afgebroken?: () => boolean }} opts
+ *   poster: de tegelkeuzes van de posterafdruk (print-poster.js) of null; de
+ *   vellen gaan dan altijd 1:1 naar de printer (plaatsing 'vel').
  *   afgebroken: wordt gevraagd vlak vóór het spoolen — zegt hij ja, dan gaat er
  *   niets naar de printer (de MCP-opdracht `app_print` gebruikt dat voor haar
  *   eigen tijdgrens, zie print-opdracht.js).
@@ -263,25 +300,32 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
 export async function runPrintJob({
   pages, copies, printer, orientatie = 'auto', papier = 'printer',
   vel = null, schaling: schalingKeuze = 'fit', zoom: zoomKeuze = 100, centreren: centrerenKeuze = true,
-  meerPerBlad = null, inhoud = 'doc-and-markups',
+  meerPerBlad: meerPerBladKeuze = null, poster = null, inhoud = 'doc-and-markups',
   afgebroken = () => false,
 }) {
-  const { schaling, zoom, centreren } = schaalVoorMeerPerBlad(meerPerBlad, schalingKeuze, zoomKeuze, centrerenKeuze);
+  const {
+    vel: bronVel, meerPerBlad, schaling, zoom, centreren,
+  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze);
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
     if (!doc?.pdfDoc) throw new Error(i18next.t('dialogs:print.progress.errNoDocument'));
     // Reserve the last slice of the bar for the spool step.
     const total = pages.length + 1;
-    const { pdf: pagePdf, opVel } = await bouwPrintPdf({
-      doc, pages, orientatie, vel, schaling, zoom, centreren, inhoud,
+    const { pdf: pagePdf, opVel: paginasOpVel } = await bouwPrintPdf({
+      doc, pages, orientatie, vel: bronVel, schaling, zoom, centreren, inhoud,
       voortgang: (i, pageNum) => updatePrintProgress(
         i18next.t('dialogs:print.progress.renderingPage', { page: pageNum, current: i + 1, total: pages.length }),
         i / total,
       ),
     });
 
-    const newPdf = await metMeerPerBlad(pagePdf, meerPerBlad, vel, orientatie);
+    const newPdf = await metPoster(
+      await metMeerPerBlad(pagePdf, meerPerBlad, vel, orientatie), poster, { vel, orientatie, pages, doc },
+    );
+    // De vellen van een poster liggen 1:1 (de tegels moeten op schaal blijven
+    // en mogen niet opnieuw ingepast worden).
+    const opVel = paginasOpVel || !!poster;
 
     updatePrintProgress(i18next.t('dialogs:print.progress.saving'), pages.length / total);
     // Afgebroken (de tijdgrens van een MCP-opdracht): niets spoolen.
@@ -292,8 +336,7 @@ export async function runPrintJob({
     const pdfBytes = await newPdf.save();
     // Documentnaam meegeven: de spooler toont de bestandsnaam van het
     // tempbestand als printjob-naam, dus die moet naar de pdf zelf heten.
-    const jobName = doc.fileName
-      || (doc.filePath ? doc.filePath.split(/[\/]/).pop() : null);
+    const jobName = documentNaam(doc) || null;
     const tempPath = await invoke('write_temp_pdf', { data: Array.from(pdfBytes), name: jobName });
     if (!tempPath) throw new Error(i18next.t('dialogs:print.progress.errTempFile'));
 
