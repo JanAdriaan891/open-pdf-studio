@@ -342,3 +342,4 @@ js/core/mcp-ui-boom.test.mjs
 js/core/mcp-lint-opdrachten.test.mjs
 js/pdf/wachtwoord-pdf.test.mjs
 js/pdf/page-transition.test.mjs
+js/mobile/mobiele-gereedschappen.test.mjs

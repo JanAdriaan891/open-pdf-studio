@@ -212,8 +212,9 @@ export async function pageContentBytes(filePath, pageNum) {
   if (_contentBytesCache.has(key)) return _contentBytesCache.get(key);
   let bytes = 0;
   try {
-    const { isTauri, invoke } = await import('../core/platform.js');
-    if (isTauri()) {
+    const { heeftRustRenderer, invoke } = await import('../core/platform.js');
+    // Mobiel heeft geen Rust-renderpad (#593): dan telt elke pagina als licht.
+    if (heeftRustRenderer()) {
       const _s0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : 0;
       bytes = Number(await invoke('page_content_size', { path: filePath, pageIndex: pageNum - 1 })) || 0;
       perfMark(`page_content_size p${pageNum} ${Math.round(((typeof performance !== 'undefined' && performance.now) ? performance.now() : 0) - _s0)}ms (${(bytes / 1048576).toFixed(1)}MB)`);
