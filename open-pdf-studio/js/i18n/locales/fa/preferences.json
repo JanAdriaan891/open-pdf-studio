@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "رنگ حاشیه‌نویسی پیش‌فرض",
     "defaultLineWidth": "عرض خط پیش‌فرض",
     "defaultFontSize": "اندازه قلم پیش‌فرض",
+    "paperSizeUnit": "واحد اندازه‌ها (تصویر، نوار مقیاس)",
     "highlightOpacity": "شفافیت برجسته‌سازی (%)",
     "angleSnap": "چسبندگی زاویه (کلید Shift)",
     "objectSnapping": "چسبندگی به اشیا",

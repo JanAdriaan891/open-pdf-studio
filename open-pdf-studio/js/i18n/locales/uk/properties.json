@@ -247,6 +247,9 @@
     "linkImageTitle": "Пов'язати зображення",
     "imageFilter": "Зображення"
   },
+  "sizeUnit": {
+    "tooltip": "Одиниця розмірів"
+  },
   "multiSelect": "{{count}} анотацій вибрано",
   "pdfText": "Текст PDF",
   "types": {

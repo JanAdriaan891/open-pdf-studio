@@ -247,6 +247,9 @@
     "linkImageTitle": "Enllaça la imatge",
     "imageFilter": "Imatges"
   },
+  "sizeUnit": {
+    "tooltip": "Unitat de les mides"
+  },
   "multiSelect": "{{count}} anotacions seleccionades",
   "pdfText": "Text PDF",
   "types": {

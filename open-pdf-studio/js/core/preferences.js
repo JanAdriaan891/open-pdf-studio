@@ -196,6 +196,11 @@ export function applyPreferences() {
   import('../tools/screenshot-annotate.js')
     .then((m) => m.applyPrintScreenHotkeyPref())
     .catch(() => {});
+
+  // Unit for paper sizes in the properties panel (#598).
+  import('../solid/stores/papierEenheidStore.js')
+    .then((m) => m.hydratePapierEenheid())
+    .catch(() => {});
 }
 
 // Show preferences dialog (bridges to Solid.js dialog)

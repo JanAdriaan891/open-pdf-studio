@@ -247,6 +247,9 @@
     "linkImageTitle": "Vincular imagen",
     "imageFilter": "Imágenes"
   },
+  "sizeUnit": {
+    "tooltip": "Unidad de las medidas"
+  },
   "multiSelect": "{{count}} anotaciones seleccionadas",
   "pdfText": "Texto PDF",
   "types": {

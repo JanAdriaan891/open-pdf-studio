@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Domyślny kolor adnotacji",
     "defaultLineWidth": "Domyślna grubość linii",
     "defaultFontSize": "Domyślny rozmiar czcionki",
+    "paperSizeUnit": "Jednostka wymiarów (obraz, podziałka liniowa)",
     "highlightOpacity": "Krycie podkreślenia (%)",
     "angleSnap": "Przyciąganie kąta (klawisz Shift)",
     "objectSnapping": "Przyciąganie do obiektów",

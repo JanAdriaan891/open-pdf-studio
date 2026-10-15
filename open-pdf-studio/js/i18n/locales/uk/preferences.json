@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Типовий колір анотації",
     "defaultLineWidth": "Типова ширина лінії",
     "defaultFontSize": "Типовий розмір шрифту",
+    "paperSizeUnit": "Одиниця розмірів (зображення, масштабна лінійка)",
     "highlightOpacity": "Прозорість виділення (%)",
     "angleSnap": "Прив'язка кута (клавіша Shift)",
     "objectSnapping": "Прив'язка об'єктів",

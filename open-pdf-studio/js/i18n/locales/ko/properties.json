@@ -247,6 +247,9 @@
     "linkImageTitle": "이미지 연결",
     "imageFilter": "이미지"
   },
+  "sizeUnit": {
+    "tooltip": "크기 단위"
+  },
   "multiSelect": "{{count}}개 주석 선택됨",
   "pdfText": "PDF 텍스트",
   "types": {

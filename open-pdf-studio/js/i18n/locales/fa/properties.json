@@ -247,6 +247,9 @@
     "linkImageTitle": "پیوند تصویر",
     "imageFilter": "تصاویر"
   },
+  "sizeUnit": {
+    "tooltip": "واحد اندازه‌ها"
+  },
   "multiSelect": "{{count}} حاشیه‌نویسی انتخاب شده",
   "pdfText": "متن PDF",
   "types": {

@@ -247,6 +247,9 @@
     "linkImageTitle": "קישור תמונה",
     "imageFilter": "תמונות"
   },
+  "sizeUnit": {
+    "tooltip": "יחידת מידה לגדלים"
+  },
   "multiSelect": "{{count}} הערות נבחרו",
   "pdfText": "טקסט PDF",
   "types": {

@@ -247,6 +247,9 @@
     "linkImageTitle": "Sammenkæd billede",
     "imageFilter": "Billeder"
   },
+  "sizeUnit": {
+    "tooltip": "Enhed for mål"
+  },
   "multiSelect": "{{count}} annotationer valgt",
   "pdfText": "PDF-tekst",
   "types": {

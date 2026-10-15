@@ -247,6 +247,9 @@
     "linkImageTitle": "Σύνδεση εικόνας",
     "imageFilter": "Εικόνες"
   },
+  "sizeUnit": {
+    "tooltip": "Μονάδα διαστάσεων"
+  },
   "multiSelect": "{{count}} σχολιασμοί επιλεγμένοι",
   "pdfText": "Κείμενο PDF",
   "types": {

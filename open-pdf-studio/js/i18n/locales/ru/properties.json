@@ -247,6 +247,9 @@
     "linkImageTitle": "Связать изображение",
     "imageFilter": "Изображения"
   },
+  "sizeUnit": {
+    "tooltip": "Единица размеров"
+  },
   "multiSelect": "{{count}} аннотаций выбрано",
   "pdfText": "Текст PDF",
   "types": {

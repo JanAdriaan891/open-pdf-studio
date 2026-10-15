@@ -247,6 +247,9 @@
     "linkImageTitle": "Unganisha picha",
     "imageFilter": "Picha"
   },
+  "sizeUnit": {
+    "tooltip": "Kipimo cha ukubwa"
+  },
   "multiSelect": "maoni {{count}} yamechaguliwa",
   "pdfText": "Maandishi ya PDF",
   "types": {

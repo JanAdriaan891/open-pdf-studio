@@ -247,6 +247,9 @@
     "linkImageTitle": "छवि लिंक करें",
     "imageFilter": "छवियां"
   },
+  "sizeUnit": {
+    "tooltip": "आकार की इकाई"
+  },
   "multiSelect": "{{count}} एनोटेशन चयनित",
   "pdfText": "PDF टेक्स्ट",
   "types": {

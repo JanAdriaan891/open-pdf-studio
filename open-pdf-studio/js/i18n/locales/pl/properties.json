@@ -247,6 +247,9 @@
     "linkImageTitle": "Połącz obraz",
     "imageFilter": "Obrazy"
   },
+  "sizeUnit": {
+    "tooltip": "Jednostka wymiarów"
+  },
   "multiSelect": "{{count}} adnotacji zaznaczonych",
   "pdfText": "Tekst PDF",
   "types": {

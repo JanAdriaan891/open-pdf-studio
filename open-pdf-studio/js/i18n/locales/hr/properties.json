@@ -247,6 +247,9 @@
     "linkImageTitle": "Poveži sliku",
     "imageFilter": "Slike"
   },
+  "sizeUnit": {
+    "tooltip": "Jedinica za dimenzije"
+  },
   "multiSelect": "{{count}} oznaka odabrano",
   "pdfText": "PDF tekst",
   "types": {

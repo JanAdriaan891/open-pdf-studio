@@ -247,6 +247,9 @@
     "linkImageTitle": "Kép csatolása",
     "imageFilter": "Képek"
   },
+  "sizeUnit": {
+    "tooltip": "Méretek mértékegysége"
+  },
   "multiSelect": "{{count}} annotáció kijelölve",
   "pdfText": "PDF szöveg",
   "types": {

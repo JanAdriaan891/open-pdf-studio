@@ -247,6 +247,9 @@
     "linkImageTitle": "Koble bilde",
     "imageFilter": "Bilder"
   },
+  "sizeUnit": {
+    "tooltip": "Enhet for mål"
+  },
   "multiSelect": "{{count}} merknader valgt",
   "pdfText": "PDF-tekst",
   "types": {

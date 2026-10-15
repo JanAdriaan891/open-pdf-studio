@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Warna Anotasi Bawaan",
     "defaultLineWidth": "Lebar Garis Bawaan",
     "defaultFontSize": "Ukuran Font Bawaan",
+    "paperSizeUnit": "Satuan Ukuran (Gambar, Batang Skala)",
     "highlightOpacity": "Opasitas Sorotan (%)",
     "angleSnap": "Snap Sudut (tombol Shift)",
     "objectSnapping": "Snap Objek",

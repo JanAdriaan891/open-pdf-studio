@@ -279,6 +279,9 @@
     "linkImageTitle": "Link image",
     "imageFilter": "Images"
   },
+  "sizeUnit": {
+    "tooltip": "Unit for sizes"
+  },
   "multiSelect": "{{count}} annotations selected",
   "pdfText": "PDF Text",
   "types": {

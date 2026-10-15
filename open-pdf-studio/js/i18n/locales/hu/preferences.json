@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Alapértelmezett annotáció szín",
     "defaultLineWidth": "Alapértelmezett vonalvastagság",
     "defaultFontSize": "Alapértelmezett betűméret",
+    "paperSizeUnit": "Méretek mértékegysége (kép, aránymérték)",
     "highlightOpacity": "Kiemelés átlátszatlansága (%)",
     "angleSnap": "Szögbekötés (Shift billentyű)",
     "objectSnapping": "Objektum bekötés",

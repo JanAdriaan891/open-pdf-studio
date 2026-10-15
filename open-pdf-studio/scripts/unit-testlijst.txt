@@ -165,6 +165,8 @@ js/pdf/page-manager-reload.test.mjs
 js/pdf/loader/tekstvak-rotatie.test.mjs
 js/annotations/minimummaat.test.mjs
 js/annotations/transforms-minimummaat.test.mjs
+js/annotations/papiermaat-eenheid.test.mjs
+js/solid/stores/papier-eenheid-paneel.test.mjs
 js/annotations/greep-keuze.test.mjs
 js/annotations/rendering/wolk-kleine-maat.test.mjs
 scripts/printer-install-scripts.test.mjs

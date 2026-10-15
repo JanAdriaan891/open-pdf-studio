@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "既定の注釈色",
     "defaultLineWidth": "既定の線幅",
     "defaultFontSize": "既定のフォントサイズ",
+    "paperSizeUnit": "サイズの単位（画像、スケールバー）",
     "highlightOpacity": "ハイライトの不透明度 (%)",
     "angleSnap": "角度スナップ（Shift キー）",
     "objectSnapping": "オブジェクトスナップ",

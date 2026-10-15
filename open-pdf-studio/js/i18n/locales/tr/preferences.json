@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Varsayılan Açıklama Rengi",
     "defaultLineWidth": "Varsayılan Çizgi Kalınlığı",
     "defaultFontSize": "Varsayılan Yazı Tipi Boyutu",
+    "paperSizeUnit": "Boyut Birimi (Görüntü, Ölçek Çubuğu)",
     "highlightOpacity": "Vurgulama Opasitesi (%)",
     "angleSnap": "Açı Yakalama (Shift tuşu)",
     "objectSnapping": "Nesne Yakalama",

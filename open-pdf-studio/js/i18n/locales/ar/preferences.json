@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "لون التعليق الافتراضي",
     "defaultLineWidth": "عرض الخط الافتراضي",
     "defaultFontSize": "حجم الخط الافتراضي",
+    "paperSizeUnit": "وحدة الأبعاد (الصورة، شريط المقياس)",
     "highlightOpacity": "شفافية التمييز (%)",
     "angleSnap": "انطباق الزاوية (مفتاح Shift)",
     "objectSnapping": "الانطباق على الكائنات",

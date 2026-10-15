@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Подразумевана боја анотације",
     "defaultLineWidth": "Подразумевана ширина линије",
     "defaultFontSize": "Подразумевана величина фонта",
+    "paperSizeUnit": "Јединица за димензије (слика, графичка размера)",
     "highlightOpacity": "Непрозирност истицања (%)",
     "angleSnap": "Фиксирање угла (тастер Shift)",
     "objectSnapping": "Привлачење објеката",

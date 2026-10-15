@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "기본 주석 색상",
     "defaultLineWidth": "기본 선 너비",
     "defaultFontSize": "기본 글꼴 크기",
+    "paperSizeUnit": "크기 단위(이미지, 축척 막대)",
     "highlightOpacity": "하이라이트 불투명도 (%)",
     "angleSnap": "각도 스냅(Shift 키)",
     "objectSnapping": "객체 스냅",

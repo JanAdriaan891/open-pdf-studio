@@ -247,6 +247,9 @@
     "linkImageTitle": "ربط صورة",
     "imageFilter": "الصور"
   },
+  "sizeUnit": {
+    "tooltip": "وحدة الأبعاد"
+  },
   "multiSelect": "{{count}} تعليقات محددة",
   "pdfText": "نص PDF",
   "types": {

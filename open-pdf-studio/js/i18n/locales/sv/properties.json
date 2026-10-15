@@ -247,6 +247,9 @@
     "linkImageTitle": "Länka bild",
     "imageFilter": "Bilder"
   },
+  "sizeUnit": {
+    "tooltip": "Enhet för mått"
+  },
   "multiSelect": "{{count}} anteckningar markerade",
   "pdfText": "PDF-text",
   "types": {

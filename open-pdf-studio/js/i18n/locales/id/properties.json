@@ -247,6 +247,9 @@
     "linkImageTitle": "Tautkan gambar",
     "imageFilter": "Gambar"
   },
+  "sizeUnit": {
+    "tooltip": "Satuan ukuran"
+  },
   "multiSelect": "{{count}} anotasi dipilih",
   "pdfText": "Teks PDF",
   "types": {

@@ -247,6 +247,9 @@
     "linkImageTitle": "تصویر منسلک کریں",
     "imageFilter": "تصاویر"
   },
+  "sizeUnit": {
+    "tooltip": "سائز کی اکائی"
+  },
   "multiSelect": "{{count}} تشریحات منتخب",
   "pdfText": "PDF متن",
   "types": {

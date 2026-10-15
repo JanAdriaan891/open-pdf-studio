@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Προεπιλεγμένο χρώμα σχολιασμού",
     "defaultLineWidth": "Προεπιλεγμένο πλάτος γραμμής",
     "defaultFontSize": "Προεπιλεγμένο μέγεθος γραμματοσειράς",
+    "paperSizeUnit": "Μονάδα διαστάσεων (εικόνα, γραμμή κλίμακας)",
     "highlightOpacity": "Αδιαφάνεια επισήμανσης (%)",
     "angleSnap": "Κούμπωμα γωνίας (πλήκτρο Shift)",
     "objectSnapping": "Κούμπωμα αντικειμένων",
