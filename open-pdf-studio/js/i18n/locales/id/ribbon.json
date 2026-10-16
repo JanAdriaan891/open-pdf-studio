@@ -297,6 +297,8 @@
     "deletePageConfirm": "Hapus halaman {{page}}?",
     "extractPages": "Ekstrak Halaman",
     "extractLabel": "Ekstrak",
+    "splitDocument": "Pisahkan Dokumen",
+    "splitLabel": "Pisahkan",
     "combine": "Gabungkan",
     "mergePdfs": "Gabungkan PDF",
     "mergeLabel": "Gabungkan",

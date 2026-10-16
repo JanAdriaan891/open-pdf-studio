@@ -297,6 +297,8 @@
     "deletePageConfirm": "Xóa trang {{page}}?",
     "extractPages": "Trích xuất Trang",
     "extractLabel": "Trích xuất",
+    "splitDocument": "Tách tài liệu",
+    "splitLabel": "Tách",
     "combine": "Kết hợp",
     "mergePdfs": "Gộp PDF",
     "mergeLabel": "Gộp",

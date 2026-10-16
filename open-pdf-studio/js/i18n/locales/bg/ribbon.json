@@ -297,6 +297,8 @@
     "deletePageConfirm": "Изтриване на страница {{page}}?",
     "extractPages": "Извличане на страници",
     "extractLabel": "Извлечи",
+    "splitDocument": "Разделяне на документ",
+    "splitLabel": "Раздели",
     "combine": "Комбиниране",
     "mergePdfs": "Обединяване на PDF файлове",
     "mergeLabel": "Обедини",

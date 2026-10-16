@@ -352,3 +352,6 @@ js/core/fout-bericht.test.mjs
 js/core/bestandsnaam.test.mjs
 js/mobile/ipc-wekker.test.mjs
 js/pdf/print-boekje.test.mjs
+js/pdf/splits-logica.test.mjs
+js/pdf/splits-document.test.mjs
+js/pdf/splits-i18n.test.mjs

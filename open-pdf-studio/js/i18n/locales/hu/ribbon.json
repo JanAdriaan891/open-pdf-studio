@@ -297,6 +297,8 @@
     "deletePageConfirm": "Törli a(z) {{page}}. oldalt?",
     "extractPages": "Oldalak kibontása",
     "extractLabel": "Kibontás",
+    "splitDocument": "Dokumentum felosztása",
+    "splitLabel": "Felosztás",
     "combine": "Kombinálás",
     "mergePdfs": "PDF-ek összefűzése",
     "mergeLabel": "Összefűzés",

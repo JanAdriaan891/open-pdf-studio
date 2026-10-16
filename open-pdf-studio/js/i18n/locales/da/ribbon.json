@@ -297,6 +297,8 @@
     "deletePageConfirm": "Slet side {{page}}?",
     "extractPages": "Udtræk sider",
     "extractLabel": "Udtræk",
+    "splitDocument": "Opdel dokument",
+    "splitLabel": "Opdel",
     "combine": "Kombiner",
     "mergePdfs": "Flet PDF-filer",
     "mergeLabel": "Flet",

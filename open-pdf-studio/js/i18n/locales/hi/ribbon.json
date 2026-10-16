@@ -297,6 +297,8 @@
     "deletePageConfirm": "पृष्ठ {{page}} हटाएं?",
     "extractPages": "पृष्ठ निकालें",
     "extractLabel": "निकालें",
+    "splitDocument": "दस्तावेज़ विभाजित करें",
+    "splitLabel": "विभाजित करें",
     "combine": "संयोजित करें",
     "mergePdfs": "PDF मर्ज करें",
     "mergeLabel": "मर्ज करें",

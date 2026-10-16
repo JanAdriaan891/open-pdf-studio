@@ -297,6 +297,8 @@
     "deletePageConfirm": "Διαγραφή σελίδας {{page}};",
     "extractPages": "Εξαγωγή σελίδων",
     "extractLabel": "Εξαγωγή",
+    "splitDocument": "Διαχωρισμός εγγράφου",
+    "splitLabel": "Διαχωρισμός",
     "combine": "Συνδυασμός",
     "mergePdfs": "Συγχώνευση PDF",
     "mergeLabel": "Συγχώνευση",

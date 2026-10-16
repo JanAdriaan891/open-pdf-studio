@@ -297,6 +297,8 @@
     "deletePageConfirm": "{{page}} 페이지를 삭제하시겠습니까?",
     "extractPages": "페이지 추출",
     "extractLabel": "추출",
+    "splitDocument": "문서 분할",
+    "splitLabel": "분할",
     "combine": "결합",
     "mergePdfs": "PDF 병합",
     "mergeLabel": "병합",

@@ -297,6 +297,8 @@
     "deletePageConfirm": "صفحہ {{page}} حذف کریں؟",
     "extractPages": "صفحات نکالیں",
     "extractLabel": "نکالیں",
+    "splitDocument": "دستاویز تقسیم کریں",
+    "splitLabel": "تقسیم کریں",
     "combine": "ملائیں",
     "mergePdfs": "PDFs ضم کریں",
     "mergeLabel": "ضم کریں",

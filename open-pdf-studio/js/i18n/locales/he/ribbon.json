@@ -297,6 +297,8 @@
     "deletePageConfirm": "למחוק את עמוד {{page}}?",
     "extractPages": "חילוץ עמודים",
     "extractLabel": "חילוץ",
+    "splitDocument": "פיצול מסמך",
+    "splitLabel": "פיצול",
     "combine": "שילוב",
     "mergePdfs": "מיזוג PDF-ים",
     "mergeLabel": "מיזוג",

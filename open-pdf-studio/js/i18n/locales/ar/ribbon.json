@@ -297,6 +297,8 @@
     "deletePageConfirm": "هل تريد حذف الصفحة {{page}}؟",
     "extractPages": "استخراج الصفحات",
     "extractLabel": "استخراج",
+    "splitDocument": "تقسيم المستند",
+    "splitLabel": "تقسيم",
     "combine": "دمج",
     "mergePdfs": "دمج ملفات PDF",
     "mergeLabel": "دمج",

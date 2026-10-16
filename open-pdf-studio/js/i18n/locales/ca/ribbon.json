@@ -297,6 +297,8 @@
     "deletePageConfirm": "Voleu suprimir la pàgina {{page}}?",
     "extractPages": "Extreu pàgines",
     "extractLabel": "Extreu",
+    "splitDocument": "Divideix el document",
+    "splitLabel": "Divideix",
     "combine": "Combina",
     "mergePdfs": "Combina PDF",
     "mergeLabel": "Combina",

@@ -297,6 +297,8 @@
     "deletePageConfirm": "Supprimer la page {{page}} ?",
     "extractPages": "Extraire des pages",
     "extractLabel": "Extraire",
+    "splitDocument": "Fractionner le document",
+    "splitLabel": "Fractionner",
     "combine": "Combiner",
     "mergePdfs": "Fusionner des PDF",
     "mergeLabel": "Fusionner",
