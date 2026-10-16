@@ -299,6 +299,8 @@
     "deletePageConfirm": "{{page}} ページを削除しますか？",
     "extractPages": "ページを抽出",
     "extractLabel": "抽出",
+    "splitDocument": "文書を分割",
+    "splitLabel": "分割",
     "combine": "結合",
     "mergePdfs": "PDF を結合",
     "mergeLabel": "結合",

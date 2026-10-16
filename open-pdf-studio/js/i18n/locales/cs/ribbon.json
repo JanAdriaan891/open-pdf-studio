@@ -299,6 +299,8 @@
     "deletePageConfirm": "Smazat stránku {{page}}?",
     "extractPages": "Extrahovat stránky",
     "extractLabel": "Extrahovat",
+    "splitDocument": "Rozdělit dokument",
+    "splitLabel": "Rozdělit",
     "combine": "Kombinovat",
     "mergePdfs": "Sloučit PDF",
     "mergeLabel": "Sloučit",

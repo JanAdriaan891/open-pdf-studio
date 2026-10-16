@@ -64,6 +64,11 @@ test('pagina\'s per vel: een getal uit een oud bestand telt, rommel valt terug',
   assert.equal(s.sheetBorder, false);
 });
 
+test('boekje (#381): de keuze blijft bewaard', () => {
+  assert.equal(herstelPrintInstellingen({ perSheet: 'booklet' }).perSheet, 'booklet');
+  assert.equal(herstelPrintInstellingen({ perSheet: 'Booklet' }).perSheet, '1');
+});
+
 test('onbekende keuzes en verkeerde typen vallen terug op de standaard', () => {
   const s = herstelPrintInstellingen({
     range: 'alles', subset: 3, scaling: 'groot', content: null,

@@ -299,6 +299,8 @@
     "deletePageConfirm": "آیا صفحه {{page}} حذف شود؟",
     "extractPages": "استخراج صفحات",
     "extractLabel": "استخراج",
+    "splitDocument": "تقسیم سند",
+    "splitLabel": "تقسیم",
     "combine": "ترکیب",
     "mergePdfs": "ادغام فایل‌های PDF",
     "mergeLabel": "ادغام",

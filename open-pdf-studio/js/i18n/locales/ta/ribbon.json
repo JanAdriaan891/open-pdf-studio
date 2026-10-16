@@ -299,6 +299,8 @@
     "deletePageConfirm": "பக்கம் {{page}} நீக்கவா?",
     "extractPages": "பக்கங்களைப் பிரித்தெடு",
     "extractLabel": "பிரித்தெடு",
+    "splitDocument": "ஆவணத்தைப் பிரி",
+    "splitLabel": "பிரி",
     "combine": "இணை",
     "mergePdfs": "PDF களை ஒன்றிணை",
     "mergeLabel": "ஒன்றிணை",

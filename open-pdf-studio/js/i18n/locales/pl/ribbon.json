@@ -299,6 +299,8 @@
     "deletePageConfirm": "Usunąć stronę {{page}}?",
     "extractPages": "Wyodrębnij strony",
     "extractLabel": "Wyodrębnij",
+    "splitDocument": "Podziel dokument",
+    "splitLabel": "Podziel",
     "combine": "Połącz",
     "mergePdfs": "Scal pliki PDF",
     "mergeLabel": "Scal",

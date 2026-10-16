@@ -299,6 +299,8 @@
     "deletePageConfirm": "Futa ukurasa {{page}}?",
     "extractPages": "Toa Kurasa",
     "extractLabel": "Toa",
+    "splitDocument": "Gawanya Hati",
+    "splitLabel": "Gawanya",
     "combine": "Unganisha",
     "mergePdfs": "Unganisha PDF",
     "mergeLabel": "Unganisha",

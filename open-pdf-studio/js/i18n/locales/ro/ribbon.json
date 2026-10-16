@@ -299,6 +299,8 @@
     "deletePageConfirm": "Stergeti pagina {{page}}?",
     "extractPages": "Extragere pagini",
     "extractLabel": "Extragere",
+    "splitDocument": "Împărțire document",
+    "splitLabel": "Împărțire",
     "combine": "Combinare",
     "mergePdfs": "Imbinare PDF-uri",
     "mergeLabel": "Imbinare",

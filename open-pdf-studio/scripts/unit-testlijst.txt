@@ -366,3 +366,7 @@ js/pdf/three-d/camera.test.mjs
 js/pdf/three-d/snapshot-page.test.mjs
 js/pdf/three-d/decoded-cache.test.mjs
 js/pdf/three-d/u3d-scene.test.mjs
+js/pdf/print-boekje.test.mjs
+js/pdf/splits-logica.test.mjs
+js/pdf/splits-document.test.mjs
+js/pdf/splits-i18n.test.mjs

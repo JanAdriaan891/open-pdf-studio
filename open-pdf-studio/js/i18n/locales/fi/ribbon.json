@@ -299,6 +299,8 @@
     "deletePageConfirm": "Poista sivu {{page}}?",
     "extractPages": "Poimi sivut",
     "extractLabel": "Poimi",
+    "splitDocument": "Jaa asiakirja",
+    "splitLabel": "Jaa",
     "combine": "Yhdistä",
     "mergePdfs": "Yhdistä PDF-tiedostot",
     "mergeLabel": "Yhdistä",

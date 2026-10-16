@@ -299,6 +299,8 @@
     "deletePageConfirm": "Sayfa {{page}} silinsin mi?",
     "extractPages": "Sayfaları Çıkar",
     "extractLabel": "Çıkar",
+    "splitDocument": "Belgeyi Böl",
+    "splitLabel": "Böl",
     "combine": "Birleştir",
     "mergePdfs": "PDF Birleştir",
     "mergeLabel": "Birleştir",

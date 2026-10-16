@@ -299,6 +299,8 @@
     "deletePageConfirm": "ลบหน้า {{page}}?",
     "extractPages": "แยกหน้า",
     "extractLabel": "แยก",
+    "splitDocument": "แบ่งเอกสาร",
+    "splitLabel": "แบ่ง",
     "combine": "รวม",
     "mergePdfs": "รวม PDF",
     "mergeLabel": "รวม",

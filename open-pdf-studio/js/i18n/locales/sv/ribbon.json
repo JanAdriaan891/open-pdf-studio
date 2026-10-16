@@ -299,6 +299,8 @@
     "deletePageConfirm": "Radera sida {{page}}?",
     "extractPages": "Extrahera sidor",
     "extractLabel": "Extrahera",
+    "splitDocument": "Dela dokument",
+    "splitLabel": "Dela",
     "combine": "Kombinera",
     "mergePdfs": "Sammanfoga PDF:er",
     "mergeLabel": "Sammanfoga",

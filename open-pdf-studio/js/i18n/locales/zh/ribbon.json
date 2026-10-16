@@ -299,6 +299,8 @@
     "deletePageConfirm": "删除第 {{page}} 页？",
     "extractPages": "提取页面",
     "extractLabel": "提取",
+    "splitDocument": "拆分文档",
+    "splitLabel": "拆分",
     "combine": "合并",
     "mergePdfs": "合并 PDF",
     "mergeLabel": "合并",

@@ -299,6 +299,8 @@
     "deletePageConfirm": "পৃষ্ঠা {{page}} মুছে ফেলবেন?",
     "extractPages": "পৃষ্ঠা নিষ্কাশন",
     "extractLabel": "নিষ্কাশন",
+    "splitDocument": "নথি বিভক্ত করুন",
+    "splitLabel": "বিভক্ত করুন",
     "combine": "সংযুক্ত",
     "mergePdfs": "PDF একত্রিত করুন",
     "mergeLabel": "একত্রিত",

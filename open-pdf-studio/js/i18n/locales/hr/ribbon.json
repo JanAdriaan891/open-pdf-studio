@@ -299,6 +299,8 @@
     "deletePageConfirm": "Obrisati stranicu {{page}}?",
     "extractPages": "Izdvoji stranice",
     "extractLabel": "Izdvoji",
+    "splitDocument": "Podijeli dokument",
+    "splitLabel": "Podijeli",
     "combine": "Kombiniraj",
     "mergePdfs": "Spoji PDF-ove",
     "mergeLabel": "Spoji",

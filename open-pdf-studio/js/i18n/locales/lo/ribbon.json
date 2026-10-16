@@ -299,6 +299,8 @@
     "deletePageConfirm": "ຕ້ອງການລຶບໜ້າ {{page}} ແທ້ບໍ່?",
     "extractPages": "ແຍກໜ້າເຈ້ຍ",
     "extractLabel": "ແຍກອອກ",
+    "splitDocument": "ແບ່ງເອກະສານ",
+    "splitLabel": "ແບ່ງ",
     "combine": "ຮວມໄຟລ໌",
     "mergePdfs": "ຮວມໄຟລ໌ PDF",
     "mergeLabel": "ຮວມ",
