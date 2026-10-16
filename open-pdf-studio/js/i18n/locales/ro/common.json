@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Reîncărcarea paginii pornește de la zero: în browser, documentul rămâne pe computerul dvs. și nu este stocat.",
   "desktopOnly": "{{feature}} funcționează doar în aplicația desktop. Această pagină este versiunea pentru browser.",
   "assistantTitle": "Asistentul OpenAEC",
+  "assistant": {
+    "greeting": "Bună! Sunt **{{title}}**. Pot: 🌐 traduce, 📝 rezuma, ✏️ desena pe planșă și 🚪 recunoaște ușile. Alegeți o abilitate de mai jos sau puneți întrebarea.",
+    "workingIn": "lucrează în",
+    "viaClaude": "prin Claude",
+    "notConnected": "neconectat",
+    "keyButton": "Setați cheia API Claude (Anthropic)",
+    "keyPlaceholder": "Cheie API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Mă gândesc…",
+    "inputPlaceholder": "Întrebați ceva despre acest PDF…",
+    "send": "Trimite",
+    "noAnswer": "Nu s-a primit niciun răspuns.",
+    "errorInvalidKey": "Cheie API Claude (Anthropic) nevalidă. Verificați cheia cu butonul 🔑 din partea de sus a panoului.",
+    "errorApi": "API-ul Claude a returnat o eroare.",
+    "errorNoConnection": "Nicio conexiune la serviciul AI.",
+    "errorTimeout": "Niciun client MCP nu a răspuns la timp la întrebare.",
+    "errorFailed": "Apelul AI a eșuat.",
+    "detail": "Detalii",
+    "unknownError": "eroare necunoscută",
+    "skills": {
+      "translate": {
+        "label": "Tradu",
+        "hint": "Tradu textul documentului",
+        "prompt": "Tradu textul documentului deschis."
+      },
+      "summarize": {
+        "label": "Rezumă",
+        "hint": "Rezumă documentul sau planșa",
+        "prompt": "Rezumă documentul sau planșa deschisă."
+      },
+      "draw": {
+        "label": "Desenează",
+        "hint": "Desenează un element sau o adnotare pe planșă",
+        "prompt": "Desenează pe planșă: "
+      },
+      "detect-doors": {
+        "label": "Recunoaște uși",
+        "hint": "Detectează ușile din plan și marchează-le",
+        "prompt": "Recunoaște ușile din plan și marchează-le."
+      },
+      "structural-layout": {
+        "label": "Trasează structura",
+        "hint": "Rețea de axe, stâlpi, grinzi, câmpuri de planșeu cu direcția deschiderii și tabelul structural",
+        "prompt": "Trasează structura de rezistență pe planșă. Date: "
+      },
+      "structural-overview": {
+        "label": "Prezentare structurală",
+        "hint": "Prezentare structurală pe niveluri pe planurile arhitectului: fundații, planșee cu deschideri, pereți portanți de dedesubt, grinzi și stâlpi, legendă și note",
+        "prompt": "Realizează o prezentare structurală pe această planșă din planurile arhitectului. Sursă, niveluri și principiu structural: "
+      },
+      "floorplan": {
+        "label": "Plan de nivel",
+        "hint": "Desenează un plan arhitectural: pereți, tâmplărie, încăperi, cote și dotări (sanitare, bucătărie)",
+        "prompt": "Desenează un plan arhitectural. Ce trebuie desenat: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Bibliotecă de simboluri online",
   "noDocumentOpen": "Niciun document nu este deschis.",
   "noPdfLoaded": "Niciun PDF încărcat.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Niciun decupaj în clipboard"
   },
   "snippetOutputFailed": "Un decupaj vectorial nu a putut fi randat, așa că exportul sau tipărirea a fost oprită. Încercați din nou.",
-  "protectedPdfReadOnly": "Acest document a fost deschis cu o parolă și este doar în citire. Nu poate fi salvat."
+  "protectedPdfReadOnly": "Acest document a fost deschis cu o parolă și este doar în citire. Nu poate fi salvat.",
+  "threeD": {
+    "title": "Vizualizare 3D",
+    "view": "Vedere",
+    "fit": "Încadrare",
+    "display": "Afișare",
+    "modeSolid": "Plin",
+    "modeEdges": "Plin cu muchii",
+    "modeWire": "Cadru de sârmă",
+    "modeXray": "Transparent",
+    "tree": "Arborele modelului",
+    "hint": "Tragere cu stânga: orbitare, cu dreapta: deplasare, rotiță: zoom",
+    "loading": "Se încarcă modelul 3D... {{pct}}%",
+    "stats": "{{models}} obiecte, {{tris}} triunghiuri",
+    "unsupported": "Acest model 3D folosește formatul {{fmt}}, care nu este încă acceptat (doar U3D).",
+    "activate": "Activare 3D",
+    "expand": "Umple zona documentului",
+    "shrink": "Înapoi la pagină",
+    "deactivate": "Dezactivare vizualizare 3D",
+    "markupView": "Vedere de adnotare",
+    "edit": "Editare",
+    "editTip": "Creează o pagină de adnotare din această vedere; pagina 3D rămâne liberă pentru rotire",
+    "creating": "Se creează pagina...",
+    "markupPages": "Pagini de adnotare",
+    "pageN": "pagina {{n}}",
+    "snapshotBar": "Pagină de adnotare 3D: {{name}}",
+    "backTo3D": "Înapoi la modelul 3D",
+    "readFailed": "Modelul 3D nu a putut fi citit.",
+    "partial": "Unele părți ale modelului 3D nu au putut fi citite ({{n}} omise).",
+    "viewerFailed": "Vizualizarea 3D nu a putut fi pornită."
+  }
 }

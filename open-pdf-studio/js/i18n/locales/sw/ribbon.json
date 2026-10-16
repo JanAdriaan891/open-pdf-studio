@@ -266,6 +266,8 @@
     "swap": "Badilishana la zamani na jipya",
     "overlayDesc": "PDF zote mbili zimewekwa moja juu ya nyingine",
     "sideDesc": "PDF mbili kando kwa kando, zikienda pamoja",
+    "split": "Mstari wa kugawa",
+    "splitDesc": "Buruta mstari ili kuonyesha cha zamani na kipya",
     "legendOld": "Kwenye la zamani tu",
     "legendNew": "Kwenye jipya tu",
     "legendBoth": "Haijabadilika",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Futa ukurasa {{page}}?",
     "extractPages": "Toa Kurasa",
     "extractLabel": "Toa",
+    "splitDocument": "Gawanya Hati",
+    "splitLabel": "Gawanya",
     "combine": "Unganisha",
     "mergePdfs": "Unganisha PDF",
     "mergeLabel": "Unganisha",
@@ -621,5 +625,15 @@
     "symbolScale": "Kipimo",
     "symbolScaleTitle": "Ukubwa wa kuweka alama mpya",
     "symbolScaleCustom": "Kipimo maalum"
+  },
+  "proofread": {
+    "group": "Usahihishaji",
+    "button": "Sahihisha",
+    "tooltip": "Hali ya usahihishaji (F2): weka alama za kuongeza, kufuta na kubadilisha kwa kibodi",
+    "hint": "Usahihishaji: vitufe vya mishale husogeza kishale, andika ili kuongeza, Delete hukata maandishi, Tab huenda kwenye sahihisho linalofuata, Esc hurudi hatua moja.",
+    "noText": "Ukurasa huu hauna maandishi ya kusahihisha.",
+    "noCorrections": "Bado hakuna masahihisho.",
+    "insertPlaceholder": "Maandishi ya kuongeza",
+    "replacePlaceholder": "Maandishi mbadala"
   }
 }

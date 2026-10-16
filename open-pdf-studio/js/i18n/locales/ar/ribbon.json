@@ -266,6 +266,8 @@
     "swap": "تبديل القديم والجديد",
     "overlayDesc": "كلا ملفي PDF فوق بعضهما",
     "sideDesc": "ملفا PDF جنبًا إلى جنب، متزامنان",
+    "split": "خط الفصل",
+    "splitDesc": "اسحب خطًا لإظهار القديم والجديد",
     "legendOld": "في القديم فقط",
     "legendNew": "في الجديد فقط",
     "legendBoth": "دون تغيير",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "هل تريد حذف الصفحة {{page}}؟",
     "extractPages": "استخراج الصفحات",
     "extractLabel": "استخراج",
+    "splitDocument": "تقسيم المستند",
+    "splitLabel": "تقسيم",
     "combine": "دمج",
     "mergePdfs": "دمج ملفات PDF",
     "mergeLabel": "دمج",
@@ -621,5 +625,15 @@
     "symbolScale": "المقياس",
     "symbolScaleTitle": "الحجم الذي يُوضع به رمز جديد",
     "symbolScaleCustom": "مقياس مخصص"
+  },
+  "proofread": {
+    "group": "التدقيق",
+    "button": "تدقيق",
+    "tooltip": "وضع التدقيق (F2): حدّد الإدراج والحذف والاستبدال باستخدام لوحة المفاتيح",
+    "hint": "التدقيق: تحرّك الأسهم المؤشر، اكتب للإدراج، يشطب Delete النص، ينتقل Tab إلى التصحيح التالي، يرجع Esc خطوة إلى الوراء.",
+    "noText": "لا يوجد نص في هذه الصفحة لتدقيقه.",
+    "noCorrections": "لا توجد تصحيحات بعد.",
+    "insertPlaceholder": "النص المراد إدراجه",
+    "replacePlaceholder": "النص البديل"
   }
 }

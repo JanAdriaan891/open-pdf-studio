@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Color d'anotació per defecte",
     "defaultLineWidth": "Amplada de línia per defecte",
     "defaultFontSize": "Mida de lletra per defecte",
+    "paperSizeUnit": "Unitat de les mides (imatge, barra d'escala)",
     "highlightOpacity": "Opacitat del ressaltat (%)",
     "angleSnap": "Ajust d'angle (tecla Maj)",
     "objectSnapping": "Ajust d'objectes",

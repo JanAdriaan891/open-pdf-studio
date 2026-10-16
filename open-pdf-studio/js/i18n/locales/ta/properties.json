@@ -247,6 +247,9 @@
     "linkImageTitle": "படத்தை இணை",
     "imageFilter": "படங்கள்"
   },
+  "sizeUnit": {
+    "tooltip": "அளவுகளின் அலகு"
+  },
   "multiSelect": "{{count}} குறிப்புரைகள் தேர்ந்தெடுக்கப்பட்டன",
   "pdfText": "PDF உரை",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "கருத்துகளை இறக்குமதி...",
     "exportComments": "கருத்துகளை தரவு கோப்பில் ஏற்றுமதி...",
     "exportSelectedComments": "தேர்ந்தெடுத்த கருத்துகளை தரவு கோப்பில் ஏற்றுமதி...",
+    "exportListCsv": "பட்டியலை CSV-க்கு ஏற்றுமதி செய்...",
+    "summarizeComingSoon": "விரைவில் வருகிறது",
+    "listExported": "கருத்துப் பட்டியல் CSV-க்கு ஏற்றுமதி செய்யப்பட்டது",
+    "csvPage": "பக்கம்",
+    "csvType": "வகை",
+    "csvAuthor": "ஆசிரியர்",
+    "csvDate": "தேதி",
+    "csvStatus": "நிலை",
+    "csvSubject": "பொருள்",
+    "csvContents": "உள்ளடக்கம்",
+    "csvColor": "நிறம்",
+    "csvLayer": "அடுக்கு",
     "schedules": "அட்டவணைகள்",
     "addPage": "பக்கத்தைச் சேர்",
     "pageLabels": "பக்க லேபிள்கள் (பெயர் உருவாக்கி)"

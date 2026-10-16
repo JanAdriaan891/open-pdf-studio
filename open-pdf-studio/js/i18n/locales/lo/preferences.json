@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "ສີເລີ່ມຕົ້ນຂອງຄຳອະທິບາຍປະກອບ",
     "defaultLineWidth": "ຄວາມກວ້າງເສັ້ນເລີ່ມຕົ້ນ",
     "defaultFontSize": "ຂະໜາດໂຕໜັງສືເລີ່ມຕົ້ນ",
+    "paperSizeUnit": "ຫົວໜ່ວຍຂະໜາດ (ຮູບພາບ, ແຖບມາດຕາສ່ວນ)",
     "highlightOpacity": "ຄວາມໂປ່ງໃສຂອງໄຮໄລທ໌",
     "angleSnap": "ດຶງມຸມອັດຕະໂນມັດ (ປຸ່ມ Shift)",
     "objectSnapping": "ການດຶງດູດວັດຖຸ (Object Snapping)",

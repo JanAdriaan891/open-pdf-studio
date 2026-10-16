@@ -247,6 +247,9 @@
     "linkImageTitle": "Связать изображение",
     "imageFilter": "Изображения"
   },
+  "sizeUnit": {
+    "tooltip": "Единица размеров"
+  },
   "multiSelect": "{{count}} аннотаций выбрано",
   "pdfText": "Текст PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Импорт комментариев...",
     "exportComments": "Экспорт комментариев в файл данных...",
     "exportSelectedComments": "Экспорт выбранных комментариев в файл данных...",
+    "exportListCsv": "Экспортировать список в CSV...",
+    "summarizeComingSoon": "Скоро",
+    "listExported": "Список комментариев экспортирован в CSV",
+    "csvPage": "Страница",
+    "csvType": "Тип",
+    "csvAuthor": "Автор",
+    "csvDate": "Дата",
+    "csvStatus": "Статус",
+    "csvSubject": "Тема",
+    "csvContents": "Содержание",
+    "csvColor": "Цвет",
+    "csvLayer": "Слой",
     "schedules": "Спецификации",
     "addPage": "Добавить страницу",
     "pageLabels": "Метки страниц (конструктор имён)"

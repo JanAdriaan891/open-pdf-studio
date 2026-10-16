@@ -247,6 +247,9 @@
     "linkImageTitle": "画像をリンク",
     "imageFilter": "画像"
   },
+  "sizeUnit": {
+    "tooltip": "サイズの単位"
+  },
   "multiSelect": "{{count}}個の注釈を選択中",
   "pdfText": "PDFテキスト",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "コメントのインポート...",
     "exportComments": "コメントをデータファイルにエクスポート...",
     "exportSelectedComments": "選択したコメントをデータファイルにエクスポート...",
+    "exportListCsv": "リストを CSV にエクスポート...",
+    "summarizeComingSoon": "近日公開",
+    "listExported": "コメントリストを CSV にエクスポートしました",
+    "csvPage": "ページ",
+    "csvType": "種類",
+    "csvAuthor": "作成者",
+    "csvDate": "日付",
+    "csvStatus": "ステータス",
+    "csvSubject": "件名",
+    "csvContents": "内容",
+    "csvColor": "色",
+    "csvLayer": "レイヤー",
     "schedules": "集計表",
     "addPage": "ページを追加",
     "pageLabels": "ページラベル (名前ビルダー)"

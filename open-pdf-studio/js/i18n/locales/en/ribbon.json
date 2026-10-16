@@ -266,6 +266,8 @@
     "swap": "Swap old and new",
     "overlayDesc": "Both PDFs on top of each other",
     "sideDesc": "Two PDFs side by side, synchronized",
+    "split": "Split line",
+    "splitDesc": "Drag a line across to reveal old and new",
     "legendOld": "Only in old",
     "legendNew": "Only in new",
     "legendBoth": "Unchanged",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Delete page {{page}}?",
     "extractPages": "Extract Pages",
     "extractLabel": "Extract",
+    "splitDocument": "Split Document",
+    "splitLabel": "Split",
     "combine": "Combine",
     "mergePdfs": "Merge PDFs",
     "mergeLabel": "Merge",
@@ -619,5 +623,15 @@
     "measureArea": "Area",
     "measurePerimeter": "Perimeter",
     "annotation": "Annotation"
+  },
+  "proofread": {
+    "group": "Proofreading",
+    "button": "Proofread",
+    "tooltip": "Proofreading mode (F2): mark insertions, deletions and replacements with the keyboard",
+    "hint": "Proofreading: arrow keys move the cursor, type to insert, Delete strikes out, Tab goes to the next correction, Esc steps back.",
+    "noText": "This page has no text to proofread.",
+    "noCorrections": "There are no corrections yet.",
+    "insertPlaceholder": "Insert text",
+    "replacePlaceholder": "Replacement text"
   }
 }

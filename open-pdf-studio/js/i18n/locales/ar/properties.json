@@ -247,6 +247,9 @@
     "linkImageTitle": "ربط صورة",
     "imageFilter": "الصور"
   },
+  "sizeUnit": {
+    "tooltip": "وحدة الأبعاد"
+  },
   "multiSelect": "{{count}} تعليقات محددة",
   "pdfText": "نص PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "استيراد التعليقات...",
     "exportComments": "تصدير التعليقات إلى ملف بيانات...",
     "exportSelectedComments": "تصدير التعليقات المحددة إلى ملف بيانات...",
+    "exportListCsv": "تصدير القائمة إلى CSV...",
+    "summarizeComingSoon": "قريبًا",
+    "listExported": "تم تصدير قائمة التعليقات إلى CSV",
+    "csvPage": "الصفحة",
+    "csvType": "النوع",
+    "csvAuthor": "المؤلف",
+    "csvDate": "التاريخ",
+    "csvStatus": "الحالة",
+    "csvSubject": "الموضوع",
+    "csvContents": "المحتوى",
+    "csvColor": "اللون",
+    "csvLayer": "الطبقة",
     "schedules": "جداول الكميات",
     "addPage": "إضافة صفحة",
     "pageLabels": "تسميات الصفحات (منشئ الأسماء)"

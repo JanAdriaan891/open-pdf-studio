@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "پہلے سے طے شدہ تشریح کا رنگ",
     "defaultLineWidth": "پہلے سے طے شدہ لکیر کی چوڑائی",
     "defaultFontSize": "پہلے سے طے شدہ فونٹ سائز",
+    "paperSizeUnit": "سائز کی اکائی (تصویر، اسکیل بار)",
     "highlightOpacity": "نمایاں شفافیت (%)",
     "angleSnap": "زاویہ سنیپ (Shift کلید)",
     "objectSnapping": "آبجیکٹ سنیپنگ",

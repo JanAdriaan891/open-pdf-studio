@@ -266,6 +266,8 @@
     "swap": "Bytt gammel og ny",
     "overlayDesc": "Begge PDF-ene oppå hverandre",
     "sideDesc": "To PDF-er side om side, synkronisert",
+    "split": "Delelinje",
+    "splitDesc": "Dra en linje for å vise gammel og ny",
     "legendOld": "Bare i gammel",
     "legendNew": "Bare i ny",
     "legendBoth": "Uendret",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Slette side {{page}}?",
     "extractPages": "Pakk ut sider",
     "extractLabel": "Pakk ut",
+    "splitDocument": "Del opp dokument",
+    "splitLabel": "Del opp",
     "combine": "Kombiner",
     "mergePdfs": "Slå sammen PDF-er",
     "mergeLabel": "Slå sammen",
@@ -621,5 +625,15 @@
     "symbolScale": "Målestokk",
     "symbolScaleTitle": "Størrelsen et nytt symbol plasseres i",
     "symbolScaleCustom": "Egendefinert målestokk"
+  },
+  "proofread": {
+    "group": "Korrektur",
+    "button": "Korrekturles",
+    "tooltip": "Korrekturmodus (F2): merk innsettinger, slettinger og erstatninger med tastaturet",
+    "hint": "Korrektur: piltastene flytter markøren, skriv for å sette inn, Delete stryker over, Tab går til neste rettelse, Esc går ett trinn tilbake.",
+    "noText": "Denne siden har ingen tekst å korrekturlese.",
+    "noCorrections": "Det er ingen rettelser ennå.",
+    "insertPlaceholder": "Sett inn tekst",
+    "replacePlaceholder": "Erstatningstekst"
   }
 }

@@ -29,7 +29,8 @@
     "formCheckbox": "Formular-Kontrollkästchen",
     "formRadio": "Formular-Optionsschaltfläche",
     "screenshot": "Bildschirmfoto",
-    "pageLabelPick": "Text für Seitenbeschriftung wählen"
+    "pageLabelPick": "Text für Seitenbeschriftung wählen",
+    "proofread": "Korrektur"
   },
   "toolLabel": "Werkzeug:",
   "annotationsLabel": "Anmerkungen:",

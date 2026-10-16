@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Couleur d'annotation par défaut",
     "defaultLineWidth": "Épaisseur de trait par défaut",
     "defaultFontSize": "Taille de police par défaut",
+    "paperSizeUnit": "Unité des dimensions (image, barre d'échelle)",
     "highlightOpacity": "Opacité du surlignage (%)",
     "angleSnap": "Magnétisme d'angle (touche Shift)",
     "objectSnapping": "Accrochage aux objets",

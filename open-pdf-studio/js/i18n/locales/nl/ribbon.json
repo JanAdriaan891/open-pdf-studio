@@ -266,6 +266,8 @@
     "swap": "Wissel oud en nieuw",
     "overlayDesc": "Beide PDF's over elkaar heen",
     "sideDesc": "Twee PDF's naast elkaar, gesynchroniseerd",
+    "split": "Scheidingslijn",
+    "splitDesc": "Sleep een lijn om oud en nieuw te tonen",
     "legendOld": "Alleen in oud",
     "legendNew": "Alleen in nieuw",
     "legendBoth": "Ongewijzigd",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Pagina {{page}} verwijderen?",
     "extractPages": "Pagina's extraheren",
     "extractLabel": "Extraheren",
+    "splitDocument": "Document splitsen",
+    "splitLabel": "Splitsen",
     "combine": "Combineren",
     "mergePdfs": "PDF's samenvoegen",
     "mergeLabel": "Samenvoegen",
@@ -621,5 +625,15 @@
     "measureArea": "Oppervlak",
     "measurePerimeter": "Omtrek",
     "annotation": "Annotatie"
+  },
+  "proofread": {
+    "group": "Proeflezen",
+    "button": "Proefleesmodus",
+    "tooltip": "Proefleesmodus (F2): markeer invoegingen, schrappingen en vervangingen met het toetsenbord",
+    "hint": "Proeflezen: pijltoetsen verplaatsen de cursor, typ om in te voegen, Delete haalt door, Tab gaat naar de volgende correctie, Esc stapt terug.",
+    "noText": "Deze pagina heeft geen tekst om proef te lezen.",
+    "noCorrections": "Er zijn nog geen correcties.",
+    "insertPlaceholder": "Tekst invoegen",
+    "replacePlaceholder": "Vervangende tekst"
   }
 }

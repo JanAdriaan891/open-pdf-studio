@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "En omladdning av sidan startar tom: i webbläsaren stannar dokumentet på din dator och lagras inte.",
   "desktopOnly": "{{feature}} fungerar bara i skrivbordsappen. Den här sidan är webbläsarversionen.",
   "assistantTitle": "OpenAEC-assistent",
+  "assistant": {
+    "greeting": "Hej! Jag är **{{title}}**. Jag kan: 🌐 översätta, 📝 sammanfatta, ✏️ rita på ritningen och 🚪 känna igen dörrar. Välj en färdighet nedan eller ställ din fråga.",
+    "workingIn": "arbetar i",
+    "viaClaude": "via Claude",
+    "notConnected": "inte ansluten",
+    "keyButton": "Ange Claude (Anthropic) API-nyckel",
+    "keyPlaceholder": "Claude (Anthropic) API-nyckel — sk-ant-…",
+    "thinking": "Tänker…",
+    "inputPlaceholder": "Fråga något om denna PDF…",
+    "send": "Skicka",
+    "noAnswer": "Inget svar mottogs.",
+    "errorInvalidKey": "Ogiltig Claude (Anthropic) API-nyckel. Kontrollera nyckeln med 🔑-knappen högst upp i panelen.",
+    "errorApi": "Claude-API:et returnerade ett fel.",
+    "errorNoConnection": "Ingen anslutning till AI-tjänsten.",
+    "errorTimeout": "Ingen MCP-klient besvarade frågan i tid.",
+    "errorFailed": "AI-anropet misslyckades.",
+    "detail": "Detaljer",
+    "unknownError": "okänt fel",
+    "skills": {
+      "translate": {
+        "label": "Översätt",
+        "hint": "Översätt dokumentets text",
+        "prompt": "Översätt texten i det öppna dokumentet."
+      },
+      "summarize": {
+        "label": "Sammanfatta",
+        "hint": "Sammanfatta dokumentet eller ritningen",
+        "prompt": "Sammanfatta det öppna dokumentet eller ritningen."
+      },
+      "draw": {
+        "label": "Rita",
+        "hint": "Rita ett element eller en anteckning på ritningen",
+        "prompt": "Rita på ritningen: "
+      },
+      "detect-doors": {
+        "label": "Känn igen dörrar",
+        "hint": "Hitta dörrarna i planritningen och markera dem",
+        "prompt": "Känn igen dörrarna i planritningen och markera dem."
+      },
+      "structural-layout": {
+        "label": "Lägg ut stomme",
+        "hint": "Modullinjer, pelare, balkar, bjälklagsfält med spännriktning och stomschemat",
+        "prompt": "Lägg ut den bärande stommen på ritningen. Uppgift: "
+      },
+      "structural-overview": {
+        "label": "Stomöversikt",
+        "hint": "Stomöversikt per våningsplan på arkitektens planritningar: grundläggning, bjälklag med spännvidd, underliggande bärande väggar, balkar och pelare, teckenförklaring och kommentarer",
+        "prompt": "Gör en stomöversikt på detta blad utifrån arkitektens planritningar. Källa, våningsplan och stomprincip: "
+      },
+      "floorplan": {
+        "label": "Planritning",
+        "hint": "Rita en byggnadsplanritning: väggar, fönster och dörrar, rum, måttsättning och inredning (sanitet, kök)",
+        "prompt": "Rita en byggnadsplanritning. Vad som ska ritas: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Symbolbibliotek online",
   "noDocumentOpen": "Inget dokument är öppet.",
   "noPdfLoaded": "Ingen PDF inläst.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Inget utsnitt i Urklipp"
   },
   "snippetOutputFailed": "Ett vektorutsnitt kunde inte återges, så exporten eller utskriften stoppades. Försök igen.",
-  "protectedPdfReadOnly": "Det här dokumentet öppnades med ett lösenord och är skrivskyddat. Det kan inte sparas."
+  "protectedPdfReadOnly": "Det här dokumentet öppnades med ett lösenord och är skrivskyddat. Det kan inte sparas.",
+  "threeD": {
+    "title": "3D-vy",
+    "view": "Vy",
+    "fit": "Anpassa",
+    "display": "Visning",
+    "modeSolid": "Massiv",
+    "modeEdges": "Massiv med kanter",
+    "modeWire": "Trådmodell",
+    "modeXray": "Genomskinlig",
+    "tree": "Modellträd",
+    "hint": "Dra med vänster: rotera, dra med höger: panorera, hjul: zooma",
+    "loading": "Läser in 3D-modell... {{pct}}%",
+    "stats": "{{models}} objekt, {{tris}} trianglar",
+    "unsupported": "Den här 3D-modellen använder formatet {{fmt}}, som ännu inte stöds (endast U3D).",
+    "activate": "Aktivera 3D",
+    "expand": "Fyll dokumentområdet",
+    "shrink": "Tillbaka till sidan",
+    "deactivate": "Stäng av 3D-vyn",
+    "markupView": "Markeringsvy",
+    "edit": "Redigera",
+    "editTip": "Skapa en markeringssida av den här vyn; 3D-sidan kan fortfarande roteras fritt",
+    "creating": "Skapar sida...",
+    "markupPages": "Markeringssidor",
+    "pageN": "sida {{n}}",
+    "snapshotBar": "3D-markeringssida: {{name}}",
+    "backTo3D": "Tillbaka till 3D-modell",
+    "readFailed": "3D-modellen kunde inte läsas.",
+    "partial": "Vissa delar av 3D-modellen kunde inte läsas ({{n}} hoppades över).",
+    "viewerFailed": "3D-vyn kunde inte startas."
+  }
 }

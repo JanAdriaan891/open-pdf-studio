@@ -46,7 +46,9 @@ import {
 import { applyTemplateRealSize } from '../../symbols/real-size.js';
 import { applyStampLineWidth, applyStampColor, stampLineWidthOf } from '../../annotations/stamp-line-width.js';
 import { pendingParams, setPendingParams } from './parametricSymbolStore.js';
-import { klemMaat, leesMaatInvoer, toonMaat, veiligeVerhouding, RECHTHOEK_VORMEN } from '../../annotations/minimummaat.js';
+import { klemMaat, toonMaat, veiligeVerhouding, RECHTHOEK_VORMEN } from '../../annotations/minimummaat.js';
+import { nieuweAfbeeldingsMaat } from '../../annotations/papiermaat-eenheid.js';
+import { papierEenheid } from './papierEenheidStore.js';
 import { kanZonderRand } from '../../annotations/fill-utils.js';
 
 // Types whose single 'color' control IS their stroke colour and which render
@@ -412,9 +414,11 @@ export function storeShowProperties(annotation) {
     textAlign: annotation.textAlign || 'left',
     lineSpacing: annotation.lineSpacing || '1.5',
     rotation: annotation.rotation || 0,
-    // Met decimalen: een afbeelding van 0,4 pt toonde anders "0".
-    imageWidth: annotation.type === 'image' ? toonMaat(annotation.width) : 0,
-    imageHeight: annotation.type === 'image' ? toonMaat(annotation.height) : 0,
+    // In paginapunten, onafgerond: het paneel toont ze in de gekozen
+    // papiereenheid (#598) en rondt pas daar af, zodat ook een kleine maat
+    // in inch niet "0" wordt.
+    imageWidth: annotation.type === 'image' ? annotation.width : 0,
+    imageHeight: annotation.type === 'image' ? annotation.height : 0,
     imageRotation: annotation.type === 'image' ? Math.round(annotation.rotation || 0) : 0,
     lockAspectRatio: annotation.type === 'image' ? (annotation.lockAspectRatio || false) : false,
     linkedPath: annotation.linkedPath || '',
@@ -1148,7 +1152,7 @@ function applyPropToAnnotation(ann, key, value) {
     case 'scaleBarUnit': ann.unit = value; break;
     case 'scaleBarTotalUnits': ann.totalUnits = parseFloat(value) || 1; break;
     case 'scaleBarDivisions': ann.divisions = Math.max(1, Math.min(20, parseInt(value) || 5)); break;
-    case 'scaleBarHeight': ann.height = Math.max(4, parseInt(value) || 14); break;
+    case 'scaleBarHeight': ann.height = _schaalbalkHoogte(value); break;
     // Stavenreeks — parameters; de geometrie wordt bij het renderen afgeleid
     // uit start/eind + deze waarden (geen coördinaten herberekenen hier).
     case 'srCount': ann.count = Math.max(1, Math.min(999, parseInt(value) || 1)); break;
@@ -1543,33 +1547,20 @@ function applyAnnotProp(key, value) {
       break;
     }
     case 'rotation': currentAnnotation.rotation = Math.max(-360, Math.min(360, parseInt(value) || 0)); break;
-    // Breedte/hoogte van een afbeelding: ELKE positieve waarde mag, met
-    // decimalen. Was geheeltallig met "leeg of 0 -> 20 pt" en een vloer van
-    // 1 pt (35 mm op 1:100) op de partner-as. Een tussenstand tijdens het
+    // Breedte/hoogte van een afbeelding: de getypte waarde staat in de
+    // gekozen papiereenheid (mm, cm, in of pt, #598) en wordt paginapunten.
+    // ELKE positieve waarde mag, met decimalen. Een tussenstand tijdens het
     // typen ("", "0", "0.") laat het model met rust. De partner-as volgt de
-    // verhouding exact (#315) en is alleen technisch begrensd.
-    case 'imageWidth': {
-      const newW = leesMaatInvoer(value);
-      if (newW == null) break;
-      currentAnnotation.width = newW;
-      const ratio = currentAnnotation.lockAspectRatio
-        ? veiligeVerhouding(currentAnnotation.originalWidth, currentAnnotation.originalHeight) : 0;
-      if (ratio) {
-        currentAnnotation.height = klemMaat(newW / ratio);
-        setAnnotProps('imageHeight', toonMaat(currentAnnotation.height));
-      }
-      break;
-    }
+    // verhouding exact (#315) en is alleen technisch begrensd. De store krijgt
+    // de maat in paginapunten, niet de getypte tekst.
+    case 'imageWidth':
     case 'imageHeight': {
-      const newH = leesMaatInvoer(value);
-      if (newH == null) break;
-      currentAnnotation.height = newH;
-      const ratio = currentAnnotation.lockAspectRatio
-        ? veiligeVerhouding(currentAnnotation.originalWidth, currentAnnotation.originalHeight) : 0;
-      if (ratio) {
-        currentAnnotation.width = klemMaat(newH * ratio);
-        setAnnotProps('imageWidth', toonMaat(currentAnnotation.width));
-      }
+      const maat = nieuweAfbeeldingsMaat(key === 'imageWidth' ? 'width' : 'height',
+        value, papierEenheid(), currentAnnotation);
+      if (!maat) break;
+      currentAnnotation.width = maat.width;
+      currentAnnotation.height = maat.height;
+      setAnnotProps({ imageWidth: maat.width, imageHeight: maat.height });
       break;
     }
     case 'imageRotation': currentAnnotation.rotation = parseInt(value) || 0; break;
@@ -1581,7 +1572,7 @@ function applyAnnotProp(key, value) {
         ? veiligeVerhouding(currentAnnotation.originalWidth, currentAnnotation.originalHeight) : 0;
       if (lockRatio) {
         currentAnnotation.height = klemMaat(currentAnnotation.width / lockRatio);
-        setAnnotProps('imageHeight', toonMaat(currentAnnotation.height));
+        setAnnotProps('imageHeight', currentAnnotation.height);
       }
       break;
     }
@@ -1654,8 +1645,8 @@ function applyAnnotProp(key, value) {
       break;
     }
     case 'scaleBarHeight': {
-      const newH = Math.max(4, parseInt(value) || 14);
-      currentAnnotation.height = newH;
+      currentAnnotation.height = _schaalbalkHoogte(value);
+      setAnnotProps('scaleBarHeight', currentAnnotation.height);
       break;
     }
     // ── Stavenreeks ────────────────────────────────────────────────────
@@ -1827,11 +1818,26 @@ function applyAnnotProp(key, value) {
     endUndoTransaction();
   }
 
-  if (!key.startsWith('tb') && !key.includes('.')) {
+  if (!key.startsWith('tb') && !key.includes('.') && !_EIGEN_STORE_SLEUTELS.has(key)) {
     setAnnotProps(key, value);
   }
 
   redraw();
+}
+
+// Sleutels waarvan de case hierboven zelf de store bijwerkt (in paginapunten)
+// in plaats van de getypte tekst in de gekozen eenheid (#598).
+const _EIGEN_STORE_SLEUTELS = new Set(['imageWidth', 'imageHeight', 'scaleBarHeight']);
+
+/** Kleinste balkhoogte van een schaalbalk, paginapunten. */
+export const SCHAALBALK_MIN_HOOGTE_PT = 4;
+
+// Balkhoogte in paginapunten (het paneel rekent de gekozen papiereenheid al
+// om, #598). Decimalen blijven staan: 5 mm is 14,17 pt, niet 14.
+function _schaalbalkHoogte(value) {
+  const n = typeof value === 'number' ? value : parseFloat(String(value ?? '').replace(',', '.'));
+  if (!Number.isFinite(n) || n <= 0) return 14;
+  return Math.max(SCHAALBALK_MIN_HOOGTE_PT, n);
 }
 
 // Apply a STYLE TYPE preset (generic concept — see annotations/style-types.js)

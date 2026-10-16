@@ -247,6 +247,9 @@
     "linkImageTitle": "Lier l'image",
     "imageFilter": "Images"
   },
+  "sizeUnit": {
+    "tooltip": "Unité des dimensions"
+  },
   "multiSelect": "{{count}} annotations sélectionnées",
   "pdfText": "Texte PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Importer les commentaires...",
     "exportComments": "Exporter les commentaires vers un fichier...",
     "exportSelectedComments": "Exporter les commentaires sélectionnés vers un fichier...",
+    "exportListCsv": "Exporter la liste en CSV...",
+    "summarizeComingSoon": "Bientôt disponible",
+    "listExported": "Liste des commentaires exportée en CSV",
+    "csvPage": "Page",
+    "csvType": "Type",
+    "csvAuthor": "Auteur",
+    "csvDate": "Date",
+    "csvStatus": "Statut",
+    "csvSubject": "Objet",
+    "csvContents": "Contenu",
+    "csvColor": "Couleur",
+    "csvLayer": "Calque",
     "schedules": "Nomenclatures",
     "addPage": "Ajouter une page",
     "pageLabels": "Étiquettes de page (générateur de noms)"

@@ -247,6 +247,9 @@
     "linkImageTitle": "Propojit obrázek",
     "imageFilter": "Obrázky"
   },
+  "sizeUnit": {
+    "tooltip": "Jednotka rozměrů"
+  },
   "multiSelect": "{{count}} anotací vybráno",
   "pdfText": "PDF text",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Importovat komentáře...",
     "exportComments": "Exportovat komentáře do datového souboru...",
     "exportSelectedComments": "Exportovat vybrané komentáře do datového souboru...",
+    "exportListCsv": "Exportovat seznam do CSV...",
+    "summarizeComingSoon": "Již brzy",
+    "listExported": "Seznam komentářů byl exportován do CSV",
+    "csvPage": "Stránka",
+    "csvType": "Typ",
+    "csvAuthor": "Autor",
+    "csvDate": "Datum",
+    "csvStatus": "Stav",
+    "csvSubject": "Předmět",
+    "csvContents": "Obsah",
+    "csvColor": "Barva",
+    "csvLayer": "Vrstva",
     "schedules": "Výkazy",
     "addPage": "Přidat stránku",
     "pageLabels": "Popisky stránek (tvorba názvů)"

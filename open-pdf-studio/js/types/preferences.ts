@@ -227,6 +227,7 @@ export interface Preferences {
   screenCalibration: Record<string, number>;
   zoomDpi: number;
   pageSharpen: number;
+  paperSizeUnit: string;
 
   // Panels
   propertiesPanelVisible: boolean;

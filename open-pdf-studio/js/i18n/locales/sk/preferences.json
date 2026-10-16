@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Predvolená farba anotácie",
     "defaultLineWidth": "Predvolená šírka čiary",
     "defaultFontSize": "Predvolená veľkosť písma",
+    "paperSizeUnit": "Jednotka rozmerov (obrázok, grafická mierka)",
     "highlightOpacity": "Priehľadnosť zvýraznenia (%)",
     "angleSnap": "Prichytenie uhla (kláves Shift)",
     "objectSnapping": "Prichytenie objektov",

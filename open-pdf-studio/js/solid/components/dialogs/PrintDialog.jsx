@@ -10,6 +10,9 @@ import { runPrintJob, slaPrintOpAlsPdf, renderPrintBeeld } from '../../../pdf/pr
 import {
   rasterVan, isMeerPerBlad, voorbeeldMeerPerBlad, aantalVellen, paginasOpVel,
 } from '../../../pdf/print-meerperblad.js';
+import {
+  isBoekje, voorbeeldBoekje, boekjeVolgorde, aantalBoekjeZijden, boekjeZijde,
+} from '../../../pdf/print-boekje.js';
 import { savePreferences } from '../../../core/preferences.js';
 import { herstelPrintInstellingen, kiesStartPrinter } from '../../stores/print-instellingen.js';
 import { printArgumenten, overstemdeStand } from '../../../pdf/print-pagina-instelling.js';
@@ -88,11 +91,15 @@ export default function PrintDialog(props) {
       alleenGroot: posterOnlyLarge(),
     })
     : null), undefined, { equals: zelfdeKeuzes });
-  // Meerdere pagina's per vel, of null bij één per vel (en bij een poster).
-  // Een memo met waardevergelijking: het voorbeeld tekent alleen opnieuw als
-  // de keuze echt verandert.
+  // Boekje (print-boekje.js): twee pagina's per liggend vel in genietvolgorde.
+  // Een keuze in "Pagina's per vel", dus nooit samen met meer per vel; de
+  // poster gaat voor.
+  const boekje = createMemo(() => !poster() && isBoekje(perSheet()));
+  // Meerdere pagina's per vel, of null bij één per vel (en bij een poster of
+  // een boekje). Een memo met waardevergelijking: het voorbeeld tekent alleen
+  // opnieuw als de keuze echt verandert.
   const meerPerBlad = createMemo(() => {
-    if (poster()) return null;
+    if (poster() || boekje()) return null;
     const raster = rasterVan({ perBlad: perSheet(), kolommen: sheetCols(), rijen: sheetRows() });
     return isMeerPerBlad(raster) ? { ...raster, volgorde: sheetOrder(), rand: sheetBorder() } : null;
   }, undefined, { equals: zelfdeKeuzes });
@@ -110,11 +117,13 @@ export default function PrintDialog(props) {
   const [posterMaten, setPosterMaten] = createSignal(null);
   let posterMatenBeurt = 0;
   // Hoeveel het voorbeeld er doorbladert: pagina's, vellen bij meerdere
-  // pagina's per vel, of de vellen van de poster.
+  // pagina's per vel, de zijden van een boekje of de vellen van de poster.
   // Een gewone functie (geen memo): posterVellenLijst staat verderop.
-  const voorbeeldTotaal = () => (poster()
-    ? posterVellenLijst().length
-    : aantalVellen(previewPages().length, meerPerBlad()));
+  const voorbeeldTotaal = () => {
+    if (poster()) return posterVellenLijst().length;
+    if (boekje()) return aantalBoekjeZijden(previewPages().length);
+    return aantalVellen(previewPages().length, meerPerBlad());
+  };
   // Maat van de getoonde voorbeeldpagina in pt (inclusief draaiing), of null.
   const [paginaMaat, setPaginaMaat] = createSignal(null);
   // Steekt de voorbeeldpagina buiten het vel of buiten het bedrukbare gebied
@@ -233,6 +242,10 @@ export default function PrintDialog(props) {
       await renderPosterVoorbeeld(beurt, pages, markeringen);
       return;
     }
+    if (boekje()) {
+      await renderBoekjeVoorbeeld(beurt, doc, pages, keuzes, markeringen);
+      return;
+    }
     const raster = meerPerBlad();
     if (raster) {
       await renderMeerPerBladVoorbeeld(beurt, doc, pages, keuzes, raster, markeringen);
@@ -298,47 +311,83 @@ export default function PrintDialog(props) {
       setAfsnijMelding('');
       if (!v) return;
 
-      const vak = canvasVak(v.vel);
-      // Eerst alle paginabeelden, dan in één keer tekenen: geen half vel in beeld.
-      const beelden = [];
-      for (const cel of v.cellen) {
-        const pxPerPt = cel.plaatsing.schaal * cel.schaal * MM_PER_PT * vak.pxPerMm;
-        const deel = renderDeel(cel.plaatsing, pxPerPt);
-        const beeld = deel
-          ? await renderPrintBeeld(opVel[cel.k], pxPerPt, cel.plaatsing, deel, { markeringen })
-          : null;
-        if (beurt !== voorbeeldBeurt) return;
-        beelden.push({ cel, deel, beeld });
-      }
-
-      const ctx = begin(vak);
-      for (const { cel, deel, beeld } of beelden) {
-        if (!beeld) continue;
-        // Het deel staat in mm op de printpagina van de cel; die komt verkleind
-        // (cel.schaal) op haar plek op het vel.
-        const r = deel.opVel;
-        tekenBeeld(ctx, beeld, {
-          x: cel.opVel.x + r.x * cel.schaal,
-          y: cel.opVel.y + r.y * cel.schaal,
-          breedte: r.breedte * cel.schaal,
-          hoogte: r.hoogte * cel.schaal,
-        }, vak.pxPerMm);
-      }
-      if (v.rand) {
-        // Zoals maakMeerPerBlad: een rand van 0,5 pt om elke printpagina.
-        ctx.save();
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = Math.max(1, 0.5 * MM_PER_PT * vak.pxPerMm);
-        for (const { cel } of beelden) {
-          const r = cel.opVel;
-          ctx.strokeRect(r.x * vak.pxPerMm, r.y * vak.pxPerMm, r.breedte * vak.pxPerMm, r.hoogte * vak.pxPerMm);
-        }
-        ctx.restore();
-      }
-      if (v.bekend) tekenVel(ctx, vak, v);
+      await tekenCellenVoorbeeld(beurt, v, (cel) => opVel[cel.k], markeringen);
     } catch (e) {
       console.error('Preview render error:', e);
     }
+  }
+
+  // Boekje: de getoonde zijde van het liggende vel met links en rechts van de
+  // vouw de pagina's in genietvolgorde (voorbeeldBoekje in print-boekje.js,
+  // dezelfde regels als maakBoekje). Een blanco helft blijft wit. De
+  // navigatie loopt per zijde: vel 1 voor, vel 1 achter, vel 2 voor...
+  async function renderBoekjeVoorbeeld(beurt, doc, pages, keuzes, markeringen) {
+    try {
+      const { zijden } = boekjeVolgorde(pages.length);
+      const zijde = zijden[Math.min(previewIndex(), zijden.length - 1)];
+      const maatVan = async (pageNum) => {
+        const page = await doc.pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport(viewportOpties(page, getPageRotation(pageNum)));
+        return { breedtePt: viewport.width, hoogtePt: viewport.height };
+      };
+      // Het vel volgt de eerste pagina van de hele afdruk (kiesBoekjeBlad).
+      const eerstePagina = await maatVan(pages[0]);
+      const maten = [];
+      for (const i of zijde) maten.push(i === null ? null : await maatVan(pages[i]));
+      if (beurt !== voorbeeldBeurt) return;
+      const getoond = maten.find(Boolean);
+      if (getoond) zetPaginaMaat(getoond.breedtePt, getoond.hoogtePt);
+      const v = voorbeeldBoekje({ keuzes, eerstePagina, paginas: maten });
+      setMeerVoorbeeld(v);
+      setAfsnijMelding('');
+      if (!v) return;
+      await tekenCellenVoorbeeld(beurt, v, (cel) => pages[zijde[cel.k]], markeringen);
+    } catch (e) {
+      console.error('Preview render error:', e);
+    }
+  }
+
+  // Een vel met cellen (meerdere pagina's per vel of een boekje): elke cel de
+  // printpagina van haar pagina, verkleind op haar plek. Eerst alle beelden,
+  // dan in één keer tekenen: geen half vel in beeld.
+  async function tekenCellenVoorbeeld(beurt, v, paginaVan, markeringen) {
+    const vak = canvasVak(v.vel);
+    const beelden = [];
+    for (const cel of v.cellen) {
+      const pxPerPt = cel.plaatsing.schaal * cel.schaal * MM_PER_PT * vak.pxPerMm;
+      const deel = renderDeel(cel.plaatsing, pxPerPt);
+      const beeld = deel
+        ? await renderPrintBeeld(paginaVan(cel), pxPerPt, cel.plaatsing, deel, { markeringen })
+        : null;
+      if (beurt !== voorbeeldBeurt) return;
+      beelden.push({ cel, deel, beeld });
+    }
+
+    const ctx = begin(vak);
+    for (const { cel, deel, beeld } of beelden) {
+      if (!beeld) continue;
+      // Het deel staat in mm op de printpagina van de cel; die komt verkleind
+      // (cel.schaal) op haar plek op het vel.
+      const r = deel.opVel;
+      tekenBeeld(ctx, beeld, {
+        x: cel.opVel.x + r.x * cel.schaal,
+        y: cel.opVel.y + r.y * cel.schaal,
+        breedte: r.breedte * cel.schaal,
+        hoogte: r.hoogte * cel.schaal,
+      }, vak.pxPerMm);
+    }
+    if (v.rand) {
+      // Zoals maakMeerPerBlad: een rand van 0,5 pt om elke printpagina.
+      ctx.save();
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = Math.max(1, 0.5 * MM_PER_PT * vak.pxPerMm);
+      for (const { cel } of beelden) {
+        const r = cel.opVel;
+        ctx.strokeRect(r.x * vak.pxPerMm, r.y * vak.pxPerMm, r.breedte * vak.pxPerMm, r.hoogte * vak.pxPerMm);
+      }
+      ctx.restore();
+    }
+    if (v.bekend) tekenVel(ctx, vak, v);
   }
 
   // Posterafdruk: het getoonde vel met zijn tegel, zoals maakPoster het bouwt
@@ -740,6 +789,7 @@ export default function PrintDialog(props) {
     const keuzes = plaatsingKeuzes();
     const meerBlad = meerPerBlad();
     const posterKeuze = poster();
+    const boekjeKeuze = boekje();
     savePreferences();
     close();
     // Oriëntatie en papier: Automatisch draaien en de Pagina-instelling
@@ -760,6 +810,7 @@ export default function PrintDialog(props) {
         centreren: keuzes.centreren,
         meerPerBlad: meerBlad,
         poster: posterKeuze,
+        boekje: boekjeKeuze,
         inhoud: printContent(),
         openen: openOpgeslagen,
       });
@@ -777,6 +828,7 @@ export default function PrintDialog(props) {
       centreren: keuzes.centreren,
       meerPerBlad: meerBlad,
       poster: posterKeuze,
+      boekje: boekjeKeuze,
       // "Afdrukken: Document" laat de markeringen ook echt weg.
       inhoud: printContent(),
     });
@@ -894,6 +946,22 @@ export default function PrintDialog(props) {
     return indeling.aangenomen ? `${tekst} ${t('print.posterAssumedPaper', { paper: 'A4' })}` : tekst;
   });
 
+  // De regel onder de kop bij een boekje: welk vel, welke kant en welke
+  // pagina's links en rechts van de vouw.
+  const boekjeNotitie = createMemo(() => {
+    if (!boekje()) return '';
+    const pages = previewPages();
+    const { zijden, blanco } = boekjeVolgorde(pages.length);
+    if (!zijden.length) return '';
+    const k = Math.min(previewIndex(), zijden.length - 1);
+    const { vel, kant } = boekjeZijde(k);
+    const naam = (i) => (i === null ? t('print.bookletBlank') : String(pages[i]));
+    const tekst = t(kant === 'front' ? 'print.bookletSideFront' : 'print.bookletSideBack', {
+      sheet: vel, left: naam(zijden[k][0]), right: naam(zijden[k][1]),
+    });
+    return blanco ? `${tekst} ${t('print.bookletPadded', { count: blanco })}` : tekst;
+  });
+
   // De plaatsing van de getoonde voorbeeldpagina: het vel zoals het uit de
   // printer komt of in het bestand komt te liggen (dezelfde regel als het
   // voorbeeld en de opdracht). Bij meerdere pagina's per vel het vel met het
@@ -904,7 +972,7 @@ export default function PrintDialog(props) {
       return posterVel ? posterVel.vel.plaatsing : null;
     }
     const meer = meerVoorbeeld();
-    if (meerPerBlad() && meer) return meer;
+    if ((meerPerBlad() || boekje()) && meer) return meer;
     const maat = paginaMaat();
     return maat ? berekenPlaatsing({ ...plaatsingKeuzes(), pagina: maat }) : null;
   });
@@ -967,7 +1035,7 @@ export default function PrintDialog(props) {
   // pagina, de inhoud (met of zonder markeringen), de plaatsing (schaaltype,
   // zoom, centreren, automatisch draaien, Pagina-instelling en printerpapier)
   // of de pagina's per vel (aantal, raster, volgorde, rand).
-  createEffect(on([previewPages, previewIndex, printContent, plaatsingKeuzes, meerPerBlad, posterVellenLijst], () => {
+  createEffect(on([previewPages, previewIndex, printContent, plaatsingKeuzes, meerPerBlad, boekje, posterVellenLijst], () => {
     renderPreview();
   }, { defer: true }));
 
@@ -995,8 +1063,9 @@ export default function PrintDialog(props) {
     if (beurt === posterMatenBeurt) setPosterMaten(maten);
   }));
 
-  // Poster aan of uit: het voorbeeld begint weer bij het eerste vel.
+  // Poster of boekje aan of uit: het voorbeeld begint weer bij het eerste vel.
   createEffect(on(() => !!poster(), () => setPreviewIndex(0), { defer: true }));
+  createEffect(on(boekje, () => setPreviewIndex(0), { defer: true }));
 
   // Een ander aantal per vel: het voorbeeld begint weer bij het eerste vel
   // (de nummering van pagina's en vellen loopt dan niet meer gelijk).
@@ -1220,7 +1289,7 @@ export default function PrintDialog(props) {
                 min={ZOOM_MIN}
                 max={ZOOM_MAX}
                 value={zoom()}
-                disabled={!!meerPerBlad() || scaling() !== 'custom-scale'}
+                disabled={!!meerPerBlad() || boekje() || scaling() !== 'custom-scale'}
                 onInput={onZoomInput}
                 onChange={onZoomChange}
               />
@@ -1325,6 +1394,7 @@ export default function PrintDialog(props) {
               <option value="9">9</option>
               <option value="16">16</option>
               <option value="custom">{t('print.perSheetCustom')}</option>
+              <option value="booklet">{t('print.perSheetBooklet')}</option>
             </select>
           </div>
           <Show when={poster()}>
@@ -1377,6 +1447,9 @@ export default function PrintDialog(props) {
             </div>
             <div class="print-row print-note">{t('print.perSheetNote')}</div>
           </Show>
+          <Show when={boekje()}>
+            <div class="print-row print-note">{t('print.bookletNote')}</div>
+          </Show>
         </fieldset>
 
         {/* Advanced Print Options */}
@@ -1427,6 +1500,9 @@ export default function PrintDialog(props) {
           </Show>
           <Show when={posterNotitie()}>
             <div class="print-preview-note print-preview-poster">{posterNotitie()}</div>
+          </Show>
+          <Show when={boekjeNotitie()}>
+            <div class="print-preview-note print-preview-booklet">{boekjeNotitie()}</div>
           </Show>
         </div>
         <div class="print-preview-container">

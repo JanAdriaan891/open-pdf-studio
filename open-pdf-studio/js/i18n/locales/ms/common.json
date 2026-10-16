@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Muat semula halaman akan bermula kosong: dalam pelayar, dokumen anda kekal pada komputer anda dan tidak disimpan.",
   "desktopOnly": "{{feature}} hanya berfungsi dalam aplikasi desktop. Halaman ini ialah versi pelayar.",
   "assistantTitle": "Pembantu OpenAEC",
+  "assistant": {
+    "greeting": "Helo! Saya **{{title}}**. Saya boleh: 🌐 menterjemah, 📝 meringkaskan, ✏️ melukis pada lukisan dan 🚪 mengecam pintu. Pilih kemahiran di bawah atau tanya soalan anda.",
+    "workingIn": "bekerja dalam",
+    "viaClaude": "melalui Claude",
+    "notConnected": "tidak disambungkan",
+    "keyButton": "Tetapkan kunci API Claude (Anthropic)",
+    "keyPlaceholder": "Kunci API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Berfikir…",
+    "inputPlaceholder": "Tanya sesuatu tentang PDF ini…",
+    "send": "Hantar",
+    "noAnswer": "Tiada jawapan diterima.",
+    "errorInvalidKey": "Kunci API Claude (Anthropic) tidak sah. Semak kunci dengan butang 🔑 di bahagian atas panel.",
+    "errorApi": "API Claude mengembalikan ralat.",
+    "errorNoConnection": "Tiada sambungan ke perkhidmatan AI.",
+    "errorTimeout": "Tiada klien MCP menjawab soalan tepat pada masanya.",
+    "errorFailed": "Panggilan AI gagal.",
+    "detail": "Butiran",
+    "unknownError": "ralat tidak diketahui",
+    "skills": {
+      "translate": {
+        "label": "Terjemah",
+        "hint": "Terjemah teks dokumen",
+        "prompt": "Terjemah teks dokumen yang dibuka."
+      },
+      "summarize": {
+        "label": "Ringkaskan",
+        "hint": "Ringkaskan dokumen atau lukisan",
+        "prompt": "Ringkaskan dokumen atau lukisan yang dibuka."
+      },
+      "draw": {
+        "label": "Lukis",
+        "hint": "Lukis elemen atau anotasi pada lukisan",
+        "prompt": "Lukis pada lukisan: "
+      },
+      "detect-doors": {
+        "label": "Kecam pintu",
+        "hint": "Kesan pintu dalam pelan lantai dan tandakannya",
+        "prompt": "Kecam pintu dalam pelan lantai dan tandakannya."
+      },
+      "structural-layout": {
+        "label": "Susun struktur",
+        "hint": "Grid, tiang, rasuk, panel lantai dengan arah rentang dan jadual struktur",
+        "prompt": "Susun struktur penanggung beban pada lukisan. Keperluan: "
+      },
+      "structural-overview": {
+        "label": "Gambaran struktur",
+        "hint": "Gambaran struktur mengikut aras pada pelan lantai arkitek: asas, lantai dengan rentang, dinding galas di bawah, rasuk dan tiang, petunjuk dan nota",
+        "prompt": "Buat gambaran struktur pada helaian ini daripada pelan lantai arkitek. Sumber, aras dan prinsip struktur: "
+      },
+      "floorplan": {
+        "label": "Pelan lantai",
+        "hint": "Lukis pelan lantai seni bina: dinding, bingkai pintu dan tingkap, ruang, dimensi dan kelengkapan (sanitari, dapur)",
+        "prompt": "Lukis pelan lantai seni bina. Apa yang perlu dilukis: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Pustaka simbol dalam talian",
   "noDocumentOpen": "Tiada dokumen dibuka.",
   "noPdfLoaded": "Tiada PDF dimuatkan.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Tiada keratan dalam papan keratan"
   },
   "snippetOutputFailed": "Keratan vektor tidak dapat dipaparkan, jadi eksport atau cetakan dihentikan. Cuba lagi.",
-  "protectedPdfReadOnly": "Dokumen ini dibuka dengan kata laluan dan hanya boleh dibaca. Ia tidak boleh disimpan."
+  "protectedPdfReadOnly": "Dokumen ini dibuka dengan kata laluan dan hanya boleh dibaca. Ia tidak boleh disimpan.",
+  "threeD": {
+    "title": "Paparan 3D",
+    "view": "Pandangan",
+    "fit": "Muat",
+    "display": "Paparan",
+    "modeSolid": "Pepejal",
+    "modeEdges": "Pepejal dengan tepi",
+    "modeWire": "Bingkai wayar",
+    "modeXray": "Lut sinar",
+    "tree": "Pepohon model",
+    "hint": "Seret kiri: orbit, seret kanan: anjak, roda: zum",
+    "loading": "Memuatkan model 3D... {{pct}}%",
+    "stats": "{{models}} objek, {{tris}} segi tiga",
+    "unsupported": "Model 3D ini menggunakan format {{fmt}}, yang belum disokong (hanya U3D).",
+    "activate": "Aktifkan 3D",
+    "expand": "Penuhi kawasan dokumen",
+    "shrink": "Kembali ke halaman",
+    "deactivate": "Matikan paparan 3D",
+    "markupView": "Pandangan penanda",
+    "edit": "Sunting",
+    "editTip": "Buat halaman penanda daripada pandangan ini; halaman 3D kekal bebas diputar",
+    "creating": "Mencipta halaman...",
+    "markupPages": "Halaman penanda",
+    "pageN": "halaman {{n}}",
+    "snapshotBar": "Halaman penanda 3D: {{name}}",
+    "backTo3D": "Kembali ke model 3D",
+    "readFailed": "Model 3D tidak dapat dibaca.",
+    "partial": "Sesetengah bahagian model 3D tidak dapat dibaca ({{n}} dilangkau).",
+    "viewerFailed": "Paparan 3D tidak dapat dimulakan."
+  }
 }

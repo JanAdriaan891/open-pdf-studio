@@ -247,6 +247,9 @@
     "linkImageTitle": "Koble bilde",
     "imageFilter": "Bilder"
   },
+  "sizeUnit": {
+    "tooltip": "Enhet for mål"
+  },
   "multiSelect": "{{count}} merknader valgt",
   "pdfText": "PDF-tekst",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Importer kommentarer...",
     "exportComments": "Eksporter kommentarer til datafil...",
     "exportSelectedComments": "Eksporter valgte kommentarer til datafil...",
+    "exportListCsv": "Eksporter listen til CSV...",
+    "summarizeComingSoon": "Kommer snart",
+    "listExported": "Kommentarlisten er eksportert til CSV",
+    "csvPage": "Side",
+    "csvType": "Type",
+    "csvAuthor": "Forfatter",
+    "csvDate": "Dato",
+    "csvStatus": "Status",
+    "csvSubject": "Emne",
+    "csvContents": "Innhold",
+    "csvColor": "Farge",
+    "csvLayer": "Lag",
     "schedules": "Lister",
     "addPage": "Legg til side",
     "pageLabels": "Sideetiketter (navnebygger)"

@@ -30,6 +30,7 @@ import { rotateTextDir } from '../annotations/corrections/geometry.js';
 import { isTextAnchored } from '../annotations/corrections/model.js';
 import { stopAlleWielScrollers } from './wiel-scroll.js';
 import { werkelijkeGrootteZoom, kalibratieVoor } from './schermkalibratie.js';
+import { thinLinesKey, thinLinesOn } from './thin-lines.js';
 // Hi-DPI support: render canvases at device pixel ratio for sharp text
 export function getCanvasDPR() { return window.devicePixelRatio || 1; }
 
@@ -1296,7 +1297,10 @@ async function renderContinuousPage(pageNum) {
 
   const label = `[render p${pageNum} scale ${renderScale.toFixed(2)}]`;
   console.time(label);
-  const _jsCacheKey = `${doc.filePath}|${pageNum}|${Math.round(renderScale * 10000)}|${extraRotation || 0}`;
+  // Lijnstand (Thin Lines, #595) hoort bij het beeld: sleutel én render
+  // gebruiken dezelfde, vastgelegd bij de start van deze render.
+  const _thin = thinLinesOn();
+  const _jsCacheKey = `${doc.filePath}|${pageNum}|${Math.round(renderScale * 10000)}|${extraRotation || 0}|${thinLinesKey(_thin)}`;
   console.time(label + ' cache-lookup');
   const _cached = _bitmapJSCacheGet(_jsCacheKey);
   console.timeEnd(label + ' cache-lookup');
@@ -1343,6 +1347,7 @@ async function renderContinuousPage(pageNum) {
         // viewport). Omitting it rendered the page un-rotated into a rotated
         // box — the old-orientation remnant of issue #262 in continuous view.
         rotation: extraRotation || 0,
+        thinLines: _thin,
       });
       console.timeEnd(label + ' invoke-render');
       if (_isStaleDoc(doc)) { console.timeEnd(label); return; }

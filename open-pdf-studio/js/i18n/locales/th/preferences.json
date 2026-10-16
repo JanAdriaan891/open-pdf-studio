@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "สีคำอธิบายประกอบเริ่มต้น",
     "defaultLineWidth": "ความกว้างเส้นเริ่มต้น",
     "defaultFontSize": "ขนาดตัวอักษรเริ่มต้น",
+    "paperSizeUnit": "หน่วยของขนาด (รูปภาพ, แถบมาตราส่วน)",
     "highlightOpacity": "ความทึบการเน้น (%)",
     "angleSnap": "สแนปมุม (ปุ่ม Shift)",
     "objectSnapping": "การสแนปวัตถุ",

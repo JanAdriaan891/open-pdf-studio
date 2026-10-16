@@ -247,6 +247,9 @@
     "linkImageTitle": "Enllaça la imatge",
     "imageFilter": "Imatges"
   },
+  "sizeUnit": {
+    "tooltip": "Unitat de les mides"
+  },
   "multiSelect": "{{count}} anotacions seleccionades",
   "pdfText": "Text PDF",
   "types": {
@@ -345,6 +348,18 @@
     "importComments": "Importa comentaris...",
     "exportComments": "Exporta els comentaris a un fitxer de dades...",
     "exportSelectedComments": "Exporta els comentaris seleccionats a un fitxer de dades...",
+    "exportListCsv": "Exporta la llista a CSV...",
+    "summarizeComingSoon": "Properament",
+    "listExported": "Llista de comentaris exportada a CSV",
+    "csvPage": "Pàgina",
+    "csvType": "Tipus",
+    "csvAuthor": "Autor",
+    "csvDate": "Data",
+    "csvStatus": "Estat",
+    "csvSubject": "Assumpte",
+    "csvContents": "Contingut",
+    "csvColor": "Color",
+    "csvLayer": "Capa",
     "sortByPage": "Pàgina",
     "sortByType": "Tipus",
     "sortByAuthor": "Autor",

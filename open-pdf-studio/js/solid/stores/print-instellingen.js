@@ -43,7 +43,7 @@ export const PRINT_KEUZES = Object.freeze({
   subset: ['all', 'odd', 'even'],
   scaling: ['fit', 'actual', 'shrink', 'custom-scale', 'poster'],
   content: ['doc-and-markups', 'doc-only'],
-  perSheet: ['1', '2', '4', '6', '9', '16', 'custom'],
+  perSheet: ['1', '2', '4', '6', '9', '16', 'custom', 'booklet'],
   sheetOrder: ['horizontal', 'horizontal-reversed', 'vertical', 'vertical-reversed'],
 });
 

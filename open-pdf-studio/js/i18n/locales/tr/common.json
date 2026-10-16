@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Sayfa yenilendiğinde boş başlar: tarayıcıda belgeniz bilgisayarınızda kalır ve hiçbir yerde saklanmaz.",
   "desktopOnly": "{{feature}} yalnızca masaüstü uygulamasında çalışır. Bu sayfa tarayıcı sürümüdür.",
   "assistantTitle": "OpenAEC asistanı",
+  "assistant": {
+    "greeting": "Merhaba! Ben **{{title}}**. Şunları yapabilirim: 🌐 çeviri, 📝 özetleme, ✏️ çizim üzerine çizim yapma ve 🚪 kapı tanıma. Aşağıdan bir beceri seçin veya sorunuzu sorun.",
+    "workingIn": "çalışılan belge",
+    "viaClaude": "Claude üzerinden",
+    "notConnected": "bağlı değil",
+    "keyButton": "Claude (Anthropic) API anahtarını ayarla",
+    "keyPlaceholder": "Claude (Anthropic) API anahtarı — sk-ant-…",
+    "thinking": "Düşünüyorum…",
+    "inputPlaceholder": "Bu PDF hakkında bir şey sorun…",
+    "send": "Gönder",
+    "noAnswer": "Yanıt alınamadı.",
+    "errorInvalidKey": "Geçersiz Claude (Anthropic) API anahtarı. Anahtarı panelin üst kısmındaki 🔑 düğmesiyle kontrol edin.",
+    "errorApi": "Claude API bir hata döndürdü.",
+    "errorNoConnection": "Yapay zekâ hizmetine bağlantı yok.",
+    "errorTimeout": "Hiçbir MCP istemcisi soruyu zamanında yanıtlamadı.",
+    "errorFailed": "Yapay zekâ çağrısı başarısız oldu.",
+    "detail": "Ayrıntı",
+    "unknownError": "bilinmeyen hata",
+    "skills": {
+      "translate": {
+        "label": "Çevir",
+        "hint": "Belgenin metnini çevir",
+        "prompt": "Açık belgenin metnini çevir."
+      },
+      "summarize": {
+        "label": "Özetle",
+        "hint": "Belgeyi veya çizimi özetle",
+        "prompt": "Açık belgeyi veya çizimi özetle."
+      },
+      "draw": {
+        "label": "Çiz",
+        "hint": "Çizime bir öğe veya açıklama çiz",
+        "prompt": "Çizime şunu çiz: "
+      },
+      "detect-doors": {
+        "label": "Kapıları tanı",
+        "hint": "Kat planındaki kapıları algıla ve işaretle",
+        "prompt": "Kat planındaki kapıları tanı ve işaretle."
+      },
+      "structural-layout": {
+        "label": "Taşıyıcı sistemi yerleştir",
+        "hint": "Aks sistemi, kolonlar, kirişler, açıklık yönlü döşeme alanları ve taşıyıcı sistem çizelgesi",
+        "prompt": "Taşıyıcı sistemi çizime yerleştir. Bilgiler: "
+      },
+      "structural-overview": {
+        "label": "Taşıyıcı sistem özeti",
+        "hint": "Mimarın kat planları üzerinde kat kat taşıyıcı sistem özeti: temel, açıklıklı döşemeler, alttaki taşıyıcı duvarlar, kirişler ve kolonlar, lejant ve açıklama",
+        "prompt": "Bu paftada mimarın kat planlarından bir taşıyıcı sistem özeti oluştur. Kaynak, katlar ve taşıyıcı sistem ilkesi: "
+      },
+      "floorplan": {
+        "label": "Kat planı",
+        "hint": "Mimari kat planı çiz: duvarlar, doğramalar, mahaller, ölçülendirme ve donatılar (ıslak hacim, mutfak)",
+        "prompt": "Mimari bir kat planı çiz. Çizilecek olan: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Çevrimiçi sembol kitaplığı",
   "noDocumentOpen": "Açık belge yok.",
   "noPdfLoaded": "PDF yüklenmedi.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Panoda kesit yok"
   },
   "snippetOutputFailed": "Bir vektör kesit işlenemedi, bu yüzden dışa aktarma veya yazdırma durduruldu. Yeniden deneyin.",
-  "protectedPdfReadOnly": "Bu belge parola ile açıldı ve salt okunurdur. Kaydedilemez."
+  "protectedPdfReadOnly": "Bu belge parola ile açıldı ve salt okunurdur. Kaydedilemez.",
+  "threeD": {
+    "title": "3D görünüm",
+    "view": "Görünüm",
+    "fit": "Sığdır",
+    "display": "Görüntüleme",
+    "modeSolid": "Katı",
+    "modeEdges": "Kenarlı katı",
+    "modeWire": "Tel kafes",
+    "modeXray": "Saydam",
+    "tree": "Model ağacı",
+    "hint": "Sol sürükle: yörünge, sağ sürükle: kaydır, tekerlek: yakınlaştır",
+    "loading": "3D model yükleniyor... {{pct}}%",
+    "stats": "{{models}} nesne, {{tris}} üçgen",
+    "unsupported": "Bu 3D model {{fmt}} biçimini kullanıyor; bu biçim henüz desteklenmiyor (yalnızca U3D).",
+    "activate": "3D'yi etkinleştir",
+    "expand": "Belge alanını doldur",
+    "shrink": "Sayfaya dön",
+    "deactivate": "3D görünümü kapat",
+    "markupView": "İşaretleme görünümü",
+    "edit": "Düzenle",
+    "editTip": "Bu görünümden bir işaretleme sayfası oluştur; 3D sayfa serbestçe döndürülebilir kalır",
+    "creating": "Sayfa oluşturuluyor...",
+    "markupPages": "İşaretleme sayfaları",
+    "pageN": "sayfa {{n}}",
+    "snapshotBar": "3D işaretleme sayfası: {{name}}",
+    "backTo3D": "3D modele dön",
+    "readFailed": "3D model okunamadı.",
+    "partial": "3D modelin bazı bölümleri okunamadı ({{n}} atlandı).",
+    "viewerFailed": "3D görünüm başlatılamadı."
+  }
 }

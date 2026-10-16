@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "重新加载页面后将为空：在浏览器中，您的文档保留在您的计算机上，不会被存储。",
   "desktopOnly": "{{feature}} 仅在桌面应用中可用。此页面是浏览器版本。",
   "assistantTitle": "OpenAEC 助手",
+  "assistant": {
+    "greeting": "你好！我是 **{{title}}**。我可以：🌐 翻译、📝 总结、✏️ 在图纸上绘制、🚪 识别门。请在下方选择一项技能或提出问题。",
+    "workingIn": "正在处理",
+    "viaClaude": "通过 Claude",
+    "notConnected": "未连接",
+    "keyButton": "设置 Claude (Anthropic) API 密钥",
+    "keyPlaceholder": "Claude (Anthropic) API 密钥 — sk-ant-…",
+    "thinking": "思考中…",
+    "inputPlaceholder": "询问有关此 PDF 的问题…",
+    "send": "发送",
+    "noAnswer": "未收到回答。",
+    "errorInvalidKey": "Claude (Anthropic) API 密钥无效。请使用面板顶部的 🔑 按钮检查密钥。",
+    "errorApi": "Claude API 返回了错误。",
+    "errorNoConnection": "无法连接到 AI 服务。",
+    "errorTimeout": "没有 MCP 客户端及时回答该问题。",
+    "errorFailed": "AI 调用失败。",
+    "detail": "详细信息",
+    "unknownError": "未知错误",
+    "skills": {
+      "translate": {
+        "label": "翻译",
+        "hint": "翻译文档的文本",
+        "prompt": "翻译已打开文档的文本。"
+      },
+      "summarize": {
+        "label": "总结",
+        "hint": "总结文档或图纸",
+        "prompt": "总结已打开的文档或图纸。"
+      },
+      "draw": {
+        "label": "绘制",
+        "hint": "在图纸上绘制元素或批注",
+        "prompt": "在图纸上绘制："
+      },
+      "detect-doors": {
+        "label": "识别门",
+        "hint": "检测平面图中的门并进行标记",
+        "prompt": "识别平面图中的门并进行标记。"
+      },
+      "structural-layout": {
+        "label": "布置结构",
+        "hint": "轴网、柱、梁、带跨度方向的楼板区格以及结构明细表",
+        "prompt": "在图纸上布置承重结构。要求："
+      },
+      "structural-overview": {
+        "label": "结构概览",
+        "hint": "在建筑师的平面图上按楼层绘制结构概览：基础、带跨度的楼板、下层承重墙、梁和柱、图例和说明",
+        "prompt": "根据建筑师的平面图在此图纸上创建结构概览。来源、楼层和结构体系："
+      },
+      "floorplan": {
+        "label": "平面图",
+        "hint": "绘制建筑平面图：墙体、门窗、房间、尺寸标注和设施（卫浴、厨房）",
+        "prompt": "绘制建筑平面图。要绘制的内容："
+      }
+    }
+  },
   "onlineSymbolLibrary": "在线符号库",
   "noDocumentOpen": "没有打开的文档。",
   "noPdfLoaded": "未加载 PDF。",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "剪贴板中没有片段"
   },
   "snippetOutputFailed": "无法渲染矢量片段，因此已停止导出或打印。请重试。",
-  "protectedPdfReadOnly": "此文档使用密码打开，为只读。无法保存。"
+  "protectedPdfReadOnly": "此文档使用密码打开，为只读。无法保存。",
+  "threeD": {
+    "title": "3D 视图",
+    "view": "视角",
+    "fit": "适合",
+    "display": "显示",
+    "modeSolid": "实体",
+    "modeEdges": "带边实体",
+    "modeWire": "线框",
+    "modeXray": "透明",
+    "tree": "模型树",
+    "hint": "左键拖动：环绕，右键拖动：平移，滚轮：缩放",
+    "loading": "正在加载 3D 模型... {{pct}}%",
+    "stats": "{{models}} 个对象，{{tris}} 个三角形",
+    "unsupported": "此 3D 模型使用 {{fmt}} 格式，目前尚不支持（仅支持 U3D）。",
+    "activate": "激活 3D",
+    "expand": "填满文档区域",
+    "shrink": "返回页面",
+    "deactivate": "关闭 3D 视图",
+    "markupView": "标记视图",
+    "edit": "编辑",
+    "editTip": "为此视图创建标记页面；3D 页面仍可自由旋转",
+    "creating": "正在创建页面...",
+    "markupPages": "标记页面",
+    "pageN": "第 {{n}} 页",
+    "snapshotBar": "3D 标记页面：{{name}}",
+    "backTo3D": "返回 3D 模型",
+    "readFailed": "无法读取 3D 模型。",
+    "partial": "3D 模型的部分内容无法读取（已跳过 {{n}} 个）。",
+    "viewerFailed": "无法启动 3D 视图。"
+  }
 }

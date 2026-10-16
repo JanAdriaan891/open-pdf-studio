@@ -266,6 +266,8 @@
     "swap": "Trocar antigo e novo",
     "overlayDesc": "Os dois PDFs sobrepostos",
     "sideDesc": "Dois PDFs lado a lado, sincronizados",
+    "split": "Linha divisória",
+    "splitDesc": "Arraste uma linha para mostrar o antigo e o novo",
     "legendOld": "Só no antigo",
     "legendNew": "Só no novo",
     "legendBoth": "Inalterado",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Excluir a página {{page}}?",
     "extractPages": "Extrair páginas",
     "extractLabel": "Extrair",
+    "splitDocument": "Dividir documento",
+    "splitLabel": "Dividir",
     "combine": "Combinar",
     "mergePdfs": "Mesclar PDF",
     "mergeLabel": "Mesclar",
@@ -621,5 +625,15 @@
     "symbolScale": "Escala",
     "symbolScaleTitle": "Tamanho com que um novo símbolo é colocado",
     "symbolScaleCustom": "Escala personalizada"
+  },
+  "proofread": {
+    "group": "Revisão",
+    "button": "Revisar",
+    "tooltip": "Modo de revisão (F2): marque inserções, exclusões e substituições com o teclado",
+    "hint": "Revisão: as setas movem o cursor, digite para inserir, Delete risca, Tab vai para a próxima correção, Esc volta um passo.",
+    "noText": "Esta página não tem texto para revisar.",
+    "noCorrections": "Ainda não há correções.",
+    "insertPlaceholder": "Texto a inserir",
+    "replacePlaceholder": "Texto de substituição"
   }
 }

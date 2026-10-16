@@ -247,6 +247,9 @@
     "linkImageTitle": "קישור תמונה",
     "imageFilter": "תמונות"
   },
+  "sizeUnit": {
+    "tooltip": "יחידת מידה לגדלים"
+  },
   "multiSelect": "{{count}} הערות נבחרו",
   "pdfText": "טקסט PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "ייבא הערות...",
     "exportComments": "ייצא הערות לקובץ נתונים...",
     "exportSelectedComments": "ייצא הערות נבחרות לקובץ נתונים...",
+    "exportListCsv": "ייצוא הרשימה ל-CSV...",
+    "summarizeComingSoon": "בקרוב",
+    "listExported": "רשימת ההערות יוצאה ל-CSV",
+    "csvPage": "עמוד",
+    "csvType": "סוג",
+    "csvAuthor": "מחבר",
+    "csvDate": "תאריך",
+    "csvStatus": "מצב",
+    "csvSubject": "נושא",
+    "csvContents": "תוכן",
+    "csvColor": "צבע",
+    "csvLayer": "שכבה",
     "schedules": "טבלאות כמויות",
     "addPage": "הוספת עמוד",
     "pageLabels": "תוויות עמודים (בונה שמות)"

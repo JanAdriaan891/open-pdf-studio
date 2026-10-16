@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Az oldal újratöltése üresen indul: a böngészőben a dokumentum az Ön számítógépén marad, és nem kerül tárolásra.",
   "desktopOnly": "A(z) {{feature}} csak az asztali alkalmazásban működik. Ez az oldal a böngészős változat.",
   "assistantTitle": "OpenAEC asszisztens",
+  "assistant": {
+    "greeting": "Helló! Én vagyok az **{{title}}**. Ezekre vagyok képes: 🌐 fordítás, 📝 összefoglalás, ✏️ rajzolás a rajzra és 🚪 ajtók felismerése. Válasszon alább egy képességet, vagy tegye fel a kérdését.",
+    "workingIn": "itt dolgozik",
+    "viaClaude": "Claude-on keresztül",
+    "notConnected": "nincs kapcsolat",
+    "keyButton": "Claude (Anthropic) API-kulcs beállítása",
+    "keyPlaceholder": "Claude (Anthropic) API-kulcs — sk-ant-…",
+    "thinking": "Gondolkodom…",
+    "inputPlaceholder": "Kérdezzen valamit erről a PDF-ről…",
+    "send": "Küldés",
+    "noAnswer": "Nem érkezett válasz.",
+    "errorInvalidKey": "Érvénytelen Claude (Anthropic) API-kulcs. Ellenőrizze a kulcsot a panel tetején lévő 🔑 gombbal.",
+    "errorApi": "A Claude API hibát adott vissza.",
+    "errorNoConnection": "Nincs kapcsolat az MI-szolgáltatással.",
+    "errorTimeout": "Egyetlen MCP-kliens sem válaszolt időben a kérdésre.",
+    "errorFailed": "Az MI-hívás sikertelen.",
+    "detail": "Részletek",
+    "unknownError": "ismeretlen hiba",
+    "skills": {
+      "translate": {
+        "label": "Fordítás",
+        "hint": "A dokumentum szövegének fordítása",
+        "prompt": "Fordítsd le a megnyitott dokumentum szövegét."
+      },
+      "summarize": {
+        "label": "Összefoglalás",
+        "hint": "A dokumentum vagy a rajz összefoglalása",
+        "prompt": "Foglald össze a megnyitott dokumentumot vagy rajzot."
+      },
+      "draw": {
+        "label": "Rajzolás",
+        "hint": "Elem vagy megjegyzés rajzolása a rajzra",
+        "prompt": "Rajzolj a rajzra: "
+      },
+      "detect-doors": {
+        "label": "Ajtók felismerése",
+        "hint": "Az alaprajz ajtóinak felismerése és megjelölése",
+        "prompt": "Ismerd fel az ajtókat az alaprajzon, és jelöld meg őket."
+      },
+      "structural-layout": {
+        "label": "Szerkezet kitűzése",
+        "hint": "Raszter, oszlopok, gerendák, födémmezők fesztávirányukkal és a szerkezeti kimutatás",
+        "prompt": "Tűzd ki a teherhordó szerkezetet a rajzon. Feladat: "
+      },
+      "structural-overview": {
+        "label": "Szerkezeti áttekintés",
+        "hint": "Szerkezeti áttekintés szintenként az építész alaprajzain: alapozás, födémek fesztávval, alatta lévő teherhordó falak, gerendák és oszlopok, jelmagyarázat és megjegyzések",
+        "prompt": "Készíts szerkezeti áttekintést erre a lapra az építész alaprajzaiból. Forrás, szintek és szerkezeti elv: "
+      },
+      "floorplan": {
+        "label": "Alaprajz",
+        "hint": "Építészeti alaprajz rajzolása: falak, nyílászárók, helyiségek, méretezés és berendezés (szaniter, konyha)",
+        "prompt": "Rajzolj építészeti alaprajzot. Mit kell rajzolni: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Online szimbólumkönyvtár",
   "noDocumentOpen": "Nincs megnyitott dokumentum.",
   "noPdfLoaded": "Nincs betöltött PDF.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Nincs kivágás a vágólapon"
   },
   "snippetOutputFailed": "Egy vektoros kivágást nem sikerült megjeleníteni, ezért az exportálás vagy a nyomtatás leállt. Próbálja újra.",
-  "protectedPdfReadOnly": "Ez a dokumentum jelszóval lett megnyitva, és csak olvasható. Nem menthető."
+  "protectedPdfReadOnly": "Ez a dokumentum jelszóval lett megnyitva, és csak olvasható. Nem menthető.",
+  "threeD": {
+    "title": "3D nézet",
+    "view": "Nézőpont",
+    "fit": "Igazítás",
+    "display": "Megjelenítés",
+    "modeSolid": "Tömör",
+    "modeEdges": "Tömör élekkel",
+    "modeWire": "Drótváz",
+    "modeXray": "Átlátszó",
+    "tree": "Modellfa",
+    "hint": "Bal húzás: forgatás, jobb húzás: mozgatás, görgő: nagyítás",
+    "loading": "3D modell betöltése... {{pct}}%",
+    "stats": "{{models}} objektum, {{tris}} háromszög",
+    "unsupported": "Ez a 3D modell {{fmt}} formátumot használ, amely még nem támogatott (csak U3D).",
+    "activate": "3D aktiválása",
+    "expand": "Dokumentumterület kitöltése",
+    "shrink": "Vissza az oldalhoz",
+    "deactivate": "3D nézet kikapcsolása",
+    "markupView": "Jelölési nézet",
+    "edit": "Szerkesztés",
+    "editTip": "Jelölőoldal készítése ebből a nézetből; a 3D oldal továbbra is szabadon forgatható",
+    "creating": "Oldal létrehozása...",
+    "markupPages": "Jelölőoldalak",
+    "pageN": "{{n}}. oldal",
+    "snapshotBar": "3D jelölőoldal: {{name}}",
+    "backTo3D": "Vissza a 3D modellhez",
+    "readFailed": "A 3D modell nem olvasható be.",
+    "partial": "A 3D modell egyes részei nem olvashatók be ({{n}} kihagyva).",
+    "viewerFailed": "A 3D nézet nem indítható el."
+  }
 }

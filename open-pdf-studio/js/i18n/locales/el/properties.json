@@ -247,6 +247,9 @@
     "linkImageTitle": "Σύνδεση εικόνας",
     "imageFilter": "Εικόνες"
   },
+  "sizeUnit": {
+    "tooltip": "Μονάδα διαστάσεων"
+  },
   "multiSelect": "{{count}} σχολιασμοί επιλεγμένοι",
   "pdfText": "Κείμενο PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Εισαγωγή σχολίων...",
     "exportComments": "Εξαγωγή σχολίων σε αρχείο...",
     "exportSelectedComments": "Εξαγωγή επιλεγμένων σχολίων σε αρχείο...",
+    "exportListCsv": "Εξαγωγή λίστας σε CSV...",
+    "summarizeComingSoon": "Σύντομα διαθέσιμο",
+    "listExported": "Η λίστα σχολίων εξήχθη σε CSV",
+    "csvPage": "Σελίδα",
+    "csvType": "Τύπος",
+    "csvAuthor": "Συντάκτης",
+    "csvDate": "Ημερομηνία",
+    "csvStatus": "Κατάσταση",
+    "csvSubject": "Θέμα",
+    "csvContents": "Περιεχόμενο",
+    "csvColor": "Χρώμα",
+    "csvLayer": "Επίπεδο",
     "schedules": "Πίνακες ποσοτήτων",
     "addPage": "Προσθήκη σελίδας",
     "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)"

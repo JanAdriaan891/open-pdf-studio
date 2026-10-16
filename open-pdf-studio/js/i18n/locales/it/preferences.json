@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Colore annotazione predefinito",
     "defaultLineWidth": "Larghezza linea predefinita",
     "defaultFontSize": "Dimensione carattere predefinita",
+    "paperSizeUnit": "Unità delle dimensioni (immagine, barra di scala)",
     "highlightOpacity": "Opacità evidenziazione (%)",
     "angleSnap": "Aggancio angolare (tasto Shift)",
     "objectSnapping": "Aggancio agli oggetti",

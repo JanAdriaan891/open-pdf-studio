@@ -266,6 +266,8 @@
     "swap": "החלפת ישן וחדש",
     "overlayDesc": "שני קובצי ה-PDF זה על גבי זה",
     "sideDesc": "שני קובצי PDF זה לצד זה, מסונכרנים",
+    "split": "קו חיתוך",
+    "splitDesc": "גררו קו כדי לחשוף את הישן ואת החדש",
     "legendOld": "רק בישן",
     "legendNew": "רק בחדש",
     "legendBoth": "ללא שינוי",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "למחוק את עמוד {{page}}?",
     "extractPages": "חילוץ עמודים",
     "extractLabel": "חילוץ",
+    "splitDocument": "פיצול מסמך",
+    "splitLabel": "פיצול",
     "combine": "שילוב",
     "mergePdfs": "מיזוג PDF-ים",
     "mergeLabel": "מיזוג",
@@ -621,5 +625,15 @@
     "symbolScale": "קנה מידה",
     "symbolScaleTitle": "הגודל שבו ממוקם סמל חדש",
     "symbolScaleCustom": "קנה מידה מותאם"
+  },
+  "proofread": {
+    "group": "הגהה",
+    "button": "הגה",
+    "tooltip": "מצב הגהה (F2): סמנו הוספות, מחיקות והחלפות באמצעות המקלדת",
+    "hint": "הגהה: החצים מזיזים את הסמן, הקלידו כדי להוסיף, Delete מוחק בקו, Tab עובר לתיקון הבא, Esc חוזר צעד אחורה.",
+    "noText": "אין בעמוד זה טקסט להגהה.",
+    "noCorrections": "עדיין אין תיקונים.",
+    "insertPlaceholder": "טקסט להוספה",
+    "replacePlaceholder": "טקסט חלופי"
   }
 }

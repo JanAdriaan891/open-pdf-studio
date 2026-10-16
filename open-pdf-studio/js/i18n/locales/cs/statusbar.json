@@ -29,7 +29,8 @@
     "formCheckbox": "Zaškrtávací pole formuláře",
     "formRadio": "Přepínač formuláře",
     "screenshot": "Snímek obrazovky",
-    "pageLabelPick": "Výběr textu pro popisek stránky"
+    "pageLabelPick": "Výběr textu pro popisek stránky",
+    "proofread": "Korektura"
   },
   "toolLabel": "Nástroj:",
   "annotationsLabel": "Anotace:",

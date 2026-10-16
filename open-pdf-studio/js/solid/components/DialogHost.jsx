@@ -7,6 +7,7 @@ import InsertPageDialog from './dialogs/InsertPageDialog.jsx';
 import DeletePagesDialog from './dialogs/DeletePagesDialog.jsx';
 import PagePropertiesDialog from './dialogs/PagePropertiesDialog.jsx';
 import ExtractPagesDialog from './dialogs/ExtractPagesDialog.jsx';
+import SplitDocumentDialog from './dialogs/SplitDocumentDialog.jsx';
 import MergePdfsDialog from './dialogs/MergePdfsDialog.jsx';
 import PrintDialog from './dialogs/PrintDialog.jsx';
 import PrintQueueDialog from './dialogs/PrintQueueDialog.jsx';
@@ -71,6 +72,7 @@ const DIALOG_MAP = {
   'delete-pages': DeletePagesDialog,
   'page-properties': PagePropertiesDialog,
   'extract-pages': ExtractPagesDialog,
+  'split-document': SplitDocumentDialog,
   'merge-pdfs': MergePdfsDialog,
   'print': PrintDialog,
   'print-queue': PrintQueueDialog,

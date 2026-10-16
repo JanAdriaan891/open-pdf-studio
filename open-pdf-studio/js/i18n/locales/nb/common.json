@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "En ny innlasting av siden starter tom: i nettleseren blir dokumentet ditt på datamaskinen og lagres ikke.",
   "desktopOnly": "{{feature}} fungerer bare i skrivebordsappen. Denne siden er nettleserversjonen.",
   "assistantTitle": "OpenAEC-assistent",
+  "assistant": {
+    "greeting": "Hei! Jeg er **{{title}}**. Jeg kan: 🌐 oversette, 📝 oppsummere, ✏️ tegne på tegningen og 🚪 gjenkjenne dører. Velg en ferdighet nedenfor, eller still spørsmålet ditt.",
+    "workingIn": "jobber i",
+    "viaClaude": "via Claude",
+    "notConnected": "ikke tilkoblet",
+    "keyButton": "Angi Claude (Anthropic) API-nøkkel",
+    "keyPlaceholder": "Claude (Anthropic) API-nøkkel — sk-ant-…",
+    "thinking": "Tenker…",
+    "inputPlaceholder": "Spør om noe i denne PDF-en…",
+    "send": "Send melding",
+    "noAnswer": "Ingen svar mottatt.",
+    "errorInvalidKey": "Ugyldig Claude (Anthropic) API-nøkkel. Kontroller nøkkelen med 🔑-knappen øverst i panelet.",
+    "errorApi": "Claude-API-et returnerte en feil.",
+    "errorNoConnection": "Ingen tilkobling til AI-tjenesten.",
+    "errorTimeout": "Ingen MCP-klient svarte på spørsmålet i tide.",
+    "errorFailed": "AI-kallet mislyktes.",
+    "detail": "Detaljer",
+    "unknownError": "ukjent feil",
+    "skills": {
+      "translate": {
+        "label": "Oversett",
+        "hint": "Oversett teksten i dokumentet",
+        "prompt": "Oversett teksten i det åpne dokumentet."
+      },
+      "summarize": {
+        "label": "Oppsummer",
+        "hint": "Oppsummer dokumentet eller tegningen",
+        "prompt": "Oppsummer det åpne dokumentet eller tegningen."
+      },
+      "draw": {
+        "label": "Tegn",
+        "hint": "Tegn et element eller en merknad på tegningen",
+        "prompt": "Tegn på tegningen: "
+      },
+      "detect-doors": {
+        "label": "Gjenkjenn dører",
+        "hint": "Finn dørene i plantegningen og marker dem",
+        "prompt": "Gjenkjenn dørene i plantegningen og marker dem."
+      },
+      "structural-layout": {
+        "label": "Sett ut konstruksjon",
+        "hint": "Akselinjer, søyler, bjelker, dekkefelt med spennretning og konstruksjonsskjemaet",
+        "prompt": "Sett ut den bærende konstruksjonen på tegningen. Oppgave: "
+      },
+      "structural-overview": {
+        "label": "Konstruksjonsoversikt",
+        "hint": "Konstruksjonsoversikt per etasje på arkitektens plantegninger: fundament, dekker med spenn, underliggende bærende vegger, bjelker og søyler, tegnforklaring og merknader",
+        "prompt": "Lag en konstruksjonsoversikt på dette arket ut fra arkitektens plantegninger. Kilde, etasjer og konstruksjonsprinsipp: "
+      },
+      "floorplan": {
+        "label": "Plantegning",
+        "hint": "Tegn en bygningsplantegning: vegger, vinduer og dører, rom, målsetting og innredning (sanitær, kjøkken)",
+        "prompt": "Tegn en bygningsplantegning. Hva som skal tegnes: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Nettbasert symbolbibliotek",
   "noDocumentOpen": "Ingen dokumenter er åpne.",
   "noPdfLoaded": "Ingen PDF lastet inn.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Ingen utsnitt på utklippstavlen"
   },
   "snippetOutputFailed": "Et vektorutsnitt kunne ikke gjengis, så eksporten eller utskriften ble stoppet. Prøv igjen.",
-  "protectedPdfReadOnly": "Dette dokumentet ble åpnet med passord og er skrivebeskyttet. Det kan ikke lagres."
+  "protectedPdfReadOnly": "Dette dokumentet ble åpnet med passord og er skrivebeskyttet. Det kan ikke lagres.",
+  "threeD": {
+    "title": "3D-visning",
+    "view": "Synsvinkel",
+    "fit": "Tilpass",
+    "display": "Visning",
+    "modeSolid": "Massiv",
+    "modeEdges": "Massiv med kanter",
+    "modeWire": "Trådmodell",
+    "modeXray": "Gjennomsiktig",
+    "tree": "Modelltre",
+    "hint": "Dra med venstre: roter, dra med høyre: panorer, hjul: zoom",
+    "loading": "Laster inn 3D-modell... {{pct}}%",
+    "stats": "{{models}} objekter, {{tris}} trekanter",
+    "unsupported": "Denne 3D-modellen bruker formatet {{fmt}}, som ikke støttes ennå (bare U3D).",
+    "activate": "Aktiver 3D",
+    "expand": "Fyll dokumentområdet",
+    "shrink": "Tilbake til siden",
+    "deactivate": "Slå av 3D-visning",
+    "markupView": "Markeringsvisning",
+    "edit": "Rediger",
+    "editTip": "Lag en markeringsside av denne visningen; 3D-siden kan fortsatt roteres fritt",
+    "creating": "Oppretter side...",
+    "markupPages": "Markeringssider",
+    "pageN": "side {{n}}",
+    "snapshotBar": "3D-markeringsside: {{name}}",
+    "backTo3D": "Tilbake til 3D-modell",
+    "readFailed": "3D-modellen kunne ikke leses.",
+    "partial": "Noen deler av 3D-modellen kunne ikke leses ({{n}} hoppet over).",
+    "viewerFailed": "3D-visningen kunne ikke startes."
+  }
 }

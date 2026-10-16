@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Po opětovném načtení stránka začíná prázdná: v prohlížeči zůstává dokument ve vašem počítači a neukládá se.",
   "desktopOnly": "{{feature}} funguje pouze v desktopové aplikaci. Tato stránka je verze pro prohlížeč.",
   "assistantTitle": "Asistent OpenAEC",
+  "assistant": {
+    "greeting": "Dobrý den! Jsem **{{title}}**. Umím: 🌐 překládat, 📝 shrnovat, ✏️ kreslit do výkresu a 🚪 rozpoznávat dveře. Vyberte dovednost níže nebo položte otázku.",
+    "workingIn": "pracuje v",
+    "viaClaude": "přes Claude",
+    "notConnected": "nepřipojeno",
+    "keyButton": "Nastavit klíč API Claude (Anthropic)",
+    "keyPlaceholder": "Klíč API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Přemýšlím…",
+    "inputPlaceholder": "Zeptejte se na něco k tomuto PDF…",
+    "send": "Odeslat",
+    "noAnswer": "Nebyla přijata žádná odpověď.",
+    "errorInvalidKey": "Neplatný klíč API Claude (Anthropic). Zkontrolujte klíč tlačítkem 🔑 v horní části panelu.",
+    "errorApi": "API Claude vrátilo chybu.",
+    "errorNoConnection": "Žádné spojení se službou AI.",
+    "errorTimeout": "Žádný klient MCP neodpověděl na otázku včas.",
+    "errorFailed": "Volání AI selhalo.",
+    "detail": "Podrobnosti",
+    "unknownError": "neznámá chyba",
+    "skills": {
+      "translate": {
+        "label": "Přeložit",
+        "hint": "Přeložit text dokumentu",
+        "prompt": "Přelož text otevřeného dokumentu."
+      },
+      "summarize": {
+        "label": "Shrnout",
+        "hint": "Shrnout dokument nebo výkres",
+        "prompt": "Shrň otevřený dokument nebo výkres."
+      },
+      "draw": {
+        "label": "Kreslit",
+        "hint": "Nakreslit prvek nebo poznámku do výkresu",
+        "prompt": "Nakresli do výkresu: "
+      },
+      "detect-doors": {
+        "label": "Rozpoznat dveře",
+        "hint": "Najít dveře v půdorysu a označit je",
+        "prompt": "Rozpoznej dveře v půdorysu a označ je."
+      },
+      "structural-layout": {
+        "label": "Vytyčit konstrukci",
+        "hint": "Osnova, sloupy, nosníky, stropní pole se směrem rozpětí a konstrukční výkaz",
+        "prompt": "Vytyč nosnou konstrukci ve výkresu. Zadání: "
+      },
+      "structural-overview": {
+        "label": "Přehled konstrukce",
+        "hint": "Přehled konstrukce po podlažích na půdorysech architekta: základy, stropy s rozpětím, nosné stěny pod nimi, nosníky a sloupy, legenda a poznámky",
+        "prompt": "Vytvoř na tomto listu přehled konstrukce z půdorysů architekta. Zdroj, podlaží a konstrukční princip: "
+      },
+      "floorplan": {
+        "label": "Půdorys",
+        "hint": "Nakreslit stavební půdorys: stěny, výplně otvorů, místnosti, kóty a vybavení (sanita, kuchyně)",
+        "prompt": "Nakresli stavební půdorys. Co nakreslit: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Online knihovna symbolů",
   "noDocumentOpen": "Žádný dokument není otevřen.",
   "noPdfLoaded": "Není načteno žádné PDF.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Ve schránce není žádný výřez"
   },
   "snippetOutputFailed": "Vektorový výřez se nepodařilo vykreslit, proto byl export nebo tisk zastaven. Zkuste to znovu.",
-  "protectedPdfReadOnly": "Tento dokument byl otevřen s heslem a je jen pro čtení. Nelze jej uložit."
+  "protectedPdfReadOnly": "Tento dokument byl otevřen s heslem a je jen pro čtení. Nelze jej uložit.",
+  "threeD": {
+    "title": "3D zobrazení",
+    "view": "Pohled",
+    "fit": "Přizpůsobit",
+    "display": "Zobrazení",
+    "modeSolid": "Plné",
+    "modeEdges": "Plné s hranami",
+    "modeWire": "Drátový model",
+    "modeXray": "Průhledné",
+    "tree": "Strom modelu",
+    "hint": "Tažení levým: otáčení, pravým: posun, kolečko: lupa",
+    "loading": "Načítání 3D modelu... {{pct}}%",
+    "stats": "Objekty: {{models}}, trojúhelníky: {{tris}}",
+    "unsupported": "Tento 3D model používá formát {{fmt}}, který zatím není podporován (pouze U3D).",
+    "activate": "Aktivovat 3D",
+    "expand": "Vyplnit oblast dokumentu",
+    "shrink": "Zpět na stránku",
+    "deactivate": "Vypnout 3D zobrazení",
+    "markupView": "Pohled pro značky",
+    "edit": "Upravit",
+    "editTip": "Vytvořit stránku pro značky z tohoto pohledu; 3D stránku lze dál volně otáčet",
+    "creating": "Vytváření stránky...",
+    "markupPages": "Stránky se značkami",
+    "pageN": "stránka {{n}}",
+    "snapshotBar": "3D stránka se značkami: {{name}}",
+    "backTo3D": "Zpět na 3D model",
+    "readFailed": "3D model se nepodařilo načíst.",
+    "partial": "Některé části 3D modelu se nepodařilo načíst (vynecháno: {{n}}).",
+    "viewerFailed": "3D zobrazení se nepodařilo spustit."
+  }
 }

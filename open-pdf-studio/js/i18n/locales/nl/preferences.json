@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Standaard annotatiekleur",
     "defaultLineWidth": "Standaard lijnbreedte",
     "defaultFontSize": "Standaard tekengrootte",
+    "paperSizeUnit": "Eenheid voor maten (afbeelding, schaalbalk)",
     "highlightOpacity": "Markering dekking (%)",
     "textBoxDefaults": "Tekstvak standaardwaarden",
     "fillColor": "Vulkleur",

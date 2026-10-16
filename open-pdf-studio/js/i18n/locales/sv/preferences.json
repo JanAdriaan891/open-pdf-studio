@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Standardfärg för anteckningar",
     "defaultLineWidth": "Standard linjebredd",
     "defaultFontSize": "Standard teckenstorlek",
+    "paperSizeUnit": "Enhet för mått (bild, skalstock)",
     "highlightOpacity": "Markeringsopacitet (%)",
     "angleSnap": "Vinkelsnappning (Shift-tangenten)",
     "objectSnapping": "Objektsnappning",

@@ -247,6 +247,9 @@
     "linkImageTitle": "Bild verknüpfen",
     "imageFilter": "Bilder"
   },
+  "sizeUnit": {
+    "tooltip": "Einheit für Abmessungen"
+  },
   "multiSelect": "{{count}} Anmerkungen ausgewählt",
   "pdfText": "PDF-Text",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Kommentare importieren...",
     "exportComments": "Kommentare in Datendatei exportieren...",
     "exportSelectedComments": "Ausgewählte Kommentare in Datendatei exportieren...",
+    "exportListCsv": "Liste als CSV exportieren...",
+    "summarizeComingSoon": "Demnächst verfügbar",
+    "listExported": "Kommentarliste als CSV exportiert",
+    "csvPage": "Seite",
+    "csvType": "Typ",
+    "csvAuthor": "Autor",
+    "csvDate": "Datum",
+    "csvStatus": "Status",
+    "csvSubject": "Betreff",
+    "csvContents": "Inhalt",
+    "csvColor": "Farbe",
+    "csvLayer": "Ebene",
     "schedules": "Listen",
     "addPage": "Seite hinzufügen",
     "pageLabels": "Seitenbeschriftungen (Namensgenerator)"

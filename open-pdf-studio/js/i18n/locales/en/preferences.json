@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Default Annotation Color",
     "defaultLineWidth": "Default Line Width",
     "defaultFontSize": "Default Font Size",
+    "paperSizeUnit": "Size Unit (Image, Scale Bar)",
     "highlightOpacity": "Highlight Opacity",
     "angleSnap": "Angle Snap (Shift key)",
     "objectSnapping": "Object Snapping",

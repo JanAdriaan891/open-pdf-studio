@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Standard-Anmerkungsfarbe",
     "defaultLineWidth": "Standard-Linienstärke",
     "defaultFontSize": "Standard-Schriftgröße",
+    "paperSizeUnit": "Einheit für Abmessungen (Bild, Maßstabsleiste)",
     "highlightOpacity": "Hervorhebung Deckkraft (%)",
     "angleSnap": "Winkelfang (Shift-Taste)",
     "objectSnapping": "Objektfang",

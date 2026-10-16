@@ -247,6 +247,9 @@
     "linkImageTitle": "Linkitä kuva",
     "imageFilter": "Kuvat"
   },
+  "sizeUnit": {
+    "tooltip": "Mittojen yksikkö"
+  },
   "multiSelect": "{{count}} merkintää valittu",
   "pdfText": "PDF-teksti",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Tuo kommentit...",
     "exportComments": "Vie kommentit datatiedostoon...",
     "exportSelectedComments": "Vie valitut kommentit datatiedostoon...",
+    "exportListCsv": "Vie luettelo CSV-tiedostoon...",
+    "summarizeComingSoon": "Tulossa pian",
+    "listExported": "Kommenttiluettelo viety CSV-tiedostoon",
+    "csvPage": "Sivu",
+    "csvType": "Tyyppi",
+    "csvAuthor": "Tekijä",
+    "csvDate": "Päivämäärä",
+    "csvStatus": "Tila",
+    "csvSubject": "Aihe",
+    "csvContents": "Sisältö",
+    "csvColor": "Väri",
+    "csvLayer": "Taso",
     "schedules": "Luettelot",
     "addPage": "Lisää sivu",
     "pageLabels": "Sivujen nimiöt (nimien muodostus)"

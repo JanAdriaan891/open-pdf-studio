@@ -266,6 +266,8 @@
     "swap": "Byt gammal och ny",
     "overlayDesc": "Båda PDF-filerna ovanpå varandra",
     "sideDesc": "Två PDF-filer sida vid sida, synkroniserade",
+    "split": "Delningslinje",
+    "splitDesc": "Dra en linje för att visa gammalt och nytt",
     "legendOld": "Endast i gammal",
     "legendNew": "Endast i ny",
     "legendBoth": "Oförändrat",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Radera sida {{page}}?",
     "extractPages": "Extrahera sidor",
     "extractLabel": "Extrahera",
+    "splitDocument": "Dela dokument",
+    "splitLabel": "Dela",
     "combine": "Kombinera",
     "mergePdfs": "Sammanfoga PDF:er",
     "mergeLabel": "Sammanfoga",
@@ -621,5 +625,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Storlek som en ny symbol placeras i",
     "symbolScaleCustom": "Anpassad skala"
+  },
+  "proofread": {
+    "group": "Korrektur",
+    "button": "Korrekturläs",
+    "tooltip": "Korrekturläge (F2): markera infogningar, borttagningar och ersättningar med tangentbordet",
+    "hint": "Korrektur: piltangenterna flyttar markören, skriv för att infoga, Delete stryker över, Tab går till nästa rättelse, Esc går ett steg tillbaka.",
+    "noText": "Den här sidan har ingen text att korrekturläsa.",
+    "noCorrections": "Det finns inga rättelser än.",
+    "insertPlaceholder": "Infoga text",
+    "replacePlaceholder": "Ersättningstext"
   }
 }

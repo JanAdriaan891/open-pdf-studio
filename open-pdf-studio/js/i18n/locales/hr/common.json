@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Ponovno učitavanje stranice počinje prazno: u pregledniku dokument ostaje na vašem računalu i ne pohranjuje se.",
   "desktopOnly": "{{feature}} radi samo u desktop aplikaciji. Ova stranica je verzija za preglednik.",
   "assistantTitle": "OpenAEC asistent",
+  "assistant": {
+    "greeting": "Pozdrav! Ja sam **{{title}}**. Mogu: 🌐 prevoditi, 📝 sažimati, ✏️ crtati na crtežu i 🚪 prepoznavati vrata. Odaberite vještinu u nastavku ili postavite pitanje.",
+    "workingIn": "radi u",
+    "viaClaude": "preko Claudea",
+    "notConnected": "nije povezano",
+    "keyButton": "Postavi Claude (Anthropic) API ključ",
+    "keyPlaceholder": "Claude (Anthropic) API ključ — sk-ant-…",
+    "thinking": "Razmišljam…",
+    "inputPlaceholder": "Pitajte nešto o ovom PDF-u…",
+    "send": "Pošalji",
+    "noAnswer": "Nije primljen odgovor.",
+    "errorInvalidKey": "Nevažeći Claude (Anthropic) API ključ. Provjerite ključ gumbom 🔑 na vrhu ploče.",
+    "errorApi": "Claude API vratio je pogrešku.",
+    "errorNoConnection": "Nema veze s AI uslugom.",
+    "errorTimeout": "Nijedan MCP klijent nije na vrijeme odgovorio na pitanje.",
+    "errorFailed": "AI poziv nije uspio.",
+    "detail": "Pojedinosti",
+    "unknownError": "nepoznata pogreška",
+    "skills": {
+      "translate": {
+        "label": "Prevedi",
+        "hint": "Prevedi tekst dokumenta",
+        "prompt": "Prevedi tekst otvorenog dokumenta."
+      },
+      "summarize": {
+        "label": "Sažmi",
+        "hint": "Sažmi dokument ili crtež",
+        "prompt": "Sažmi otvoreni dokument ili crtež."
+      },
+      "draw": {
+        "label": "Crtaj",
+        "hint": "Nacrtaj element ili bilješku na crtežu",
+        "prompt": "Nacrtaj na crtežu: "
+      },
+      "detect-doors": {
+        "label": "Prepoznaj vrata",
+        "hint": "Pronađi vrata u tlocrtu i označi ih",
+        "prompt": "Prepoznaj vrata u tlocrtu i označi ih."
+      },
+      "structural-layout": {
+        "label": "Postavi konstrukciju",
+        "hint": "Raster osi, stupovi, grede, polja ploča sa smjerom raspona i konstrukcijska specifikacija",
+        "prompt": "Postavi nosivu konstrukciju na crtežu. Zadatak: "
+      },
+      "structural-overview": {
+        "label": "Pregled konstrukcije",
+        "hint": "Pregled konstrukcije po etažama na tlocrtima arhitekta: temelji, ploče s rasponom, nosivi zidovi ispod, grede i stupovi, legenda i napomene",
+        "prompt": "Izradi pregled konstrukcije na ovom listu iz tlocrta arhitekta. Izvor, etaže i konstrukcijsko načelo: "
+      },
+      "floorplan": {
+        "label": "Tlocrt",
+        "hint": "Nacrtaj arhitektonski tlocrt: zidovi, stolarija, prostorije, kote i oprema (sanitarije, kuhinja)",
+        "prompt": "Nacrtaj arhitektonski tlocrt. Što nacrtati: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Mrežna knjižnica simbola",
   "noDocumentOpen": "Nijedan dokument nije otvoren.",
   "noPdfLoaded": "Nije učitan PDF.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "U međuspremniku nema isječka"
   },
   "snippetOutputFailed": "Vektorski isječak nije se mogao iscrtati pa je izvoz ili ispis zaustavljen. Pokušajte ponovno.",
-  "protectedPdfReadOnly": "Ovaj je dokument otvoren lozinkom i samo je za čitanje. Ne može se spremiti."
+  "protectedPdfReadOnly": "Ovaj je dokument otvoren lozinkom i samo je za čitanje. Ne može se spremiti.",
+  "threeD": {
+    "title": "3D prikaz",
+    "view": "Pogled",
+    "fit": "Prilagodi",
+    "display": "Prikaz",
+    "modeSolid": "Puno",
+    "modeEdges": "Puno s rubovima",
+    "modeWire": "Žičani model",
+    "modeXray": "Prozirno",
+    "tree": "Stablo modela",
+    "hint": "Povlačenje lijevim: kruženje, desnim: pomicanje, kotačić: zum",
+    "loading": "Učitavanje 3D modela... {{pct}}%",
+    "stats": "Objekata: {{models}}, trokuta: {{tris}}",
+    "unsupported": "Ovaj 3D model koristi format {{fmt}}, koji još nije podržan (samo U3D).",
+    "activate": "Aktiviraj 3D",
+    "expand": "Ispuni područje dokumenta",
+    "shrink": "Natrag na stranicu",
+    "deactivate": "Isključi 3D prikaz",
+    "markupView": "Pogled za oznake",
+    "edit": "Uredi",
+    "editTip": "Izradi stranicu za oznake iz ovog pogleda; 3D stranica i dalje se može slobodno okretati",
+    "creating": "Izrada stranice...",
+    "markupPages": "Stranice s oznakama",
+    "pageN": "stranica {{n}}",
+    "snapshotBar": "3D stranica s oznakama: {{name}}",
+    "backTo3D": "Natrag na 3D model",
+    "readFailed": "3D model nije moguće pročitati.",
+    "partial": "Neke dijelove 3D modela nije moguće pročitati (preskočeno: {{n}}).",
+    "viewerFailed": "3D prikaz nije moguće pokrenuti."
+  }
 }

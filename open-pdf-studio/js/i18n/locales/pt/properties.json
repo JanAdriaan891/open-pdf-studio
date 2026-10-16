@@ -247,6 +247,9 @@
     "linkImageTitle": "Vincular imagem",
     "imageFilter": "Imagens"
   },
+  "sizeUnit": {
+    "tooltip": "Unidade das dimensões"
+  },
   "multiSelect": "{{count}} anotações selecionadas",
   "pdfText": "Texto do PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Importar comentários...",
     "exportComments": "Exportar comentários para arquivo de dados...",
     "exportSelectedComments": "Exportar comentários selecionados para arquivo de dados...",
+    "exportListCsv": "Exportar lista para CSV...",
+    "summarizeComingSoon": "Em breve",
+    "listExported": "Lista de comentários exportada para CSV",
+    "csvPage": "Página",
+    "csvType": "Tipo",
+    "csvAuthor": "Autor",
+    "csvDate": "Data",
+    "csvStatus": "Estado",
+    "csvSubject": "Assunto",
+    "csvContents": "Conteúdo",
+    "csvColor": "Cor",
+    "csvLayer": "Camada",
     "schedules": "Quadros",
     "addPage": "Adicionar página",
     "pageLabels": "Rótulos de página (gerador de nomes)"

@@ -266,6 +266,8 @@
     "swap": "Eski ile yeniyi değiştir",
     "overlayDesc": "Her iki PDF üst üste",
     "sideDesc": "İki PDF yan yana, eşitlenmiş",
+    "split": "Ayırma çizgisi",
+    "splitDesc": "Eskiyi ve yeniyi göstermek için bir çizgiyi sürükleyin",
     "legendOld": "Yalnızca eskide",
     "legendNew": "Yalnızca yenide",
     "legendBoth": "Değişmemiş",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Sayfa {{page}} silinsin mi?",
     "extractPages": "Sayfaları Çıkar",
     "extractLabel": "Çıkar",
+    "splitDocument": "Belgeyi Böl",
+    "splitLabel": "Böl",
     "combine": "Birleştir",
     "mergePdfs": "PDF Birleştir",
     "mergeLabel": "Birleştir",
@@ -621,5 +625,15 @@
     "symbolScale": "Ölçek",
     "symbolScaleTitle": "Yeni bir sembolün yerleştirildiği boyut",
     "symbolScaleCustom": "Özel ölçek"
+  },
+  "proofread": {
+    "group": "Düzelti",
+    "button": "Düzelt",
+    "tooltip": "Düzelti modu (F2): eklemeleri, silmeleri ve değiştirmeleri klavyeyle işaretleyin",
+    "hint": "Düzelti: ok tuşları imleci taşır, eklemek için yazın, Delete üstünü çizer, Tab sonraki düzeltmeye gider, Esc bir adım geri döner.",
+    "noText": "Bu sayfada düzeltilecek metin yok.",
+    "noCorrections": "Henüz düzeltme yok.",
+    "insertPlaceholder": "Eklenecek metin",
+    "replacePlaceholder": "Yeni metin"
   }
 }

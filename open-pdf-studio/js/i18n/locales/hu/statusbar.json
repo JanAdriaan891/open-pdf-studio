@@ -29,7 +29,8 @@
     "formCheckbox": "Űrlap jelölőnégyzet",
     "formRadio": "Űrlap rádiógomb",
     "screenshot": "Képernyőkép",
-    "pageLabelPick": "Szöveg kiválasztása oldalcímkéhez"
+    "pageLabelPick": "Szöveg kiválasztása oldalcímkéhez",
+    "proofread": "Korrektúra"
   },
   "toolLabel": "Eszköz:",
   "annotationsLabel": "Annotációk:",

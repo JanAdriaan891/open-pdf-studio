@@ -266,6 +266,8 @@
     "swap": "Tukar lama dan baru",
     "overlayDesc": "Kedua PDF ditumpuk satu di atas yang lain",
     "sideDesc": "Dua PDF berdampingan, tersinkronisasi",
+    "split": "Garis pemisah",
+    "splitDesc": "Seret garis untuk menampilkan versi lama dan baru",
     "legendOld": "Hanya di versi lama",
     "legendNew": "Hanya di versi baru",
     "legendBoth": "Tidak berubah",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Hapus halaman {{page}}?",
     "extractPages": "Ekstrak Halaman",
     "extractLabel": "Ekstrak",
+    "splitDocument": "Pisahkan Dokumen",
+    "splitLabel": "Pisahkan",
     "combine": "Gabungkan",
     "mergePdfs": "Gabungkan PDF",
     "mergeLabel": "Gabungkan",
@@ -621,5 +625,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Ukuran penempatan simbol baru",
     "symbolScaleCustom": "Skala kustom"
+  },
+  "proofread": {
+    "group": "Koreksi",
+    "button": "Periksa Teks",
+    "tooltip": "Mode koreksi (F2): tandai sisipan, penghapusan, dan penggantian dengan papan ketik",
+    "hint": "Koreksi: tombol panah memindahkan kursor, ketik untuk menyisipkan, Delete mencoret, Tab menuju koreksi berikutnya, Esc mundur satu langkah.",
+    "noText": "Halaman ini tidak memiliki teks untuk dikoreksi.",
+    "noCorrections": "Belum ada koreksi.",
+    "insertPlaceholder": "Teks yang disisipkan",
+    "replacePlaceholder": "Teks pengganti"
   }
 }

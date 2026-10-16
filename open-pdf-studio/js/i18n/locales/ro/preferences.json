@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Culoare implicita adnotare",
     "defaultLineWidth": "Grosime linie implicita",
     "defaultFontSize": "Dimensiune font implicita",
+    "paperSizeUnit": "Unitate pentru dimensiuni (imagine, bară de scară)",
     "highlightOpacity": "Opacitate evidentiator (%)",
     "angleSnap": "Fixare unghi (tasta Shift)",
     "objectSnapping": "Fixare obiecte",

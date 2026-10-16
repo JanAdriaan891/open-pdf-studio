@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Cor de anotação padrão",
     "defaultLineWidth": "Largura de linha padrão",
     "defaultFontSize": "Tamanho de fonte padrão",
+    "paperSizeUnit": "Unidade das dimensões (imagem, barra de escala)",
     "highlightOpacity": "Opacidade do realce (%)",
     "angleSnap": "Encaixe de ângulo (tecla Shift)",
     "objectSnapping": "Encaixe em objetos",

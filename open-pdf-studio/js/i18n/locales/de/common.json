@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Ein Neuladen der Seite beginnt leer: Im Browser bleibt Ihr Dokument auf Ihrem Computer und wird nicht gespeichert.",
   "desktopOnly": "{{feature}} funktioniert nur in der Desktop-App. Diese Seite ist die Browserversion.",
   "assistantTitle": "OpenAEC-Assistent",
+  "assistant": {
+    "greeting": "Hallo! Ich bin der **{{title}}**. Ich kann: 🌐 übersetzen, 📝 zusammenfassen, ✏️ auf der Zeichnung zeichnen und 🚪 Türen erkennen. Wählen Sie unten eine Fähigkeit oder stellen Sie Ihre Frage.",
+    "workingIn": "arbeitet in",
+    "viaClaude": "über Claude",
+    "notConnected": "nicht verbunden",
+    "keyButton": "Claude-(Anthropic-)API-Schlüssel festlegen",
+    "keyPlaceholder": "Claude-(Anthropic-)API-Schlüssel — sk-ant-…",
+    "thinking": "Denke nach…",
+    "inputPlaceholder": "Fragen Sie etwas zu diesem PDF…",
+    "send": "Senden",
+    "noAnswer": "Keine Antwort erhalten.",
+    "errorInvalidKey": "Ungültiger Claude-(Anthropic-)API-Schlüssel. Prüfen Sie den Schlüssel über die 🔑-Schaltfläche oben im Bereich.",
+    "errorApi": "Die Claude-API hat einen Fehler gemeldet.",
+    "errorNoConnection": "Keine Verbindung zum KI-Dienst.",
+    "errorTimeout": "Kein MCP-Client hat die Frage rechtzeitig beantwortet.",
+    "errorFailed": "KI-Anfrage fehlgeschlagen.",
+    "detail": "Details",
+    "unknownError": "unbekannter Fehler",
+    "skills": {
+      "translate": {
+        "label": "Übersetzen",
+        "hint": "Den Text des Dokuments übersetzen",
+        "prompt": "Übersetze den Text des geöffneten Dokuments."
+      },
+      "summarize": {
+        "label": "Zusammenfassen",
+        "hint": "Das Dokument oder die Zeichnung zusammenfassen",
+        "prompt": "Fasse das geöffnete Dokument oder die Zeichnung zusammen."
+      },
+      "draw": {
+        "label": "Zeichnen",
+        "hint": "Ein Element oder eine Anmerkung auf der Zeichnung zeichnen",
+        "prompt": "Zeichne auf der Zeichnung: "
+      },
+      "detect-doors": {
+        "label": "Türen erkennen",
+        "hint": "Die Türen im Grundriss erkennen und markieren",
+        "prompt": "Erkenne die Türen im Grundriss und markiere sie."
+      },
+      "structural-layout": {
+        "label": "Tragwerk anlegen",
+        "hint": "Raster, Stützen, Träger, Deckenfelder mit Spannrichtung und die Tragwerksliste",
+        "prompt": "Lege das Tragwerk auf der Zeichnung an. Vorgabe: "
+      },
+      "structural-overview": {
+        "label": "Tragwerksübersicht",
+        "hint": "Tragwerksübersicht je Geschoss auf den Grundrissen des Architekten: Gründung, Decken mit Spannweite, darunterliegende tragende Wände, Träger und Stützen, Legende und Erläuterung",
+        "prompt": "Erstelle auf diesem Blatt eine Tragwerksübersicht aus den Grundrissen des Architekten. Quelle, Geschosse und Tragprinzip: "
+      },
+      "floorplan": {
+        "label": "Grundriss",
+        "hint": "Einen Bauplan-Grundriss zeichnen: Wände, Fenster und Türen, Räume, Bemaßung und Einrichtung (Sanitär, Küche)",
+        "prompt": "Zeichne einen Grundriss. Was gezeichnet werden soll: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Online-Symbolbibliothek",
   "noDocumentOpen": "Es ist kein Dokument geöffnet.",
   "noPdfLoaded": "Kein PDF geladen.",
@@ -172,5 +228,35 @@
     "clipboardEmpty": "Kein Ausschnitt in der Zwischenablage"
   },
   "snippetOutputFailed": "Ein Vektorausschnitt konnte nicht gerendert werden, daher wurde der Export oder Druck abgebrochen. Versuchen Sie es erneut.",
-  "protectedPdfReadOnly": "Dieses Dokument wurde mit einem Kennwort geöffnet und ist schreibgeschützt. Es kann nicht gespeichert werden."
+  "protectedPdfReadOnly": "Dieses Dokument wurde mit einem Kennwort geöffnet und ist schreibgeschützt. Es kann nicht gespeichert werden.",
+  "threeD": {
+    "title": "3D-Ansicht",
+    "view": "Ansicht",
+    "fit": "Einpassen",
+    "display": "Darstellung",
+    "modeSolid": "Vollkörper",
+    "modeEdges": "Vollkörper mit Kanten",
+    "modeWire": "Drahtmodell",
+    "modeXray": "Transparent",
+    "tree": "Modellbaum",
+    "hint": "Links ziehen: drehen, rechts ziehen: verschieben, Mausrad: zoomen",
+    "loading": "3D-Modell wird geladen... {{pct}}%",
+    "stats": "{{models}} Objekte, {{tris}} Dreiecke",
+    "unsupported": "Dieses 3D-Modell verwendet das Format {{fmt}}, das noch nicht unterstützt wird (nur U3D).",
+    "activate": "3D aktivieren",
+    "expand": "Dokumentbereich ausfüllen",
+    "shrink": "Zurück zur Seite",
+    "deactivate": "3D-Ansicht ausschalten",
+    "markupView": "Markierungsansicht",
+    "edit": "Bearbeiten",
+    "editTip": "Markierungsseite aus dieser Ansicht erstellen; die 3D-Seite bleibt frei drehbar",
+    "creating": "Seite wird erstellt...",
+    "markupPages": "Markierungsseiten",
+    "pageN": "Seite {{n}}",
+    "snapshotBar": "3D-Markierungsseite: {{name}}",
+    "backTo3D": "Zurück zum 3D-Modell",
+    "readFailed": "Das 3D-Modell konnte nicht gelesen werden.",
+    "partial": "Einige Teile des 3D-Modells konnten nicht gelesen werden ({{n}} übersprungen).",
+    "viewerFailed": "Die 3D-Ansicht konnte nicht gestartet werden."
+  }
 }

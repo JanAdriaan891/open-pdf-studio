@@ -29,7 +29,8 @@
     "formCheckbox": "ປຸ່ມໝາຍເລືອກແບບຟອມ",
     "formRadio": "ປຸ່ມເລືອກຕົວດຽວແບບຟອມ",
     "screenshot": "ຖ່າຍພາບໜ້າຈໍ",
-    "pageLabelPick": "ເລືອກຂໍ້ຄວາມສຳລັບປ້າຍຊື່ໜ້າ"
+    "pageLabelPick": "ເລືອກຂໍ້ຄວາມສຳລັບປ້າຍຊື່ໜ້າ",
+    "proofread": "ກວດແກ້ຄຳຜິດ"
   },
   "toolLabel": "ເຄື່ອງມື:",
   "annotationsLabel": "ໝາຍເຫດ:",

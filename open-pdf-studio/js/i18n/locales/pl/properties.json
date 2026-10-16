@@ -247,6 +247,9 @@
     "linkImageTitle": "Połącz obraz",
     "imageFilter": "Obrazy"
   },
+  "sizeUnit": {
+    "tooltip": "Jednostka wymiarów"
+  },
   "multiSelect": "{{count}} adnotacji zaznaczonych",
   "pdfText": "Tekst PDF",
   "types": {
@@ -349,6 +352,18 @@
     "importComments": "Importuj komentarze...",
     "exportComments": "Eksportuj komentarze do pliku danych...",
     "exportSelectedComments": "Eksportuj wybrane komentarze do pliku danych...",
+    "exportListCsv": "Eksportuj listę do CSV...",
+    "summarizeComingSoon": "Wkrótce",
+    "listExported": "Lista komentarzy wyeksportowana do CSV",
+    "csvPage": "Strona",
+    "csvType": "Typ",
+    "csvAuthor": "Autor",
+    "csvDate": "Data",
+    "csvStatus": "Status",
+    "csvSubject": "Temat",
+    "csvContents": "Treść",
+    "csvColor": "Kolor",
+    "csvLayer": "Warstwa",
     "schedules": "Zestawienia",
     "addPage": "Dodaj stronę",
     "pageLabels": "Etykiety stron (kreator nazw)"

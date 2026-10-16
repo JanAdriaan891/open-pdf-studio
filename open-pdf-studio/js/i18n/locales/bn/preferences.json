@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "ডিফল্ট টীকার রঙ",
     "defaultLineWidth": "ডিফল্ট রেখার প্রস্থ",
     "defaultFontSize": "ডিফল্ট ফন্ট আকার",
+    "paperSizeUnit": "মাপের একক (চিত্র, স্কেল বার)",
     "highlightOpacity": "হাইলাইট অস্বচ্ছতা (%)",
     "angleSnap": "কোণ স্ন্যাপ (Shift কী)",
     "objectSnapping": "অবজেক্ট স্ন্যাপিং",

@@ -38,6 +38,7 @@
     "defaultAnnotationColor": "Standard merknadsfarge",
     "defaultLineWidth": "Standard linjebredde",
     "defaultFontSize": "Standard skriftstørrelse",
+    "paperSizeUnit": "Enhet for mål (bilde, målestokklinjal)",
     "highlightOpacity": "Uthevingsugjennomsiktighet (%)",
     "angleSnap": "Vinkelsnapp (Shift-tast)",
     "objectSnapping": "Objektfesting",

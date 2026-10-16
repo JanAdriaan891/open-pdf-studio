@@ -266,6 +266,8 @@
     "swap": "Inversare vechi și nou",
     "overlayDesc": "Ambele PDF-uri suprapuse",
     "sideDesc": "Două PDF-uri alăturate, sincronizate",
+    "split": "Linie de separare",
+    "splitDesc": "Trageți o linie pentru a afișa vechiul și noul",
     "legendOld": "Doar în vechi",
     "legendNew": "Doar în nou",
     "legendBoth": "Nemodificat",
@@ -297,6 +299,8 @@
     "deletePageConfirm": "Stergeti pagina {{page}}?",
     "extractPages": "Extragere pagini",
     "extractLabel": "Extragere",
+    "splitDocument": "Împărțire document",
+    "splitLabel": "Împărțire",
     "combine": "Combinare",
     "mergePdfs": "Imbinare PDF-uri",
     "mergeLabel": "Imbinare",
@@ -621,5 +625,15 @@
     "symbolScale": "Scară",
     "symbolScaleTitle": "Dimensiunea la care este plasat un simbol nou",
     "symbolScaleCustom": "Scară personalizată"
+  },
+  "proofread": {
+    "group": "Corectură",
+    "button": "Corectează",
+    "tooltip": "Mod corectură (F2): marcați inserări, ștergeri și înlocuiri de la tastatură",
+    "hint": "Corectură: săgețile mută cursorul, tastați pentru a insera, Delete taie textul, Tab trece la corectura următoare, Esc revine un pas.",
+    "noText": "Această pagină nu are text de corectat.",
+    "noCorrections": "Nu există încă corecturi.",
+    "insertPlaceholder": "Text de inserat",
+    "replacePlaceholder": "Text de înlocuire"
   }
 }
