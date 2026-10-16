@@ -17,6 +17,7 @@ import { bouwVectorPrintPdf, maakTegelRaster, vakkenUitRaster, vakOpVel } from '
 import { markeringenVoorInhoud } from '../solid/stores/print-instellingen.js';
 import { maakMeerPerBlad, isMeerPerBlad, schaalVoorMeerPerBlad } from './print-meerperblad.js';
 import { maakPoster } from './print-poster.js';
+import { maakBoekje } from './print-boekje.js';
 import {
   startPrintProgress, updatePrintProgress, finishPrintProgress, failPrintProgress,
 } from '../solid/stores/printProgressStore.js';
@@ -160,12 +161,13 @@ async function bronBytesVan(doc) {
  *           orientatie?:'auto'|'portrait'|'landscape',
  *           vel?: {breedteMm:number, hoogteMm:number}|'pagina'|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
- *           poster?: object|null,
+ *           poster?: object|null, boekje?: boolean,
  *           openen?: ((pad:string) => void)|null,
  *           afgebroken?: () => boolean }} opts
  *   vel 'pagina' = elke pagina haar eigen vel, in de gekozen stand
  *   (print-plaatsing.js); poster = de tegelkeuzes van de posterafdruk
- *   (print-poster.js, posterOpties) of null; openen: achter de knop "Openen" op de melding na
+ *   (print-poster.js, posterOpties) of null; boekje: een geniet boekje
+ *   (print-boekje.js), twee pagina's per liggend vel; openen: achter de knop "Openen" op de melding na
  *   afloop; afgebroken: wordt vlak vóór het schrijven gevraagd — zegt hij ja,
  *   dan komt er geen bestand (de MCP-opdracht `app_print_to_pdf` gebruikt dat
  *   voor haar eigen tijdgrens, zie print-opdracht.js).
@@ -173,12 +175,12 @@ async function bronBytesVan(doc) {
  */
 export async function slaPrintOpAlsPdf({
   pages, pad, orientatie = 'auto', vel = null, schaling: schalingKeuze = 'fit', zoom: zoomKeuze = 100,
-  centreren: centrerenKeuze = true, meerPerBlad: meerPerBladKeuze = null, poster = null,
+  centreren: centrerenKeuze = true, meerPerBlad: meerPerBladKeuze = null, poster = null, boekje = false,
   inhoud = 'doc-and-markups', openen = null, afgebroken = () => false,
 }) {
   const {
     vel: bronVel, meerPerBlad, schaling, zoom, centreren,
-  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze);
+  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze, boekje);
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -209,6 +211,7 @@ export async function slaPrintOpAlsPdf({
     }
 
     pdf = await metMeerPerBlad(pdf, meerPerBlad, vel, orientatie);
+    pdf = await metBoekje(pdf, !poster && boekje, vel);
     pdf = await metPoster(pdf, poster, { vel, orientatie, pages, doc });
 
     updatePrintProgress(i18next.t('dialogs:print.progress.saving'), pages.length / total);
@@ -249,13 +252,26 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
 }
 
 /**
+ * Boekje (print-boekje.js): de print-PDF (één pagina per bronpagina, in
+ * printvolgorde) naar liggende vellen met twee pagina's per zijde in
+ * genietvolgorde, aangevuld tot een viervoud.
+ */
+async function metBoekje(pdf, boekje, vel) {
+  if (!boekje) return pdf;
+  return maakBoekje(pdf, { papier: vel && typeof vel === 'object' ? vel : null });
+}
+
+/**
  * Posterafdruk (print-poster.js): de bronpagina's eerst elk op hun eigen maat
  * (papier null, passend = 1:1), daarna in tegels over de vellen. De
  * schaalkeuze en het aantal per vel tellen dan niet: de tegelschaal vervangt
- * ze. Zonder poster: de keuzes zoals ze zijn.
+ * ze. Een boekje telt net als meerdere pagina's per vel: elke pagina passend
+ * en gecentreerd op haar printpagina, geen raster ernaast. Anders: de keuzes
+ * zoals ze zijn.
  */
-function bronKeuzes(poster, vel, meerPerBlad, schaling, zoom, centreren) {
+function bronKeuzes(poster, vel, meerPerBlad, schaling, zoom, centreren, boekje = false) {
   if (poster) return { vel: null, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
+  if (boekje) return { vel, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
   return { vel, meerPerBlad, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
 }
 
@@ -288,8 +304,9 @@ async function metPoster(pdf, poster, { vel, orientatie, pages, doc }) {
  *           orientatie?:'auto'|'portrait'|'landscape', papier?:string,
  *           vel?: {breedteMm:number, hoogteMm:number}|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
- *           poster?: object|null,
+ *           poster?: object|null, boekje?: boolean,
  *           afgebroken?: () => boolean }} opts
+ *   boekje: een geniet boekje (print-boekje.js), twee pagina's per liggend vel.
  *   poster: de tegelkeuzes van de posterafdruk (print-poster.js) of null; de
  *   vellen gaan dan altijd 1:1 naar de printer (plaatsing 'vel').
  *   afgebroken: wordt gevraagd vlak vóór het spoolen — zegt hij ja, dan gaat er
@@ -300,12 +317,12 @@ async function metPoster(pdf, poster, { vel, orientatie, pages, doc }) {
 export async function runPrintJob({
   pages, copies, printer, orientatie = 'auto', papier = 'printer',
   vel = null, schaling: schalingKeuze = 'fit', zoom: zoomKeuze = 100, centreren: centrerenKeuze = true,
-  meerPerBlad: meerPerBladKeuze = null, poster = null, inhoud = 'doc-and-markups',
+  meerPerBlad: meerPerBladKeuze = null, poster = null, boekje = false, inhoud = 'doc-and-markups',
   afgebroken = () => false,
 }) {
   const {
     vel: bronVel, meerPerBlad, schaling, zoom, centreren,
-  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze);
+  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze, boekje);
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -321,7 +338,8 @@ export async function runPrintJob({
     });
 
     const newPdf = await metPoster(
-      await metMeerPerBlad(pagePdf, meerPerBlad, vel, orientatie), poster, { vel, orientatie, pages, doc },
+      await metBoekje(await metMeerPerBlad(pagePdf, meerPerBlad, vel, orientatie), !poster && boekje, vel),
+      poster, { vel, orientatie, pages, doc },
     );
     // De vellen van een poster liggen 1:1 (de tegels moeten op schaal blijven
     // en mogen niet opnieuw ingepast worden).
