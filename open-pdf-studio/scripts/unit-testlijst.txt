@@ -351,3 +351,5 @@ scripts/android-config.test.mjs
 js/core/fout-bericht.test.mjs
 js/core/bestandsnaam.test.mjs
 js/mobile/ipc-wekker.test.mjs
+js/annotations/opmerkingen-export.test.mjs
+js/annotations/xfdf-pagina.test.mjs
