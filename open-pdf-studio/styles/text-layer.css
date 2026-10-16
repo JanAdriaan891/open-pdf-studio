@@ -192,7 +192,8 @@
   border-radius: 0;
   background: #ffffff;
   color: #000000;
-  font: 13px 'Segoe UI', Tahoma, sans-serif;
+  font-size: 13px;
+  font-family: var(--ui-font);
   outline: none;
   box-shadow: none;
 }
