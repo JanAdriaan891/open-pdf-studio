@@ -198,6 +198,9 @@
     "markupPages": "Markup pages",
     "pageN": "page {{n}}",
     "snapshotBar": "3D markup page: {{name}}",
-    "backTo3D": "Back to 3D model"
+    "backTo3D": "Back to 3D model",
+    "readFailed": "The 3D model could not be read.",
+    "partial": "Some parts of the 3D model could not be read ({{n}} skipped).",
+    "viewerFailed": "The 3D view could not be started."
   }
 }

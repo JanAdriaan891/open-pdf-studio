@@ -198,6 +198,9 @@
     "markupPages": "Markeerpagina's",
     "pageN": "pagina {{n}}",
     "snapshotBar": "3D-markeerpagina: {{name}}",
-    "backTo3D": "Terug naar 3D-model"
+    "backTo3D": "Terug naar 3D-model",
+    "readFailed": "Het 3D-model kon niet worden gelezen.",
+    "partial": "Een deel van het 3D-model kon niet worden gelezen ({{n}} overgeslagen).",
+    "viewerFailed": "De 3D-weergave kon niet worden gestart."
   }
 }
