@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "En genindlæsning af siden starter tom: i browseren bliver dit dokument på din computer og gemmes ikke.",
   "desktopOnly": "{{feature}} virker kun i skrivebordsappen. Denne side er browserversionen.",
   "assistantTitle": "OpenAEC-assistent",
+  "assistant": {
+    "greeting": "Hej! Jeg er **{{title}}**. Jeg kan: 🌐 oversætte, 📝 opsummere, ✏️ tegne på tegningen og 🚪 genkende døre. Vælg en færdighed nedenfor, eller stil dit spørgsmål.",
+    "workingIn": "arbejder i",
+    "viaClaude": "via Claude",
+    "notConnected": "ikke forbundet",
+    "keyButton": "Angiv Claude (Anthropic) API-nøgle",
+    "keyPlaceholder": "Claude (Anthropic) API-nøgle — sk-ant-…",
+    "thinking": "Tænker…",
+    "inputPlaceholder": "Spørg om noget i denne PDF…",
+    "send": "Afsend",
+    "noAnswer": "Intet svar modtaget.",
+    "errorInvalidKey": "Ugyldig Claude (Anthropic) API-nøgle. Kontrollér nøglen med 🔑-knappen øverst i panelet.",
+    "errorApi": "Claude-API'et returnerede en fejl.",
+    "errorNoConnection": "Ingen forbindelse til AI-tjenesten.",
+    "errorTimeout": "Ingen MCP-klient besvarede spørgsmålet i tide.",
+    "errorFailed": "AI-kaldet mislykkedes.",
+    "detail": "Detaljer",
+    "unknownError": "ukendt fejl",
+    "skills": {
+      "translate": {
+        "label": "Oversæt",
+        "hint": "Oversæt dokumentets tekst",
+        "prompt": "Oversæt teksten i det åbne dokument."
+      },
+      "summarize": {
+        "label": "Opsummér",
+        "hint": "Opsummér dokumentet eller tegningen",
+        "prompt": "Opsummér det åbne dokument eller tegningen."
+      },
+      "draw": {
+        "label": "Tegn",
+        "hint": "Tegn et element eller en annotation på tegningen",
+        "prompt": "Tegn på tegningen: "
+      },
+      "detect-doors": {
+        "label": "Genkend døre",
+        "hint": "Find dørene i plantegningen og markér dem",
+        "prompt": "Genkend dørene i plantegningen og markér dem."
+      },
+      "structural-layout": {
+        "label": "Afsæt konstruktion",
+        "hint": "Modullinjer, søjler, bjælker, dækfelter med spænderetning og konstruktionsskemaet",
+        "prompt": "Afsæt den bærende konstruktion på tegningen. Opgave: "
+      },
+      "structural-overview": {
+        "label": "Konstruktionsoversigt",
+        "hint": "Konstruktionsoversigt pr. etage på arkitektens plantegninger: fundament, dæk med spænd, underliggende bærende vægge, bjælker og søjler, signaturforklaring og noter",
+        "prompt": "Lav en konstruktionsoversigt på dette ark ud fra arkitektens plantegninger. Kilde, etager og konstruktionsprincip: "
+      },
+      "floorplan": {
+        "label": "Plantegning",
+        "hint": "Tegn en bygningsplantegning: vægge, vinduer og døre, rum, målsætning og indretning (sanitet, køkken)",
+        "prompt": "Tegn en bygningsplantegning. Hvad der skal tegnes: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Online symbolbibliotek",
   "noDocumentOpen": "Intet dokument er åbent.",
   "noPdfLoaded": "Ingen PDF indlæst.",

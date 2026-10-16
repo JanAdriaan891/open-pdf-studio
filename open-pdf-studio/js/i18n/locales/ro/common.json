@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Reîncărcarea paginii pornește de la zero: în browser, documentul rămâne pe computerul dvs. și nu este stocat.",
   "desktopOnly": "{{feature}} funcționează doar în aplicația desktop. Această pagină este versiunea pentru browser.",
   "assistantTitle": "Asistentul OpenAEC",
+  "assistant": {
+    "greeting": "Bună! Sunt **{{title}}**. Pot: 🌐 traduce, 📝 rezuma, ✏️ desena pe planșă și 🚪 recunoaște ușile. Alegeți o abilitate de mai jos sau puneți întrebarea.",
+    "workingIn": "lucrează în",
+    "viaClaude": "prin Claude",
+    "notConnected": "neconectat",
+    "keyButton": "Setați cheia API Claude (Anthropic)",
+    "keyPlaceholder": "Cheie API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Mă gândesc…",
+    "inputPlaceholder": "Întrebați ceva despre acest PDF…",
+    "send": "Trimite",
+    "noAnswer": "Nu s-a primit niciun răspuns.",
+    "errorInvalidKey": "Cheie API Claude (Anthropic) nevalidă. Verificați cheia cu butonul 🔑 din partea de sus a panoului.",
+    "errorApi": "API-ul Claude a returnat o eroare.",
+    "errorNoConnection": "Nicio conexiune la serviciul AI.",
+    "errorTimeout": "Niciun client MCP nu a răspuns la timp la întrebare.",
+    "errorFailed": "Apelul AI a eșuat.",
+    "detail": "Detalii",
+    "unknownError": "eroare necunoscută",
+    "skills": {
+      "translate": {
+        "label": "Tradu",
+        "hint": "Tradu textul documentului",
+        "prompt": "Tradu textul documentului deschis."
+      },
+      "summarize": {
+        "label": "Rezumă",
+        "hint": "Rezumă documentul sau planșa",
+        "prompt": "Rezumă documentul sau planșa deschisă."
+      },
+      "draw": {
+        "label": "Desenează",
+        "hint": "Desenează un element sau o adnotare pe planșă",
+        "prompt": "Desenează pe planșă: "
+      },
+      "detect-doors": {
+        "label": "Recunoaște uși",
+        "hint": "Detectează ușile din plan și marchează-le",
+        "prompt": "Recunoaște ușile din plan și marchează-le."
+      },
+      "structural-layout": {
+        "label": "Trasează structura",
+        "hint": "Rețea de axe, stâlpi, grinzi, câmpuri de planșeu cu direcția deschiderii și tabelul structural",
+        "prompt": "Trasează structura de rezistență pe planșă. Date: "
+      },
+      "structural-overview": {
+        "label": "Prezentare structurală",
+        "hint": "Prezentare structurală pe niveluri pe planurile arhitectului: fundații, planșee cu deschideri, pereți portanți de dedesubt, grinzi și stâlpi, legendă și note",
+        "prompt": "Realizează o prezentare structurală pe această planșă din planurile arhitectului. Sursă, niveluri și principiu structural: "
+      },
+      "floorplan": {
+        "label": "Plan de nivel",
+        "hint": "Desenează un plan arhitectural: pereți, tâmplărie, încăperi, cote și dotări (sanitare, bucătărie)",
+        "prompt": "Desenează un plan arhitectural. Ce trebuie desenat: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Bibliotecă de simboluri online",
   "noDocumentOpen": "Niciun document nu este deschis.",
   "noPdfLoaded": "Niciun PDF încărcat.",

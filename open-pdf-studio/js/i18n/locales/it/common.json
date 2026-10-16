@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Ricaricando la pagina si riparte da vuoto: nel browser il documento resta sul tuo computer e non viene memorizzato.",
   "desktopOnly": "{{feature}} funziona solo nell'app desktop. Questa pagina è la versione per browser.",
   "assistantTitle": "Assistente OpenAEC",
+  "assistant": {
+    "greeting": "Ciao! Sono l'**{{title}}**. Posso: 🌐 tradurre, 📝 riassumere, ✏️ disegnare sul disegno e 🚪 riconoscere le porte. Scegli un'abilità qui sotto o fai la tua domanda.",
+    "workingIn": "al lavoro su",
+    "viaClaude": "tramite Claude",
+    "notConnected": "non connesso",
+    "keyButton": "Imposta la chiave API di Claude (Anthropic)",
+    "keyPlaceholder": "Chiave API di Claude (Anthropic) — sk-ant-…",
+    "thinking": "Sto pensando…",
+    "inputPlaceholder": "Chiedi qualcosa su questo PDF…",
+    "send": "Invia",
+    "noAnswer": "Nessuna risposta ricevuta.",
+    "errorInvalidKey": "Chiave API di Claude (Anthropic) non valida. Controlla la chiave con il pulsante 🔑 in alto nel pannello.",
+    "errorApi": "L'API di Claude ha restituito un errore.",
+    "errorNoConnection": "Nessuna connessione al servizio di IA.",
+    "errorTimeout": "Nessun client MCP ha risposto alla domanda in tempo.",
+    "errorFailed": "Chiamata all'IA non riuscita.",
+    "detail": "Dettaglio",
+    "unknownError": "errore sconosciuto",
+    "skills": {
+      "translate": {
+        "label": "Traduci",
+        "hint": "Traduci il testo del documento",
+        "prompt": "Traduci il testo del documento aperto."
+      },
+      "summarize": {
+        "label": "Riassumi",
+        "hint": "Riassumi il documento o il disegno",
+        "prompt": "Riassumi il documento o il disegno aperto."
+      },
+      "draw": {
+        "label": "Disegna",
+        "hint": "Disegna un elemento o un'annotazione sul disegno",
+        "prompt": "Disegna sul disegno: "
+      },
+      "detect-doors": {
+        "label": "Riconosci porte",
+        "hint": "Rileva le porte nella pianta e contrassegnale",
+        "prompt": "Riconosci le porte nella pianta e contrassegnale."
+      },
+      "structural-layout": {
+        "label": "Imposta struttura",
+        "hint": "Griglia, pilastri, travi, campi di solaio con direzione di orditura e la tabella strutturale",
+        "prompt": "Imposta la struttura portante sul disegno. Dati: "
+      },
+      "structural-overview": {
+        "label": "Panoramica strutturale",
+        "hint": "Panoramica strutturale per piano sulle piante dell'architetto: fondazioni, solai con luce, muri portanti sottostanti, travi e pilastri, legenda e note",
+        "prompt": "Crea una panoramica strutturale su questo foglio dalle piante dell'architetto. Fonte, piani e principio strutturale: "
+      },
+      "floorplan": {
+        "label": "Pianta",
+        "hint": "Disegna una pianta architettonica: muri, serramenti, locali, quote e arredi (sanitari, cucina)",
+        "prompt": "Disegna una pianta architettonica. Cosa disegnare: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Libreria di simboli online",
   "noDocumentOpen": "Nessun documento aperto.",
   "noPdfLoaded": "Nessun PDF caricato.",

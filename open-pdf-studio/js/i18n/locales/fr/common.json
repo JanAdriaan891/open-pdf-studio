@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Un rechargement de la page repart de zéro : dans le navigateur, votre document reste sur votre ordinateur et n'est pas stocké.",
   "desktopOnly": "{{feature}} ne fonctionne que dans l'application de bureau. Cette page est la version navigateur.",
   "assistantTitle": "Assistant OpenAEC",
+  "assistant": {
+    "greeting": "Bonjour ! Je suis l'**{{title}}**. Je peux : 🌐 traduire, 📝 résumer, ✏️ dessiner sur le plan et 🚪 reconnaître les portes. Choisissez une compétence ci-dessous ou posez votre question.",
+    "workingIn": "travaille dans",
+    "viaClaude": "via Claude",
+    "notConnected": "non connecté",
+    "keyButton": "Définir la clé API Claude (Anthropic)",
+    "keyPlaceholder": "Clé API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Réflexion…",
+    "inputPlaceholder": "Posez une question sur ce PDF…",
+    "send": "Envoyer",
+    "noAnswer": "Aucune réponse reçue.",
+    "errorInvalidKey": "Clé API Claude (Anthropic) non valide. Vérifiez la clé avec le bouton 🔑 en haut du panneau.",
+    "errorApi": "L'API Claude a renvoyé une erreur.",
+    "errorNoConnection": "Pas de connexion au service d'IA.",
+    "errorTimeout": "Aucun client MCP n'a répondu à la question à temps.",
+    "errorFailed": "La requête IA a échoué.",
+    "detail": "Détail",
+    "unknownError": "erreur inconnue",
+    "skills": {
+      "translate": {
+        "label": "Traduire",
+        "hint": "Traduire le texte du document",
+        "prompt": "Traduis le texte du document ouvert."
+      },
+      "summarize": {
+        "label": "Résumer",
+        "hint": "Résumer le document ou le plan",
+        "prompt": "Résume le document ou le plan ouvert."
+      },
+      "draw": {
+        "label": "Dessiner",
+        "hint": "Dessiner un élément ou une annotation sur le plan",
+        "prompt": "Dessine sur le plan : "
+      },
+      "detect-doors": {
+        "label": "Reconnaître les portes",
+        "hint": "Détecter les portes dans le plan et les marquer",
+        "prompt": "Reconnais les portes dans le plan et marque-les."
+      },
+      "structural-layout": {
+        "label": "Implanter la structure",
+        "hint": "Trame, poteaux, poutres, travées de plancher avec sens de portée et le tableau de structure",
+        "prompt": "Implante la structure porteuse sur le plan. Données : "
+      },
+      "structural-overview": {
+        "label": "Vue d'ensemble structurelle",
+        "hint": "Vue d'ensemble structurelle par niveau sur les plans de l'architecte : fondations, planchers avec portée, murs porteurs sous-jacents, poutres et poteaux, légende et notes",
+        "prompt": "Crée une vue d'ensemble structurelle sur cette feuille à partir des plans de l'architecte. Source, niveaux et principe structurel : "
+      },
+      "floorplan": {
+        "label": "Plan d'étage",
+        "hint": "Dessiner un plan d'étage architectural : murs, menuiseries, pièces, cotations et aménagement (sanitaires, cuisine)",
+        "prompt": "Dessine un plan d'étage architectural. Ce qu'il faut dessiner : "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Bibliothèque de symboles en ligne",
   "noDocumentOpen": "Aucun document n'est ouvert.",
   "noPdfLoaded": "Aucun PDF chargé.",

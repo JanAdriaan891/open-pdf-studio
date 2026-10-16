@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Sivun uudelleenlataus alkaa tyhjästä: selaimessa asiakirjasi pysyy tietokoneellasi eikä sitä tallenneta.",
   "desktopOnly": "{{feature}} toimii vain työpöytäsovelluksessa. Tämä sivu on selainversio.",
   "assistantTitle": "OpenAEC-avustaja",
+  "assistant": {
+    "greeting": "Hei! Olen **{{title}}**. Osaan: 🌐 kääntää, 📝 tiivistää, ✏️ piirtää piirustukseen ja 🚪 tunnistaa ovet. Valitse taito alta tai kysy kysymyksesi.",
+    "workingIn": "työn kohteena",
+    "viaClaude": "Clauden kautta",
+    "notConnected": "ei yhteyttä",
+    "keyButton": "Aseta Claude (Anthropic) -API-avain",
+    "keyPlaceholder": "Claude (Anthropic) -API-avain — sk-ant-…",
+    "thinking": "Ajattelee…",
+    "inputPlaceholder": "Kysy jotain tästä PDF:stä…",
+    "send": "Lähetä",
+    "noAnswer": "Vastausta ei saatu.",
+    "errorInvalidKey": "Virheellinen Claude (Anthropic) -API-avain. Tarkista avain paneelin yläosan 🔑-painikkeella.",
+    "errorApi": "Claude-API palautti virheen.",
+    "errorNoConnection": "Ei yhteyttä tekoälypalveluun.",
+    "errorTimeout": "Mikään MCP-asiakas ei vastannut kysymykseen ajoissa.",
+    "errorFailed": "Tekoälykutsu epäonnistui.",
+    "detail": "Lisätiedot",
+    "unknownError": "tuntematon virhe",
+    "skills": {
+      "translate": {
+        "label": "Käännä",
+        "hint": "Käännä asiakirjan teksti",
+        "prompt": "Käännä avoimen asiakirjan teksti."
+      },
+      "summarize": {
+        "label": "Tiivistä",
+        "hint": "Tiivistä asiakirja tai piirustus",
+        "prompt": "Tiivistä avoin asiakirja tai piirustus."
+      },
+      "draw": {
+        "label": "Piirrä",
+        "hint": "Piirrä elementti tai merkintä piirustukseen",
+        "prompt": "Piirrä piirustukseen: "
+      },
+      "detect-doors": {
+        "label": "Tunnista ovet",
+        "hint": "Etsi pohjapiirustuksen ovet ja merkitse ne",
+        "prompt": "Tunnista pohjapiirustuksen ovet ja merkitse ne."
+      },
+      "structural-layout": {
+        "label": "Merkitse rakenne",
+        "hint": "Moduuliverkko, pilarit, palkit, laattakentät jännityssuuntineen ja rakenneluettelo",
+        "prompt": "Merkitse kantava rakenne piirustukseen. Lähtötiedot: "
+      },
+      "structural-overview": {
+        "label": "Rakenneyleiskuva",
+        "hint": "Rakenneyleiskuva kerroksittain arkkitehdin pohjapiirustuksiin: perustukset, laatat jänneväleineen, alla olevat kantavat seinät, palkit ja pilarit, selite ja huomautukset",
+        "prompt": "Tee tälle arkille rakenneyleiskuva arkkitehdin pohjapiirustuksista. Lähde, kerrokset ja rakenneperiaate: "
+      },
+      "floorplan": {
+        "label": "Pohjapiirustus",
+        "hint": "Piirrä rakennuksen pohjapiirustus: seinät, ikkunat ja ovet, tilat, mitoitus ja kalusteet (saniteetti, keittiö)",
+        "prompt": "Piirrä rakennuksen pohjapiirustus. Mitä piirretään: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Online-symbolikirjasto",
   "noDocumentOpen": "Asiakirjaa ei ole avattu.",
   "noPdfLoaded": "PDF:ää ei ole ladattu.",

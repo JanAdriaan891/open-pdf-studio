@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Memuat ulang halaman akan dimulai kosong: di browser, dokumen Anda tetap di komputer Anda dan tidak disimpan.",
   "desktopOnly": "{{feature}} hanya berfungsi di aplikasi desktop. Halaman ini adalah versi browser.",
   "assistantTitle": "Asisten OpenAEC",
+  "assistant": {
+    "greeting": "Halo! Saya **{{title}}**. Saya bisa: 🌐 menerjemahkan, 📝 meringkas, ✏️ menggambar pada gambar kerja, dan 🚪 mengenali pintu. Pilih keterampilan di bawah atau ajukan pertanyaan Anda.",
+    "workingIn": "bekerja di",
+    "viaClaude": "melalui Claude",
+    "notConnected": "tidak terhubung",
+    "keyButton": "Atur kunci API Claude (Anthropic)",
+    "keyPlaceholder": "Kunci API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Berpikir…",
+    "inputPlaceholder": "Tanyakan sesuatu tentang PDF ini…",
+    "send": "Kirim",
+    "noAnswer": "Tidak ada jawaban yang diterima.",
+    "errorInvalidKey": "Kunci API Claude (Anthropic) tidak valid. Periksa kunci dengan tombol 🔑 di bagian atas panel.",
+    "errorApi": "API Claude mengembalikan galat.",
+    "errorNoConnection": "Tidak ada koneksi ke layanan AI.",
+    "errorTimeout": "Tidak ada klien MCP yang menjawab pertanyaan tepat waktu.",
+    "errorFailed": "Panggilan AI gagal.",
+    "detail": "Rincian",
+    "unknownError": "galat tidak dikenal",
+    "skills": {
+      "translate": {
+        "label": "Terjemahkan",
+        "hint": "Terjemahkan teks dokumen",
+        "prompt": "Terjemahkan teks dokumen yang terbuka."
+      },
+      "summarize": {
+        "label": "Ringkas",
+        "hint": "Ringkas dokumen atau gambar",
+        "prompt": "Ringkas dokumen atau gambar yang terbuka."
+      },
+      "draw": {
+        "label": "Gambar",
+        "hint": "Gambar elemen atau anotasi pada gambar kerja",
+        "prompt": "Gambar pada gambar kerja: "
+      },
+      "detect-doors": {
+        "label": "Kenali pintu",
+        "hint": "Deteksi pintu pada denah dan tandai",
+        "prompt": "Kenali pintu pada denah dan tandai."
+      },
+      "structural-layout": {
+        "label": "Tata struktur",
+        "hint": "Grid, kolom, balok, panel pelat dengan arah bentang dan daftar struktur",
+        "prompt": "Tata struktur pemikul pada gambar. Ketentuan: "
+      },
+      "structural-overview": {
+        "label": "Ikhtisar struktur",
+        "hint": "Ikhtisar struktur per lantai pada denah arsitek: fondasi, pelat dengan bentang, dinding pemikul di bawahnya, balok dan kolom, legenda dan catatan",
+        "prompt": "Buat ikhtisar struktur pada lembar ini dari denah arsitek. Sumber, lantai, dan prinsip struktur: "
+      },
+      "floorplan": {
+        "label": "Denah",
+        "hint": "Gambar denah arsitektur: dinding, kusen, ruang, dimensi, dan perlengkapan (sanitair, dapur)",
+        "prompt": "Gambar denah arsitektur. Yang perlu digambar: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Pustaka simbol daring",
   "noDocumentOpen": "Tidak ada dokumen yang terbuka.",
   "noPdfLoaded": "Tidak ada PDF yang dimuat.",

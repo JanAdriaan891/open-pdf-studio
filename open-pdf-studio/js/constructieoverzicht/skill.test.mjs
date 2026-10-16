@@ -12,7 +12,7 @@ const alle = (re) => [...new Set([...CONSTRUCTIEOVERZICHT_PROMPT.matchAll(re)].m
 test('de vaardigheid staat als chip in het assistentvenster', () => {
   const chip = ASSISTANT_SKILLS.find((s) => s.id === 'structural-overview');
   assert.equal(chip, CONSTRUCTIEOVERZICHT_SKILL, 'als eigen element in de lijst');
-  assert.ok(chip.label && chip.icon && chip.hint, 'een chip heeft een naam, een teken en een uitleg');
+  assert.ok(chip.icon && chip.invoke, 'een chip heeft een teken en een instructie; naam en uitleg staan in de locales (assistant-i18n.test.mjs)');
   assert.equal(chip.needsInput, true, 'de gebruiker vult bron, bouwlagen en constructieprincipe aan');
   assert.equal(new Set(ASSISTANT_SKILLS.map((s) => s.id)).size, ASSISTANT_SKILLS.length, 'geen dubbele id');
   // Naast "Zet constructie uit"; de plattegrond blijft de laatste chip.

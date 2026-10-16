@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Po opětovném načtení stránka začíná prázdná: v prohlížeči zůstává dokument ve vašem počítači a neukládá se.",
   "desktopOnly": "{{feature}} funguje pouze v desktopové aplikaci. Tato stránka je verze pro prohlížeč.",
   "assistantTitle": "Asistent OpenAEC",
+  "assistant": {
+    "greeting": "Dobrý den! Jsem **{{title}}**. Umím: 🌐 překládat, 📝 shrnovat, ✏️ kreslit do výkresu a 🚪 rozpoznávat dveře. Vyberte dovednost níže nebo položte otázku.",
+    "workingIn": "pracuje v",
+    "viaClaude": "přes Claude",
+    "notConnected": "nepřipojeno",
+    "keyButton": "Nastavit klíč API Claude (Anthropic)",
+    "keyPlaceholder": "Klíč API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Přemýšlím…",
+    "inputPlaceholder": "Zeptejte se na něco k tomuto PDF…",
+    "send": "Odeslat",
+    "noAnswer": "Nebyla přijata žádná odpověď.",
+    "errorInvalidKey": "Neplatný klíč API Claude (Anthropic). Zkontrolujte klíč tlačítkem 🔑 v horní části panelu.",
+    "errorApi": "API Claude vrátilo chybu.",
+    "errorNoConnection": "Žádné spojení se službou AI.",
+    "errorTimeout": "Žádný klient MCP neodpověděl na otázku včas.",
+    "errorFailed": "Volání AI selhalo.",
+    "detail": "Podrobnosti",
+    "unknownError": "neznámá chyba",
+    "skills": {
+      "translate": {
+        "label": "Přeložit",
+        "hint": "Přeložit text dokumentu",
+        "prompt": "Přelož text otevřeného dokumentu."
+      },
+      "summarize": {
+        "label": "Shrnout",
+        "hint": "Shrnout dokument nebo výkres",
+        "prompt": "Shrň otevřený dokument nebo výkres."
+      },
+      "draw": {
+        "label": "Kreslit",
+        "hint": "Nakreslit prvek nebo poznámku do výkresu",
+        "prompt": "Nakresli do výkresu: "
+      },
+      "detect-doors": {
+        "label": "Rozpoznat dveře",
+        "hint": "Najít dveře v půdorysu a označit je",
+        "prompt": "Rozpoznej dveře v půdorysu a označ je."
+      },
+      "structural-layout": {
+        "label": "Vytyčit konstrukci",
+        "hint": "Osnova, sloupy, nosníky, stropní pole se směrem rozpětí a konstrukční výkaz",
+        "prompt": "Vytyč nosnou konstrukci ve výkresu. Zadání: "
+      },
+      "structural-overview": {
+        "label": "Přehled konstrukce",
+        "hint": "Přehled konstrukce po podlažích na půdorysech architekta: základy, stropy s rozpětím, nosné stěny pod nimi, nosníky a sloupy, legenda a poznámky",
+        "prompt": "Vytvoř na tomto listu přehled konstrukce z půdorysů architekta. Zdroj, podlaží a konstrukční princip: "
+      },
+      "floorplan": {
+        "label": "Půdorys",
+        "hint": "Nakreslit stavební půdorys: stěny, výplně otvorů, místnosti, kóty a vybavení (sanita, kuchyně)",
+        "prompt": "Nakresli stavební půdorys. Co nakreslit: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Online knihovna symbolů",
   "noDocumentOpen": "Žádný dokument není otevřen.",
   "noPdfLoaded": "Není načteno žádné PDF.",

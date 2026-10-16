@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "ページを再読み込みすると空の状態から始まります。ブラウザーでは文書はお使いのコンピューター上にあり、保存されません。",
   "desktopOnly": "{{feature}} はデスクトップアプリでのみ使用できます。このページはブラウザー版です。",
   "assistantTitle": "OpenAEC アシスタント",
+  "assistant": {
+    "greeting": "こんにちは！**{{title}}**です。🌐 翻訳、📝 要約、✏️ 図面への作図、🚪 ドアの検出ができます。下のスキルを選ぶか、質問を入力してください。",
+    "workingIn": "作業中",
+    "viaClaude": "Claude 経由",
+    "notConnected": "未接続",
+    "keyButton": "Claude (Anthropic) API キーを設定",
+    "keyPlaceholder": "Claude (Anthropic) API キー — sk-ant-…",
+    "thinking": "考え中…",
+    "inputPlaceholder": "この PDF について質問してください…",
+    "send": "送信",
+    "noAnswer": "回答を受信できませんでした。",
+    "errorInvalidKey": "Claude (Anthropic) API キーが無効です。パネル上部の 🔑 ボタンでキーを確認してください。",
+    "errorApi": "Claude API がエラーを返しました。",
+    "errorNoConnection": "AI サービスに接続できません。",
+    "errorTimeout": "時間内に質問に回答した MCP クライアントはありませんでした。",
+    "errorFailed": "AI 呼び出しに失敗しました。",
+    "detail": "詳細",
+    "unknownError": "不明なエラー",
+    "skills": {
+      "translate": {
+        "label": "翻訳",
+        "hint": "文書のテキストを翻訳",
+        "prompt": "開いている文書のテキストを翻訳してください。"
+      },
+      "summarize": {
+        "label": "要約",
+        "hint": "文書または図面を要約",
+        "prompt": "開いている文書または図面を要約してください。"
+      },
+      "draw": {
+        "label": "作図",
+        "hint": "図面に要素または注釈を描く",
+        "prompt": "図面に描いてください："
+      },
+      "detect-doors": {
+        "label": "ドアを検出",
+        "hint": "平面図のドアを検出してマークする",
+        "prompt": "平面図のドアを検出してマークしてください。"
+      },
+      "structural-layout": {
+        "label": "構造を配置",
+        "hint": "通り芯、柱、梁、スパン方向付きの床区画、構造リスト",
+        "prompt": "図面に構造躯体を配置してください。条件："
+      },
+      "structural-overview": {
+        "label": "構造概要",
+        "hint": "建築家の平面図上に階ごとの構造概要：基礎、スパン付きの床、下階の耐力壁、梁と柱、凡例と注記",
+        "prompt": "建築家の平面図からこのシートに構造概要を作成してください。元図、階、構造方式："
+      },
+      "floorplan": {
+        "label": "平面図",
+        "hint": "建築平面図を描く：壁、建具、部屋、寸法、設備（衛生、キッチン）",
+        "prompt": "建築平面図を描いてください。描く内容："
+      }
+    }
+  },
   "onlineSymbolLibrary": "オンライン記号ライブラリ",
   "noDocumentOpen": "ドキュメントが開かれていません。",
   "noPdfLoaded": "PDF が読み込まれていません。",
