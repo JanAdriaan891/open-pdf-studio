@@ -351,3 +351,4 @@ scripts/android-config.test.mjs
 js/core/fout-bericht.test.mjs
 js/core/bestandsnaam.test.mjs
 js/mobile/ipc-wekker.test.mjs
+js/compare/change-detect-worker.test.mjs
