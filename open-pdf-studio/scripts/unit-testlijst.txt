@@ -358,3 +358,4 @@ js/compare/split-line.test.mjs
 js/annotations/opmerkingen-export.test.mjs
 js/annotations/xfdf-pagina.test.mjs
 js/compare/change-detect-worker.test.mjs
+js/pdf/thin-lines.test.mjs

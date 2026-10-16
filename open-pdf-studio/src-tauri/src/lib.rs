@@ -1744,14 +1744,16 @@ async fn render_pdf_page(
     page_index: u32,
     scale: f32,
     rotation: Option<i32>,
+    // Thin Lines view mode (#595): every vector stroke as a hairline.
+    thin_lines: Option<bool>,
     bytes_cache: tauri::State<'_, PdfBytesCache>,
     pdfium_cache: tauri::State<'_, pdfium_renderer::PdfiumDocCache>,
     pixmap_cache: tauri::State<'_, pdfium_renderer::PixmapCacheState>,
     pool: tauri::State<'_, std::sync::Arc<tokio::sync::OnceCell<worker_pool::WorkerPool>>>,
 ) -> Result<tauri::ipc::Response, String> {
     let extra_rot = rotation.unwrap_or(0);
-    let scale_q = (scale * 10_000.0).round() as u32;
-    let cache_key = (path.clone(), page_index, scale_q, extra_rot);
+    let thin_lines = thin_lines.unwrap_or(false);
+    let cache_key = pdfium_renderer::pixmap_key(&path, page_index, scale, extra_rot, thin_lines);
 
     // Cache fast path (unchanged)
     pixmap_cache.ensure();
@@ -1769,7 +1771,7 @@ async fn render_pdf_page(
 
     // Try the worker pool first
     if let Some(p) = pool.get() {
-        match p.render(&path, page_index, scale, extra_rot).await {
+        match p.render(&path, page_index, scale, extra_rot, thin_lines).await {
             Ok((width, height, rgba)) => {
                 let rgba_arc = std::sync::Arc::new(rgba);
                 if let Ok(mut guard) = pixmap_cache.0.lock() {
@@ -1819,11 +1821,12 @@ async fn render_pdf_page(
         &pdfium_cache,
     )?;
 
-    let (width, height, rgba) = pdfium_renderer::render_page_to_rgba(
+    let (width, height, rgba) = pdfium_renderer::render_page_to_rgba_opts(
         handle.document(),
         page_index,
         scale,
         extra_rot,
+        thin_lines,
     )?;
 
     let rgba_arc = std::sync::Arc::new(rgba);
@@ -1912,11 +1915,14 @@ async fn render_pdf_page_region(
     region_w_pt: f32,
     region_h_pt: f32,
     spread: Option<bool>,
+    // Thin Lines view mode (#595), see render_pdf_page.
+    thin_lines: Option<bool>,
     bytes_cache: tauri::State<'_, PdfBytesCache>,
     pdfium_cache: tauri::State<'_, pdfium_renderer::PdfiumDocCache>,
     pool: tauri::State<'_, std::sync::Arc<tokio::sync::OnceCell<worker_pool::WorkerPool>>>,
 ) -> Result<tauri::ipc::Response, String> {
     let extra_rot = rotation.unwrap_or(0);
+    let thin_lines = thin_lines.unwrap_or(false);
 
     // Try the worker pool first: region tiles are small (fit the 64 MB SHM), so
     // they render in a SEPARATE process — safe for parallel/pre-cache rendering
@@ -1924,7 +1930,7 @@ async fn render_pdf_page_region(
     // except a dead worker: that crash must not be repeated in the GUI process.
     if let Some(p) = pool.get() {
         match p
-            .render_region(&path, page_index, scale, extra_rot, region_x_pt, region_y_pt, region_w_pt, region_h_pt, spread.unwrap_or(false))
+            .render_region(&path, page_index, scale, extra_rot, region_x_pt, region_y_pt, region_w_pt, region_h_pt, spread.unwrap_or(false), thin_lines)
             .await
         {
             Ok((width, height, rgba)) => {
@@ -1974,6 +1980,7 @@ async fn render_pdf_page_region(
         region_y_pt,
         region_w_pt,
         region_h_pt,
+        thin_lines,
     )?;
 
     let mut data = Vec::with_capacity(8 + rgba.len());
@@ -1999,11 +2006,15 @@ async fn render_tile_scene_region(
     region_y_pt: f32,
     region_w_pt: f32,
     region_h_pt: f32,
+    // Thin Lines view mode (#595): the scene replays every stroke as a
+    // hairline. The scene itself is the same in both modes.
+    thin_lines: Option<bool>,
     bytes_cache: tauri::State<'_, PdfBytesCache>,
     handle_cache: tauri::State<'_, DocHandleCache>,
     scene_cache: tauri::State<'_, TileSceneCache>,
 ) -> Result<tauri::ipc::Response, String> {
     let extra_rot = rotation.unwrap_or(0);
+    let thin_lines = thin_lines.unwrap_or(false);
     let meta = std::fs::metadata(&path).map_err(|e| format!("stat: {}", e))?;
     let mtime = meta
         .modified()
@@ -2087,7 +2098,7 @@ async fn render_tile_scene_region(
     };
 
     let (w, h, rgba) = tauri::async_runtime::spawn_blocking(move || {
-        scene.render_region_rgba(scale, region_x_pt, region_y_pt, region_w_pt, region_h_pt)
+        scene.render_region_rgba_opts(scale, region_x_pt, region_y_pt, region_w_pt, region_h_pt, thin_lines)
     })
     .await
     .map_err(|e| format!("join: {}", e))?;

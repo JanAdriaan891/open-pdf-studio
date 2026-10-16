@@ -138,11 +138,8 @@ const CAD_CHORDS = {
   // max 1pt hairline instead of true widths. Pure display toggle —
   // annotation lineWidth values stay untouched.
   'tl': () => {
-    state.preferences.thinLines = !state.preferences.thinLines;
-    // '[render]' prefix lands in the MCP console ring → observable in tests.
-    console.log('[render] thinLines =', state.preferences.thinLines);
-    import('../core/preferences.js').then(m => m.savePreferences && m.savePreferences()).catch(() => {});
-    redraw();
+    // Also the PAGE content, not only the annotations (#595).
+    import('../pdf/thin-lines.js').then(m => m.toggleThinLines());
   },
   // 'co' = Copy: duplicate + move via the EDIT-OPS layer (edit-ops.js) —
   // the one place where target resolution, cloning and the move session
@@ -921,14 +918,7 @@ export async function handleKeydown(e) {
     fitPage();
   } else if (ctrl && e.key === '5') {
     e.preventDefault();
-    state.preferences.thinLines = !state.preferences.thinLines;
-    if (getActiveDocument()?.pdfDoc) {
-      if (getActiveDocument()?.viewMode === 'continuous') {
-        import('../pdf/renderer.js').then(m => m.renderContinuous());
-      } else {
-        import('../pdf/renderer.js').then(m => m.renderPage(getActiveDocument()?.currentPage || 1));
-      }
-    }
+    import('../pdf/thin-lines.js').then(m => m.toggleThinLines());
   }
 
   // Tool shortcuts (only if PDF is loaded). Nooit met Ctrl: een Ctrl-letter
