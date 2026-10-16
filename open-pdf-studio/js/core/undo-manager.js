@@ -858,6 +858,28 @@ export function recordBulkAdd(annotations) {
   execute({ type: 'bulkAdd', items });
 }
 
+// A correction that keeps growing in the proofreading mode (#508: pressing
+// Delete again extends the strike-through) stays one undo step: the add at
+// the top of the stack takes the new shape, so one undo removes the whole
+// correction. Only while that add is the last step, nothing can be redone,
+// no transaction is open and the document was not saved after it; otherwise
+// false, and the caller records an ordinary modify step.
+export function amendLastAdd(annotation) {
+  if (!annotation || undoTransactionDepth > 0) return false;
+  const doc = getActiveDocument();
+  if (!doc) return false;
+  const stack = getUndoStack();
+  const top = stack[stack.length - 1];
+  if (!top || top.type !== 'addAnnotation' || top.annotation?.id !== annotation.id) return false;
+  if ((doc.redoStack || []).length > 0) return false;
+  if (doc.savedUndoStackLength === stack.length) return false;
+  if (pendingPropertyChange) flushPropertyChange();
+  top.annotation = cloneAnnotation(annotation);
+  syncModifiedState();
+  scheduleThumbnailRefresh(top);
+  return true;
+}
+
 export function recordAnnotationOrder(oldOrder, newOrder) {
   if (!Array.isArray(oldOrder) || !Array.isArray(newOrder)) return;
   if (oldOrder.length !== newOrder.length) return;

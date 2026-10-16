@@ -24,6 +24,10 @@ js/annotations/corrections/correction-ui.test.mjs
 js/annotations/corrections/correction-app.test.mjs
 js/annotations/corrections/correction-ui-wiring.test.mjs
 js/annotations/corrections/correction-i18n.test.mjs
+js/annotations/corrections/text-model.test.mjs
+js/annotations/corrections/proofreading.test.mjs
+js/annotations/corrections/proofreading-apply.test.mjs
+js/pdf/proofreading-roundtrip.test.mjs
 js/constructieoverzicht/skill.test.mjs
 js/pdf/loader/tekstvak-tekst.test.mjs
 js/pdf/loader/tekstvak-marge.test.mjs
