@@ -228,5 +228,35 @@
     "clipboardEmpty": "Niciun decupaj în clipboard"
   },
   "snippetOutputFailed": "Un decupaj vectorial nu a putut fi randat, așa că exportul sau tipărirea a fost oprită. Încercați din nou.",
-  "protectedPdfReadOnly": "Acest document a fost deschis cu o parolă și este doar în citire. Nu poate fi salvat."
+  "protectedPdfReadOnly": "Acest document a fost deschis cu o parolă și este doar în citire. Nu poate fi salvat.",
+  "threeD": {
+    "title": "Vizualizare 3D",
+    "view": "Vedere",
+    "fit": "Încadrare",
+    "display": "Afișare",
+    "modeSolid": "Plin",
+    "modeEdges": "Plin cu muchii",
+    "modeWire": "Cadru de sârmă",
+    "modeXray": "Transparent",
+    "tree": "Arborele modelului",
+    "hint": "Tragere cu stânga: orbitare, cu dreapta: deplasare, rotiță: zoom",
+    "loading": "Se încarcă modelul 3D... {{pct}}%",
+    "stats": "{{models}} obiecte, {{tris}} triunghiuri",
+    "unsupported": "Acest model 3D folosește formatul {{fmt}}, care nu este încă acceptat (doar U3D).",
+    "activate": "Activare 3D",
+    "expand": "Umple zona documentului",
+    "shrink": "Înapoi la pagină",
+    "deactivate": "Dezactivare vizualizare 3D",
+    "markupView": "Vedere de adnotare",
+    "edit": "Editare",
+    "editTip": "Creează o pagină de adnotare din această vedere; pagina 3D rămâne liberă pentru rotire",
+    "creating": "Se creează pagina...",
+    "markupPages": "Pagini de adnotare",
+    "pageN": "pagina {{n}}",
+    "snapshotBar": "Pagină de adnotare 3D: {{name}}",
+    "backTo3D": "Înapoi la modelul 3D",
+    "readFailed": "Modelul 3D nu a putut fi citit.",
+    "partial": "Unele părți ale modelului 3D nu au putut fi citite ({{n}} omise).",
+    "viewerFailed": "Vizualizarea 3D nu a putut fi pornită."
+  }
 }

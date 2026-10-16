@@ -314,6 +314,20 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
     pageMapping: viewportUpdate?.pageMapping || null,
   });
 
+  // 3D models and 3D markup pages move with the pages: scan the new bytes.
+  // Only a document that had either needs this extra parse; for all others
+  // a page operation costs what it did before.
+  if (doc.threeD?.length || doc.threeDSnapshots?.length) {
+    try {
+      const { find3DAnnotations, findThreeDSnapshots } = await import('./three-d/pdf-3d.js');
+      const lib = await PDFDocument.load(aangeleverdeBytes.slice(), { ignoreEncryption: true, updateMetadata: false });
+      doc.threeD = find3DAnnotations(lib);
+      doc.threeDSnapshots = findThreeDSnapshots(lib);
+    } catch (e) {
+      console.warn('[3d] rescan after reload failed:', e);
+    }
+  }
+
   // Restore annotations and rotations
   doc.annotations = annotations;
   doc.pageRotations = rotations;

@@ -228,5 +228,35 @@
     "clipboardEmpty": "Inget utsnitt i Urklipp"
   },
   "snippetOutputFailed": "Ett vektorutsnitt kunde inte återges, så exporten eller utskriften stoppades. Försök igen.",
-  "protectedPdfReadOnly": "Det här dokumentet öppnades med ett lösenord och är skrivskyddat. Det kan inte sparas."
+  "protectedPdfReadOnly": "Det här dokumentet öppnades med ett lösenord och är skrivskyddat. Det kan inte sparas.",
+  "threeD": {
+    "title": "3D-vy",
+    "view": "Vy",
+    "fit": "Anpassa",
+    "display": "Visning",
+    "modeSolid": "Massiv",
+    "modeEdges": "Massiv med kanter",
+    "modeWire": "Trådmodell",
+    "modeXray": "Genomskinlig",
+    "tree": "Modellträd",
+    "hint": "Dra med vänster: rotera, dra med höger: panorera, hjul: zooma",
+    "loading": "Läser in 3D-modell... {{pct}}%",
+    "stats": "{{models}} objekt, {{tris}} trianglar",
+    "unsupported": "Den här 3D-modellen använder formatet {{fmt}}, som ännu inte stöds (endast U3D).",
+    "activate": "Aktivera 3D",
+    "expand": "Fyll dokumentområdet",
+    "shrink": "Tillbaka till sidan",
+    "deactivate": "Stäng av 3D-vyn",
+    "markupView": "Markeringsvy",
+    "edit": "Redigera",
+    "editTip": "Skapa en markeringssida av den här vyn; 3D-sidan kan fortfarande roteras fritt",
+    "creating": "Skapar sida...",
+    "markupPages": "Markeringssidor",
+    "pageN": "sida {{n}}",
+    "snapshotBar": "3D-markeringssida: {{name}}",
+    "backTo3D": "Tillbaka till 3D-modell",
+    "readFailed": "3D-modellen kunde inte läsas.",
+    "partial": "Vissa delar av 3D-modellen kunde inte läsas ({{n}} hoppades över).",
+    "viewerFailed": "3D-vyn kunde inte startas."
+  }
 }

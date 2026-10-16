@@ -228,5 +228,35 @@
     "clipboardEmpty": "Intet udsnit på udklipsholderen"
   },
   "snippetOutputFailed": "Et vektorudsnit kunne ikke gengives, så eksporten eller udskriften blev stoppet. Prøv igen.",
-  "protectedPdfReadOnly": "Dette dokument blev åbnet med en adgangskode og er skrivebeskyttet. Det kan ikke gemmes."
+  "protectedPdfReadOnly": "Dette dokument blev åbnet med en adgangskode og er skrivebeskyttet. Det kan ikke gemmes.",
+  "threeD": {
+    "title": "3D-visning",
+    "view": "Synsvinkel",
+    "fit": "Tilpas",
+    "display": "Visning",
+    "modeSolid": "Massiv",
+    "modeEdges": "Massiv med kanter",
+    "modeWire": "Trådmodel",
+    "modeXray": "Gennemsigtig",
+    "tree": "Modeltræ",
+    "hint": "Træk med venstre: drej, træk med højre: panorer, hjul: zoom",
+    "loading": "Indlæser 3D-model... {{pct}}%",
+    "stats": "{{models}} objekter, {{tris}} trekanter",
+    "unsupported": "Denne 3D-model bruger formatet {{fmt}}, som endnu ikke understøttes (kun U3D).",
+    "activate": "Aktivér 3D",
+    "expand": "Udfyld dokumentområdet",
+    "shrink": "Tilbage til siden",
+    "deactivate": "Slå 3D-visning fra",
+    "markupView": "Markeringsvisning",
+    "edit": "Rediger",
+    "editTip": "Opret en markeringsside af denne visning; 3D-siden kan stadig drejes frit",
+    "creating": "Opretter side...",
+    "markupPages": "Markeringssider",
+    "pageN": "side {{n}}",
+    "snapshotBar": "3D-markeringsside: {{name}}",
+    "backTo3D": "Tilbage til 3D-model",
+    "readFailed": "3D-modellen kunne ikke læses.",
+    "partial": "Nogle dele af 3D-modellen kunne ikke læses ({{n}} sprunget over).",
+    "viewerFailed": "3D-visningen kunne ikke startes."
+  }
 }

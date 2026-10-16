@@ -228,5 +228,35 @@
     "clipboardEmpty": "Không có đoạn cắt nào trong bảng tạm"
   },
   "snippetOutputFailed": "Không thể kết xuất một đoạn cắt vector, nên quá trình xuất hoặc in đã bị dừng. Hãy thử lại.",
-  "protectedPdfReadOnly": "Tài liệu này được mở bằng mật khẩu và ở chế độ chỉ đọc. Không thể lưu."
+  "protectedPdfReadOnly": "Tài liệu này được mở bằng mật khẩu và ở chế độ chỉ đọc. Không thể lưu.",
+  "threeD": {
+    "title": "Chế độ xem 3D",
+    "view": "Góc nhìn",
+    "fit": "Vừa khung",
+    "display": "Hiển thị",
+    "modeSolid": "Đặc",
+    "modeEdges": "Đặc có cạnh",
+    "modeWire": "Khung dây",
+    "modeXray": "Trong suốt",
+    "tree": "Cây mô hình",
+    "hint": "Kéo trái: xoay quanh, kéo phải: di chuyển, con lăn: thu phóng",
+    "loading": "Đang tải mô hình 3D... {{pct}}%",
+    "stats": "{{models}} đối tượng, {{tris}} tam giác",
+    "unsupported": "Mô hình 3D này dùng định dạng {{fmt}}, hiện chưa được hỗ trợ (chỉ U3D).",
+    "activate": "Kích hoạt 3D",
+    "expand": "Lấp đầy vùng tài liệu",
+    "shrink": "Quay lại trang",
+    "deactivate": "Tắt chế độ xem 3D",
+    "markupView": "Góc nhìn đánh dấu",
+    "edit": "Chỉnh sửa",
+    "editTip": "Tạo trang đánh dấu từ góc nhìn này; trang 3D vẫn xoay tự do",
+    "creating": "Đang tạo trang...",
+    "markupPages": "Trang đánh dấu",
+    "pageN": "trang {{n}}",
+    "snapshotBar": "Trang đánh dấu 3D: {{name}}",
+    "backTo3D": "Quay lại mô hình 3D",
+    "readFailed": "Không thể đọc mô hình 3D.",
+    "partial": "Không thể đọc một số phần của mô hình 3D (đã bỏ qua {{n}}).",
+    "viewerFailed": "Không thể khởi động chế độ xem 3D."
+  }
 }

@@ -228,5 +228,35 @@
     "clipboardEmpty": "Hakuna kipande kwenye ubao wa kunakili"
   },
   "snippetOutputFailed": "Kipande cha vekta hakikuweza kuchorwa, kwa hivyo uhamishaji au uchapishaji umesimamishwa. Jaribu tena.",
-  "protectedPdfReadOnly": "Hati hii ilifunguliwa kwa nenosiri na ni ya kusoma tu. Haiwezi kuhifadhiwa."
+  "protectedPdfReadOnly": "Hati hii ilifunguliwa kwa nenosiri na ni ya kusoma tu. Haiwezi kuhifadhiwa.",
+  "threeD": {
+    "title": "Mwonekano wa 3D",
+    "view": "Mwonekano",
+    "fit": "Tosheleza",
+    "display": "Onyesho",
+    "modeSolid": "Imara",
+    "modeEdges": "Imara yenye kingo",
+    "modeWire": "Fremu ya waya",
+    "modeXray": "Angavu",
+    "tree": "Mti wa modeli",
+    "hint": "Buruta kushoto: zungusha, buruta kulia: sogeza, gurudumu: kuza",
+    "loading": "Inapakia modeli ya 3D... {{pct}}%",
+    "stats": "Vitu {{models}}, pembetatu {{tris}}",
+    "unsupported": "Modeli hii ya 3D inatumia umbizo la {{fmt}}, ambalo bado halitumiki (U3D pekee).",
+    "activate": "Washa 3D",
+    "expand": "Jaza eneo la hati",
+    "shrink": "Rudi kwenye ukurasa",
+    "deactivate": "Zima mwonekano wa 3D",
+    "markupView": "Mwonekano wa alama",
+    "edit": "Hariri",
+    "editTip": "Unda ukurasa wa alama kutoka mwonekano huu; ukurasa wa 3D unabaki huru kuzungushwa",
+    "creating": "Inaunda ukurasa...",
+    "markupPages": "Kurasa za alama",
+    "pageN": "ukurasa {{n}}",
+    "snapshotBar": "Ukurasa wa alama wa 3D: {{name}}",
+    "backTo3D": "Rudi kwenye modeli ya 3D",
+    "readFailed": "Modeli ya 3D haikuweza kusomwa.",
+    "partial": "Baadhi ya sehemu za modeli ya 3D hazikuweza kusomwa ({{n}} zimerukwa).",
+    "viewerFailed": "Mwonekano wa 3D haukuweza kuanzishwa."
+  }
 }

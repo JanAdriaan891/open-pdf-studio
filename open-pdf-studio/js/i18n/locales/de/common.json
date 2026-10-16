@@ -228,5 +228,35 @@
     "clipboardEmpty": "Kein Ausschnitt in der Zwischenablage"
   },
   "snippetOutputFailed": "Ein Vektorausschnitt konnte nicht gerendert werden, daher wurde der Export oder Druck abgebrochen. Versuchen Sie es erneut.",
-  "protectedPdfReadOnly": "Dieses Dokument wurde mit einem Kennwort geöffnet und ist schreibgeschützt. Es kann nicht gespeichert werden."
+  "protectedPdfReadOnly": "Dieses Dokument wurde mit einem Kennwort geöffnet und ist schreibgeschützt. Es kann nicht gespeichert werden.",
+  "threeD": {
+    "title": "3D-Ansicht",
+    "view": "Ansicht",
+    "fit": "Einpassen",
+    "display": "Darstellung",
+    "modeSolid": "Vollkörper",
+    "modeEdges": "Vollkörper mit Kanten",
+    "modeWire": "Drahtmodell",
+    "modeXray": "Transparent",
+    "tree": "Modellbaum",
+    "hint": "Links ziehen: drehen, rechts ziehen: verschieben, Mausrad: zoomen",
+    "loading": "3D-Modell wird geladen... {{pct}}%",
+    "stats": "{{models}} Objekte, {{tris}} Dreiecke",
+    "unsupported": "Dieses 3D-Modell verwendet das Format {{fmt}}, das noch nicht unterstützt wird (nur U3D).",
+    "activate": "3D aktivieren",
+    "expand": "Dokumentbereich ausfüllen",
+    "shrink": "Zurück zur Seite",
+    "deactivate": "3D-Ansicht ausschalten",
+    "markupView": "Markierungsansicht",
+    "edit": "Bearbeiten",
+    "editTip": "Markierungsseite aus dieser Ansicht erstellen; die 3D-Seite bleibt frei drehbar",
+    "creating": "Seite wird erstellt...",
+    "markupPages": "Markierungsseiten",
+    "pageN": "Seite {{n}}",
+    "snapshotBar": "3D-Markierungsseite: {{name}}",
+    "backTo3D": "Zurück zum 3D-Modell",
+    "readFailed": "Das 3D-Modell konnte nicht gelesen werden.",
+    "partial": "Einige Teile des 3D-Modells konnten nicht gelesen werden ({{n}} übersprungen).",
+    "viewerFailed": "Die 3D-Ansicht konnte nicht gestartet werden."
+  }
 }

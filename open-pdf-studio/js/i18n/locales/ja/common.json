@@ -228,5 +228,35 @@
     "clipboardEmpty": "クリップボードに切り抜きがありません"
   },
   "snippetOutputFailed": "ベクター切り抜きを描画できなかったため、エクスポートまたは印刷を中止しました。もう一度お試しください。",
-  "protectedPdfReadOnly": "このドキュメントはパスワードで開かれたため読み取り専用です。保存できません。"
+  "protectedPdfReadOnly": "このドキュメントはパスワードで開かれたため読み取り専用です。保存できません。",
+  "threeD": {
+    "title": "3D ビュー",
+    "view": "ビュー",
+    "fit": "全体表示",
+    "display": "表示",
+    "modeSolid": "ソリッド",
+    "modeEdges": "エッジ付きソリッド",
+    "modeWire": "ワイヤフレーム",
+    "modeXray": "透明",
+    "tree": "モデルツリー",
+    "hint": "左ドラッグ: 回転、右ドラッグ: パン、ホイール: ズーム",
+    "loading": "3D モデルを読み込み中... {{pct}}%",
+    "stats": "{{models}} オブジェクト、{{tris}} 三角形",
+    "unsupported": "この 3D モデルは {{fmt}} 形式を使用しています。この形式はまだサポートされていません (U3D のみ)。",
+    "activate": "3D を有効化",
+    "expand": "ドキュメント領域全体に表示",
+    "shrink": "ページに戻る",
+    "deactivate": "3D ビューをオフにする",
+    "markupView": "マークアップビュー",
+    "edit": "編集",
+    "editTip": "このビューのマークアップページを作成します。3D ページは引き続き自由に回転できます",
+    "creating": "ページを作成中...",
+    "markupPages": "マークアップページ",
+    "pageN": "ページ {{n}}",
+    "snapshotBar": "3D マークアップページ: {{name}}",
+    "backTo3D": "3D モデルに戻る",
+    "readFailed": "3D モデルを読み取れませんでした。",
+    "partial": "3D モデルの一部を読み取れませんでした ({{n}} 件をスキップ)。",
+    "viewerFailed": "3D ビューを開始できませんでした。"
+  }
 }

@@ -228,5 +228,35 @@
     "clipboardEmpty": "Nenhum recorte na área de transferência"
   },
   "snippetOutputFailed": "Não foi possível renderizar um recorte vetorial, por isso a exportação ou impressão foi interrompida. Tente novamente.",
-  "protectedPdfReadOnly": "Este documento foi aberto com uma senha e é somente leitura. Não pode ser salvo."
+  "protectedPdfReadOnly": "Este documento foi aberto com uma senha e é somente leitura. Não pode ser salvo.",
+  "threeD": {
+    "title": "Visualização 3D",
+    "view": "Vista",
+    "fit": "Ajustar",
+    "display": "Exibição",
+    "modeSolid": "Sólido",
+    "modeEdges": "Sólido com arestas",
+    "modeWire": "Aramado",
+    "modeXray": "Transparente",
+    "tree": "Árvore do modelo",
+    "hint": "Arrastar com o esquerdo: orbitar, com o direito: deslocar, roda: zoom",
+    "loading": "Carregando modelo 3D... {{pct}}%",
+    "stats": "{{models}} objetos, {{tris}} triângulos",
+    "unsupported": "Este modelo 3D usa o formato {{fmt}}, que ainda não é suportado (apenas U3D).",
+    "activate": "Ativar 3D",
+    "expand": "Preencher a área do documento",
+    "shrink": "Voltar à página",
+    "deactivate": "Desativar a visualização 3D",
+    "markupView": "Vista de marcação",
+    "edit": "Editar",
+    "editTip": "Criar uma página de marcação desta vista; a página 3D continua livre para girar",
+    "creating": "Criando página...",
+    "markupPages": "Páginas de marcação",
+    "pageN": "página {{n}}",
+    "snapshotBar": "Página de marcação 3D: {{name}}",
+    "backTo3D": "Voltar ao modelo 3D",
+    "readFailed": "Não foi possível ler o modelo 3D.",
+    "partial": "Algumas partes do modelo 3D não puderam ser lidas ({{n}} ignoradas).",
+    "viewerFailed": "Não foi possível iniciar a visualização 3D."
+  }
 }

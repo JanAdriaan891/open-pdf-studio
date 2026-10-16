@@ -228,5 +228,35 @@
     "clipboardEmpty": "剪贴板中没有片段"
   },
   "snippetOutputFailed": "无法渲染矢量片段，因此已停止导出或打印。请重试。",
-  "protectedPdfReadOnly": "此文档使用密码打开，为只读。无法保存。"
+  "protectedPdfReadOnly": "此文档使用密码打开，为只读。无法保存。",
+  "threeD": {
+    "title": "3D 视图",
+    "view": "视角",
+    "fit": "适合",
+    "display": "显示",
+    "modeSolid": "实体",
+    "modeEdges": "带边实体",
+    "modeWire": "线框",
+    "modeXray": "透明",
+    "tree": "模型树",
+    "hint": "左键拖动：环绕，右键拖动：平移，滚轮：缩放",
+    "loading": "正在加载 3D 模型... {{pct}}%",
+    "stats": "{{models}} 个对象，{{tris}} 个三角形",
+    "unsupported": "此 3D 模型使用 {{fmt}} 格式，目前尚不支持（仅支持 U3D）。",
+    "activate": "激活 3D",
+    "expand": "填满文档区域",
+    "shrink": "返回页面",
+    "deactivate": "关闭 3D 视图",
+    "markupView": "标记视图",
+    "edit": "编辑",
+    "editTip": "为此视图创建标记页面；3D 页面仍可自由旋转",
+    "creating": "正在创建页面...",
+    "markupPages": "标记页面",
+    "pageN": "第 {{n}} 页",
+    "snapshotBar": "3D 标记页面：{{name}}",
+    "backTo3D": "返回 3D 模型",
+    "readFailed": "无法读取 3D 模型。",
+    "partial": "3D 模型的部分内容无法读取（已跳过 {{n}} 个）。",
+    "viewerFailed": "无法启动 3D 视图。"
+  }
 }

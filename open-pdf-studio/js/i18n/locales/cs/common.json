@@ -228,5 +228,35 @@
     "clipboardEmpty": "Ve schránce není žádný výřez"
   },
   "snippetOutputFailed": "Vektorový výřez se nepodařilo vykreslit, proto byl export nebo tisk zastaven. Zkuste to znovu.",
-  "protectedPdfReadOnly": "Tento dokument byl otevřen s heslem a je jen pro čtení. Nelze jej uložit."
+  "protectedPdfReadOnly": "Tento dokument byl otevřen s heslem a je jen pro čtení. Nelze jej uložit.",
+  "threeD": {
+    "title": "3D zobrazení",
+    "view": "Pohled",
+    "fit": "Přizpůsobit",
+    "display": "Zobrazení",
+    "modeSolid": "Plné",
+    "modeEdges": "Plné s hranami",
+    "modeWire": "Drátový model",
+    "modeXray": "Průhledné",
+    "tree": "Strom modelu",
+    "hint": "Tažení levým: otáčení, pravým: posun, kolečko: lupa",
+    "loading": "Načítání 3D modelu... {{pct}}%",
+    "stats": "Objekty: {{models}}, trojúhelníky: {{tris}}",
+    "unsupported": "Tento 3D model používá formát {{fmt}}, který zatím není podporován (pouze U3D).",
+    "activate": "Aktivovat 3D",
+    "expand": "Vyplnit oblast dokumentu",
+    "shrink": "Zpět na stránku",
+    "deactivate": "Vypnout 3D zobrazení",
+    "markupView": "Pohled pro značky",
+    "edit": "Upravit",
+    "editTip": "Vytvořit stránku pro značky z tohoto pohledu; 3D stránku lze dál volně otáčet",
+    "creating": "Vytváření stránky...",
+    "markupPages": "Stránky se značkami",
+    "pageN": "stránka {{n}}",
+    "snapshotBar": "3D stránka se značkami: {{name}}",
+    "backTo3D": "Zpět na 3D model",
+    "readFailed": "3D model se nepodařilo načíst.",
+    "partial": "Některé části 3D modelu se nepodařilo načíst (vynecháno: {{n}}).",
+    "viewerFailed": "3D zobrazení se nepodařilo spustit."
+  }
 }

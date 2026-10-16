@@ -228,5 +228,35 @@
     "clipboardEmpty": "Brak wycinka w schowku"
   },
   "snippetOutputFailed": "Nie udało się wyrenderować wycinka wektorowego, dlatego eksport lub drukowanie zostało przerwane. Spróbuj ponownie.",
-  "protectedPdfReadOnly": "Ten dokument został otwarty z hasłem i jest tylko do odczytu. Nie można go zapisać."
+  "protectedPdfReadOnly": "Ten dokument został otwarty z hasłem i jest tylko do odczytu. Nie można go zapisać.",
+  "threeD": {
+    "title": "Widok 3D",
+    "view": "Widok",
+    "fit": "Dopasuj",
+    "display": "Wyświetlanie",
+    "modeSolid": "Bryła",
+    "modeEdges": "Bryła z krawędziami",
+    "modeWire": "Szkielet",
+    "modeXray": "Przezroczysty",
+    "tree": "Drzewo modelu",
+    "hint": "Lewy przycisk: obrót, prawy przycisk: przesuwanie, kółko: powiększenie",
+    "loading": "Wczytywanie modelu 3D... {{pct}}%",
+    "stats": "Obiekty: {{models}}, trójkąty: {{tris}}",
+    "unsupported": "Ten model 3D używa formatu {{fmt}}, który nie jest jeszcze obsługiwany (tylko U3D).",
+    "activate": "Aktywuj 3D",
+    "expand": "Wypełnij obszar dokumentu",
+    "shrink": "Powrót do strony",
+    "deactivate": "Wyłącz widok 3D",
+    "markupView": "Widok adnotacji",
+    "edit": "Edytuj",
+    "editTip": "Utwórz stronę adnotacji z tego widoku; stronę 3D można nadal swobodnie obracać",
+    "creating": "Tworzenie strony...",
+    "markupPages": "Strony adnotacji",
+    "pageN": "strona {{n}}",
+    "snapshotBar": "Strona adnotacji 3D: {{name}}",
+    "backTo3D": "Powrót do modelu 3D",
+    "readFailed": "Nie można odczytać modelu 3D.",
+    "partial": "Nie można odczytać niektórych części modelu 3D (pominięto: {{n}}).",
+    "viewerFailed": "Nie można uruchomić widoku 3D."
+  }
 }

@@ -228,5 +228,35 @@
     "clipboardEmpty": "Panoda kesit yok"
   },
   "snippetOutputFailed": "Bir vektör kesit işlenemedi, bu yüzden dışa aktarma veya yazdırma durduruldu. Yeniden deneyin.",
-  "protectedPdfReadOnly": "Bu belge parola ile açıldı ve salt okunurdur. Kaydedilemez."
+  "protectedPdfReadOnly": "Bu belge parola ile açıldı ve salt okunurdur. Kaydedilemez.",
+  "threeD": {
+    "title": "3D görünüm",
+    "view": "Görünüm",
+    "fit": "Sığdır",
+    "display": "Görüntüleme",
+    "modeSolid": "Katı",
+    "modeEdges": "Kenarlı katı",
+    "modeWire": "Tel kafes",
+    "modeXray": "Saydam",
+    "tree": "Model ağacı",
+    "hint": "Sol sürükle: yörünge, sağ sürükle: kaydır, tekerlek: yakınlaştır",
+    "loading": "3D model yükleniyor... {{pct}}%",
+    "stats": "{{models}} nesne, {{tris}} üçgen",
+    "unsupported": "Bu 3D model {{fmt}} biçimini kullanıyor; bu biçim henüz desteklenmiyor (yalnızca U3D).",
+    "activate": "3D'yi etkinleştir",
+    "expand": "Belge alanını doldur",
+    "shrink": "Sayfaya dön",
+    "deactivate": "3D görünümü kapat",
+    "markupView": "İşaretleme görünümü",
+    "edit": "Düzenle",
+    "editTip": "Bu görünümden bir işaretleme sayfası oluştur; 3D sayfa serbestçe döndürülebilir kalır",
+    "creating": "Sayfa oluşturuluyor...",
+    "markupPages": "İşaretleme sayfaları",
+    "pageN": "sayfa {{n}}",
+    "snapshotBar": "3D işaretleme sayfası: {{name}}",
+    "backTo3D": "3D modele dön",
+    "readFailed": "3D model okunamadı.",
+    "partial": "3D modelin bazı bölümleri okunamadı ({{n}} atlandı).",
+    "viewerFailed": "3D görünüm başlatılamadı."
+  }
 }

@@ -228,5 +228,35 @@
     "clipboardEmpty": "Tiada keratan dalam papan keratan"
   },
   "snippetOutputFailed": "Keratan vektor tidak dapat dipaparkan, jadi eksport atau cetakan dihentikan. Cuba lagi.",
-  "protectedPdfReadOnly": "Dokumen ini dibuka dengan kata laluan dan hanya boleh dibaca. Ia tidak boleh disimpan."
+  "protectedPdfReadOnly": "Dokumen ini dibuka dengan kata laluan dan hanya boleh dibaca. Ia tidak boleh disimpan.",
+  "threeD": {
+    "title": "Paparan 3D",
+    "view": "Pandangan",
+    "fit": "Muat",
+    "display": "Paparan",
+    "modeSolid": "Pepejal",
+    "modeEdges": "Pepejal dengan tepi",
+    "modeWire": "Bingkai wayar",
+    "modeXray": "Lut sinar",
+    "tree": "Pepohon model",
+    "hint": "Seret kiri: orbit, seret kanan: anjak, roda: zum",
+    "loading": "Memuatkan model 3D... {{pct}}%",
+    "stats": "{{models}} objek, {{tris}} segi tiga",
+    "unsupported": "Model 3D ini menggunakan format {{fmt}}, yang belum disokong (hanya U3D).",
+    "activate": "Aktifkan 3D",
+    "expand": "Penuhi kawasan dokumen",
+    "shrink": "Kembali ke halaman",
+    "deactivate": "Matikan paparan 3D",
+    "markupView": "Pandangan penanda",
+    "edit": "Sunting",
+    "editTip": "Buat halaman penanda daripada pandangan ini; halaman 3D kekal bebas diputar",
+    "creating": "Mencipta halaman...",
+    "markupPages": "Halaman penanda",
+    "pageN": "halaman {{n}}",
+    "snapshotBar": "Halaman penanda 3D: {{name}}",
+    "backTo3D": "Kembali ke model 3D",
+    "readFailed": "Model 3D tidak dapat dibaca.",
+    "partial": "Sesetengah bahagian model 3D tidak dapat dibaca ({{n}} dilangkau).",
+    "viewerFailed": "Paparan 3D tidak dapat dimulakan."
+  }
 }
