@@ -352,3 +352,8 @@ js/core/fout-bericht.test.mjs
 js/core/bestandsnaam.test.mjs
 js/mobile/ipc-wekker.test.mjs
 js/pdf/three-d/u3d-reader.test.mjs
+js/pdf/three-d/pdf-3d.test.mjs
+js/pdf/three-d/camera.test.mjs
+js/pdf/three-d/snapshot-page.test.mjs
+js/pdf/three-d/decoded-cache.test.mjs
+js/pdf/three-d/u3d-scene.test.mjs
