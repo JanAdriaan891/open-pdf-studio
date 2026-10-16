@@ -30,6 +30,7 @@ import { extendTool } from './extend-tool.js';
 import { arrayTool } from './array-tool.js';
 import { removeImageTool } from './remove-image-tool.js';
 import { scanTextTool } from './scan-text-tool.js';
+import { proofreadTool, PROOFREAD_TOOL } from '../proofreading-mode.js';
 import { splitTool, breakTool } from './split-tool.js';
 import { lengthenTool } from './lengthen-tool.js';
 import { offsetTool } from './offset-tool.js';
@@ -142,6 +143,8 @@ export function registerAllTools() {
   // Remove an image that is embedded in the PDF page content (issue #184)
   registerTool('removeImage', removeImageTool);
   registerTool('scanText', scanTextTool);
+  // Proofreading mode (#508): keyboard-driven text corrections (F2).
+  registerTool(PROOFREAD_TOOL, proofreadTool);
 
   // CAD tools
   registerTool('trim', trimTool);

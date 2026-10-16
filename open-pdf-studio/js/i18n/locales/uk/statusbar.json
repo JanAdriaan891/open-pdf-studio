@@ -29,7 +29,8 @@
     "formCheckbox": "Прапорець форми",
     "formRadio": "Перемикач форми",
     "screenshot": "Знімок екрана",
-    "pageLabelPick": "Вибір тексту для мітки сторінки"
+    "pageLabelPick": "Вибір тексту для мітки сторінки",
+    "proofread": "Коректура"
   },
   "toolLabel": "Інструмент:",
   "annotationsLabel": "Анотації:",

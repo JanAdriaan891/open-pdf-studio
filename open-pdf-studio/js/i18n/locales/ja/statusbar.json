@@ -29,7 +29,8 @@
     "formCheckbox": "フォームチェックボックス",
     "formRadio": "フォームラジオボタン",
     "screenshot": "スクリーンショット",
-    "pageLabelPick": "ページラベルの文字を選択"
+    "pageLabelPick": "ページラベルの文字を選択",
+    "proofread": "校正"
   },
   "toolLabel": "ツール：",
   "annotationsLabel": "注釈：",

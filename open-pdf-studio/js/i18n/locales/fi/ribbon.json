@@ -625,5 +625,15 @@
     "symbolScale": "Mittakaava",
     "symbolScaleTitle": "Koko, jossa uusi symboli sijoitetaan",
     "symbolScaleCustom": "Mukautettu mittakaava"
+  },
+  "proofread": {
+    "group": "Oikoluku",
+    "button": "Oikolue",
+    "tooltip": "Oikolukutila (F2): merkitse lisäykset, poistot ja korvaukset näppäimistöllä",
+    "hint": "Oikoluku: nuolinäppäimet siirtävät kohdistinta, kirjoita lisätäksesi, Delete yliviivaa, Tab siirtyy seuraavaan korjaukseen, Esc palaa askeleen taaksepäin.",
+    "noText": "Tällä sivulla ei ole oikoluettavaa tekstiä.",
+    "noCorrections": "Korjauksia ei ole vielä.",
+    "insertPlaceholder": "Lisättävä teksti",
+    "replacePlaceholder": "Korvaava teksti"
   }
 }

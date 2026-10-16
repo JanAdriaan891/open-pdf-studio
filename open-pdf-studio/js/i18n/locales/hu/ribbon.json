@@ -625,5 +625,15 @@
     "symbolScale": "Lépték",
     "symbolScaleTitle": "Az a méret, amelyben az új szimbólum elhelyezésre kerül",
     "symbolScaleCustom": "Egyéni lépték"
+  },
+  "proofread": {
+    "group": "Korrektúra",
+    "button": "Korrektúrázás",
+    "tooltip": "Korrektúra mód (F2): beszúrások, törlések és cserék jelölése billentyűzettel",
+    "hint": "Korrektúra: a nyilak mozgatják a kurzort, gépeléssel beszúr, a Delete áthúz, a Tab a következő javításra lép, az Esc egy lépést visszalép.",
+    "noText": "Ezen az oldalon nincs korrektúrázható szöveg.",
+    "noCorrections": "Még nincsenek javítások.",
+    "insertPlaceholder": "Beszúrandó szöveg",
+    "replacePlaceholder": "Csereszöveg"
   }
 }

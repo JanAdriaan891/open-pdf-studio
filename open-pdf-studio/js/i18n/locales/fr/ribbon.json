@@ -625,5 +625,15 @@
     "symbolScale": "Échelle",
     "symbolScaleTitle": "Taille à laquelle un nouveau symbole est placé",
     "symbolScaleCustom": "Échelle personnalisée"
+  },
+  "proofread": {
+    "group": "Relecture",
+    "button": "Relire",
+    "tooltip": "Mode relecture (F2) : marquer les insertions, suppressions et remplacements au clavier",
+    "hint": "Relecture : les flèches déplacent le curseur, tapez pour insérer, Suppr barre le texte, Tab passe à la correction suivante, Échap revient en arrière.",
+    "noText": "Cette page ne contient pas de texte à relire.",
+    "noCorrections": "Il n’y a pas encore de corrections.",
+    "insertPlaceholder": "Texte à insérer",
+    "replacePlaceholder": "Texte de remplacement"
   }
 }

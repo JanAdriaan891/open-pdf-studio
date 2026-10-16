@@ -625,5 +625,15 @@
     "symbolScale": "축척",
     "symbolScaleTitle": "새 기호를 배치할 때의 크기",
     "symbolScaleCustom": "사용자 지정 축척"
+  },
+  "proofread": {
+    "group": "교정",
+    "button": "교정 모드",
+    "tooltip": "교정 모드 (F2): 키보드로 삽입, 삭제, 바꾸기를 표시합니다",
+    "hint": "교정: 화살표 키로 커서를 이동하고, 입력하면 삽입되며, Delete는 취소선을 긋고, Tab은 다음 수정으로 이동하며, Esc는 한 단계 뒤로 갑니다.",
+    "noText": "이 페이지에는 교정할 텍스트가 없습니다.",
+    "noCorrections": "아직 수정 사항이 없습니다.",
+    "insertPlaceholder": "삽입할 텍스트",
+    "replacePlaceholder": "바꿀 텍스트"
   }
 }

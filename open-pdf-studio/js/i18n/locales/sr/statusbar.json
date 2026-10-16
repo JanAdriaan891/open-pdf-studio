@@ -29,7 +29,8 @@
     "formCheckbox": "Поље за потврду обрасца",
     "formRadio": "Радио дугме обрасца",
     "screenshot": "Снимак екрана",
-    "pageLabelPick": "Избор текста за ознаку странице"
+    "pageLabelPick": "Избор текста за ознаку странице",
+    "proofread": "Коректура"
   },
   "toolLabel": "Алатка:",
   "annotationsLabel": "Анотације:",

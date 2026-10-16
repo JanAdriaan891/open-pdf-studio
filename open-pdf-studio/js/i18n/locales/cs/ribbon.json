@@ -625,5 +625,15 @@
     "symbolScale": "Měřítko",
     "symbolScaleTitle": "Velikost, ve které se umístí nový symbol",
     "symbolScaleCustom": "Vlastní měřítko"
+  },
+  "proofread": {
+    "group": "Korektura",
+    "button": "Korigovat",
+    "tooltip": "Režim korektury (F2): označujte vložení, odstranění a nahrazení klávesnicí",
+    "hint": "Korektura: šipky posouvají kurzor, psaním vkládáte, Delete přeškrtne, Tab přejde na další opravu, Esc vrátí o krok zpět.",
+    "noText": "Tato stránka neobsahuje text ke korektuře.",
+    "noCorrections": "Zatím nejsou žádné opravy.",
+    "insertPlaceholder": "Vložit text",
+    "replacePlaceholder": "Náhradní text"
   }
 }

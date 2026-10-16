@@ -625,5 +625,15 @@
     "symbolScale": "Scala",
     "symbolScaleTitle": "Dimensione con cui viene posizionato un nuovo simbolo",
     "symbolScaleCustom": "Scala personalizzata"
+  },
+  "proofread": {
+    "group": "Revisione",
+    "button": "Rivedi",
+    "tooltip": "Modalità revisione (F2): segna inserimenti, eliminazioni e sostituzioni con la tastiera",
+    "hint": "Revisione: le frecce spostano il cursore, digita per inserire, Canc barra il testo, Tab passa alla correzione successiva, Esc torna indietro.",
+    "noText": "Questa pagina non contiene testo da rivedere.",
+    "noCorrections": "Non ci sono ancora correzioni.",
+    "insertPlaceholder": "Testo da inserire",
+    "replacePlaceholder": "Testo sostitutivo"
   }
 }

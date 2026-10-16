@@ -29,7 +29,8 @@
     "formCheckbox": "Formularafkrydsningsfelt",
     "formRadio": "Formularalternativknap",
     "screenshot": "Skærmbillede",
-    "pageLabelPick": "Vælg tekst til sideetiket"
+    "pageLabelPick": "Vælg tekst til sideetiket",
+    "proofread": "Korrektur"
   },
   "toolLabel": "Værktøj:",
   "annotationsLabel": "Annotationer:",

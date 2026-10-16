@@ -625,5 +625,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Saiz simbol baharu diletakkan",
     "symbolScaleCustom": "Skala tersuai"
+  },
+  "proofread": {
+    "group": "Pembacaan Pruf",
+    "button": "Baca Pruf",
+    "tooltip": "Mod pembacaan pruf (F2): tandakan sisipan, pemadaman dan penggantian dengan papan kekunci",
+    "hint": "Pembacaan pruf: kekunci anak panah menggerakkan kursor, taip untuk menyisip, Delete memotong, Tab pergi ke pembetulan seterusnya, Esc berundur satu langkah.",
+    "noText": "Halaman ini tiada teks untuk dibaca pruf.",
+    "noCorrections": "Belum ada pembetulan.",
+    "insertPlaceholder": "Teks untuk disisip",
+    "replacePlaceholder": "Teks gantian"
   }
 }

@@ -29,7 +29,8 @@
     "formCheckbox": "Form Onay Kutusu",
     "formRadio": "Form Seçenek Düğmesi",
     "screenshot": "Ekran Görüntüsü",
-    "pageLabelPick": "Sayfa Etiketi için Metin Seç"
+    "pageLabelPick": "Sayfa Etiketi için Metin Seç",
+    "proofread": "Düzelti"
   },
   "toolLabel": "Araç:",
   "annotationsLabel": "Açıklamalar:",

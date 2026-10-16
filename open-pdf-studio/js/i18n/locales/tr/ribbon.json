@@ -625,5 +625,15 @@
     "symbolScale": "Ölçek",
     "symbolScaleTitle": "Yeni bir sembolün yerleştirildiği boyut",
     "symbolScaleCustom": "Özel ölçek"
+  },
+  "proofread": {
+    "group": "Düzelti",
+    "button": "Düzelt",
+    "tooltip": "Düzelti modu (F2): eklemeleri, silmeleri ve değiştirmeleri klavyeyle işaretleyin",
+    "hint": "Düzelti: ok tuşları imleci taşır, eklemek için yazın, Delete üstünü çizer, Tab sonraki düzeltmeye gider, Esc bir adım geri döner.",
+    "noText": "Bu sayfada düzeltilecek metin yok.",
+    "noCorrections": "Henüz düzeltme yok.",
+    "insertPlaceholder": "Eklenecek metin",
+    "replacePlaceholder": "Yeni metin"
   }
 }

@@ -625,5 +625,15 @@
     "symbolScale": "Maßstab",
     "symbolScaleTitle": "Größe, in der ein neues Symbol platziert wird",
     "symbolScaleCustom": "Eigener Maßstab"
+  },
+  "proofread": {
+    "group": "Korrektur",
+    "button": "Korrekturlesen",
+    "tooltip": "Korrekturmodus (F2): Einfügungen, Löschungen und Ersetzungen per Tastatur markieren",
+    "hint": "Korrekturlesen: Pfeiltasten bewegen den Cursor, Tippen fügt ein, Entf streicht durch, Tab springt zur nächsten Korrektur, Esc geht einen Schritt zurück.",
+    "noText": "Diese Seite enthält keinen Text zum Korrekturlesen.",
+    "noCorrections": "Es gibt noch keine Korrekturen.",
+    "insertPlaceholder": "Text einfügen",
+    "replacePlaceholder": "Ersatztext"
   }
 }

@@ -625,5 +625,15 @@
     "symbolScale": "Mjerilo",
     "symbolScaleTitle": "Veličina u kojoj se postavlja novi simbol",
     "symbolScaleCustom": "Prilagođeno mjerilo"
+  },
+  "proofread": {
+    "group": "Korektura",
+    "button": "Lektoriraj",
+    "tooltip": "Način korekture (F2): označite umetanja, brisanja i zamjene tipkovnicom",
+    "hint": "Korektura: strelice pomiču pokazivač, tipkajte za umetanje, Delete precrtava, Tab ide na sljedeći ispravak, Esc vraća korak natrag.",
+    "noText": "Na ovoj stranici nema teksta za korekturu.",
+    "noCorrections": "Još nema ispravaka.",
+    "insertPlaceholder": "Umetni tekst",
+    "replacePlaceholder": "Zamjenski tekst"
   }
 }

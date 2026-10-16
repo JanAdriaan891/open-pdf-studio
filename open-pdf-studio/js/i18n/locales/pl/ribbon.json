@@ -625,5 +625,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Rozmiar, w jakim umieszczany jest nowy symbol",
     "symbolScaleCustom": "Skala niestandardowa"
+  },
+  "proofread": {
+    "group": "Korekta",
+    "button": "Koryguj",
+    "tooltip": "Tryb korekty (F2): zaznaczaj wstawienia, usunięcia i zamiany za pomocą klawiatury",
+    "hint": "Korekta: strzałki przesuwają kursor, pisz, aby wstawić, Delete przekreśla, Tab przechodzi do następnej poprawki, Esc cofa o krok.",
+    "noText": "Na tej stronie nie ma tekstu do korekty.",
+    "noCorrections": "Nie ma jeszcze żadnych poprawek.",
+    "insertPlaceholder": "Tekst do wstawienia",
+    "replacePlaceholder": "Tekst zastępczy"
   }
 }

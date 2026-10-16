@@ -625,5 +625,15 @@
     "symbolScale": "Tỷ lệ",
     "symbolScaleTitle": "Kích thước khi đặt một ký hiệu mới",
     "symbolScaleCustom": "Tỷ lệ tùy chỉnh"
+  },
+  "proofread": {
+    "group": "Hiệu đính",
+    "button": "Soát lỗi",
+    "tooltip": "Chế độ hiệu đính (F2): đánh dấu chèn, xóa và thay thế bằng bàn phím",
+    "hint": "Hiệu đính: phím mũi tên di chuyển con trỏ, gõ để chèn, Delete gạch bỏ, Tab chuyển đến chỉnh sửa tiếp theo, Esc lùi lại một bước.",
+    "noText": "Trang này không có văn bản để hiệu đính.",
+    "noCorrections": "Chưa có chỉnh sửa nào.",
+    "insertPlaceholder": "Văn bản cần chèn",
+    "replacePlaceholder": "Văn bản thay thế"
   }
 }

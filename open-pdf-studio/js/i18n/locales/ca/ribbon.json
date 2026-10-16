@@ -625,5 +625,15 @@
     "symbolScale": "Escala",
     "symbolScaleTitle": "Mida amb què es col·loca un símbol nou",
     "symbolScaleCustom": "Escala personalitzada"
+  },
+  "proofread": {
+    "group": "Revisió",
+    "button": "Revisa",
+    "tooltip": "Mode de revisió (F2): marqueu insercions, supressions i substitucions amb el teclat",
+    "hint": "Revisió: les fletxes mouen el cursor, escriviu per inserir, Supr ratlla, Tab va a la correcció següent, Esc torna enrere.",
+    "noText": "Aquesta pàgina no té text per revisar.",
+    "noCorrections": "Encara no hi ha correccions.",
+    "insertPlaceholder": "Text a inserir",
+    "replacePlaceholder": "Text de substitució"
   }
 }

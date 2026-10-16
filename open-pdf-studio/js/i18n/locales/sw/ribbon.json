@@ -625,5 +625,15 @@
     "symbolScale": "Kipimo",
     "symbolScaleTitle": "Ukubwa wa kuweka alama mpya",
     "symbolScaleCustom": "Kipimo maalum"
+  },
+  "proofread": {
+    "group": "Usahihishaji",
+    "button": "Sahihisha",
+    "tooltip": "Hali ya usahihishaji (F2): weka alama za kuongeza, kufuta na kubadilisha kwa kibodi",
+    "hint": "Usahihishaji: vitufe vya mishale husogeza kishale, andika ili kuongeza, Delete hukata maandishi, Tab huenda kwenye sahihisho linalofuata, Esc hurudi hatua moja.",
+    "noText": "Ukurasa huu hauna maandishi ya kusahihisha.",
+    "noCorrections": "Bado hakuna masahihisho.",
+    "insertPlaceholder": "Maandishi ya kuongeza",
+    "replacePlaceholder": "Maandishi mbadala"
   }
 }
