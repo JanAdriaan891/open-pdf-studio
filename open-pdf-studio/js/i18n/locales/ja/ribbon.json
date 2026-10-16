@@ -621,5 +621,15 @@
     "symbolScale": "尺度",
     "symbolScaleTitle": "新しいシンボルを配置するときのサイズ",
     "symbolScaleCustom": "カスタム尺度"
+  },
+  "proofread": {
+    "group": "校正",
+    "button": "校正モード",
+    "tooltip": "校正モード (F2): キーボードで挿入、削除、置換を指定します",
+    "hint": "校正: 矢印キーでカーソルを移動、入力で挿入、Delete で取り消し線、Tab で次の修正へ、Esc で一段階戻ります。",
+    "noText": "このページには校正するテキストがありません。",
+    "noCorrections": "まだ修正はありません。",
+    "insertPlaceholder": "挿入するテキスト",
+    "replacePlaceholder": "置換後のテキスト"
   }
 }

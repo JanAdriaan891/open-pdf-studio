@@ -29,7 +29,8 @@
     "formCheckbox": "Potvrdni okvir obrasca",
     "formRadio": "Radio gumb obrasca",
     "screenshot": "Snimka zaslona",
-    "pageLabelPick": "Odabir teksta za oznaku stranice"
+    "pageLabelPick": "Odabir teksta za oznaku stranice",
+    "proofread": "Korektura"
   },
   "toolLabel": "Alat:",
   "annotationsLabel": "Oznake:",

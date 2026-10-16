@@ -29,7 +29,8 @@
     "formCheckbox": "Caixa de seleção de formulário",
     "formRadio": "Botão de opção de formulário",
     "screenshot": "Captura de tela",
-    "pageLabelPick": "Escolher texto para o rótulo da página"
+    "pageLabelPick": "Escolher texto para o rótulo da página",
+    "proofread": "Revisão"
   },
   "toolLabel": "Ferramenta:",
   "annotationsLabel": "Anotações:",

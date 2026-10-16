@@ -27,6 +27,7 @@ js/annotations/corrections/correction-i18n.test.mjs
 js/annotations/corrections/text-model.test.mjs
 js/annotations/corrections/proofreading.test.mjs
 js/annotations/corrections/proofreading-apply.test.mjs
+js/annotations/corrections/proofreading-wiring.test.mjs
 js/pdf/proofreading-roundtrip.test.mjs
 js/constructieoverzicht/skill.test.mjs
 js/pdf/loader/tekstvak-tekst.test.mjs

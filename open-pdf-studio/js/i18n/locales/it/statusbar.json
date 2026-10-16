@@ -29,7 +29,8 @@
     "formCheckbox": "Casella di controllo modulo",
     "formRadio": "Pulsante di opzione modulo",
     "screenshot": "Cattura schermata",
-    "pageLabelPick": "Scegli il testo per l'etichetta di pagina"
+    "pageLabelPick": "Scegli il testo per l'etichetta di pagina",
+    "proofread": "Revisione"
   },
   "toolLabel": "Strumento:",
   "annotationsLabel": "Annotazioni:",

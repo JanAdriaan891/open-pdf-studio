@@ -29,7 +29,8 @@
     "formCheckbox": "Skjema-avkrysningsboks",
     "formRadio": "Skjema-radioknapp",
     "screenshot": "Skjermbilde",
-    "pageLabelPick": "Velg tekst for sideetikett"
+    "pageLabelPick": "Velg tekst for sideetikett",
+    "proofread": "Korrektur"
   },
   "toolLabel": "Verktøy:",
   "annotationsLabel": "Merknader:",

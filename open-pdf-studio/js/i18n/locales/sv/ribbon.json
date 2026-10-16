@@ -621,5 +621,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Storlek som en ny symbol placeras i",
     "symbolScaleCustom": "Anpassad skala"
+  },
+  "proofread": {
+    "group": "Korrektur",
+    "button": "Korrekturläs",
+    "tooltip": "Korrekturläge (F2): markera infogningar, borttagningar och ersättningar med tangentbordet",
+    "hint": "Korrektur: piltangenterna flyttar markören, skriv för att infoga, Delete stryker över, Tab går till nästa rättelse, Esc går ett steg tillbaka.",
+    "noText": "Den här sidan har ingen text att korrekturläsa.",
+    "noCorrections": "Det finns inga rättelser än.",
+    "insertPlaceholder": "Infoga text",
+    "replacePlaceholder": "Ersättningstext"
   }
 }

@@ -621,5 +621,15 @@
     "symbolScale": "比例",
     "symbolScaleTitle": "放置新符号时的尺寸",
     "symbolScaleCustom": "自定义比例"
+  },
+  "proofread": {
+    "group": "校对",
+    "button": "校对模式",
+    "tooltip": "校对模式 (F2)：使用键盘标记插入、删除和替换",
+    "hint": "校对：方向键移动光标，输入即可插入，Delete 添加删除线，Tab 转到下一处修改，Esc 后退一步。",
+    "noText": "此页面没有可校对的文本。",
+    "noCorrections": "还没有任何修改。",
+    "insertPlaceholder": "要插入的文本",
+    "replacePlaceholder": "替换文本"
   }
 }

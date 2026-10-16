@@ -37,6 +37,7 @@ import { tabDoorOnderdelen, verwijderOnderdeel } from '../gevelelement/app-bewer
 import { gevelPreset } from '../gevelelement/herkenning.js';
 import { isTextAnchored, expandCorrectionGroups, replaceParentOf } from '../annotations/corrections/model.js';
 import { deleteAnnotationsWithUndo } from '../annotations/mutations.js';
+import { installProofreadingKeys } from './proofreading-mode.js';
 
 function redraw() {
   if (getActiveDocument()?.viewMode === 'continuous') redrawContinuous();
@@ -1044,6 +1045,9 @@ function handlePaste(e) {
 export function initKeyboardHandlers() {
   // Capture-fase op window: vóór alle keydown-luisteraars op document en
   // daaronder, ook de capture-luisteraars (#539).
+  // Proofreading mode (#508): F2, and while it is on every key it uses,
+  // before any other handler (also before the tab switch keys).
+  installProofreadingKeys();
   window.addEventListener('keydown', handleTabSneltoets, true);
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('paste', handlePaste);

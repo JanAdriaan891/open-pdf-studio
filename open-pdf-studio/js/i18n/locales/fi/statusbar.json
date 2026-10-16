@@ -29,7 +29,8 @@
     "formCheckbox": "Lomakkeen valintaruutu",
     "formRadio": "Lomakkeen valintapainike",
     "screenshot": "Kuvakaappaus",
-    "pageLabelPick": "Valitse teksti sivun nimiöön"
+    "pageLabelPick": "Valitse teksti sivun nimiöön",
+    "proofread": "Oikoluku"
   },
   "toolLabel": "Työkalu:",
   "annotationsLabel": "Merkinnät:",

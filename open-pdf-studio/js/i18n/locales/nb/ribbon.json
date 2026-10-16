@@ -621,5 +621,15 @@
     "symbolScale": "Målestokk",
     "symbolScaleTitle": "Størrelsen et nytt symbol plasseres i",
     "symbolScaleCustom": "Egendefinert målestokk"
+  },
+  "proofread": {
+    "group": "Korrektur",
+    "button": "Korrekturles",
+    "tooltip": "Korrekturmodus (F2): merk innsettinger, slettinger og erstatninger med tastaturet",
+    "hint": "Korrektur: piltastene flytter markøren, skriv for å sette inn, Delete stryker over, Tab går til neste rettelse, Esc går ett trinn tilbake.",
+    "noText": "Denne siden har ingen tekst å korrekturlese.",
+    "noCorrections": "Det er ingen rettelser ennå.",
+    "insertPlaceholder": "Sett inn tekst",
+    "replacePlaceholder": "Erstatningstekst"
   }
 }

@@ -621,5 +621,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Ukuran penempatan simbol baru",
     "symbolScaleCustom": "Skala kustom"
+  },
+  "proofread": {
+    "group": "Koreksi",
+    "button": "Periksa Teks",
+    "tooltip": "Mode koreksi (F2): tandai sisipan, penghapusan, dan penggantian dengan papan ketik",
+    "hint": "Koreksi: tombol panah memindahkan kursor, ketik untuk menyisipkan, Delete mencoret, Tab menuju koreksi berikutnya, Esc mundur satu langkah.",
+    "noText": "Halaman ini tidak memiliki teks untuk dikoreksi.",
+    "noCorrections": "Belum ada koreksi.",
+    "insertPlaceholder": "Teks yang disisipkan",
+    "replacePlaceholder": "Teks pengganti"
   }
 }

@@ -621,5 +621,15 @@
     "measureArea": "Oppervlak",
     "measurePerimeter": "Omtrek",
     "annotation": "Annotatie"
+  },
+  "proofread": {
+    "group": "Proeflezen",
+    "button": "Proefleesmodus",
+    "tooltip": "Proefleesmodus (F2): markeer invoegingen, schrappingen en vervangingen met het toetsenbord",
+    "hint": "Proeflezen: pijltoetsen verplaatsen de cursor, typ om in te voegen, Delete haalt door, Tab gaat naar de volgende correctie, Esc stapt terug.",
+    "noText": "Deze pagina heeft geen tekst om proef te lezen.",
+    "noCorrections": "Er zijn nog geen correcties.",
+    "insertPlaceholder": "Tekst invoegen",
+    "replacePlaceholder": "Vervangende tekst"
   }
 }

@@ -621,5 +621,15 @@
     "symbolScale": "Skala",
     "symbolScaleTitle": "Størrelse, som et nyt symbol placeres i",
     "symbolScaleCustom": "Brugerdefineret skala"
+  },
+  "proofread": {
+    "group": "Korrektur",
+    "button": "Korrekturlæs",
+    "tooltip": "Korrekturtilstand (F2): markér indsættelser, sletninger og erstatninger med tastaturet",
+    "hint": "Korrektur: piletasterne flytter markøren, skriv for at indsætte, Delete overstreger, Tab går til næste rettelse, Esc går et trin tilbage.",
+    "noText": "Denne side har ingen tekst at korrekturlæse.",
+    "noCorrections": "Der er endnu ingen rettelser.",
+    "insertPlaceholder": "Indsæt tekst",
+    "replacePlaceholder": "Erstatningstekst"
   }
 }

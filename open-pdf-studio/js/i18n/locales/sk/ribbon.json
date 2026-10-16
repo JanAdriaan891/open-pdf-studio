@@ -621,5 +621,15 @@
     "symbolScale": "Mierka",
     "symbolScaleTitle": "Veľkosť, v ktorej sa umiestni nový symbol",
     "symbolScaleCustom": "Vlastná mierka"
+  },
+  "proofread": {
+    "group": "Korektúra",
+    "button": "Korigovať",
+    "tooltip": "Režim korektúry (F2): označujte vloženia, odstránenia a nahradenia klávesnicou",
+    "hint": "Korektúra: šípky posúvajú kurzor, písaním vkladáte, Delete prečiarkne, Tab prejde na ďalšiu opravu, Esc vráti o krok späť.",
+    "noText": "Táto stránka neobsahuje text na korektúru.",
+    "noCorrections": "Zatiaľ nie sú žiadne opravy.",
+    "insertPlaceholder": "Vložiť text",
+    "replacePlaceholder": "Náhradný text"
   }
 }
