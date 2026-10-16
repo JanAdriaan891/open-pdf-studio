@@ -355,3 +355,5 @@ js/core/bestandsnaam.test.mjs
 js/mobile/ipc-wekker.test.mjs
 js/ui/ui-lettertype.test.mjs
 js/compare/split-line.test.mjs
+js/annotations/opmerkingen-export.test.mjs
+js/annotations/xfdf-pagina.test.mjs
