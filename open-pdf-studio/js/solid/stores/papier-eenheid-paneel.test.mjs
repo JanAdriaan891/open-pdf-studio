@@ -20,6 +20,19 @@ const { toonInEenheid } = await import('../../annotations/papiermaat-eenheid.js'
 
 const bijna = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps * Math.max(1, Math.abs(b));
 const wacht = () => new Promise(r => setTimeout(r, 0));
+// Opslaan loopt via een dynamische import; onder volle testlast duurt die
+// langer dan één timer-tik. Wacht tot de teller stil staat.
+async function wachtTotStil(lees, ms = 2000) {
+  let vorige = lees();
+  for (let t = 0; t < ms; t += 25) {
+    await new Promise(r => setTimeout(r, 25));
+    const nu = lees();
+    if (nu === vorige && t >= 100) return nu;
+    vorige = nu;
+  }
+  return lees();
+}
+const opslagen = () => globalThis.__stubCalls?.savePreferences || 0;
 
 function openen(annotations) {
   state.documents = [{
@@ -85,15 +98,12 @@ test('eenheid wisselen verandert maat en positie van de afbeelding niet', async 
 });
 
 test('de keuze wordt een voorkeur en overleeft een herstart', async () => {
-  await wacht();   // opslagen uit eerdere tests eerst afronden
-  const voor = globalThis.__stubCalls?.savePreferences || 0;
+  const voor = await wachtTotStil(opslagen);   // opslagen uit eerdere tests eerst afronden
   kiesPapierEenheid('cm');
   assert.equal(state.preferences.paperSizeUnit, 'cm');
-  await wacht();
-  assert.equal(globalThis.__stubCalls.savePreferences, voor + 1, 'voorkeuren opgeslagen');
+  assert.equal(await wachtTotStil(opslagen), voor + 1, 'voorkeuren opgeslagen');
   kiesPapierEenheid('cm');
-  await wacht();
-  assert.equal(globalThis.__stubCalls.savePreferences, voor + 1, 'dezelfde keuze slaat niet opnieuw op');
+  assert.equal(await wachtTotStil(opslagen), voor + 1, 'dezelfde keuze slaat niet opnieuw op');
   // "Herstart": voorkeuren opnieuw geladen, signaal opnieuw gezet.
   const geladen = JSON.parse(JSON.stringify(state.preferences));
   state.preferences = { ...DEFAULT_PREFERENCES, ...geladen };
