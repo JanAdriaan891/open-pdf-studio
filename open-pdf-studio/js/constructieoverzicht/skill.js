@@ -15,9 +15,10 @@
 export const CONSTRUCTIEOVERZICHT_SKILL = {
   id: 'structural-overview',
   icon: '📐',
-  label: 'Constructieoverzicht',
-  hint: 'Constructieoverzicht per bouwlaag op de plattegronden van de architect: fundering, vloeren met overspanning, onderliggende dragende wanden, liggers en kolommen, legenda en toelichting',
-  invoke: 'Maak een constructieoverzicht op dit blad met knipsels uit de plattegronden van de architect, per bouwlaag en volgens de conventies. Bron, bouwlagen en constructieprincipe: ',
+  // Naam, uitleg en de tekst in het invoervak staan per taal in de locales
+  // (common.assistant.skills.structural-overview); de instructie voor het
+  // model is Engels en voor elke taal gelijk.
+  invoke: 'Make a structural overview on this sheet with snippets from the architect\'s floor plans, per storey and following the conventions. Source, storeys and structural principle: ',
   needsInput: true,
 };
 

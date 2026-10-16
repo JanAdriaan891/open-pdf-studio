@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Tải lại trang sẽ bắt đầu trống: trong trình duyệt, tài liệu của bạn ở trên máy tính của bạn và không được lưu trữ.",
   "desktopOnly": "{{feature}} chỉ hoạt động trong ứng dụng máy tính. Trang này là phiên bản trình duyệt.",
   "assistantTitle": "Trợ lý OpenAEC",
+  "assistant": {
+    "greeting": "Xin chào! Tôi là **{{title}}**. Tôi có thể: 🌐 dịch, 📝 tóm tắt, ✏️ vẽ lên bản vẽ và 🚪 nhận diện cửa. Hãy chọn một kỹ năng bên dưới hoặc đặt câu hỏi.",
+    "workingIn": "đang làm việc trong",
+    "viaClaude": "qua Claude",
+    "notConnected": "chưa kết nối",
+    "keyButton": "Đặt khóa API Claude (Anthropic)",
+    "keyPlaceholder": "Khóa API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Đang suy nghĩ…",
+    "inputPlaceholder": "Hỏi điều gì đó về PDF này…",
+    "send": "Gửi",
+    "noAnswer": "Không nhận được câu trả lời.",
+    "errorInvalidKey": "Khóa API Claude (Anthropic) không hợp lệ. Hãy kiểm tra khóa bằng nút 🔑 ở đầu bảng.",
+    "errorApi": "API Claude trả về lỗi.",
+    "errorNoConnection": "Không có kết nối tới dịch vụ AI.",
+    "errorTimeout": "Không có máy khách MCP nào trả lời câu hỏi kịp thời.",
+    "errorFailed": "Lệnh gọi AI thất bại.",
+    "detail": "Chi tiết",
+    "unknownError": "lỗi không xác định",
+    "skills": {
+      "translate": {
+        "label": "Dịch",
+        "hint": "Dịch văn bản của tài liệu",
+        "prompt": "Dịch văn bản của tài liệu đang mở."
+      },
+      "summarize": {
+        "label": "Tóm tắt",
+        "hint": "Tóm tắt tài liệu hoặc bản vẽ",
+        "prompt": "Tóm tắt tài liệu hoặc bản vẽ đang mở."
+      },
+      "draw": {
+        "label": "Vẽ",
+        "hint": "Vẽ một phần tử hoặc chú thích lên bản vẽ",
+        "prompt": "Vẽ lên bản vẽ: "
+      },
+      "detect-doors": {
+        "label": "Nhận diện cửa",
+        "hint": "Phát hiện các cửa trên mặt bằng và đánh dấu chúng",
+        "prompt": "Nhận diện các cửa trên mặt bằng và đánh dấu chúng."
+      },
+      "structural-layout": {
+        "label": "Bố trí kết cấu",
+        "hint": "Lưới trục, cột, dầm, ô sàn với hướng nhịp và bảng thống kê kết cấu",
+        "prompt": "Bố trí kết cấu chịu lực trên bản vẽ. Yêu cầu: "
+      },
+      "structural-overview": {
+        "label": "Tổng quan kết cấu",
+        "hint": "Tổng quan kết cấu theo từng tầng trên mặt bằng của kiến trúc sư: móng, sàn với nhịp, tường chịu lực bên dưới, dầm và cột, chú giải và ghi chú",
+        "prompt": "Lập tổng quan kết cấu trên tờ này từ các mặt bằng của kiến trúc sư. Nguồn, các tầng và nguyên lý kết cấu: "
+      },
+      "floorplan": {
+        "label": "Mặt bằng",
+        "hint": "Vẽ mặt bằng kiến trúc: tường, khung cửa, phòng, kích thước và trang thiết bị (vệ sinh, bếp)",
+        "prompt": "Vẽ mặt bằng kiến trúc. Nội dung cần vẽ: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Thư viện ký hiệu trực tuyến",
   "noDocumentOpen": "Không có tài liệu nào đang mở.",
   "noPdfLoaded": "Chưa tải PDF nào.",

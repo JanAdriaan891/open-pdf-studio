@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Al recargar la página se empieza vacío: en el navegador, su documento permanece en su equipo y no se almacena.",
   "desktopOnly": "{{feature}} solo funciona en la aplicación de escritorio. Esta página es la versión para navegador.",
   "assistantTitle": "Asistente de OpenAEC",
+  "assistant": {
+    "greeting": "¡Hola! Soy el **{{title}}**. Puedo: 🌐 traducir, 📝 resumir, ✏️ dibujar en el plano y 🚪 reconocer puertas. Elige una habilidad abajo o haz tu pregunta.",
+    "workingIn": "trabajando en",
+    "viaClaude": "vía Claude",
+    "notConnected": "no conectado",
+    "keyButton": "Configurar la clave API de Claude (Anthropic)",
+    "keyPlaceholder": "Clave API de Claude (Anthropic) — sk-ant-…",
+    "thinking": "Pensando…",
+    "inputPlaceholder": "Pregunta algo sobre este PDF…",
+    "send": "Enviar",
+    "noAnswer": "No se recibió respuesta.",
+    "errorInvalidKey": "Clave API de Claude (Anthropic) no válida. Comprueba la clave con el botón 🔑 en la parte superior del panel.",
+    "errorApi": "La API de Claude devolvió un error.",
+    "errorNoConnection": "Sin conexión con el servicio de IA.",
+    "errorTimeout": "Ningún cliente MCP respondió a la pregunta a tiempo.",
+    "errorFailed": "La llamada a la IA falló.",
+    "detail": "Detalle",
+    "unknownError": "error desconocido",
+    "skills": {
+      "translate": {
+        "label": "Traducir",
+        "hint": "Traducir el texto del documento",
+        "prompt": "Traduce el texto del documento abierto."
+      },
+      "summarize": {
+        "label": "Resumir",
+        "hint": "Resumir el documento o el plano",
+        "prompt": "Resume el documento o el plano abierto."
+      },
+      "draw": {
+        "label": "Dibujar",
+        "hint": "Dibujar un elemento o una anotación en el plano",
+        "prompt": "Dibuja en el plano: "
+      },
+      "detect-doors": {
+        "label": "Reconocer puertas",
+        "hint": "Detectar las puertas en la planta y marcarlas",
+        "prompt": "Reconoce las puertas en la planta y márcalas."
+      },
+      "structural-layout": {
+        "label": "Trazar estructura",
+        "hint": "Retícula, pilares, vigas, paños de forjado con dirección de luz y la tabla estructural",
+        "prompt": "Traza la estructura portante en el plano. Datos: "
+      },
+      "structural-overview": {
+        "label": "Resumen estructural",
+        "hint": "Resumen estructural por planta sobre los planos del arquitecto: cimentación, forjados con luz, muros de carga inferiores, vigas y pilares, leyenda y notas",
+        "prompt": "Haz un resumen estructural en esta hoja a partir de los planos del arquitecto. Origen, plantas y principio estructural: "
+      },
+      "floorplan": {
+        "label": "Planta",
+        "hint": "Dibujar una planta arquitectónica: muros, carpinterías, estancias, cotas y equipamiento (sanitarios, cocina)",
+        "prompt": "Dibuja una planta arquitectónica. Qué hay que dibujar: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Biblioteca de símbolos en línea",
   "noDocumentOpen": "No hay ningún documento abierto.",
   "noPdfLoaded": "No hay ningún PDF cargado.",

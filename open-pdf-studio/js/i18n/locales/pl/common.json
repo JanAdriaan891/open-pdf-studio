@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Po przeładowaniu strona startuje pusta: w przeglądarce dokument pozostaje na Twoim komputerze i nie jest przechowywany.",
   "desktopOnly": "{{feature}} działa tylko w aplikacji na komputer. Ta strona to wersja przeglądarkowa.",
   "assistantTitle": "Asystent OpenAEC",
+  "assistant": {
+    "greeting": "Cześć! Tu **{{title}}**. Potrafię: 🌐 tłumaczyć, 📝 streszczać, ✏️ rysować na rysunku i 🚪 rozpoznawać drzwi. Wybierz umiejętność poniżej lub zadaj pytanie.",
+    "workingIn": "pracuje w",
+    "viaClaude": "przez Claude",
+    "notConnected": "nie połączono",
+    "keyButton": "Ustaw klucz API Claude (Anthropic)",
+    "keyPlaceholder": "Klucz API Claude (Anthropic) — sk-ant-…",
+    "thinking": "Myślę…",
+    "inputPlaceholder": "Zapytaj o coś w tym PDF…",
+    "send": "Wyślij",
+    "noAnswer": "Nie otrzymano odpowiedzi.",
+    "errorInvalidKey": "Nieprawidłowy klucz API Claude (Anthropic). Sprawdź klucz przyciskiem 🔑 u góry panelu.",
+    "errorApi": "API Claude zwróciło błąd.",
+    "errorNoConnection": "Brak połączenia z usługą AI.",
+    "errorTimeout": "Żaden klient MCP nie odpowiedział na pytanie na czas.",
+    "errorFailed": "Wywołanie AI nie powiodło się.",
+    "detail": "Szczegóły",
+    "unknownError": "nieznany błąd",
+    "skills": {
+      "translate": {
+        "label": "Przetłumacz",
+        "hint": "Przetłumacz tekst dokumentu",
+        "prompt": "Przetłumacz tekst otwartego dokumentu."
+      },
+      "summarize": {
+        "label": "Streść",
+        "hint": "Streść dokument lub rysunek",
+        "prompt": "Streść otwarty dokument lub rysunek."
+      },
+      "draw": {
+        "label": "Rysuj",
+        "hint": "Narysuj element lub adnotację na rysunku",
+        "prompt": "Narysuj na rysunku: "
+      },
+      "detect-doors": {
+        "label": "Rozpoznaj drzwi",
+        "hint": "Wykryj drzwi na rzucie i oznacz je",
+        "prompt": "Rozpoznaj drzwi na rzucie i oznacz je."
+      },
+      "structural-layout": {
+        "label": "Wyznacz konstrukcję",
+        "hint": "Siatka osi, słupy, belki, pola stropowe z kierunkiem rozpiętości i zestawienie konstrukcyjne",
+        "prompt": "Wyznacz konstrukcję nośną na rysunku. Założenia: "
+      },
+      "structural-overview": {
+        "label": "Przegląd konstrukcji",
+        "hint": "Przegląd konstrukcji dla każdej kondygnacji na rzutach architekta: fundamenty, stropy z rozpiętością, ściany nośne poniżej, belki i słupy, legenda i opis",
+        "prompt": "Utwórz przegląd konstrukcji na tym arkuszu z rzutów architekta. Źródło, kondygnacje i zasada konstrukcyjna: "
+      },
+      "floorplan": {
+        "label": "Rzut",
+        "hint": "Narysuj rzut architektoniczny: ściany, stolarka, pomieszczenia, wymiary i wyposażenie (sanitariaty, kuchnia)",
+        "prompt": "Narysuj rzut architektoniczny. Co narysować: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Biblioteka symboli online",
   "noDocumentOpen": "Żaden dokument nie jest otwarty.",
   "noPdfLoaded": "Nie wczytano pliku PDF.",

@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Recarregar a página começa do zero: no navegador, seu documento fica no seu computador e não é armazenado.",
   "desktopOnly": "{{feature}} só funciona no aplicativo para desktop. Esta página é a versão para navegador.",
   "assistantTitle": "Assistente OpenAEC",
+  "assistant": {
+    "greeting": "Olá! Sou o **{{title}}**. Posso: 🌐 traduzir, 📝 resumir, ✏️ desenhar no desenho e 🚪 reconhecer portas. Escolha uma habilidade abaixo ou faça a sua pergunta.",
+    "workingIn": "trabalhando em",
+    "viaClaude": "via Claude",
+    "notConnected": "não conectado",
+    "keyButton": "Definir a chave de API do Claude (Anthropic)",
+    "keyPlaceholder": "Chave de API do Claude (Anthropic) — sk-ant-…",
+    "thinking": "Pensando…",
+    "inputPlaceholder": "Pergunte algo sobre este PDF…",
+    "send": "Enviar",
+    "noAnswer": "Nenhuma resposta recebida.",
+    "errorInvalidKey": "Chave de API do Claude (Anthropic) inválida. Verifique a chave com o botão 🔑 no topo do painel.",
+    "errorApi": "A API do Claude devolveu um erro.",
+    "errorNoConnection": "Sem conexão com o serviço de IA.",
+    "errorTimeout": "Nenhum cliente MCP respondeu à pergunta a tempo.",
+    "errorFailed": "A chamada à IA falhou.",
+    "detail": "Detalhe",
+    "unknownError": "erro desconhecido",
+    "skills": {
+      "translate": {
+        "label": "Traduzir",
+        "hint": "Traduzir o texto do documento",
+        "prompt": "Traduza o texto do documento aberto."
+      },
+      "summarize": {
+        "label": "Resumir",
+        "hint": "Resumir o documento ou o desenho",
+        "prompt": "Resuma o documento ou o desenho aberto."
+      },
+      "draw": {
+        "label": "Desenhar",
+        "hint": "Desenhar um elemento ou anotação no desenho",
+        "prompt": "Desenhe no desenho: "
+      },
+      "detect-doors": {
+        "label": "Reconhecer portas",
+        "hint": "Detectar as portas na planta e marcá-las",
+        "prompt": "Reconheça as portas na planta e marque-as."
+      },
+      "structural-layout": {
+        "label": "Traçar estrutura",
+        "hint": "Malha, pilares, vigas, painéis de laje com direção do vão e o quadro estrutural",
+        "prompt": "Trace a estrutura portante no desenho. Dados: "
+      },
+      "structural-overview": {
+        "label": "Visão estrutural",
+        "hint": "Visão estrutural por pavimento sobre as plantas do arquiteto: fundação, lajes com vão, paredes portantes inferiores, vigas e pilares, legenda e notas",
+        "prompt": "Faça uma visão estrutural nesta folha a partir das plantas do arquiteto. Origem, pavimentos e princípio estrutural: "
+      },
+      "floorplan": {
+        "label": "Planta baixa",
+        "hint": "Desenhar uma planta arquitetônica: paredes, esquadrias, ambientes, cotas e equipamentos (sanitários, cozinha)",
+        "prompt": "Desenhe uma planta arquitetônica. O que desenhar: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Biblioteca de símbolos online",
   "noDocumentOpen": "Nenhum documento aberto.",
   "noPdfLoaded": "Nenhum PDF carregado.",

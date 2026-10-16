@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "Sayfa yenilendiğinde boş başlar: tarayıcıda belgeniz bilgisayarınızda kalır ve hiçbir yerde saklanmaz.",
   "desktopOnly": "{{feature}} yalnızca masaüstü uygulamasında çalışır. Bu sayfa tarayıcı sürümüdür.",
   "assistantTitle": "OpenAEC asistanı",
+  "assistant": {
+    "greeting": "Merhaba! Ben **{{title}}**. Şunları yapabilirim: 🌐 çeviri, 📝 özetleme, ✏️ çizim üzerine çizim yapma ve 🚪 kapı tanıma. Aşağıdan bir beceri seçin veya sorunuzu sorun.",
+    "workingIn": "çalışılan belge",
+    "viaClaude": "Claude üzerinden",
+    "notConnected": "bağlı değil",
+    "keyButton": "Claude (Anthropic) API anahtarını ayarla",
+    "keyPlaceholder": "Claude (Anthropic) API anahtarı — sk-ant-…",
+    "thinking": "Düşünüyorum…",
+    "inputPlaceholder": "Bu PDF hakkında bir şey sorun…",
+    "send": "Gönder",
+    "noAnswer": "Yanıt alınamadı.",
+    "errorInvalidKey": "Geçersiz Claude (Anthropic) API anahtarı. Anahtarı panelin üst kısmındaki 🔑 düğmesiyle kontrol edin.",
+    "errorApi": "Claude API bir hata döndürdü.",
+    "errorNoConnection": "Yapay zekâ hizmetine bağlantı yok.",
+    "errorTimeout": "Hiçbir MCP istemcisi soruyu zamanında yanıtlamadı.",
+    "errorFailed": "Yapay zekâ çağrısı başarısız oldu.",
+    "detail": "Ayrıntı",
+    "unknownError": "bilinmeyen hata",
+    "skills": {
+      "translate": {
+        "label": "Çevir",
+        "hint": "Belgenin metnini çevir",
+        "prompt": "Açık belgenin metnini çevir."
+      },
+      "summarize": {
+        "label": "Özetle",
+        "hint": "Belgeyi veya çizimi özetle",
+        "prompt": "Açık belgeyi veya çizimi özetle."
+      },
+      "draw": {
+        "label": "Çiz",
+        "hint": "Çizime bir öğe veya açıklama çiz",
+        "prompt": "Çizime şunu çiz: "
+      },
+      "detect-doors": {
+        "label": "Kapıları tanı",
+        "hint": "Kat planındaki kapıları algıla ve işaretle",
+        "prompt": "Kat planındaki kapıları tanı ve işaretle."
+      },
+      "structural-layout": {
+        "label": "Taşıyıcı sistemi yerleştir",
+        "hint": "Aks sistemi, kolonlar, kirişler, açıklık yönlü döşeme alanları ve taşıyıcı sistem çizelgesi",
+        "prompt": "Taşıyıcı sistemi çizime yerleştir. Bilgiler: "
+      },
+      "structural-overview": {
+        "label": "Taşıyıcı sistem özeti",
+        "hint": "Mimarın kat planları üzerinde kat kat taşıyıcı sistem özeti: temel, açıklıklı döşemeler, alttaki taşıyıcı duvarlar, kirişler ve kolonlar, lejant ve açıklama",
+        "prompt": "Bu paftada mimarın kat planlarından bir taşıyıcı sistem özeti oluştur. Kaynak, katlar ve taşıyıcı sistem ilkesi: "
+      },
+      "floorplan": {
+        "label": "Kat planı",
+        "hint": "Mimari kat planı çiz: duvarlar, doğramalar, mahaller, ölçülendirme ve donatılar (ıslak hacim, mutfak)",
+        "prompt": "Mimari bir kat planı çiz. Çizilecek olan: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Çevrimiçi sembol kitaplığı",
   "noDocumentOpen": "Açık belge yok.",
   "noPdfLoaded": "PDF yüklenmedi.",

@@ -49,6 +49,62 @@
   "webSessionStartsEmpty": "En tornar a carregar la pàgina es comença de zero: al navegador, el document es queda a l'ordinador i no s'emmagatzema.",
   "desktopOnly": "{{feature}} només funciona a l'aplicació d'escriptori. Aquesta pàgina és la versió per al navegador.",
   "assistantTitle": "Assistent d'OpenAEC",
+  "assistant": {
+    "greeting": "Hola! Soc l'**{{title}}**. Puc: 🌐 traduir, 📝 resumir, ✏️ dibuixar al plànol i 🚪 reconèixer portes. Tria una habilitat a sota o fes la teva pregunta.",
+    "workingIn": "treballant a",
+    "viaClaude": "via Claude",
+    "notConnected": "no connectat",
+    "keyButton": "Configura la clau API de Claude (Anthropic)",
+    "keyPlaceholder": "Clau API de Claude (Anthropic) — sk-ant-…",
+    "thinking": "Pensant…",
+    "inputPlaceholder": "Pregunta alguna cosa sobre aquest PDF…",
+    "send": "Envia",
+    "noAnswer": "No s'ha rebut cap resposta.",
+    "errorInvalidKey": "Clau API de Claude (Anthropic) no vàlida. Comprova la clau amb el botó 🔑 a la part superior del tauler.",
+    "errorApi": "L'API de Claude ha retornat un error.",
+    "errorNoConnection": "No hi ha connexió amb el servei d'IA.",
+    "errorTimeout": "Cap client MCP no ha respost la pregunta a temps.",
+    "errorFailed": "La crida a la IA ha fallat.",
+    "detail": "Detall",
+    "unknownError": "error desconegut",
+    "skills": {
+      "translate": {
+        "label": "Tradueix",
+        "hint": "Tradueix el text del document",
+        "prompt": "Tradueix el text del document obert."
+      },
+      "summarize": {
+        "label": "Resumeix",
+        "hint": "Resumeix el document o el plànol",
+        "prompt": "Resumeix el document o el plànol obert."
+      },
+      "draw": {
+        "label": "Dibuixa",
+        "hint": "Dibuixa un element o una anotació al plànol",
+        "prompt": "Dibuixa al plànol: "
+      },
+      "detect-doors": {
+        "label": "Reconeix portes",
+        "hint": "Detecta les portes a la planta i marca-les",
+        "prompt": "Reconeix les portes a la planta i marca-les."
+      },
+      "structural-layout": {
+        "label": "Traça l'estructura",
+        "hint": "Retícula, pilars, bigues, panys de forjat amb direcció de llum i la taula estructural",
+        "prompt": "Traça l'estructura portant al plànol. Dades: "
+      },
+      "structural-overview": {
+        "label": "Resum estructural",
+        "hint": "Resum estructural per planta sobre els plànols de l'arquitecte: fonaments, forjats amb llum, murs de càrrega inferiors, bigues i pilars, llegenda i notes",
+        "prompt": "Fes un resum estructural en aquest full a partir dels plànols de l'arquitecte. Origen, plantes i principi estructural: "
+      },
+      "floorplan": {
+        "label": "Planta",
+        "hint": "Dibuixa una planta arquitectònica: murs, fusteries, estances, cotes i equipament (sanitaris, cuina)",
+        "prompt": "Dibuixa una planta arquitectònica. Què cal dibuixar: "
+      }
+    }
+  },
   "onlineSymbolLibrary": "Biblioteca de símbols en línia",
   "noDocumentOpen": "No hi ha cap document obert.",
   "noPdfLoaded": "No hi ha cap PDF carregat.",
