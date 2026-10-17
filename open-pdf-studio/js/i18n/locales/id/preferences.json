@@ -181,6 +181,17 @@
     "checkFinder": "Periksa Finder > Dapatkan Info",
     "notSet": "Belum diatur"
   },
+  "explorerThumbnails": {
+    "title": "Penjelajah File",
+    "show": "Tampilkan gambar mini PDF di Penjelajah File",
+    "help": "Penjelajah File kemudian menampilkan halaman pertama setiap PDF sebagai ganti ikon PDF. Ini hanya berlaku untuk akun Windows Anda dan tidak mengubah aplikasi PDF default Anda.",
+    "unavailable": "Tidak tersedia di versi ini.",
+    "otherHandler": "Gambar mini PDF saat ini disediakan oleh {{name}}.",
+    "defaultApp": "Aplikasi PDF default Anda menampilkan gambar mininya sendiri ({{name}}). Windows memakainya selama aplikasi itu menjadi aplikasi PDF default Anda.",
+    "replaceTitle": "Gambar mini PDF",
+    "replaceConfirm": "{{name}} sudah menyediakan gambar mini PDF di Penjelajah File.\n\nTampilkan gambar mini dari Open PDF Studio sebagai gantinya untuk akun Windows Anda? Menonaktifkan opsi ini akan memulihkan gambar mini sebelumnya.",
+    "failed": "Pengaturan gambar mini Penjelajah File tidak dapat diubah."
+  },
   "virtualPrinter": {
     "title": "Printer Virtual",
     "description": "Instal \"Open PDF Printer\" sebagai printer Windows. Ketika Anda mencetak dari aplikasi apa pun (Word, Chrome, Notepad, dll.) dan memilih printer ini, PDF hasil keluaran akan terbuka secara otomatis di aplikasi ini.",

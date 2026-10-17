@@ -181,6 +181,17 @@
     "checkFinder": "Überprüfen Sie Finder > Informationen",
     "notSet": "Nicht festgelegt"
   },
+  "explorerThumbnails": {
+    "title": "Datei-Explorer",
+    "show": "PDF-Miniaturansichten im Datei-Explorer anzeigen",
+    "help": "Der Datei-Explorer zeigt dann die erste Seite jeder PDF statt des PDF-Symbols. Dies gilt nur für Ihr Windows-Konto und ändert Ihre Standard-PDF-App nicht.",
+    "unavailable": "In dieser Version nicht verfügbar.",
+    "otherHandler": "PDF-Miniaturansichten werden derzeit von {{name}} bereitgestellt.",
+    "defaultApp": "Ihre Standard-PDF-App zeigt eigene Miniaturansichten ({{name}}). Windows verwendet diese, solange diese App Ihre Standard-PDF-App ist.",
+    "replaceTitle": "PDF-Miniaturansichten",
+    "replaceConfirm": "{{name}} stellt bereits PDF-Miniaturansichten im Datei-Explorer bereit.\n\nStattdessen für Ihr Windows-Konto die Miniaturansichten von Open PDF Studio anzeigen? Wenn Sie diese Option wieder ausschalten, werden die vorherigen Miniaturansichten wiederhergestellt.",
+    "failed": "Die Einstellung für Miniaturansichten im Datei-Explorer konnte nicht geändert werden."
+  },
   "virtualPrinter": {
     "title": "Virtueller Drucker",
     "description": "Installieren Sie „Open PDF Printer“ als Windows-Drucker. Wenn Sie aus einer Anwendung drucken (Word, Chrome, Editor usw.) und diesen Drucker auswählen, wird die erzeugte PDF automatisch in dieser App geöffnet.",

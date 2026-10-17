@@ -375,3 +375,5 @@ js/pdf/print-boekje.test.mjs
 js/pdf/splits-logica.test.mjs
 js/pdf/splits-document.test.mjs
 js/pdf/splits-i18n.test.mjs
+js/core/verkenner-miniaturen.test.mjs
+js/i18n/verkenner-miniaturen-i18n.test.mjs

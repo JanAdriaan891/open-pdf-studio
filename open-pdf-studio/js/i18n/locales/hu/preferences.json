@@ -181,6 +181,17 @@
     "checkFinder": "Ellenőrizze a Finder > Információ részben",
     "notSet": "Nincs beállítva"
   },
+  "explorerThumbnails": {
+    "title": "Fájlkezelő",
+    "show": "PDF-miniatűrök megjelenítése a Fájlkezelőben",
+    "help": "A Fájlkezelő ekkor a PDF-ikon helyett minden PDF első oldalát mutatja. Ez csak az Ön Windows-fiókjára vonatkozik, és nem változtatja meg az alapértelmezett PDF-alkalmazást.",
+    "unavailable": "Ebben a verzióban nem érhető el.",
+    "otherHandler": "A PDF-miniatűröket jelenleg a következő biztosítja: {{name}}.",
+    "defaultApp": "Az alapértelmezett PDF-alkalmazása saját miniatűröket mutat ({{name}}). A Windows ezeket használja, amíg az az alkalmazás az alapértelmezett PDF-alkalmazás.",
+    "replaceTitle": "PDF-miniatűrök",
+    "replaceConfirm": "A(z) {{name}} már biztosít PDF-miniatűröket a Fájlkezelőben.\n\nHelyettük az Open PDF Studio miniatűrjei jelenjenek meg az Ön Windows-fiókjában? Ha kikapcsolja ezt a beállítást, visszaállnak a korábbi miniatűrök.",
+    "failed": "A Fájlkezelő miniatűr-beállítását nem sikerült módosítani."
+  },
   "virtualPrinter": {
     "title": "Virtuális nyomtató",
     "description": "Telepítse az \"Open PDF Printer\" nyomtatót Windows nyomtatóként. Ha bármely alkalmazásból (Word, Chrome, Jegyzettömb stb.) nyomtat, és ezt a nyomtatót választja, a létrejövő PDF automatikusan megnyílik ebben az alkalmazásban.",

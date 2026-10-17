@@ -38,6 +38,8 @@ mod standaard_app;
 #[cfg(target_os = "windows")]
 pub mod print_windows;
 pub mod render_to_png;
+// Miniaturen van PDF's in Windows Verkenner (#605); buiten Windows niet beschikbaar.
+pub mod verkenner_miniaturen;
 pub mod window_mgmt;
 pub mod startup_diagnostics;
 // Vensteropname voor app_screenshot_view (#583); buiten Windows een nette fout.
@@ -334,6 +336,38 @@ async fn is_default_pdf_app() -> bool {
             false
         }
     }).await.unwrap_or(false)
+}
+
+/// Of de PDF-miniaturen in Windows Verkenner aan staan (#605), en of een ander
+/// programma ze al levert. Leest alleen het register.
+#[tauri::command]
+async fn explorer_thumbnails_status(app: tauri::AppHandle) -> verkenner_miniaturen::MiniatuurStatus {
+    let Ok(resource_dir) = app.path().resource_dir() else {
+        return verkenner_miniaturen::MiniatuurStatus::default();
+    };
+    tauri::async_runtime::spawn_blocking(move || verkenner_miniaturen::status(&resource_dir))
+        .await
+        .unwrap_or_default()
+}
+
+/// Zet de PDF-miniaturen in Windows Verkenner aan of uit voor deze gebruiker
+/// (HKCU, geen admin; de bestandskoppeling blijft ongemoeid). `replace_other`:
+/// de gebruiker koos ervoor de miniaturen van een ander programma te vervangen.
+#[tauri::command]
+async fn explorer_thumbnails_set(
+    app: tauri::AppHandle,
+    enabled: bool,
+    replace_other: bool,
+) -> Result<verkenner_miniaturen::MiniatuurStatus, String> {
+    let resource_dir = app
+        .path()
+        .resource_dir()
+        .map_err(|e| format!("Cannot resolve resource_dir: {}", e))?;
+    tauri::async_runtime::spawn_blocking(move || {
+        verkenner_miniaturen::zet(&resource_dir, enabled, replace_other)
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 /// Make this app the default handler for .pdf files.
@@ -2876,6 +2910,8 @@ pub fn run(opts: StartupOpts) {
             unlock_file,
             is_default_pdf_app,
             open_default_apps_settings,
+            explorer_thumbnails_status,
+            explorer_thumbnails_set,
             get_printers,
             print_pdf,
             open_printer_properties,

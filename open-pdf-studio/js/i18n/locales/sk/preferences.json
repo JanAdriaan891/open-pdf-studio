@@ -181,6 +181,17 @@
     "checkFinder": "Skontrolujte Finder > Informácie",
     "notSet": "Nenastavené"
   },
+  "explorerThumbnails": {
+    "title": "Prieskumník",
+    "show": "Zobrazovať miniatúry PDF v Prieskumníkovi",
+    "help": "Prieskumník potom namiesto ikony PDF zobrazí prvú stranu každého PDF. Platí to len pre váš účet Windows a nemení to vašu predvolenú aplikáciu pre PDF.",
+    "unavailable": "V tejto verzii nie je k dispozícii.",
+    "otherHandler": "Miniatúry PDF teraz poskytuje {{name}}.",
+    "defaultApp": "Vaša predvolená aplikácia pre PDF zobrazuje vlastné miniatúry ({{name}}). Windows ich používa, kým je táto aplikácia vašou predvolenou aplikáciou pre PDF.",
+    "replaceTitle": "Miniatúry PDF",
+    "replaceConfirm": "{{name}} už poskytuje miniatúry PDF v Prieskumníkovi.\n\nZobrazovať namiesto nich pre váš účet Windows miniatúry z Open PDF Studio? Vypnutím tejto možnosti sa obnovia predchádzajúce miniatúry.",
+    "failed": "Nastavenie miniatúr v Prieskumníkovi sa nepodarilo zmeniť."
+  },
   "virtualPrinter": {
     "title": "Virtuálna tlačiareň",
     "description": "Nainštalujte \"Open PDF Printer\" ako tlačiareň systému Windows. Keď tlačíte z ľubovoľnej aplikácie (Word, Chrome, Poznámkový blok atď.) a vyberiete túto tlačiareň, výstupný PDF sa automaticky otvorí v tejto aplikácii.",

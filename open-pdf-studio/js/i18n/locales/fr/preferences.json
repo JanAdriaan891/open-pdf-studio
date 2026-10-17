@@ -181,6 +181,17 @@
     "checkFinder": "Vérifiez Finder > Lire les informations",
     "notSet": "Non défini"
   },
+  "explorerThumbnails": {
+    "title": "Explorateur de fichiers",
+    "show": "Afficher les miniatures PDF dans l'Explorateur de fichiers",
+    "help": "L'Explorateur de fichiers affiche alors la première page de chaque PDF au lieu de l'icône PDF. Cela s'applique uniquement à votre compte Windows et ne modifie pas votre application PDF par défaut.",
+    "unavailable": "Non disponible dans cette version.",
+    "otherHandler": "Les miniatures PDF sont actuellement fournies par {{name}}.",
+    "defaultApp": "Votre application PDF par défaut affiche ses propres miniatures ({{name}}). Windows les utilise tant que cette application reste votre application PDF par défaut.",
+    "replaceTitle": "Miniatures PDF",
+    "replaceConfirm": "{{name}} fournit déjà des miniatures PDF dans l'Explorateur de fichiers.\n\nAfficher plutôt les miniatures d'Open PDF Studio pour votre compte Windows ? Désactiver cette option rétablit les miniatures précédentes.",
+    "failed": "Impossible de modifier le réglage des miniatures de l'Explorateur de fichiers."
+  },
   "virtualPrinter": {
     "title": "Imprimante virtuelle",
     "description": "Installez « Open PDF Printer » comme imprimante Windows. Lorsque vous imprimez depuis une application (Word, Chrome, Bloc-notes, etc.) et sélectionnez cette imprimante, le PDF généré s'ouvrira automatiquement dans cette application.",

@@ -181,6 +181,17 @@
     "checkFinder": "Kiểm tra Finder > Lấy Thông tin",
     "notSet": "Chưa đặt"
   },
+  "explorerThumbnails": {
+    "title": "Trình khám phá tệp",
+    "show": "Hiển thị hình thu nhỏ PDF trong Trình khám phá tệp",
+    "help": "Khi đó Trình khám phá tệp sẽ hiển thị trang đầu tiên của mỗi tệp PDF thay cho biểu tượng PDF. Thiết lập này chỉ áp dụng cho tài khoản Windows của bạn và không thay đổi ứng dụng PDF mặc định.",
+    "unavailable": "Không có trong phiên bản này.",
+    "otherHandler": "Hình thu nhỏ PDF hiện do {{name}} cung cấp.",
+    "defaultApp": "Ứng dụng PDF mặc định của bạn hiển thị hình thu nhỏ riêng ({{name}}). Windows dùng chúng chừng nào ứng dụng đó còn là ứng dụng PDF mặc định của bạn.",
+    "replaceTitle": "Hình thu nhỏ PDF",
+    "replaceConfirm": "{{name}} đã cung cấp hình thu nhỏ PDF trong Trình khám phá tệp.\n\nHiển thị hình thu nhỏ của Open PDF Studio thay thế cho tài khoản Windows của bạn? Tắt tùy chọn này sẽ khôi phục hình thu nhỏ trước đó.",
+    "failed": "Không thể thay đổi thiết lập hình thu nhỏ của Trình khám phá tệp."
+  },
   "virtualPrinter": {
     "title": "Máy in Ảo",
     "description": "Cài đặt \"Open PDF Printer\" làm máy in Windows. Khi bạn in từ bất kỳ ứng dụng nào (Word, Chrome, Notepad, v.v.) và chọn máy in này, tệp PDF đầu ra sẽ tự động mở trong ứng dụng này.",

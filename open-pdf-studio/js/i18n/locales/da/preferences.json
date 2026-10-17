@@ -181,6 +181,17 @@
     "checkFinder": "Tjek Finder > Vis info",
     "notSet": "Ikke angivet"
   },
+  "explorerThumbnails": {
+    "title": "Stifinder",
+    "show": "Vis PDF-miniaturer i Stifinder",
+    "help": "Stifinder viser så den første side af hver PDF i stedet for PDF-ikonet. Det gælder kun din Windows-konto og ændrer ikke din standard-PDF-app.",
+    "unavailable": "Ikke tilgængelig i denne version.",
+    "otherHandler": "PDF-miniaturer leveres i øjeblikket af {{name}}.",
+    "defaultApp": "Din standard-PDF-app viser sine egne miniaturer ({{name}}). Windows bruger dem, så længe den app er din standard-PDF-app.",
+    "replaceTitle": "PDF-miniaturer",
+    "replaceConfirm": "{{name}} leverer allerede PDF-miniaturer i Stifinder.\n\nVis i stedet miniaturerne fra Open PDF Studio for din Windows-konto? Hvis du slår denne indstilling fra igen, gendannes de tidligere miniaturer.",
+    "failed": "Indstillingen for miniaturer i Stifinder kunne ikke ændres."
+  },
   "virtualPrinter": {
     "title": "Virtuel printer",
     "description": "Installer \"Open PDF Printer\" som en Windows-printer. Når du udskriver fra et hvilket som helst program (Word, Chrome, Notesblok osv.) og vælger denne printer, åbnes den genererede PDF automatisk i dette program.",
