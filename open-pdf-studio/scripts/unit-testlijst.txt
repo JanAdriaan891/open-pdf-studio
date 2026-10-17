@@ -375,3 +375,5 @@ js/pdf/print-boekje.test.mjs
 js/pdf/splits-logica.test.mjs
 js/pdf/splits-document.test.mjs
 js/pdf/splits-i18n.test.mjs
+js/ui/chrome/tab-losmaken.test.mjs
+js/core/instantie-rol.test.mjs

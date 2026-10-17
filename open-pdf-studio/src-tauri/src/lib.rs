@@ -24,6 +24,7 @@ pub mod ocr;
 pub mod pdfium_renderer;
 pub mod pdfx_cmyk;
 pub mod handtekening;
+pub mod instantie;
 pub mod print_formulieren;
 pub mod print_instelling;
 pub mod print_plaatsing;
@@ -2636,15 +2637,19 @@ pub fn run(opts: StartupOpts) {
 
     // Single-instance and updater plugins are desktop-only.
     //
-    // A DETACHED document window is launched as its own app process with the
-    // `OPDS_DETACHED=1` env var (see window_mgmt::spawn_window_with_pdf). Such
-    // a process must NOT register single-instance — otherwise it would just
-    // forward its PDF arg to the original instance and exit, instead of
-    // becoming an independent window. So we skip the plugin when detached.
+    // A torn-off tab opens in a SECOND app instance: its own process, started
+    // with `--new-instance` (see instantie.rs and
+    // window_mgmt::spawn_window_with_pdf). Such a process must NOT register
+    // single-instance — otherwise it would forward its PDF arg to the primary
+    // instance and exit. `OPDS_DETACHED=1` also skips it (test instances next
+    // to the installed app).
     #[cfg(not(target_os = "android"))]
     {
-        let is_detached = std::env::var("OPDS_DETACHED").as_deref() == Ok("1");
-        if !is_detached {
+        let skip_single_instance = instantie::slaat_single_instance_over(
+            &args,
+            std::env::var("OPDS_DETACHED").ok().as_deref(),
+        );
+        if !skip_single_instance {
             builder = builder
                 .plugin(tauri_plugin_single_instance::init(|app: &tauri::AppHandle, argv: Vec<String>, _cwd: String| {
                     if let Some(window) = app.get_webview_window("main") {
@@ -2978,6 +2983,8 @@ pub fn run(opts: StartupOpts) {
             window_mgmt::drag_icon_path,
             window_mgmt::tab_drag_preflight,
             window_mgmt::detach_diag,
+            instantie::instance_role,
+            instantie::tab_drop_target,
             startup_diagnostics::startup_diagnostic,
             startup_diagnostics::startup_diagnostics_path,
             datamap::app_data_dir_effectief,
