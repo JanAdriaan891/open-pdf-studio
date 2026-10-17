@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Virtuell skriver",
-    "description": "Installer \"Open PDF Printer\" som en Windows-skriver. Når du skriver ut fra et program (Word, Chrome, Notisblokk osv.) og velger denne skriveren, åpnes PDF-en automatisk i dette programmet.",
+    "description": "«Open PDF Printer» er en Windows-skriver som gjør en utskrift fra et hvilket som helst program om til en PDF og samler den i skrivervinduet i denne appen.",
     "status": "Status:",
     "installButton": "Installer virtuell skriver",
     "removeButton": "Fjern virtuell skriver",
@@ -196,7 +196,17 @@
     "installationFailed": "Installasjon mislyktes",
     "removalFailed": "Fjerning mislyktes",
     "failedToInstall": "Kunne ikke installere virtuell skriver:",
-    "failedToRemove": "Kunne ikke fjerne virtuell skriver:"
+    "failedToRemove": "Kunne ikke fjerne virtuell skriver:",
+    "stateActiveDetail": "Utskrifter til {{printer}} kommer til skrivervinduet uten Lagre-dialog.",
+    "stateDialogDetail": "Hver utskrift spør fortsatt hvor den skal lagres. Aktiver PDF-oppfanging for å samle utskrifter i skrivervinduet.",
+    "stateMissingDetail": "Installer skriveren for å lage PDF fra et hvilket som helst program.",
+    "stateUnknownDetail": "Skriverstatusen kunne ikke leses.",
+    "howTitle": "Slik fungerer det",
+    "how1": "Velg Skriv ut i et program og velg {{printer}}.",
+    "how2": "Utskriften vises i skrivervinduet i Open PDF Studio.",
+    "how3": "Forhåndsvis, endre rekkefølge på, slå sammen og lagre jobbene som én PDF, eller åpne dem i Studio.",
+    "openWindow": "Åpne skrivervindu",
+    "openWindowTip": "Vis de fangede utskriftsjobbene"
   },
   "pageDisplay": {
     "rendering": "Gjengivelse",

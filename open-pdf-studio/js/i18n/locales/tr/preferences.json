@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Sanal Yazıcı",
-    "description": "\"Open PDF Printer\" adlı yazıcıyı Windows yazıcısı olarak yükleyin. Herhangi bir uygulamadan (Word, Chrome, Not Defteri vb.) yazdırıp bu yazıcıyı seçtiğinizde, çıktı PDF dosyası bu uygulamada otomatik olarak açılacaktır.",
+    "description": "\"Open PDF Printer\", herhangi bir programdan yapılan yazdırmayı PDF'ye dönüştüren ve bu uygulamanın yazıcı penceresinde toplayan bir Windows yazıcısıdır.",
     "status": "Durum:",
     "installButton": "Sanal Yazıcıyı Yükle",
     "removeButton": "Sanal Yazıcıyı Kaldır",
@@ -196,7 +196,17 @@
     "installationFailed": "Yükleme başarısız oldu",
     "removalFailed": "Kaldırma başarısız oldu",
     "failedToInstall": "Sanal yazıcı yüklenemedi:",
-    "failedToRemove": "Sanal yazıcı kaldırılamadı:"
+    "failedToRemove": "Sanal yazıcı kaldırılamadı:",
+    "stateActiveDetail": "{{printer}} yazıcısına yapılan yazdırmalar Kaydet iletişim kutusu olmadan yazıcı penceresine gelir.",
+    "stateDialogDetail": "Her yazdırma hâlâ nereye kaydedileceğini soruyor. Yazdırmaları yazıcı penceresinde toplamak için PDF yakalamayı etkinleştirin.",
+    "stateMissingDetail": "Herhangi bir programdan PDF oluşturmak için yazıcıyı yükleyin.",
+    "stateUnknownDetail": "Yazıcı durumu okunamadı.",
+    "howTitle": "Nasıl çalışır",
+    "how1": "Herhangi bir programda Yazdır'ı seçin ve {{printer}} yazıcısını seçin.",
+    "how2": "Yazdırma, Open PDF Studio'nun yazıcı penceresinde görünür.",
+    "how3": "İşleri önizleyin, sıralayın, birleştirin ve tek PDF olarak kaydedin ya da Studio'da açın.",
+    "openWindow": "Yazıcı penceresini aç",
+    "openWindowTip": "Yakalanan yazdırma işlerini göster"
   },
   "pageDisplay": {
     "rendering": "İşleme",

@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Printa Pepe",
-    "description": "Weka \"Open PDF Printer\" kama printa ya Windows. Unapochapisha kutoka programu yoyote (Word, Chrome, Notepad, n.k.) na kuchagua printa hii, PDF inayotoka itafunguka kiotomatiki kwenye programu hii.",
+    "description": "\"Open PDF Printer\" ni printa ya Windows inayogeuza uchapishaji kutoka programu yoyote kuwa PDF na kuukusanya kwenye dirisha la printa la programu hii.",
     "status": "Hali:",
     "installButton": "Weka Printa Pepe",
     "removeButton": "Ondoa Printa Pepe",
@@ -196,7 +196,17 @@
     "installationFailed": "Uwekaji umeshindwa",
     "removalFailed": "Uondoaji umeshindwa",
     "failedToInstall": "Imeshindwa kuweka printa pepe:",
-    "failedToRemove": "Imeshindwa kuondoa printa pepe:"
+    "failedToRemove": "Imeshindwa kuondoa printa pepe:",
+    "stateActiveDetail": "Machapisho kwenda {{printer}} hufika kwenye dirisha la printa bila kidirisha cha Hifadhi.",
+    "stateDialogDetail": "Kila uchapishaji bado huuliza mahali pa kuhifadhi. Washa unasaji wa PDF ili kukusanya machapisho kwenye dirisha la printa.",
+    "stateMissingDetail": "Weka printa ili kutengeneza PDF kutoka programu yoyote.",
+    "stateUnknownDetail": "Hali ya printa haikuweza kusomwa.",
+    "howTitle": "Inavyofanya kazi",
+    "how1": "Katika programu yoyote chagua Chapisha na uchague {{printer}}.",
+    "how2": "Uchapishaji unaonekana kwenye dirisha la printa la Open PDF Studio.",
+    "how3": "Hakiki, panga upya, unganisha na uhifadhi kazi kama PDF moja, au zifungue katika Studio.",
+    "openWindow": "Fungua dirisha la printa",
+    "openWindowTip": "Onyesha kazi za uchapishaji zilizonaswa"
   },
   "pageDisplay": {
     "rendering": "Uonyeshaji",

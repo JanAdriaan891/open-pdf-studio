@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Virtuell skrivare",
-    "description": "Installera \"Open PDF Printer\" som en Windows-skrivare. När du skriver ut från valfritt program (Word, Chrome, Anteckningar, etc.) och väljer denna skrivare, öppnas den resulterande PDF-filen automatiskt i denna app.",
+    "description": "”Open PDF Printer” är en Windows-skrivare som gör om en utskrift från valfritt program till en PDF och samlar den i skrivarfönstret i den här appen.",
     "status": "Status:",
     "installButton": "Installera virtuell skrivare",
     "removeButton": "Ta bort virtuell skrivare",
@@ -196,7 +196,17 @@
     "installationFailed": "Installationen misslyckades",
     "removalFailed": "Borttagningen misslyckades",
     "failedToInstall": "Kunde inte installera virtuell skrivare:",
-    "failedToRemove": "Kunde inte ta bort virtuell skrivare:"
+    "failedToRemove": "Kunde inte ta bort virtuell skrivare:",
+    "stateActiveDetail": "Utskrifter till {{printer}} kommer till skrivarfönstret utan Spara-dialog.",
+    "stateDialogDetail": "Varje utskrift frågar fortfarande var den ska sparas. Aktivera PDF-fångst för att samla utskrifter i skrivarfönstret.",
+    "stateMissingDetail": "Installera skrivaren för att skapa en PDF från valfritt program.",
+    "stateUnknownDetail": "Skrivarstatusen kunde inte läsas.",
+    "howTitle": "Så fungerar det",
+    "how1": "Välj Skriv ut i valfritt program och välj {{printer}}.",
+    "how2": "Utskriften visas i skrivarfönstret i Open PDF Studio.",
+    "how3": "Förhandsvisa, ändra ordning på, sammanfoga och spara jobben som en PDF, eller öppna dem i Studio.",
+    "openWindow": "Öppna skrivarfönster",
+    "openWindowTip": "Visa de fångade utskriftsjobben"
   },
   "pageDisplay": {
     "rendering": "Rendering",

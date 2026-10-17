@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Stampante virtuale",
-    "description": "Installa \"Open PDF Printer\" come stampante Windows. Quando si stampa da qualsiasi applicazione (Word, Chrome, Blocco note, ecc.) e si seleziona questa stampante, il PDF generato si aprirà automaticamente in questa applicazione.",
+    "description": "\"Open PDF Printer\" è una stampante Windows che trasforma una stampa da qualsiasi programma in un PDF e la raccoglie nella finestra della stampante di questa app.",
     "status": "Stato:",
     "installButton": "Installa stampante virtuale",
     "removeButton": "Rimuovi stampante virtuale",
@@ -196,7 +196,17 @@
     "installationFailed": "Installazione non riuscita",
     "removalFailed": "Rimozione non riuscita",
     "failedToInstall": "Impossibile installare la stampante virtuale:",
-    "failedToRemove": "Impossibile rimuovere la stampante virtuale:"
+    "failedToRemove": "Impossibile rimuovere la stampante virtuale:",
+    "stateActiveDetail": "Le stampe su {{printer}} arrivano nella finestra della stampante senza finestra Salva.",
+    "stateDialogDetail": "Ogni stampa chiede ancora dove salvare. Attiva la cattura PDF per raccogliere le stampe nella finestra della stampante.",
+    "stateMissingDetail": "Installa la stampante per creare un PDF da qualsiasi programma.",
+    "stateUnknownDetail": "Impossibile leggere lo stato della stampante.",
+    "howTitle": "Come funziona",
+    "how1": "In qualsiasi programma scegli Stampa e seleziona {{printer}}.",
+    "how2": "La stampa compare nella finestra della stampante di Open PDF Studio.",
+    "how3": "Visualizza l'anteprima, riordina, unisci e salva i processi come un unico PDF, oppure aprili in Studio.",
+    "openWindow": "Apri finestra stampante",
+    "openWindowTip": "Mostra i processi di stampa catturati"
   },
   "pageDisplay": {
     "rendering": "Rendering",

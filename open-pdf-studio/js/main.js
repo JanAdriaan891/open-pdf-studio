@@ -266,6 +266,11 @@ async function init() {
   import('./solid/stores/printQueueStore.js')
     .then(m => m.startPrintQueueWatcher())
     .catch(() => {});
+  // The printer window ("Open printer settings") asks this window to show
+  // the Virtual printer tab of the preferences.
+  import('./solid/stores/printQueueStore.js')
+    .then(m => m.listenForPrinterSettingsRequests())
+    .catch(() => {});
 
   // Lazy-load printer enumeration so the print dialog shows the OS default
   // printer instantly (Ctrl+P) instead of waiting on PowerShell/lpstat.

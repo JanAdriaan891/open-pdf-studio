@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "מדפסת וירטואלית",
-    "description": "התקנת \"Open PDF Printer\" כמדפסת Windows. כאשר תדפיס מכל יישום (Word, Chrome, Notepad וכו') ותבחר מדפסת זו, קובץ ה-PDF שייווצר ייפתח אוטומטית ביישום זה.",
+    "description": "\"Open PDF Printer\" היא מדפסת Windows שהופכת הדפסה מכל תוכנה לקובץ PDF ואוספת אותה בחלון המדפסת של יישום זה.",
     "status": "מצב:",
     "installButton": "התקנת מדפסת וירטואלית",
     "removeButton": "הסרת מדפסת וירטואלית",
@@ -196,7 +196,17 @@
     "installationFailed": "ההתקנה נכשלה",
     "removalFailed": "ההסרה נכשלה",
     "failedToInstall": "נכשלה התקנת מדפסת וירטואלית:",
-    "failedToRemove": "נכשלה הסרת מדפסת וירטואלית:"
+    "failedToRemove": "נכשלה הסרת מדפסת וירטואלית:",
+    "stateActiveDetail": "הדפסות אל {{printer}} מגיעות לחלון המדפסת ללא חלון שמירה.",
+    "stateDialogDetail": "כל הדפסה עדיין שואלת היכן לשמור. הפעל את לכידת ה-PDF כדי לאסוף הדפסות בחלון המדפסת.",
+    "stateMissingDetail": "התקן את המדפסת כדי ליצור קובץ PDF מכל תוכנה.",
+    "stateUnknownDetail": "לא ניתן היה לקרוא את מצב המדפסת.",
+    "howTitle": "איך זה עובד",
+    "how1": "בכל תוכנה בחר הדפסה ובחר את {{printer}}.",
+    "how2": "ההדפסה מופיעה בחלון המדפסת של Open PDF Studio.",
+    "how3": "הצג בתצוגה מקדימה, שנה סדר, מזג ושמור את העבודות כקובץ PDF אחד, או פתח אותן ב-Studio.",
+    "openWindow": "פתיחת חלון המדפסת",
+    "openWindowTip": "הצגת עבודות ההדפסה שנלכדו"
   },
   "pageDisplay": {
     "rendering": "עיבוד",

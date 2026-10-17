@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Virtuel printer",
-    "description": "Installer \"Open PDF Printer\" som en Windows-printer. Når du udskriver fra et hvilket som helst program (Word, Chrome, Notesblok osv.) og vælger denne printer, åbnes den genererede PDF automatisk i dette program.",
+    "description": "\"Open PDF Printer\" er en Windows-printer, der omdanner en udskrift fra et vilkårligt program til en PDF og samler den i printervinduet i denne app.",
     "status": "Status:",
     "installButton": "Installer virtuel printer",
     "removeButton": "Fjern virtuel printer",
@@ -196,7 +196,17 @@
     "installationFailed": "Installation mislykkedes",
     "removalFailed": "Fjernelse mislykkedes",
     "failedToInstall": "Kunne ikke installere virtuel printer:",
-    "failedToRemove": "Kunne ikke fjerne virtuel printer:"
+    "failedToRemove": "Kunne ikke fjerne virtuel printer:",
+    "stateActiveDetail": "Udskrifter til {{printer}} kommer til printervinduet uden en Gem-dialog.",
+    "stateDialogDetail": "Hver udskrift spørger stadig, hvor den skal gemmes. Aktivér PDF-opfangning for at samle udskrifter i printervinduet.",
+    "stateMissingDetail": "Installer printeren for at lave en PDF fra et hvilket som helst program.",
+    "stateUnknownDetail": "Printerens status kunne ikke læses.",
+    "howTitle": "Sådan virker det",
+    "how1": "Vælg Udskriv i et vilkårligt program, og vælg {{printer}}.",
+    "how2": "Udskriften vises i printervinduet i Open PDF Studio.",
+    "how3": "Få vist eksempel, ændr rækkefølgen, flet og gem jobbene som én PDF, eller åbn dem i Studio.",
+    "openWindow": "Åbn printervindue",
+    "openWindowTip": "Vis de opfangede udskriftsjob"
   },
   "pageDisplay": {
     "rendering": "Gengivelse",

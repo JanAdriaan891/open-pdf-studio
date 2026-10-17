@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Pencetak Maya",
-    "description": "Pasang \"Open PDF Printer\" sebagai pencetak Windows. Apabila anda mencetak dari mana-mana aplikasi (Word, Chrome, Notepad, dll.) dan memilih pencetak ini, output PDF akan dibuka secara automatik dalam aplikasi ini.",
+    "description": "\"Open PDF Printer\" ialah pencetak Windows yang menukar cetakan daripada mana-mana program kepada PDF dan mengumpulkannya dalam tetingkap pencetak aplikasi ini.",
     "status": "Status:",
     "installButton": "Pasang Pencetak Maya",
     "removeButton": "Buang Pencetak Maya",
@@ -196,7 +196,17 @@
     "installationFailed": "Pemasangan gagal",
     "removalFailed": "Pembuangan gagal",
     "failedToInstall": "Gagal memasang pencetak maya:",
-    "failedToRemove": "Gagal membuang pencetak maya:"
+    "failedToRemove": "Gagal membuang pencetak maya:",
+    "stateActiveDetail": "Cetakan ke {{printer}} sampai ke tetingkap pencetak tanpa dialog Simpan.",
+    "stateDialogDetail": "Setiap cetakan masih bertanya tempat menyimpan. Dayakan tangkapan PDF untuk mengumpulkan cetakan dalam tetingkap pencetak.",
+    "stateMissingDetail": "Pasang pencetak untuk membuat PDF daripada mana-mana program.",
+    "stateUnknownDetail": "Status pencetak tidak dapat dibaca.",
+    "howTitle": "Cara ia berfungsi",
+    "how1": "Dalam mana-mana program, pilih Cetak dan pilih {{printer}}.",
+    "how2": "Cetakan dipaparkan dalam tetingkap pencetak Open PDF Studio.",
+    "how3": "Pratonton, susun semula, gabung dan simpan kerja sebagai satu PDF, atau buka dalam Studio.",
+    "openWindow": "Buka tetingkap pencetak",
+    "openWindowTip": "Tunjukkan kerja cetak yang ditangkap"
   },
   "pageDisplay": {
     "rendering": "Rendering",
