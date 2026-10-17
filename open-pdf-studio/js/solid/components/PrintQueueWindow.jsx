@@ -108,7 +108,9 @@ export default function PrintQueueWindow() {
   const ordered = () => order().map((f) => jobByFile().get(f)).filter(Boolean);
   const selectedFiles = () => selectedInOrder(order(), sel().selected);
   const selectedJobs = () => selectedFiles().map((f) => jobByFile().get(f)).filter(Boolean);
-  const focusJob = () => jobByFile().get(sel().focus) || null;
+  // Memo: a selection change that keeps the same focus must not reset the preview.
+  const focusFile = createMemo(() => sel().focus);
+  const focusJob = () => jobByFile().get(focusFile()) || null;
   const pagesOf = (job) => meta()[job.file]?.pages || job.pages || 0;
   const nameOf = (job) => jobDisplayName(job, meta()[job.file]?.title, t('printQueue.printedAt', { time: fmtTime(job.modifiedMs) }));
 
@@ -196,7 +198,7 @@ export default function PrintQueueWindow() {
   }
 
   // Preview: the focused job, page by page, fitted into the stage.
-  createEffect(on(() => sel().focus, () => { setPage(1); setPreviewFailed(false); }));
+  createEffect(on(focusFile, () => { setPage(1); setPreviewFailed(false); }));
   let renderSeq = 0;
   let renderTask = null;
   async function renderPreview() {
@@ -237,7 +239,7 @@ export default function PrintQueueWindow() {
       setPreviewPaper('');
     }
   }
-  createEffect(on([() => sel().focus, page, () => order().length, language], () => { queueMicrotask(renderPreview); }));
+  createEffect(on([focusFile, page, () => order().length, language], () => { queueMicrotask(renderPreview); }));
   const previewCount = () => { const j = focusJob(); return j ? pagesOf(j) : 0; };
   function goPage(delta) {
     setPage((p) => clampPage(p + delta, previewCount()));
