@@ -376,3 +376,5 @@ js/pdf/splits-logica.test.mjs
 js/pdf/splits-document.test.mjs
 js/pdf/splits-i18n.test.mjs
 js/pdf/print-bereik.test.mjs
+js/pdf/print-flyer.test.mjs
+js/pdf/print-katern.test.mjs

@@ -2669,6 +2669,8 @@
 
 .print-zoom-row { margin-left: 58px; }
 .print-note { font-size: 11px; color: var(--theme-text-secondary); }
+/* Pad van de paginavolgorde naast de keuzelijst (#607). */
+.print-order-icon { flex-shrink: 0; margin-left: 6px; color: var(--theme-text-secondary); }
 
 .print-pages-row { margin-bottom: 4px; }
 
