@@ -9,6 +9,7 @@ js/annotations/maatlijn-inline.test.mjs
 js/annotations/rendering/maat-inline-tekenen.test.mjs
 js/pdf/loader/maatlijn-uit-bestand.test.mjs
 js/pdf/saver/maatlijn-opslaan.test.mjs
+js/pdf/saver/dimension-measure.test.mjs
 js/pdf/maatlijn-rondgang.test.mjs
 js/annotations/corrections/geometry.test.mjs
 js/annotations/corrections/model.test.mjs
@@ -354,6 +355,7 @@ js/pdf/page-transition.test.mjs
 js/mobile/mobiele-gereedschappen.test.mjs
 js/core/oude-webview.test.mjs
 scripts/oude-webview.test.mjs
+scripts/oude-webview-pdfjs.test.mjs
 scripts/android-config.test.mjs
 js/core/fout-bericht.test.mjs
 js/core/bestandsnaam.test.mjs
