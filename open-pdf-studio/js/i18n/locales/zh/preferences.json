@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "虚拟打印机",
-    "description": "将“Open PDF Printer”安装为 Windows 打印机。当您从任何应用程序（Word、Chrome、记事本等）打印并选择此打印机时，输出的 PDF 将自动在此应用中打开。",
+    "description": "“Open PDF Printer”是一台 Windows 打印机，可将任意程序的打印内容转换为 PDF，并收集到本应用的打印机窗口中。",
     "status": "状态：",
     "installButton": "安装虚拟打印机",
     "removeButton": "移除虚拟打印机",
@@ -196,7 +196,17 @@
     "installationFailed": "安装失败",
     "removalFailed": "移除失败",
     "failedToInstall": "无法安装虚拟打印机：",
-    "failedToRemove": "无法移除虚拟打印机："
+    "failedToRemove": "无法移除虚拟打印机：",
+    "stateActiveDetail": "发送到 {{printer}} 的打印内容会直接进入打印机窗口，不显示保存对话框。",
+    "stateDialogDetail": "每次打印仍会询问保存位置。启用 PDF 捕获即可在打印机窗口中收集打印内容。",
+    "stateMissingDetail": "安装打印机即可从任意程序生成 PDF。",
+    "stateUnknownDetail": "无法读取打印机状态。",
+    "howTitle": "工作原理",
+    "how1": "在任意程序中选择“打印”，然后选择 {{printer}}。",
+    "how2": "打印内容会显示在 Open PDF Studio 的打印机窗口中。",
+    "how3": "预览、重新排序、合并并将作业保存为一个 PDF，或在 Studio 中打开它们。",
+    "openWindow": "打开打印机窗口",
+    "openWindowTip": "显示已捕获的打印作业"
   },
   "pageDisplay": {
     "rendering": "渲染",

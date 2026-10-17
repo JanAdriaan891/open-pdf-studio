@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Máy in Ảo",
-    "description": "Cài đặt \"Open PDF Printer\" làm máy in Windows. Khi bạn in từ bất kỳ ứng dụng nào (Word, Chrome, Notepad, v.v.) và chọn máy in này, tệp PDF đầu ra sẽ tự động mở trong ứng dụng này.",
+    "description": "\"Open PDF Printer\" là máy in Windows biến bản in từ bất kỳ chương trình nào thành PDF và thu thập vào cửa sổ máy in của ứng dụng này.",
     "status": "Trạng thái:",
     "installButton": "Cài đặt Máy in Ảo",
     "removeButton": "Gỡ bỏ Máy in Ảo",
@@ -196,7 +196,17 @@
     "installationFailed": "Cài đặt thất bại",
     "removalFailed": "Gỡ bỏ thất bại",
     "failedToInstall": "Không thể cài đặt máy in ảo:",
-    "failedToRemove": "Không thể gỡ bỏ máy in ảo:"
+    "failedToRemove": "Không thể gỡ bỏ máy in ảo:",
+    "stateActiveDetail": "Các bản in tới {{printer}} xuất hiện trong cửa sổ máy in mà không có hộp thoại Lưu.",
+    "stateDialogDetail": "Mỗi lần in vẫn hỏi nơi lưu. Hãy bật bắt PDF để thu thập các bản in trong cửa sổ máy in.",
+    "stateMissingDetail": "Cài đặt máy in để tạo PDF từ bất kỳ chương trình nào.",
+    "stateUnknownDetail": "Không thể đọc trạng thái máy in.",
+    "howTitle": "Cách hoạt động",
+    "how1": "Trong bất kỳ chương trình nào, chọn In và chọn {{printer}}.",
+    "how2": "Bản in xuất hiện trong cửa sổ máy in của Open PDF Studio.",
+    "how3": "Xem trước, sắp xếp lại, gộp và lưu các lệnh in thành một PDF, hoặc mở chúng trong Studio.",
+    "openWindow": "Mở cửa sổ máy in",
+    "openWindowTip": "Hiển thị các lệnh in đã bắt được"
   },
   "pageDisplay": {
     "rendering": "Kết xuất",

@@ -1079,6 +1079,27 @@ struct VpJob {
     size: u64,
     modified_ms: u64,
     pages: u32,
+    /// `/Info /Title` of the PDF. The Windows PDF driver behind "Open PDF
+    /// Printer" writes the print job's document name there, so this is the
+    /// name of what was printed (the file port itself drops it).
+    title: Option<String>,
+}
+
+/// The document title from the trailer's `/Info` dictionary (direct or
+/// indirect), decoded from PDFDocEncoding or UTF-16; None when absent/blank.
+fn vp_pdf_title(doc: &lopdf::Document) -> Option<String> {
+    let info = doc.trailer.get(b"Info").ok()?;
+    let dict = match info.as_reference() {
+        Ok(id) => doc.get_object(id).ok()?.as_dict().ok()?,
+        Err(_) => info.as_dict().ok()?,
+    };
+    let title = match dict.get(b"Title").ok()? {
+        lopdf::Object::Reference(id) => doc.get_object(*id).ok()?,
+        o => o,
+    };
+    let text = lopdf::decode_text_string(title).ok()?;
+    let text = text.trim();
+    (!text.is_empty()).then(|| text.to_string())
 }
 
 /// List collected jobs (oldest first — print order).
@@ -1102,15 +1123,17 @@ fn virtual_printer_jobs() -> Result<Vec<VpJob>, String> {
                 .and_then(|m| m.duration_since(std::time::UNIX_EPOCH).ok())
                 .map(|d| d.as_millis() as u64)
                 .unwrap_or(0);
-            let pages = lopdf::Document::load(e.path())
-                .map(|d| d.get_pages().len() as u32)
-                .unwrap_or(0);
+            let (pages, title) = match lopdf::Document::load(e.path()) {
+                Ok(d) => (d.get_pages().len() as u32, vp_pdf_title(&d)),
+                Err(_) => (0, None),
+            };
             jobs.push(VpJob {
                 file: name,
                 path: e.path().to_string_lossy().to_string(),
                 size: meta.len(),
                 modified_ms,
                 pages,
+                title,
             });
         }
     }
@@ -3091,5 +3114,53 @@ mod geopend_document_tests {
         for s in ["openpdfstudio://open/x.pdf", "https://open/x.pdf", "http://example.com/a.pdf"] {
             assert_eq!(geopend_pdf_document(&url(s), true), None, "{s}");
         }
+    }
+}
+
+#[cfg(test)]
+mod vp_title_tests {
+    use super::vp_pdf_title;
+    use lopdf::{dictionary, Document, Object, StringFormat};
+
+    fn doc_with_info(info: Option<Object>) -> Document {
+        let mut doc = Document::with_version("1.7");
+        if let Some(info) = info {
+            let id = doc.add_object(info);
+            doc.trailer.set("Info", Object::Reference(id));
+        }
+        doc
+    }
+
+    #[test]
+    fn title_from_an_indirect_info_dictionary() {
+        let doc = doc_with_info(Some(Object::Dictionary(dictionary! {
+            "Title" => Object::String(b"Rapport fase 2.docx".to_vec(), StringFormat::Literal),
+        })));
+        assert_eq!(vp_pdf_title(&doc).as_deref(), Some("Rapport fase 2.docx"));
+    }
+
+    #[test]
+    fn title_in_utf16_with_a_byte_order_mark() {
+        let mut bytes = vec![0xFE, 0xFF];
+        for u in "Gevel noord – A1".encode_utf16() {
+            bytes.extend_from_slice(&u.to_be_bytes());
+        }
+        let doc = doc_with_info(Some(Object::Dictionary(dictionary! {
+            "Title" => Object::String(bytes, StringFormat::Hexadecimal),
+        })));
+        assert_eq!(vp_pdf_title(&doc).as_deref(), Some("Gevel noord – A1"));
+    }
+
+    #[test]
+    fn no_info_blank_title_or_no_title_give_none() {
+        assert_eq!(vp_pdf_title(&doc_with_info(None)), None);
+        let blank = doc_with_info(Some(Object::Dictionary(dictionary! {
+            "Title" => Object::String(b"   ".to_vec(), StringFormat::Literal),
+        })));
+        assert_eq!(vp_pdf_title(&blank), None);
+        let other = doc_with_info(Some(Object::Dictionary(dictionary! {
+            "Producer" => Object::String(b"x".to_vec(), StringFormat::Literal),
+        })));
+        assert_eq!(vp_pdf_title(&other), None);
     }
 }

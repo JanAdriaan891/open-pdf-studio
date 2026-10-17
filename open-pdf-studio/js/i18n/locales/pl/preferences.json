@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Drukarka wirtualna",
-    "description": "Zainstaluj \"Open PDF Printer\" jako drukarkę systemu Windows. Gdy drukujesz z dowolnej aplikacji (Word, Chrome, Notatnik itp.) i wybierzesz tę drukarkę, wynikowy plik PDF otworzy się automatycznie w tej aplikacji.",
+    "description": "„Open PDF Printer” to drukarka systemu Windows, która zamienia wydruk z dowolnego programu na plik PDF i zbiera go w oknie drukarki tej aplikacji.",
     "status": "Status:",
     "installButton": "Zainstaluj drukarkę wirtualną",
     "removeButton": "Usuń drukarkę wirtualną",
@@ -196,7 +196,17 @@
     "installationFailed": "Instalacja nie powiodła się",
     "removalFailed": "Usunięcie nie powiodło się",
     "failedToInstall": "Nie udało się zainstalować drukarki wirtualnej:",
-    "failedToRemove": "Nie udało się usunąć drukarki wirtualnej:"
+    "failedToRemove": "Nie udało się usunąć drukarki wirtualnej:",
+    "stateActiveDetail": "Wydruki na {{printer}} trafiają do okna drukarki bez okna Zapisz.",
+    "stateDialogDetail": "Każdy wydruk nadal pyta, gdzie go zapisać. Włącz przechwytywanie PDF, aby zbierać wydruki w oknie drukarki.",
+    "stateMissingDetail": "Zainstaluj drukarkę, aby tworzyć pliki PDF z dowolnego programu.",
+    "stateUnknownDetail": "Nie udało się odczytać stanu drukarki.",
+    "howTitle": "Jak to działa",
+    "how1": "W dowolnym programie wybierz Drukuj i wybierz {{printer}}.",
+    "how2": "Wydruk pojawi się w oknie drukarki Open PDF Studio.",
+    "how3": "Wyświetlaj podgląd, zmieniaj kolejność, scalaj i zapisuj zadania jako jeden plik PDF lub otwieraj je w Studio.",
+    "openWindow": "Otwórz okno drukarki",
+    "openWindowTip": "Pokaż przechwycone zadania drukowania"
   },
   "pageDisplay": {
     "rendering": "Renderowanie",

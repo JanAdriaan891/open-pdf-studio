@@ -183,7 +183,7 @@
   },
   "virtualPrinter": {
     "title": "Imprimanta virtuala",
-    "description": "Instalati \"Open PDF Printer\" ca imprimanta Windows. Cand tipariti din orice aplicatie (Word, Chrome, Notepad, etc.) si selectati aceasta imprimanta, fisierul PDF rezultat se va deschide automat in aceasta aplicatie.",
+    "description": "„Open PDF Printer” este o imprimantă Windows care transformă o tipărire din orice program într-un PDF și o adună în fereastra de imprimantă a acestei aplicații.",
     "status": "Stare:",
     "installButton": "Instalare imprimanta virtuala",
     "removeButton": "Eliminare imprimanta virtuala",
@@ -196,7 +196,17 @@
     "installationFailed": "Instalarea a esuat",
     "removalFailed": "Eliminarea a esuat",
     "failedToInstall": "Nu s-a putut instala imprimanta virtuala:",
-    "failedToRemove": "Nu s-a putut elimina imprimanta virtuala:"
+    "failedToRemove": "Nu s-a putut elimina imprimanta virtuala:",
+    "stateActiveDetail": "Tipăririle către {{printer}} ajung în fereastra de imprimantă fără dialog Salvare.",
+    "stateDialogDetail": "Fiecare tipărire încă întreabă unde se salvează. Activați captura PDF pentru a aduna tipăririle în fereastra de imprimantă.",
+    "stateMissingDetail": "Instalați imprimanta pentru a crea un PDF din orice program.",
+    "stateUnknownDetail": "Starea imprimantei nu a putut fi citită.",
+    "howTitle": "Cum funcționează",
+    "how1": "În orice program alegeți Tipărire și selectați {{printer}}.",
+    "how2": "Tipărirea apare în fereastra de imprimantă din Open PDF Studio.",
+    "how3": "Previzualizați, reordonați, îmbinați și salvați lucrările ca un singur PDF sau deschideți-le în Studio.",
+    "openWindow": "Deschidere fereastră imprimantă",
+    "openWindowTip": "Afișează lucrările de tipărire capturate"
   },
   "pageDisplay": {
     "rendering": "Randare",
