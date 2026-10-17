@@ -3,7 +3,7 @@ import Dialog from '../Dialog.jsx';
 import { closeDialog } from '../../stores/dialogStore.js';
 import { state, getActiveDocument, getPageRotation } from '../../../core/state.js';
 import { invoke, saveFileDialog } from '../../../core/platform.js';
-import { parsePageRange } from '../../../pdf/exporter.js';
+import { printPaginaBereik } from '../../../pdf/print-bereik.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { loadPrinters, printerList as cachedPrinters, defaultPrinterName, printerErrorMessage } from '../../stores/printerStore.js';
 import { runPrintJob, slaPrintOpAlsPdf, renderPrintBeeld } from '../../../pdf/print-job.js';
@@ -15,7 +15,7 @@ import {
 } from '../../../pdf/print-boekje.js';
 import { savePreferences } from '../../../core/preferences.js';
 import { herstelPrintInstellingen, kiesStartPrinter } from '../../stores/print-instellingen.js';
-import { printArgumenten, overstemdeStand } from '../../../pdf/print-pagina-instelling.js';
+import { printArgumenten, overstemdeStand, vellenStand } from '../../../pdf/print-pagina-instelling.js';
 import { getPageSetupSettings, stelPaginaInstellingIn, paginaInstellingVersie } from './PageSetupDialog.jsx';
 import { viewportOpties } from '../../../pdf/getoonde-pagina.js';
 import {
@@ -96,12 +96,16 @@ export default function PrintDialog(props) {
   // poster gaat voor.
   const boekje = createMemo(() => !poster() && isBoekje(perSheet()));
   // Meerdere pagina's per vel, of null bij één per vel (en bij een poster of
-  // een boekje). Een memo met waardevergelijking: het voorbeeld tekent alleen
-  // opnieuw als de keuze echt verandert.
+  // een boekje). Een vast aantal laat het raster meedraaien met het vel
+  // (draaibaar); een eigen raster blijft zoals getypt. Een memo met
+  // waardevergelijking: het voorbeeld tekent alleen opnieuw als de keuze echt
+  // verandert.
   const meerPerBlad = createMemo(() => {
     if (poster() || boekje()) return null;
     const raster = rasterVan({ perBlad: perSheet(), kolommen: sheetCols(), rijen: sheetRows() });
-    return isMeerPerBlad(raster) ? { ...raster, volgorde: sheetOrder(), rand: sheetBorder() } : null;
+    return isMeerPerBlad(raster)
+      ? { ...raster, volgorde: sheetOrder(), rand: sheetBorder(), draaibaar: perSheet() !== 'custom' }
+      : null;
   }, undefined, { equals: zelfdeKeuzes });
   // Het getoonde vel bij meerdere pagina's per vel (voorbeeldMeerPerBlad), of
   // null: dan toont het voorbeeld één pagina op het vel.
@@ -172,7 +176,8 @@ export default function PrintDialog(props) {
       const cp = props.data?.currentPage || getActiveDocument()?.currentPage || 1;
       pages = [cp];
     } else if (activeRange() === 'custom') {
-      pages = parsePageRange(customPages(), totalPages);
+      // Zoals getypt: volgorde en herhalingen tellen mee (#606).
+      pages = printPaginaBereik(customPages(), totalPages);
     }
 
     if (activeSubset() === 'odd') {
@@ -790,11 +795,14 @@ export default function PrintDialog(props) {
     const meerBlad = meerPerBlad();
     const posterKeuze = poster();
     const boekjeKeuze = boekje();
+    // De stand zoals het voorbeeld hem toont (plaatsingKeuzes): bij meerdere
+    // pagina's per vel geldt de gekozen stand (#606).
+    const orientatie = keuzes.orientatie;
     savePreferences();
     close();
-    // Oriëntatie en papier: Automatisch draaien en de Pagina-instelling
-    // bereiken nu echt de printer (zie print-pagina-instelling.js).
-    const { orientatie, papier } = printArgumenten({
+    // Papier: de Pagina-instelling bereikt nu echt de printer (zie
+    // print-pagina-instelling.js).
+    const { papier } = printArgumenten({
       autoRotate: autoRotate(),
       paginaInstelling: getPageSetupSettings(),
       docId: getActiveDocument()?.id ?? null,
@@ -904,11 +912,14 @@ export default function PrintDialog(props) {
     const marges = printerMarges().get(papierVerzoekSleutel(selectedPrinter(), gevraagdPapier())) || null;
     return {
       papier: vel ? { ...vel, bedrukbaar: marges } : (pdfDoel() ? 'pagina' : null),
-      orientatie: printArgumenten({
+      // Bij meerdere pagina's per vel geldt de in de Pagina-instelling
+      // gekozen stand, ook met Automatisch draaien (#606).
+      orientatie: vellenStand({
         autoRotate: autoRotate(),
         paginaInstelling: getPageSetupSettings(),
         docId: getActiveDocument()?.id ?? null,
-      }).orientatie,
+        metIndeling: !!meerPerBlad(),
+      }),
       schaling: scaling(),
       zoom: geldigeZoom(zoom()),
       centreren: autoCenter(),
@@ -1018,6 +1029,7 @@ export default function PrintDialog(props) {
       paginaInstelling: getPageSetupSettings(),
       docId: getActiveDocument()?.id ?? null,
       pagina: paginaMaat(),
+      metIndeling: !!meerPerBlad(),
     });
     return stand ? t('print.autoRotateOverrides', { orientation: tCommon(stand) }) : '';
   });

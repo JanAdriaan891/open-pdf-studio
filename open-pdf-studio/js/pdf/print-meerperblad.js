@@ -91,12 +91,17 @@ export function plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB, 
 }
 
 /**
- * Het vel: afmetingen en stand. `papier` is {breedteMm, hoogteMm} als het vel
- * bekend is, anders volgt het de eerste pagina. `orientatie` 'portrait' /
- * 'landscape' staat vast; 'auto' kiest de stand waarin de eerste pagina het
- * grootst in zijn cel komt.
+ * Het vel: afmetingen, stand en raster. `papier` is {breedteMm, hoogteMm} als
+ * het vel bekend is, anders volgt het de eerste pagina. `orientatie`
+ * 'portrait' / 'landscape' staat vast; 'auto' kiest de stand waarin de eerste
+ * pagina het grootst in haar cel komt. `draaibaar` (een vast aantal per vel
+ * of een folder, geen eigen raster): het raster mag een kwartslag draaien
+ * (3 x 2 wordt 2 x 3) als de eerste pagina daarin groter komt; bij gelijke
+ * schaal blijft het raster zoals het in de lijst staat. Een eigen raster
+ * blijft zoals getypt.
+ * @returns {{bladB:number, bladH:number, kolommen:number, rijen:number}}
  */
-export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, rijen }) {
+export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, rijen, draaibaar = false }) {
   let kort;
   let lang;
   if (papier && papier.breedteMm > 0 && papier.hoogteMm > 0) {
@@ -108,13 +113,30 @@ export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, 
   }
   const staand = { bladB: kort, bladH: lang };
   const liggend = { bladB: lang, bladH: kort };
-  if (orientatie === 'portrait') return staand;
-  if (orientatie === 'landscape') return liggend;
-  const schaalIn = (blad) => {
-    const { celB, celH } = celGeometrie({ ...blad, kolommen, rijen });
+  const bladen = orientatie === 'portrait' ? [staand]
+    : orientatie === 'landscape' ? [liggend] : [staand, liggend];
+  const rasters = draaibaar && kolommen !== rijen
+    ? [{ kolommen, rijen }, { kolommen: rijen, rijen: kolommen }]
+    : [{ kolommen, rijen }];
+  const schaalIn = (kandidaat) => {
+    const { celB, celH } = celGeometrie(kandidaat);
     return Math.min(celB / eerstePagina.breedte, celH / eerstePagina.hoogte);
   };
-  return schaalIn(liggend) > schaalIn(staand) + 1e-9 ? liggend : staand;
+  // Op volgorde van voorkeur (staand vóór liggend, het raster uit de lijst
+  // vóór het gedraaide); alleen een echt grotere pagina wint.
+  let beste = null;
+  let besteSchaal = -Infinity;
+  for (const blad of bladen) {
+    for (const raster of rasters) {
+      const kandidaat = { ...blad, ...raster };
+      const schaal = schaalIn(kandidaat);
+      if (beste === null || schaal > besteSchaal + 1e-9) {
+        beste = kandidaat;
+        besteSchaal = schaal;
+      }
+    }
+  }
+  return beste;
 }
 
 /**
@@ -191,7 +213,7 @@ export function schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) {
  */
 export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, paginas }) {
   if (!isMeerPerBlad(meerPerBlad) || !keuzes) return null;
-  const { kolommen, rijen, volgorde = 'horizontal', rand = false } = meerPerBlad;
+  const { volgorde = 'horizontal', rand = false, draaibaar = false } = meerPerBlad;
   const { papier: vel = null, orientatie = 'auto', schaling, zoom, centreren } = keuzes;
   const celKeuzes = { papier: vel, orientatie, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
   const plaats = (pagina) => berekenPlaatsing({ ...celKeuzes, pagina });
@@ -207,7 +229,10 @@ export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, pagina
   // Zoals metMeerPerBlad in print-job.js: alleen een vel met maten telt als
   // papier; anders volgt het vel de eerste printpagina.
   const papier = vel && typeof vel === 'object' ? vel : null;
-  const { bladB, bladH } = kiesBlad({ papier, orientatie, eerstePagina: maat(eerste), kolommen, rijen });
+  const { bladB, bladH, kolommen, rijen } = kiesBlad({
+    papier, orientatie, eerstePagina: maat(eerste),
+    kolommen: meerPerBlad.kolommen, rijen: meerPerBlad.rijen, draaibaar,
+  });
   const velB = bladB * MM_PER_PT;
   const velH = bladH * MM_PER_PT;
   const stand = bladB > bladH ? 'landscape' : 'portrait';
@@ -238,6 +263,8 @@ export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, pagina
     },
     rand: !!rand,
     schaal: cellen.length ? cellen[0].plaatsing.schaal * cellen[0].schaal : null,
+    kolommen,
+    rijen,
     cellen,
   };
 }
@@ -248,12 +275,15 @@ export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, pagina
  * `pdf` zelf terug.
  * @param {PDFDocument} pdf
  * @param {{ kolommen:number, rijen:number, volgorde?:string, rand?:boolean,
+ *           draaibaar?:boolean,
  *           papier?:{breedteMm:number, hoogteMm:number}|null,
  *           orientatie?:'auto'|'portrait'|'landscape' }} opties
  */
 export async function maakMeerPerBlad(pdf, opties) {
-  const { kolommen, rijen, volgorde = 'horizontal', rand = false, papier = null, orientatie = 'auto' } = opties;
-  if (!isMeerPerBlad({ kolommen, rijen })) return pdf;
+  const {
+    volgorde = 'horizontal', rand = false, papier = null, orientatie = 'auto', draaibaar = false,
+  } = opties;
+  if (!isMeerPerBlad({ kolommen: opties.kolommen, rijen: opties.rijen })) return pdf;
   const bron = pdf.getPages();
   if (bron.length === 0) return pdf;
 
@@ -261,7 +291,9 @@ export async function maakMeerPerBlad(pdf, opties) {
     const { width, height } = p.getSize();
     return { breedte: width, hoogte: height };
   });
-  const { bladB, bladH } = kiesBlad({ papier, orientatie, eerstePagina: maten[0], kolommen, rijen });
+  const { bladB, bladH, kolommen, rijen } = kiesBlad({
+    papier, orientatie, eerstePagina: maten[0], kolommen: opties.kolommen, rijen: opties.rijen, draaibaar,
+  });
 
   // pdf-lib schrijft lui ingebedde afbeeldingen en fonts (embedJpg/embedFont
   // in bouwPrintPdf) pas bij flush()/save() weg. Zonder flush kopieert

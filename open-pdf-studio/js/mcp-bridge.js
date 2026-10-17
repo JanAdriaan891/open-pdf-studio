@@ -3394,9 +3394,10 @@ async function bereidPrintVoor(params, naarBestand, controle = null) {
     if (mis) return mis;
   }
 
-  const { parsePageRange } = await import('./pdf/exporter.js');
+  // Het printbereik zoals getypt, met volgorde en herhalingen (#606).
+  const { printPaginaBereik } = await import('./pdf/print-bereik.js');
   const keuze = opdrachtMod.kiesPaginas(opdracht, {
-    totaal: doc.pdfDoc.numPages, huidig: doc.currentPage || 1, bereik: parsePageRange,
+    totaal: doc.pdfDoc.numPages, huidig: doc.currentPage || 1, bereik: printPaginaBereik,
   });
   if (!keuze.ok) return keuze;
 
