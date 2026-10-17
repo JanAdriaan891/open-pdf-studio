@@ -375,3 +375,4 @@ js/pdf/print-boekje.test.mjs
 js/pdf/splits-logica.test.mjs
 js/pdf/splits-document.test.mjs
 js/pdf/splits-i18n.test.mjs
+js/solid/stores/print-queue-model.test.mjs
