@@ -181,6 +181,17 @@
     "checkFinder": "Finder > 情報を見る を確認",
     "notSet": "未設定"
   },
+  "explorerThumbnails": {
+    "title": "エクスプローラー",
+    "show": "エクスプローラーで PDF のサムネイルを表示する",
+    "help": "エクスプローラーで、PDF アイコンの代わりに各 PDF の最初のページが表示されます。この設定はお使いの Windows アカウントにのみ適用され、既定の PDF アプリは変更されません。",
+    "unavailable": "このバージョンでは利用できません。",
+    "otherHandler": "現在、PDF のサムネイルは {{name}} によって提供されています。",
+    "defaultApp": "既定の PDF アプリが独自のサムネイルを表示します ({{name}})。そのアプリが既定の PDF アプリである間は、Windows はそちらを使用します。",
+    "replaceTitle": "PDF のサムネイル",
+    "replaceConfirm": "{{name}} がすでにエクスプローラーで PDF のサムネイルを提供しています。\n\nお使いの Windows アカウントでは、代わりに Open PDF Studio のサムネイルを表示しますか? このオプションをオフにすると、以前のサムネイルに戻ります。",
+    "failed": "エクスプローラーのサムネイル設定を変更できませんでした。"
+  },
   "virtualPrinter": {
     "title": "仮想プリンター",
     "description": "「Open PDF Printer」は、任意のプログラムからの印刷を PDF に変換し、このアプリのプリンターウィンドウに集める Windows プリンターです。",

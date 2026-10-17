@@ -181,6 +181,17 @@
     "checkFinder": "Kontrollera Finder > Visa info",
     "notSet": "Inte angiven"
   },
+  "explorerThumbnails": {
+    "title": "Utforskaren",
+    "show": "Visa PDF-miniatyrer i Utforskaren",
+    "help": "Utforskaren visar då den första sidan i varje PDF i stället för PDF-ikonen. Detta gäller bara ditt Windows-konto och ändrar inte din standardapp för PDF.",
+    "unavailable": "Inte tillgängligt i den här versionen.",
+    "otherHandler": "PDF-miniatyrer tillhandahålls just nu av {{name}}.",
+    "defaultApp": "Din standardapp för PDF visar egna miniatyrer ({{name}}). Windows använder dem så länge den appen är din standardapp för PDF.",
+    "replaceTitle": "PDF-miniatyrer",
+    "replaceConfirm": "{{name}} tillhandahåller redan PDF-miniatyrer i Utforskaren.\n\nVisa i stället miniatyrerna från Open PDF Studio för ditt Windows-konto? Om du stänger av alternativet igen återställs de tidigare miniatyrerna.",
+    "failed": "Inställningen för miniatyrer i Utforskaren kunde inte ändras."
+  },
   "virtualPrinter": {
     "title": "Virtuell skrivare",
     "description": "”Open PDF Printer” är en Windows-skrivare som gör om en utskrift från valfritt program till en PDF och samlar den i skrivarfönstret i den här appen.",

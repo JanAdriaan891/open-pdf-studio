@@ -181,6 +181,17 @@
     "checkFinder": "Zkontrolujte Finder > Získat informace",
     "notSet": "Nenastaveno"
   },
+  "explorerThumbnails": {
+    "title": "Průzkumník souborů",
+    "show": "Zobrazovat miniatury PDF v Průzkumníku souborů",
+    "help": "Průzkumník souborů pak místo ikony PDF zobrazí první stránku každého PDF. Platí to jen pro váš účet Windows a nemění to vaši výchozí aplikaci pro PDF.",
+    "unavailable": "V této verzi není k dispozici.",
+    "otherHandler": "Miniatury PDF nyní poskytuje {{name}}.",
+    "defaultApp": "Vaše výchozí aplikace pro PDF zobrazuje vlastní miniatury ({{name}}). Windows je používá, dokud je tato aplikace vaší výchozí aplikací pro PDF.",
+    "replaceTitle": "Miniatury PDF",
+    "replaceConfirm": "{{name}} už poskytuje miniatury PDF v Průzkumníku souborů.\n\nZobrazovat místo nich pro váš účet Windows miniatury z Open PDF Studio? Vypnutím této možnosti se obnoví předchozí miniatury.",
+    "failed": "Nastavení miniatur v Průzkumníku souborů se nepodařilo změnit."
+  },
   "virtualPrinter": {
     "title": "Virtuální tiskárna",
     "description": "„Open PDF Printer“ je tiskárna ve Windows, která převede výtisk z libovolného programu na PDF a shromáždí jej v okně tiskárny této aplikace.",

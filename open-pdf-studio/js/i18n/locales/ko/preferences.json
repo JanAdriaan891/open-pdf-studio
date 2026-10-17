@@ -181,6 +181,17 @@
     "checkFinder": "Finder > 정보 가져오기 확인",
     "notSet": "설정되지 않음"
   },
+  "explorerThumbnails": {
+    "title": "파일 탐색기",
+    "show": "파일 탐색기에서 PDF 미리 보기 이미지 표시",
+    "help": "파일 탐색기에서 PDF 아이콘 대신 각 PDF의 첫 페이지가 표시됩니다. 이 설정은 사용자의 Windows 계정에만 적용되며 기본 PDF 앱은 바뀌지 않습니다.",
+    "unavailable": "이 버전에서는 사용할 수 없습니다.",
+    "otherHandler": "현재 PDF 미리 보기 이미지는 {{name}}에서 제공합니다.",
+    "defaultApp": "기본 PDF 앱이 자체 미리 보기 이미지를 표시합니다({{name}}). 해당 앱이 기본 PDF 앱인 동안에는 Windows가 그 이미지를 사용합니다.",
+    "replaceTitle": "PDF 미리 보기 이미지",
+    "replaceConfirm": "{{name}}에서 이미 파일 탐색기의 PDF 미리 보기 이미지를 제공하고 있습니다.\n\n사용자의 Windows 계정에서 대신 Open PDF Studio의 미리 보기 이미지를 표시할까요? 이 옵션을 끄면 이전 미리 보기 이미지가 복원됩니다.",
+    "failed": "파일 탐색기의 미리 보기 이미지 설정을 변경하지 못했습니다."
+  },
   "virtualPrinter": {
     "title": "가상 프린터",
     "description": "\"Open PDF Printer\"는 아무 프로그램의 인쇄물을 PDF로 변환하여 이 앱의 프린터 창에 모아 주는 Windows 프린터입니다.",

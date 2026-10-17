@@ -247,6 +247,17 @@
     "checkFinder": "Check Finder > Get Info",
     "notSet": "Not set"
   },
+  "explorerThumbnails": {
+    "title": "File Explorer",
+    "show": "Show PDF thumbnails in File Explorer",
+    "help": "File Explorer then shows the first page of each PDF instead of the PDF icon. This applies to your Windows account only and does not change your default PDF app.",
+    "unavailable": "Not available in this version.",
+    "otherHandler": "PDF thumbnails are currently provided by {{name}}.",
+    "defaultApp": "Your default PDF app shows its own thumbnails ({{name}}). Windows uses those as long as that app is your default PDF app.",
+    "replaceTitle": "PDF thumbnails",
+    "replaceConfirm": "{{name}} already provides PDF thumbnails in File Explorer.\n\nShow the thumbnails of Open PDF Studio instead for your Windows account? Turning this option off restores the previous thumbnails.",
+    "failed": "Could not change the File Explorer thumbnail setting."
+  },
   "virtualPrinter": {
     "title": "Virtual Printer",
     "description": "\"Open PDF Printer\" is a Windows printer that turns a print from any program into a PDF and collects it in the printer window of this app.",

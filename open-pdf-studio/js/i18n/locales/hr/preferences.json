@@ -181,6 +181,17 @@
     "checkFinder": "Provjerite Finder > Get Info",
     "notSet": "Nije postavljeno"
   },
+  "explorerThumbnails": {
+    "title": "Eksplorer za datoteke",
+    "show": "Prikaži minijature PDF-ova u Eksploreru za datoteke",
+    "help": "Eksplorer za datoteke tada umjesto ikone PDF-a prikazuje prvu stranicu svakog PDF-a. To vrijedi samo za vaš Windows račun i ne mijenja vašu zadanu aplikaciju za PDF.",
+    "unavailable": "Nije dostupno u ovoj verziji.",
+    "otherHandler": "Minijature PDF-ova trenutačno pruža {{name}}.",
+    "defaultApp": "Vaša zadana aplikacija za PDF prikazuje vlastite minijature ({{name}}). Windows ih koristi dok je ta aplikacija vaša zadana aplikacija za PDF.",
+    "replaceTitle": "Minijature PDF-ova",
+    "replaceConfirm": "{{name}} već pruža minijature PDF-ova u Eksploreru za datoteke.\n\nŽelite li umjesto toga za svoj Windows račun prikazivati minijature iz aplikacije Open PDF Studio? Isključivanjem ove mogućnosti vraćaju se prethodne minijature.",
+    "failed": "Postavka minijatura u Eksploreru za datoteke nije se mogla promijeniti."
+  },
   "virtualPrinter": {
     "title": "Virtualni pisač",
     "description": "„Open PDF Printer“ je Windows pisač koji ispis iz bilo kojeg programa pretvara u PDF i prikuplja ga u prozoru pisača ove aplikacije.",

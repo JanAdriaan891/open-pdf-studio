@@ -181,6 +181,17 @@
     "checkFinder": "Tarkista Finder > Hae tietoja",
     "notSet": "Ei asetettu"
   },
+  "explorerThumbnails": {
+    "title": "Resurssienhallinta",
+    "show": "Näytä PDF-pikkukuvat resurssienhallinnassa",
+    "help": "Resurssienhallinta näyttää tällöin jokaisen PDF:n ensimmäisen sivun PDF-kuvakkeen sijaan. Asetus koskee vain Windows-tiliäsi eikä muuta oletus-PDF-sovellustasi.",
+    "unavailable": "Ei käytettävissä tässä versiossa.",
+    "otherHandler": "PDF-pikkukuvat tarjoaa tällä hetkellä {{name}}.",
+    "defaultApp": "Oletus-PDF-sovelluksesi näyttää omat pikkukuvansa ({{name}}). Windows käyttää niitä niin kauan kuin kyseinen sovellus on oletus-PDF-sovelluksesi.",
+    "replaceTitle": "PDF-pikkukuvat",
+    "replaceConfirm": "{{name}} tarjoaa jo PDF-pikkukuvat resurssienhallintaan.\n\nNäytetäänkö Windows-tilillesi sen sijaan Open PDF Studion pikkukuvat? Kun poistat asetuksen käytöstä, aiemmat pikkukuvat palautetaan.",
+    "failed": "Resurssienhallinnan pikkukuva-asetusta ei voitu muuttaa."
+  },
   "virtualPrinter": {
     "title": "Virtuaalitulostin",
     "description": "\"Open PDF Printer\" on Windows-tulostin, joka muuttaa minkä tahansa ohjelman tulosteen PDF-tiedostoksi ja kerää sen tämän sovelluksen tulostinikkunaan.",

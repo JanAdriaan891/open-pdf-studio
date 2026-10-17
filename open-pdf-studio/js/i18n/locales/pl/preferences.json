@@ -181,6 +181,17 @@
     "checkFinder": "Sprawdź Finder > Informacje",
     "notSet": "Nie ustawiono"
   },
+  "explorerThumbnails": {
+    "title": "Eksplorator plików",
+    "show": "Pokazuj miniatury plików PDF w Eksploratorze plików",
+    "help": "Eksplorator plików będzie wtedy pokazywał pierwszą stronę każdego pliku PDF zamiast ikony PDF. Dotyczy to tylko Twojego konta Windows i nie zmienia domyślnej aplikacji PDF.",
+    "unavailable": "Niedostępne w tej wersji.",
+    "otherHandler": "Miniatury plików PDF dostarcza obecnie {{name}}.",
+    "defaultApp": "Twoja domyślna aplikacja PDF pokazuje własne miniatury ({{name}}). Windows używa ich, dopóki ta aplikacja jest domyślną aplikacją PDF.",
+    "replaceTitle": "Miniatury PDF",
+    "replaceConfirm": "{{name}} już dostarcza miniatury plików PDF w Eksploratorze plików.\n\nCzy zamiast nich pokazywać miniatury Open PDF Studio na Twoim koncie Windows? Wyłączenie tej opcji przywraca poprzednie miniatury.",
+    "failed": "Nie udało się zmienić ustawienia miniatur w Eksploratorze plików."
+  },
   "virtualPrinter": {
     "title": "Drukarka wirtualna",
     "description": "„Open PDF Printer” to drukarka systemu Windows, która zamienia wydruk z dowolnego programu na plik PDF i zbiera go w oknie drukarki tej aplikacji.",

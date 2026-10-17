@@ -181,6 +181,17 @@
     "checkFinder": "Finder > Bilgi Al seçeneğini kontrol edin",
     "notSet": "Ayarlanmadı"
   },
+  "explorerThumbnails": {
+    "title": "Dosya Gezgini",
+    "show": "Dosya Gezgini'nde PDF küçük resimlerini göster",
+    "help": "Dosya Gezgini bu durumda PDF simgesi yerine her PDF'nin ilk sayfasını gösterir. Bu yalnızca Windows hesabınız için geçerlidir ve varsayılan PDF uygulamanızı değiştirmez.",
+    "unavailable": "Bu sürümde kullanılamaz.",
+    "otherHandler": "PDF küçük resimleri şu anda {{name}} tarafından sağlanıyor.",
+    "defaultApp": "Varsayılan PDF uygulamanız kendi küçük resimlerini gösteriyor ({{name}}). Windows, o uygulama varsayılan PDF uygulamanız olduğu sürece bunları kullanır.",
+    "replaceTitle": "PDF küçük resimleri",
+    "replaceConfirm": "{{name}} zaten Dosya Gezgini'nde PDF küçük resimleri sağlıyor.\n\nWindows hesabınız için bunların yerine Open PDF Studio küçük resimleri gösterilsin mi? Bu seçeneği kapattığınızda önceki küçük resimler geri gelir.",
+    "failed": "Dosya Gezgini küçük resim ayarı değiştirilemedi."
+  },
   "virtualPrinter": {
     "title": "Sanal Yazıcı",
     "description": "\"Open PDF Printer\", herhangi bir programdan yapılan yazdırmayı PDF'ye dönüştüren ve bu uygulamanın yazıcı penceresinde toplayan bir Windows yazıcısıdır.",

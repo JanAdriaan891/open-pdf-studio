@@ -181,6 +181,17 @@
     "checkFinder": "Controleer Finder > Toon info",
     "notSet": "Niet ingesteld"
   },
+  "explorerThumbnails": {
+    "title": "Verkenner",
+    "show": "PDF-miniaturen tonen in Verkenner",
+    "help": "Verkenner toont dan de eerste pagina van elke PDF in plaats van het PDF-pictogram. Dit geldt alleen voor uw Windows-account en verandert uw standaard-PDF-app niet.",
+    "unavailable": "Niet beschikbaar in deze versie.",
+    "otherHandler": "PDF-miniaturen worden nu geleverd door {{name}}.",
+    "defaultApp": "Uw standaard-PDF-app toont eigen miniaturen ({{name}}). Windows gebruikt die zolang die app uw standaard-PDF-app is.",
+    "replaceTitle": "PDF-miniaturen",
+    "replaceConfirm": "{{name}} levert al PDF-miniaturen in Verkenner.\n\nVoor uw Windows-account in plaats daarvan de miniaturen van Open PDF Studio tonen? Als u deze optie weer uitzet, komen de vorige miniaturen terug.",
+    "failed": "De instelling voor miniaturen in Verkenner kon niet worden gewijzigd."
+  },
   "virtualPrinter": {
     "title": "Virtuele printer",
     "description": "\"Open PDF Printer\" is een Windows-printer die een afdruk uit elk programma omzet in een PDF en die verzamelt in het printervenster van deze app.",
