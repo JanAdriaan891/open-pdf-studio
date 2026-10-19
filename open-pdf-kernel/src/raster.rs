@@ -7,7 +7,7 @@ use std::fmt;
 use vello_cpu::color::{AlphaColor, Srgb};
 use vello_cpu::kurbo::{Affine, BezPath, Cap, Join, Stroke};
 use vello_cpu::peniko::{BlendMode as VBlend, Fill, Mix};
-use vello_cpu::{Pixmap, RenderContext, Resources};
+use vello_cpu::{Pixmap, RasterizerSettings, RenderContext, Resources};
 
 use crate::dl::{
     BlendMode, Color, DisplayList, FillRule, Item, LineCap, LineJoin, Path, PathEl, StrokeStyle,
@@ -105,23 +105,33 @@ pub fn render(dl: &DisplayList, target: &RasterTarget) -> Result<RgbaImage, Rast
     }
     ctx.flush();
     let mut pixmap = Pixmap::new(w16, h16);
-    ctx.render_to_pixmap(&mut Resources::new(), &mut pixmap);
-    let data = pixmap
-        .take_unpremultiplied()
-        .into_iter()
-        .flat_map(|p| {
-            if p.a == 0 {
-                [0, 0, 0, 0]
-            } else {
-                [p.r, p.g, p.b, p.a]
-            }
-        })
-        .collect();
+    ctx.render_with(
+        &mut pixmap,
+        &mut Resources::new(),
+        RasterizerSettings::default(),
+    );
     Ok(RgbaImage {
         width: w,
         height: h,
-        data,
+        data: unpremultiply(pixmap.data_as_u8_slice()),
     })
+}
+
+/// Premultiplied RGBA8 → straight RGBA8, rounding to nearest; alpha 0 → all zero.
+pub(crate) fn unpremultiply(premul: &[u8]) -> Vec<u8> {
+    let mut out = Vec::with_capacity(premul.len());
+    for p in premul.chunks_exact(4) {
+        let a = u32::from(p[3]);
+        if a == 0 {
+            out.extend_from_slice(&[0, 0, 0, 0]);
+            continue;
+        }
+        for &c in &p[..3] {
+            out.push(((u32::from(c) * 255 + a / 2) / a).min(255) as u8);
+        }
+        out.push(p[3]);
+    }
+    out
 }
 
 impl RgbaImage {

@@ -10,5 +10,5 @@ publish = false
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["float_roundtrip"] }
-vello_cpu = { version = "=0.0.8", default-features = false, features = ["std", "png", "u8_pipeline"] }
+vello_cpu = { version = "=0.3.0", default-features = false, features = ["std", "png", "u8_pipeline"] }
 png = "0.18"
