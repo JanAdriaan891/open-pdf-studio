@@ -24,7 +24,7 @@ import {
   PDFDocument, pushGraphicsState, popGraphicsState, concatTransformationMatrix, rectangle, clip, endPath,
 } from 'pdf-lib';
 import { berekenPlaatsing, printPaginaMaat, margesVoor } from './print-plaatsing.js';
-import { BLAD_MARGE_PT } from './print-meerperblad.js';
+import { BLAD_MARGE_PT, CEL_PAGINA_STAND } from './print-meerperblad.js';
 
 const PT_PER_MM = 72 / 25.4;
 const MM_PER_PT = 25.4 / 72;
@@ -234,8 +234,9 @@ export function boekjeIndeling({ bladB, bladH, maten, kruip = 0 }) {
 
 /**
  * Het voorbeeld van één zijde van het boekje, zoals de printopdracht haar
- * bouwt: elke pagina eerst passend op haar printpagina (berekenPlaatsing; de
- * schaalkeuze vervalt, zoals bij meerdere pagina's per vel), dan het liggende
+ * bouwt: elke pagina eerst passend op haar printpagina (berekenPlaatsing in
+ * de stand van de pagina zelf; de schaalkeuze en de gekozen stand vervallen,
+ * zoals bij meerdere pagina's per vel), dan het liggende
  * vel (kiesBoekjeBlad, uit de eerste pagina van de hele afdruk) en de helften
  * (boekjeIndeling).
  *
@@ -255,8 +256,11 @@ export function boekjeIndeling({ bladB, bladH, maten, kruip = 0 }) {
  */
 export function voorbeeldBoekje({ keuzes, eerstePagina, paginas, kruip = 0, gedraaid = false }) {
   if (!keuzes || !eerstePagina) return null;
-  const { papier: vel = null, orientatie = 'auto' } = keuzes;
-  const celKeuzes = { papier: vel, orientatie, schaling: 'fit', zoom: 100, centreren: true };
+  // De gekozen stand telt niet voor de inhoud: elke printpagina in de stand
+  // van haar pagina (CEL_PAGINA_STAND, zoals bronKeuzes), zodat een boekje
+  // zijn pagina's altijd rechtop houdt (#623).
+  const { papier: vel = null } = keuzes;
+  const celKeuzes = { papier: vel, orientatie: CEL_PAGINA_STAND, schaling: 'fit', zoom: 100, centreren: true };
   const plaats = (pagina) => (pagina ? berekenPlaatsing({ ...celKeuzes, pagina }) : null);
   const maat = (plaatsing) => {
     if (!plaatsing) return null;
