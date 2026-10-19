@@ -7,6 +7,7 @@ import { bewaar as bewaarKnipsel } from '../../annotations/vector-snippet-store.
 import { decodePdfTextObject } from '../saver/pdf-text.js';
 import { readPluginPdfAnnotation } from '../../plugins/plugin-pdf.js';
 import { laagVanOc } from '../saver/annotatie-lagen.js';
+import { leesRuweSleutels } from '../saver/ruwe-sleutels.js';
 import { leesPlattegrondMeta } from './plattegrond-meta.js';
 import { leesLijnSleutels } from './maatlijn-uit-bestand.js';
 import { blendUitPdf } from '../../annotations/blend-modes.js';
@@ -779,6 +780,18 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         }
       }
 
+      // Telmarkering van de app (#621, saver/telling.js).
+      if (subtypeName === '/Circle') {
+        const nr = annotDict.get(PDFName.of('OPS_CountNumber'));
+        const nv = nr !== undefined ? pdfNum(context.lookup(nr) || nr) : null;
+        if (nv !== null) colors.opsCountNumber = nv;
+        for (const [sleutel, veld] of [['OPS_CountCategory', 'opsCountCategory'],
+          ['OPS_MarkerStyle', 'opsMarkerStyle'], ['OPS_SymbolId', 'opsSymbolId']]) {
+          const t = leesPdfTekst(context, annotDict.get(PDFName.of(sleutel)));
+          if (t) colors[veld] = t;
+        }
+      }
+
       // Read /OPS_HatchPattern, /OPS_HatchColor, /OPS_HatchScale, /OPS_HatchAngle
       // (used by 'filledArea' annotations to persist user-controlled hatch fill).
       const hpRaw = annotDict.get(PDFName.of('OPS_HatchPattern'));
@@ -802,6 +815,21 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
       if (haRaw) {
         const ha = pdfNum(context.lookup(haRaw) || haRaw);
         if (ha !== null) colors.opsHatchAngle = ha;
+      }
+      // Tegelpatroon van een ander programma (#621): de naam in /PatternName
+      // (tekst of naam) en de kleur in /PatternColor. Het patroon zelf staat
+      // in de appearance; een bekende naam wordt een arcering van de app
+      // (saver/hatch-meta.js), de sleutels zelf reizen ongewijzigd mee.
+      const pnRaw = annotDict.get(PDFName.of('PatternName'));
+      if (pnRaw !== undefined) {
+        const pn = context.lookup(pnRaw) || pnRaw;
+        const naam = pn instanceof PDFName ? pn.decodeText() : leesTekstString(context, pn);
+        if (naam) colors.pdfPatternName = naam;
+      }
+      const pcRaw = annotDict.get(PDFName.of('PatternColor'));
+      if (pcRaw !== undefined) {
+        const pc = pdfColorToHex(context.lookup(pcRaw) || pcRaw, context);
+        if (pc) colors.pdfPatternColor = pc;
       }
 
       // Read /OPS_DikteMm — wall thickness in real-world mm (wall round-trip)
@@ -1692,6 +1720,10 @@ const result = {};
         }
         delete colors.rawLineHeight;
       }
+
+      // Sleutels die het model niet kent, ruw bewaard voor de saver (#621).
+      const ruw = leesRuweSleutels(context, annotDict);
+      if (ruw) colors.pdfRaw = ruw;
 
       if (Object.keys(colors).length > 0) colorMap.set(key, colors);
       // Invoegteken en tekstmarkeringen ook op objectverwijzing, ook zonder

@@ -158,7 +158,7 @@ let gX = (x) => x, gY = (y) => y;
 
 // Build the full hatch fill (clip to polygon+holes, then all line families).
 // `points`/`holes` are app-space. Returns ops (already includes q/Q).
-function hatchFillOps({ points, holes, hatchPattern, hatchColorRgb, hatchScale, hatchAngle, X, Y }) {
+export function hatchFillOps({ points, holes, hatchPattern, hatchColorRgb, hatchScale, hatchAngle, X, Y }) {
   const families = getHatchLineFamilies(hatchPattern);
   if (families === null) return '';
   gX = X; gY = Y;
@@ -796,7 +796,8 @@ export function buildSysteemrasterAP({ geom, X, Y, strokeColorHex, lineWidth }) 
 
 // cloud / cloudPolyline: scalloped outline (optional fill).
 export function buildCloudAP({ kind, x, y, w, h, points, puff, X, Y,
-  fillColorHex, strokeColorHex, lineWidth, borderStyle, heeftRand = true }) {
+  fillColorHex, strokeColorHex, lineWidth, borderStyle, heeftRand = true,
+  hatchPattern, hatchColorHex, hatchScale, hatchAngle }) {
   const outline = kind === 'rect'
     ? cloudRectOutlinePts(x, y, w, h, puff || 15)
     : cloudPolyOutlinePts(points, true);
@@ -805,6 +806,13 @@ export function buildCloudAP({ kind, x, y, w, h, points, puff, X, Y,
   let s = '';
   if (fillColorHex && fillColorHex !== 'none' && fillColorHex !== 'transparent') {
     s += solidFillOps(outline, null, hexToRgb(fillColorHex), X, Y);
+  }
+  // Arcering uit het eigenschappenpaneel (#621), binnen de gebolde omtrek,
+  // tussen vulling en rand zoals het scherm.
+  if (hatchPattern && hatchPattern !== 'none') {
+    s += hatchFillOps({ points: outline, holes: null, hatchPattern,
+      hatchColorRgb: hexToRgb(hatchColorHex || strokeColorHex || '#000000'),
+      hatchScale, hatchAngle, X, Y });
   }
   if (heeftRand) {
     s += `${f(stroke[0])} ${f(stroke[1])} ${f(stroke[2])} RG\n${f(lineWidth ?? 1)} w\n${dashOp(borderStyle)}`;

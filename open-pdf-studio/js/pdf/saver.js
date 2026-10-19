@@ -52,10 +52,13 @@ import { catmullRomSpline } from '../tools/tools/spline-tool.js';
 import { buildFilledAreaAP, buildMeasureAreaAP, buildPolylineMeasureAP,
   buildWallAP, buildCloudAP, buildSplineArrowAP,
   buildStavenreeksAP, buildBetonbalkAP, buildSysteemrasterAP, buildLineAP, calloutLeiderOps, buildPolylineAP, polylijnOmhullende, lijnOmhullende, buildLeiderAP, leiderOmhullende, apLijndikte,
-  cloudRectOutlinePts, cloudPolyOutlinePts } from './saver/appearance-vectors.js';
+  cloudRectOutlinePts, cloudPolyOutlinePts, hatchFillOps } from './saver/appearance-vectors.js';
 import { veelhoekGrondvorm } from './saver/veelhoek-grondvorm.js';
 import { draaiPunt, draaiMidden, draaiCm } from './saver/vorm-draaiing.js';
 import { schrijfAlgemeneSleutels, antwoordAnnotaties, schrijfKoppelingen } from './saver/annotatie-algemeen.js';
+import { schrijfRuweSleutels } from './saver/ruwe-sleutels.js';
+import { bouwTellingDict } from './saver/telling.js';
+import { isVreemdeTelling, tellingStraal } from '../annotations/telling.js';
 import { tekstvakRc, dsTekstDecoratie } from './saver/tekstvak-rc.js';
 import { _rotVisualMapper, _remapRect } from './saver/rotatie-mapper.js';
 import { makePointMapper, buildTextEditStrikeDict, buildCaretDict, addLoadedMarkupKeys,
@@ -651,6 +654,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             if (ann.rotation) annDictObj.OPS_Rotation = ann.rotation;
 
             annotDict = context.obj(annDictObj);
+            // Arcering uit het eigenschappenpaneel (#621): de sleutels voor de
+            // rondgang; de appearance tekent haar (generateAppearanceStream).
+            if (ann.type === 'box') schrijfHatchMeta(annotDict, ann, context);
             break;
           }
 
@@ -774,6 +780,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             if (ann.cross) annDictObj.OPS_Cross = true;
 
             annotDict = context.obj(annDictObj);
+            // Arcering (#621), zie de rechthoek.
+            schrijfHatchMeta(annotDict, ann, context);
             break;
           }
 
@@ -881,6 +889,14 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             inkDict.BS = buildBorderStyle(context, borderWidth, ann.borderStyle);
 
             annotDict = context.obj(inkDict);
+            break;
+          }
+
+          case 'count': {
+            // Telmarkering (#621): verdween bij opslaan. Zie saver/telling.js.
+            annotDict = bouwTellingDict(context, ann, convertX, convertY, {
+              opacity, flags: computeAnnotFlags(ann),
+            });
             break;
           }
 
@@ -1133,6 +1149,15 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             if (polyRotatie) polygonDict.OPS_Rotation = polyRotatie;
 
             annotDict = context.obj(polygonDict);
+            // Arcering (#621): de sleutels voor de rondgang; de appearance
+            // hieronder tekent haar. Een vrije wolk biedt het paneel niet aan.
+            if (ann.type !== 'cloudPolyline') schrijfHatchMeta(annotDict, ann, context);
+            // De hoek van de arcering in de ruimte van `ann` (ongedraaide
+            // pagina): op het scherm staat hij ten opzichte van de getoonde pagina.
+            const polyArcering = ann.type !== 'cloudPolyline' && ann.hatchPattern && ann.hatchPattern !== 'none'
+              ? { hatchPattern: ann.hatchPattern, hatchColorHex: ann.hatchColor || ann.strokeColor || ann.color || '#000000',
+                hatchScale: ann.hatchScale, hatchAngle: (ann.hatchAngle || 0) - (pageRot || 0) }
+              : null;
 
             // Vector /AP voor GEWONE polygonen: viewers die zelf uit /Vertices
             // synthetiseren tekenen alleen de rand en laten /IC-vulling (en al
@@ -1142,7 +1167,27 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             // staan in absolute PDF-coordinaten en draaien vanzelf met de
             // pagina mee — geen /Rotate-compensatie nodig, anders dan bij
             // tekst- en beeldinhoud.
-            if (ann.type === 'polygon' && polyVertices.length >= 6) {
+            if (isVreemdeTelling(ann) && polyVertices.length >= 2) {
+              // Telling van een ander programma (#621): een stip per hoekpunt,
+              // zoals dat programma hem tekent, geen gesloten veelhoek.
+              const tr = tellingStraal(ann);
+              const k = 0.5522847498;
+              const [sr, sg, sb] = hexToRgb(ann.strokeColor || ann.color || '#ff0000');
+              let stippen = `q ${sr} ${sg} ${sb} rg\n`;
+              for (let vi = 0; vi < polyVertices.length; vi += 2) {
+                const x = polyVertices[vi], y = polyVertices[vi + 1];
+                stippen += `${x + tr} ${y} m ${x + tr} ${y + k * tr} ${x + k * tr} ${y + tr} ${x} ${y + tr} c `
+                  + `${x - k * tr} ${y + tr} ${x - tr} ${y + k * tr} ${x - tr} ${y} c `
+                  + `${x - tr} ${y - k * tr} ${x - k * tr} ${y - tr} ${x} ${y - tr} c `
+                  + `${x + k * tr} ${y - tr} ${x + tr} ${y - k * tr} ${x + tr} ${y} c f\n`;
+              }
+              stippen += 'Q\n';
+              const xs = polyVertices.filter((_, i) => i % 2 === 0);
+              const ys = polyVertices.filter((_, i) => i % 2 === 1);
+              const tRect = [Math.min(...xs) - tr - 1, Math.min(...ys) - tr - 1, Math.max(...xs) + tr + 1, Math.max(...ys) + tr + 1];
+              annotDict.set(PDFName.of('Rect'), context.obj(tRect));
+              attachVectorAP(context, annotDict, { content: stippen }, tRect);
+            } else if (ann.type === 'polygon' && polyVertices.length >= 6) {
               const pgFill = hasFill(ann.fillColor);
               const pgStroke = borderWidth > 0 && hasStroke(ann.strokeColor);
               let pad = '';
@@ -1156,6 +1201,15 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                 const [fr, fg, fb] = hexToRgb(ann.fillColor);
                 // Vulling apart binnen q…Q zodat de vul-alfa de rand niet raakt.
                 pgContent += `q\n${pgFillAlpha < 1 ? '/GSf gs\n' : ''}${fr} ${fg} ${fb} rg\n${pad}f\nQ\n`;
+              }
+              if (polyArcering) {
+                // Ongedraaid berekend en met één cm om het midden gedraaid,
+                // zoals het scherm de arcering met de vorm meedraait.
+                const ongedraaid = grondvorm.map((pt) => naarPagina(pt.x, pt.y));
+                const ops = hatchFillOps({ points: ongedraaid, holes: null, ...polyArcering,
+                  hatchColorRgb: hexToRgb(polyArcering.hatchColorHex), X: convertX, Y: convertY });
+                pgContent += polyRotatie
+                  ? `q\n${draaiCm(convertX(polyMidden.x), convertY(polyMidden.y), polyRotatie)}${ops}Q\n` : ops;
               }
               if (pgStroke) {
                 const [psr, psg, psb] = hexToRgb(ann.strokeColor || ann.color || '#000000');
@@ -1193,6 +1247,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   strokeColorHex: ann.strokeColor || ann.color || '#000000',
                   lineWidth: borderWidth, borderStyle: ann.borderStyle,
                   heeftRand: !randSleutelZonderRand(ann),
+                  ...(polyArcering || {}),
                 });
                 // Gedraaid: de ongedraaide wolk met één cm om het midden.
                 if (wolkAp && polyRotatie) {
@@ -2825,6 +2880,23 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             // Existing page-baking handlers keep their original contract.
             // Render-only handlers use a visible /Square with editable metadata.
             const pluginHandler = getAnnotationType(ann.type);
+            const pluginRect = () => {
+              const rawBounds = pluginHandler?.getBounds?.(annRaw) || annRaw;
+              const bounds = pageRot
+                ? _remapRect(rawBounds, _rotVisualMapper(pageRot, cropBox.width, cropBox.height))
+                : rawBounds;
+              return [convertX(bounds.x), convertY(bounds.y + bounds.height),
+                convertX(bounds.x + bounds.width), convertY(bounds.y)];
+            };
+            // Bewaard als /Square met de gegevens van de extensie, met een
+            // afbeelding als de extensie kan tekenen (render), anders zonder.
+            const alsPluginVlak = async () => {
+              let png = null;
+              if (pluginHandler?.render) {
+                try { png = renderPluginAnnotationPng(annRaw, pluginHandler, pageRot); } catch (_) { png = null; }
+              }
+              return createPluginPdfAnnotation(pdfDocLib, annRaw, pluginRect(), png);
+            };
             if (pluginHandler && typeof pluginHandler.serializeToPdf === 'function') {
               try {
                 await pluginHandler.serializeToPdf({
@@ -2835,17 +2907,16 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   convertY,
                 });
               } catch (err) {
-                console.warn(`[saver] plugin serializeToPdf failed for type "${ann.type}":`, err);
+                // Een fout in een extensie mag geen markering van de gebruiker
+                // kosten (#621): bewaar haar gegevens zoals bij een extensie
+                // zonder serializeToPdf.
+                console.warn(`[saver] plugin serializeToPdf failed for type "${ann.type}", kept as plugin data:`, err);
+                try { annotDict = await alsPluginVlak(); } catch (e2) {
+                  console.warn(`[saver] plugin annotation "${ann.type}" could not be kept:`, e2);
+                }
               }
             } else if (pluginHandler?.render) {
-              const rawBounds = pluginHandler.getBounds?.(annRaw) || annRaw;
-              const bounds = pageRot
-                ? _remapRect(rawBounds, _rotVisualMapper(pageRot, cropBox.width, cropBox.height))
-                : rawBounds;
-              const rect = [convertX(bounds.x), convertY(bounds.y + bounds.height),
-                convertX(bounds.x + bounds.width), convertY(bounds.y)];
-              const png = renderPluginAnnotationPng(annRaw, pluginHandler, pageRot);
-              annotDict = await createPluginPdfAnnotation(pdfDocLib, annRaw, rect, png);
+              annotDict = await alsPluginVlak();
             }
             break;
           }
@@ -2854,7 +2925,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
         // Generate appearance stream for better compatibility with other PDF viewers
         // Skip if AP was already set (e.g. image/signature with embedded image)
         if (annotDict && !annotDict.get(PDFName.of('AP'))) {
-          const apStream = generateAppearanceStream(context, ann, convertY);
+          // Arcering (#621): de hoek geldt op het scherm, de appearance staat
+          // in de ongedraaide pagina.
+          const apAnn = pageRot && ann.hatchPattern && ann.hatchPattern !== 'none'
+            ? { ...ann, hatchAngle: (ann.hatchAngle || 0) - pageRot } : ann;
+          const apStream = generateAppearanceStream(context, apAnn, convertY);
           if (apStream) {
             const apStreamRef = context.register(apStream);
             const apDict = context.obj({ N: apStreamRef });
@@ -2892,6 +2967,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
           // Naam, onderwerp, alternatieve tekst en IFC-categorie (#619) — ook
           // één plek voor alle soorten. Zie saver/annotatie-algemeen.js.
           schrijfAlgemeneSleutels(annotDict, ann, gebruikteNm);
+          // Sleutels uit het bestand die het model niet kent (#621): ruw terug.
+          schrijfRuweSleutels(context, annotDict, annRaw.pdfRaw, annRaw);
           // Alles vlakken (#615): welke model-annotatie dit is; vlakken haalt
           // de sleutel weer weg (flatten-bytes.js).
           if (alleenAnnotaties && typeof annotDict.set === 'function') {

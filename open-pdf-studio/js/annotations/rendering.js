@@ -18,6 +18,7 @@ import { maatlijnTekst } from './maat-label.js';
 import { maatlijnVelden } from './maatlijn-geometrie.js';
 import { tagWeergaveParams } from '../plattegrond/ruimte-koppeling.js';
 import { applyHatchFill, applyHatchFillPolygon } from './rendering/hatch-patterns.js';
+import { isVreemdeTelling, tellingStraal } from './telling.js';
 import { drawWall } from './rendering/walls.js';
 import { buildStavenreeks } from './stavenreeks.js';
 import { stavenreeksPxPerMm } from './stavenreeks-scale.js';
@@ -855,6 +856,17 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       break;
 
     case 'polygon':
+      if (isVreemdeTelling(annotation) && Array.isArray(annotation.points)) {
+        // Telling van een ander programma (#621): een stip per hoekpunt.
+        const tr = tellingStraal(annotation);
+        ctx.save();
+        ctx.fillStyle = strokeColor;
+        for (const p of annotation.points) {
+          ctx.beginPath(); ctx.arc(p.x, p.y, tr, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.restore();
+        break;
+      }
       ctx.save();
       if (annotation.rotation || annotation.flipX || annotation.flipY) {
         const polyCX = annotation.x + annotation.width / 2;
