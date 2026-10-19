@@ -212,6 +212,14 @@ export interface Preferences {
   // Screenshot annotate: intercept the system PrtScn key as a global hotkey
   interceptPrintScreen: boolean;
 
+  // Home → Screenshot: the last choices in the capture dialog
+  // (validated in tools/screenshot-keuze.js).
+  screenshotResolution: 'screen' | 'custom' | number;
+  screenshotCustomDpi: number;
+  screenshotFormat: 'png' | 'jpeg';
+  screenshotJpegQuality: number;
+  screenshotDefaultAction: 'copy' | 'save';
+
   // AI-koppeling: lokale MCP-server voor AI-assistenten (Claude Desktop e.d.)
   mcpEnabled: boolean;
   mcpPort: number;

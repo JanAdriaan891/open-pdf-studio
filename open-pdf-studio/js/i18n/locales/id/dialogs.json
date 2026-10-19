@@ -1092,5 +1092,32 @@
     "message": "\"{{fileName}}\" dilindungi kata sandi. Masukkan kata sandi untuk membukanya dalam mode hanya baca.",
     "label": "Kata sandi:",
     "wrong": "Kata sandi salah, coba lagi."
+  },
+  "screenshot": {
+    "title": "Tangkapan Layar",
+    "selectHint": "Seret untuk memilih area. Esc membatalkan.",
+    "area": "Halaman {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(pilihan dipotong ke halaman ini)",
+    "resolution": "Resolusi",
+    "screenResolution": "Layar ({{dpi}} dpi)",
+    "custom": "Kustom",
+    "size": "Ukuran",
+    "limited": "Dibatasi ke ukuran gambar maksimum: {{dpi}} dpi.",
+    "format": "Format file",
+    "quality": "Kualitas JPEG",
+    "clipboardNote": "Papan klip selalu menerima gambar PNG; format file berlaku untuk Simpan sebagai.",
+    "copy": "Salin ke papan klip",
+    "saveAs": "Simpan sebagai…",
+    "busy": "Merender…",
+    "copied": "Tangkapan layar disalin ke papan klip ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Tangkapan layar disimpan ke {{path}}",
+    "copyFailed": "Tidak dapat menyalin tangkapan layar ke papan klip",
+    "saveFailed": "Tidak dapat menyimpan tangkapan layar",
+    "cancelled": "Tangkapan layar dibatalkan",
+    "noPage": "Tidak ada halaman PDF untuk ditangkap",
+    "notOnPage": "Pilihan tidak berada di halaman",
+    "documentChanged": "Dokumen berubah. Ambil tangkapan layar lagi.",
+    "pngFiles": "Gambar PNG",
+    "jpegFiles": "Gambar JPEG"
   }
 }

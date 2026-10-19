@@ -1092,5 +1092,32 @@
     "message": "„{{fileName}}” zaštićen je lozinkom. Unesite lozinku da biste ga otvorili samo za čitanje.",
     "label": "Lozinka:",
     "wrong": "Pogrešna lozinka, pokušajte ponovno."
+  },
+  "screenshot": {
+    "title": "Snimka zaslona",
+    "selectHint": "Povucite za odabir područja. Esc poništava.",
+    "area": "Stranica {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(odabir obrezan na ovu stranicu)",
+    "resolution": "Razlučivost",
+    "screenResolution": "Zaslon ({{dpi}} dpi)",
+    "custom": "Prilagođeno",
+    "size": "Veličina",
+    "limited": "Ograničeno na najveću veličinu slike: {{dpi}} dpi.",
+    "format": "Format datoteke",
+    "quality": "Kvaliteta JPEG-a",
+    "clipboardNote": "U međuspremnik uvijek ide PNG slika; format datoteke vrijedi za Spremi kao.",
+    "copy": "Kopiraj u međuspremnik",
+    "saveAs": "Spremi kao…",
+    "busy": "Iscrtavanje…",
+    "copied": "Snimka kopirana u međuspremnik ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Snimka spremljena u {{path}}",
+    "copyFailed": "Snimku nije moguće kopirati u međuspremnik",
+    "saveFailed": "Snimku nije moguće spremiti",
+    "cancelled": "Snimka poništena",
+    "noPage": "Nema PDF stranice za snimanje",
+    "notOnPage": "Odabir nije na stranici",
+    "documentChanged": "Dokument se promijenio. Ponovno napravite snimku.",
+    "pngFiles": "PNG slika",
+    "jpegFiles": "JPEG slika"
   }
 }

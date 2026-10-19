@@ -1092,5 +1092,32 @@
     "message": "„{{fileName}}“ ist mit einem Kennwort geschützt. Geben Sie das Kennwort ein, um die Datei schreibgeschützt zu öffnen.",
     "label": "Kennwort:",
     "wrong": "Falsches Kennwort, bitte erneut versuchen."
+  },
+  "screenshot": {
+    "title": "Bildschirmfoto",
+    "selectHint": "Ziehen Sie, um einen Bereich auszuwählen. Esc bricht ab.",
+    "area": "Seite {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(Auswahl auf diese Seite zugeschnitten)",
+    "resolution": "Auflösung",
+    "screenResolution": "Bildschirm ({{dpi}} dpi)",
+    "custom": "Benutzerdefiniert",
+    "size": "Größe",
+    "limited": "Auf die maximale Bildgröße begrenzt: {{dpi}} dpi.",
+    "format": "Dateiformat",
+    "quality": "JPEG-Qualität",
+    "clipboardNote": "In die Zwischenablage kommt immer ein PNG-Bild; das Dateiformat gilt für Speichern unter.",
+    "copy": "In die Zwischenablage kopieren",
+    "saveAs": "Speichern unter…",
+    "busy": "Wird gerendert…",
+    "copied": "Bildschirmfoto in die Zwischenablage kopiert ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Bildschirmfoto gespeichert unter {{path}}",
+    "copyFailed": "Das Bildschirmfoto konnte nicht in die Zwischenablage kopiert werden",
+    "saveFailed": "Das Bildschirmfoto konnte nicht gespeichert werden",
+    "cancelled": "Bildschirmfoto abgebrochen",
+    "noPage": "Keine PDF-Seite zum Erfassen",
+    "notOnPage": "Die Auswahl liegt nicht auf einer Seite",
+    "documentChanged": "Das Dokument wurde geändert. Erstellen Sie das Bildschirmfoto erneut.",
+    "pngFiles": "PNG-Bild",
+    "jpegFiles": "JPEG-Bild"
   }
 }

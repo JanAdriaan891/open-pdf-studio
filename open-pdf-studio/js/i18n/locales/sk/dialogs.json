@@ -1092,5 +1092,32 @@
     "message": "„{{fileName}}“ je chránený heslom. Zadajte heslo a otvorte ho iba na čítanie.",
     "label": "Heslo:",
     "wrong": "Nesprávne heslo, skúste to znova."
+  },
+  "screenshot": {
+    "title": "Snímka obrazovky",
+    "selectHint": "Ťahaním vyberte oblasť. Esc zruší.",
+    "area": "Strana {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(výber orezaný na túto stranu)",
+    "resolution": "Rozlíšenie",
+    "screenResolution": "Obrazovka ({{dpi}} dpi)",
+    "custom": "Vlastné",
+    "size": "Veľkosť",
+    "limited": "Obmedzené na maximálnu veľkosť obrázka: {{dpi}} dpi.",
+    "format": "Formát súboru",
+    "quality": "Kvalita JPEG",
+    "clipboardNote": "Do schránky ide vždy obrázok PNG; formát súboru platí pre Uložiť ako.",
+    "copy": "Kopírovať do schránky",
+    "saveAs": "Uložiť ako…",
+    "busy": "Vykresľovanie…",
+    "copied": "Snímka skopírovaná do schránky ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Snímka uložená do {{path}}",
+    "copyFailed": "Snímku sa nepodarilo skopírovať do schránky",
+    "saveFailed": "Snímku sa nepodarilo uložiť",
+    "cancelled": "Snímka zrušená",
+    "noPage": "Žiadna strana PDF na zachytenie",
+    "notOnPage": "Výber neleží na strane",
+    "documentChanged": "Dokument sa zmenil. Urobte snímku znova.",
+    "pngFiles": "Obrázok PNG",
+    "jpegFiles": "Obrázok JPEG"
   }
 }

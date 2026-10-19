@@ -1092,5 +1092,32 @@
     "message": "\"{{fileName}}\"은(는) 암호로 보호되어 있습니다. 읽기 전용으로 열려면 암호를 입력하세요.",
     "label": "암호:",
     "wrong": "암호가 올바르지 않습니다. 다시 시도하세요."
+  },
+  "screenshot": {
+    "title": "스크린샷",
+    "selectHint": "드래그하여 영역을 선택하세요. Esc로 취소합니다.",
+    "area": "{{page}}페이지 · {{width}} × {{height}} mm",
+    "clipped": "(선택 영역을 이 페이지로 잘랐습니다)",
+    "resolution": "해상도",
+    "screenResolution": "화면 ({{dpi}} dpi)",
+    "custom": "사용자 지정",
+    "size": "크기",
+    "limited": "최대 이미지 크기로 제한됨: {{dpi}} dpi.",
+    "format": "파일 형식",
+    "quality": "JPEG 품질",
+    "clipboardNote": "클립보드에는 항상 PNG 이미지가 들어갑니다. 파일 형식은 다른 이름으로 저장에 적용됩니다.",
+    "copy": "클립보드에 복사",
+    "saveAs": "다른 이름으로 저장…",
+    "busy": "렌더링 중…",
+    "copied": "스크린샷을 클립보드에 복사했습니다 ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "스크린샷을 {{path}}에 저장했습니다",
+    "copyFailed": "스크린샷을 클립보드에 복사할 수 없습니다",
+    "saveFailed": "스크린샷을 저장할 수 없습니다",
+    "cancelled": "스크린샷이 취소되었습니다",
+    "noPage": "캡처할 PDF 페이지가 없습니다",
+    "notOnPage": "선택 영역이 페이지 위에 있지 않습니다",
+    "documentChanged": "문서가 변경되었습니다. 스크린샷을 다시 찍으세요.",
+    "pngFiles": "PNG 이미지",
+    "jpegFiles": "JPEG 이미지"
   }
 }

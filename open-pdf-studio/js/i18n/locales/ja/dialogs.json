@@ -1092,5 +1092,32 @@
     "message": "「{{fileName}}」はパスワードで保護されています。読み取り専用で開くにはパスワードを入力してください。",
     "label": "パスワード:",
     "wrong": "パスワードが正しくありません。もう一度入力してください。"
+  },
+  "screenshot": {
+    "title": "スクリーンショット",
+    "selectHint": "ドラッグして範囲を選択します。Esc でキャンセル。",
+    "area": "ページ {{page}} · {{width}} × {{height}} mm",
+    "clipped": "（選択範囲をこのページに切り詰めました）",
+    "resolution": "解像度",
+    "screenResolution": "画面（{{dpi}} dpi）",
+    "custom": "カスタム",
+    "size": "サイズ",
+    "limited": "最大画像サイズに制限されました: {{dpi}} dpi。",
+    "format": "ファイル形式",
+    "quality": "JPEG 品質",
+    "clipboardNote": "クリップボードには常に PNG 画像が入ります。ファイル形式は「名前を付けて保存」に適用されます。",
+    "copy": "クリップボードにコピー",
+    "saveAs": "名前を付けて保存…",
+    "busy": "レンダリング中…",
+    "copied": "スクリーンショットをクリップボードにコピーしました（{{width}} × {{height}} px、{{dpi}} dpi）",
+    "saved": "スクリーンショットを {{path}} に保存しました",
+    "copyFailed": "スクリーンショットをクリップボードにコピーできませんでした",
+    "saveFailed": "スクリーンショットを保存できませんでした",
+    "cancelled": "スクリーンショットをキャンセルしました",
+    "noPage": "取り込む PDF ページがありません",
+    "notOnPage": "選択範囲がページ上にありません",
+    "documentChanged": "文書が変更されました。もう一度スクリーンショットを撮ってください。",
+    "pngFiles": "PNG 画像",
+    "jpegFiles": "JPEG 画像"
   }
 }

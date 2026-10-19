@@ -29,6 +29,7 @@ import ShiftPageDialog from './dialogs/ShiftPageDialog.jsx';
 import OcrLanguageDialog from './dialogs/OcrLanguageDialog.jsx';
 import ResizePagesDialog from './dialogs/ResizePagesDialog.jsx';
 import CompressDialog from './dialogs/CompressDialog.jsx';
+import ScreenshotDialog from './dialogs/ScreenshotDialog.jsx';
 import FeedbackDialog from './dialogs/FeedbackDialog.jsx';
 import MessageDialog from './dialogs/MessageDialog.jsx';
 import AboutDialog from './dialogs/AboutDialog.jsx';
@@ -94,6 +95,7 @@ const DIALOG_MAP = {
   'ocr-language': OcrLanguageDialog,
   'resize-pages': ResizePagesDialog,
   'compress': CompressDialog,
+  'screenshot': ScreenshotDialog,
   'feedback': FeedbackDialog,
   'message': MessageDialog,
   'about': AboutDialog,

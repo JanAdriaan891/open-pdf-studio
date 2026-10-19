@@ -398,3 +398,5 @@ js/annotations/rendering/mengen-tegen-pagina.test.mjs
 js/pdf/saver/blend-mode-ap.test.mjs
 js/pdf/mengmodus-rondgang.test.mjs
 js/solid/components/ribbon/ribbon-popup.test.mjs
+js/tools/screenshot-keuze.test.mjs
+js/tools/screenshot-bedrading.test.mjs

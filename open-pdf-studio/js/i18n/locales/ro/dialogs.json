@@ -1092,5 +1092,32 @@
     "message": "„{{fileName}}” este protejat cu parolă. Introduceți parola pentru a-l deschide doar în citire.",
     "label": "Parolă:",
     "wrong": "Parolă greșită, încercați din nou."
+  },
+  "screenshot": {
+    "title": "Captură de ecran",
+    "selectHint": "Trageți pentru a selecta o zonă. Esc anulează.",
+    "area": "Pagina {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(selecție decupată la această pagină)",
+    "resolution": "Rezoluție",
+    "screenResolution": "Ecran ({{dpi}} dpi)",
+    "custom": "Personalizată",
+    "size": "Dimensiune",
+    "limited": "Limitată la dimensiunea maximă a imaginii: {{dpi}} dpi.",
+    "format": "Format fișier",
+    "quality": "Calitate JPEG",
+    "clipboardNote": "Clipboardul primește întotdeauna o imagine PNG; formatul fișierului se aplică la Salvare ca.",
+    "copy": "Copiere în clipboard",
+    "saveAs": "Salvare ca…",
+    "busy": "Se randează…",
+    "copied": "Captură copiată în clipboard ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Captură salvată în {{path}}",
+    "copyFailed": "Captura nu a putut fi copiată în clipboard",
+    "saveFailed": "Captura nu a putut fi salvată",
+    "cancelled": "Captură anulată",
+    "noPage": "Nicio pagină PDF de capturat",
+    "notOnPage": "Selecția nu se află pe o pagină",
+    "documentChanged": "Documentul s-a modificat. Refaceți captura.",
+    "pngFiles": "Imagine PNG",
+    "jpegFiles": "Imagine JPEG"
   }
 }

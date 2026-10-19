@@ -1091,5 +1091,32 @@
     "message": "\"{{fileName}}\" is protected with a password. Enter the password to open it read-only.",
     "label": "Password:",
     "wrong": "Wrong password, try again."
+  },
+  "screenshot": {
+    "title": "Screenshot",
+    "selectHint": "Drag to select an area. Esc cancels.",
+    "area": "Page {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(selection clipped to this page)",
+    "resolution": "Resolution",
+    "screenResolution": "Screen ({{dpi}} dpi)",
+    "custom": "Custom",
+    "size": "Size",
+    "limited": "Limited to the maximum image size: {{dpi}} dpi.",
+    "format": "File format",
+    "quality": "JPEG quality",
+    "clipboardNote": "The clipboard always receives a PNG image; the file format applies to Save as.",
+    "copy": "Copy to clipboard",
+    "saveAs": "Save as…",
+    "busy": "Rendering…",
+    "copied": "Screenshot copied to the clipboard ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Screenshot saved to {{path}}",
+    "copyFailed": "Could not copy the screenshot to the clipboard",
+    "saveFailed": "Could not save the screenshot",
+    "cancelled": "Screenshot cancelled",
+    "noPage": "No PDF page to capture",
+    "notOnPage": "The selection is not on a page",
+    "documentChanged": "The document changed. Take the screenshot again.",
+    "pngFiles": "PNG image",
+    "jpegFiles": "JPEG image"
   }
 }
