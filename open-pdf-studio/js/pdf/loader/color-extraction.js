@@ -11,6 +11,7 @@ import { leesRuweSleutels } from '../saver/ruwe-sleutels.js';
 import { leesPlattegrondMeta } from './plattegrond-meta.js';
 import { leesLijnSleutels } from './maatlijn-uit-bestand.js';
 import { blendUitPdf } from '../../annotations/blend-modes.js';
+import { leesStempelAp } from './stempel-ap.js';
 
 // Documenten waarvan de knipsel-bronpagina's al in de store staan: dat
 // uitpakken gebeurt één keer per document, bij het eerste knipsel dat we zien.
@@ -330,6 +331,10 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
           const tekst = leesPdfTekst(context, opsTekstRaw);
           if (tekst) colors.opsStampText = tekst;
         }
+        // Vak en draaiing van een stempel of afbeelding komen uit de
+        // appearance (stempel-geometrie.js), niet uit /OPS_Rotation.
+        const stempelAp = await leesStempelAp(context, annotDict);
+        if (stempelAp) colors.stempelAp = stempelAp;
         // Read /OPS_CropLeft.. (non-destructive image crop, fractions 0-1
         // per side — issue #212). The AP embeds the FULL bitmap, so these
         // fractions re-apply the crop after the image round-trips.
@@ -358,6 +363,13 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         }
       }
 
+      // Een afbeelding als /Square met /IT /SquareImage (ander programma):
+      // vak en draaiing ook uit de appearance, zoals bij een stempel.
+      if (subtypeName === '/Square' && annotDict.get(PDFName.of('IT'))?.toString() === '/SquareImage') {
+        const stempelAp = await leesStempelAp(context, annotDict);
+        if (stempelAp) colors.stempelAp = stempelAp;
+      }
+
       // Kruis in een rechthoek of cirkel/ellips (OPS_Cross, zie saver).
       const opsCrossRaw = annotDict.get(PDFName.of('OPS_Cross'));
       if (opsCrossRaw) {
@@ -365,8 +377,11 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         if (cv === true || (cv && typeof cv.value === 'boolean' && cv.value)) colors.cross = true;
       }
 
-      // Read /OPS_Rotation (our custom rotation key) for ALL annotation types
-      const opsRotRaw = annotDict.get(PDFName.of('OPS_Rotation'));
+      // Read /OPS_Rotation (our custom rotation key) for all annotation types
+      // except stamps and images (/Stamp): their rotation lives in the
+      // appearance, as every other reader sees it (stempel-geometrie.js). An
+      // old /OPS_Rotation on a stamp is legacy and ignored.
+      const opsRotRaw = subtypeName === '/Stamp' ? null : annotDict.get(PDFName.of('OPS_Rotation'));
       if (opsRotRaw) {
         const rv = pdfNum(context.lookup(opsRotRaw) || opsRotRaw);
         if (rv !== null) colors.rotation = rv;

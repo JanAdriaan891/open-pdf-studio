@@ -62,6 +62,7 @@ import { bouwTellingDict } from './saver/telling.js';
 import { isVreemdeTelling, tellingStraal } from '../annotations/telling.js';
 import { tekstvakRc, dsTekstDecoratie } from './saver/tekstvak-rc.js';
 import { _rotVisualMapper, _remapRect } from './saver/rotatie-mapper.js';
+import { stempelAppearance, stempelRect } from './saver/stempel-draaiing.js';
 import { makePointMapper, buildTextEditStrikeDict, buildCaretDict, addLoadedMarkupKeys,
   applyGroupLinks, correctionRefKeys, dropOrphanPopups } from './saver/correction-dicts.js';
 import { buildTextMarkupDict, bronMarkeringen } from './saver/text-markup-dict.js';
@@ -157,17 +158,6 @@ function remapAnnotationForRotatedPage(annRaw, rot, cw, ch) {
   return ann;
 }
 
-// Pagina-/Rotate-compensatie voor beeldvullende AP-inhoud (stempels en
-// afbeeldingen). De AP leeft in ongedraaide PDF-ruimte, maar de viewer draait
-// de hele pagina — inclusief de AP — mee met /Rotate. De inhoud moet dus
-// tegengesteld voorgedraaid worden, met dezelfde conventie als het
-// FreeText-pad (één rotatie-cm rond het BBox-midden, /Matrix blijft
-// identiteit). Zonder deze compensatie stond een afbeeldingsstempel op een
-// /Rotate-90-blad na opslaan een kwartslag gedraaid in elke andere viewer.
-// Geeft { prefix, visW, visH }: cm-prefix binnen q…Q en de visuele
-// afmetingen waarop de inhoud getekend moet worden. Bij /Rotate 0 is de
-// prefix leeg en zijn visW/visH gelijk aan w/h — de uitvoer verandert dan
-// niet.
 // Afbeeldingsbytes uit ann.imageData voor pdf-lib-embedding. Normaal een
 // data:-URL; een blob:-URL (regressie of oude sessie-staat, #352) wordt via
 // fetch gelezen zodat de afbeelding alsnog in het bestand belandt in plaats
@@ -183,23 +173,6 @@ async function imageBytesFromDataUrl(dataUrl) {
   }
   const isJpeg = bytes.length > 2 && bytes[0] === 0xFF && bytes[1] === 0xD8;
   return { bytes, isJpeg };
-}
-
-function pageCompensationForAp(w, h, pageRot) {
-  const apRotation = (((-pageRot) % 360) + 360) % 360;
-  const pageSwapsDims = pageRot === 90 || pageRot === 270;
-  const visW = pageSwapsDims ? h : w;
-  const visH = pageSwapsDims ? w : h;
-  if (apRotation === 0) return { prefix: '', visW, visH };
-  const rad = -apRotation * Math.PI / 180;
-  // Afronden: rechte hoeken moeten als exact 0/±1 serialiseren — rauwe
-  // Math.cos geeft 6.1e-17 en exponent-notatie is geen geldig PDF-getal.
-  const cosR = Math.round(Math.cos(rad) * 1e6) / 1e6;
-  const sinR = Math.round(Math.sin(rad) * 1e6) / 1e6;
-  const prefix = `1 0 0 1 ${w / 2} ${h / 2} cm\n` +
-    `${cosR} ${sinR} ${-sinR} ${cosR} 0 0 cm\n` +
-    `1 0 0 1 ${-visW / 2} ${-visH / 2} cm\n`;
-  return { prefix, visW, visH };
 }
 
 // Save PDF with annotations
@@ -1717,10 +1690,20 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             };
             const pdfStampName = stdStampNames[ann.stampName] || ann.stampName || 'Draft';
 
+            // Draaiing en pagina-/Rotate gaan in de appearance; /Rect wordt de
+            // omhullende van het gedraaide vak (saver/stempel-draaiing.js).
+            // Zonder appearance (geen bitmap, geen tekst) blijft het vak zelf.
+            const stPlaatsing = stempelAppearance({
+              w: ann.width, h: ann.height, paginaRotatie: pageRot,
+              rotatie: ann.rotation, ruimte: ann.imageData ? ann.apImageSpace : undefined,
+            });
+            const stRect = (ann.imageData || ann.stampText)
+              ? stempelRect([x1, y1, x2, y2], stPlaatsing) : [x1, y1, x2, y2];
+
             const stampDictObj = {
               Type: 'Annot',
               Subtype: 'Stamp',
-              Rect: [x1, y1, x2, y2],
+              Rect: stRect,
               // /Name is een PDFName: alleen ASCII (de echte naam staat in /Subj en OPS_StampName).
               Name: asciiPdfName(pdfStampName, 'Draft'),
               Subj: pdfTextString(ann.stampName || pdfStampName),
@@ -1733,7 +1716,6 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             };
             stampDictObj.IT = PDFName.of('Stamp');
 
-            if (ann.rotation) stampDictObj.OPS_Rotation = ann.rotation;
             if (ann.stampName) stampDictObj.OPS_StampName = pdfTextString(ann.stampName);
             // Palette-symbool-id + IFC-classificatie (NEN 1414-stempels e.d.)
             // — roundtrip zodat het eigenschappenpaneel en het IFC-report de
@@ -1750,12 +1732,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
 
             // Generate AP stream for text-only stamps
             if (!ann.imageData && ann.stampText) {
-              const w = ann.width;
-              const h = ann.height;
-              // Op /Rotate-pagina's tekent de stempel in visuele afmetingen
-              // binnen een compensatie-transform; bij /Rotate 0 is dit een
-              // no-op (lege prefix, visW/visH == w/h).
-              const { prefix: stPrefix, visW, visH } = pageCompensationForAp(w, h, pageRot);
+              // De stempel tekent in visuele afmetingen binnen één draai-cm
+              // (pagina-/Rotate en draaiing in de app); zonder beide is de
+              // prefix leeg en zijn visW/visH gelijk aan het vak. De clip op
+              // het vak geeft de lader de maat terug (stempel-geometrie.js).
+              const { prefix: stPrefix, visW, visH, bboxW, bboxH } = stPlaatsing;
               const [sr, sg, sb] = hexToRgb(ann.stampColor || ann.color || '#ef4444');
               const fontSize = Math.min(visH * 0.45, 22);
               // Breedte en string over dezelfde (WinAnsi-)tekst.
@@ -1773,11 +1754,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   `${rx+cr} ${ry+rh} l ${rx+cr-kr} ${ry+rh} ${rx} ${ry+rh-cr+kr} ${rx} ${ry+rh-cr} c ` +
                   `${rx} ${ry+cr} l ${rx} ${ry+cr-kr} ${rx+cr-kr} ${ry} ${rx+cr} ${ry} c h\n`;
               };
-              let s = `q\n${stPrefix}2 w ${sr} ${sg} ${sb} RG\n${rrect(0, 0, visW, visH, r)}S\n`;
+              let s = `q\n${stPrefix}0 0 ${visW} ${visH} re W n\n2 w ${sr} ${sg} ${sb} RG\n${rrect(0, 0, visW, visH, r)}S\n`;
               s += `BT\n/F1 ${fontSize} Tf\n${sr} ${sg} ${sb} rg\n${textX} ${textY} Td\n(${escaped}) Tj\nET\nQ\n`;
               const fontDict = context.obj({ Type: 'Font', Subtype: 'Type1', BaseFont: 'Helvetica-Bold', Encoding: 'WinAnsiEncoding' });
               const apStream = context.stream(s, {
-                Type: 'XObject', Subtype: 'Form', BBox: [0, 0, w, h],
+                Type: 'XObject', Subtype: 'Form', BBox: [0, 0, bboxW, bboxH],
                 Resources: context.obj({ Font: context.obj({ F1: fontDict }) })
               });
               const apStreamRef = context.register(apStream);
@@ -1799,16 +1780,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   : await pdfDocLib.embedPng(bytes);
 
                 const imageRef = embeddedImage.ref;
-                const w = ann.width;
-                const h = ann.height;
-                // Compensatie alleen voor bitmaps in SCHERMruimte (in de app
-                // geplaatst of via de render-fallback geëxtraheerd). Rauwe
-                // XObject-pixels (apImageSpace 'pdf') staan al in ongedraaide
-                // PDF-ruimte en moeten zonder compensatie terug, anders
-                // draait de inhoud dubbel.
-                const { prefix: imgPrefix, visW, visH } = ann.apImageSpace === 'pdf'
-                  ? { prefix: '', visW: w, visH: h }
-                  : pageCompensationForAp(w, h, pageRot);
+                // Draaiing en pagina-/Rotate in één cm om het midden; rauwe
+                // XObject-pixels (apImageSpace 'pdf', zonder draaiing) gaan
+                // ongedraaid terug, anders draait de inhoud dubbel. Zie
+                // saver/stempel-draaiing.js.
+                const { prefix: imgPrefix, visW, visH, bboxW, bboxH } = stPlaatsing;
                 const alpha = ann.opacity !== undefined ? ann.opacity : 1;
                 let apContent;
                 const resources = { XObject: context.obj({ Img: imageRef }) };
@@ -1827,7 +1803,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   {
                     Type: 'XObject',
                     Subtype: 'Form',
-                    BBox: [0, 0, w, h],
+                    BBox: [0, 0, bboxW, bboxH],
                     Resources: context.obj(resources)
                   }
                 );
@@ -1851,13 +1827,17 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             const y1 = convertY(ann.y + ann.height);
             const x2 = convertX(ann.x + ann.width);
             const y2 = convertY(ann.y);
-            const w = ann.width;
-            const h = ann.height;
+            // Draaiing en pagina-/Rotate in de appearance, /Rect is de
+            // omhullende van het gedraaide vak (saver/stempel-draaiing.js).
+            const imgPlaatsing = stempelAppearance({
+              w: ann.width, h: ann.height, paginaRotatie: pageRot,
+              rotatie: ann.rotation, ruimte: ann.apImageSpace,
+            });
 
             const imgDictObj = {
               Type: 'Annot',
               Subtype: 'Stamp',
-              Rect: [x1, y1, x2, y2],
+              Rect: ann.imageData ? stempelRect([x1, y1, x2, y2], imgPlaatsing) : [x1, y1, x2, y2],
               Name: ann.type === 'signature' ? 'Signature' : asciiPdfName(ann.stampName, 'Image'),
               Contents: pdfTextString(ann.type === 'signature' ? 'Signature' : (ann.stampText || ann.subject || '')),
               C: colorArr,
@@ -1867,7 +1847,6 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
               F: computeAnnotFlags(ann)
             };
 
-            if (ann.rotation) imgDictObj.OPS_Rotation = ann.rotation;
             // Linked image: store the source path so the app refreshes the
             // bitmap from disk on reopen (the embed below stays as a
             // self-contained fallback for other viewers). Hex string: literal
@@ -1922,12 +1901,10 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
 
                 // Build AP stream content with opacity via ExtGState
                 const alpha = ann.opacity !== undefined ? ann.opacity : 1;
-                // Pagina-/Rotate-compensatie alleen voor schermruimte-bitmaps;
-                // rauwe XObject-pixels (apImageSpace 'pdf') gaan ongedraaid
-                // terug — zie het stempel-pad hierboven.
-                const { prefix: imgPrefix, visW, visH } = ann.apImageSpace === 'pdf'
-                  ? { prefix: '', visW: w, visH: h }
-                  : pageCompensationForAp(w, h, pageRot);
+                // Draaiing en pagina-/Rotate in één cm; rauwe XObject-pixels
+                // (apImageSpace 'pdf') gaan ongedraaid terug — zie het
+                // stempel-pad hierboven.
+                const { prefix: imgPrefix, visW, visH, bboxW, bboxH } = imgPlaatsing;
                 let apContent;
                 const resources = { XObject: context.obj({ Img: imageRef }) };
                 const extGStates = {};
@@ -1980,7 +1957,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   {
                     Type: 'XObject',
                     Subtype: 'Form',
-                    BBox: [0, 0, w, h],
+                    BBox: [0, 0, bboxW, bboxH],
                     Resources: context.obj(resources)
                   }
                 );

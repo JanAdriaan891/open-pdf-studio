@@ -41,6 +41,7 @@ import { inzetUitDsMarge, tolerantieVoorDsInzet } from '../../annotations/render
 import { caretPropsFromPdf, textEditPropsFromPdf } from './correction-load.js';
 import { algemeneEigenschappen } from './annotatie-algemeen.js';
 import { ontdraaiVorm } from '../saver/vorm-draaiing.js';
+import { stempelGeometrie } from './stempel-geometrie.js';
 
 /**
  * Zet een PDF-annotatie om naar het model van de app.
@@ -245,6 +246,24 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
       const squareImageData = squareImgEntry?.dataUrl ?? null;
       if (squareImageData) {
         const imageRect = convertRect(rect);
+        // Vak en draaiing uit de appearance, zoals bij een stempel
+        // (stempel-geometrie.js): die tekent de afbeelding vaak gedraaid,
+        // rechtop op een gedraaid blad.
+        const sqGeometrie = stempelGeometrie({
+          rect, paginaRotatie: viewport.rotation || 0, ap: extraColors.stempelAp, soort: 'beeld',
+        });
+        let sqRotatie = 0;
+        let sqRuimte = squareImgEntry.space;
+        if (sqGeometrie) {
+          const schaal = viewport.scale || 1;
+          const [mx, my] = convertPoint(sqGeometrie.midden.x, sqGeometrie.midden.y);
+          imageRect.width = sqGeometrie.breedte * schaal;
+          imageRect.height = sqGeometrie.hoogte * schaal;
+          imageRect.x = mx - imageRect.width / 2;
+          imageRect.y = my - imageRect.height / 2;
+          sqRotatie = sqGeometrie.rotation;
+          sqRuimte = 'visual';
+        }
         const imageId = generateImageId();
         const img = new Image();
         img.src = squareImageData;
@@ -254,7 +273,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
           type: 'image',
           // In welke ruimte de pixels staan ('pdf' of 'visual') — bepaalt of
           // de saver pagina-/Rotate-compensatie in de appearance schrijft.
-          apImageSpace: squareImgEntry.space,
+          apImageSpace: sqRuimte,
+          ...(sqRotatie ? { rotation: sqRotatie } : {}),
           x: imageRect.x,
           y: imageRect.y,
           width: imageRect.width,
@@ -1526,10 +1546,10 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
 
       // Image stamp - extracted from PDF structure via pdf-lib
       const stRect = convertRect(annot.rect);
-      const x = stRect.x;
-      const y = stRect.y;
-      const w = stRect.width;
-      const h = stRect.height;
+      let x = stRect.x;
+      let y = stRect.y;
+      let w = stRect.width;
+      let h = stRect.height;
 
       const gevondenBeeld = findImageEntryForAnnotation(stampImageMap, annot, 'stamp');
       // Een tekststempel van de app: de uitsnede van de weergave is geen bron.
@@ -1539,10 +1559,43 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
       });
       const stampImgEntry = eigenTekst ? null : gevondenBeeld;
       const dataUrl = stampImgEntry?.dataUrl ?? null;
+      // Pixelruimte van de bitmap; zie de saver en stempel-geometrie.js.
+      let stImageSpace = stampImgEntry?.space;
+
+      // Vak en draaiing uit de appearance, zoals elke lezer de stempel tekent
+      // (stempel-geometrie.js). /OPS_Rotation telt voor stempels niet meer.
+      // - Een uitsnede van de weergave (source 'render') ligt al zoals op het
+      //   scherm en vult de /Rect: geen draaiing.
+      // - Een bitmap uit het bestand of een tekststempel van de app: vak en
+      //   draaiing uit /Rect, /BBox, /Matrix en de cm's van de inhoud.
+      let stGeometrie = null;
+      if (stampImgEntry?.source !== 'render' && (eigenTekst || stampImgEntry)) {
+        stGeometrie = stempelGeometrie({
+          rect: annot.rect,
+          paginaRotatie: viewport.rotation || 0,
+          ap: extraColors.stempelAp,
+          soort: eigenTekst ? 'tekst' : 'beeld',
+          crop: eigenTekst ? null : {
+            left: extraColors.cropLeft, top: extraColors.cropTop,
+            right: extraColors.cropRight, bottom: extraColors.cropBottom,
+          },
+        });
+      }
 
       let stRotation = 0;
-      if (extraColors.rotation !== undefined && extraColors.rotation !== 0) {
-        stRotation = Math.round(extraColors.rotation);
+      if (stampImgEntry?.source === 'render') {
+        stRotation = 0;
+      } else if (stGeometrie) {
+        const schaal = viewport.scale || 1;
+        const [mx, my] = convertPoint(stGeometrie.midden.x, stGeometrie.midden.y);
+        w = stGeometrie.breedte * schaal;
+        h = stGeometrie.hoogte * schaal;
+        x = mx - w / 2;
+        y = my - h / 2;
+        stRotation = stGeometrie.rotation;
+        // De pixels liggen rechtop in dit vak: 'visual'. De saver schrijft
+        // ze zo terug dat elke lezer ze toont zoals de app.
+        if (stampImgEntry) stImageSpace = 'visual';
       } else if (extraColors.matrixAngle !== undefined && Math.abs(extraColors.matrixAngle) > 1) {
         // Zelfde conventie als het FreeText-pad hierboven: de /Matrix-hoek is
         // een hoek in PDF-ruimte, en de pagina-/Rotate draait het hele blad
@@ -1583,7 +1636,7 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         rotation: stRotation,
         // Pixelruimte van de geëxtraheerde bitmap ('pdf' of 'visual') — de
         // saver kiest daarop of hij pagina-/Rotate-compensatie schrijft.
-        apImageSpace: stampImgEntry?.space
+        apImageSpace: stImageSpace
       };
 
       // IFC-classificatie van symboolstempels (NEN 1414 e.d.). Voorkeur:
