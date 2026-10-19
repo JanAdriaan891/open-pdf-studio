@@ -90,3 +90,22 @@ fn polyline_closed_ends_with_close() {
     let open = Path::polyline(&[(0.0, 0.0), (1.0, 0.0)], false);
     assert_eq!(open.0.last(), Some(&PathEl::LineTo(1.0, 0.0)));
 }
+
+#[test]
+fn bounds_cover_square_caps() {
+    use open_pdf_kernel::dl::LineCap;
+    let mut dl = DisplayList::new();
+    dl.push(Item::Stroke {
+        path: Path::polyline(&[(0.0, 0.0), (10.0, 10.0)], false),
+        color: RED,
+        style: StrokeStyle {
+            width: 2.0,
+            cap: LineCap::Square,
+            join: LineJoin::Round,
+            ..StrokeStyle::default()
+        },
+    });
+    let b = dl.bounds().unwrap();
+    assert!(b.y1 >= 10.0 + 2f64.sqrt() - 1e-9, "y1 {}", b.y1);
+    assert!(b.x0 <= -(2f64.sqrt()) + 1e-9, "x0 {}", b.x0);
+}

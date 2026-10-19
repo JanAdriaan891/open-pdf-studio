@@ -175,3 +175,60 @@ fn png_roundtrip_is_exact() {
     let img = render(&red_rect(), &target(20, 20, IDENTITY)).unwrap();
     assert_eq!(RgbaImage::from_png(&img.to_png()).unwrap(), img);
 }
+
+fn long_line(dash: Vec<f64>) -> DisplayList {
+    let mut dl = DisplayList::new();
+    dl.push(Item::Stroke {
+        path: Path::polyline(&[(0.0, 10.0), (1.0e7, 10.0)], false),
+        color: RED,
+        style: StrokeStyle {
+            width: 2.0,
+            dash,
+            ..StrokeStyle::default()
+        },
+    });
+    dl
+}
+
+/// Renders on a worker thread and fails instead of hanging the test run.
+fn render_within(dl: DisplayList, secs: u64) -> RgbaImage {
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        let _ = tx.send(render(&dl, &target(20, 20, IDENTITY)).unwrap());
+    });
+    rx.recv_timeout(std::time::Duration::from_secs(secs))
+        .expect("render did not finish in time")
+}
+
+#[test]
+fn degenerate_dash_falls_back_to_solid() {
+    let solid = render_within(long_line(vec![]), 20);
+    assert_eq!(render_within(long_line(vec![-1.0, -2.0]), 20), solid);
+    assert_eq!(render_within(long_line(vec![1e-3, 1e-3]), 20), solid);
+    assert_eq!(render_within(long_line(vec![f64::NAN, 2.0]), 20), solid);
+}
+
+#[test]
+fn path_without_moveto_renders() {
+    use open_pdf_kernel::dl::PathEl;
+    let style = StrokeStyle {
+        width: 2.0,
+        ..StrokeStyle::default()
+    };
+    let mut dl = DisplayList::new();
+    dl.push(Item::Stroke {
+        path: Path(vec![PathEl::LineTo(5.0, 5.0), PathEl::LineTo(15.0, 15.0)]),
+        color: RED,
+        style: style.clone(),
+    });
+    let mut after_close = Path::rect(2.0, 2.0, 4.0, 4.0);
+    after_close.0.push(PathEl::LineTo(18.0, 18.0));
+    after_close.0.insert(0, PathEl::Close);
+    dl.push(Item::Stroke {
+        path: after_close,
+        color: RED,
+        style,
+    });
+    let img = render(&dl, &target(20, 20, IDENTITY)).unwrap();
+    assert_eq!(px(&img, 10, 10)[3], 255, "the LineTo segment is drawn");
+}

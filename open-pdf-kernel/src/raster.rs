@@ -84,7 +84,7 @@ pub fn render(dl: &DisplayList, target: &RasterTarget) -> Result<RgbaImage, Rast
                 ctx.fill_path(&to_bez(path));
             }
             Item::Stroke { path, color, style } => {
-                ctx.set_stroke(to_stroke(style));
+                ctx.set_stroke(to_stroke(style, path));
                 ctx.set_paint(to_color(*color));
                 ctx.stroke_path(&to_bez(path));
             }
@@ -181,19 +181,96 @@ fn to_color(c: Color) -> AlphaColor<Srgb> {
 
 fn to_bez(path: &Path) -> BezPath {
     let mut bez = BezPath::new();
+    let mut open = false;
+    let mut start: Option<(f64, f64)> = None;
     for el in &path.0 {
+        // A drawing element without an open subpath starts one at the last
+        // subpath start (after Close, as in PDF) or at its own end point.
+        let end = match *el {
+            PathEl::MoveTo(x, y) | PathEl::LineTo(x, y) | PathEl::QuadTo(_, _, x, y) => (x, y),
+            PathEl::CubicTo(_, _, _, _, x, y) => (x, y),
+            PathEl::Close => {
+                if open {
+                    bez.close_path();
+                    open = false;
+                }
+                continue;
+            }
+        };
+        if let PathEl::MoveTo(..) = el {
+            bez.move_to(end);
+            start = Some(end);
+            open = true;
+            continue;
+        }
+        if !open {
+            let p = *start.get_or_insert(end);
+            bez.move_to(p);
+            open = true;
+        }
         match *el {
-            PathEl::MoveTo(x, y) => bez.move_to((x, y)),
             PathEl::LineTo(x, y) => bez.line_to((x, y)),
             PathEl::QuadTo(x1, y1, x, y) => bez.quad_to((x1, y1), (x, y)),
             PathEl::CubicTo(x1, y1, x2, y2, x, y) => bez.curve_to((x1, y1), (x2, y2), (x, y)),
-            PathEl::Close => bez.close_path(),
+            PathEl::MoveTo(..) | PathEl::Close => unreachable!(),
         }
     }
     bez
 }
 
-fn to_stroke(s: &StrokeStyle) -> Stroke {
+/// Upper bound on dash segments per stroke; beyond it the dash is dropped
+/// and the stroke is drawn solid, so a degenerate pattern cannot stall rendering.
+const MAX_DASH_SEGMENTS: f64 = 100_000.0;
+
+/// The dash pattern if it is usable on `path`: finite, non-negative, a
+/// positive period, and not more than `MAX_DASH_SEGMENTS` periods long.
+fn usable_dash<'a>(s: &'a StrokeStyle, path: &Path) -> Option<&'a [f64]> {
+    let period: f64 = s.dash.iter().sum();
+    let valid = !s.dash.is_empty()
+        && s.dash.iter().all(|d| d.is_finite() && *d >= 0.0)
+        && s.dash_offset.is_finite()
+        && period > 0.0;
+    (valid && control_length(path) / period <= MAX_DASH_SEGMENTS).then_some(&s.dash[..])
+}
+
+/// Length of the control polygon: an upper bound of the path length.
+fn control_length(path: &Path) -> f64 {
+    fn visit(len: &mut f64, cur: &mut Option<(f64, f64)>, p: (f64, f64)) {
+        if let Some(c) = *cur {
+            *len += ((p.0 - c.0).powi(2) + (p.1 - c.1).powi(2)).sqrt();
+        }
+        *cur = Some(p);
+    }
+    let mut len = 0.0;
+    let mut cur: Option<(f64, f64)> = None;
+    let mut start: Option<(f64, f64)> = None;
+    for el in &path.0 {
+        match *el {
+            PathEl::MoveTo(x, y) => {
+                cur = Some((x, y));
+                start = cur;
+            }
+            PathEl::LineTo(x, y) => visit(&mut len, &mut cur, (x, y)),
+            PathEl::QuadTo(x1, y1, x, y) => {
+                visit(&mut len, &mut cur, (x1, y1));
+                visit(&mut len, &mut cur, (x, y));
+            }
+            PathEl::CubicTo(x1, y1, x2, y2, x, y) => {
+                visit(&mut len, &mut cur, (x1, y1));
+                visit(&mut len, &mut cur, (x2, y2));
+                visit(&mut len, &mut cur, (x, y));
+            }
+            PathEl::Close => {
+                if let Some(s) = start {
+                    visit(&mut len, &mut cur, s);
+                }
+            }
+        }
+    }
+    len
+}
+
+fn to_stroke(s: &StrokeStyle, path: &Path) -> Stroke {
     let cap = match s.cap {
         LineCap::Butt => Cap::Butt,
         LineCap::Round => Cap::Round,
@@ -208,9 +285,8 @@ fn to_stroke(s: &StrokeStyle) -> Stroke {
         .with_caps(cap)
         .with_join(join)
         .with_miter_limit(s.miter_limit);
-    if s.dash.is_empty() {
-        stroke
-    } else {
-        stroke.with_dashes(s.dash_offset, s.dash.iter().copied())
+    match usable_dash(s, path) {
+        Some(dash) => stroke.with_dashes(s.dash_offset, dash.iter().copied()),
+        None => stroke,
     }
 }

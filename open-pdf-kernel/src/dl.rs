@@ -212,11 +212,18 @@ impl DisplayList {
                 Item::Fill { path, .. } => path.control_bounds(),
                 Item::Stroke { path, style, .. } => {
                     let half = style.width / 2.0;
-                    let grow = if style.join == LineJoin::Miter {
+                    let join_grow = if style.join == LineJoin::Miter {
                         half * style.miter_limit
                     } else {
                         half
                     };
+                    // A square cap's corner lies half·√2 from the endpoint.
+                    let cap_grow = if style.cap == LineCap::Square {
+                        half * std::f64::consts::SQRT_2
+                    } else {
+                        half
+                    };
+                    let grow = join_grow.max(cap_grow);
                     path.control_bounds().map(|r| r.inflate(grow))
                 }
                 Item::PushGroup { clip, .. } => {
