@@ -7,6 +7,9 @@
 //   node scripts/verify-prestaties.mjs <exe-A> <label-A> <exe-B> <label-B>
 //   node scripts/verify-prestaties.mjs <exe-A> <label-A>            (één build)
 //
+// PRESTATIE_ENGINES=pdfium,hayro zet per build de voorkeur renderEngine
+// (A, B), zodat één build met beide pagina-engines gemeten kan worden.
+//
 // De exe's zijn release-builds (geïnstalleerd of los); de MCP-server wordt
 // per instantie op een eigen poort gestart (OPS_ENABLE_MCP=1 vereist voor
 // release-builds). Draai op een verder rustige machine; elke meting is de
@@ -109,16 +112,19 @@ async function wachtOpInkt(evalJs, maxMs, minInkt = 5) {
 // niets in het profiel van de gebruiker schrijft en geen sessie van de
 // gebruiker herstelt. LET OP: builds van vóór OPDS_DATA_DIR negeren de
 // variabele en schrijven wél in het echte profiel — meet die niet.
-function isolatieMappen() {
+function isolatieMappen(engine) {
   const basis = path.join(os.tmpdir(), 'opds-prestatie-isolatie');
   const data = path.join(basis, 'data');
   fs.mkdirSync(path.join(data, 'OpenPDFStudio'), { recursive: true });
   fs.writeFileSync(path.join(data, 'OpenPDFStudio', 'session.json'), '{"openFiles":[],"activeIndex":0}');
+  const prefs = path.join(data, 'OpenPDFStudio', 'preferences.json');
+  if (engine) fs.writeFileSync(prefs, JSON.stringify({ renderEngine: engine }));
+  else fs.rmSync(prefs, { force: true });
   return { data, webview: path.join(basis, 'webview') };
 }
 
-async function meetRun(exe, bestand) {
-  const iso = isolatieMappen();
+async function meetRun(exe, bestand, engine) {
+  const iso = isolatieMappen(engine);
   const env = {
     ...process.env,
     OPS_ENABLE_MCP: '1',
