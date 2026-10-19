@@ -26,7 +26,7 @@ const playwright = require('C:/Users/rickd/Documents/GitHub/open-pdf-studio/open
 
 const REPO = 'C:/Users/rickd/Documents/GitHub/open-pdf-studio';
 const HELPER = path.join(REPO, 'scripts', 'mupdf_compare_helper.py');
-const MCP = 'http://127.0.0.1:9223/mcp';
+const MCP = `http://127.0.0.1:${process.env.MCP_PORT || '9223'}/mcp`;
 const DEFAULT_DIRS = [
   'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden',
   `${REPO}/test pdf-bestanden/Originele bestanden`,
