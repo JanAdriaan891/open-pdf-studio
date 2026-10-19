@@ -9,8 +9,18 @@
 // regels: dezelfde plaatsing van elke pagina op haar eigen printpagina
 // (print-plaatsing.js), hetzelfde vel (kiesBlad) en dezelfde cellen
 // (velIndeling). Wat het voorbeeld toont is dus wat er uit de printer komt.
+//
+// Stand en draaien (#623), twee losse dingen:
+// - het VEL: een in de Pagina-instelling voor dit document bevestigde stand
+//   ligt vast (vellenStand in print-pagina-instelling.js); anders de stand
+//   waarin het raster het best past (kiesBlad);
+// - de PAGINA in haar cel: haar printpagina heeft altijd de stand van de
+//   pagina zelf (CEL_PAGINA_STAND), de stand van het vel draait de inhoud
+//   nooit mee. Met Automatisch draaien (`paginaDraaien`) komt ze een
+//   kwartslag linksom in haar cel als ze daar echt groter in komt; bij gelijke
+//   grootte blijft ze rechtop. Zonder Automatisch draaien nooit.
 
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFDocument, rgb, degrees } from 'pdf-lib';
 import { berekenPlaatsing, printPaginaMaat, margesVoor } from './print-plaatsing.js';
 
 const PT_PER_MM = 72 / 25.4;
@@ -102,19 +112,53 @@ export function celGeometrie({ bladB, bladH, kolommen, rijen }) {
   return { celB, celH };
 }
 
-export function plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB, paginaH }) {
+/**
+ * De stand van de printpagina van elke cel (bij meerdere pagina's per vel, een
+ * folder en een boekje): die van de pagina zelf, zoals berekenPlaatsing 'auto'
+ * hem kiest. Nooit de stand van het vel: dan kwam een liggende pagina op een
+ * staand vel gedraaid op haar printpagina en lag haar inhoud dwars in de cel,
+ * ook met Automatisch draaien uit (#623). Draaien gebeurt alleen in de cel.
+ */
+export const CEL_PAGINA_STAND = 'auto';
+
+/** Hoeveel groter een gedraaide pagina moet worden voordat de kwartslag wint (relatief). */
+const DRAAI_WINST = 1e-6;
+
+/**
+ * Hoe groot een pagina van `paginaB` x `paginaH` in een cel van `celB` x
+ * `celH` komt: rechtop, of met `draaien` een kwartslag gedraaid als dat echt
+ * groter is.
+ * @returns {{schaal:number, kwartslag:boolean}}
+ */
+function passendInCel(celB, celH, paginaB, paginaH, draaien) {
+  const rechtop = Math.min(celB / paginaB, celH / paginaH);
+  if (!draaien) return { schaal: rechtop, kwartslag: false };
+  const gedraaid = Math.min(celB / paginaH, celH / paginaB);
+  return gedraaid > rechtop * (1 + DRAAI_WINST)
+    ? { schaal: gedraaid, kwartslag: true }
+    : { schaal: rechtop, kwartslag: false };
+}
+
+/**
+ * Waar een pagina in haar cel komt: passend en gecentreerd. `draaien`
+ * (Automatisch draaien): een kwartslag linksom als ze zo groter wordt. De
+ * rechthoek (x, y, breedte, hoogte) is wat de pagina op het vel bedekt, dus
+ * bij `kwartslag` met breedte en hoogte van de pagina gewisseld.
+ */
+export function plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB, paginaH, draaien = false }) {
   const { celB, celH } = celGeometrie({ bladB, bladH, kolommen, rijen });
   const celX = BLAD_MARGE_PT + kol * (celB + CEL_TUSSENRUIMTE_PT);
   const celBoven = bladH - BLAD_MARGE_PT - rij * (celH + CEL_TUSSENRUIMTE_PT);
-  const schaal = Math.min(celB / paginaB, celH / paginaH);
-  const b = paginaB * schaal;
-  const h = paginaH * schaal;
+  const { schaal, kwartslag } = passendInCel(celB, celH, paginaB, paginaH, draaien);
+  const b = (kwartslag ? paginaH : paginaB) * schaal;
+  const h = (kwartslag ? paginaB : paginaH) * schaal;
   return {
     x: celX + (celB - b) / 2,
     y: celBoven - celH + (celH - h) / 2,
     breedte: b,
     hoogte: h,
     schaal,
+    kwartslag,
   };
 }
 
@@ -126,10 +170,14 @@ export function plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB, 
  * of een folder, geen eigen raster): het raster mag een kwartslag draaien
  * (3 x 2 wordt 2 x 3) als de eerste pagina daarin groter komt; bij gelijke
  * schaal blijft het raster zoals het in de lijst staat. Een eigen raster
- * blijft zoals getypt.
+ * blijft zoals getypt. `draaien` (Automatisch draaien): de pagina mag een
+ * kwartslag in haar cel draaien (plaatsInCel); dat telt mee, maar bij gelijke
+ * grootte wint een vel en raster waarin ze rechtop blijft.
  * @returns {{bladB:number, bladH:number, kolommen:number, rijen:number}}
  */
-export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, rijen, draaibaar = false }) {
+export function kiesBlad({
+  papier, orientatie = 'auto', eerstePagina, kolommen, rijen, draaibaar = false, draaien = false,
+}) {
   let kort;
   let lang;
   if (papier && papier.breedteMm > 0 && papier.hoogteMm > 0) {
@@ -146,21 +194,25 @@ export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, 
   const rasters = draaibaar && kolommen !== rijen
     ? [{ kolommen, rijen }, { kolommen: rijen, rijen: kolommen }]
     : [{ kolommen, rijen }];
-  const schaalIn = (kandidaat) => {
+  const passend = (kandidaat) => {
     const { celB, celH } = celGeometrie(kandidaat);
-    return Math.min(celB / eerstePagina.breedte, celH / eerstePagina.hoogte);
+    return passendInCel(celB, celH, eerstePagina.breedte, eerstePagina.hoogte, draaien);
   };
   // Op volgorde van voorkeur (staand vóór liggend, het raster uit de lijst
-  // vóór het gedraaide); alleen een echt grotere pagina wint.
+  // vóór het gedraaide); alleen een echt grotere pagina wint, en bij gelijke
+  // grootte wint een rechtop liggende pagina van een gedraaide.
   let beste = null;
-  let besteSchaal = -Infinity;
+  let bestePassend = null;
   for (const blad of bladen) {
     for (const raster of rasters) {
       const kandidaat = { ...blad, ...raster };
-      const schaal = schaalIn(kandidaat);
-      if (beste === null || schaal > besteSchaal + 1e-9) {
+      const p = passend(kandidaat);
+      const groter = beste === null || p.schaal > bestePassend.schaal + 1e-9;
+      const evenGrootMaarRechtop = !groter && bestePassend.kwartslag && !p.kwartslag
+        && p.schaal >= bestePassend.schaal - 1e-9;
+      if (groter || evenGrootMaarRechtop) {
         beste = kandidaat;
-        besteSchaal = schaal;
+        bestePassend = p;
       }
     }
   }
@@ -171,17 +223,55 @@ export function kiesBlad({ papier, orientatie = 'auto', eerstePagina, kolommen, 
  * De cellen van één vel: per pagina op dat vel (`maten`, in printvolgorde,
  * {breedte, hoogte} in pt) haar cel en haar plek (plaatsInCel, PDF-
  * coördinaten in pt). De afdruk en het voorbeeld gebruiken allebei deze regel.
+ * `draaien`: Automatisch draaien, per pagina (plaatsInCel).
  * @returns {{k:number, kol:number, rij:number, x:number, y:number,
- *            breedte:number, hoogte:number, schaal:number}[]}
+ *            breedte:number, hoogte:number, schaal:number, kwartslag:boolean}[]}
  */
-export function velIndeling({ bladB, bladH, kolommen, rijen, volgorde = 'horizontal', maten }) {
+export function velIndeling({ bladB, bladH, kolommen, rijen, volgorde = 'horizontal', maten, draaien = false }) {
   return maten.slice(0, kolommen * rijen).map((m, k) => {
     const { kol, rij } = celVoorVolgnummer(k, kolommen, rijen, volgorde);
     return {
       k, kol, rij,
-      ...plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB: m.breedte, paginaH: m.hoogte }),
+      ...plaatsInCel({ bladB, bladH, kolommen, rijen, kol, rij, paginaB: m.breedte, paginaH: m.hoogte, draaien }),
     };
   });
+}
+
+/**
+ * Waar het beeld van (een deel van) een printpagina in het voorbeeld komt.
+ * `cel`: een cel van voorbeeldMeerPerBlad of voorbeeldBoekje (opVel in mm op
+ * het vel, schaal = verkleining van de printpagina); `r`: het deel in mm op de
+ * printpagina (renderDeel(...).opVel). Geeft de rechthoek op het vel (mm) die
+ * het beeld bedekt en de hoek waarover het beeld linksom gedraaid in die
+ * rechthoek komt: 0, 90 (`kwartslag`, zoals maakMeerPerBlad) of 180
+ * (`gedraaid`, de achterkant van een boekje, gespiegeld in de cel).
+ * @returns {{x:number, y:number, breedte:number, hoogte:number, hoek:0|90|180}}
+ */
+export function beeldInCel(cel, r) {
+  const s = cel.schaal;
+  const o = cel.opVel;
+  if (cel.kwartslag) {
+    // Linksom: de bovenrand van de printpagina komt links. Punt (x, y) van
+    // een printpagina van B mm breed komt op (y, B - x).
+    const paginaB = o.hoogte / s;
+    return {
+      x: o.x + r.y * s,
+      y: o.y + (paginaB - r.x - r.breedte) * s,
+      breedte: r.hoogte * s,
+      hoogte: r.breedte * s,
+      hoek: 90,
+    };
+  }
+  if (cel.gedraaid) {
+    return {
+      x: o.x + o.breedte - (r.x + r.breedte) * s,
+      y: o.y + o.hoogte - (r.y + r.hoogte) * s,
+      breedte: r.breedte * s,
+      hoogte: r.hoogte * s,
+      hoek: 180,
+    };
+  }
+  return { x: o.x + r.x * s, y: o.y + r.y * s, breedte: r.breedte * s, hoogte: r.hoogte * s, hoek: 0 };
 }
 
 /** Pagina's per vel: kolommen x rijen, of 1 zonder raster. */
@@ -301,13 +391,42 @@ export function schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) {
 }
 
 /**
+ * De keuzes waarmee de printopdracht de printpagina's bouwt (één per
+ * bronpagina, vóór het raster, het boekje of de poster). Poster: elke pagina
+ * op haar eigen maat (papier onbekend, passend = 1:1), geen raster. Boekje en
+ * meerdere pagina's per vel (ook een folder): passend en gecentreerd, en elke
+ * printpagina in de stand van haar pagina (CEL_PAGINA_STAND); de gekozen
+ * stand geldt voor het vel, niet voor de inhoud (#623). Anders de keuzes
+ * zoals ze zijn.
+ * @returns {{vel:any, meerPerBlad:object|null, schaling:string, zoom:number,
+ *            centreren:boolean, orientatie:string}}
+ */
+export function bronKeuzes({
+  poster = null, vel = null, meerPerBlad = null, schaling, zoom, centreren, boekje = false, orientatie = 'auto',
+}) {
+  if (poster) return { vel: null, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true, orientatie };
+  if (boekje) {
+    return { vel, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true, orientatie: CEL_PAGINA_STAND };
+  }
+  if (isMeerPerBlad(meerPerBlad)) {
+    return {
+      vel, meerPerBlad, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren), orientatie: CEL_PAGINA_STAND,
+    };
+  }
+  return { vel, meerPerBlad, schaling, zoom, centreren, orientatie };
+}
+
+/**
  * Het voorbeeld van één vel bij meerdere pagina's per vel, zoals de
  * printopdracht het bouwt: elke pagina eerst op haar printpagina
- * (berekenPlaatsing met de keuzes van de dialoog, de schaalkeuze vervalt),
- * dan het vel (kiesBlad, uit de eerste pagina van de hele afdruk) en de
- * cellen (velIndeling).
+ * (berekenPlaatsing met het papier van de dialoog, in de stand van de pagina
+ * zelf, de schaalkeuze vervalt), dan het vel (kiesBlad in de gekozen stand,
+ * uit de eerste pagina van de hele afdruk) en de cellen (velIndeling).
+ * `meerPerBlad.paginaDraaien` = Automatisch draaien: een pagina mag een
+ * kwartslag in haar cel draaien als ze zo groter wordt (`kwartslag` per cel).
  *
- * @param {{ meerPerBlad: {kolommen:number, rijen:number, volgorde?:string, rand?:boolean}|null,
+ * @param {{ meerPerBlad: {kolommen:number, rijen:number, volgorde?:string, rand?:boolean,
+ *                         draaibaar?:boolean, paginaDraaien?:boolean}|null,
  *           keuzes: { papier: object|'pagina'|null, orientatie?: string,
  *                     schaling?: string, zoom?: number, centreren?: boolean },
  *           eerstePagina: {breedtePt:number, hoogtePt:number},
@@ -320,21 +439,25 @@ export function schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) {
  *   marges: {links:number, boven:number, rechts:number, onder:number},
  *   bedrukbaar: {x:number, y:number, breedte:number, hoogte:number},
  *   rand: boolean, schaal: number|null,
- *   cellen: { k:number, plaatsing:object, schaal:number,
+ *   cellen: { k:number, plaatsing:object, schaal:number, kwartslag:boolean,
  *             opVel:{x:number, y:number, breedte:number, hoogte:number} }[] }}
  *   Rechthoeken in mm vanaf de linkerbovenhoek van het vel. Per cel:
  *   plaatsing = de pagina op haar printpagina (print-plaatsing.js), opVel =
- *   waar die printpagina op het vel komt, schaal = de verkleining daarbij.
+ *   waar die printpagina op het vel komt (bij kwartslag gedraaid, zie
+ *   beeldInCel), schaal = de verkleining daarbij.
  *   schaal = de schaal van de eerste pagina van het vel op het papier.
  *   null bij één pagina per vel of een onbruikbare paginamaat.
  */
 export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, paginas }) {
   if (!isMeerPerBlad(meerPerBlad) || !keuzes) return null;
   const {
-    volgorde = 'horizontal', rand = false, draaibaar = false, snijtekens = false,
+    volgorde = 'horizontal', rand = false, draaibaar = false, snijtekens = false, paginaDraaien = false,
   } = meerPerBlad;
   const { papier: vel = null, orientatie = 'auto', schaling, zoom, centreren } = keuzes;
-  const celKeuzes = { papier: vel, orientatie, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
+  // Zoals bronKeuzes: de printpagina in de stand van de pagina zelf.
+  const celKeuzes = {
+    papier: vel, orientatie: CEL_PAGINA_STAND, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren),
+  };
   const plaats = (pagina) => berekenPlaatsing({ ...celKeuzes, pagina });
   const maat = (plaatsing) => {
     const [breedte, hoogte] = printPaginaMaat(plaatsing);
@@ -350,18 +473,21 @@ export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, pagina
   const papier = vel && typeof vel === 'object' ? vel : null;
   const { bladB, bladH, kolommen, rijen } = kiesBlad({
     papier, orientatie, eerstePagina: maat(eerste),
-    kolommen: meerPerBlad.kolommen, rijen: meerPerBlad.rijen, draaibaar,
+    kolommen: meerPerBlad.kolommen, rijen: meerPerBlad.rijen, draaibaar, draaien: paginaDraaien,
   });
   const velB = bladB * MM_PER_PT;
   const velH = bladH * MM_PER_PT;
   const stand = bladB > bladH ? 'landscape' : 'portrait';
 
-  const indeling = velIndeling({ bladB, bladH, kolommen, rijen, volgorde, maten: plaatsingen.map(maat) });
+  const indeling = velIndeling({
+    bladB, bladH, kolommen, rijen, volgorde, maten: plaatsingen.map(maat), draaien: paginaDraaien,
+  });
   const cellen = indeling
     .map((c) => ({
       k: c.k,
       plaatsing: plaatsingen[c.k],
       schaal: c.schaal,
+      kwartslag: c.kwartslag,
       opVel: {
         x: c.x * MM_PER_PT,
         y: (bladH - c.y - c.hoogte) * MM_PER_PT,
@@ -401,16 +527,19 @@ export function voorbeeldMeerPerBlad({ meerPerBlad, keuzes, eerstePagina, pagina
  * bronpagina). Geeft een nieuw PDFDocument; zonder meer dan één per vel komt
  * `pdf` zelf terug. Een folder (`flyer`): per bronpagina één vel met in elke
  * cel diezelfde pagina; `snijtekens` zet er snijtekens in de witrand bij.
+ * `orientatie` is de stand van het vel; `paginaDraaien` (Automatisch draaien)
+ * laat een pagina een kwartslag linksom in haar cel draaien als ze zo groter
+ * wordt (velIndeling), zoals het voorbeeld.
  * @param {PDFDocument} pdf
  * @param {{ kolommen:number, rijen:number, volgorde?:string, rand?:boolean,
- *           draaibaar?:boolean, flyer?:boolean, snijtekens?:boolean,
+ *           draaibaar?:boolean, paginaDraaien?:boolean, flyer?:boolean, snijtekens?:boolean,
  *           papier?:{breedteMm:number, hoogteMm:number}|null,
  *           orientatie?:'auto'|'portrait'|'landscape' }} opties
  */
 export async function maakMeerPerBlad(pdf, opties) {
   const {
     volgorde = 'horizontal', rand = false, papier = null, orientatie = 'auto',
-    draaibaar = false, flyer = false, snijtekens = false,
+    draaibaar = false, paginaDraaien = false, flyer = false, snijtekens = false,
   } = opties;
   if (!isMeerPerBlad({ kolommen: opties.kolommen, rijen: opties.rijen })) return pdf;
   const bron = pdf.getPages();
@@ -422,6 +551,7 @@ export async function maakMeerPerBlad(pdf, opties) {
   });
   const { bladB, bladH, kolommen, rijen } = kiesBlad({
     papier, orientatie, eerstePagina: maten[0], kolommen: opties.kolommen, rijen: opties.rijen, draaibaar,
+    draaien: paginaDraaien,
   });
 
   // pdf-lib schrijft lui ingebedde afbeeldingen en fonts (embedJpg/embedFont
@@ -436,10 +566,15 @@ export async function maakMeerPerBlad(pdf, opties) {
     const opVel = paginasOpVel(indexen, vel, raster);
     const blad = uit.addPage([bladB, bladH]);
     const cellen = velIndeling({
-      bladB, bladH, kolommen, rijen, volgorde, maten: opVel.map((i) => maten[i]),
+      bladB, bladH, kolommen, rijen, volgorde, maten: opVel.map((i) => maten[i]), draaien: paginaDraaien,
     });
     for (const p of cellen) {
-      blad.drawPage(ingebed[opVel[p.k]], { x: p.x, y: p.y, width: p.breedte, height: p.hoogte });
+      // Een kwartslag linksom om de linkeronderhoek van de pagina: die komt
+      // dan rechtsonder in haar rechthoek; breedte en hoogte zijn die van de
+      // pagina zelf.
+      blad.drawPage(ingebed[opVel[p.k]], p.kwartslag
+        ? { x: p.x + p.breedte, y: p.y, width: p.hoogte, height: p.breedte, rotate: degrees(90) }
+        : { x: p.x, y: p.y, width: p.breedte, height: p.hoogte });
       if (rand) {
         blad.drawRectangle({
           x: p.x, y: p.y, width: p.breedte, height: p.hoogte,
