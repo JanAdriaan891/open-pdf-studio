@@ -11,6 +11,7 @@ De crate is een pure Rust-bibliotheek zonder Tauri-afhankelijkheid. De app praat
 | `model` | Annotatiemodel: verliesvrije spiegel van het JS-object (`js/types/annotation.ts`). Het ruwe JSON-object is de bron en gaat ongewijzigd terug; getypeerde leesfuncties (`f64`, `str`, `points`, …) geven `None` bij een ontbrekende, `null` of verkeerd getypeerde waarde. |
 | `dl` | Display list: één tekentaal (paden, lijnstijl, groepen met dekking, blend en clip) voor scherm en PDF. |
 | `raster` | Display list → rechte RGBA-bitmap via `vello_cpu`, dezelfde rasterizer die Hayro gebruikt. |
+| `pdfrender` | Paginarendering met Hayro (pure Rust), met dezelfde conventies als de PDFium-route: opaak wit, `ceil`-afmetingen, regio in weergave-punten, extra rotatie per kwartslag. Annotaties tekent de app zelf. |
 
 ## Testen
 

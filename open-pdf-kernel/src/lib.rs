@@ -6,4 +6,5 @@
 //! thin commands.
 pub mod dl;
 pub mod model;
+pub mod pdfrender;
 pub mod raster;
