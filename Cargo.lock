@@ -4178,6 +4178,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "memmap2",
+ "open-pdf-kernel",
  "pdfium-render",
  "serde",
  "serde_json",
