@@ -9,6 +9,8 @@ De crate is een pure Rust-bibliotheek zonder Tauri-afhankelijkheid. De app praat
 | Module | Inhoud |
 |---|---|
 | `model` | Annotatiemodel: verliesvrije spiegel van het JS-object (`js/types/annotation.ts`). Getypeerde velden voor tekenen en opslaan; al het andere blijft ongewijzigd in `extra`. |
+| `dl` | Display list: één tekentaal (paden, lijnstijl, groepen met dekking, blend en clip) voor scherm en PDF. |
+| `raster` | Display list → rechte RGBA-bitmap via `vello_cpu`, dezelfde rasterizer die Hayro gebruikt. |
 
 ## Testen
 
@@ -17,3 +19,15 @@ cargo test -p open-pdf-kernel
 ```
 
 Op Windows bouw je buiten de OneDrive-map, bijvoorbeeld met `CARGO_TARGET_DIR=C:\opds-cargo-target-kernel`.
+
+## Golden-bitmaps bijwerken
+
+`tests/golden.rs` vergelijkt renders met de PNG's in `tests/golden/`. Per kanaal mag een pixel maximaal 3 afwijken; die marge vangt verschillen in SIMD-niveau tussen machines op. Bij een afwijking komt de werkelijke render in `<target>/golden-diff/`.
+
+Na een bedoelde wijziging in de rendering:
+
+```bash
+OPDS_UPDATE_GOLDEN=1 cargo test -p open-pdf-kernel --test golden
+```
+
+Bekijk de nieuwe PNG's vóór het committen.
