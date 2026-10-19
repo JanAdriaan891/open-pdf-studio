@@ -51,7 +51,18 @@ jobs:
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libtesseract-dev libleptonica-dev pkg-config
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf pkg-config
+
+      # tesseract-rs compiles Leptonica/Tesseract from source and links them
+      # statically (#620). It keeps the sources and static libs in
+      # ~/.tesseract-rs, so cache that; the key follows the tesseract-rs pin
+      # in the workspace Cargo.toml.
+      - name: Cache Tesseract static build (Linux)
+        if: matrix.platform == 'ubuntu-22.04'
+        uses: actions/cache@v5
+        with:
+          path: ~/.tesseract-rs
+          key: tesseract-rs-ubuntu-22.04-${{ hashFiles('Cargo.toml') }}
 
       - name: Install frontend dependencies
         run: npm ci
@@ -147,6 +158,12 @@ jobs:
       - name: Build Tauri AppImage
         if: matrix.platform == 'ubuntu-22.04'
         run: npm run tauri build -- --bundles appimage --config '{"bundle":{"createUpdaterArtifacts":false}}'
+
+      # The binary must not need a distro-specific libtesseract/liblept soname:
+      # the .deb, the AppImage and repackagers such as the AUR use it as is (#620).
+      - name: Verify no system OCR library dependency (Linux)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: bash scripts/linux-ocr-linkage-check.sh ../target/release/open-pdf-studio
 
       - name: Verify AppImage on Debian 13
         if: matrix.platform == 'ubuntu-22.04'
