@@ -389,3 +389,4 @@ js/i18n/verkenner-miniaturen-i18n.test.mjs
 js/annotations/callout-koppen.test.mjs
 js/pdf/callout-koppen-rondgang.test.mjs
 js/tools/callout-plaatsing.test.mjs
+js/tools/voorbeeld-doorlopend.test.mjs
