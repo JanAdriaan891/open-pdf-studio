@@ -4,8 +4,9 @@
 # the Open PDF Studio repository as a reference the AUR maintainer can adopt.
 # It repackages the official .deb from the GitHub release as is: the binary
 # links Tesseract and Leptonica statically, and the .deb ships its own PDFium
-# library, PDFium worker sidecar and OCR trained data, so only the WebKitGTK
-# desktop stack comes from Arch.
+# library and OCR trained data, so only the WebKitGTK desktop stack and a few
+# common libraries come from Arch. depends lists the packages that own the
+# binary's NEEDED libraries (checked with namcap).
 #
 # Releases up to and including 2026.42.11 linked the build machine's
 # libtesseract.so.4 dynamically and do not start on Arch (issue #620); use
@@ -25,14 +26,18 @@ url='https://github.com/OpenAEC-Foundation/open-pdf-studio'
 license=('LGPL-3.0-or-later')
 depends=(
   'cairo'
-  'gcc-libs'
+  'dbus'
   'gdk-pixbuf2'
   'glib2'
   'glibc'
   'gtk3'
   'hicolor-icon-theme'
+  'lcms2'
+  'libgcc'
   'libsoup3'
+  'libstdc++'
   'webkit2gtk-4.1'
+  'xz'
 )
 optdepends=(
   'cups: printing (lp and lpstat)'
