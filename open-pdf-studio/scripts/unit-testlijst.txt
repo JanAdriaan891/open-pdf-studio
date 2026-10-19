@@ -386,3 +386,5 @@ js/ui/chrome/tab-losmaken.test.mjs
 js/core/instantie-rol.test.mjs
 js/core/verkenner-miniaturen.test.mjs
 js/i18n/verkenner-miniaturen-i18n.test.mjs
+js/pdf/flatten-bytes.test.mjs
+js/pdf/flatten-rondgang.test.mjs
