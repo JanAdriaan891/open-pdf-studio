@@ -222,6 +222,8 @@ export interface Preferences {
 
   // View
   thinLines: boolean;
+  /** Page engine (#625): 'pdfium' (default) or 'hayro' (pure Rust). */
+  renderEngine: 'pdfium' | 'hayro';
   showScrollbars: boolean;
   progressiveRender: boolean;
   screenCalibration: Record<string, number>;

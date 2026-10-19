@@ -141,6 +141,14 @@ export function createSceneAttemptCoordinator() {
 const _sceneAttempts = createSceneAttemptCoordinator();
 
 /**
+ * Whether a tile goes to the scene engine first: only on the PDFium route
+ * (#625) and only for pages with more content than SCENE_CONTENT_BYTES.
+ */
+export function usesSceneEngine(engine, contentBytes) {
+  return engine === 'pdfium' && contentBytes > SCENE_CONTENT_BYTES;
+}
+
+/**
  * Tegel-invoke met scene-first en per-pagina PDFium-fallback. De eigen
  * display-list-engine rastert tegels parallel uit één gecachete scene
  * (~140 MB op een 5M-ops blad) i.p.v. PDFium-parse-state van ~1,1 GB per
@@ -153,13 +161,22 @@ export async function invokeTileRegion(args) {
   // preference. Both engines below draw strokes as hairlines with it.
   const { withThinLines } = await import('./thin-lines.js');
   args = args.thinLines === undefined ? withThinLines(args) : withThinLines(args, args.thinLines);
+  // Page engine (#625): the caller's choice or the preference. The scene
+  // engine is a PDFium-route optimisation; Hayro renders every tile itself.
+  if (args.engine === undefined) {
+    const { renderEngineOn } = await import('./render-engine.js');
+    args = { ...args, engine: renderEngineOn() };
+  }
   const key = `${args.path}|${args.pageIndex}|${args.rotation || 0}`;
-  const sceneWorthIt = (await pageContentBytes(args.path, args.pageIndex + 1)) > SCENE_CONTENT_BYTES;
+  const sceneWorthIt = usesSceneEngine(
+    args.engine,
+    args.engine === 'pdfium' ? await pageContentBytes(args.path, args.pageIndex + 1) : 0,
+  );
   if (sceneWorthIt) {
     const res = await _sceneAttempts.tryRegion(
       key,
       args,
-      (regionArgs) => invoke('render_tile_scene_region', regionArgs),
+      ({ engine: _engine, ...regionArgs }) => invoke('render_tile_scene_region', regionArgs),
       (error) => {
         perfMark(`scene-fallback p${args.pageIndex + 1}: ${String(error).slice(0, 80)}`);
         console.log(`[prog] scene-fallback p${args.pageIndex + 1}: ${String(error).slice(0, 140)}`);
@@ -183,7 +200,7 @@ export async function invokeTileRegion(args) {
   });
   try {
     const { reportActiveEngine } = await import('../solid/stores/engineStatusStore.js');
-    reportActiveEngine('pdfium', args.path, args.pageIndex + 1);
+    reportActiveEngine(args.engine, args.path, args.pageIndex + 1);
   } catch {}
   return res;
 }

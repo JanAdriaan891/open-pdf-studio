@@ -8,6 +8,7 @@ import { setLastCaptureAvailable } from '../solid/stores/screenshotStore.js';
 import { renderAnnotationsForPage, redrawAnnotations, redrawContinuous } from '../annotations/rendering.js';
 import { generateImageId } from '../utils/helpers.js';
 import { recordAdd } from '../core/undo-manager.js';
+import { renderEngineOn } from '../pdf/render-engine.js';
 import { showProperties } from '../ui/panels/properties-panel.js';
 import { layerForNewAnnotation } from '../annotations/annotatie-lagen.js';
 import { viewportGeometrie, rectNaarPagina, normaliseerRotatie, isKwartslag } from '../pdf/weergave-rotatie.js';
@@ -200,6 +201,7 @@ async function _renderRegionHighRes(pageNum, appRect) {
     regionYPt: appRect.y,
     regionWPt: appRect.w,
     regionHPt: appRect.h,
+    engine: renderEngineOn(),
   });
   const bytes = rgbaData instanceof Uint8Array ? rgbaData : new Uint8Array(rgbaData);
   if (!bytes || bytes.length <= 8) return null;

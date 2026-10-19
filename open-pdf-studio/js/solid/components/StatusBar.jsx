@@ -299,7 +299,7 @@ export default function StatusBar() {
             class="status-item"
             title={t('engineTitle')}
             style={`padding:1px 8px; border:1px solid #b5b5b5; font-size:11px; background:${
-              (() => { const d = state.documents[state.activeDocumentIndex]; return engineFor(d?.filePath, d?.currentPage); })() === 'scene' ? '#dcfce7' : (() => { const d = state.documents[state.activeDocumentIndex]; return engineFor(d?.filePath, d?.currentPage); })() === 'vector' ? '#dbeafe' : '#f0f0f0'
+              (() => { const d = state.documents[state.activeDocumentIndex]; return engineFor(d?.filePath, d?.currentPage); })() === 'scene' ? '#dcfce7' : (() => { const d = state.documents[state.activeDocumentIndex]; return engineFor(d?.filePath, d?.currentPage); })() === 'vector' ? '#dbeafe' : (() => { const d = state.documents[state.activeDocumentIndex]; return engineFor(d?.filePath, d?.currentPage); })() === 'hayro' ? '#fef3c7' : '#f0f0f0'
             }; color:#222;`}
           >
             {t(`engine.${(() => { const d = state.documents[state.activeDocumentIndex]; return engineFor(d?.filePath, d?.currentPage); })()}`)}
