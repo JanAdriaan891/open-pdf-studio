@@ -157,3 +157,12 @@ test('other Hayro errors are not hidden by a PDFium retry', async () => {
   globalThis.__TAURI__.core.invoke = saved;
   setEngine('pdfium');
 });
+
+test('the diagnostic label names the engine that drew the page', async () => {
+  const { pageEngineLabel } = await import('./render-engine.js');
+  setEngine('hayro');
+  assert.equal(pageEngineLabel('mesh.pdf', 0), 'PDFium', 'refused page');
+  assert.equal(pageEngineLabel('other.pdf', 0), 'Hayro');
+  setEngine('pdfium');
+  assert.equal(pageEngineLabel('other.pdf', 0), 'PDFium');
+});

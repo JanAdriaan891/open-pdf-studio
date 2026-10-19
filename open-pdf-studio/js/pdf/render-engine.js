@@ -46,3 +46,8 @@ export async function withPageEngine(engine, path, pageIndex, run) {
 export function renderEngineLabel(engine = renderEngineOn()) {
   return engine === 'hayro' ? 'Hayro' : 'PDFium';
 }
+
+/** Label of the engine that actually draws this page (after a Hayro refusal: PDFium). */
+export function pageEngineLabel(path, pageIndex) {
+  return renderEngineLabel(engineForPage(renderEngineOn(), path, pageIndex));
+}
