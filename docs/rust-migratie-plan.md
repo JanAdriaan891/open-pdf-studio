@@ -361,3 +361,19 @@ Wat alleen bij PDFium gevlagd is:
 Wat alleen bij Hayro gevlagd is: NKD1a p5 en p6. Bij nader onderzoek was dat een tegel die bij de schermafbeelding nog niet klaar was; de rig draait een debug-build. Na wachten is de pagina compleet.
 
 2196-CB-21 is in beide sweeps leeg op het moment van de schermafbeelding. Dat is de bekende trage pagina (#395). Met Hayro valt die pagina nu terug op PDFium en wordt hij correct getoond.
+
+**Snelheid in de app (prestatiepoort, release-build, mediaan van 3 rondes)**
+
+Gemeten met `PRESTATIE_ENGINES=pdfium,hayro node scripts/verify-prestaties.mjs <exe> pdfium <exe> hayro`. Getoond is de tijd van openen tot de eerste inkt, en van zoomen naar 200 %.
+
+| Bestand | Openen PDFium | Openen Hayro | Zoom PDFium | Zoom Hayro |
+|---|---:|---:|---:|---:|
+| licht (Tekst) | 329 ms | 343 ms | 172 ms | 171 ms |
+| middel (Technische tekening) | 504 ms | 505 ms | 196 ms | 226 ms |
+| annotatierijk (NKD1a) | 730 ms | 693 ms | — | — |
+| zwaar (Zware vector) | 1178 ms | 1222 ms | 176 ms | 167 ms |
+
+In de app is het verschil tussen de engines binnen de meetruis:
+- De eerste inkt is een voorvertoning op lage resolutie, waarin vooral de app-pijplijn de tijd bepaalt.
+- Het voordeel van Hayro op zware tekeningen (2,6× in de engine-vergelijking) zie je pas bij het scherp worden en bij tegels op hoge zoom. Die momenten meet deze poort niet.
+- De zoommeting op NKD1a lukt bij beide engines niet; dat was al zo.
