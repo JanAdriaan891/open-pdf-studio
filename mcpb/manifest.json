@@ -52,6 +52,10 @@
       "description": "Capture the LIVE app as a base64 PNG."
     },
     {
+      "name": "app_capture_region",
+      "description": "Render an area of a page (or the whole page) of the active document as an image at a chosen resolution, the way Home > Screenshot does: the page is rendered again at `dpi` (not the screen pixels enlarged), with the annotations as printed (no selection frames), in the view rotation the user sees."
+    },
+    {
       "name": "app_mouse_move",
       "description": "Dispatch a synthetic mousemove at viewport CSS coordinates (x, y) inside the LIVE WebView."
     },

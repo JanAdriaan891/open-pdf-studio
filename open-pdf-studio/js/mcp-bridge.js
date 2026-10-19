@@ -306,6 +306,51 @@ async function handleZoomOut() {
   return { ok: true, actual };
 }
 
+/** app_capture_region: a page area (or the whole page) as an image file,
+ *  rendered again from the page at the requested dpi with the annotations —
+ *  the same route as Home → Screenshot (tools/screenshot.js). Returned as
+ *  base64, or written to `path`. */
+async function handleCaptureRegion(params) {
+  const { getActiveDocument } = await import('./core/state.js');
+  const doc = getActiveDocument();
+  const { leesOpnameArgumenten, snijRechthoeken, mimeType } = await import('./tools/screenshot-keuze.js');
+  const a = leesOpnameArgumenten(params, { aantalPaginas: doc?.pdfDoc?.numPages || 0, huidigePagina: doc?.currentPage || 1 });
+  if (a.error) return { ok: false, error: a.error };
+  const shot = await import('./tools/screenshot.js');
+  const gebied = shot.gebiedVanPagina(doc, a.page);
+  if (!gebied) return { ok: false, error: `size of page ${a.page} is unknown` };
+  if (a.rect) {
+    const s = snijRechthoeken(
+      { left: a.rect.x, top: a.rect.y, width: a.rect.width, height: a.rect.height },
+      { left: 0, top: 0, width: gebied.pageW, height: gebied.pageH });
+    if (!s) return { ok: false, error: 'the area is outside the page' };
+    gebied.rect = { x: s.left, y: s.top, width: s.width, height: s.height };
+  }
+  try {
+    const { canvas, maat } = await shot.renderSchermafbeelding(gebied, a.dpi);
+    const { canvasToBytes } = await import('./pdf/exporter.js');
+    const { imageWithDpi } = await import('./pdf/image-dpi.js');
+    const bytes = imageWithDpi(await canvasToBytes(canvas, a.formaat, a.kwaliteit / 100), a.formaat, Math.max(1, Math.min(65535, maat.dpi)));
+    const uit = {
+      ok: true, page: a.page, rect: gebied.rect, width: canvas.width, height: canvas.height,
+      dpi: maat.dpi, limited: maat.beperkt, mime: mimeType(a.formaat),
+    };
+    if (a.pad) {
+      const { writeBinaryFile } = await import('./core/platform.js');
+      await writeBinaryFile(a.pad, bytes);
+      uit.path = a.pad;
+      uit.bytes = bytes.length;
+    } else {
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      uit.image_base64 = btoa(bin);
+    }
+    return uit;
+  } catch (e) {
+    return { ok: false, error: `capture failed: ${e?.message ?? e}` };
+  }
+}
+
 async function handleScreenshotView(params) {
   const { leesSchermafdrukArgumenten } = await import('./core/mcp-schermafdruk.js');
   const args = leesSchermafdrukArgumenten(params);
@@ -3637,6 +3682,7 @@ const HANDLERS = {
   'mcp:zoom-in':            handleZoomIn,
   'mcp:zoom-out':           handleZoomOut,
   'mcp:screenshot-view':    handleScreenshotView,
+  'mcp:capture-region':     handleCaptureRegion,
   'mcp:mouse-move':         handleMouseMove,
   'mcp:mouse-click':        handleMouseClick,
   'mcp:mouse-drag':         handleMouseDrag,

@@ -52,6 +52,8 @@ pub const TOOLS: &[ToolMeta] = &[
     lees("app_clear_selection", "Clear selection"),
     // Opvragen.
     lees("app_screenshot_view", "Capture page view"),
+    // Writes a file only when a path is given; never changes the document.
+    voegt_toe("app_capture_region", "Capture page area as image"),
     lees("app_get_viewport_state", "Get view state"),
     lees("app_get_current_tool", "Get current tool"),
     lees("app_list_annotations", "List annotations"),

@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (75 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 75 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -126,6 +126,11 @@ and documented in `docs/superpowers/specs/2026-05-09-mcp-app-tools.md`.
 panels, status bar) or `{"scope":"element","selector":".ribbon-container"}`
 for one element; the result adds the captured `bounds` (CSS px) and
 `devicePixelRatio`. The window and element captures are Windows-only for now.
+
+`app_capture_region` renders an area of a page (`x`, `y`, `width`, `height`
+in app points, or nothing for the whole page) again at a chosen `dpi`, with
+the annotations, as PNG or JPEG — the same image as Home > Screenshot in the
+app. It returns `image_base64`, or writes the file when `path` is given.
 
 `app_list_commands` lists every ribbon tab as `ribbon-tab:<tab>` (extension
 tabs included) and the buttons of extension tabs with the extension tab id in

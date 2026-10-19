@@ -100,3 +100,19 @@ test('geen taal kopieert de Engelse zinnen', () => {
   }
   assert.deepEqual(gekopieerd, []);
 });
+
+test('app_capture_region staat in de brug, de Rust-server, de metatabel, tools.json en de manifest', () => {
+  const repo = (pad) => readFileSync(new URL(`../../../${pad}`, import.meta.url), 'utf8');
+  assert.match(repo('open-pdf-studio/js/mcp-bridge.js'), /'mcp:capture-region':\s+handleCaptureRegion/);
+  const server = repo('open-pdf-studio/src-tauri/src/mcp_server.rs');
+  assert.match(server, /"name": "app_capture_region"/);
+  assert.match(server, /"app_capture_region"\s+=> tool_app_request\(state, "mcp:capture-region"/);
+  assert.match(repo('open-pdf-studio/src-tauri/src/mcp_tool_meta.rs'), /"app_capture_region"/);
+  const tools = JSON.parse(repo('mcp-stdio/tools.json'));
+  const t = tools.find((x) => x.name === 'app_capture_region');
+  assert.ok(t, 'in tools.json');
+  assert.deepEqual(Object.keys(t.inputSchema.properties).sort(),
+    ['dpi', 'format', 'height', 'page', 'path', 'quality', 'width', 'x', 'y']);
+  assert.equal(t.annotations.destructiveHint, false);
+  assert.ok(JSON.parse(repo('mcpb/manifest.json')).tools.some((x) => x.name === 'app_capture_region'), 'in manifest.json');
+});
