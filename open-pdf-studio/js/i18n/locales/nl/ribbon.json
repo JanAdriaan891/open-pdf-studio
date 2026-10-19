@@ -161,7 +161,11 @@
     "loading": "Laden...",
     "northArrow": "Noordpijl",
     "cloudPolyline": "Wolk-polylijn",
-    "parametricSymbol": "Parametrisch symbool"
+    "parametricSymbol": "Parametrisch symbool",
+    "flattenAll": "Alles afvlakken",
+    "flattenAllTooltip": "Alle markeringen afvlakken tot pagina-inhoud",
+    "unflattenAll": "Afvlakken ongedaan",
+    "unflattenAllTooltip": "Markeringen terughalen die zijn afgevlakt met terughalen toegestaan"
   },
   "view": {
     "pageDisplay": "Paginaweergave",
@@ -635,5 +639,28 @@
     "noCorrections": "Er zijn nog geen correcties.",
     "insertPlaceholder": "Tekst invoegen",
     "replacePlaceholder": "Vervangende tekst"
+  },
+  "flattenAll": {
+    "title": "Alle markeringen afvlakken",
+    "message": "De markeringen in dit document ({{count}}) worden deel van de pagina-inhoud. Elke PDF-lezer toont ze, maar ze zijn niet meer als markering te selecteren of te bewerken.",
+    "allowUnflatten": "Terughalen toestaan",
+    "allowUnflattenHint": "Er blijft een kopie van de markeringen in het bestand, zodat Afvlakken ongedaan ze later kan terughalen, ook na opslaan en heropenen.",
+    "noUnflattenHint": "Er blijft geen kopie: na opslaan zijn de markeringen voorgoed deel van de pagina.",
+    "saveNote": "Notities en andere markeringen zonder uiterlijk op de pagina blijven markering. Het bestand verandert pas bij opslaan; tot dan maakt Ongedaan maken deze stap ongedaan.",
+    "ok": "Afvlakken",
+    "busy": "Markeringen afvlakken...",
+    "nothing": "Dit document heeft geen markeringen om af te vlakken.",
+    "nothingBaked": "Geen van de markeringen heeft een uiterlijk op de pagina; er is niets afgevlakt.",
+    "notLoaded": "De markeringen van dit document worden nog geladen. Probeer het zo opnieuw.",
+    "done": "Markeringen afgevlakt: {{count}}.",
+    "kept": "Markering gebleven (geen uiterlijk op de pagina): {{count}}.",
+    "failed": "Afvlakken mislukt: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Markeringen terughalen...",
+    "nothing": "Dit document heeft geen afgevlakte markeringen om terug te halen.",
+    "noRecovery": "De markeringen in dit document zijn afgevlakt zonder terughalen toe te staan. Ze zijn deel van de pagina-inhoud en kunnen niet worden teruggehaald.",
+    "done": "Markeringen teruggehaald: {{count}}.",
+    "failed": "Terughalen mislukt: {{error}}"
   }
 }

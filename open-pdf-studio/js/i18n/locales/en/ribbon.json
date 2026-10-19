@@ -161,7 +161,11 @@
     "clearAllAnnotations": "Clear All Annotations",
     "clearAll": "Clear All",
     "clearAllConfirm": "Clear ALL annotations from ALL pages?",
-    "parametricSymbol": "Parametric Symbol"
+    "parametricSymbol": "Parametric Symbol",
+    "flattenAll": "Flatten All",
+    "flattenAllTooltip": "Flatten all markups into the page content",
+    "unflattenAll": "Unflatten All",
+    "unflattenAllTooltip": "Restore markups that were flattened with unflattening allowed"
   },
   "view": {
     "pageDisplay": "Page Display",
@@ -633,5 +637,28 @@
     "noCorrections": "There are no corrections yet.",
     "insertPlaceholder": "Insert text",
     "replacePlaceholder": "Replacement text"
+  },
+  "flattenAll": {
+    "title": "Flatten All Markups",
+    "message": "The markups in this document ({{count}}) become part of the page content. Every PDF viewer shows them, but they can no longer be selected or edited as markups.",
+    "allowUnflatten": "Allow unflattening",
+    "allowUnflattenHint": "A copy of the markups is kept in the file, so Unflatten All can restore them later, also after saving and reopening.",
+    "noUnflattenHint": "No copy is kept: once saved, the markups are part of the page for good.",
+    "saveNote": "Notes and other markups without a page appearance stay markups. The file only changes when you save; until then Undo reverts this step.",
+    "ok": "Flatten",
+    "busy": "Flattening markups...",
+    "nothing": "This document has no markups to flatten.",
+    "nothingBaked": "None of the markups has a page appearance, so nothing was flattened.",
+    "notLoaded": "The markups of this document are still loading. Try again in a moment.",
+    "done": "Markups flattened: {{count}}.",
+    "kept": "Kept as markups (no page appearance): {{count}}.",
+    "failed": "Flattening failed: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Restoring markups...",
+    "nothing": "This document has no flattened markups to restore.",
+    "noRecovery": "The markups in this document were flattened without allowing unflattening. They are part of the page content and cannot be restored.",
+    "done": "Markups restored: {{count}}.",
+    "failed": "Unflattening failed: {{error}}"
   }
 }

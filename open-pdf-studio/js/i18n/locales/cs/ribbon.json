@@ -161,7 +161,11 @@
     "snapActive": "Přichycení zap.",
     "loading": "Načítání...",
     "northArrow": "Severka",
-    "parametricSymbol": "Parametrický symbol"
+    "parametricSymbol": "Parametrický symbol",
+    "flattenAll": "Sloučit vše",
+    "flattenAllTooltip": "Sloučit všechny značky do obsahu stránky",
+    "unflattenAll": "Zrušit sloučení",
+    "unflattenAllTooltip": "Obnovit značky sloučené s povoleným obnovením"
   },
   "view": {
     "pageDisplay": "Zobrazení stránky",
@@ -635,5 +639,28 @@
     "noCorrections": "Zatím nejsou žádné opravy.",
     "insertPlaceholder": "Vložit text",
     "replacePlaceholder": "Náhradní text"
+  },
+  "flattenAll": {
+    "title": "Sloučit všechny značky",
+    "message": "Značky v tomto dokumentu ({{count}}) se stanou součástí obsahu stránky. Každý prohlížeč PDF je zobrazí, ale už je nebude možné vybrat ani upravit jako značky.",
+    "allowUnflatten": "Povolit obnovení",
+    "allowUnflattenHint": "V souboru zůstane kopie značek, takže je „Zrušit sloučení“ může později obnovit, i po uložení a opětovném otevření.",
+    "noUnflattenHint": "Kopie se neuchová: po uložení jsou značky natrvalo součástí stránky.",
+    "saveNote": "Poznámky a další značky bez vzhledu na stránce zůstanou značkami. Soubor se změní až při uložení; do té doby tento krok vrátí Zpět.",
+    "ok": "Sloučit",
+    "busy": "Slučování značek...",
+    "nothing": "Tento dokument nemá žádné značky ke sloučení.",
+    "nothingBaked": "Žádná ze značek nemá vzhled na stránce, nic tedy nebylo sloučeno.",
+    "notLoaded": "Značky tohoto dokumentu se stále načítají. Zkuste to za chvíli znovu.",
+    "done": "Sloučené značky: {{count}}.",
+    "kept": "Ponecháno jako značky (bez vzhledu na stránce): {{count}}.",
+    "failed": "Sloučení se nezdařilo: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Obnovování značek...",
+    "nothing": "Tento dokument nemá žádné sloučené značky k obnovení.",
+    "noRecovery": "Značky v tomto dokumentu byly sloučeny bez povolení obnovení. Jsou součástí obsahu stránky a nelze je obnovit.",
+    "done": "Obnovené značky: {{count}}.",
+    "failed": "Obnovení se nezdařilo: {{error}}"
   }
 }

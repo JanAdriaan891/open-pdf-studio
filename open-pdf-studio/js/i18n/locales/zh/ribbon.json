@@ -161,7 +161,11 @@
     "snapActive": "捕捉已开启",
     "loading": "正在加载...",
     "northArrow": "指北针",
-    "parametricSymbol": "参数化符号"
+    "parametricSymbol": "参数化符号",
+    "flattenAll": "全部拼合",
+    "flattenAllTooltip": "将所有标记拼合到页面内容中",
+    "unflattenAll": "取消拼合",
+    "unflattenAllTooltip": "恢复在允许恢复时拼合的标记"
   },
   "view": {
     "pageDisplay": "页面显示",
@@ -635,5 +639,28 @@
     "noCorrections": "还没有任何修改。",
     "insertPlaceholder": "要插入的文本",
     "replacePlaceholder": "替换文本"
+  },
+  "flattenAll": {
+    "title": "拼合所有标记",
+    "message": "此文档中的标记（{{count}} 个）将成为页面内容的一部分。所有 PDF 查看器都会显示它们，但无法再将其作为标记选择或编辑。",
+    "allowUnflatten": "允许恢复",
+    "allowUnflattenHint": "文件中会保留一份标记副本，因此“取消拼合”以后可以恢复它们，即使在保存并重新打开之后也可以。",
+    "noUnflattenHint": "不保留副本：保存后，标记将永久成为页面的一部分。",
+    "saveNote": "注释及其他在页面上没有外观的标记仍保留为标记。文件只在保存时更改；在此之前，撤销可还原此步骤。",
+    "ok": "拼合",
+    "busy": "正在拼合标记...",
+    "nothing": "此文档中没有可拼合的标记。",
+    "nothingBaked": "没有任何标记在页面上有外观，因此未拼合任何内容。",
+    "notLoaded": "此文档的标记仍在加载。请稍后重试。",
+    "done": "已拼合标记：{{count}}。",
+    "kept": "保留为标记（页面上无外观）：{{count}}。",
+    "failed": "拼合失败：{{error}}"
+  },
+  "unflattenAll": {
+    "busy": "正在恢复标记...",
+    "nothing": "此文档中没有可恢复的已拼合标记。",
+    "noRecovery": "此文档中的标记在拼合时未允许恢复。它们是页面内容的一部分，无法恢复。",
+    "done": "已恢复标记：{{count}}。",
+    "failed": "恢复失败：{{error}}"
   }
 }

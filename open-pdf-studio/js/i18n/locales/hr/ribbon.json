@@ -161,7 +161,11 @@
     "snapActive": "Privlačenje uklj.",
     "loading": "Učitavanje...",
     "northArrow": "Strelica sjevera",
-    "parametricSymbol": "Parametarski simbol"
+    "parametricSymbol": "Parametarski simbol",
+    "flattenAll": "Spljošti sve",
+    "flattenAllTooltip": "Spljošti sve oznake u sadržaj stranice",
+    "unflattenAll": "Poništi spljoštenje",
+    "unflattenAllTooltip": "Vrati oznake spljoštene uz dopušteno vraćanje"
   },
   "view": {
     "pageDisplay": "Prikaz stranice",
@@ -635,5 +639,28 @@
     "noCorrections": "Još nema ispravaka.",
     "insertPlaceholder": "Umetni tekst",
     "replacePlaceholder": "Zamjenski tekst"
+  },
+  "flattenAll": {
+    "title": "Spljošti sve oznake",
+    "message": "Oznake u ovom dokumentu ({{count}}) postaju dio sadržaja stranice. Svaki PDF preglednik ih prikazuje, ali ih više nije moguće odabrati ni uređivati kao oznake.",
+    "allowUnflatten": "Dopusti vraćanje",
+    "allowUnflattenHint": "U datoteci ostaje kopija oznaka, pa ih „Poništi spljoštenje” može kasnije vratiti, i nakon spremanja i ponovnog otvaranja.",
+    "noUnflattenHint": "Kopija se ne čuva: nakon spremanja oznake su trajno dio stranice.",
+    "saveNote": "Bilješke i druge oznake bez izgleda na stranici ostaju oznake. Datoteka se mijenja tek pri spremanju; do tada Poništi vraća ovaj korak.",
+    "ok": "Spljošti",
+    "busy": "Spljoštavanje oznaka...",
+    "nothing": "Ovaj dokument nema oznaka za spljoštavanje.",
+    "nothingBaked": "Nijedna oznaka nema izgled na stranici, pa ništa nije spljošteno.",
+    "notLoaded": "Oznake ovog dokumenta još se učitavaju. Pokušajte ponovno za trenutak.",
+    "done": "Spljoštene oznake: {{count}}.",
+    "kept": "Zadržano kao oznake (bez izgleda na stranici): {{count}}.",
+    "failed": "Spljoštavanje nije uspjelo: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Vraćanje oznaka...",
+    "nothing": "Ovaj dokument nema spljoštenih oznaka za vraćanje.",
+    "noRecovery": "Oznake u ovom dokumentu spljoštene su bez dopuštenja vraćanja. Dio su sadržaja stranice i ne mogu se vratiti.",
+    "done": "Vraćene oznake: {{count}}.",
+    "failed": "Vraćanje nije uspjelo: {{error}}"
   }
 }

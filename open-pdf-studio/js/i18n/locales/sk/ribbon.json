@@ -161,7 +161,11 @@
     "snapActive": "Prichytenie zap.",
     "loading": "Načítava sa...",
     "northArrow": "Severka",
-    "parametricSymbol": "Parametrický symbol"
+    "parametricSymbol": "Parametrický symbol",
+    "flattenAll": "Sploštiť všetko",
+    "flattenAllTooltip": "Sploštiť všetky označenia do obsahu strany",
+    "unflattenAll": "Zrušiť sploštenie",
+    "unflattenAllTooltip": "Obnoviť označenia sploštené s povoleným obnovením"
   },
   "view": {
     "pageDisplay": "Zobrazenie strany",
@@ -635,5 +639,28 @@
     "noCorrections": "Zatiaľ nie sú žiadne opravy.",
     "insertPlaceholder": "Vložiť text",
     "replacePlaceholder": "Náhradný text"
+  },
+  "flattenAll": {
+    "title": "Sploštiť všetky označenia",
+    "message": "Označenia v tomto dokumente ({{count}}) sa stanú súčasťou obsahu strany. Každý prehliadač PDF ich zobrazí, ale už ich nebude možné vybrať ani upraviť ako označenia.",
+    "allowUnflatten": "Povoliť obnovenie",
+    "allowUnflattenHint": "V súbore zostane kópia označení, takže „Zrušiť sploštenie“ ich môže neskôr obnoviť, aj po uložení a opätovnom otvorení.",
+    "noUnflattenHint": "Kópia sa neuchová: po uložení sú označenia natrvalo súčasťou strany.",
+    "saveNote": "Poznámky a ďalšie označenia bez vzhľadu na strane zostanú označeniami. Súbor sa zmení až pri uložení; dovtedy tento krok vráti Späť.",
+    "ok": "Sploštiť",
+    "busy": "Sploštenie označení...",
+    "nothing": "Tento dokument nemá žiadne označenia na sploštenie.",
+    "nothingBaked": "Žiadne z označení nemá vzhľad na strane, nič sa teda nesploštilo.",
+    "notLoaded": "Označenia tohto dokumentu sa ešte načítavajú. Skúste to o chvíľu znova.",
+    "done": "Sploštené označenia: {{count}}.",
+    "kept": "Ponechané ako označenia (bez vzhľadu na strane): {{count}}.",
+    "failed": "Sploštenie zlyhalo: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Obnovujú sa označenia...",
+    "nothing": "Tento dokument nemá žiadne sploštené označenia na obnovenie.",
+    "noRecovery": "Označenia v tomto dokumente boli sploštené bez povolenia obnovenia. Sú súčasťou obsahu strany a nemožno ich obnoviť.",
+    "done": "Obnovené označenia: {{count}}.",
+    "failed": "Obnovenie zlyhalo: {{error}}"
   }
 }

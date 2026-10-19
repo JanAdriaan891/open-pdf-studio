@@ -161,7 +161,11 @@
     "snapActive": "스냅 켜짐",
     "loading": "불러오는 중...",
     "northArrow": "방위표",
-    "parametricSymbol": "파라메트릭 기호"
+    "parametricSymbol": "파라메트릭 기호",
+    "flattenAll": "모두 병합",
+    "flattenAllTooltip": "모든 마크업을 페이지 내용으로 병합",
+    "unflattenAll": "병합 취소",
+    "unflattenAllTooltip": "복원을 허용하고 병합한 마크업 복원"
   },
   "view": {
     "pageDisplay": "페이지 표시",
@@ -635,5 +639,28 @@
     "noCorrections": "아직 수정 사항이 없습니다.",
     "insertPlaceholder": "삽입할 텍스트",
     "replacePlaceholder": "바꿀 텍스트"
+  },
+  "flattenAll": {
+    "title": "모든 마크업 병합",
+    "message": "이 문서의 마크업({{count}}개)이 페이지 내용의 일부가 됩니다. 모든 PDF 뷰어에서 표시되지만 더 이상 마크업으로 선택하거나 편집할 수 없습니다.",
+    "allowUnflatten": "복원 허용",
+    "allowUnflattenHint": "마크업의 사본이 파일에 보관되므로, 저장하고 다시 연 후에도 \"병합 취소\"로 나중에 복원할 수 있습니다.",
+    "noUnflattenHint": "사본이 보관되지 않습니다. 저장하면 마크업은 영구적으로 페이지의 일부가 됩니다.",
+    "saveNote": "메모 등 페이지에 모양이 없는 마크업은 마크업으로 남습니다. 파일은 저장할 때만 변경되며, 그 전까지는 실행 취소로 이 단계를 되돌릴 수 있습니다.",
+    "ok": "병합",
+    "busy": "마크업 병합 중...",
+    "nothing": "이 문서에는 병합할 마크업이 없습니다.",
+    "nothingBaked": "페이지에 모양이 있는 마크업이 없어 아무것도 병합되지 않았습니다.",
+    "notLoaded": "이 문서의 마크업을 아직 불러오는 중입니다. 잠시 후 다시 시도하세요.",
+    "done": "병합된 마크업: {{count}}",
+    "kept": "마크업으로 유지됨(페이지에 모양 없음): {{count}}",
+    "failed": "병합 실패: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "마크업 복원 중...",
+    "nothing": "이 문서에는 복원할 병합된 마크업이 없습니다.",
+    "noRecovery": "이 문서의 마크업은 복원을 허용하지 않고 병합되었습니다. 페이지 내용의 일부이므로 복원할 수 없습니다.",
+    "done": "복원된 마크업: {{count}}",
+    "failed": "복원 실패: {{error}}"
   }
 }

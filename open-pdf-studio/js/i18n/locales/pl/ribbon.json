@@ -161,7 +161,11 @@
     "snapActive": "Przyciąganie wł.",
     "loading": "Wczytywanie...",
     "northArrow": "Strzałka północy",
-    "parametricSymbol": "Symbol parametryczny"
+    "parametricSymbol": "Symbol parametryczny",
+    "flattenAll": "Spłaszcz wszystko",
+    "flattenAllTooltip": "Spłaszcz wszystkie adnotacje do zawartości strony",
+    "unflattenAll": "Cofnij spłaszczenie",
+    "unflattenAllTooltip": "Przywróć adnotacje spłaszczone z dozwolonym przywracaniem"
   },
   "view": {
     "pageDisplay": "Wyświetlanie strony",
@@ -635,5 +639,28 @@
     "noCorrections": "Nie ma jeszcze żadnych poprawek.",
     "insertPlaceholder": "Tekst do wstawienia",
     "replacePlaceholder": "Tekst zastępczy"
+  },
+  "flattenAll": {
+    "title": "Spłaszcz wszystkie adnotacje",
+    "message": "Adnotacje w tym dokumencie ({{count}}) staną się częścią zawartości strony. Każda przeglądarka PDF je wyświetli, ale nie będzie można ich już zaznaczać ani edytować jako adnotacji.",
+    "allowUnflatten": "Zezwól na przywrócenie",
+    "allowUnflattenHint": "W pliku zostaje kopia adnotacji, dzięki czemu „Cofnij spłaszczenie” może je później przywrócić, także po zapisaniu i ponownym otwarciu.",
+    "noUnflattenHint": "Kopia nie jest zachowywana: po zapisaniu adnotacje na stałe stają się częścią strony.",
+    "saveNote": "Notatki i inne adnotacje bez wyglądu na stronie pozostają adnotacjami. Plik zmienia się dopiero po zapisaniu; do tego czasu Cofnij odwraca ten krok.",
+    "ok": "Spłaszcz",
+    "busy": "Spłaszczanie adnotacji...",
+    "nothing": "Ten dokument nie zawiera adnotacji do spłaszczenia.",
+    "nothingBaked": "Żadna z adnotacji nie ma wyglądu na stronie, więc nic nie zostało spłaszczone.",
+    "notLoaded": "Adnotacje tego dokumentu wciąż się wczytują. Spróbuj ponownie za chwilę.",
+    "done": "Spłaszczone adnotacje: {{count}}.",
+    "kept": "Pozostawione jako adnotacje (bez wyglądu na stronie): {{count}}.",
+    "failed": "Spłaszczanie nie powiodło się: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Przywracanie adnotacji...",
+    "nothing": "Ten dokument nie zawiera spłaszczonych adnotacji do przywrócenia.",
+    "noRecovery": "Adnotacje w tym dokumencie zostały spłaszczone bez zezwolenia na przywrócenie. Są częścią zawartości strony i nie można ich przywrócić.",
+    "done": "Przywrócone adnotacje: {{count}}.",
+    "failed": "Przywracanie nie powiodło się: {{error}}"
   }
 }

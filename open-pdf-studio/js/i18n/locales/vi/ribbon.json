@@ -161,7 +161,11 @@
     "snapActive": "Bắt dính bật",
     "loading": "Đang tải...",
     "northArrow": "Mũi tên chỉ hướng bắc",
-    "parametricSymbol": "Ký hiệu tham số"
+    "parametricSymbol": "Ký hiệu tham số",
+    "flattenAll": "Làm phẳng tất cả",
+    "flattenAllTooltip": "Làm phẳng tất cả đánh dấu vào nội dung trang",
+    "unflattenAll": "Hoàn tác làm phẳng",
+    "unflattenAllTooltip": "Khôi phục các đánh dấu đã làm phẳng khi cho phép khôi phục"
   },
   "view": {
     "pageDisplay": "Hiển thị Trang",
@@ -635,5 +639,28 @@
     "noCorrections": "Chưa có chỉnh sửa nào.",
     "insertPlaceholder": "Văn bản cần chèn",
     "replacePlaceholder": "Văn bản thay thế"
+  },
+  "flattenAll": {
+    "title": "Làm phẳng tất cả đánh dấu",
+    "message": "Các đánh dấu trong tài liệu này ({{count}}) trở thành một phần nội dung trang. Mọi trình xem PDF đều hiển thị chúng, nhưng không thể chọn hay chỉnh sửa chúng như đánh dấu nữa.",
+    "allowUnflatten": "Cho phép khôi phục",
+    "allowUnflattenHint": "Một bản sao của các đánh dấu được giữ trong tệp, để \"Hoàn tác làm phẳng\" có thể khôi phục chúng sau này, kể cả sau khi lưu và mở lại.",
+    "noUnflattenHint": "Không giữ bản sao: sau khi lưu, các đánh dấu vĩnh viễn là một phần của trang.",
+    "saveNote": "Ghi chú và các đánh dấu khác không có hình thức trên trang vẫn là đánh dấu. Tệp chỉ thay đổi khi bạn lưu; trước đó, Hoàn tác sẽ đảo ngược bước này.",
+    "ok": "Làm phẳng",
+    "busy": "Đang làm phẳng đánh dấu...",
+    "nothing": "Tài liệu này không có đánh dấu để làm phẳng.",
+    "nothingBaked": "Không đánh dấu nào có hình thức trên trang, nên không có gì được làm phẳng.",
+    "notLoaded": "Các đánh dấu của tài liệu này vẫn đang tải. Hãy thử lại sau giây lát.",
+    "done": "Đã làm phẳng đánh dấu: {{count}}.",
+    "kept": "Giữ nguyên là đánh dấu (không có hình thức trên trang): {{count}}.",
+    "failed": "Làm phẳng thất bại: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Đang khôi phục đánh dấu...",
+    "nothing": "Tài liệu này không có đánh dấu đã làm phẳng để khôi phục.",
+    "noRecovery": "Các đánh dấu trong tài liệu này đã được làm phẳng mà không cho phép khôi phục. Chúng là một phần nội dung trang và không thể khôi phục.",
+    "done": "Đã khôi phục đánh dấu: {{count}}.",
+    "failed": "Khôi phục thất bại: {{error}}"
   }
 }
