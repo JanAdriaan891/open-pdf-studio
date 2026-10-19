@@ -1,0 +1,49 @@
+# Reference PKGBUILD for the AUR package open-pdf-studio-bin.
+#
+# The AUR package itself is maintained by the community; this file lives in
+# the Open PDF Studio repository as a reference the AUR maintainer can adopt.
+# It repackages the official .deb from the GitHub release as is: the binary
+# links Tesseract and Leptonica statically, and the .deb ships its own PDFium
+# library, PDFium worker sidecar and OCR trained data, so only the WebKitGTK
+# desktop stack comes from Arch.
+#
+# Releases up to and including 2026.42.11 linked the build machine's
+# libtesseract.so.4 dynamically and do not start on Arch (issue #620); use
+# this PKGBUILD from the first release after that.
+#
+# Update per release: set pkgver, set sha256sums to the .deb's digest (the
+# GitHub release lists a sha256 per asset, or run updpkgsums), then
+# regenerate .SRCINFO with: makepkg --printsrcinfo > .SRCINFO
+
+pkgname=open-pdf-studio-bin
+_pkgname=open-pdf-studio
+pkgver=2026.42.11
+pkgrel=1
+pkgdesc='Free, open-source PDF editor and annotator for drawings and documents'
+arch=('x86_64')
+url='https://github.com/OpenAEC-Foundation/open-pdf-studio'
+license=('LGPL-3.0-or-later')
+depends=(
+  'cairo'
+  'gcc-libs'
+  'gdk-pixbuf2'
+  'glib2'
+  'glibc'
+  'gtk3'
+  'hicolor-icon-theme'
+  'libsoup3'
+  'webkit2gtk-4.1'
+)
+optdepends=(
+  'cups: printing (lp and lpstat)'
+)
+provides=("${_pkgname}")
+conflicts=("${_pkgname}")
+options=('!strip' '!debug')
+source=("${_pkgname}-${pkgver}.deb::${url}/releases/download/v${pkgver}/Open.PDF.Studio_${pkgver}_amd64.deb")
+noextract=("${_pkgname}-${pkgver}.deb")
+sha256sums=('b4bd7958b1539b9d535e588d4c6581d72bb893565dfcac3d2f5118489c8bfbc6')
+
+package() {
+  bsdtar -xOf "${_pkgname}-${pkgver}.deb" 'data.tar.*' | bsdtar -xf - -C "${pkgdir}"
+}
