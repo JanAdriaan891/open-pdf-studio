@@ -1,0 +1,172 @@
+name: Linux Tesseract linkage check (#620)
+
+# Temporary verification workflow for the #620 branch. It builds nothing that
+# is published: no release, no tag, no upload.
+on:
+  push:
+    branches:
+      - r4212/620-linux-tesseract
+
+permissions:
+  contents: read
+
+jobs:
+  released:
+    name: Released 2026.42.11 artifacts
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Inspect released .deb and AppImage
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release download v2026.42.11 -R "${{ github.repository }}" -p '*_amd64.deb' -p '*_amd64.AppImage' -D rel
+          cd rel
+          sha256sum ./*.deb
+          echo "--- control"; dpkg-deb -I ./*.deb | sed -n '/Package:/,$p'
+          echo "--- contents"; dpkg-deb -c ./*.deb
+          mkdir deb && dpkg-deb -x ./*.deb deb
+          echo "--- NEEDED of the released binary"; readelf -d deb/usr/bin/open-pdf-studio | grep NEEDED
+          bash ../open-pdf-studio/scripts/linux-ocr-linkage-check.sh deb/usr/bin/open-pdf-studio || echo "linkage check failed as expected for the released binary"
+          chmod +x ./*.AppImage && ./*.AppImage --appimage-extract >/dev/null
+          echo "--- OCR libraries bundled in the released AppImage"; find squashfs-root \( -name 'libtesseract*' -o -name 'liblept*' \) -print
+
+      - name: Released .deb binary, AppImage and PKGBUILD on Arch Linux
+        run: |
+          set -uo pipefail
+          docker run --rm -v "$PWD/rel:/rel:ro" -v "$PWD/packaging/aur:/aur:ro" archlinux:latest bash -c '
+            pacman -Syu --noconfirm --needed base-devel webkit2gtk-4.1 gtk3 >/dev/null
+            echo "--- system tesseract:"; ls /usr/lib/libtesseract* 2>&1 || true
+            echo "--- released raw binary --version:"; /rel/deb/usr/bin/open-pdf-studio --version; echo "exit $?"
+            echo "--- released AppImage --version:"; cp -r /rel/squashfs-root /tmp/sq; /tmp/sq/AppRun --version; echo "exit $?"
+            echo "--- PKGBUILD with the released .deb (real download and checksum):"
+            useradd -m builder && cp -r /aur /home/builder/pkg && chown -R builder /home/builder/pkg
+            su builder -c "cd ~/pkg && makepkg -f --noconfirm" && pacman -U --noconfirm /home/builder/pkg/*.pkg.tar.zst >/dev/null
+            open-pdf-studio --version; echo "exit $?"
+          '
+
+  branch:
+    name: Branch build (static Tesseract)
+    runs-on: ubuntu-22.04
+    env:
+      LINUXDEPLOY_EXCLUDED_LIBRARIES: 'libwayland-client.so*;libwayland-cursor.so*;libwayland-egl.so*;libwayland-server.so*;libxkbcommon.so*;libxcb-randr.so*;libxcb-render.so*;libxcb-shm.so*;libXau.so*;libXdmcp.so*'
+    defaults:
+      run:
+        working-directory: open-pdf-studio
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies (no system Tesseract)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf pkg-config
+          dpkg -l | grep -E 'tesseract|leptonica' || echo "no tesseract/leptonica packages installed"
+          cmake --version | head -1
+
+      - name: Cache Tesseract static build (Linux)
+        uses: actions/cache@v5
+        with:
+          path: ~/.tesseract-rs
+          key: tesseract-rs-ubuntu-22.04-${{ hashFiles('Cargo.toml') }}
+
+      - run: npm ci
+
+      - name: Build pdfium-worker sidecar
+        working-directory: .
+        run: |
+          cargo build --release -p pdfium-worker
+          mkdir -p open-pdf-studio/src-tauri/binaries
+          cp target/release/pdfium-worker open-pdf-studio/src-tauri/binaries/pdfium-worker-x86_64-unknown-linux-gnu
+
+      - name: Fetch libpdfium.so
+        run: |
+          mkdir -p src-tauri/binaries/linux-x64
+          curl -L "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F8076/pdfium-linux-x64.tgz" -o /tmp/pdfium-linux.tgz
+          tar xzf /tmp/pdfium-linux.tgz -C /tmp lib/libpdfium.so
+          cp /tmp/lib/libpdfium.so src-tauri/binaries/linux-x64/libpdfium.so
+
+      - name: Provide pinned linuxdeploy
+        run: |
+          set -euo pipefail
+          tools="${XDG_CACHE_HOME:-$HOME/.cache}/tauri"
+          mkdir -p "$tools"
+          curl -fsSL --retry 3 -o "$tools/linuxdeploy-x86_64.AppImage" \
+            https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-x86_64.AppImage
+          echo "c20cd71e3a4e3b80c3483cef793cda3f4e990aca14014d23c544ca3ce1270b4d  $tools/linuxdeploy-x86_64.AppImage" | sha256sum -c -
+          chmod +x "$tools/linuxdeploy-x86_64.AppImage"
+
+      - name: Build .deb and AppImage
+        run: |
+          time npm run tauri build -- --bundles deb,appimage --config '{"bundle":{"createUpdaterArtifacts":false}}'
+          ls -la ~/.tesseract-rs/*/ ~/.tesseract-rs/*/cache/* || true
+
+      - name: Verify no system OCR library dependency
+        run: bash scripts/linux-ocr-linkage-check.sh ../target/release/open-pdf-studio
+
+      - name: Inspect branch .deb and AppImage
+        working-directory: .
+        run: |
+          set -euo pipefail
+          mkdir -p out && cp target/release/bundle/deb/*.deb target/release/bundle/appimage/*.AppImage out/
+          cd out
+          echo "--- control"; dpkg-deb -I ./*.deb | sed -n '/Package:/,$p'
+          echo "--- contents"; dpkg-deb -c ./*.deb
+          mkdir deb && dpkg-deb -x ./*.deb deb
+          echo "--- NEEDED of every ELF in the .deb"
+          find deb -type f | while read -r f; do
+            if file -b "$f" | grep -q ELF; then echo "## $f"; readelf -d "$f" | grep NEEDED || true; fi
+          done
+          chmod +x ./*.AppImage && ./*.AppImage --appimage-extract >/dev/null
+          echo "--- OCR libraries bundled in the branch AppImage"; find squashfs-root \( -name 'libtesseract*' -o -name 'liblept*' \) -print
+          echo "(end of list)"
+
+      - name: OCR self-check (real ocr::ocr_page_words, Ubuntu 22.04 without system Tesseract)
+        working-directory: .
+        run: |
+          set -euo pipefail
+          cargo build --release -p open-pdf-studio --example ocr_poc
+          bash open-pdf-studio/scripts/linux-ocr-linkage-check.sh target/release/examples/ocr_poc
+          cp target/release/examples/ocr_poc out/ocr_poc
+          cp open-pdf-studio/public/pdfjs/web/compressed.tracemonkey-pldi-09.pdf out/sample.pdf
+          tessdata=$(dirname "$(find out/deb -name eng.traineddata -print -quit)")
+          pdfium=$(dirname "$(find out/deb -name libpdfium.so -print -quit)")
+          echo "tessdata from the .deb: $tessdata ; libpdfium from the .deb: $pdfium"
+          OPDS_TESSDATA_DIR="$tessdata" OPDS_PDFIUM_DIR="$pdfium" out/ocr_poc out/sample.pdf 0 eng > out/words.json
+          head -c 600 out/words.json; echo
+          grep -q '"Dynamic' out/words.json
+          echo "OCR OK"
+
+      - name: Branch .deb binary, AppImage, OCR and PKGBUILD on Arch Linux
+        working-directory: .
+        run: |
+          set -euo pipefail
+          docker run --rm -v "$PWD/out:/out:ro" -v "$PWD/packaging/aur:/aur:ro" archlinux:latest bash -euo pipefail -c '
+            pacman -Syu --noconfirm --needed base-devel namcap >/dev/null
+            echo "--- system tesseract:"; ls /usr/lib/libtesseract* 2>&1 || true
+            useradd -m builder && cp -r /aur /home/builder/pkg
+            ver=$(sed -n "s/^pkgver=//p" /home/builder/pkg/PKGBUILD)
+            cp /out/*.deb "/home/builder/pkg/open-pdf-studio-$ver.deb"
+            chown -R builder /home/builder/pkg
+            echo "--- .SRCINFO matches PKGBUILD:"; su builder -c "cd ~/pkg && makepkg --printsrcinfo" | diff - /aur/.SRCINFO && echo yes
+            echo "--- makepkg with the branch .deb:"
+            su builder -c "cd ~/pkg && makepkg -f --noconfirm --skipchecksums"
+            pacman -U --noconfirm /home/builder/pkg/*.pkg.tar.zst
+            echo "--- namcap:"; namcap /home/builder/pkg/PKGBUILD || true; namcap /home/builder/pkg/*.pkg.tar.zst || true
+            echo "--- unresolved libraries:"; ldd /usr/bin/open-pdf-studio | grep "not found" || echo none
+            echo "--- installed binary --version:"; open-pdf-studio --version
+            echo "--- AppImage --version:"; cp -r /out/squashfs-root /tmp/sq; /tmp/sq/AppRun --version
+            echo "--- OCR on Arch with the installed package data:"
+            tessdata=$(dirname "$(find /usr/lib -name eng.traineddata -print -quit)")
+            pdfium=$(dirname "$(find /usr/lib -name libpdfium.so -print -quit)")
+            OPDS_TESSDATA_DIR="$tessdata" OPDS_PDFIUM_DIR="$pdfium" /out/ocr_poc /out/sample.pdf 0 eng > /tmp/words.json
+            head -c 300 /tmp/words.json; echo
+            grep -q "\"Dynamic" /tmp/words.json && echo "OCR OK on Arch"
+          '
