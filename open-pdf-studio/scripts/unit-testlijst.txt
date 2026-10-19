@@ -386,3 +386,7 @@ js/ui/chrome/tab-losmaken.test.mjs
 js/core/instantie-rol.test.mjs
 js/core/verkenner-miniaturen.test.mjs
 js/i18n/verkenner-miniaturen-i18n.test.mjs
+js/pdf/eigenschappen-rondgang.test.mjs
+js/pdf/saver/vorm-draaiing.test.mjs
+js/pdf/saver/tekstvak-rc.test.mjs
+js/pdf/loader/annotatie-algemeen.test.mjs
