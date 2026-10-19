@@ -339,3 +339,25 @@ De worker kiest `min(4, kernen/4 − 1)` threads, omdat de app vier workers naas
 Met 4 threads is Hayro:
 - op lichte pagina's even snel als PDFium;
 - op zware tekeningen ongeveer 2,6× sneller.
+
+**Volledigheid in de app (MuPDF-vergelijkings-sweep, zelfde build, beide engines)**
+
+Opzet:
+- 46 bestanden, 167 pagina's;
+- gemeten met `verify-mupdf-compare.mjs` in een geïsoleerde rig (MCP 9235);
+- elke pagina vergeleken met een onafhankelijke MuPDF-render.
+
+| | PDFium | Hayro |
+|---|---:|---:|
+| Gevlagde pagina's | 13 | 10 |
+| Mediaan \|inktverschil\| met de referentie (procentpunt) | 2,27 | 1,31 |
+| Mediaan occupancy-overeenkomst | 1,000 | 1,000 |
+
+Wat alleen bij PDFium gevlagd is:
+- MV-03;
+- Technische tekening p3 (beide mappen);
+- Zware vector p8 (beide mappen).
+
+Wat alleen bij Hayro gevlagd is: NKD1a p5 en p6. Bij nader onderzoek was dat een tegel die bij de schermafbeelding nog niet klaar was; de rig draait een debug-build. Na wachten is de pagina compleet.
+
+2196-CB-21 is in beide sweeps leeg op het moment van de schermafbeelding. Dat is de bekende trage pagina (#395). Met Hayro valt die pagina nu terug op PDFium en wordt hij correct getoond.
