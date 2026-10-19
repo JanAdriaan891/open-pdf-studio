@@ -418,3 +418,5 @@ js/annotations/veelhoek-bewerken.test.mjs
 js/annotations/veelhoek-raak.test.mjs
 js/tools/tools/polygon-tool.test.mjs
 js/pdf/veelhoek-rondgang.test.mjs
+js/pdf/loader/stempel-geometrie.test.mjs
+js/pdf/stempel-draaiing-rondgang.test.mjs
