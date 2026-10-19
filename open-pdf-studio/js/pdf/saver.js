@@ -1784,7 +1784,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                 // XObject-pixels (apImageSpace 'pdf', zonder draaiing) gaan
                 // ongedraaid terug, anders draait de inhoud dubbel. Zie
                 // saver/stempel-draaiing.js.
-                const { prefix: imgPrefix, visW, visH, bboxW, bboxH } = stPlaatsing;
+                const { prefix: imgPrefix, clip: imgClip, visW, visH, bboxW, bboxH } = stPlaatsing;
                 const alpha = ann.opacity !== undefined ? ann.opacity : 1;
                 let apContent;
                 const resources = { XObject: context.obj({ Img: imageRef }) };
@@ -1793,9 +1793,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   const gsDict = context.obj({ Type: 'ExtGState', ca: alpha, CA: alpha });
                   const gsRef = context.register(gsDict);
                   resources.ExtGState = context.obj({ GS0: gsRef });
-                  apContent = `q\n/GS0 gs\n${imgPrefix}${visW} 0 0 ${visH} 0 0 cm\n/Img Do\nQ\n`;
+                  apContent = `q\n/GS0 gs\n${imgPrefix}${imgClip}${visW} 0 0 ${visH} 0 0 cm\n/Img Do\nQ\n`;
                 } else {
-                  apContent = `q\n${imgPrefix}${visW} 0 0 ${visH} 0 0 cm\n/Img Do\nQ\n`;
+                  apContent = `q\n${imgPrefix}${imgClip}${visW} 0 0 ${visH} 0 0 cm\n/Img Do\nQ\n`;
                 }
 
                 const apStream = context.stream(
@@ -1904,7 +1904,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                 // Draaiing en pagina-/Rotate in één cm; rauwe XObject-pixels
                 // (apImageSpace 'pdf') gaan ongedraaid terug — zie het
                 // stempel-pad hierboven.
-                const { prefix: imgPrefix, visW, visH, bboxW, bboxH } = imgPlaatsing;
+                const { prefix: imgPrefix, clip: imgClip, visW, visH, bboxW, bboxH } = imgPlaatsing;
                 let apContent;
                 const resources = { XObject: context.obj({ Img: imageRef }) };
                 const extGStates = {};
@@ -1922,7 +1922,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   const oy = -cropB * sh;
                   imgOps = `0 0 ${r4(visW)} ${r4(visH)} re W n\n${r4(sw)} 0 0 ${r4(sh)} ${r4(ox)} ${r4(oy)} cm\n/Img Do`;
                 } else {
-                  imgOps = `${visW} 0 0 ${visH} 0 0 cm\n/Img Do`;
+                  imgOps = `${imgClip}${visW} 0 0 ${visH} 0 0 cm\n/Img Do`;
                 }
 
                 if (alpha < 1) {

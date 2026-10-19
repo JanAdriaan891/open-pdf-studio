@@ -5,13 +5,14 @@
 // omhullende), niet in /OPS_Rotation: die sleutel kent geen andere lezer.
 // Elk geval gaat twee keer door de echte saver en lader, met de bitmap uit de
 // appearance (stempel-rondgang.testhulp.mjs), op bladen met /Rotate 0, 90,
-// 180 en 270, met en zonder draaiing in de app. Daarnaast een oud bestand
-// zoals CP-21: schermafdrukken op een /Rotate-90-blad, de bitmap zonder
-// draaiing in de ongedraaide /Rect en /OPS_Rotation -90.
+// 180 en 270, met en zonder draaiing in de app. Daarnaast oude bestanden:
+// CP-21 (schermafdrukken op een /Rotate-90-blad, de bitmap zonder draaiing in
+// de ongedraaide /Rect en /OPS_Rotation -90), VO Constructie (zelfde opbouw,
+// pixels in PDF-ruimte) en -CP-21-3/-4 (draaiing alleen in /OPS_Rotation).
 
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { PDFDocument, PDFName, PDFNumber } from 'pdf-lib';
+import { PDFDocument, PDFName, PDFNumber, PDFString } from 'pdf-lib';
 import { leegBlad, opslaan, woordenboeken } from './rondgang.testhulp.mjs';
 import { laadMetBeelden, pngDataUrl, pngMaat, maakPng, appearance, getallen } from './stempel-rondgang.testhulp.mjs';
 
@@ -155,21 +156,27 @@ for (const paginaRotatie of [0, 90, 180, 270]) {
  * pixels (1138 × 784, hier op schaal) liggen zoals op het scherm. Een oudere
  * versie schreef er /OPS_Rotation -90 bij.
  */
-async function cp21Achtig({ pixels = [114, 78], rect = [300, 200, 626.967, 674.666], opsRotation = -90, rotatie = 90 } = {}) {
+async function cp21Achtig({
+  pixels = [114, 78], rect = [300, 200, 626.967, 674.666], opsRotation = -90, rotatie = 90, inhoud = null, extra = {},
+  bbox = null, matrix = null,
+} = {}) {
   const doc = await PDFDocument.create();
   const pagina = doc.addPage([842, 1191]);
   pagina.node.set(PDFName.of('Rotate'), PDFNumber.of(rotatie));
   const png = await doc.embedPng(maakPng(...pixels));
   const bw = rect[2] - rect[0];
   const bh = rect[3] - rect[1];
-  const ap = doc.context.register(doc.context.stream(`q\n${bw} 0 0 ${bh} 0 0 cm\n/Img Do\nQ\n`, {
-    Type: 'XObject', Subtype: 'Form', BBox: [0, 0, bw, bh],
-    Resources: doc.context.obj({ XObject: doc.context.obj({ Img: png.ref }) }),
+  const ap = doc.context.register(doc.context.stream(inhoud ?? `q\n${bw} 0 0 ${bh} 0 0 cm\n/Img Do\nQ\n`, {
+    Type: 'XObject', Subtype: 'Form', BBox: bbox ?? [0, 0, bw, bh], ...(matrix ? { Matrix: matrix } : {}),
+    // Een appearance zonder Do (tekststempel) krijgt geen afbeelding mee.
+    Resources: inhoud && !/\sDo\b/.test(inhoud) ? doc.context.obj({})
+      : doc.context.obj({ XObject: doc.context.obj({ Img: png.ref }) }),
   }));
   const annot = doc.context.obj({
     Type: 'Annot', Subtype: 'Stamp', Rect: rect, Name: 'clipboard.image.0800002c',
     F: 4, AP: doc.context.obj({ N: ap }),
     ...(opsRotation !== null ? { OPS_Rotation: opsRotation } : {}),
+    ...extra,
   });
   pagina.node.set(PDFName.of('Annots'), doc.context.obj([doc.context.register(annot)]));
   return doc.save();
@@ -219,22 +226,106 @@ test('CP-21 op /Rotate 270 werkt net zo', async () => {
   dichtbij(m.width, 474.666, 0.01, 'breedte');
 });
 
-test('een bitmap die bij het ongedraaide vak past, staat zoals elke lezer hem toont (kwartslag mee met het blad)', async () => {
-  // Zoals VO Constructie.pdf: de pixels liggen in PDF-ruimte; de pagina
-  // draait ze mee. Niet platgedrukt in het schermvak.
-  const bytes = await cp21Achtig({ pixels: [78, 114], opsRotation: null });
+/** Opslaan en heropenen, `keer` keer; geeft per ronde model, dict en appearance. */
+async function opslaanEnLaden(bytes, keer = 2) {
+  let modellen = await laadMetBeelden(bytes);
+  const rondes = [{ modellen }];
+  for (let i = 0; i < keer; i++) {
+    bytes = await opslaan(bytes, modellen);
+    modellen = await laadMetBeelden(bytes);
+    const lijst = await woordenboeken(bytes);
+    const { dict } = lijst.find(({ dict: d }) => d.get(PDFName.of('Subtype'))?.toString() === '/Stamp');
+    rondes.push({ modellen, dict, ap: appearance(lijst.doc, dict) });
+  }
+  return rondes;
+}
+
+test('VO Constructie: een bitmap die de appearance niet draait, staat op een gedraaid blad rechtop in zijn schermvak, zoals altijd', async () => {
+  // De pixels passen bij het ongedraaide vak (geen oude schermafdruk), maar
+  // de app toonde zulke bitmaps altijd rechtop in het vak op het scherm.
+  // Opslaan schrijft ze zo dat elke lezer dat ook toont, en dat blijft zo.
+  const rondes = await opslaanEnLaden(await cp21Achtig({ pixels: [78, 114], opsRotation: null }));
+  for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
+    const [m] = modellen.filter((a) => a.type === 'stamp');
+    assert.equal(m.rotation, 0, `ronde ${ronde}: rechtop`);
+    dichtbij(m.width, 474.666, 0.01, `ronde ${ronde}: breedte op het scherm`);
+    dichtbij(m.height, 326.967, 0.01, `ronde ${ronde}: hoogte op het scherm`);
+    dichtbij(midden(m).x, 437.333, 0.01, `ronde ${ronde}: midden x`);
+    dichtbij(midden(m).y, 463.4835, 0.01, `ronde ${ronde}: midden y`);
+    if (!dict) continue;
+    assert.equal(dict.get(PDFName.of('OPS_Rotation')), undefined);
+    const s = opScherm(ap, 90);
+    dichtbij(s.hoek, 0, 0.01, `ronde ${ronde}: rechtop in het bestand`);
+    dichtbij(s.lx, 474.666, 0.01, `ronde ${ronde}: breedte in het bestand`);
+    dichtbij(s.ly, 326.967, 0.01, `ronde ${ronde}: hoogte in het bestand`);
+    const rect = getallen(dict.get(PDFName.of('Rect')));
+    [300, 200, 626.967, 674.666].forEach((v, i) => dichtbij(rect[i], v, 0.01, `ronde ${ronde}: /Rect[${i}]`));
+  }
+});
+
+test('-CP-21-3/-4: een oude /OPS_Rotation zonder draaiing in de appearance draait de stempel nog, en gaat bij opslaan in de appearance', async () => {
+  for (const hoek of [90, 45]) {
+    const rondes = await opslaanEnLaden(await cp21Achtig({
+      pixels: [100, 96], rect: [500, 140, 545.4, 187.48], opsRotation: hoek, rotatie: 0,
+    }));
+    for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
+      const [m] = modellen.filter((a) => a.type === 'stamp');
+      assert.equal(m.rotation, hoek, `${hoek}°, ronde ${ronde}: draaiing`);
+      dichtbij(m.width, 45.4, 0.01, `${hoek}°, ronde ${ronde}: breedte`);
+      dichtbij(m.height, 47.48, 0.01, `${hoek}°, ronde ${ronde}: hoogte`);
+      dichtbij(midden(m).x, 522.7, 0.01, `${hoek}°, ronde ${ronde}: midden x`);
+      if (!dict) continue;
+      assert.equal(dict.get(PDFName.of('OPS_Rotation')), undefined, `${hoek}°, ronde ${ronde}: sleutel weg`);
+      const s = opScherm(ap, 0);
+      dichtbij(s.hoek, hoek, 0.01, `${hoek}°, ronde ${ronde}: draaiing in de appearance`);
+    }
+  }
+});
+
+test('-CP-21-2: een /Matrix-draaiing van een ander programma staat zoals altijd, en blijft zo na opslaan', async () => {
+  // /Matrix 45 graden met de klok mee; /Rect is de omhullende (59,2 × 59,2).
+  const c = Math.SQRT1_2;
+  const rondes = await opslaanEnLaden(await cp21Achtig({
+    pixels: [103, 102], rect: [353.5, 154.0, 412.7, 213.2], opsRotation: null, rotatie: 0,
+    inhoud: 'q\n309 0 0 306 0 0 cm\n/Img Do\nQ\n', bbox: [0, 0, 309, 306], matrix: [c, -c, c, c, 0, 218.5],
+  }));
+  for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
+    const [m] = modellen.filter((a) => a.type === 'stamp');
+    assert.equal(m.rotation, 45, `ronde ${ronde}: draaiing`);
+    dichtbij(m.width, 59.2, 0.01, `ronde ${ronde}: breedte`);
+    dichtbij(m.height, 59.2, 0.01, `ronde ${ronde}: hoogte`);
+    if (!dict) continue;
+    const s = opScherm(ap, 0);
+    dichtbij(s.hoek, 45, 0.01, `ronde ${ronde}: draaiing in de appearance`);
+    dichtbij(s.lx, 59.2, 0.01, `ronde ${ronde}: breedte in de appearance`);
+  }
+});
+
+test('een oudere save op een gedraaid blad (cm compenseert alleen de pagina) houdt zijn /OPS_Rotation', async () => {
+  const [w, h] = [80, 160]; // ongedraaide paginaruimte; op het scherm 160 × 80
+  const inhoud = `q\n1 0 0 1 ${w / 2} ${h / 2} cm\n0 1 -1 0 0 0 cm\n1 0 0 1 ${-h / 2} ${-w / 2} cm\n${h} 0 0 ${w} 0 0 cm\n/Img Do\nQ\n`;
+  const rondes = await opslaanEnLaden(await cp21Achtig({
+    pixels: [100, 50], rect: [300, 300, 300 + w, 300 + h], opsRotation: 30, inhoud,
+  }));
+  for (const [ronde, { modellen }] of rondes.entries()) {
+    const [m] = modellen.filter((a) => a.type === 'stamp');
+    assert.equal(m.rotation, 30, `ronde ${ronde}: draaiing`);
+    dichtbij(m.width, 160, 0.01, `ronde ${ronde}: breedte`);
+    dichtbij(m.height, 80, 0.01, `ronde ${ronde}: hoogte`);
+  }
+});
+
+test('een oude tekststempel zonder clip houdt zijn /OPS_Rotation', async () => {
+  const inhoud = 'q\n2 w 1 0 0 RG\n10 0 m 90 0 l 100 10 100 30 c S\nBT\n/F1 12 Tf\n(GOEDGEKEURD) Tj\nET\nQ\n';
+  const bytes = await cp21Achtig({
+    pixels: [10, 10], rect: [100, 100, 220, 140], opsRotation: 30, rotatie: 0, inhoud,
+    extra: { OPS_StampName: PDFString.of('Goedgekeurd'), OPS_StampText: PDFString.of('GOEDGEKEURD') },
+  });
   const [m] = (await laadMetBeelden(bytes)).filter((a) => a.type === 'stamp');
-  assert.equal(m.rotation, 90);
-  dichtbij(m.width, 326.967, 0.01, 'breedte langs de beeldas');
-  dichtbij(m.height, 474.666, 0.01, 'hoogte langs de beeldas');
-  // Opslaan schrijft hem terug zoals hij stond: geen draai-cm, zelfde /Rect.
-  const uit = await opslaan(bytes, await laadMetBeelden(bytes));
-  const lijst = await woordenboeken(uit);
-  const { dict } = lijst.find(({ dict: d }) => d.get(PDFName.of('Subtype'))?.toString() === '/Stamp');
-  const ap = appearance(lijst.doc, dict);
-  assert.doesNotMatch(ap.inhoud, /0 1 -1 0 0 0 cm|0 -1 1 0 0 0 cm/, 'geen draai-cm');
-  const rect = getallen(dict.get(PDFName.of('Rect')));
-  [300, 200, 626.967, 674.666].forEach((v, i) => dichtbij(rect[i], v, 0.01, `/Rect[${i}]`));
+  assert.equal(m.stampText, 'GOEDGEKEURD');
+  assert.equal(m.imageData, undefined, 'tekststempel, geen bitmap');
+  assert.equal(m.rotation, 30);
+  dichtbij(m.width, 120, 0.01, 'breedte');
 });
 
 test('een /SquareImage van een ander programma op een /Rotate-90-blad: rechtop zoals zijn appearance, ook na opslaan', async () => {
@@ -276,9 +367,10 @@ test('een /SquareImage van een ander programma op een /Rotate-90-blad: rechtop z
   }
 });
 
-test('een vrijwel vierkante bitmap is geen oude schermafdruk', async () => {
+test('een vrijwel vierkante bitmap is geen oude schermafdruk: zijn /OPS_Rotation blijft gelden', async () => {
   const bytes = await cp21Achtig({ pixels: [100, 96], rect: [300, 200, 500, 404], opsRotation: -90 });
   const [m] = (await laadMetBeelden(bytes)).filter((a) => a.type === 'stamp');
-  // Zoals de appearance hem tekent: met het blad mee gedraaid.
-  assert.equal(m.rotation, 90);
+  // Zoals de app hem altijd toonde: -90 in het schermvak.
+  assert.equal(m.rotation, -90);
+  dichtbij(m.width, 204, 0.01, 'breedte op het scherm');
 });

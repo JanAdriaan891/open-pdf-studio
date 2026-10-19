@@ -41,7 +41,7 @@ import { inzetUitDsMarge, tolerantieVoorDsInzet } from '../../annotations/render
 import { caretPropsFromPdf, textEditPropsFromPdf } from './correction-load.js';
 import { algemeneEigenschappen } from './annotatie-algemeen.js';
 import { ontdraaiVorm } from '../saver/vorm-draaiing.js';
-import { stempelGeometrie } from './stempel-geometrie.js';
+import { stempelGeometrie, kiesStempelWeergave, oudeStempelDraaiing } from './stempel-geometrie.js';
 
 /**
  * Zet een PDF-annotatie om naar het model van de app.
@@ -252,16 +252,19 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         const sqGeometrie = stempelGeometrie({
           rect, paginaRotatie: viewport.rotation || 0, ap: extraColors.stempelAp, soort: 'beeld',
         });
+        const sqWeergave = kiesStempelWeergave({ geometrie: sqGeometrie, paginaRotatie: viewport.rotation || 0 });
         let sqRotatie = 0;
         let sqRuimte = squareImgEntry.space;
-        if (sqGeometrie) {
-          const schaal = viewport.scale || 1;
-          const [mx, my] = convertPoint(sqGeometrie.midden.x, sqGeometrie.midden.y);
-          imageRect.width = sqGeometrie.breedte * schaal;
-          imageRect.height = sqGeometrie.hoogte * schaal;
-          imageRect.x = mx - imageRect.width / 2;
-          imageRect.y = my - imageRect.height / 2;
-          sqRotatie = sqGeometrie.rotation;
+        if (sqWeergave) {
+          if (sqWeergave.vak === 'ap') {
+            const schaal = viewport.scale || 1;
+            const [mx, my] = convertPoint(sqGeometrie.midden.x, sqGeometrie.midden.y);
+            imageRect.width = sqGeometrie.breedte * schaal;
+            imageRect.height = sqGeometrie.hoogte * schaal;
+            imageRect.x = mx - imageRect.width / 2;
+            imageRect.y = my - imageRect.height / 2;
+          }
+          sqRotatie = sqWeergave.rotation;
           sqRuimte = 'visual';
         }
         const imageId = generateImageId();
@@ -1562,12 +1565,14 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
       // Pixelruimte van de bitmap; zie de saver en stempel-geometrie.js.
       let stImageSpace = stampImgEntry?.space;
 
-      // Vak en draaiing uit de appearance, zoals elke lezer de stempel tekent
-      // (stempel-geometrie.js). /OPS_Rotation telt voor stempels niet meer.
-      // - Een uitsnede van de weergave (source 'render') ligt al zoals op het
-      //   scherm en vult de /Rect: geen draaiing.
-      // - Een bitmap uit het bestand of een tekststempel van de app: vak en
-      //   draaiing uit /Rect, /BBox, /Matrix en de cm's van de inhoud.
+      // Vak en draaiing (stempel-geometrie.js): stempelGeometrie leest hoe
+      // elke lezer de stempel tekent, kiesStempelWeergave wat de app daarvan
+      // toont (een appearance van de eigen saver precies zo; oudere en andere
+      // bestanden zoals altijd, met /OPS_Rotation als oude bron). Een
+      // uitsnede van de weergave (source 'render') ligt al zoals op het
+      // scherm en vult de /Rect; alleen een oude /OPS_Rotation draait hem nog.
+      const opsRotatie = Number.isFinite(extraColors.rotation) ? extraColors.rotation : undefined;
+      let stWeergave = null;
       let stGeometrie = null;
       if (stampImgEntry?.source !== 'render' && (eigenTekst || stampImgEntry)) {
         stGeometrie = stempelGeometrie({
@@ -1580,33 +1585,34 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
             right: extraColors.cropRight, bottom: extraColors.cropBottom,
           },
         });
+        stWeergave = kiesStempelWeergave({
+          geometrie: stGeometrie, paginaRotatie: viewport.rotation || 0,
+          opsRotation: opsRotatie, matrixHoek: extraColors.matrixAngle,
+        });
       }
 
       let stRotation = 0;
       if (stampImgEntry?.source === 'render') {
-        stRotation = 0;
-      } else if (stGeometrie) {
-        const schaal = viewport.scale || 1;
-        const [mx, my] = convertPoint(stGeometrie.midden.x, stGeometrie.midden.y);
-        w = stGeometrie.breedte * schaal;
-        h = stGeometrie.hoogte * schaal;
-        x = mx - w / 2;
-        y = my - h / 2;
-        stRotation = stGeometrie.rotation;
+        stRotation = opsRotatie ? Math.round(opsRotatie) : 0;
+      } else if (stWeergave) {
+        if (stWeergave.vak === 'ap') {
+          const schaal = viewport.scale || 1;
+          const [mx, my] = convertPoint(stGeometrie.midden.x, stGeometrie.midden.y);
+          w = stGeometrie.breedte * schaal;
+          h = stGeometrie.hoogte * schaal;
+          x = mx - w / 2;
+          y = my - h / 2;
+        }
+        stRotation = stWeergave.rotation;
         // De pixels liggen rechtop in dit vak: 'visual'. De saver schrijft
         // ze zo terug dat elke lezer ze toont zoals de app.
         if (stampImgEntry) stImageSpace = 'visual';
-      } else if (extraColors.matrixAngle !== undefined && Math.abs(extraColors.matrixAngle) > 1) {
-        // Zelfde conventie als het FreeText-pad hierboven: de /Matrix-hoek is
-        // een hoek in PDF-ruimte, en de pagina-/Rotate draait het hele blad
-        // mee. Zichtbaar is dus het verschil van die twee. Zonder deze
-        // verrekening stond een stempel met matrix +90 op een /Rotate-90-blad
-        // (extern rechtop) hier een kwartslag gedraaid.
-        const stPageRot = (((viewport.rotation || 0) % 360) + 360) % 360;
-        stRotation = -(Math.round(extraColors.matrixAngle) - stPageRot);
-        while (stRotation > 180) stRotation -= 360;
-        while (stRotation < -180) stRotation += 360;
-        if (Math.abs(stRotation) <= 1) stRotation = 0;
+      } else {
+        // Geen eenduidig vak in de appearance: zoals altijd (een oude
+        // /OPS_Rotation, anders /Matrix verrekend met de pagina-/Rotate).
+        stRotation = oudeStempelDraaiing({
+          opsRotation: opsRotatie, matrixHoek: extraColors.matrixAngle, paginaRotatie: viewport.rotation || 0,
+        });
       }
 
       // Reverse-map PDF standard names back to app stamp names

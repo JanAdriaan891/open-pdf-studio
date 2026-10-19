@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   analyseerInhoud, stempelGeometrie, isSchermBeeldOpGedraaidBlad, appearanceNaarPagina, vultBBox,
+  kiesStempelWeergave, oudeStempelDraaiing,
 } from './stempel-geometrie.js';
 import { stempelAppearance, stempelRect } from '../saver/stempel-draaiing.js';
 
@@ -51,12 +52,52 @@ test('CP-21: elke schermafdruk is een oude schermafdruk en komt rechtop, vullend
     const ap = { bbox: [0, 0, bw, bh], matrix: null, beeld: { ctm: [bw, 0, 0, bh, 0, 0], pixelW: pw, pixelH: ph } };
     const g = stempelGeometrie({ rect, paginaRotatie: 90, ap, soort: 'beeld' });
     assert.equal(g.schermBeeld, true, `${pw}×${ph}`);
-    assert.equal(g.rotation, 0);
-    dichtbij(g.breedte, bh, 1e-6, 'breedte = hoogte van /Rect');
-    dichtbij(g.hoogte, bw, 1e-6, 'hoogte = breedte van /Rect');
-    dichtbij(g.midden.x, 100 + bw / 2, 1e-6, 'midden x');
-    dichtbij(g.midden.y, 100 + bh / 2, 1e-6, 'midden y');
+    assert.equal(g.eigenAp, false);
+    // /OPS_Rotation -90 draait een oude schermafdruk niet: rechtop in de /Rect.
+    assert.deepEqual(kiesStempelWeergave({ geometrie: g, paginaRotatie: 90, opsRotation: -90 }), { rotation: 0, vak: 'rect' });
   }
+});
+
+test('kiesStempelWeergave: eigen appearance zoals getekend, oude en andere bestanden zoals altijd', () => {
+  const geo = (o) => ({ rotation: 0, beeldHoek: 0, schermBeeld: false, eigenAp: false, ...o });
+  // Eigen saver, geen /OPS_Rotation: precies de appearance.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90, eigenAp: true }), paginaRotatie: 90 }), { rotation: 90, vak: 'ap' });
+  // Gedraaid blad, appearance draait de bitmap niet (zoals VO Constructie):
+  // rechtop in de /Rect, zoals de app hem altijd toonde.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90 }), paginaRotatie: 90 }), { rotation: 0, vak: 'rect' });
+  // ... met een oude /OPS_Rotation (vrijwel vierkant, geen schermafdruk): die draaiing.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90 }), paginaRotatie: 90, opsRotation: -90 }), { rotation: -90, vak: 'rect' });
+  // Oude schermafdruk (CP-21): rechtop, de oude /OPS_Rotation telt niet.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90, schermBeeld: true }), paginaRotatie: 90, opsRotation: -90 }), { rotation: 0, vak: 'rect' });
+  // Ongedraaid blad, oude /OPS_Rotation (-CP-21-3/-4).
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo(), paginaRotatie: 0, opsRotation: 45 }), { rotation: 45, vak: 'rect' });
+  // Oude save op een gedraaid blad: de cm compenseert alleen de pagina.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ beeldHoek: 90 }), paginaRotatie: 90, opsRotation: 30 }), { rotation: 30, vak: 'rect' });
+  // /Matrix van een ander programma (-CP-21-2): zoals altijd, uit /Matrix.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 45, beeldHoek: -45 }), paginaRotatie: 0, matrixHoek: -45 }), { rotation: 45, vak: 'rect' });
+  // Een eigen appearance mét /OPS_Rotation is een oudere save: oude regels.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ eigenAp: true }), paginaRotatie: 0, opsRotation: 30 }), { rotation: 30, vak: 'rect' });
+  assert.equal(kiesStempelWeergave({ geometrie: null }), null);
+});
+
+test('oudeStempelDraaiing: /OPS_Rotation, anders /Matrix min de pagina-/Rotate', () => {
+  assert.equal(oudeStempelDraaiing({ opsRotation: 30.4 }), 30);
+  assert.equal(oudeStempelDraaiing({ opsRotation: 0, matrixHoek: -90, paginaRotatie: 0 }), 90);
+  assert.equal(oudeStempelDraaiing({ matrixHoek: 90, paginaRotatie: 90 }), 0);
+  assert.equal(oudeStempelDraaiing({ matrixHoek: -90, paginaRotatie: 90 }), 180);
+  assert.equal(oudeStempelDraaiing({ matrixHoek: 0.0117, paginaRotatie: 90 }), 0, 'ruis in /Matrix');
+  assert.equal(oudeStempelDraaiing({}), 0);
+});
+
+test('stempelGeometrie: een clip op precies het beeldvak is een appearance van de eigen saver', () => {
+  const p = stempelAppearance({ w: 40, h: 120, paginaRotatie: 90, rotatie: 30 });
+  const rect = stempelRect([300, 300, 340, 420], p);
+  const a = analyseerInhoud(`q\n${p.prefix}${p.clip}${p.visW} 0 0 ${p.visH} 0 0 cm\n/Img Do\nQ\n`);
+  const ap = { bbox: [0, 0, p.bboxW, p.bboxH], beeld: { ctm: a.beeldDo[0].ctm, pixelW: 120, pixelH: 40 }, eersteRe: a.eersteRe };
+  assert.equal(stempelGeometrie({ rect, paginaRotatie: 90, ap }).eigenAp, true);
+  // Zonder clip, of met een clip op iets anders: niet.
+  assert.equal(stempelGeometrie({ rect, paginaRotatie: 90, ap: { ...ap, eersteRe: null } }).eigenAp, false);
+  assert.equal(stempelGeometrie({ rect, paginaRotatie: 90, ap: { ...ap, eersteRe: { ...a.eersteRe, w: 10 } } }).eigenAp, false);
 });
 
 test('oude schermafdruk: alleen met een duidelijke marge, alleen op een kwartslag gedraaid blad', () => {
@@ -144,9 +185,9 @@ test('saver en lader zijn elkaars omgekeerde, op elk blad en bij elke draaiing',
   }
 });
 
-test('stempelAppearance: zonder draaiing dezelfde uitvoer als de oude pagina-compensatie', () => {
+test('stempelAppearance: zonder draaiing dezelfde draai-cm als de oude pagina-compensatie', () => {
   assert.deepEqual(stempelAppearance({ w: 120, h: 40, paginaRotatie: 0 }),
-    { prefix: '', visW: 120, visH: 40, bboxW: 120, bboxH: 40, gedraaid: false });
+    { prefix: '', clip: '0 0 120 40 re W n\n', visW: 120, visH: 40, bboxW: 120, bboxH: 40, gedraaid: false });
   const p90 = stempelAppearance({ w: 40, h: 120, paginaRotatie: 90 });
   assert.equal(p90.prefix, '1 0 0 1 20 60 cm\n0 1 -1 0 0 0 cm\n1 0 0 1 -60 -20 cm\n');
   assert.deepEqual([p90.visW, p90.visH, p90.bboxW, p90.bboxH], [120, 40, 40, 120]);
@@ -154,9 +195,9 @@ test('stempelAppearance: zonder draaiing dezelfde uitvoer als de oude pagina-com
     '1 0 0 1 60 20 cm\n-1 0 0 -1 0 0 cm\n1 0 0 1 -60 -20 cm\n');
   assert.equal(stempelAppearance({ w: 40, h: 120, paginaRotatie: 270 }).prefix,
     '1 0 0 1 20 60 cm\n0 -1 1 0 0 0 cm\n1 0 0 1 -60 -20 cm\n');
-  // Rauwe PDF-pixels zonder draaiing: ongedraaid terug.
+  // Rauwe PDF-pixels zonder draaiing: ongedraaid en zonder clip terug.
   assert.deepEqual(stempelAppearance({ w: 40, h: 120, paginaRotatie: 90, ruimte: 'pdf' }),
-    { prefix: '', visW: 40, visH: 120, bboxW: 40, bboxH: 120, gedraaid: false });
+    { prefix: '', clip: '', visW: 40, visH: 120, bboxW: 40, bboxH: 120, gedraaid: false });
   // Geen exponent-notatie in de cm.
   assert.doesNotMatch(stempelAppearance({ w: 120, h: 40, paginaRotatie: 0, rotatie: 89.9999999 }).prefix, /e-/);
 });

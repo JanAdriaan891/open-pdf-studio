@@ -16,8 +16,9 @@
 //   paginarotatie − draaiing tegen de klok in gedraaid (in PDF-ruimte).
 // - 'pdf' zonder draaiing: rauwe pixels zoals de appearance ze in de
 //   ongedraaide PDF-ruimte tekende (een pad dat het vak niet uit de
-//   appearance kon afleiden). Die gaan ongedraaid terug, anders draait de
-//   inhoud dubbel; zo blijft ook een tweede opslagronde stabiel.
+//   appearance kon afleiden). Die gaan ongedraaid en zonder clip terug,
+//   anders draait de inhoud dubbel; zo blijft ook een tweede opslagronde
+//   stabiel en toont de app ze daarna zoals voorheen.
 //
 // Puur: geen pdf-lib.
 
@@ -28,6 +29,10 @@ const rondCosSin = (v) => {
   return Math.abs(r) < 1e-6 ? 0 : r;
 };
 
+// Clip op het vak, direct na de prefix: tekent niets, en de lader herkent er
+// een appearance van deze saver aan (stempel-geometrie.js, eigenAp).
+const clipOp = (visW, visH) => `0 0 ${visW} ${visH} re W n\n`;
+
 /**
  * @param {object} p
  * @param {number} p.w  breedte van het ongedraaide vak in de ongedraaide paginaruimte
@@ -35,8 +40,10 @@ const rondCosSin = (v) => {
  * @param {number} p.paginaRotatie  /Rotate van de pagina bij het opslaan
  * @param {number} [p.rotatie]  draaiing van het vak in de app (graden, met de klok mee)
  * @param {string} [p.ruimte]  apImageSpace van de bitmap
- * @returns {{ prefix:string, visW:number, visH:number, bboxW:number, bboxH:number, gedraaid:boolean }}
- *   prefix: cm-operatoren binnen q…Q vóór de inhoud; visW/visH: maten waarin
+ * @returns {{ prefix:string, clip:string, visW:number, visH:number, bboxW:number, bboxH:number, gedraaid:boolean }}
+ *   prefix: cm-operatoren binnen q…Q vóór de inhoud; clip: clip op het vak
+ *   direct na de prefix, waaraan de lader een appearance van deze saver
+ *   herkent (leeg bij rauwe PDF-pixels); visW/visH: maten waarin
  *   de inhoud tekent; bboxW/bboxH: /BBox en maat van de /Rect;
  *   gedraaid: het vak staat schuin t.o.v. het blad, /Rect wordt de omhullende.
  */
@@ -45,7 +52,7 @@ export function stempelAppearance({ w, h, paginaRotatie = 0, rotatie = 0, ruimte
   const draai = Number.isFinite(rotatie) ? rotatie : 0;
   const gedraaid = Math.abs(((draai % 360) + 360) % 360) > 1e-9;
   if (ruimte === 'pdf' && !gedraaid) {
-    return { prefix: '', visW: w, visH: h, bboxW: w, bboxH: h, gedraaid: false };
+    return { prefix: '', clip: '', visW: w, visH: h, bboxW: w, bboxH: h, gedraaid: false };
   }
   const omgewisseld = rot === 90 || rot === 270;
   const visW = omgewisseld ? h : w;
@@ -60,12 +67,12 @@ export function stempelAppearance({ w, h, paginaRotatie = 0, rotatie = 0, ruimte
   const bboxW = visW * Math.abs(cos) + visH * Math.abs(sin);
   const bboxH = visW * Math.abs(sin) + visH * Math.abs(cos);
   if (sin === 0 && cos === 1) {
-    return { prefix: '', visW, visH, bboxW: visW, bboxH: visH, gedraaid };
+    return { prefix: '', clip: clipOp(visW, visH), visW, visH, bboxW: visW, bboxH: visH, gedraaid };
   }
   const prefix = `1 0 0 1 ${bboxW / 2} ${bboxH / 2} cm\n` +
     `${cos} ${sin} ${-sin} ${cos} 0 0 cm\n` +
     `1 0 0 1 ${-visW / 2} ${-visH / 2} cm\n`;
-  return { prefix, visW, visH, bboxW, bboxH, gedraaid };
+  return { prefix, clip: clipOp(visW, visH), visW, visH, bboxW, bboxH, gedraaid };
 }
 
 /**

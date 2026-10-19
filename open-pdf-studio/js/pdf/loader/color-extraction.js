@@ -332,7 +332,7 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
           if (tekst) colors.opsStampText = tekst;
         }
         // Vak en draaiing van een stempel of afbeelding komen uit de
-        // appearance (stempel-geometrie.js), niet uit /OPS_Rotation.
+        // appearance (stempel-geometrie.js).
         const stempelAp = await leesStempelAp(context, annotDict);
         if (stempelAp) colors.stempelAp = stempelAp;
         // Read /OPS_CropLeft.. (non-destructive image crop, fractions 0-1
@@ -377,11 +377,11 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         if (cv === true || (cv && typeof cv.value === 'boolean' && cv.value)) colors.cross = true;
       }
 
-      // Read /OPS_Rotation (our custom rotation key) for all annotation types
-      // except stamps and images (/Stamp): their rotation lives in the
-      // appearance, as every other reader sees it (stempel-geometrie.js). An
-      // old /OPS_Rotation on a stamp is legacy and ignored.
-      const opsRotRaw = subtypeName === '/Stamp' ? null : annotDict.get(PDFName.of('OPS_Rotation'));
+      // Read /OPS_Rotation (our custom rotation key) for ALL annotation types.
+      // For stamps and images it is only a legacy fallback: their rotation
+      // lives in the appearance and the saver no longer writes the key
+      // (stempel-geometrie.js, kiesStempelWeergave).
+      const opsRotRaw = annotDict.get(PDFName.of('OPS_Rotation'));
       if (opsRotRaw) {
         const rv = pdfNum(context.lookup(opsRotRaw) || opsRotRaw);
         if (rv !== null) colors.rotation = rv;

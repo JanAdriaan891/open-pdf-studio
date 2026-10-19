@@ -3,20 +3,22 @@
 // Een stempel of afbeelding heeft in de PDF-specificatie geen draaiing: de
 // appearance bepaalt hoe hij op de pagina staat. De app tekent een stempel als
 // bitmap rechtop in zijn vak en draait dat vak om het midden (`rotation`, met
-// de klok mee op het scherm). Deze module leidt dat vak en die draaiing af uit
+// de klok mee op het scherm). stempelGeometrie leidt vak en draaiing af uit
 // wat elke PDF-lezer tekent: de /Rect, de /BBox en /Matrix van de appearance
-// en de cm-operatoren in de inhoud, samen met de /Rotate van de pagina. De
-// eigen sleutel /OPS_Rotation telt voor stempels en afbeeldingen niet meer mee:
-// andere lezers kennen hem niet, en een stempel moet in de app staan zoals in
-// elke andere lezer.
+// en de cm-operatoren in de inhoud, samen met de /Rotate van de pagina.
+// kiesStempelWeergave bepaalt wat de app toont: een appearance van de eigen
+// saver precies zoals getekend; bestanden van andere programma's en oudere
+// versies zoals de app ze altijd toonde (met /OPS_Rotation als oude bron van
+// de draaiing). De saver schrijft /OPS_Rotation niet meer voor stempels en
+// afbeeldingen; hij bakt de getoonde draaiing in de appearance, zodat elke
+// lezer daarna toont wat de app toont.
 //
-// Eén uitzondering: oude bestanden met schermafdrukken die op een gedraaide
-// pagina geplakt zijn (bijv. /Rotate 90). Hun appearance tekent de bitmap
-// zonder draaiing in de ongedraaide /Rect, maar de pixels liggen zoals op het
-// scherm: hun verhouding past bij de /Rect zoals je hem op de gedraaide pagina
-// ziet, niet bij de ongedraaide. Andere lezers tonen zo'n bitmap platgedrukt
-// en een kwartslag gedraaid; de bedoeling was rechtop, vullend in het vak op
-// het scherm. Zie isSchermBeeldOpGedraaidBlad.
+// Oude schermafdrukken die op een gedraaide pagina geplakt zijn (bijv.
+// /Rotate 90, met /OPS_Rotation -90): de appearance tekent de bitmap zonder
+// draaiing in de ongedraaide /Rect, maar de pixels liggen zoals op het scherm:
+// hun verhouding past bij de /Rect zoals je hem op de gedraaide pagina ziet.
+// De bedoeling was rechtop, vullend in het vak op het scherm; zie
+// isSchermBeeldOpGedraaidBlad.
 //
 // Puur: geen pdf-lib, geen DOM. Matrices zoals in PDF: [a b c d e f], een punt
 // als rijvector, p' = p · M.
@@ -222,7 +224,8 @@ export function isSchermBeeldOpGedraaidBlad({ paginaRotatie, beeldHoek, pixelW, 
 }
 
 /**
- * Vak en draaiing van een stempel of afbeelding uit zijn appearance.
+ * Vak en draaiing van een stempel of afbeelding zoals zijn appearance hem
+ * tekent. Wat de app daarvan toont, kiest kiesStempelWeergave.
  *
  * @param {object} p
  * @param {number[]} p.rect           /Rect in PDF-ruimte
@@ -232,10 +235,13 @@ export function isSchermBeeldOpGedraaidBlad({ paginaRotatie, beeldHoek, pixelW, 
  * @param {'beeld'|'tekst'} p.soort   beeld: de eerste afbeelding in de appearance;
  *                                    tekst: het vak van de eerste `re` (tekststempel van de app)
  * @param {{left?:number,top?:number,right?:number,bottom?:number}} [p.crop]  bijsnijden (#212)
- * @returns {null|{ rotation:number, midden:{x:number,y:number}, breedte:number, hoogte:number,
- *                  schermBeeld:boolean }}
- *   midden in PDF-ruimte; breedte/hoogte in PDF-eenheden langs de assen van
- *   het (ongedraaide) vak; schermBeeld = oude schermafdruk (zie boven).
+ * @returns {null|{ rotation:number, beeldHoek:number, midden:{x:number,y:number}, breedte:number,
+ *                  hoogte:number, schermBeeld:boolean, eigenAp:boolean }}
+ *   rotation: draaiing op het scherm zoals elke lezer hem tekent; beeldHoek:
+ *   hoek van het beeld in PDF-ruimte; midden in PDF-ruimte; breedte/hoogte in
+ *   PDF-eenheden langs de assen van het (ongedraaide) vak; schermBeeld: oude
+ *   schermafdruk (zie isSchermBeeldOpGedraaidBlad); eigenAp: de appearance
+ *   komt van deze saver (clip op precies het vak van het beeld).
  *   null als de appearance geen eenduidig vak geeft (spiegeling, scheefstand,
  *   geen afbeelding): de aanroeper valt dan terug op /Rect.
  */
@@ -244,15 +250,17 @@ export function stempelGeometrie({ rect, paginaRotatie = 0, ap, soort = 'beeld',
   const naarPagina = appearanceNaarPagina(rect, ap.bbox, ap.matrix);
   if (!naarPagina) return null;
 
+  const reVak = (re) => (re && isMatrix(re.ctm) && [re.x, re.y, re.w, re.h].every(isGetal) && re.w > 0 && re.h > 0
+    ? vermenigvuldig([re.w, 0, 0, re.h, re.x, re.y], re.ctm) : null);
+
   // Het eenheidsvierkant van het vak in appearance-ruimte.
   let vak;
   if (soort === 'beeld') {
     if (!ap.beeld || !isMatrix(ap.beeld.ctm)) return null;
     vak = ap.beeld.ctm;
   } else {
-    const re = ap.eersteRe;
-    if (!re || !isMatrix(re.ctm) || ![re.x, re.y, re.w, re.h].every(isGetal) || re.w <= 0 || re.h <= 0) return null;
-    vak = vermenigvuldig([re.w, 0, 0, re.h, re.x, re.y], re.ctm);
+    vak = reVak(ap.eersteRe);
+    if (!vak) return null;
   }
   // Het vak moet de appearance vullen: de omhullende van het beeld (of van
   // de rechthoek) dekt de /BBox. Een samengestelde appearance waarin de
@@ -287,13 +295,74 @@ export function stempelGeometrie({ rect, paginaRotatie = 0, ap, soort = 'beeld',
   const breedte = lx * fw;
   const hoogte = ly * fh;
 
-  if (soort === 'beeld' && isSchermBeeldOpGedraaidBlad({
-    paginaRotatie: rot, beeldHoek,
-    pixelW: ap.beeld.pixelW, pixelH: ap.beeld.pixelH, vakW: lx, vakH: ly,
-  })) {
-    // Rechtop op het scherm, vullend in het vak zoals het daar staat.
-    return { rotation: 0, midden, breedte: hoogte, hoogte: breedte, schermBeeld: true };
+  // Eigen appearance: de saver zet een clip op precies het (zichtbare) vak
+  // vóór het beeld. Een tekststempel wordt alleen zo teruggelezen.
+  let eigenAp = soort === 'tekst';
+  if (soort === 'beeld') {
+    const clip = reVak(ap.eersteRe);
+    if (clip) {
+      const tc = vermenigvuldig(clip, naarPagina);
+      const cm = pasToe(tc, 0.5, 0.5);
+      const tol = (a) => 0.01 + Math.abs(a) * 1e-4;
+      eigenAp = Math.abs(normaliseerHoek(Math.atan2(tc[1], tc[0]) * 180 / Math.PI - beeldHoek)) < 0.05 &&
+        Math.abs(Math.hypot(tc[0], tc[1]) - breedte) <= tol(breedte) &&
+        Math.abs(Math.hypot(tc[2], tc[3]) - hoogte) <= tol(hoogte) &&
+        Math.hypot(cm.x - midden.x, cm.y - midden.y) <= 0.05;
+    }
   }
 
-  return { rotation: rondHoek(rot - beeldHoek), midden, breedte, hoogte, schermBeeld: false };
+  const schermBeeld = soort === 'beeld' && isSchermBeeldOpGedraaidBlad({
+    paginaRotatie: rot, beeldHoek,
+    pixelW: ap.beeld.pixelW, pixelH: ap.beeld.pixelH, vakW: lx, vakH: ly,
+  });
+
+  return { rotation: rondHoek(rot - beeldHoek), beeldHoek, midden, breedte, hoogte, schermBeeld, eigenAp };
+}
+
+/**
+ * Draaiing zoals de app een stempel uit een ouder of ander bestand altijd
+ * toonde: een oude /OPS_Rotation, anders de hoek van /Matrix verrekend met
+ * de pagina-/Rotate (zichtbaar is het verschil van die twee), anders 0.
+ * @param {{ opsRotation?:number, matrixHoek?:number, paginaRotatie?:number }} p
+ */
+export function oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie = 0 }) {
+  if (isGetal(opsRotation) && opsRotation !== 0) return Math.round(opsRotation);
+  if (isGetal(matrixHoek) && Math.abs(matrixHoek) > 1) {
+    const rot = ((Math.round(paginaRotatie || 0) % 360) + 360) % 360;
+    let r = -(Math.round(matrixHoek) - rot);
+    while (r > 180) r -= 360;
+    while (r < -180) r += 360;
+    return Math.abs(r) <= 1 ? 0 : r;
+  }
+  return 0;
+}
+
+/**
+ * Wat de app van een stempel of afbeelding toont.
+ *
+ * - Een appearance van deze saver (eigenAp, zonder /OPS_Rotation): precies
+ *   zoals hij getekend is.
+ * - Een oude schermafdruk op een gedraaide pagina (schermBeeld, zoals CP-21):
+ *   rechtop, vullend in het vak zoals het op het scherm staat (/Rect); een
+ *   oude /OPS_Rotation telt daar niet.
+ * - Elk ander bestand (andere programma's, oudere versies) zoals de app het
+ *   altijd toonde: de bitmap in de /Rect zoals die op het scherm staat, met
+ *   oudeStempelDraaiing (een oude /OPS_Rotation, anders /Matrix).
+ * Opslaan bakt de getoonde draaiing in de appearance (saver/stempel-draaiing.js)
+ * en schrijft /OPS_Rotation niet meer; daarna geldt het eerste geval en
+ * tonen andere lezers hetzelfde.
+ *
+ * @param {object} p
+ * @param {ReturnType<typeof stempelGeometrie>} p.geometrie
+ * @param {number} p.paginaRotatie
+ * @param {number|undefined} p.opsRotation  /OPS_Rotation uit het bestand, of undefined
+ * @param {number|undefined} p.matrixHoek   hoek van /Matrix van de appearance, of undefined
+ * @returns {null|{ rotation:number, vak:'ap'|'rect' }}  vak: 'ap' = het vak uit de
+ *   geometrie, 'rect' = de /Rect zoals hij op het scherm staat
+ */
+export function kiesStempelWeergave({ geometrie, paginaRotatie = 0, opsRotation, matrixHoek }) {
+  if (!geometrie) return null;
+  if (geometrie.eigenAp && !isGetal(opsRotation)) return { rotation: geometrie.rotation, vak: 'ap' };
+  if (geometrie.schermBeeld) return { rotation: 0, vak: 'rect' };
+  return { rotation: oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie }), vak: 'rect' };
 }
