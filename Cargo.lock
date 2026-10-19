@@ -3684,6 +3684,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "open-pdf-kernel"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "open-pdf-render"
 version = "0.1.0"
 dependencies = [
