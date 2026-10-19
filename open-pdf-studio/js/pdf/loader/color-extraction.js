@@ -147,7 +147,7 @@ function leesTekstString(context, raw) {
   return (v instanceof PDFString || v instanceof PDFHexString) ? v.decodeText() : undefined;
 }
 
-// /Sy, /RD, /NM, /Subj, de rauwe /QuadPoints (bestandsvolgorde),
+// /Sy, /RD, de rauwe /QuadPoints (bestandsvolgorde),
 // /OPS_TextDir en /OPS_MarkedText; bij een /Caret ook de eigen /Contents (als
 // kind in een groep geeft pdf.js die van de ouder).
 function leesTekstcorrectieExtra(context, annotDict, subtypeName, colors) {
@@ -165,10 +165,6 @@ function leesTekstcorrectieExtra(context, annotDict, subtypeName, colors) {
   }
   const rd = getallen(annotDict.get(PDFName.of('RD')));
   if (rd && rd.length === 4) colors.rd = rd;
-  const nm = leesTekstString(context, annotDict.get(PDFName.of('NM')));
-  if (nm) colors.nm = nm;
-  const subj = leesTekstString(context, annotDict.get(PDFName.of('Subj')));
-  if (subj) colors.subj = subj;
   const quads = getallen(annotDict.get(PDFName.of('QuadPoints')));
   if (quads && quads.length >= 8) colors.rawQuadPoints = quads;
   const tdRaw = annotDict.get(PDFName.of('OPS_TextDir'));
@@ -188,6 +184,7 @@ function leesTekstcorrectieExtra(context, annotDict, subtypeName, colors) {
 // Returns Map<rectKey, { ic, apStrokeColor }> where ic = Interior Color hex, apStrokeColor = stroke from appearance stream
 export async function extractAnnotationColors(pageNum, pdfDoc) {
   const colorMap = new Map();
+  const perRect = new Map(); // rauwe /Rect -> [[@ref-sleutel, gegevens], …]
   try {
     const page = pdfDoc.getPages()[pageNum - 1];
     if (!page) return colorMap;
@@ -367,6 +364,28 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
       if (opsRotRaw) {
         const rv = pdfNum(context.lookup(opsRotRaw) || opsRotRaw);
         if (rv !== null) colors.rotation = rv;
+      }
+
+      // Naam, onderwerp en alternatieve tekst, voor ELKE soort (#619; zie
+      // loader/annotatie-algemeen.js). /NM en /Subj zijn standaard; voor een
+      // alternatieve tekst naast /Contents kent de specificatie geen sleutel.
+      const nm = leesTekstString(context, annotDict.get(PDFName.of('NM')));
+      if (nm) colors.nm = nm;
+      const subj = leesTekstString(context, annotDict.get(PDFName.of('Subj')));
+      if (subj) colors.subj = subj;
+      const altTekst = leesPdfTekst(context, annotDict.get(PDFName.of('OPS_AltText')));
+      if (altTekst) colors.opsAltText = altTekst;
+
+      // Boog: middelpunt, straal en hoeken in de app-ruimte van de ongedraaide
+      // pagina (zie de 'arc'-tak van saver.js). /Vertices is de benadering
+      // voor andere lezers (#619).
+      if (subtypeName === '/PolyLine') {
+        for (const [sleutel, veld] of [['OPS_CenterX', 'opsCenterX'], ['OPS_CenterY', 'opsCenterY'],
+          ['OPS_Radius', 'opsRadius'], ['OPS_StartAngle', 'opsStartAngle'], ['OPS_EndAngle', 'opsEndAngle']]) {
+          const raw = annotDict.get(PDFName.of(sleutel));
+          const v = raw !== undefined ? pdfNum(context.lookup(raw) || raw) : null;
+          if (typeof v === 'number' && Number.isFinite(v)) colors[veld] = v;
+        }
       }
 
       // /OPS_LineHeads: exacte lijnkoppen die /LE niet kent (lijnkoppen.js).
@@ -1324,6 +1343,14 @@ const result = {};
               const marge = parseFloat(marginMatch[1]);
               if (Number.isFinite(marge)) colors.dsMargin = marge;
             }
+            // text-decoration (onderstreept, doorgehaald) van het hele vak
+            // (#619). /RC hierboven wint: die beschrijft de tekst zelf.
+            const dsDecoMatch = dsStr.match(/text-decoration\s*:\s*([^;]+)/i);
+            if (dsDecoMatch) {
+              const deco = dsDecoMatch[1].toLowerCase();
+              colors.dsUnderline = deco.includes('underline');
+              colors.dsStrikethrough = deco.includes('line-through');
+            }
             if (!colors.rawLineHeight) {
               const lhMatch = dsStr.match(/line-height\s*:\s*([\d.]+)/i);
               if (lhMatch) {
@@ -1331,6 +1358,13 @@ const result = {};
               }
             }
           } catch (e) { /* ignore DS parsing errors */ }
+        }
+
+        // /Q: uitlijning van de tekst (0 links, 1 midden, 2 rechts) (#619).
+        const qRaw = annotDict.get(PDFName.of('Q'));
+        if (qRaw !== undefined) {
+          const q = pdfNum(context.lookup(qRaw) || qRaw);
+          if (q === 0 || q === 1 || q === 2) colors.q = q;
         }
 
         // Extract /OPS_Rotation (our custom key only — ignore standard /Rotation
@@ -1664,12 +1698,23 @@ const result = {};
       // gegevens: markeringen op dezelfde woorden hebben dezelfde /Rect, en de
       // latere gaf anders haar /IT, /NM en /Subj aan de eerdere. Zie
       // extra-sleutel.js.
-      if (TEKSTCORRECTIE_SOORTEN.has(subtypeName)) {
-        const ref = annots.get(i);
-        if (Number.isInteger(ref?.objectNumber)) {
-          colorMap.set(`@ref:${ref.objectNumber}R${ref.generationNumber || ''}`, colors);
-        }
+      const ref = annots.get(i);
+      const refSleutel = Number.isInteger(ref?.objectNumber)
+        ? `@ref:${ref.objectNumber}R${ref.generationNumber || ''}` : null;
+      if (refSleutel && TEKSTCORRECTIE_SOORTEN.has(subtypeName)) colorMap.set(refSleutel, colors);
+      if (refSleutel) {
+        const zelfde = perRect.get(key);
+        if (zelfde) zelfde.push([refSleutel, colors]);
+        else perRect.set(key, [[refSleutel, colors]]);
       }
+    }
+    // Ook elke andere annotatie die haar /Rect met een andere deelt, krijgt
+    // haar gegevens op objectverwijzing: een reviewstatus, markering of
+    // antwoord neemt de /Rect van zijn annotatie over en wiste zo de
+    // draaiing, vulling en eigen sleutels van een rechthoek met een status
+    // (#619).
+    for (const zelfde of perRect.values()) {
+      if (zelfde.length > 1) for (const [refSleutel, gegevens] of zelfde) colorMap.set(refSleutel, gegevens);
     }
   } catch (e) {
     console.warn('Failed to extract annotation colors:', e);

@@ -21,9 +21,7 @@ import { verifieerHandtekeningen } from './handtekeningen/verificatie.js';
 // Sub-module imports
 import { extractAnnotationColors } from './loader/color-extraction.js';
 import { extractStampImagesHybrid } from './loader/image-extraction.js';
-import { convertPdfAnnotation } from './loader/annotation-converter.js';
-import { statusReplyFromPdfAnnotation, applyStatusReplies } from './loader/status-replies.js';
-import { resolveGroupLinks } from './loader/correction-load.js';
+import { zetPaginaAnnotatiesOm } from './loader/annotaties-omzetten.js';
 import { loadIfNeeded } from './queued-load.js';
 import { leesAnnotatieLagen, pasGelezenLagenToe } from './saver/annotatie-lagen.js';
 import { voegAnnotatiesToe } from './loader/annotaties-toevoegen.js';
@@ -31,63 +29,14 @@ import { pdfjsBronnen } from '../core/basis-url.js';
 import { isWachtwoordFout, vraagEnOntsleutel, markeerBeveiligd, isAlleenLezen, isBeveiligdDocument, bronPad } from './wachtwoord-pdf.js';
 
 
-// Convert one batch of pdf.js annotations and push them to doc.annotations,
-// detecting textbox-leader PolyLines (linked via IRT) and attaching them
-// to their parent textbox instead of pushing a standalone annotation.
-// Review-status replies (Text + /IRT + /State, issue #308) worden hier ook
-// herkend: die worden NIET als losse sticky note gepusht maar als status
-// op de doel-annotatie gezet. Een vervanging (invoegteken en doorhaling met
-// /RT /Group, #508) wordt na de lus gekoppeld.
+// Convert one batch of pdf.js annotations and push them to doc.annotations.
+// Het omzetten zelf, met de aanhaallijnen, statussen, antwoorden en
+// koppelingen tussen annotaties, staat in loader/annotaties-omzetten.js.
 // De hele reeks gaat pas aan het eind, in één keer, in doc.annotations (zie
 // annotaties-toevoegen.js): losse pushes lieten per annotatie alles opnieuw
 // rekenen wat de lijst leest.
 async function _convertAndPushAnnotations(annots, pageNum, viewport, stampImageMap, annotColorMap, doc) {
-  const textboxByRect = new Map();
-  const byPdfId = new Map();
-  const pendingLeaders = [];
-  const pendingStatuses = [];
-  const groepen = []; // /RT /Group-kinderen, zie resolveGroupLinks
-  const nieuw = [];
-  for (const annot of annots) {
-    const statusReply = statusReplyFromPdfAnnotation(annot);
-    if (statusReply) {
-      pendingStatuses.push(statusReply);
-      continue;
-    }
-    const converted = await convertPdfAnnotation(annot, pageNum, viewport, stampImageMap, annotColorMap);
-    if (!converted) continue;
-    if (converted.__textboxLeader) {
-      pendingLeaders.push(converted);
-      continue;
-    }
-    if (converted.type === 'textbox' && converted._pdfRectKey) {
-      textboxByRect.set(converted._pdfRectKey, converted);
-    }
-    if (annot.id) byPdfId.set(annot.id, converted);
-    if (annot.replyType === 'Group' && annot.inReplyTo) {
-      groepen.push({ converted, inReplyTo: annot.inReplyTo, replyType: annot.replyType });
-    }
-    nieuw.push(converted);
-    // Sommige converters leveren EXTRA annotaties naast de hoofdannotatie
-    // (bv. een legacy meerpunts-betonbalk die in losse tweepunts-balken
-    // gesplitst wordt). Die worden hier mee-gepusht.
-    if (Array.isArray(converted.__extraAnnotations)) {
-      for (const extra of converted.__extraAnnotations) nieuw.push(extra);
-      delete converted.__extraAnnotations;
-    }
-  }
-  for (const pl of pendingLeaders) {
-    const parent = textboxByRect.get(pl.irtRectKey);
-    if (parent) {
-      if (!Array.isArray(parent.leaders)) parent.leaders = [];
-      parent.leaders.push(pl.leader);
-    }
-  }
-  for (const tb of textboxByRect.values()) delete tb._pdfRectKey;
-  applyStatusReplies(pendingStatuses, byPdfId);
-  // Vervangingen (#508): invoegteken + doorhaling, in beide richtingen.
-  resolveGroupLinks(groepen, byPdfId);
-  voegAnnotatiesToe(doc, nieuw);
+  voegAnnotatiesToe(doc, await zetPaginaAnnotatiesOm(annots, pageNum, viewport, stampImageMap, annotColorMap));
 }
 
 // Cache for original PDF bytes (used by saver to avoid re-reading)
