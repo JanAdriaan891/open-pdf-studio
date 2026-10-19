@@ -43,7 +43,7 @@ jobs:
             echo "--- released AppImage --version:"; cp -r /rel/squashfs-root /tmp/sq; /tmp/sq/AppRun --version; echo "exit $?"
             echo "--- PKGBUILD with the released .deb (real download and checksum):"
             useradd -m builder && cp -r /aur /home/builder/pkg && chown -R builder /home/builder/pkg
-            su builder -c "cd ~/pkg && makepkg -f --noconfirm" && pacman -U --noconfirm /home/builder/pkg/*.pkg.tar.zst >/dev/null
+            su builder -c "cd ~/pkg && makepkg -d -f --noconfirm" && pacman -U --noconfirm /home/builder/pkg/*.pkg.tar.zst >/dev/null
             open-pdf-studio --version; echo "exit $?"
           '
 
@@ -157,7 +157,7 @@ jobs:
             chown -R builder /home/builder/pkg
             echo "--- .SRCINFO matches PKGBUILD:"; su builder -c "cd ~/pkg && makepkg --printsrcinfo" | diff - /aur/.SRCINFO && echo yes
             echo "--- makepkg with the branch .deb:"
-            su builder -c "cd ~/pkg && makepkg -f --noconfirm --skipchecksums"
+            su builder -c "cd ~/pkg && makepkg -d -f --noconfirm --skipchecksums"
             pacman -U --noconfirm /home/builder/pkg/*.pkg.tar.zst
             echo "--- namcap:"; namcap /home/builder/pkg/PKGBUILD || true; namcap /home/builder/pkg/*.pkg.tar.zst || true
             echo "--- unresolved libraries:"; ldd /usr/bin/open-pdf-studio | grep "not found" || echo none
