@@ -229,3 +229,139 @@ fn bad_arguments_are_errors() {
         Err(RenderError::TooLarge { .. })
     ));
 }
+
+/// A 600×400 pt page that fills `n` rectangles, each with its own shading
+/// pattern of type 4 (free-form mesh). Hayro samples every non-gradient
+/// shading into a texture that stays alive until the page is rasterized.
+fn mesh_page_pdf(n: usize) -> Arc<Vec<u8>> {
+    let first_pattern = 5;
+    let mut objs = vec![
+        "<< /Type /Catalog /Pages 2 0 R >>".to_string(),
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>".to_string(),
+    ];
+    let patterns: String = (0..n)
+        .map(|i| format!("/P{i} {} 0 R ", first_pattern + 2 * i))
+        .collect();
+    objs.push(format!(
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 600 400] /Contents 4 0 R /Resources << /Pattern << {patterns}>> >> >>"
+    ));
+    let content: String = (0..n)
+        .map(|i| format!("/Pattern cs /P{i} scn 0 0 600 400 re f\n"))
+        .collect();
+    objs.push(format!(
+        "<< /Length {} >>\nstream\n{}\nendstream",
+        content.len(),
+        content
+    ));
+    // One triangle per mesh: flag, x, y (16-bit), r g b (8-bit).
+    let mesh: Vec<u8> = [
+        [0u8, 0, 0, 0, 0, 255, 0, 0],
+        [0, 255, 255, 0, 0, 0, 255, 0],
+        [0, 0, 0, 255, 255, 0, 0, 255],
+    ]
+    .concat();
+    for i in 0..n {
+        objs.push(format!(
+            "<< /PatternType 2 /Shading {} 0 R >>",
+            first_pattern + 2 * i + 1
+        ));
+        let mut stream = format!(
+            "<< /ShadingType 4 /ColorSpace /DeviceRGB /BitsPerCoordinate 16 /BitsPerComponent 8 /BitsPerFlag 8 /Decode [0 600 0 400 0 1 0 1 0 1] /Length {} >>\nstream\n",
+            mesh.len()
+        )
+        .into_bytes();
+        stream.extend_from_slice(&mesh);
+        stream.extend_from_slice(b"\nendstream");
+        objs.push(unsafe_utf8(stream));
+    }
+    let mut out = b"%PDF-1.7\n".to_vec();
+    let mut offsets = Vec::new();
+    for (i, body) in objs.iter().enumerate() {
+        offsets.push(out.len());
+        out.extend_from_slice(format!("{} 0 obj\n", i + 1).as_bytes());
+        out.extend_from_slice(&body_bytes(body));
+        out.extend_from_slice(b"\nendobj\n");
+    }
+    let xref = out.len();
+    out.extend_from_slice(format!("xref\n0 {}\n0000000000 65535 f \n", objs.len() + 1).as_bytes());
+    for o in offsets {
+        out.extend_from_slice(format!("{o:010} 00000 n \n").as_bytes());
+    }
+    out.extend_from_slice(
+        format!(
+            "trailer\n<< /Size {} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n",
+            objs.len() + 1
+        )
+        .as_bytes(),
+    );
+    Arc::new(out)
+}
+
+/// Binary stream data travels through `String` as Latin-1 code points.
+fn unsafe_utf8(bytes: Vec<u8>) -> String {
+    bytes.into_iter().map(char::from).collect()
+}
+
+fn body_bytes(body: &str) -> Vec<u8> {
+    body.chars().map(|c| c as u32 as u8).collect()
+}
+
+#[test]
+fn a_few_mesh_shadings_render() {
+    let doc = HayroDocument::open(mesh_page_pdf(2)).unwrap();
+    assert!(doc.render_page(0, 1.0, 0).is_ok());
+}
+
+#[test]
+fn many_mesh_shadings_are_refused_before_they_exhaust_memory() {
+    let doc = HayroDocument::open(mesh_page_pdf(200)).unwrap();
+    match doc.render_page(0, 1.0, 0) {
+        Err(RenderError::Unsupported(why)) => assert!(why.contains("200"), "{why}"),
+        other => panic!(
+            "expected Unsupported, got {:?}",
+            other.map(|i| (i.width, i.height))
+        ),
+    }
+    let msg = doc.render_page(0, 1.0, 0).unwrap_err().to_string();
+    assert!(msg.starts_with("HAYRO_UNSUPPORTED"), "{msg}");
+}
+
+#[test]
+fn mesh_textures_beyond_the_memory_budget_are_refused() {
+    let doc = HayroDocument::open(mesh_page_pdf(10)).unwrap();
+    assert!(doc.render_page(0, 1.0, 0).is_ok());
+    // 10 page-sized textures of 6600x4400 px need more than 1 GiB.
+    assert!(matches!(
+        doc.render_page(0, 11.0, 0),
+        Err(RenderError::Unsupported(_))
+    ));
+    // A tile of the same zoom only needs tile-sized textures.
+    assert!(doc.render_region(0, 11.0, 0.0, 0.0, 50.0, 50.0).is_ok());
+}
+
+#[test]
+fn multithreaded_rendering_matches_single_threaded() {
+    let single = HayroDocument::open(test_pdf("Technische tekening.pdf")).unwrap();
+    let multi = HayroDocument::open(test_pdf("Technische tekening.pdf"))
+        .unwrap()
+        .with_threads(4);
+    let a = single.render_page(0, 0.5, 0).unwrap();
+    let b = multi.render_page(0, 0.5, 0).unwrap();
+    assert_eq!((a.width, a.height), (b.width, b.height));
+    let worst = a
+        .data
+        .iter()
+        .zip(&b.data)
+        .map(|(x, y)| x.abs_diff(*y))
+        .max()
+        .unwrap();
+    assert!(worst <= 3, "threads change the picture by {worst}");
+}
+
+#[test]
+fn the_render_cache_is_reused_between_renders() {
+    let doc = HayroDocument::open(test_pdf("Tekst.pdf")).unwrap();
+    let first = doc.render_page(0, 1.0, 0).unwrap();
+    let again = doc.render_page(0, 1.0, 0).unwrap();
+    assert_eq!(first, again, "a warm cache draws the same page");
+}

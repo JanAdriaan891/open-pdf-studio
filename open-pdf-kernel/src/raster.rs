@@ -7,7 +7,7 @@ use std::fmt;
 use vello_cpu::color::{AlphaColor, Srgb};
 use vello_cpu::kurbo::{Affine, BezPath, Cap, Join, Stroke};
 use vello_cpu::peniko::{BlendMode as VBlend, Fill, Mix};
-use vello_cpu::{Pixmap, RasterizerSettings, RenderContext, Resources};
+use vello_cpu::{Level, Pixmap, RasterizerSettings, RenderContext, RenderSettings, Resources};
 
 use crate::dl::{
     BlendMode, Color, DisplayList, FillRule, Item, LineCap, LineJoin, Path, PathEl, StrokeStyle,
@@ -71,7 +71,16 @@ pub fn render(dl: &DisplayList, target: &RasterTarget) -> Result<RgbaImage, Rast
 
     // MAX_SIDE fits in u16.
     let (w16, h16) = (w as u16, h as u16);
-    let mut ctx = RenderContext::new(w16, h16);
+    // Single-threaded: annotation layers are small, and the multithreading
+    // feature (enabled for page rendering) would otherwise default to all cores.
+    let mut ctx = RenderContext::new_with(
+        w16,
+        h16,
+        RenderSettings {
+            level: Level::try_detect().unwrap_or(Level::baseline()),
+            num_threads: 0,
+        },
+    );
     ctx.set_transform(Affine::new(target.transform));
     for item in &dl.items {
         match item {
