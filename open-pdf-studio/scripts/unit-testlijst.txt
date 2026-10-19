@@ -391,3 +391,5 @@ js/annotations/callout-koppen.test.mjs
 js/pdf/callout-koppen-rondgang.test.mjs
 js/tools/callout-plaatsing.test.mjs
 js/tools/voorbeeld-doorlopend.test.mjs
+js/pdf/flatten-bytes.test.mjs
+js/pdf/flatten-rondgang.test.mjs

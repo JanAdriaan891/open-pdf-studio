@@ -161,7 +161,11 @@
     "snapActive": "Aggancio attivo",
     "loading": "Caricamento...",
     "northArrow": "Freccia del nord",
-    "parametricSymbol": "Simbolo parametrico"
+    "parametricSymbol": "Simbolo parametrico",
+    "flattenAll": "Appiattisci tutto",
+    "flattenAllTooltip": "Appiattisci tutte le annotazioni nel contenuto della pagina",
+    "unflattenAll": "Annulla appiattimento",
+    "unflattenAllTooltip": "Ripristina le annotazioni appiattite con il ripristino consentito"
   },
   "view": {
     "pageDisplay": "Visualizzazione pagina",
@@ -636,5 +640,28 @@
     "noCorrections": "Non ci sono ancora correzioni.",
     "insertPlaceholder": "Testo da inserire",
     "replacePlaceholder": "Testo sostitutivo"
+  },
+  "flattenAll": {
+    "title": "Appiattisci tutte le annotazioni",
+    "message": "Le annotazioni di questo documento ({{count}}) diventano parte del contenuto della pagina. Tutti i visualizzatori PDF le mostrano, ma non è più possibile selezionarle o modificarle come annotazioni.",
+    "allowUnflatten": "Consenti il ripristino",
+    "allowUnflattenHint": "Nel file viene conservata una copia delle annotazioni, così «Annulla appiattimento» può ripristinarle in seguito, anche dopo il salvataggio e la riapertura.",
+    "noUnflattenHint": "Non viene conservata alcuna copia: dopo il salvataggio le annotazioni fanno parte della pagina per sempre.",
+    "saveNote": "Le note e le altre annotazioni senza aspetto sulla pagina restano annotazioni. Il file cambia solo al salvataggio; fino ad allora Annulla revoca questo passaggio.",
+    "ok": "Appiattisci",
+    "busy": "Appiattimento delle annotazioni...",
+    "nothing": "Questo documento non contiene annotazioni da appiattire.",
+    "nothingBaked": "Nessuna annotazione ha un aspetto sulla pagina, quindi non è stato appiattito nulla.",
+    "notLoaded": "Le annotazioni di questo documento sono ancora in caricamento. Riprova tra un momento.",
+    "done": "Annotazioni appiattite: {{count}}.",
+    "kept": "Mantenute come annotazioni (senza aspetto sulla pagina): {{count}}.",
+    "failed": "Appiattimento non riuscito: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Ripristino delle annotazioni...",
+    "nothing": "Questo documento non contiene annotazioni appiattite da ripristinare.",
+    "noRecovery": "Le annotazioni di questo documento sono state appiattite senza consentire il ripristino. Fanno parte del contenuto della pagina e non possono essere ripristinate.",
+    "done": "Annotazioni ripristinate: {{count}}.",
+    "failed": "Ripristino non riuscito: {{error}}"
   }
 }

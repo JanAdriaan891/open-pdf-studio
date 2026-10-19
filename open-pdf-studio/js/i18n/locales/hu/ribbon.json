@@ -161,7 +161,11 @@
     "snapActive": "Bekötés be",
     "loading": "Betöltés...",
     "northArrow": "Északi nyíl",
-    "parametricSymbol": "Paraméteres szimbólum"
+    "parametricSymbol": "Paraméteres szimbólum",
+    "flattenAll": "Összes lapítása",
+    "flattenAllTooltip": "Az összes jelölés lapítása az oldal tartalmába",
+    "unflattenAll": "Lapítás visszavonása",
+    "unflattenAllTooltip": "Az engedélyezett visszaállítással lapított jelölések visszaállítása"
   },
   "view": {
     "pageDisplay": "Oldal megjelenítés",
@@ -636,5 +640,28 @@
     "noCorrections": "Még nincsenek javítások.",
     "insertPlaceholder": "Beszúrandó szöveg",
     "replacePlaceholder": "Csereszöveg"
+  },
+  "flattenAll": {
+    "title": "Összes jelölés lapítása",
+    "message": "A dokumentum jelölései ({{count}}) az oldal tartalmának részévé válnak. Minden PDF-megjelenítő mutatja őket, de jelölésként többé nem jelölhetők ki és nem szerkeszthetők.",
+    "allowUnflatten": "Visszaállítás engedélyezése",
+    "allowUnflattenHint": "A jelölések másolata a fájlban marad, így a Lapítás visszavonása később visszaállíthatja őket, mentés és újbóli megnyitás után is.",
+    "noUnflattenHint": "Nem marad másolat: mentés után a jelölések végleg az oldal részei.",
+    "saveNote": "A jegyzetek és más, az oldalon megjelenés nélküli jelölések jelölések maradnak. A fájl csak mentéskor változik; addig a Visszavonás visszaállítja ezt a lépést.",
+    "ok": "Lapítás",
+    "busy": "Jelölések lapítása...",
+    "nothing": "Ebben a dokumentumban nincs lapítható jelölés.",
+    "nothingBaked": "Egyik jelölésnek sincs megjelenése az oldalon, így semmi sem lett lapítva.",
+    "notLoaded": "A dokumentum jelölései még töltődnek. Próbálja újra egy pillanat múlva.",
+    "done": "Lapított jelölések: {{count}}.",
+    "kept": "Jelölésként megtartva (nincs megjelenés az oldalon): {{count}}.",
+    "failed": "A lapítás sikertelen: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Jelölések visszaállítása...",
+    "nothing": "Ebben a dokumentumban nincs visszaállítható lapított jelölés.",
+    "noRecovery": "A dokumentum jelöléseit a visszaállítás engedélyezése nélkül lapították. Az oldal tartalmának részei, és nem állíthatók vissza.",
+    "done": "Visszaállított jelölések: {{count}}.",
+    "failed": "A visszaállítás sikertelen: {{error}}"
   }
 }

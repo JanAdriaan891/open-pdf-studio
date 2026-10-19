@@ -161,7 +161,11 @@
     "snapActive": "Snap Aktif",
     "loading": "Memuat...",
     "northArrow": "Panah Utara",
-    "parametricSymbol": "Simbol parametrik"
+    "parametricSymbol": "Simbol parametrik",
+    "flattenAll": "Ratakan semua",
+    "flattenAllTooltip": "Ratakan semua markup ke dalam isi halaman",
+    "unflattenAll": "Batalkan perataan",
+    "unflattenAllTooltip": "Pulihkan markup yang diratakan dengan pemulihan diizinkan"
   },
   "view": {
     "pageDisplay": "Tampilan Halaman",
@@ -636,5 +640,28 @@
     "noCorrections": "Belum ada koreksi.",
     "insertPlaceholder": "Teks yang disisipkan",
     "replacePlaceholder": "Teks pengganti"
+  },
+  "flattenAll": {
+    "title": "Ratakan semua markup",
+    "message": "Markup dalam dokumen ini ({{count}}) menjadi bagian dari isi halaman. Setiap penampil PDF menampilkannya, tetapi markup tersebut tidak dapat lagi dipilih atau diedit sebagai markup.",
+    "allowUnflatten": "Izinkan pemulihan",
+    "allowUnflattenHint": "Salinan markup disimpan di dalam file, sehingga \"Batalkan perataan\" dapat memulihkannya nanti, bahkan setelah disimpan dan dibuka kembali.",
+    "noUnflattenHint": "Tidak ada salinan yang disimpan: setelah disimpan, markup menjadi bagian halaman secara permanen.",
+    "saveNote": "Catatan dan markup lain tanpa tampilan di halaman tetap menjadi markup. File baru berubah saat Anda menyimpan; sampai saat itu Urungkan membatalkan langkah ini.",
+    "ok": "Ratakan",
+    "busy": "Meratakan markup...",
+    "nothing": "Dokumen ini tidak memiliki markup untuk diratakan.",
+    "nothingBaked": "Tidak ada markup yang memiliki tampilan di halaman, jadi tidak ada yang diratakan.",
+    "notLoaded": "Markup dokumen ini masih dimuat. Coba lagi sebentar lagi.",
+    "done": "Markup diratakan: {{count}}.",
+    "kept": "Tetap sebagai markup (tanpa tampilan di halaman): {{count}}.",
+    "failed": "Gagal meratakan: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Memulihkan markup...",
+    "nothing": "Dokumen ini tidak memiliki markup yang diratakan untuk dipulihkan.",
+    "noRecovery": "Markup dalam dokumen ini diratakan tanpa mengizinkan pemulihan. Markup tersebut merupakan bagian dari isi halaman dan tidak dapat dipulihkan.",
+    "done": "Markup dipulihkan: {{count}}.",
+    "failed": "Gagal memulihkan: {{error}}"
   }
 }

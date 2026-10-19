@@ -161,7 +161,11 @@
     "snapActive": "Ajust actiu",
     "loading": "S'està carregant...",
     "northArrow": "Fletxa del nord",
-    "parametricSymbol": "Símbol paramètric"
+    "parametricSymbol": "Símbol paramètric",
+    "flattenAll": "Aplana-ho tot",
+    "flattenAllTooltip": "Aplana totes les marques en el contingut de la pàgina",
+    "unflattenAll": "Desfés l'aplanat",
+    "unflattenAllTooltip": "Restaura les marques aplanades amb la restauració permesa"
   },
   "view": {
     "pageDisplay": "Visualització de pàgina",
@@ -636,5 +640,28 @@
     "noCorrections": "Encara no hi ha correccions.",
     "insertPlaceholder": "Text a inserir",
     "replacePlaceholder": "Text de substitució"
+  },
+  "flattenAll": {
+    "title": "Aplana totes les marques",
+    "message": "Les marques d'aquest document ({{count}}) passen a formar part del contingut de la pàgina. Tots els visors PDF les mostren, però ja no es poden seleccionar ni editar com a marques.",
+    "allowUnflatten": "Permet restaurar",
+    "allowUnflattenHint": "Es desa una còpia de les marques al fitxer, de manera que «Desfés l'aplanat» les pot restaurar més endavant, fins i tot després de desar i tornar a obrir.",
+    "noUnflattenHint": "No es desa cap còpia: un cop desat, les marques formen part de la pàgina per sempre.",
+    "saveNote": "Les notes i altres marques sense aparença a la pàgina continuen sent marques. El fitxer només canvia en desar; fins aleshores, Desfés reverteix aquest pas.",
+    "ok": "Aplana",
+    "busy": "S'estan aplanant les marques...",
+    "nothing": "Aquest document no té marques per aplanar.",
+    "nothingBaked": "Cap de les marques té aparença a la pàgina, així que no s'ha aplanat res.",
+    "notLoaded": "Les marques d'aquest document encara s'estan carregant. Torneu-ho a provar d'aquí a un moment.",
+    "done": "Marques aplanades: {{count}}.",
+    "kept": "Conservades com a marques (sense aparença a la pàgina): {{count}}.",
+    "failed": "No s'ha pogut aplanar: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "S'estan restaurant les marques...",
+    "nothing": "Aquest document no té marques aplanades per restaurar.",
+    "noRecovery": "Les marques d'aquest document es van aplanar sense permetre restaurar-les. Formen part del contingut de la pàgina i no es poden restaurar.",
+    "done": "Marques restaurades: {{count}}.",
+    "failed": "No s'ha pogut restaurar: {{error}}"
   }
 }

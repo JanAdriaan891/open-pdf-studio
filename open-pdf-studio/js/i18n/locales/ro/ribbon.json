@@ -161,7 +161,11 @@
     "snapActive": "Fixare activă",
     "loading": "Se încarcă...",
     "northArrow": "Săgeată nord",
-    "parametricSymbol": "Simbol parametric"
+    "parametricSymbol": "Simbol parametric",
+    "flattenAll": "Aplatizare totală",
+    "flattenAllTooltip": "Aplatizează toate marcajele în conținutul paginii",
+    "unflattenAll": "Anulare aplatizare",
+    "unflattenAllTooltip": "Restaurează marcajele aplatizate cu restaurarea permisă"
   },
   "view": {
     "pageDisplay": "Afisare pagina",
@@ -636,5 +640,28 @@
     "noCorrections": "Nu există încă corecturi.",
     "insertPlaceholder": "Text de inserat",
     "replacePlaceholder": "Text de înlocuire"
+  },
+  "flattenAll": {
+    "title": "Aplatizarea tuturor marcajelor",
+    "message": "Marcajele din acest document ({{count}}) devin parte din conținutul paginii. Orice vizualizator PDF le afișează, dar nu mai pot fi selectate sau editate ca marcaje.",
+    "allowUnflatten": "Permite restaurarea",
+    "allowUnflattenHint": "În fișier se păstrează o copie a marcajelor, astfel încât „Anulare aplatizare” le poate restaura mai târziu, chiar și după salvare și redeschidere.",
+    "noUnflattenHint": "Nu se păstrează nicio copie: după salvare, marcajele fac parte definitiv din pagină.",
+    "saveNote": "Notele și alte marcaje fără aspect pe pagină rămân marcaje. Fișierul se modifică doar la salvare; până atunci, Anulare revine asupra acestui pas.",
+    "ok": "Aplatizează",
+    "busy": "Se aplatizează marcajele...",
+    "nothing": "Acest document nu are marcaje de aplatizat.",
+    "nothingBaked": "Niciun marcaj nu are aspect pe pagină, așa că nu s-a aplatizat nimic.",
+    "notLoaded": "Marcajele acestui document încă se încarcă. Încercați din nou peste câteva momente.",
+    "done": "Marcaje aplatizate: {{count}}.",
+    "kept": "Păstrate ca marcaje (fără aspect pe pagină): {{count}}.",
+    "failed": "Aplatizarea a eșuat: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Se restaurează marcajele...",
+    "nothing": "Acest document nu are marcaje aplatizate de restaurat.",
+    "noRecovery": "Marcajele din acest document au fost aplatizate fără a permite restaurarea. Fac parte din conținutul paginii și nu pot fi restaurate.",
+    "done": "Marcaje restaurate: {{count}}.",
+    "failed": "Restaurarea a eșuat: {{error}}"
   }
 }

@@ -161,7 +161,11 @@
     "snapActive": "Fäst på",
     "loading": "Läser in...",
     "northArrow": "Nordpil",
-    "parametricSymbol": "Parametrisk symbol"
+    "parametricSymbol": "Parametrisk symbol",
+    "flattenAll": "Platta till alla",
+    "flattenAllTooltip": "Platta till alla markeringar till sidinnehåll",
+    "unflattenAll": "Ångra tillplattning",
+    "unflattenAllTooltip": "Återställ markeringar som plattades till med återställning tillåten"
   },
   "view": {
     "pageDisplay": "Sidvisning",
@@ -636,5 +640,28 @@
     "noCorrections": "Det finns inga rättelser än.",
     "insertPlaceholder": "Infoga text",
     "replacePlaceholder": "Ersättningstext"
+  },
+  "flattenAll": {
+    "title": "Platta till alla markeringar",
+    "message": "Markeringarna i det här dokumentet ({{count}}) blir en del av sidinnehållet. Alla PDF-visare visar dem, men de kan inte längre markeras eller redigeras som markeringar.",
+    "allowUnflatten": "Tillåt återställning",
+    "allowUnflattenHint": "En kopia av markeringarna sparas i filen, så att \"Ångra tillplattning\" kan återställa dem senare, även efter att filen sparats och öppnats igen.",
+    "noUnflattenHint": "Ingen kopia sparas: när filen har sparats är markeringarna en permanent del av sidan.",
+    "saveNote": "Anteckningar och andra markeringar utan utseende på sidan förblir markeringar. Filen ändras först när du sparar; fram till dess ångrar Ångra det här steget.",
+    "ok": "Platta till",
+    "busy": "Plattar till markeringar...",
+    "nothing": "Det här dokumentet har inga markeringar att platta till.",
+    "nothingBaked": "Ingen av markeringarna har ett utseende på sidan, så inget plattades till.",
+    "notLoaded": "Dokumentets markeringar läses fortfarande in. Försök igen om en stund.",
+    "done": "Tillplattade markeringar: {{count}}.",
+    "kept": "Behållna som markeringar (inget utseende på sidan): {{count}}.",
+    "failed": "Tillplattningen misslyckades: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Återställer markeringar...",
+    "nothing": "Det här dokumentet har inga tillplattade markeringar att återställa.",
+    "noRecovery": "Markeringarna i det här dokumentet plattades till utan att återställning tilläts. De är en del av sidinnehållet och kan inte återställas.",
+    "done": "Återställda markeringar: {{count}}.",
+    "failed": "Återställningen misslyckades: {{error}}"
   }
 }

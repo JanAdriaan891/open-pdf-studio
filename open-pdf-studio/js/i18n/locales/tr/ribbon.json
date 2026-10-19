@@ -161,7 +161,11 @@
     "snapActive": "Yakalama Açık",
     "loading": "Yükleniyor...",
     "northArrow": "Kuzey Oku",
-    "parametricSymbol": "Parametrik sembol"
+    "parametricSymbol": "Parametrik sembol",
+    "flattenAll": "Tümünü düzleştir",
+    "flattenAllTooltip": "Tüm işaretlemeleri sayfa içeriğine düzleştir",
+    "unflattenAll": "Düzleştirmeyi geri al",
+    "unflattenAllTooltip": "Geri yüklemeye izin verilerek düzleştirilen işaretlemeleri geri yükle"
   },
   "view": {
     "pageDisplay": "Sayfa Görüntüleme",
@@ -636,5 +640,28 @@
     "noCorrections": "Henüz düzeltme yok.",
     "insertPlaceholder": "Eklenecek metin",
     "replacePlaceholder": "Yeni metin"
+  },
+  "flattenAll": {
+    "title": "Tüm işaretlemeleri düzleştir",
+    "message": "Bu belgedeki işaretlemeler ({{count}}) sayfa içeriğinin parçası olur. Her PDF görüntüleyici bunları gösterir, ancak artık işaretleme olarak seçilemez veya düzenlenemezler.",
+    "allowUnflatten": "Geri yüklemeye izin ver",
+    "allowUnflattenHint": "İşaretlemelerin bir kopyası dosyada tutulur; böylece \"Düzleştirmeyi geri al\" bunları daha sonra, kaydedip yeniden açtıktan sonra bile geri yükleyebilir.",
+    "noUnflattenHint": "Kopya tutulmaz: kaydedildikten sonra işaretlemeler kalıcı olarak sayfanın parçasıdır.",
+    "saveNote": "Notlar ve sayfada görünümü olmayan diğer işaretlemeler işaretleme olarak kalır. Dosya yalnızca kaydettiğinizde değişir; o zamana kadar Geri Al bu adımı geri alır.",
+    "ok": "Düzleştir",
+    "busy": "İşaretlemeler düzleştiriliyor...",
+    "nothing": "Bu belgede düzleştirilecek işaretleme yok.",
+    "nothingBaked": "İşaretlemelerin hiçbirinin sayfada görünümü yok, bu yüzden hiçbir şey düzleştirilmedi.",
+    "notLoaded": "Bu belgenin işaretlemeleri hâlâ yükleniyor. Birazdan yeniden deneyin.",
+    "done": "Düzleştirilen işaretlemeler: {{count}}.",
+    "kept": "İşaretleme olarak tutulan (sayfada görünümü yok): {{count}}.",
+    "failed": "Düzleştirme başarısız: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "İşaretlemeler geri yükleniyor...",
+    "nothing": "Bu belgede geri yüklenecek düzleştirilmiş işaretleme yok.",
+    "noRecovery": "Bu belgedeki işaretlemeler geri yüklemeye izin verilmeden düzleştirildi. Sayfa içeriğinin parçasıdırlar ve geri yüklenemezler.",
+    "done": "Geri yüklenen işaretlemeler: {{count}}.",
+    "failed": "Geri yükleme başarısız: {{error}}"
   }
 }

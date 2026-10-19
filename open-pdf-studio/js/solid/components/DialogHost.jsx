@@ -47,6 +47,7 @@ import CompareDialog from './compare/CompareDialog.jsx';
 import CadExportDialog from './dialogs/CadExportDialog.jsx';
 import CadImportDialog from './dialogs/CadImportDialog.jsx';
 import AnnotationLayerDeleteDialog from './dialogs/AnnotationLayerDeleteDialog.jsx';
+import FlattenAllDialog from './dialogs/FlattenAllDialog.jsx';
 import TextEditOverlay from './TextEditOverlay.jsx';
 import StavenreeksInlineEditor from './StavenreeksInlineEditor.jsx';
 import ParametricLabelInlineEditor from './ParametricLabelInlineEditor.jsx';
@@ -110,6 +111,7 @@ const DIALOG_MAP = {
   'cad-export': CadExportDialog,
   'cad-import': CadImportDialog,
   'annotation-layer-delete': AnnotationLayerDeleteDialog,
+  'flatten-all': FlattenAllDialog,
   'pdf-password': PasswordDialog,
 };
 

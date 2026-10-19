@@ -161,7 +161,11 @@
     "snapToDrawingTitle": "An PDF-Zeichnung einrasten",
     "snapActive": "Snap An",
     "loading": "Laden...",
-    "parametricSymbol": "Parametrisches Symbol"
+    "parametricSymbol": "Parametrisches Symbol",
+    "flattenAll": "Alle reduzieren",
+    "flattenAllTooltip": "Alle Markierungen auf den Seiteninhalt reduzieren",
+    "unflattenAll": "Reduzieren aufheben",
+    "unflattenAllTooltip": "Markierungen wiederherstellen, die mit erlaubter Wiederherstellung reduziert wurden"
   },
   "view": {
     "pageDisplay": "Seitenanzeige",
@@ -636,5 +640,28 @@
     "noCorrections": "Es gibt noch keine Korrekturen.",
     "insertPlaceholder": "Text einfügen",
     "replacePlaceholder": "Ersatztext"
+  },
+  "flattenAll": {
+    "title": "Alle Markierungen reduzieren",
+    "message": "Die Markierungen in diesem Dokument ({{count}}) werden Teil des Seiteninhalts. Jeder PDF-Viewer zeigt sie an, aber sie lassen sich nicht mehr als Markierungen auswählen oder bearbeiten.",
+    "allowUnflatten": "Wiederherstellung erlauben",
+    "allowUnflattenHint": "Eine Kopie der Markierungen bleibt in der Datei, sodass „Reduzieren aufheben“ sie später wiederherstellen kann, auch nach Speichern und erneutem Öffnen.",
+    "noUnflattenHint": "Es wird keine Kopie behalten: Nach dem Speichern sind die Markierungen dauerhaft Teil der Seite.",
+    "saveNote": "Notizen und andere Markierungen ohne Darstellung auf der Seite bleiben Markierungen. Die Datei ändert sich erst beim Speichern; bis dahin macht Rückgängig diesen Schritt rückgängig.",
+    "ok": "Reduzieren",
+    "busy": "Markierungen werden reduziert...",
+    "nothing": "Dieses Dokument enthält keine Markierungen zum Reduzieren.",
+    "nothingBaked": "Keine der Markierungen hat eine Darstellung auf der Seite; es wurde nichts reduziert.",
+    "notLoaded": "Die Markierungen dieses Dokuments werden noch geladen. Versuchen Sie es gleich noch einmal.",
+    "done": "Markierungen reduziert: {{count}}.",
+    "kept": "Als Markierung behalten (keine Darstellung auf der Seite): {{count}}.",
+    "failed": "Reduzieren fehlgeschlagen: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Markierungen werden wiederhergestellt...",
+    "nothing": "Dieses Dokument enthält keine reduzierten Markierungen zum Wiederherstellen.",
+    "noRecovery": "Die Markierungen in diesem Dokument wurden ohne erlaubte Wiederherstellung reduziert. Sie sind Teil des Seiteninhalts und können nicht wiederhergestellt werden.",
+    "done": "Markierungen wiederhergestellt: {{count}}.",
+    "failed": "Wiederherstellen fehlgeschlagen: {{error}}"
   }
 }

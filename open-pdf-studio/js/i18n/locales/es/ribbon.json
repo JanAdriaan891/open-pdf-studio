@@ -161,7 +161,11 @@
     "snapActive": "Snap Act.",
     "loading": "Cargando...",
     "northArrow": "Flecha de norte",
-    "parametricSymbol": "Símbolo paramétrico"
+    "parametricSymbol": "Símbolo paramétrico",
+    "flattenAll": "Aplanar todo",
+    "flattenAllTooltip": "Aplanar todas las marcas en el contenido de la página",
+    "unflattenAll": "Deshacer aplanado",
+    "unflattenAllTooltip": "Restaurar las marcas aplanadas con la restauración permitida"
   },
   "view": {
     "pageDisplay": "Visualización de página",
@@ -636,5 +640,28 @@
     "noCorrections": "Todavía no hay correcciones.",
     "insertPlaceholder": "Texto a insertar",
     "replacePlaceholder": "Texto de reemplazo"
+  },
+  "flattenAll": {
+    "title": "Aplanar todas las marcas",
+    "message": "Las marcas de este documento ({{count}}) pasan a formar parte del contenido de la página. Todos los visores PDF las muestran, pero ya no se pueden seleccionar ni editar como marcas.",
+    "allowUnflatten": "Permitir restaurar",
+    "allowUnflattenHint": "Se guarda una copia de las marcas en el archivo, así «Deshacer aplanado» puede restaurarlas más tarde, incluso después de guardar y volver a abrir.",
+    "noUnflattenHint": "No se guarda ninguna copia: una vez guardado, las marcas forman parte de la página para siempre.",
+    "saveNote": "Las notas y otras marcas sin apariencia en la página siguen siendo marcas. El archivo solo cambia al guardar; hasta entonces, Deshacer revierte este paso.",
+    "ok": "Aplanar",
+    "busy": "Aplanando marcas...",
+    "nothing": "Este documento no tiene marcas que aplanar.",
+    "nothingBaked": "Ninguna de las marcas tiene apariencia en la página, así que no se aplanó nada.",
+    "notLoaded": "Las marcas de este documento aún se están cargando. Inténtelo de nuevo en un momento.",
+    "done": "Marcas aplanadas: {{count}}.",
+    "kept": "Conservadas como marcas (sin apariencia en la página): {{count}}.",
+    "failed": "Error al aplanar: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Restaurando marcas...",
+    "nothing": "Este documento no tiene marcas aplanadas que restaurar.",
+    "noRecovery": "Las marcas de este documento se aplanaron sin permitir restaurarlas. Forman parte del contenido de la página y no se pueden restaurar.",
+    "done": "Marcas restauradas: {{count}}.",
+    "failed": "Error al restaurar: {{error}}"
   }
 }

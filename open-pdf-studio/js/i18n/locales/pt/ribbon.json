@@ -161,7 +161,11 @@
     "snapActive": "Encaixe ativo",
     "loading": "Carregando...",
     "northArrow": "Seta norte",
-    "parametricSymbol": "Símbolo paramétrico"
+    "parametricSymbol": "Símbolo paramétrico",
+    "flattenAll": "Achatar tudo",
+    "flattenAllTooltip": "Achatar todas as marcações no conteúdo da página",
+    "unflattenAll": "Desfazer achatamento",
+    "unflattenAllTooltip": "Restaurar as marcações achatadas com restauração permitida"
   },
   "view": {
     "pageDisplay": "Exibição de página",
@@ -636,5 +640,28 @@
     "noCorrections": "Ainda não há correções.",
     "insertPlaceholder": "Texto a inserir",
     "replacePlaceholder": "Texto de substituição"
+  },
+  "flattenAll": {
+    "title": "Achatar todas as marcações",
+    "message": "As marcações deste documento ({{count}}) passam a fazer parte do conteúdo da página. Todos os visualizadores de PDF as mostram, mas elas deixam de poder ser selecionadas ou editadas como marcações.",
+    "allowUnflatten": "Permitir restaurar",
+    "allowUnflattenHint": "Uma cópia das marcações fica guardada no arquivo, para que «Desfazer achatamento» possa restaurá-las mais tarde, mesmo depois de salvar e reabrir.",
+    "noUnflattenHint": "Nenhuma cópia é guardada: depois de salvar, as marcações fazem parte da página para sempre.",
+    "saveNote": "Notas e outras marcações sem aparência na página continuam sendo marcações. O arquivo só muda ao salvar; até lá, Desfazer reverte esta etapa.",
+    "ok": "Achatar",
+    "busy": "Achatando marcações...",
+    "nothing": "Este documento não tem marcações para achatar.",
+    "nothingBaked": "Nenhuma das marcações tem aparência na página, por isso nada foi achatado.",
+    "notLoaded": "As marcações deste documento ainda estão carregando. Tente novamente em instantes.",
+    "done": "Marcações achatadas: {{count}}.",
+    "kept": "Mantidas como marcações (sem aparência na página): {{count}}.",
+    "failed": "Falha ao achatar: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Restaurando marcações...",
+    "nothing": "Este documento não tem marcações achatadas para restaurar.",
+    "noRecovery": "As marcações deste documento foram achatadas sem permitir restaurar. Elas fazem parte do conteúdo da página e não podem ser restauradas.",
+    "done": "Marcações restauradas: {{count}}.",
+    "failed": "Falha ao restaurar: {{error}}"
   }
 }

@@ -21,6 +21,7 @@ import { schrijfMeetvlakSchaal, meetvlakRect } from './saver/meetvlak-opslaan.js
 import { vlakZijdeTeksten } from '../annotations/measurement.js';
 import { verzamelSchaalBronnen } from '../annotations/schaal-op-punt.js';
 import { attachVectorAP } from './saver/vector-ap.js';
+import { MODEL_ID_SLEUTEL } from './flatten-bytes.js';
 import { bytesVan as knipselBytesVan } from '../annotations/vector-snippet-store.js';
 import { getAnnotationStorage, getAnnotIdToFieldName } from './form-layer.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
@@ -282,7 +283,20 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   return gelukt;
 }
 
-async function _savePDFNu(saveAsPath, activeDoc) {
+/**
+ * Het document zoals opslaan het zou schrijven, maar alleen met de annotaties
+ * uit het model en zonder iets weg te schrijven (Alles vlakken, #615). De
+ * annotaties die deze save schreef, hebben een objectnummer boven
+ * `eersteNieuwObject`.
+ * @returns {Promise<{pdfDocLib: PDFDocument, eersteNieuwObject: number}>}
+ */
+export async function bouwAnnotatieDocument(activeDoc = getActiveDocument()) {
+  if (!activeDoc?.pdfDoc) throw new Error('no document');
+  if (_saveBezig) await _saveBezig.catch(() => {});
+  return metOpslagSlot(() => _savePDFNu(null, activeDoc, { alleenAnnotaties: true }));
+}
+
+async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = {}) {
   const currentPath = activeDoc?.filePath;
   const sourcePdf = activeDoc?.pdfDoc;
   const stillCurrent = () => state.documents.includes(activeDoc)
@@ -2831,6 +2845,11 @@ async function _savePDFNu(saveAsPath, activeDoc) {
           // voor alle soorten. Zonder lagen is laagOcgs null en komt er niets bij.
           const ocRef = ocVoorAnnotatie(laagOcgs, ann);
           if (ocRef && typeof annotDict.set === 'function') annotDict.set(PDFName.of('OC'), ocRef);
+          // Alles vlakken (#615): welke model-annotatie dit is; vlakken haalt
+          // de sleutel weer weg (flatten-bytes.js).
+          if (alleenAnnotaties && typeof annotDict.set === 'function') {
+            annotDict.set(PDFName.of(MODEL_ID_SLEUTEL), PDFString.of(String(annRaw.id ?? '')));
+          }
           parentAnnotRef = context.register(annotDict);
           annotsArray.push(parentAnnotRef);
           if (annRaw.type === 'caret' || annRaw.type === 'textStrikethrough') {
@@ -2941,44 +2960,50 @@ async function _savePDFNu(saveAsPath, activeDoc) {
       page.node.set(PDFName.of('Annots'), context.obj(annotsArray));
     }
 
-    // Burn text edits into the PDF (cover-and-replace)
-    await saveTextEditsToPages(pdfDocLib, pages, activeDoc);
+    // Alleen de annotaties (Alles vlakken, #615): tekstbewerkingen, OCR-laag,
+    // watermerken, bladwijzers, stijlen, paginalabels en bijlagen blijven in
+    // het model en gaan pas bij het echte opslaan het bestand in.
+    let watermerkUitkomst = null;
+    if (!alleenAnnotaties) {
+      // Burn text edits into the PDF (cover-and-replace)
+      await saveTextEditsToPages(pdfDocLib, pages, activeDoc);
 
-    // Write out any OCR results as an invisible searchable text layer
-    if (activeDoc && activeDoc.ocrResults && Object.keys(activeDoc.ocrResults).length > 0) {
-      // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
-      // geslaagde opslag; de herkende tekst blijft in het document staan.
-      let ocrFont = null;
-      try {
-        ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes());
-      } catch (err) {
-        console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);
-      }
-      for (const [pageNumStr, words] of Object.entries(ocrFont ? activeDoc.ocrResults : {})) {
-        const pageIndex = parseInt(pageNumStr, 10) - 1;
-        const page = pages[pageIndex];
-        if (page && words && words.length > 0) {
-          writeOcrTextLayer(page, words, ocrFont);
+      // Write out any OCR results as an invisible searchable text layer
+      if (activeDoc && activeDoc.ocrResults && Object.keys(activeDoc.ocrResults).length > 0) {
+        // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
+        // geslaagde opslag; de herkende tekst blijft in het document staan.
+        let ocrFont = null;
+        try {
+          ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes());
+        } catch (err) {
+          console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);
+        }
+        for (const [pageNumStr, words] of Object.entries(ocrFont ? activeDoc.ocrResults : {})) {
+          const pageIndex = parseInt(pageNumStr, 10) - 1;
+          const page = pages[pageIndex];
+          if (page && words && words.length > 0) {
+            writeOcrTextLayer(page, words, ocrFont);
+          }
         }
       }
+
+      // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
+      // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.
+      watermerkUitkomst = await saveWatermarksToPages(pdfDocLib, pages, activeDoc);
+
+      // Save bookmarks to PDF outline
+      saveBookmarksToOutline(pdfDocLib, activeDoc);
+
+      // Save named line-style presets into the catalog (travel with the PDF)
+      saveStylePresetsToCatalog(pdfDocLib, activeDoc.stylePresets || null);
+
+      // Paginalabels (bladnamen, #580) als /PageLabels; alleen na een bewerking,
+      // zodat een andere nummering in het bestand ongemoeid blijft.
+      slaPaginaLabelsOp(pdfDocLib, activeDoc);
+
+      // Bijlagen die in het paneel zijn toegevoegd of verwijderd (bijlagen.js).
+      pasBijlagenToe(pdfDocLib, activeDoc.bijlagenWijzigingen);
     }
-
-    // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
-    // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.
-    const watermerkUitkomst = await saveWatermarksToPages(pdfDocLib, pages, activeDoc);
-
-    // Save bookmarks to PDF outline
-    saveBookmarksToOutline(pdfDocLib, activeDoc);
-
-    // Save named line-style presets into the catalog (travel with the PDF)
-    saveStylePresetsToCatalog(pdfDocLib, activeDoc.stylePresets || null);
-
-    // Paginalabels (bladnamen, #580) als /PageLabels; alleen na een bewerking,
-    // zodat een andere nummering in het bestand ongemoeid blijft.
-    slaPaginaLabelsOp(pdfDocLib, activeDoc);
-
-    // Bijlagen die in het paneel zijn toegevoegd of verwijderd (bijlagen.js).
-    pasBijlagenToe(pdfDocLib, activeDoc.bijlagenWijzigingen);
 
     // Vectorknipsels: opruimen wat de vorige stempels en het inbedden achter-
     // lieten, anders groeit het bestand per save met de hele bronpagina. Eerst
@@ -2996,6 +3021,10 @@ async function _savePDFNu(saveAsPath, activeDoc) {
         console.warn('[saver] knipsel-resten opruimen overgeslagen:', err?.message || err);
       }
     }
+
+    // Alles vlakken (#615): het document zoals het opgeslagen zou worden,
+    // zonder het weg te schrijven.
+    if (alleenAnnotaties) return { pdfDocLib, eersteNieuwObject };
 
     // Save the PDF
     const pdfBytes = await pdfDocLib.save();
@@ -3134,6 +3163,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
     return true;
   } catch (error) {
+    if (alleenAnnotaties) throw error;
     console.error('Error saving PDF:', error);
     showMessage(i18next.t('failedToSavePdf', { error: error?.message || String(error) }));
     return false;
