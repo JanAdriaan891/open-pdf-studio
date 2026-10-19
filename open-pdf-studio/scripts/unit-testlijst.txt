@@ -408,3 +408,8 @@ js/pdf/loader/annotatie-algemeen.test.mjs
 js/pdf/bewaren-rondgang.test.mjs
 js/pdf/saver/ruwe-sleutels.test.mjs
 js/pdf/extensie-opslaan.test.mjs
+js/annotations/scale-region-style.test.mjs
+js/pdf/saver/scale-region-ap.test.mjs
+js/annotations/xfdf-schaalgebied.test.mjs
+js/pdf/schaalgebied-rondgang.test.mjs
+js/solid/stores/schaalgebied-paneel.test.mjs

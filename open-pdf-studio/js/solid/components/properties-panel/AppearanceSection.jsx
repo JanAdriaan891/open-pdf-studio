@@ -103,7 +103,7 @@ export default function AppearanceSection() {
           <ColorPalettePicker
             label={t('appearance.fillColor')}
             color={() => annotProps.fillColor}
-            showNone={true}
+            showNone={sectionVis.fillNoneAllowed !== false}
             disabled={isLocked()}
             onColorChange={(color) => updateAnnotProp('fillColor', color)}
             onNone={() => updateAnnotProp('fillColor', null)}
@@ -146,6 +146,21 @@ export default function AppearanceSection() {
               setValue={(val) => updateAnnotProp('opacity', val)}
               options={[100, 90, 80, 70, 60, 50, 40, 30, 20, 10]}
               min={0} max={100} fallback={100} suffix="%"
+              disabled={isLocked}
+            />
+          </div>
+        </Show>
+
+        {/* Vul-doorzichtigheid (#611): alleen waar de vulling een eigen alfa
+            heeft (schaalgebied); de doorzichtigheid hierboven geldt voor de rand. */}
+        <Show when={sectionVis.fillOpacityGroup}>
+          <div class="property-group">
+            <label>{t('appearance.fillOpacity')}</label>
+            <PrefComboBox
+              value={() => annotProps.fillOpacity}
+              setValue={(val) => updateAnnotProp('fillOpacity', val)}
+              options={[100, 75, 50, 25, 10, 5, 0]}
+              min={0} max={100} fallback={10} suffix="%"
               disabled={isLocked}
             />
           </div>

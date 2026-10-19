@@ -63,6 +63,7 @@
     "strokeColor": "Couleur de trait",
     "color": "Couleur",
     "opacity": "Opacité",
+    "fillOpacity": "Opacité du remplissage",
     "borderStyle": "Style de bordure",
     "cross": "Croix",
     "crossHint": "Dessine une croix dans le rectangle, le cercle ou l'ellipse (ex. une réservation)",

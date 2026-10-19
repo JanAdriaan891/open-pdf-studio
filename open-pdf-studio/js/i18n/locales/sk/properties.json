@@ -63,6 +63,7 @@
     "strokeColor": "Farba obrysu",
     "color": "Farba",
     "opacity": "Priehľadnosť",
+    "fillOpacity": "Priehľadnosť výplne",
     "lineWidth": "Šírka čiary",
     "borderWidth": "Šírka okraja",
     "borderStyle": "Štýl okraja",

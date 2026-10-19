@@ -63,6 +63,7 @@
     "strokeColor": "Цвет обводки",
     "color": "Цвет",
     "opacity": "Непрозрачность",
+    "fillOpacity": "Непрозрачность заливки",
     "lineWidth": "Толщина линии",
     "borderWidth": "Толщина границы",
     "borderStyle": "Стиль границы",

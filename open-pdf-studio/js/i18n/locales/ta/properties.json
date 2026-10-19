@@ -63,6 +63,7 @@
     "strokeColor": "கோட்டு நிறம்",
     "color": "நிறம்",
     "opacity": "ஒளிபுகாமை",
+    "fillOpacity": "நிரப்பு ஒளிபுகாமை",
     "lineWidth": "கோட்டு அகலம்",
     "borderWidth": "கரை அகலம்",
     "borderStyle": "கரை பாணி",

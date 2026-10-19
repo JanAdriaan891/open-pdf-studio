@@ -11,6 +11,7 @@ import { syncTwoPointGeometry } from '../symbols/two-point.js';
 import { colorWithoutStroke } from './fill-utils.js';
 import { colorToXFDF, xfdfColorToHex, randkleurAttribuut, randkleurUitAttribuut, vulkleurUitAttribuut } from './xfdf-kleur.js';
 import { laagAttribuut, laagUitAttribuut } from './xfdf-laag.js';
+import { schaalgebiedXfdfAttributen, schaalgebiedUitXfdf } from './xfdf-schaalgebied.js';
 import { assignLayer } from './annotatie-lagen.js';
 import { paginaUitXfdf } from './xfdf-pagina.js';
 
@@ -192,6 +193,7 @@ function annotationToXFDF(ann) {
 
     case 'scaleRegion':
       return `    <square ${attrs} color="${colorToXFDF(ann.color || '#ff9800')}"` +
+             schaalgebiedXfdfAttributen(ann) +
              ` width="${ann.lineWidth ?? 1.5}"` +
              ` opstype="scaleRegion"` +
              ` opsscalestring="${escapeXml(ann.scaleString || '1:100')}"` +
@@ -347,7 +349,8 @@ function xfdfElementToAnnotation(el) {
           color: color || '#ff9800',
           lineWidth: width || 1.5,
           borderStyle: 'dashed',
-          opacity: 1,
+          // Doorzichtigheid, vulkleur en vul-doorzichtigheid (#611).
+          ...schaalgebiedUitXfdf((naam) => el.getAttribute(naam)),
           replies: replies.length > 0 ? replies : undefined
         });
       }

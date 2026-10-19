@@ -63,6 +63,7 @@
     "strokeColor": "Kolor obrysu",
     "color": "Kolor",
     "opacity": "Krycie",
+    "fillOpacity": "Krycie wypełnienia",
     "borderStyle": "Styl obramowania",
     "cross": "Krzyż",
     "crossHint": "Rysuje krzyż wewnątrz prostokąta, okręgu lub elipsy (np. otwór)",
