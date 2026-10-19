@@ -1796,6 +1796,36 @@ fn worker_died(e: &anyhow::Error) -> bool {
     msg.ends_with(" EOF") || msg.starts_with("write to worker") || msg.starts_with("read from worker")
 }
 
+/// Normalise the page engine the frontend asks for. Absent = PDFium.
+fn render_engine(engine: Option<&str>) -> Result<&'static str, String> {
+    match engine {
+        None | Some("pdfium") => Ok("pdfium"),
+        Some("hayro") => Ok("hayro"),
+        Some(other) => Err(format!("unknown render engine: {other}")),
+    }
+}
+
+/// In-process Hayro render, used only when the worker pool is not available.
+/// Runs on a blocking thread; a panic becomes an error, not a crash.
+async fn hayro_inproc(
+    bytes: Vec<u8>,
+    job: impl FnOnce(&open_pdf_kernel::pdfrender::HayroDocument) -> Result<open_pdf_kernel::raster::RgbaImage, open_pdf_kernel::pdfrender::RenderError>
+        + Send
+        + 'static,
+) -> Result<(u32, u32, Vec<u8>), String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let doc = open_pdf_kernel::pdfrender::HayroDocument::open(std::sync::Arc::new(bytes))
+                .map_err(|e| e.to_string())?;
+            let img = job(&doc).map_err(|e| e.to_string())?;
+            Ok::<_, String>((img.width, img.height, img.data))
+        }))
+        .unwrap_or_else(|_| Err("Hayro panicked while rendering".to_string()))
+    })
+    .await
+    .map_err(|e| format!("Hayro task failed: {e}"))?
+}
+
 #[tauri::command]
 async fn render_pdf_page(
     path: String,
@@ -1804,6 +1834,8 @@ async fn render_pdf_page(
     rotation: Option<i32>,
     // Thin Lines view mode (#595): every vector stroke as a hairline.
     thin_lines: Option<bool>,
+    // Page engine: "pdfium" (default) or "hayro".
+    engine: Option<String>,
     bytes_cache: tauri::State<'_, PdfBytesCache>,
     pdfium_cache: tauri::State<'_, pdfium_renderer::PdfiumDocCache>,
     pixmap_cache: tauri::State<'_, pdfium_renderer::PixmapCacheState>,
@@ -1811,7 +1843,8 @@ async fn render_pdf_page(
 ) -> Result<tauri::ipc::Response, String> {
     let extra_rot = rotation.unwrap_or(0);
     let thin_lines = thin_lines.unwrap_or(false);
-    let cache_key = pdfium_renderer::pixmap_key(&path, page_index, scale, extra_rot, thin_lines);
+    let engine = render_engine(engine.as_deref())?;
+    let cache_key = pdfium_renderer::pixmap_key(&path, page_index, scale, extra_rot, thin_lines, engine);
 
     // Cache fast path (unchanged)
     pixmap_cache.ensure();
@@ -1829,7 +1862,7 @@ async fn render_pdf_page(
 
     // Try the worker pool first
     if let Some(p) = pool.get() {
-        match p.render(&path, page_index, scale, extra_rot, thin_lines).await {
+        match p.render(&path, page_index, scale, extra_rot, thin_lines, engine).await {
             Ok((width, height, rgba)) => {
                 let rgba_arc = std::sync::Arc::new(rgba);
                 if let Ok(mut guard) = pixmap_cache.0.lock() {
@@ -1854,14 +1887,13 @@ async fn render_pdf_page(
                 // Other failures (timeout, bitmap too large for the shared
                 // memory, an older worker) still fall back to in-proc.
                 if worker_died(&e) {
-                    return Err(format!("PDFium worker render failed: {e}"));
+                    return Err(format!("{engine} worker render failed: {e}"));
                 }
                 eprintln!("[render_pdf_page] pool render failed: {} — falling back to in-proc", e);
             }
         }
     }
 
-    // Fallback: in-proc PDFium (existing path, unchanged)
     let bytes = {
         let mut bm = bytes_cache.0.lock().map_err(|e| format!("Bytes cache lock: {}", e))?;
         if let Some(cached) = bm.get(&path) {
@@ -1873,19 +1905,23 @@ async fn render_pdf_page(
         }
     };
 
-    let handle = pdfium_renderer::get_or_load_pdfium_doc_with_bytes(
-        &path,
-        std::sync::Arc::new(bytes),
-        &pdfium_cache,
-    )?;
-
-    let (width, height, rgba) = pdfium_renderer::render_page_to_rgba_opts(
-        handle.document(),
-        page_index,
-        scale,
-        extra_rot,
-        thin_lines,
-    )?;
+    let (width, height, rgba) = if engine == "hayro" {
+        hayro_inproc(bytes, move |doc| doc.render_page(page_index, scale, extra_rot)).await?
+    } else {
+        // Fallback: in-proc PDFium (existing path, unchanged)
+        let handle = pdfium_renderer::get_or_load_pdfium_doc_with_bytes(
+            &path,
+            std::sync::Arc::new(bytes),
+            &pdfium_cache,
+        )?;
+        pdfium_renderer::render_page_to_rgba_opts(
+            handle.document(),
+            page_index,
+            scale,
+            extra_rot,
+            thin_lines,
+        )?
+    };
 
     let rgba_arc = std::sync::Arc::new(rgba);
     if let Ok(mut guard) = pixmap_cache.0.lock() {
@@ -1975,12 +2011,15 @@ async fn render_pdf_page_region(
     spread: Option<bool>,
     // Thin Lines view mode (#595), see render_pdf_page.
     thin_lines: Option<bool>,
+    // Page engine, see render_pdf_page.
+    engine: Option<String>,
     bytes_cache: tauri::State<'_, PdfBytesCache>,
     pdfium_cache: tauri::State<'_, pdfium_renderer::PdfiumDocCache>,
     pool: tauri::State<'_, std::sync::Arc<tokio::sync::OnceCell<worker_pool::WorkerPool>>>,
 ) -> Result<tauri::ipc::Response, String> {
     let extra_rot = rotation.unwrap_or(0);
     let thin_lines = thin_lines.unwrap_or(false);
+    let engine = render_engine(engine.as_deref())?;
 
     // Try the worker pool first: region tiles are small (fit the 64 MB SHM), so
     // they render in a SEPARATE process — safe for parallel/pre-cache rendering
@@ -1988,7 +2027,7 @@ async fn render_pdf_page_region(
     // except a dead worker: that crash must not be repeated in the GUI process.
     if let Some(p) = pool.get() {
         match p
-            .render_region(&path, page_index, scale, extra_rot, region_x_pt, region_y_pt, region_w_pt, region_h_pt, spread.unwrap_or(false), thin_lines)
+            .render_region(&path, page_index, scale, extra_rot, region_x_pt, region_y_pt, region_w_pt, region_h_pt, spread.unwrap_or(false), thin_lines, engine)
             .await
         {
             Ok((width, height, rgba)) => {
@@ -2000,7 +2039,7 @@ async fn render_pdf_page_region(
             }
             Err(e) => {
                 if worker_died(&e) {
-                    return Err(format!("PDFium worker region render failed: {e}"));
+                    return Err(format!("{engine} worker region render failed: {e}"));
                 }
                 eprintln!("[render_pdf_page_region] pool failed: {} — in-proc fallback", e);
             }
@@ -2023,23 +2062,32 @@ async fn render_pdf_page_region(
         }
     };
 
-    let handle = pdfium_renderer::get_or_load_pdfium_doc_with_bytes(
-        &path,
-        std::sync::Arc::new(bytes),
-        &pdfium_cache,
-    )?;
-
-    let (width, height, rgba) = pdfium_renderer::render_page_region_to_rgba(
-        handle.document(),
-        page_index,
-        scale,
-        extra_rot,
-        region_x_pt,
-        region_y_pt,
-        region_w_pt,
-        region_h_pt,
-        thin_lines,
-    )?;
+    let (width, height, rgba) = if engine == "hayro" {
+        if extra_rot != 0 {
+            return Err(format!("render_region: rotation {extra_rot} not supported"));
+        }
+        hayro_inproc(bytes, move |doc| {
+            doc.render_region(page_index, scale, region_x_pt, region_y_pt, region_w_pt, region_h_pt)
+        })
+        .await?
+    } else {
+        let handle = pdfium_renderer::get_or_load_pdfium_doc_with_bytes(
+            &path,
+            std::sync::Arc::new(bytes),
+            &pdfium_cache,
+        )?;
+        pdfium_renderer::render_page_region_to_rgba(
+            handle.document(),
+            page_index,
+            scale,
+            extra_rot,
+            region_x_pt,
+            region_y_pt,
+            region_w_pt,
+            region_h_pt,
+            thin_lines,
+        )?
+    };
 
     let mut data = Vec::with_capacity(8 + rgba.len());
     data.extend_from_slice(&width.to_le_bytes());
