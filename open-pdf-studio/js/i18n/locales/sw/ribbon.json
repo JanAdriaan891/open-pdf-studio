@@ -606,6 +606,7 @@
     "dimHint": "bofya, kisha andika mf. 500,300 + Enter",
     "dimInputHint": "Andika vipimo (mf. 500,300 au ukubwa mmoja) na ubonyeze Enter — au buruta ili kuchora",
     "calloutStep2": "Bofya mahali dokezo linapaswa kuwekwa — Esc kughairi",
+    "polygonHint": "Bofya kila kona — bofya mara mbili, Enter au bofya kona ya kwanza kumaliza; Backspace huondoa kona ya mwisho, Esc hughairi. Buruta upate pembe sita sawa.",
     "offsetPick": "Nakala Sambamba: bofya kitu cha kunakili sambamba",
     "offsetDistance": "Nakala Sambamba: andika umbali na ubonyeze Enter (mf. 100)",
     "offsetDistanceInvalid": "Nakala Sambamba: weka umbali chanya, mf. 100",

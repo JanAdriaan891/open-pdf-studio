@@ -63,6 +63,7 @@
     "strokeColor": "Stregfarve",
     "color": "Farve",
     "opacity": "Gennemsigtighed",
+    "fillOpacity": "Fyldets gennemsigtighed",
     "lineWidth": "Linjebredde",
     "borderWidth": "Kantbredde",
     "borderStyle": "Kantstil",

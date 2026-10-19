@@ -63,6 +63,7 @@
     "strokeColor": "Culoare contur",
     "color": "Culoare",
     "opacity": "Opacitate",
+    "fillOpacity": "Opacitate umplere",
     "lineWidth": "Grosime linie",
     "borderWidth": "Latime chenar",
     "borderStyle": "Stil chenar",

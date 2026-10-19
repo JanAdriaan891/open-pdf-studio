@@ -63,6 +63,7 @@
     "strokeColor": "Linjefärg",
     "color": "Färg",
     "opacity": "Opacitet",
+    "fillOpacity": "Fyllningens opacitet",
     "lineWidth": "Linjebredd",
     "borderWidth": "Rambredd",
     "borderStyle": "Ramstil",

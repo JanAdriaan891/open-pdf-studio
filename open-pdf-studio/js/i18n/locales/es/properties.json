@@ -63,6 +63,7 @@
     "strokeColor": "Color de trazo",
     "color": "Color",
     "opacity": "Opacidad",
+    "fillOpacity": "Opacidad del relleno",
     "borderStyle": "Estilo de borde",
     "cross": "Cruz",
     "crossHint": "Dibuja una cruz dentro del rectángulo, círculo o elipse (ej. un hueco)",

@@ -606,6 +606,7 @@
     "dimHint": "klik, lalu ketik mis. 500,300 + Enter",
     "dimInputHint": "Ketik dimensi (mis. 500,300 atau satu ukuran) lalu tekan Enter — atau seret untuk menggambar",
     "calloutStep2": "Klik di tempat catatan akan diletakkan — Esc untuk membatalkan",
+    "polygonHint": "Klik setiap sudut — klik ganda, Enter, atau klik sudut pertama untuk menyelesaikan; Backspace menghapus sudut terakhir, Esc membatalkan. Seret untuk segi enam beraturan.",
     "offsetPick": "Offset: klik objek yang akan di-offset",
     "offsetDistance": "Offset: ketik jarak lalu tekan Enter (mis. 100)",
     "offsetDistanceInvalid": "Offset: masukkan jarak positif, mis. 100",

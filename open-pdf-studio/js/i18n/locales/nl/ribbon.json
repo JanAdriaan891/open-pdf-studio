@@ -558,6 +558,7 @@
     "dimHint": "klik en typ dan bijv. 500,300 + Enter",
     "dimInputHint": "Typ afmetingen (bijv. 500,300 of één maat) en druk op Enter — of sleep om te tekenen",
     "calloutStep2": "Klik waar de notitie moet komen — Esc om te annuleren",
+    "polygonHint": "Klik elk hoekpunt — dubbelklik, Enter of klik op het eerste hoekpunt om af te ronden; Backspace haalt het laatste hoekpunt weg, Esc annuleert. Sleep voor een regelmatige zeshoek.",
     "offsetPick": "Verschuiven: klik op een object om te verschuiven",
     "offsetDistance": "Verschuiven: typ de afstand en druk op Enter (bijv. 100)",
     "offsetDistanceInvalid": "Verschuiven: voer een positieve afstand in, bijv. 100",

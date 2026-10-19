@@ -15,7 +15,7 @@ import {
 } from './print-plaatsing.js';
 import { bouwVectorPrintPdf, maakTegelRaster, vakkenUitRaster, vakOpVel } from './print-vector.js';
 import { markeringenVoorInhoud } from '../solid/stores/print-instellingen.js';
-import { maakMeerPerBlad, isMeerPerBlad, schaalVoorMeerPerBlad } from './print-meerperblad.js';
+import { maakMeerPerBlad, isMeerPerBlad, bronKeuzes } from './print-meerperblad.js';
 import { maakPoster } from './print-poster.js';
 import { maakBoekje } from './print-boekje.js';
 import {
@@ -180,9 +180,14 @@ export async function slaPrintOpAlsPdf({
   centreren: centrerenKeuze = true, meerPerBlad: meerPerBladKeuze = null, poster = null, boekje = false,
   inhoud = 'doc-and-markups', openen = null, afgebroken = () => false,
 }) {
+  // `orientatie` is de stand van het vel; de printpagina's krijgen bij
+  // pagina's per vel en een boekje hun eigen stand (bronOrientatie, #623).
   const {
-    vel: bronVel, meerPerBlad, schaling, zoom, centreren,
-  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze, boekje);
+    vel: bronVel, meerPerBlad, schaling, zoom, centreren, orientatie: bronOrientatie,
+  } = bronKeuzes({
+    poster, vel, meerPerBlad: meerPerBladKeuze, schaling: schalingKeuze, zoom: zoomKeuze,
+    centreren: centrerenKeuze, boekje, orientatie,
+  });
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -200,7 +205,7 @@ export async function slaPrintOpAlsPdf({
       ({ pdf } = await bouwVectorPrintPdf({
         bronBytes: await bronBytesVan(doc),
         paginas: pages.map((pageNum) => ({ index: pageNum - 1, extraRotatie: getPageRotation(pageNum) })),
-        keuzes: { papier: bronVel, orientatie, schaling, zoom, centreren },
+        keuzes: { papier: bronVel, orientatie: bronOrientatie, schaling, zoom, centreren },
         beelden: ({ index, plaatsing }) => markeringBeelden(index + 1, plaatsing, markeringen),
         voortgang: (i, index) => voortgang(i, index + 1),
       }));
@@ -208,7 +213,7 @@ export async function slaPrintOpAlsPdf({
       console.warn('[print] vector print PDF failed; falling back to page images:', e);
       gerasterd = true;
       ({ pdf } = await bouwPrintPdf({
-        doc, pages, orientatie, vel: bronVel, schaling, zoom, centreren, inhoud, voortgang,
+        doc, pages, orientatie: bronOrientatie, vel: bronVel, schaling, zoom, centreren, inhoud, voortgang,
       }));
     }
 
@@ -274,20 +279,6 @@ async function metBoekje(pdf, boekje, vel) {
   });
 }
 
-/**
- * Posterafdruk (print-poster.js): de bronpagina's eerst elk op hun eigen maat
- * (papier null, passend = 1:1), daarna in tegels over de vellen. De
- * schaalkeuze en het aantal per vel tellen dan niet: de tegelschaal vervangt
- * ze. Een boekje telt net als meerdere pagina's per vel: elke pagina passend
- * en gecentreerd op haar printpagina, geen raster ernaast. Anders: de keuzes
- * zoals ze zijn.
- */
-function bronKeuzes(poster, vel, meerPerBlad, schaling, zoom, centreren, boekje = false) {
-  if (poster) return { vel: null, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
-  if (boekje) return { vel, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
-  return { vel, meerPerBlad, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
-}
-
 /** Het label van een tegel in de taal van de app (print-poster.js, posterLabel). */
 function posterVertaling(waarden) {
   return i18next.t('dialogs:print.posterLabelText', waarden);
@@ -333,9 +324,15 @@ export async function runPrintJob({
   meerPerBlad: meerPerBladKeuze = null, poster = null, boekje = false, inhoud = 'doc-and-markups',
   afgebroken = () => false,
 }) {
+  // `orientatie` is de stand van het vel (en gaat zo naar print_pdf); de
+  // printpagina's krijgen bij pagina's per vel en een boekje hun eigen stand
+  // (bronOrientatie, #623).
   const {
-    vel: bronVel, meerPerBlad, schaling, zoom, centreren,
-  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze, boekje);
+    vel: bronVel, meerPerBlad, schaling, zoom, centreren, orientatie: bronOrientatie,
+  } = bronKeuzes({
+    poster, vel, meerPerBlad: meerPerBladKeuze, schaling: schalingKeuze, zoom: zoomKeuze,
+    centreren: centrerenKeuze, boekje, orientatie,
+  });
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -343,7 +340,7 @@ export async function runPrintJob({
     // Reserve the last slice of the bar for the spool step.
     const total = pages.length + 1;
     const { pdf: pagePdf, opVel: paginasOpVel } = await bouwPrintPdf({
-      doc, pages, orientatie, vel: bronVel, schaling, zoom, centreren, inhoud,
+      doc, pages, orientatie: bronOrientatie, vel: bronVel, schaling, zoom, centreren, inhoud,
       voortgang: (i, pageNum) => updatePrintProgress(
         i18next.t('dialogs:print.progress.renderingPage', { page: pageNum, current: i + 1, total: pages.length }),
         i / total,

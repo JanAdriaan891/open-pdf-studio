@@ -63,6 +63,7 @@
     "strokeColor": "لکیر کا رنگ",
     "color": "رنگ",
     "opacity": "شفافیت",
+    "fillOpacity": "بھرنے کی شفافیت",
     "lineWidth": "لکیر کی چوڑائی",
     "borderWidth": "بارڈر کی چوڑائی",
     "borderStyle": "بارڈر سٹائل",

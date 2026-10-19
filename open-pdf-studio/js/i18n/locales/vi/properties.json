@@ -63,6 +63,7 @@
     "strokeColor": "Màu viền",
     "color": "Màu sắc",
     "opacity": "Độ mờ",
+    "fillOpacity": "Độ mờ của nền",
     "lineWidth": "Độ rộng Nét",
     "borderWidth": "Độ rộng Viền",
     "borderStyle": "Kiểu viền",

@@ -63,6 +63,7 @@
     "strokeColor": "स्ट्रोक रंग",
     "color": "रंग",
     "opacity": "अपारदर्शिता",
+    "fillOpacity": "भरण अपारदर्शिता",
     "lineWidth": "रेखा चौड़ाई",
     "borderWidth": "बॉर्डर चौड़ाई",
     "borderStyle": "बॉर्डर शैली",

@@ -304,6 +304,7 @@ js/core/zoom-display.test.mjs
 js/pdf/render-sharpen.test.mjs
 js/pdf/print-meerperblad.test.mjs
 js/pdf/print-meerperblad-voorbeeld.test.mjs
+js/pdf/print-draaien-in-cel.test.mjs
 js/pdf/print-poster.test.mjs
 js/pdf/print-poster-voorbeeld.test.mjs
 js/pdf/flattened-copy.test.mjs
@@ -407,3 +408,13 @@ js/pdf/loader/annotatie-algemeen.test.mjs
 js/pdf/bewaren-rondgang.test.mjs
 js/pdf/saver/ruwe-sleutels.test.mjs
 js/pdf/extensie-opslaan.test.mjs
+js/annotations/scale-region-style.test.mjs
+js/pdf/saver/scale-region-ap.test.mjs
+js/annotations/xfdf-schaalgebied.test.mjs
+js/pdf/schaalgebied-rondgang.test.mjs
+js/solid/stores/schaalgebied-paneel.test.mjs
+js/annotations/veelhoek-punten.test.mjs
+js/annotations/veelhoek-bewerken.test.mjs
+js/annotations/veelhoek-raak.test.mjs
+js/tools/tools/polygon-tool.test.mjs
+js/pdf/veelhoek-rondgang.test.mjs

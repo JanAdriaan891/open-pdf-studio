@@ -113,13 +113,14 @@ export function printArgumenten({ autoRotate, paginaInstelling, docId }) {
 }
 
 /**
- * De stand van het vel bij meerdere pagina's per vel of een folder (#606).
- * Automatisch draaien draait daar geen pagina naar het papier maar kiest de
- * stand van het hele vel; een in de Pagina-instelling voor dít document
- * bevestigde stand moet dan gewoon gelden — anders bleef het voorbeeld
- * liggend terwijl er staand gekozen was. Zonder zo'n keuze: 'auto', de stand
- * waarin het raster het best past (kiesBlad in print-meerperblad.js). Zonder
- * indeling (één pagina per vel): precies printArgumenten.
+ * De stand van het VEL bij meerdere pagina's per vel of een folder (#606).
+ * Een in de Pagina-instelling voor dít document bevestigde stand geldt dan
+ * gewoon — anders bleef het voorbeeld liggend terwijl er staand gekozen was.
+ * Zonder zo'n keuze: 'auto', de stand waarin het raster het best past
+ * (kiesBlad in print-meerperblad.js). Deze stand geldt alleen voor het vel,
+ * nooit voor de inhoud van de cellen; of een pagina in haar cel een kwartslag
+ * draait, bepaalt Automatisch draaien (paginaDraaien, #623). Zonder indeling
+ * (één pagina per vel): precies printArgumenten.
  * @returns {'auto'|'portrait'|'landscape'}
  */
 export function vellenStand({ autoRotate, paginaInstelling, docId, metIndeling }) {

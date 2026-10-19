@@ -67,6 +67,7 @@ import {
 } from '../text/text-edit-appearance.js';
 import { viewportGeometrie, rectNaarPagina } from '../pdf/weergave-rotatie.js';
 import { paginaMaat, paginaNaarWeergave, weergaveTransform, weergaveRectNaarPagina, zetRechtopRond } from '../pdf/weergave-ruimte.js';
+import { schaalgebiedStijl } from './scale-region-style.js';
 
 // Re-export everything that external code needs
 export { drawPolygonShape, drawCloudShape, buildPolygonPath, buildCloudPath } from './rendering/shapes.js';
@@ -2165,18 +2166,25 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
     }
 
     case 'scaleRegion': {
-      // Scale region: dashed orange boundary, translucent fill, top-left badge.
+      // Scale region: dashed boundary, translucent fill, top-left badge.
+      // Kleuren en doorzichtigheid uit de eigenschappen (#611), via dezelfde
+      // regel als de appearance in het bestand (scale-region-style.js):
+      // vulling op fillOpacity (zonder eigen waarde 10 % van opacity, het oude
+      // uiterlijk), rand en label op opacity.
       const srX = annotation.x, srY = annotation.y;
       const srW = annotation.width, srH = annotation.height;
-      const srColor = annotation.color || '#ff9800';
+      const srStijl = schaalgebiedStijl(annotation);
+      const srColor = srStijl.randKleur;
 
       ctx.save();
       // Translucent fill
-      ctx.globalAlpha = 0.10 * (annotation.opacity || 1);
-      ctx.fillStyle = srColor;
-      ctx.fillRect(srX, srY, srW, srH);
+      if (srStijl.vulAlfa > 0) {
+        ctx.globalAlpha = srStijl.vulAlfa;
+        ctx.fillStyle = srStijl.vulKleur;
+        ctx.fillRect(srX, srY, srW, srH);
+      }
       // Dashed border
-      ctx.globalAlpha = annotation.opacity || 1;
+      ctx.globalAlpha = srStijl.randAlfa;
       ctx.setLineDash([6, 3]);
       ctx.strokeStyle = srColor;
       ctx.lineWidth = annotation.lineWidth || 1.5;

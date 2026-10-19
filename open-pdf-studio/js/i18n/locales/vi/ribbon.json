@@ -606,6 +606,7 @@
     "dimHint": "nhấp, rồi nhập vd. 500,300 + Enter",
     "dimInputHint": "Nhập kích thước (vd. 500,300 hoặc một giá trị) rồi nhấn Enter — hoặc kéo để vẽ",
     "calloutStep2": "Nhấp vào nơi đặt ghi chú — Esc để hủy",
+    "polygonHint": "Nhấp vào từng đỉnh — nhấp đúp, nhấn Enter hoặc nhấp vào đỉnh đầu tiên để hoàn tất; Backspace xóa đỉnh cuối cùng, Esc hủy. Kéo để vẽ lục giác đều.",
     "offsetPick": "Vẽ song song: nhấp vào đối tượng cần vẽ song song",
     "offsetDistance": "Vẽ song song: nhập khoảng cách rồi nhấn Enter (vd. 100)",
     "offsetDistanceInvalid": "Vẽ song song: nhập khoảng cách dương, vd. 100",

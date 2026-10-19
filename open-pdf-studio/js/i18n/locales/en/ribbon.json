@@ -556,6 +556,7 @@
     "dimHint": "click, then type e.g. 500,300 + Enter",
     "dimInputHint": "Type dimensions (e.g. 500,300 or a single size) and press Enter — or drag to draw",
     "calloutStep2": "Click where the note should go — Esc to cancel",
+    "polygonHint": "Click each corner — double-click, Enter or click the first corner to finish; Backspace removes the last corner, Esc cancels. Drag for a regular hexagon.",
     "offsetPick": "Offset: click an object to offset",
     "offsetDistance": "Offset: type the distance and press Enter (e.g. 100)",
     "offsetDistanceInvalid": "Offset: enter a positive distance, e.g. 100",

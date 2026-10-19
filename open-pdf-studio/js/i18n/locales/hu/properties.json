@@ -63,6 +63,7 @@
     "strokeColor": "Körvonal színe",
     "color": "Szín",
     "opacity": "Átlátszatlanság",
+    "fillOpacity": "Kitöltés átlátszatlansága",
     "lineWidth": "Vonalvastagság",
     "borderWidth": "Szegély szélesség",
     "borderStyle": "Szegélystílus",

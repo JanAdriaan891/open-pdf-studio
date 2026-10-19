@@ -1272,7 +1272,6 @@ async function _buildCreateProps(type, page, props) {
     case 'circle':
     case 'highlight':
     case 'cloud':
-    case 'polygon':
     case 'textbox': {
       const lineLike = type === 'line' || type === 'arrow' || type === 'wall' || type === 'betonbalk';
       const bad = lineLike ? needLine() : needRect();
@@ -1283,6 +1282,25 @@ async function _buildCreateProps(type, page, props) {
         : creators.buildAnnotationProps(type, p.x, p.y, p.x + p.width, p.y + p.height, null);
       if (!base) return { error: `could not build '${type}' props` };
       return { base };
+    }
+
+    case 'polygon': {
+      // Veelhoek (#622): de hoekpunten zoals de tool ze hoek voor hoek
+      // plaatst (points, minstens drie), of een vak voor een regelmatige
+      // veelhoek (sides, standaard zes), zoals een sleep met de tool.
+      const creators = await import('./tools/annotation-creators.js');
+      const vh = await import('./annotations/veelhoek-punten.js');
+      if (p.points !== undefined) {
+        if (!_validPoints(p.points, 3)) {
+          return { error: "type 'polygon' requires props.points: [{x,y}, ...] (>= 3) or x, y, width > 0, height > 0" };
+        }
+        return { base: creators.buildPolygonFromPoints(p.points, page), veelhoekPunten: true };
+      }
+      const bad = needRect();
+      if (bad) return { error: "type 'polygon' requires props.points: [{x,y}, ...] (>= 3) or x, y, width > 0, height > 0" };
+      const zijden = _isNum(p.sides) ? Math.max(3, Math.min(64, Math.round(p.sides))) : 6;
+      const punten = vh.regelmatigeVeelhoekPunten({ x: p.x, y: p.y, width: p.width, height: p.height }, zijden);
+      return { base: creators.buildPolygonFromPoints(punten, page), veelhoekPunten: true };
     }
 
     case 'polyline': {
@@ -1623,6 +1641,11 @@ async function handleCreateAnnotation(params) {
 
   // Caller props win over tool defaults; type and the page param are pinned.
   const merged = { ...built.base, ...props, type, page };
+  // Veelhoek: de geometrie (punten, vak, zijden) komt uit de bouwer — een
+  // meegegeven vak of zijdenaantal beschreef alleen waar de punten liggen.
+  if (built.veelhoekPunten) {
+    for (const k of ['points', 'x', 'y', 'width', 'height', 'sides']) merged[k] = built.base[k];
+  }
   // parametricSymbol without an explicit rect: (x,y) was an INSERT POINT —
   // the builder centred a real-size bbox on it. Keep that computed bbox
   // instead of letting the raw x/y overwrite it as a top-left corner.
@@ -1832,6 +1855,15 @@ async function handleUpdateAnnotation(params) {
   // koppeling van de uiteinden blijft staan tenzij de patch haar zelf noemt.
   if (koppelMod.isStramien(ann) && patch.params && typeof patch.params === 'object') {
     patch = { ...patch, params: koppelMod.bewaarKoppeling(ann.params, patch.params) };
+  }
+  // Nieuwe hoekpunten van een veelhoek (#622): het vak en het aantal zijden
+  // volgen eruit, anders tekent het scherm ze in het oude vak.
+  if (ann.type === 'polygon' && 'points' in patch) {
+    if (!_validPoints(patch.points, 3)) {
+      return { ok: false, error: "polygon points must be [{x,y}, ...] with at least 3 corners" };
+    }
+    const vh = await import('./annotations/veelhoek-punten.js');
+    patch = { ...patch, ...vh.veelhoekUitPunten(patch.points) };
   }
   const andereDikte = 'lineWidth' in patch && patch.lineWidth !== ann.lineWidth;
   Object.assign(ann, patch);
@@ -2590,6 +2622,10 @@ async function handleStructuralLayout(params) {
       merged.y = built.base.y;
       merged.width = built.base.width;
       merged.height = built.base.height;
+    }
+    // Veelhoek (#622): de geometrie komt uit de bouwer (punten en vak samen).
+    if (built.veelhoekPunten) {
+      for (const k of ['points', 'x', 'y', 'width', 'height', 'sides']) merged[k] = built.base[k];
     }
     klaar.push({ opgave, merged });
   }

@@ -378,8 +378,15 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
           tekeningtypeId: extraColors.opsTekeningtype || undefined,
           label: extraColors.opsLabel || annot.contentsObj?.str || '',
           color: colorArrayToHex(annot.color, '#ff9800'),
+          // Vulling (#611): eigen kleur uit /IC, eigen doorzichtigheid alleen
+          // uit OPS_FillOpacity. De alfa in de appearance is afgeleid; zonder
+          // sleutel blijft het oude uiterlijk (10 % van de doorzichtigheid).
+          fillColor: extraColors.ic || undefined,
+          fillOpacity: extraColors.opsFillOpacity,
           lineWidth: extraColors.opsLineWidth || 1.5,
-          opacity: annot.opacity ?? 1,
+          // /CA via baseProps (pdf.js geeft hier geen annot.opacity; dat
+          // maakte elke doorzichtigheid na heropenen weer 100 %).
+          opacity: baseProps.opacity ?? 1,
           borderStyle: 'dashed',
         });
       }

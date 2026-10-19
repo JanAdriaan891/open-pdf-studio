@@ -8,7 +8,7 @@ import { PDFDocument, PDFArray, PDFRawStream, decodePDFRawStream } from 'pdf-lib
 
 import {
   voorbeeldMeerPerBlad, aantalVellen, paginasOpVel, schaalVoorMeerPerBlad, maakMeerPerBlad,
-  rasterVan, kiesBlad, BLAD_MARGE_PT,
+  rasterVan, kiesBlad, bronKeuzes, BLAD_MARGE_PT,
 } from './print-meerperblad.js';
 import { berekenPlaatsing, printPaginaMaat } from './print-plaatsing.js';
 
@@ -104,12 +104,14 @@ test('vaste stand: staand en liggend vel, zoals de printopdracht', () => {
   const liggend = voorbeeld({ perBlad: '4', keuzes: { orientatie: 'landscape' } });
   assert.equal(liggend.vel.orientatie, 'landscape');
   bijna(liggend.vel.breedteMm, 297);
-  // Een liggende pagina op een staand vel: in de cel ligt ze gedraaid, net als
-  // bij het afdrukken (berekenPlaatsing met dezelfde keuzes).
-  const gedraaid = voorbeeld({
+  // Een liggende pagina op een staand vel: de stand van het vel draait haar
+  // inhoud niet mee (#623); haar printpagina ligt in haar eigen stand.
+  const liggendePaginas = voorbeeld({
     perBlad: '2', keuzes: { orientatie: 'portrait' }, paginas: [A4_LIGGEND, A4_LIGGEND],
   });
-  assert.equal(gedraaid.cellen[0].plaatsing.gedraaid, true);
+  assert.equal(liggendePaginas.vel.orientatie, 'portrait');
+  assert.equal(liggendePaginas.cellen[0].plaatsing.gedraaid, false);
+  assert.equal(liggendePaginas.cellen[0].kwartslag, false);
 });
 
 test('paginavolgorde: de k-de pagina in de juiste cel', () => {
@@ -222,7 +224,13 @@ test('voorbeeld = afdruk: elke cel ligt waar maakMeerPerBlad de pagina tekent', 
   const paginas = [A4, A4_LIGGEND, A4, A4, A4_LIGGEND, A4, A4, A4, A4];
   for (const g of gevallen) {
     const raster = rasterVan(g);
-    const keuzes = { ...KEUZES, orientatie: g.orientatie, ...schaalVoorMeerPerBlad(raster, 'fit', 100, true) };
+    // Zoals runPrintJob: de printpagina's met bronKeuzes (eigen stand, #623).
+    const bron = bronKeuzes({
+      vel: A4_VEL, meerPerBlad: raster, schaling: 'fit', zoom: 100, centreren: true, orientatie: g.orientatie,
+    });
+    const keuzes = {
+      ...KEUZES, orientatie: bron.orientatie, schaling: bron.schaling, zoom: bron.zoom, centreren: bron.centreren,
+    };
     const { doc, maten } = await printPdf(paginas, keuzes);
     const uit = await maakMeerPerBlad(doc, {
       ...raster, volgorde: g.volgorde, papier: A4_VEL, orientatie: g.orientatie,

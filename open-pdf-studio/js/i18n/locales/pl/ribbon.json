@@ -606,6 +606,7 @@
     "dimHint": "kliknij, a następnie wpisz np. 500,300 + Enter",
     "dimInputHint": "Wpisz wymiary (np. 500,300 lub jeden rozmiar) i naciśnij Enter — lub przeciągnij, aby narysować",
     "calloutStep2": "Kliknij tam, gdzie ma się znaleźć notatka — Esc, aby anulować",
+    "polygonHint": "Kliknij każdy wierzchołek — dwukrotne kliknięcie, Enter lub kliknięcie pierwszego wierzchołka kończy; Backspace usuwa ostatni wierzchołek, Esc anuluje. Przeciągnij, aby narysować sześciokąt foremny.",
     "offsetPick": "Odsuń: kliknij obiekt do odsunięcia",
     "offsetDistance": "Odsuń: wpisz odległość i naciśnij Enter (np. 100)",
     "offsetDistanceInvalid": "Odsuń: wprowadź dodatnią odległość, np. 100",

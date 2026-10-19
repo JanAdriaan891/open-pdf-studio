@@ -606,6 +606,7 @@
     "dimHint": "klicken, dann z.B. 500,300 + Enter eingeben",
     "dimInputHint": "Maße eingeben (z.B. 500,300 oder eine einzelne Größe) und Enter drücken — oder zum Zeichnen ziehen",
     "calloutStep2": "Klicken Sie dorthin, wo die Notiz stehen soll — Esc zum Abbrechen",
+    "polygonHint": "Klicken Sie jeden Eckpunkt — Doppelklick, Eingabe oder Klick auf den ersten Eckpunkt zum Abschließen; Rücktaste entfernt den letzten Eckpunkt, Esc bricht ab. Ziehen für ein regelmäßiges Sechseck.",
     "offsetPick": "Versetzen: Klicken Sie auf ein zu versetzendes Objekt",
     "offsetDistance": "Versetzen: Geben Sie den Abstand ein und drücken Sie Enter (z.B. 100)",
     "offsetDistanceInvalid": "Versetzen: Geben Sie einen positiven Abstand ein, z.B. 100",

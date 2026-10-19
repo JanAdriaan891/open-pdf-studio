@@ -606,6 +606,7 @@
     "dimHint": "cliquez, puis tapez ex. 500,300 + Enter",
     "dimInputHint": "Tapez les dimensions (ex. 500,300 ou une seule taille) et appuyez sur Enter — ou faites glisser pour dessiner",
     "calloutStep2": "Cliquez à l'endroit où placer la note — Échap pour annuler",
+    "polygonHint": "Cliquez sur chaque sommet — double-clic, Entrée ou clic sur le premier sommet pour terminer ; Retour arrière supprime le dernier sommet, Échap annule. Faites glisser pour un hexagone régulier.",
     "offsetPick": "Décaler : cliquez sur un objet à décaler",
     "offsetDistance": "Décaler : tapez la distance et appuyez sur Enter (ex. 100)",
     "offsetDistanceInvalid": "Décaler : saisissez une distance positive, ex. 100",

@@ -9,7 +9,7 @@ import { loadPrinters, printerList as cachedPrinters, defaultPrinterName, printe
 import { runPrintJob, slaPrintOpAlsPdf, renderPrintBeeld } from '../../../pdf/print-job.js';
 import {
   rasterVan, isMeerPerBlad, voorbeeldMeerPerBlad, aantalVellen, paginasOpVel,
-  isFlyer, flyerRaster, volgordeAanwijzer, SNIJTEKEN_LIJN_PT, PAGINAVOLGORDES,
+  isFlyer, flyerRaster, volgordeAanwijzer, beeldInCel, SNIJTEKEN_LIJN_PT, PAGINAVOLGORDES,
 } from '../../../pdf/print-meerperblad.js';
 import {
   isBoekje, voorbeeldBoekje, boekjeVolgorde, boekjeAfdrukZijden, kruipVoorVel, geldigeKruip, KRUIP_MAX_MM,
@@ -170,16 +170,24 @@ export default function PrintDialog(props) {
   // Meerdere pagina's per vel (of een folder), of null bij één per vel (en
   // bij een poster of een boekje). Een vast aantal of een folder laat het
   // raster meedraaien met het vel (draaibaar); een eigen raster blijft zoals
-  // getypt. Een memo met waardevergelijking: het voorbeeld tekent alleen
+  // getypt. Automatisch draaien (paginaDraaien, #623) laat een pagina een
+  // kwartslag in haar cel draaien als ze zo groter wordt; uit draait de inhoud
+  // nooit. Een memo met waardevergelijking: het voorbeeld tekent alleen
   // opnieuw als de keuze echt verandert.
   const meerPerBlad = createMemo(() => {
     if (poster() || boekje()) return null;
     if (flyer()) {
-      return { ...flyerRaster(flyerCount()), volgorde: 'horizontal', rand: false, snijtekens: flyerCutMarks() };
+      return {
+        ...flyerRaster(flyerCount()), volgorde: 'horizontal', rand: false, snijtekens: flyerCutMarks(),
+        paginaDraaien: autoRotate(),
+      };
     }
     const raster = rasterVan({ perBlad: perSheet(), kolommen: sheetCols(), rijen: sheetRows() });
     return isMeerPerBlad(raster)
-      ? { ...raster, volgorde: sheetOrder(), rand: sheetBorder(), draaibaar: perSheet() !== 'custom' }
+      ? {
+        ...raster, volgorde: sheetOrder(), rand: sheetBorder(), draaibaar: perSheet() !== 'custom',
+        paginaDraaien: autoRotate(),
+      }
       : null;
   }, undefined, { equals: zelfdeKeuzes });
   // Het getoonde vel bij meerdere pagina's per vel (voorbeeldMeerPerBlad), of
@@ -478,22 +486,11 @@ export default function PrintDialog(props) {
     for (const { cel, deel, beeld } of beelden) {
       if (!beeld) continue;
       // Het deel staat in mm op de printpagina van de cel; die komt verkleind
-      // (cel.schaal) op haar plek op het vel. Gedraaid: gespiegeld in de cel
-      // en het beeld een halve slag gedraaid, zoals maakBoekje de zijde draait.
-      const r = deel.opVel;
-      const plek = cel.gedraaid
-        ? {
-          x: cel.opVel.x + cel.opVel.breedte - (r.x + r.breedte) * cel.schaal,
-          y: cel.opVel.y + cel.opVel.hoogte - (r.y + r.hoogte) * cel.schaal,
-          breedte: r.breedte * cel.schaal,
-          hoogte: r.hoogte * cel.schaal,
-        }
-        : {
-          x: cel.opVel.x + r.x * cel.schaal,
-          y: cel.opVel.y + r.y * cel.schaal,
-          breedte: r.breedte * cel.schaal,
-          hoogte: r.hoogte * cel.schaal,
-        };
+      // (cel.schaal) op haar plek op het vel (beeldInCel). Een halve slag
+      // (achterkant van een boekje, zoals maakBoekje de zijde draait) of een
+      // kwartslag linksom (Automatisch draaien in een cel, zoals
+      // maakMeerPerBlad): het beeld gedraaid om het midden van die plek.
+      const plek = beeldInCel(cel, deel.opVel);
       ctx.save();
       if (cel.klem) {
         const k = cel.klem;
@@ -501,13 +498,15 @@ export default function PrintDialog(props) {
         ctx.rect(k.x * vak.pxPerMm, k.y * vak.pxPerMm, k.breedte * vak.pxPerMm, k.hoogte * vak.pxPerMm);
         ctx.clip();
       }
-      if (cel.gedraaid) {
+      if (plek.hoek) {
         const px = vak.pxPerMm;
+        // Bij een kwartslag is het ongedraaide beeld zo breed als de plek hoog is.
+        const b = plek.hoek === 90 ? plek.hoogte : plek.breedte;
+        const h = plek.hoek === 90 ? plek.breedte : plek.hoogte;
         ctx.translate((plek.x + plek.breedte / 2) * px, (plek.y + plek.hoogte / 2) * px);
-        ctx.rotate(Math.PI);
-        tekenBeeld(ctx, beeld, {
-          x: -plek.breedte / 2, y: -plek.hoogte / 2, breedte: plek.breedte, hoogte: plek.hoogte,
-        }, px);
+        // Canvas draait met de klok mee bij een positieve hoek; linksom is negatief.
+        ctx.rotate((-plek.hoek * Math.PI) / 180);
+        tekenBeeld(ctx, beeld, { x: -b / 2, y: -h / 2, breedte: b, hoogte: h }, px);
       } else {
         tekenBeeld(ctx, beeld, plek, vak.pxPerMm);
       }
