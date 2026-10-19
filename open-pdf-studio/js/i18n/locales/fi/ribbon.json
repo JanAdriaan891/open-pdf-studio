@@ -606,6 +606,7 @@
     "dimHint": "napsauta ja kirjoita sitten esim. 500,300 + Enter",
     "dimInputHint": "Kirjoita mitat (esim. 500,300 tai yksi koko) ja paina Enter — tai piirrä vetämällä",
     "calloutStep2": "Napsauta kohtaa, johon huomautus tulee — Esc peruuttaa",
+    "polygonHint": "Napsauta jokaista kulmaa — lopeta kaksoisnapsautuksella, Enterillä tai napsauttamalla ensimmäistä kulmaa; Askelpalautin poistaa viimeisen kulman, Esc peruuttaa. Vedä, niin saat säännöllisen kuusikulmion.",
     "offsetPick": "Rinnakkaissiirto: napsauta siirrettävää kohdetta",
     "offsetDistance": "Rinnakkaissiirto: kirjoita etäisyys ja paina Enter (esim. 100)",
     "offsetDistanceInvalid": "Rinnakkaissiirto: anna positiivinen etäisyys, esim. 100",

@@ -606,6 +606,7 @@
     "dimHint": "클릭한 다음 입력(예: 500,300) + Enter",
     "dimInputHint": "치수를 입력하고(예: 500,300 또는 단일 크기) Enter 키를 누르거나, 끌어서 그리세요",
     "calloutStep2": "메모를 놓을 위치를 클릭하세요 — 취소하려면 Esc",
+    "polygonHint": "각 꼭짓점을 클릭하세요 — 더블클릭, Enter 또는 첫 꼭짓점 클릭으로 완료; Backspace는 마지막 꼭짓점을 제거하고 Esc는 취소합니다. 드래그하면 정육각형이 됩니다.",
     "offsetPick": "간격띄우기: 간격을 띄울 객체를 클릭하세요",
     "offsetDistance": "간격띄우기: 거리를 입력하고 Enter 키를 누르세요(예: 100)",
     "offsetDistanceInvalid": "간격띄우기: 양수 거리를 입력하세요. 예: 100",

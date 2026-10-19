@@ -4,6 +4,7 @@
 
 import { totalBarLengthM } from '../annotations/stavenreeks.js';
 import { nettoVlakOppervlak } from '../annotations/vlak-ringen.js';
+import { veelhoekPunten } from '../annotations/veelhoek-punten.js';
 
 // --- Vertaalhaak -----------------------------------------------------------
 // Deze module blijft puur: hij kent i18next niet. De UI-laag injecteert via
@@ -145,7 +146,8 @@ const GEOMETRISCHE_VLAKKEN = new Set([
 // komt uit vlak-ringen.js — dezelfde regel die het scherm en het opgeslagen
 // bestand volgen (GitHub #457).
 function pixelArea(el) {
-  const pts = Array.isArray(el.points) ? el.points : null;
+  // Een veelhoek (#622): de hoekpunten zoals het scherm ze in zijn vak tekent.
+  const pts = (el.type === 'polygon' && veelhoekPunten(el)) || (Array.isArray(el.points) ? el.points : null);
   if (pts && pts.length >= 3) return nettoVlakOppervlak(pts, el.holes);
   const w = Math.abs(el.width || 0), h = Math.abs(el.height || 0);
   if (w > 0 && h > 0) {

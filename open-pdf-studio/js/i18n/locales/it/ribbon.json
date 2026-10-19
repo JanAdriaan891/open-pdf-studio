@@ -606,6 +606,7 @@
     "dimHint": "fai clic, poi digita es. 500,300 + Enter",
     "dimInputHint": "Digita le dimensioni (es. 500,300 o una sola misura) e premi Enter — oppure trascina per disegnare",
     "calloutStep2": "Fai clic dove deve andare la nota — Esc per annullare",
+    "polygonHint": "Fai clic su ogni vertice — doppio clic, Invio o clic sul primo vertice per terminare; Backspace rimuove l'ultimo vertice, Esc annulla. Trascina per un esagono regolare.",
     "offsetPick": "Offset: fai clic su un oggetto da sfalsare",
     "offsetDistance": "Offset: digita la distanza e premi Enter (es. 100)",
     "offsetDistanceInvalid": "Offset: inserisci una distanza positiva, es. 100",

@@ -606,6 +606,7 @@
     "dimHint": "klikněte a pak zadejte např. 500,300 + Enter",
     "dimInputHint": "Zadejte rozměry (např. 500,300 nebo jeden rozměr) a stiskněte Enter — nebo kreslete tažením",
     "calloutStep2": "Klikněte tam, kam má přijít poznámka — Esc pro zrušení",
+    "polygonHint": "Klikněte na každý vrchol — dvojklik, Enter nebo klik na první vrchol dokončí; Backspace odebere poslední vrchol, Esc zruší. Tažením nakreslíte pravidelný šestiúhelník.",
     "offsetPick": "Ekvidistanta: klikněte na objekt, ke kterému se má vytvořit ekvidistanta",
     "offsetDistance": "Ekvidistanta: zadejte vzdálenost a stiskněte Enter (např. 100)",
     "offsetDistanceInvalid": "Ekvidistanta: zadejte kladnou vzdálenost, např. 100",

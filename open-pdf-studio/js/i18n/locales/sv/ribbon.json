@@ -606,6 +606,7 @@
     "dimHint": "klicka och skriv sedan t.ex. 500,300 + Enter",
     "dimInputHint": "Skriv mått (t.ex. 500,300 eller ett enda mått) och tryck på Enter — eller dra för att rita",
     "calloutStep2": "Klicka där anteckningen ska placeras — Esc för att avbryta",
+    "polygonHint": "Klicka på varje hörn — dubbelklicka, Enter eller klicka på det första hörnet för att avsluta; Backsteg tar bort det sista hörnet, Esc avbryter. Dra för en regelbunden sexhörning.",
     "offsetPick": "Förskjut: klicka på ett objekt som ska förskjutas",
     "offsetDistance": "Förskjut: skriv avståndet och tryck på Enter (t.ex. 100)",
     "offsetDistanceInvalid": "Förskjut: ange ett positivt avstånd, t.ex. 100",

@@ -23,6 +23,7 @@ import { selecteerRuimteVanTag } from '../../plattegrond/ruimte-selectie.js';
 import { redrawAnnotations, redrawContinuous } from '../../annotations/rendering.js';
 import { copyAnnotation, copyAnnotations, pasteFromClipboard, pasteAnnotationsInPlace, duplicateAnnotation } from '../../annotations/clipboard.js';
 import { cloneAnnotation } from '../../annotations/factory.js';
+import { verwijderVeelhoekHoekpunt, voegVeelhoekHoekpuntIn, VEELHOEK_MIN_PUNTEN } from '../../annotations/veelhoek-punten.js';
 import { commitAnnotationMutation, deleteAnnotationsWithUndo } from '../../annotations/mutations.js';
 import { expandCorrectionGroups } from '../../annotations/corrections/model.js';
 import { recordModify, recordBulkModify } from '../../core/undo-manager.js';
@@ -194,6 +195,37 @@ function AnnotationMenuContent() {
     if (!v || !a || a.id !== v.annotationId) return null;
     // Wand-context draagt alleen het klikpunt (zie wandEind hieronder).
     if (v.kind === 'wand') return null;
+    // Veelhoek (#622): rechtsklik op een hoekpunt haalt het weg (er blijven
+    // er minstens drie), op een zijde komt er een hoekpunt bij, op de plek
+    // van de klik.
+    if (v.kind === 'veelhoekHoek' || v.kind === 'veelhoekZijde') {
+      const pasToe = (nieuw) => {
+        if (nieuw) {
+          const before = cloneAnnotation(a);
+          Object.assign(a, nieuw);
+          a.modifiedAt = new Date().toISOString();
+          recordModify(a.id, before, cloneAnnotation(a));
+          redraw();
+          showProperties(a);
+        }
+        hideMenu();
+      };
+      return (
+        <>
+          <Show when={v.kind === 'veelhoekHoek'}>
+            <MenuItem icon={deleteIcon} label={t('contextMenu.deleteVertex') || 'Delete vertex'}
+              disabled={isLocked() || !((a.points?.length || 0) > VEELHOEK_MIN_PUNTEN)}
+              onClick={() => pasToe(verwijderVeelhoekHoekpunt(a, v.nodeIndex))} />
+          </Show>
+          <Show when={v.kind === 'veelhoekZijde'}>
+            <MenuItem label={t('contextMenu.insertVertex') || 'Insert vertex here'}
+              disabled={isLocked()}
+              onClick={() => pasToe(voegVeelhoekHoekpuntIn(a, v.edgeIndex, v.punt))} />
+          </Show>
+          <Separator />
+        </>
+      );
+    }
     // Systeem-paneel (rechtsklik op een cel van een systeemraster/-plafond):
     // paneeltype direct wisselen — het ASSORTIMENT komt als data van het
     // systeemtype (typeDef.paneelTypen) — of het paneel vervangen door een
