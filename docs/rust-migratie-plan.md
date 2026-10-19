@@ -242,3 +242,61 @@ Het werk op de tak wordt niet in één keer samengevoegd. Elk onderdeel wordt ov
 - #463 — JS→Rust gemeten (gesloten); scripts in `open-pdf-studio/scripts/bench-rust/` op tak `research/js-naar-rust`
 - #395 — rendertijd zware tekeningen
 - Tak `feat/rust-native` op de fork van oscar981-op: `rust-studio/docs/` (enginevergelijkingen, opslaan, MCP)
+
+## 9. Voortgang
+
+### M0 — kernel-crate (19-10-2026)
+
+`open-pdf-kernel` bevat:
+- het annotatiemodel: het ruwe JSON-object is de bron, met getypeerde leesfuncties;
+- de display list;
+- de rasterizer: vello_cpu 0.3;
+- de golden-harness.
+
+Status:
+- 29 tests; ze draaien in CI op alle drie de platformen;
+- een onafhankelijke review is verwerkt;
+- nog niet aangesloten op de app.
+
+### M1 — Hayro als schakelbare pagina-engine (19-10-2026)
+
+Gebouwd:
+- `open_pdf_kernel::pdfrender` op Hayro 0.8;
+- een Hayro-route in de worker (`engine`-veld);
+- de engine wordt doorgegeven via de pool, de commands en de cachesleutels;
+- een voorkeur "Paginarender-engine" onder Paginaweergave, vertaald in alle 40 talen;
+- de statuschip toont "Hayro".
+
+Standaard blijft PDFium.
+
+**Engine-vergelijking**
+
+Gemeten met `pdfium-worker/examples/engine_compare.rs`, in release-modus:
+- beide verificatiemappen, 219 unieke pagina's (dubbele bestanden één keer geteld);
+- de langste zijde gerenderd op 2048 px;
+- per pagina de eerste render (inclusief openen van de pagina) en een herhaling.
+
+| | PDFium | Hayro |
+|---|---:|---:|
+| Pagina's gerenderd | 219/219 | 219/219 (geen fout, paniek of time-out) |
+| Mediaan per pagina, eerste render | 76 ms | 91 ms |
+| Mediaan per pagina, herhaling | 74 ms | 87 ms |
+| Totaal alle pagina's | 88,2 s | 85,9 s |
+| Lichte pagina's (< 200 ms bij PDFium), 148 stuks | 8,6 s (mediaan 39 ms) | 11,1 s (mediaan 61 ms) |
+| Zware pagina's (≥ 200 ms), 71 stuks | 79,6 s (mediaan 540 ms) | 74,7 s (mediaan 415 ms) |
+
+Snelheid:
+- Hayro is sneller op zware tekeningen. De sterkste winst is MV-03: 7,3 s tegenover 21,9 s. Zware vector, NKD1a en NKE2D2 zijn 30–40 % sneller.
+- Op lichte tekst- en rapportpagina's is Hayro trager, gemiddeld ongeveer 25 ms extra per pagina.
+- De grote uitschieter is 2196-CB-21 p1 (de bekende mesh-shading-pagina, #395): 24,5 s tegenover 3,3 s.
+
+Volledigheid:
+- Het aandeel duidelijk afwijkende pixels (een kanaal > 64 verschil) heeft een mediaan van 0,43 %, een p95 van 1,57 % en een maximum van 6,4 % (2196-CB-21).
+- Het inktverschil heeft een mediaan van 0,12 procentpunt en een maximum van 1,5.
+- Alleen 2196-CB-21 is gevlagd. Visueel is die pagina gelijk; het verschil komt van de anti-aliasing van zeer fijne tekst.
+- Er is geen enkele lege of half getekende pagina.
+
+Bekende verschillen:
+- `thin_lines` werkt nog niet met Hayro.
+- Formuliervelden tekent PDFium wel en Hayro niet. De app tekent annotaties zelf, maar AcroForm-widgets nog niet.
+- Het geheugengebruik op zware scans is niet gemeten.
