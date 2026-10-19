@@ -131,6 +131,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
     // gezet als de PDF hem echt apart opgeeft; anders volgt de vulling gewoon
     // `opacity`. Zie extractApAlphas() in color-extraction.js.
     ...(extraColors.fillOpacity !== undefined ? { fillOpacity: extraColors.fillOpacity } : {}),
+    // Mengmodus (/BM in de appearance, #614) — voor elke soort.
+    ...(extraColors.blendMode ? { blendMode: extraColors.blendMode } : {}),
     locked: !!(annot.annotationFlags & 128),      // Bit 8: Locked
     printable: !!(annot.annotationFlags & 4),       // Bit 3: Print
     readOnly: !!(annot.annotationFlags & 64),       // Bit 7: ReadOnly

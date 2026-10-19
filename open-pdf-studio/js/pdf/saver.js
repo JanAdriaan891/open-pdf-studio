@@ -2825,7 +2825,8 @@ async function _savePDFNu(saveAsPath, activeDoc) {
         // /CA zodra er een /AP is.
         if (annotDict && typeof annotDict.get === 'function') {
           // Een pijl als geheel, zoals het scherm (overlap van schacht en kop).
-          zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep: ann.type === 'arrow' });
+          // Met de mengmodus (#614) in dezelfde graphics-state.
+          zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep: ann.type === 'arrow', blendMode: ann.blendMode });
         }
 
         // Add annotation to page
@@ -2938,7 +2939,7 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               strokeColorHex: ann.strokeColor && hasStroke(ann.strokeColor) ? ann.strokeColor : (ann.color || '#000000'),
               lineWidth: _lwLdr, eindStijl,
             }), ldrRect);
-            zetDoorzichtigheidInAp(context, ldrDict, ann.opacity !== undefined ? ann.opacity : 1, { alsGroep: true });
+            zetDoorzichtigheidInAp(context, ldrDict, ann.opacity !== undefined ? ann.opacity : 1, { alsGroep: true, blendMode: ann.blendMode });
             // Een aanhaallijn hoort bij de laag van haar tekstvak (#468).
             const ocRef = ocVoorAnnotatie(laagOcgs, ann);
             if (ocRef) ldrDict.set(PDFName.of('OC'), ocRef);

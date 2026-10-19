@@ -40,6 +40,8 @@ import { updateQuickAccessButtons, updateContextualTabs, drawGrid, snapToGrid } 
 import { drawCommentIcon } from './rendering/comment-icons.js';
 import { drawCaret, drawMarkupLines, replaceStrikeColor } from './rendering/caret.js';
 import { spatialIndex, annotationBounds } from './spatial-index.js';
+import { blendCanvasWaarde, isGemengd } from './blend-modes.js';
+import { tekenGemengdTegenPagina } from './rendering/mengen-tegen-pagina.js';
 import { bitmapVoor, bijNieuweTegel, KNIPSEL_UITVOER_FOUT } from './vector-snippet-preview.js';
 import { invalidateScaleRegionCache, pixelsPerUnitFor, getRegionScaleFactor } from './scale-region.js';
 import { metSchaalBronnen } from './schaal-bronnen.js';
@@ -201,6 +203,10 @@ function _drawPolarOverlay(ctx, snapResult, scale) {
 // alleen tijdens renderAnnotationsForPage gezet — die tekent synchroon — zodat
 // drawAnnotation weet dat er geen bewerkingstoestand in de uitvoer hoort.
 let _lagen = null;
+
+// Alleen tijdens het tekenen van de dekking van een gemengde annotatie (zie
+// _tekenGemengd): de annotatie dan zonder haar mengmodus.
+let _zonderMengmodus = false;
 
 /** Tekent deze rendering laag `naam`? Zonder uitvoermodus altijd. */
 function laag(naam) {
@@ -503,7 +509,8 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
   lw = thinLw(lw);
   ctx.lineWidth = lw;
   ctx.globalAlpha = baseOpacity;
-  ctx.globalCompositeOperation = annotation.blendMode === 'multiply' ? 'multiply' : 'source-over';
+  // Alle zestien modi, met de canvasnamen (color-dodge, …) — #614.
+  ctx.globalCompositeOperation = _zonderMengmodus ? 'source-over' : blendCanvasWaarde(annotation.blendMode);
 
   switch (annotation.type) {
     case 'draw':
@@ -2743,6 +2750,40 @@ function drawTextEdits(ctx, pageNum) {
 // Track annotation count to know when spatial index needs rebuild
 let _lastIndexedCount = -1;
 
+// Het paginacanvas onder een annotatie-overlay op het scherm: #pdf-canvas
+// onder #annotation-canvas, .pdf-canvas in dezelfde paginacontainer in de
+// doorlopende weergave. Null voor een canvas buiten beeld (export, afdruk,
+// miniatuur): daar staat de pagina op hetzelfde canvas of draagt het bestand
+// de mengmodus zelf (/BM).
+function _paginaOnder(canvas) {
+  if (!canvas || typeof canvas.getBoundingClientRect !== 'function') return null;
+  if (canvas.id === 'annotation-canvas') return document.getElementById('pdf-canvas');
+  if (canvas.classList?.contains('annotation-canvas')) {
+    return canvas.parentElement?.querySelector(':scope > .pdf-canvas') || null;
+  }
+  return null;
+}
+
+// Een annotatie met mengmodus (#614): op de doorzichtige overlay mengt
+// globalCompositeOperation met niets, dus mengen we met de pagina eronder
+// (rendering/mengen-tegen-pagina.js). Valt dat terug, dan gewoon tekenen.
+function _tekenGemengd(ctx, annotation, snippetBitmaps, tussenlagen) {
+  const teken = (c, normaal) => {
+    c.save();
+    _zonderMengmodus = normaal;
+    try {
+      drawAnnotation(c, annotation, snippetBitmaps);
+    } finally {
+      _zonderMengmodus = false;
+      c.restore();
+    }
+  };
+  const gelukt = tekenGemengdTegenPagina(ctx, _paginaOnder(ctx.canvas), teken,
+    annotationBounds(annotation, { goedkoop: true }),
+    { marge: Math.max(4, (annotation.lineWidth || 1) * 2), tussenlagen });
+  if (!gelukt) teken(ctx, false);
+}
+
 // Valt deze annotatie volledig buiten het (ruim genomen) zichtbare gebied?
 // De omhullende komt uit annotationBounds — dezelfde definitie die de spatial
 // index hanteert — zodat lijnen, polylijnen, vrije hand, wolken en metingen
@@ -2939,6 +2980,14 @@ export function redrawAnnotations(lightweight = false) {
   metSchaalBronnen(() => annotations.forEach(annotation => {
     if (annotation.page !== curPage) return;
     if (_buitenBeeld(annotation, vpX, vpY, vpW, vpH)) return;
+    // Een tekstmarkering met een andere mengmodus dan vermenigvuldigen mengt
+    // zelf met de pagina; de markeerlaag kan alleen vermenigvuldigen.
+    const gemengd = isGemengd(annotation.blendMode);
+    if (gemengd && !(annotation.type === 'textHighlight' && textHighlightCtx && annotation.blendMode === 'multiply')) {
+      _tekenGemengd(annotationCtx, annotation, null,
+        textHighlightCanvas ? [{ canvas: textHighlightCanvas, op: 'multiply' }] : []);
+      return;
+    }
     const targetCtx = (annotation.type === 'textHighlight' && textHighlightCtx)
       ? textHighlightCtx
       : annotationCtx;
@@ -3141,6 +3190,10 @@ function tekenPaginaLagen(ctx, pageNum, width, height, overrideDpr, renderOffset
   metSchaalBronnen(() => annotations.forEach(annotation => {
     if (annotation.page !== pageNum) return;
     if (_buitenBeeld(annotation, cvX, cvY, cvW, cvH)) return;
+    if (isGemengd(annotation.blendMode) && _paginaOnder(ctx.canvas)) {
+      _tekenGemengd(ctx, annotation, snippetBitmaps, []);
+      return;
+    }
     drawAnnotation(ctx, annotation, snippetBitmaps);
   }));
 

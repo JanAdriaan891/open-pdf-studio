@@ -137,7 +137,13 @@ async function compositeCurrentView(maxWidth = 2000) {
   ctx.fillRect(0, 0, outW, outH);
   ctx.drawImage(pdfCanvas, 0, 0, outW, outH);
   if (hlCanvas && hlCanvas.width > 0 && hlCanvas.height > 0) {
+    // Zoals het scherm: de markeerlaag vermenigvuldigt met de pagina (CSS
+    // mix-blend-mode). Met source-over zag een controle hier een andere
+    // pagina dan de gebruiker (#614). Gemengde annotaties staan al gemengd
+    // op de annotatielaag (rendering/mengen-tegen-pagina.js).
+    ctx.globalCompositeOperation = 'multiply';
     ctx.drawImage(hlCanvas, 0, 0, outW, outH);
+    ctx.globalCompositeOperation = 'source-over';
   }
   if (annCanvas && annCanvas.width > 0 && annCanvas.height > 0) {
     ctx.drawImage(annCanvas, 0, 0, outW, outH);

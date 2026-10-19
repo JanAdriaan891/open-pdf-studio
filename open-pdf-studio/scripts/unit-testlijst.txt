@@ -386,3 +386,7 @@ js/ui/chrome/tab-losmaken.test.mjs
 js/core/instantie-rol.test.mjs
 js/core/verkenner-miniaturen.test.mjs
 js/i18n/verkenner-miniaturen-i18n.test.mjs
+js/annotations/blend-modes.test.mjs
+js/annotations/rendering/mengen-tegen-pagina.test.mjs
+js/pdf/saver/blend-mode-ap.test.mjs
+js/pdf/mengmodus-rondgang.test.mjs

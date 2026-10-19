@@ -9,6 +9,7 @@ import { readPluginPdfAnnotation } from '../../plugins/plugin-pdf.js';
 import { laagVanOc } from '../saver/annotatie-lagen.js';
 import { leesPlattegrondMeta } from './plattegrond-meta.js';
 import { leesLijnSleutels } from './maatlijn-uit-bestand.js';
+import { blendUitPdf } from '../../annotations/blend-modes.js';
 
 // Documenten waarvan de knipsel-bronpagina's al in de store staan: dat
 // uitpakken gebeurt één keer per document, bij het eerste knipsel dat we zien.
@@ -63,10 +64,13 @@ async function decodeApStream(stream) {
  * annotatie als geheel beschrijft en geven we niets terug. Bij meerdere
  * vul-alfa's telt de alfa van het eerste vlak (zie fillAlphaAtFirstFill).
  *
- * @returns {Promise<{fillAlpha: number|null, strokeAlpha: number|null}>}
+ * Uit dezelfde graphics-states komt de mengmodus (/BM, #614): één modus als
+ * alle geactiveerde states dezelfde zetten, anders geen.
+ *
+ * @returns {Promise<{fillAlpha: number|null, strokeAlpha: number|null, blendMode: string|null}>}
  */
 async function extractApAlphas(context, nStream) {
-  const empty = { fillAlpha: null, strokeAlpha: null };
+  const empty = { fillAlpha: null, strokeAlpha: null, blendMode: null };
   try {
     const nDict = nStream.dict || nStream;
     const resRaw = nDict.get(PDFName.of('Resources'));
@@ -89,6 +93,7 @@ async function extractApAlphas(context, nStream) {
 
     const fills = new Set();
     const strokes = new Set();
+    const modi = new Set();
     const fillAlphaByName = new Map();
     for (const name of used) {
       const gsRefRaw = egs.get(PDFName.of(name));
@@ -104,6 +109,8 @@ async function extractApAlphas(context, nStream) {
         fillAlphaByName.set(name, ca);
       }
       if (CA !== null && CA >= 0 && CA <= 1) strokes.add(CA);
+      const modus = leesBlendMode(context, gs.get(PDFName.of('BM')));
+      if (modus) modi.add(modus);
     }
     // Meerdere vul-alfa's: geen enkele /ca geldt voor de hele stream. Gangbaar
     // bij meetvlakken — het vlak op 30%, het maatlabel in een eigen
@@ -115,10 +122,19 @@ async function extractApAlphas(context, nStream) {
     return {
       fillAlpha,
       strokeAlpha: strokes.size === 1 ? [...strokes][0] : null,
+      blendMode: modi.size === 1 ? [...modi][0] : null,
     };
   } catch (_) {
     return empty;
   }
+}
+
+/** De mengmodus uit een /BM-waarde (naam of array), of null. */
+function leesBlendMode(context, raw) {
+  if (raw === undefined || raw === null) return null;
+  const v = context.lookup(raw) || raw;
+  if (v instanceof PDFArray) return blendUitPdf(v.asArray().map((x) => String(context.lookup(x) || x)));
+  return blendUitPdf(String(v));
 }
 
 const TEKSTCORRECTIE_SOORTEN = new Set(['/Caret', '/Highlight', '/Underline', '/StrikeOut', '/Squiggly']);
@@ -230,7 +246,8 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
           const nForAlpha = apDict?.get?.(PDFName.of('N'));
           const nStreamForAlpha = nForAlpha ? context.lookup(nForAlpha) : null;
           if (nStreamForAlpha) {
-            const { fillAlpha, strokeAlpha } = await extractApAlphas(context, nStreamForAlpha);
+            const { fillAlpha, strokeAlpha, blendMode } = await extractApAlphas(context, nStreamForAlpha);
+            if (blendMode) colors.blendMode = blendMode;
             // Gelijk aan /CA is het de algehele doorzichtigheid die ook in de
             // appearance staat (#512), geen aparte vul-alfa.
             if (fillAlpha !== null && fillAlpha !== colors.opacity) colors.fillOpacity = fillAlpha;
@@ -238,6 +255,15 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
           }
         }
       } catch (_) { /* appearance zonder bruikbare graphics-state */ }
+
+      // Mengmodus (#614): uit de appearance hierboven; anders /BM op de
+      // annotatie zelf (PDF 2.0). Bij een tekstmarkering is vermenigvuldigen
+      // gewoon haar uiterlijk (zie correction-dicts.js), geen keuze.
+      if (!colors.blendMode) {
+        const bmDict = leesBlendMode(context, annotDict.get(PDFName.of('BM')));
+        if (bmDict) colors.blendMode = bmDict;
+      }
+      if (colors.blendMode === 'multiply' && TEKSTCORRECTIE_SOORTEN.has(subtypeName)) delete colors.blendMode;
 
       // /FillOpacity: niet-standaard sleutel die externe tekenpakketten naast de
       // appearance zetten. Alleen terugval: de appearance hierboven is wat andere

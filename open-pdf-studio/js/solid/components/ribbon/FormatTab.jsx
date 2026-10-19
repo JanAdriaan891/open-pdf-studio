@@ -23,6 +23,7 @@ import {
 } from '../../data/ribbonIcons.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { paginaMaat } from '../../../pdf/weergave-ruimte.js';
+import { BLEND_MODES } from '../../../annotations/blend-modes.js';
 
 const STYLE_GALLERY = [
   { name: 'red', labelKey: 'format.styleRed', color: '#ff0000', cloudy: false },
@@ -284,16 +285,18 @@ export default function FormatTab() {
               </select>
             </div>
             <div class="ribbon-form-row">
-              <label>{t('format.blendLabel')}</label>
-              <select class="ribbon-form-select" id="fmt-blend-mode" title={t('format.blendMode')}
+              <label title={t('format.blendHint')}>{t('format.blendLabel')}</label>
+              <select class="ribbon-form-select" id="fmt-blend-mode" title={t('format.blendHint')}
                 value={blendMode()}
                 disabled={nietVoorSymbool('blendMode')}
                 onChange={(e) => {
                   const mode = e.target.value;
                   zetOpmaak({ blendMode: mode }, ann => { ann.blendMode = mode; });
                 }}>
-                <option value="normal">{t('format.normal')}</option>
-                <option value="multiply">{t('format.multiply')}</option>
+                {/* Alle zestien PDF-mengmodi (#614); de labels per taal. */}
+                <For each={BLEND_MODES}>{(mode) => (
+                  <option value={mode}>{t(`format.blend.${mode}`, mode)}</option>
+                )}</For>
               </select>
             </div>
           </div>
