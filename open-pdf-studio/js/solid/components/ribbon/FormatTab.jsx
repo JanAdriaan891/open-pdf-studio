@@ -24,6 +24,7 @@ import {
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { paginaMaat } from '../../../pdf/weergave-ruimte.js';
 import { BLEND_MODES } from '../../../annotations/blend-modes.js';
+import { volgPopup } from './ribbon-popup.js';
 
 const STYLE_GALLERY = [
   { name: 'red', labelKey: 'format.styleRed', color: '#ff0000', cloudy: false },
@@ -97,6 +98,13 @@ export default function FormatTab() {
   let moreRef;
   let toolsRef;
   let nameInputRef;
+  // De popups staan met position: fixed buiten de klip van de ribbon (#617).
+  let moreBtnRef;
+  let morePopupRef;
+  let toolsBtnRef;
+  let toolsMenuRef;
+  volgPopup(() => morePopupRef, () => moreBtnRef, moreOpen, { rechts: true });
+  volgPopup(() => toolsMenuRef, () => toolsBtnRef, toolsOpen);
 
   onMount(() => {
     const handler = (e) => {
@@ -164,12 +172,12 @@ export default function FormatTab() {
                 )}
               </For>
             </div>
-            <button class="ribbon-gallery-more" id="fmt-style-more" title={t('format.moreStyles')}
+            <button class="ribbon-gallery-more" id="fmt-style-more" title={t('format.moreStyles')} ref={moreBtnRef}
               onClick={() => setMoreOpen(!moreOpen())}>
               <svg viewBox="0 0 8 14"><path d="M1 1l5 6-5 6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
             </button>
             {/* Galerij-popup: alle stijl-presets in een raster + opgeslagen lijnstijlen */}
-            <div class={`ribbon-style-more-popup${moreOpen() ? ' show' : ''}`} id="fmt-style-more-popup">
+            <div class={`ribbon-style-more-popup${moreOpen() ? ' show' : ''}`} id="fmt-style-more-popup" ref={morePopupRef}>
               <div class="ribbon-style-more-grid">
                 <For each={STYLE_GALLERY}>
                   {(item) => (
@@ -369,14 +377,14 @@ export default function FormatTab() {
         <RibbonGroup label="">
           <div class="ribbon-grid-col">
             <div class="ribbon-menu-wrapper" ref={toolsRef}>
-              <button class="ribbon-row-btn ribbon-dropdown-btn" id="fmt-style-tools" title={t('format.styleTools')}
+              <button class="ribbon-row-btn ribbon-dropdown-btn" id="fmt-style-tools" title={t('format.styleTools')} ref={toolsBtnRef}
                 disabled={invoegen()}
                 onClick={() => setToolsOpen(!toolsOpen())}>
                 <span ref={el => { el.innerHTML = styleToolsIcon; }} />
                 <span>{t('format.styleTools')}</span>
                 <svg class="dropdown-arrow" viewBox="0 0 8 5"><path d="M0 0l4 4 4-4z" fill="currentColor"/></svg>
               </button>
-              <div class={`ribbon-menu-dropdown${toolsOpen() ? ' show' : ''}`} id="fmt-style-tools-menu">
+              <div class={`ribbon-menu-dropdown${toolsOpen() ? ' show' : ''}`} id="fmt-style-tools-menu" ref={toolsMenuRef}>
                 <button class="ribbon-menu-item"
                   onClick={() => { copyStyleFromSelection(); setToolsOpen(false); }}>
                   {tp('stylePresets.copyStyle')}
