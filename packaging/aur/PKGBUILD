@@ -18,7 +18,7 @@
 
 pkgname=open-pdf-studio-bin
 _pkgname=open-pdf-studio
-pkgver=2026.42.11
+pkgver=2026.42.12
 pkgrel=1
 pkgdesc='Free, open-source PDF editor and annotator for drawings and documents'
 arch=('x86_64')
@@ -47,7 +47,7 @@ conflicts=("${_pkgname}")
 options=('!strip' '!debug')
 source=("${_pkgname}-${pkgver}.deb::${url}/releases/download/v${pkgver}/Open.PDF.Studio_${pkgver}_amd64.deb")
 noextract=("${_pkgname}-${pkgver}.deb")
-sha256sums=('b4bd7958b1539b9d535e588d4c6581d72bb893565dfcac3d2f5118489c8bfbc6')
+sha256sums=('3c793c0d69ef32ae0d9adc6eec41ecf92449a342d853dc61712cb5d3ca10661e')
 
 package() {
   bsdtar -xOf "${_pkgname}-${pkgver}.deb" 'data.tar.*' | bsdtar -xf - -C "${pkgdir}"
