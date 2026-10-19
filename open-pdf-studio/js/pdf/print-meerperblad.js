@@ -254,11 +254,15 @@ export function snijtekensVoorCellen({ bladB, bladH, cellen }) {
  * met het volgnummer midden in elke cel en een pijl van cel naar cel in de
  * printvolgorde. Werkt op de cellen van voorbeeldMeerPerBlad (mm vanaf
  * linksboven); de pijlen beginnen en eindigen buiten de merken.
+ * Zonder pijlen (`pijlen: false`) alleen de nummers: bij een boekje, waar de
+ * pagina's links en rechts van de vouw niet na elkaar komen, en bij een
+ * folder, waar elke cel dezelfde pagina is.
  * @param {{k:number, opVel:{x:number, y:number, breedte:number, hoogte:number}}[]} cellen
+ * @param {{pijlen?: boolean}} [opties]
  * @returns {{ straal:number, merken:{k:number, x:number, y:number}[],
  *             pijlen:{x1:number, y1:number, x2:number, y2:number}[] }}
  */
-export function volgordeAanwijzer(cellen) {
+export function volgordeAanwijzer(cellen, { pijlen: metPijlen = true } = {}) {
   const lijst = (cellen || []).filter((c) => c && c.opVel);
   if (!lijst.length) return { straal: 0, merken: [], pijlen: [] };
   const kleinste = Math.min(...lijst.map((c) => Math.min(c.opVel.breedte, c.opVel.hoogte)));
@@ -268,7 +272,7 @@ export function volgordeAanwijzer(cellen) {
     .sort((a, b) => a.k - b.k);
   const ruimte = straal * 1.25;
   const pijlen = [];
-  for (let i = 0; i + 1 < merken.length; i++) {
+  for (let i = 0; metPijlen && i + 1 < merken.length; i++) {
     const van = merken[i];
     const naar = merken[i + 1];
     const dx = naar.x - van.x;

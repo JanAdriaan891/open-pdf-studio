@@ -23,6 +23,9 @@ import {
 } from '../../data/ribbonIcons.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { paginaMaat } from '../../../pdf/weergave-ruimte.js';
+import { lintZetLijnkoppen } from '../../../pdf/lijnkoppen.js';
+import { BLEND_MODES } from '../../../annotations/blend-modes.js';
+import { volgPopup } from './ribbon-popup.js';
 
 const STYLE_GALLERY = [
   { name: 'red', labelKey: 'format.styleRed', color: '#ff0000', cloudy: false },
@@ -96,6 +99,13 @@ export default function FormatTab() {
   let moreRef;
   let toolsRef;
   let nameInputRef;
+  // De popups staan met position: fixed buiten de klip van de ribbon (#617).
+  let moreBtnRef;
+  let morePopupRef;
+  let toolsBtnRef;
+  let toolsMenuRef;
+  volgPopup(() => morePopupRef, () => moreBtnRef, moreOpen, { rechts: true });
+  volgPopup(() => toolsMenuRef, () => toolsBtnRef, toolsOpen);
 
   onMount(() => {
     const handler = (e) => {
@@ -163,12 +173,12 @@ export default function FormatTab() {
                 )}
               </For>
             </div>
-            <button class="ribbon-gallery-more" id="fmt-style-more" title={t('format.moreStyles')}
+            <button class="ribbon-gallery-more" id="fmt-style-more" title={t('format.moreStyles')} ref={moreBtnRef}
               onClick={() => setMoreOpen(!moreOpen())}>
               <svg viewBox="0 0 8 14"><path d="M1 1l5 6-5 6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
             </button>
             {/* Galerij-popup: alle stijl-presets in een raster + opgeslagen lijnstijlen */}
-            <div class={`ribbon-style-more-popup${moreOpen() ? ' show' : ''}`} id="fmt-style-more-popup">
+            <div class={`ribbon-style-more-popup${moreOpen() ? ' show' : ''}`} id="fmt-style-more-popup" ref={morePopupRef}>
               <div class="ribbon-style-more-grid">
                 <For each={STYLE_GALLERY}>
                   {(item) => (
@@ -284,16 +294,18 @@ export default function FormatTab() {
               </select>
             </div>
             <div class="ribbon-form-row">
-              <label>{t('format.blendLabel')}</label>
-              <select class="ribbon-form-select" id="fmt-blend-mode" title={t('format.blendMode')}
+              <label title={t('format.blendHint')}>{t('format.blendLabel')}</label>
+              <select class="ribbon-form-select" id="fmt-blend-mode" title={t('format.blendHint')}
                 value={blendMode()}
                 disabled={nietVoorSymbool('blendMode')}
                 onChange={(e) => {
                   const mode = e.target.value;
                   zetOpmaak({ blendMode: mode }, ann => { ann.blendMode = mode; });
                 }}>
-                <option value="normal">{t('format.normal')}</option>
-                <option value="multiply">{t('format.multiply')}</option>
+                {/* Alle zestien PDF-mengmodi (#614); de labels per taal. */}
+                <For each={BLEND_MODES}>{(mode) => (
+                  <option value={mode}>{t(`format.blend.${mode}`, mode)}</option>
+                )}</For>
               </select>
             </div>
           </div>
@@ -328,7 +340,7 @@ export default function FormatTab() {
                 value={arrowStart()}
                 disabled={invoegen()}
                 onChange={(e) => {
-                  applyToSelected(ann => { if (ann.type === 'arrow') ann.startHead = e.target.value; });
+                  applyToSelected(ann => { if (lintZetLijnkoppen(ann.type)) ann.startHead = e.target.value; });
                   syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
                 }}>
                 <option value="none">{tc('none')}</option>
@@ -347,7 +359,7 @@ export default function FormatTab() {
                 value={arrowEnd()}
                 disabled={invoegen()}
                 onChange={(e) => {
-                  applyToSelected(ann => { if (ann.type === 'arrow') ann.endHead = e.target.value; });
+                  applyToSelected(ann => { if (lintZetLijnkoppen(ann.type)) ann.endHead = e.target.value; });
                   syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
                 }}>
                 <option value="none">{tc('none')}</option>
@@ -366,14 +378,14 @@ export default function FormatTab() {
         <RibbonGroup label="">
           <div class="ribbon-grid-col">
             <div class="ribbon-menu-wrapper" ref={toolsRef}>
-              <button class="ribbon-row-btn ribbon-dropdown-btn" id="fmt-style-tools" title={t('format.styleTools')}
+              <button class="ribbon-row-btn ribbon-dropdown-btn" id="fmt-style-tools" title={t('format.styleTools')} ref={toolsBtnRef}
                 disabled={invoegen()}
                 onClick={() => setToolsOpen(!toolsOpen())}>
                 <span ref={el => { el.innerHTML = styleToolsIcon; }} />
                 <span>{t('format.styleTools')}</span>
                 <svg class="dropdown-arrow" viewBox="0 0 8 5"><path d="M0 0l4 4 4-4z" fill="currentColor"/></svg>
               </button>
-              <div class={`ribbon-menu-dropdown${toolsOpen() ? ' show' : ''}`} id="fmt-style-tools-menu">
+              <div class={`ribbon-menu-dropdown${toolsOpen() ? ' show' : ''}`} id="fmt-style-tools-menu" ref={toolsMenuRef}>
                 <button class="ribbon-menu-item"
                   onClick={() => { copyStyleFromSelection(); setToolsOpen(false); }}>
                   {tp('stylePresets.copyStyle')}

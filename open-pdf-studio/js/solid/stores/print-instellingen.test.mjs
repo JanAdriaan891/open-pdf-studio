@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   PRINT_STANDAARD, PRINT_KEUZES, herstelPrintInstellingen, kiesStartPrinter, markeringenVoorInhoud,
+  PRINT_MODI, MEER_PER_BLAD_KEUZES, printModus, naarModus,
 } from './print-instellingen.js';
 
 test('zonder opgeslagen instellingen gelden de standaardwaarden', () => {
@@ -39,6 +40,10 @@ test('alle gekozen instellingen komen terug', () => {
     flyerCount: '8',
     flyerCutMarks: false,
     bookletSheets: 4,
+    bookletBinding: 'right',
+    bookletSides: 'front',
+    bookletRotateBack: true,
+    bookletCreep: 0.8,
   };
   assert.deepEqual(herstelPrintInstellingen(gekozen), gekozen);
 });
@@ -159,6 +164,70 @@ test("de keuzelijsten voor pagina's per vel en folder in de printdialoog kennen 
     const blok = jsx.split(merk)[1] ?? '';
     return [...blok.split('</select>')[0].matchAll(/<option value="([^"]+)"/g)].map((m) => m[1]);
   };
-  assert.deepEqual(waardenNa('onChange={(e) => setPerSheet(e.target.value)}'), [...PRINT_KEUZES.perSheet]);
+  // Pagina's per vel toont alleen de rasters van "Meerdere"; 1, folder en
+  // boekje zijn afdrukwijzen geworden (#607).
+  assert.deepEqual(waardenNa('onChange={(e) => setPerSheet(e.target.value)}'), [...MEER_PER_BLAD_KEUZES]);
   assert.deepEqual(waardenNa('onChange={(e) => setFlyerCount(e.target.value)}'), [...PRINT_KEUZES.flyerCount]);
+  assert.deepEqual(waardenNa('onChange={(e) => setBookletBinding(e.target.value)}'), [...PRINT_KEUZES.bookletBinding]);
+  assert.deepEqual(waardenNa('onChange={(e) => setBookletSides(e.target.value)}'), [...PRINT_KEUZES.bookletSides]);
+  // De wijzen als knoppen, één per wijze, en de volgorde als vier knoppen.
+  const knoppen = jsx.slice(jsx.indexOf('const MODUS_KNOPPEN'), jsx.indexOf('];', jsx.indexOf('const MODUS_KNOPPEN')));
+  assert.deepEqual([...knoppen.matchAll(/waarde: '(\w+)'/g)].map((m) => m[1]), [...PRINT_MODI]);
+  assert.match(jsx, /onClick=\{\(\) => kiesModus\(m\.waarde\)\}/);
+  assert.match(jsx, /<For each=\{PAGINAVOLGORDES\}>/);
+  assert.match(jsx, /onClick=\{\(\) => setSheetOrder\(volgorde\)\}/);
+  // Geen tweede weg naar de poster in de schaalkeuze.
+  assert.doesNotMatch(jsx, /<option value="poster">/);
+});
+
+test('boekje-opties (#607): binding, kanten, gedraaide achterkanten en kruip blijven bewaard', () => {
+  assert.equal(PRINT_STANDAARD.bookletBinding, 'left');
+  assert.equal(PRINT_STANDAARD.bookletSides, 'both');
+  assert.equal(PRINT_STANDAARD.bookletRotateBack, false);
+  assert.equal(PRINT_STANDAARD.bookletCreep, 0);
+  const s = herstelPrintInstellingen({
+    bookletBinding: 'right', bookletSides: 'back', bookletRotateBack: true, bookletCreep: 1.25,
+  });
+  assert.equal(s.bookletBinding, 'right');
+  assert.equal(s.bookletSides, 'back');
+  assert.equal(s.bookletRotateBack, true);
+  assert.equal(s.bookletCreep, 1.3);
+  const rommel = herstelPrintInstellingen({
+    bookletBinding: 'boven', bookletSides: 1, bookletRotateBack: 'ja', bookletCreep: 'veel',
+  });
+  assert.equal(rommel.bookletBinding, 'left');
+  assert.equal(rommel.bookletSides, 'both');
+  assert.equal(rommel.bookletRotateBack, false);
+  assert.equal(rommel.bookletCreep, 0);
+  assert.equal(herstelPrintInstellingen({ bookletCreep: 50 }).bookletCreep, 5);
+});
+
+test('afdrukwijze (#607): uit de bewaarde keuzes en terug', () => {
+  assert.deepEqual([...PRINT_MODI], ['normal', 'multiple', 'flyer', 'booklet', 'poster']);
+  assert.equal(printModus({ scaling: 'fit', perSheet: '1' }), 'normal');
+  assert.equal(printModus({ scaling: 'actual', perSheet: '4' }), 'multiple');
+  assert.equal(printModus({ scaling: 'fit', perSheet: 'custom' }), 'multiple');
+  assert.equal(printModus({ scaling: 'fit', perSheet: 'flyer' }), 'flyer');
+  assert.equal(printModus({ scaling: 'fit', perSheet: 'booklet' }), 'booklet');
+  // De poster gaat voor, zoals in de printopdracht.
+  assert.equal(printModus({ scaling: 'poster', perSheet: 'booklet' }), 'poster');
+  assert.equal(printModus({}), 'normal');
+
+  const nu = { scaling: 'shrink', perSheet: '6' };
+  assert.deepEqual(naarModus('normal', nu), { scaling: 'shrink', perSheet: '1' });
+  assert.deepEqual(naarModus('multiple', nu), { scaling: 'shrink', perSheet: '6' });
+  assert.deepEqual(naarModus('flyer', nu), { scaling: 'shrink', perSheet: 'flyer' });
+  assert.deepEqual(naarModus('booklet', nu), { scaling: 'shrink', perSheet: 'booklet' });
+  // Poster laat het aantal per vel staan, zodat terug naar Meerdere het weer kent.
+  assert.deepEqual(naarModus('poster', nu), { scaling: 'poster', perSheet: '6' });
+  // Van poster terug: de laatste gewone schaal; naar Meerdere: het laatste raster.
+  const poster = { scaling: 'poster', perSheet: 'booklet' };
+  assert.deepEqual(naarModus('normal', poster, { schaling: 'actual' }), { scaling: 'actual', perSheet: '1' });
+  assert.deepEqual(naarModus('multiple', poster, { meer: '9' }), { scaling: 'fit', perSheet: '9' });
+  assert.deepEqual(naarModus('multiple', { scaling: 'fit', perSheet: '1' }), { scaling: 'fit', perSheet: '2' });
+  assert.deepEqual(naarModus('multiple', { scaling: 'fit', perSheet: '1' }, { meer: 'flyer' }), { scaling: 'fit', perSheet: '2' });
+  // Onbekende wijze: niets verandert.
+  assert.deepEqual(naarModus('x', nu), nu);
+  assert.deepEqual([...MEER_PER_BLAD_KEUZES], ['2', '4', '6', '9', '16', 'custom']);
+  for (const k of MEER_PER_BLAD_KEUZES) assert.ok(PRINT_KEUZES.perSheet.includes(k));
 });

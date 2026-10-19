@@ -62,6 +62,9 @@
     "screenshot": "Schermafbeelding",
     "captureFullPage": "Volledige pagina vastleggen",
     "screenshotOptions": "Schermafbeelding opties",
+    "captureRegionTitle": "Schermafbeelding: selecteer een gebied en kopieer het of sla het op als afbeelding",
+    "quickCopy": "Gebied kopiëren op schermresolutie",
+    "quickCopyTitle": "Selecteer een gebied en kopieer het meteen naar het klembord, op de resolutie van het scherm",
     "fullPage": "Volledige pagina",
     "region": "Gebied",
     "placeAsOverlay": "Als overlay plaatsen",
@@ -161,7 +164,11 @@
     "loading": "Laden...",
     "northArrow": "Noordpijl",
     "cloudPolyline": "Wolk-polylijn",
-    "parametricSymbol": "Parametrisch symbool"
+    "parametricSymbol": "Parametrisch symbool",
+    "flattenAll": "Alles afvlakken",
+    "flattenAllTooltip": "Alle markeringen afvlakken tot pagina-inhoud",
+    "unflattenAll": "Afvlakken ongedaan",
+    "unflattenAllTooltip": "Markeringen terughalen die zijn afgevlakt met terughalen toegestaan"
   },
   "view": {
     "pageDisplay": "Paginaweergave",
@@ -372,6 +379,25 @@
     "blendMode": "Mengmodus",
     "normal": "Normaal",
     "multiply": "Vermenigvuldigen",
+    "blend": {
+      "normal": "Normaal",
+      "multiply": "Vermenigvuldigen",
+      "screen": "Bleken",
+      "overlay": "Bedekken",
+      "darken": "Donkerder",
+      "lighten": "Lichter",
+      "colorDodge": "Kleur tegenhouden",
+      "colorBurn": "Kleur doordrukken",
+      "hardLight": "Fel licht",
+      "softLight": "Zacht licht",
+      "difference": "Verschil",
+      "exclusion": "Uitsluiting",
+      "hue": "Kleurtoon",
+      "saturation": "Verzadiging",
+      "color": "Kleur",
+      "luminosity": "Lichtsterkte"
+    },
+    "blendHint": "Hoe de markering zich mengt met de pagina eronder. Vulling en lijn geven haar kleur; de mengmodus bepaalt alleen hoe die kleur met de pagina mengt.",
     "startLabel": "Begin:",
     "startArrow": "Beginpijl",
     "endLabel": "Einde:",
@@ -531,6 +557,7 @@
     "enlarge": "Vergroten",
     "dimHint": "klik en typ dan bijv. 500,300 + Enter",
     "dimInputHint": "Typ afmetingen (bijv. 500,300 of één maat) en druk op Enter — of sleep om te tekenen",
+    "calloutStep2": "Klik waar de notitie moet komen — Esc om te annuleren",
     "offsetPick": "Verschuiven: klik op een object om te verschuiven",
     "offsetDistance": "Verschuiven: typ de afstand en druk op Enter (bijv. 100)",
     "offsetDistanceInvalid": "Verschuiven: voer een positieve afstand in, bijv. 100",
@@ -635,5 +662,28 @@
     "noCorrections": "Er zijn nog geen correcties.",
     "insertPlaceholder": "Tekst invoegen",
     "replacePlaceholder": "Vervangende tekst"
+  },
+  "flattenAll": {
+    "title": "Alle markeringen afvlakken",
+    "message": "De markeringen in dit document ({{count}}) worden deel van de pagina-inhoud. Elke PDF-lezer toont ze, maar ze zijn niet meer als markering te selecteren of te bewerken.",
+    "allowUnflatten": "Terughalen toestaan",
+    "allowUnflattenHint": "Er blijft een kopie van de markeringen in het bestand, zodat Afvlakken ongedaan ze later kan terughalen, ook na opslaan en heropenen.",
+    "noUnflattenHint": "Er blijft geen kopie: na opslaan zijn de markeringen voorgoed deel van de pagina.",
+    "saveNote": "Notities en andere markeringen zonder uiterlijk op de pagina blijven markering. Het bestand verandert pas bij opslaan; tot dan maakt Ongedaan maken deze stap ongedaan.",
+    "ok": "Afvlakken",
+    "busy": "Markeringen afvlakken...",
+    "nothing": "Dit document heeft geen markeringen om af te vlakken.",
+    "nothingBaked": "Geen van de markeringen heeft een uiterlijk op de pagina; er is niets afgevlakt.",
+    "notLoaded": "De markeringen van dit document worden nog geladen. Probeer het zo opnieuw.",
+    "done": "Markeringen afgevlakt: {{count}}.",
+    "kept": "Markering gebleven (geen uiterlijk op de pagina): {{count}}.",
+    "failed": "Afvlakken mislukt: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Markeringen terughalen...",
+    "nothing": "Dit document heeft geen afgevlakte markeringen om terug te halen.",
+    "noRecovery": "De markeringen in dit document zijn afgevlakt zonder terughalen toe te staan. Ze zijn deel van de pagina-inhoud en kunnen niet worden teruggehaald.",
+    "done": "Markeringen teruggehaald: {{count}}.",
+    "failed": "Terughalen mislukt: {{error}}"
   }
 }

@@ -10,12 +10,15 @@ import { tekstvakKnipvlak } from './rendering/textbox-layout.js';
 import { drawArrowheadOnCanvas, applyBorderStyle, drawDimensionLineEnding } from './rendering/decorations.js';
 import { catmullRomSpline } from '../tools/tools/spline-tool.js';
 import { catmullRomToBezier, splineArrowEndTangent } from './spline-arrow-geometry.js';
+import { calloutLeiderKoppen } from './callout-koppen.js';
+import { koppenVan } from '../pdf/lijnkoppen.js';
 import { drawDimension, drawMeasureAreaShape, drawCentroidLabel, drawMeasurePerimeterShape, drawVlakZijdematen } from './rendering/measurements.js';
 import { vlakZijdeTeksten } from './measurement.js';
 import { maatlijnTekst } from './maat-label.js';
 import { maatlijnVelden } from './maatlijn-geometrie.js';
 import { tagWeergaveParams } from '../plattegrond/ruimte-koppeling.js';
 import { applyHatchFill, applyHatchFillPolygon } from './rendering/hatch-patterns.js';
+import { isVreemdeTelling, tellingStraal } from './telling.js';
 import { drawWall } from './rendering/walls.js';
 import { buildStavenreeks } from './stavenreeks.js';
 import { stavenreeksPxPerMm } from './stavenreeks-scale.js';
@@ -40,6 +43,8 @@ import { updateQuickAccessButtons, updateContextualTabs, drawGrid, snapToGrid } 
 import { drawCommentIcon } from './rendering/comment-icons.js';
 import { drawCaret, drawMarkupLines, replaceStrikeColor } from './rendering/caret.js';
 import { spatialIndex, annotationBounds } from './spatial-index.js';
+import { blendCanvasWaarde, isGemengd } from './blend-modes.js';
+import { tekenGemengdTegenPagina } from './rendering/mengen-tegen-pagina.js';
 import { bitmapVoor, bijNieuweTegel, KNIPSEL_UITVOER_FOUT } from './vector-snippet-preview.js';
 import { invalidateScaleRegionCache, pixelsPerUnitFor, getRegionScaleFactor } from './scale-region.js';
 import { metSchaalBronnen } from './schaal-bronnen.js';
@@ -201,6 +206,10 @@ function _drawPolarOverlay(ctx, snapResult, scale) {
 // alleen tijdens renderAnnotationsForPage gezet — die tekent synchroon — zodat
 // drawAnnotation weet dat er geen bewerkingstoestand in de uitvoer hoort.
 let _lagen = null;
+
+// Alleen tijdens het tekenen van de dekking van een gemengde annotatie (zie
+// _tekenGemengd): de annotatie dan zonder haar mengmodus.
+let _zonderMengmodus = false;
 
 /** Tekent deze rendering laag `naam`? Zonder uitvoermodus altijd. */
 function laag(naam) {
@@ -503,7 +512,8 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
   lw = thinLw(lw);
   ctx.lineWidth = lw;
   ctx.globalAlpha = baseOpacity;
-  ctx.globalCompositeOperation = annotation.blendMode === 'multiply' ? 'multiply' : 'source-over';
+  // Alle zestien modi, met de canvasnamen (color-dodge, …) — #614.
+  ctx.globalCompositeOperation = _zonderMengmodus ? 'source-over' : blendCanvasWaarde(annotation.blendMode);
 
   switch (annotation.type) {
     case 'draw':
@@ -846,6 +856,17 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       break;
 
     case 'polygon':
+      if (isVreemdeTelling(annotation) && Array.isArray(annotation.points)) {
+        // Telling van een ander programma (#621): een stip per hoekpunt.
+        const tr = tellingStraal(annotation);
+        ctx.save();
+        ctx.fillStyle = strokeColor;
+        for (const p of annotation.points) {
+          ctx.beginPath(); ctx.arc(p.x, p.y, tr, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.restore();
+        break;
+      }
       ctx.save();
       if (annotation.rotation || annotation.flipX || annotation.flipY) {
         const polyCX = annotation.x + annotation.width / 2;
@@ -1203,33 +1224,36 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       // Draw the leader line (not rotated - arrow stays in place).
       // 'curved' leader = vloeiende Catmull-Rom-spline door
       // [armOrigin, knee, arrowTip] i.p.v. twee rechte segmenten (ronde aanhaallijn).
+      // Koppen (#612): End op de punt, Start waar de lijn het tekstvak
+      // verlaat, beide op headSize (callout-koppen.js, ook voor de saver).
       const coCurved = annotation.leaderStyle === 'curved';
-      let angle;
+      const coKoppen = koppenVan(annotation);
+      const coHol = annotation.headFill === false;
+      const coLeider = calloutLeiderKoppen({
+        arm: { x: armOriginX, y: armOriginY }, knie: { x: kneeX, y: kneeY }, tip: { x: arrowX, y: arrowY },
+        startHead: coKoppen.startHead, endHead: coKoppen.endHead, headSize: coKoppen.headSize,
+        lineWidth: ctx.lineWidth, hol: coHol, gebogen: coCurved,
+      });
       ctx.beginPath();
       if (coCurved) {
-        const coLeaderPts = [
-          { x: armOriginX, y: armOriginY },
-          { x: kneeX, y: kneeY },
-          { x: arrowX, y: arrowY },
-        ];
-        const coSegs = catmullRomToBezier(coLeaderPts);
+        const coSegs = catmullRomToBezier(coLeider.lijn);
         ctx.moveTo(armOriginX, armOriginY);
         for (const s of coSegs) {
           ctx.bezierCurveTo(s.c1x, s.c1y, s.c2x, s.c2y, s.x1, s.y1);
         }
-        ctx.stroke();
-        angle = splineArrowEndTangent(coLeaderPts);
       } else {
-        ctx.moveTo(armOriginX, armOriginY);
-        ctx.lineTo(kneeX, kneeY);
-        ctx.lineTo(arrowX, arrowY);
-        ctx.stroke();
-        angle = Math.atan2(arrowY - kneeY, arrowX - kneeX);
+        const [coL0, coL1, coL2] = coLeider.lijn;
+        ctx.moveTo(coL0.x, coL0.y);
+        ctx.lineTo(coL1.x, coL1.y);
+        ctx.lineTo(coL2.x, coL2.y);
       }
+      ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Draw arrowhead — filled (closed) by default, but honor explicit per-annotation style if set
       ctx.fillStyle = rawStrokeColor || strokeColor;
-      drawArrowheadOnCanvas(ctx, arrowX, arrowY, angle, annotation.headSize || 7, annotation.arrowStyle || 'closed');
+      for (const kop of [coLeider.eind, coLeider.begin]) {
+        if (kop) drawArrowheadOnCanvas(ctx, kop.x, kop.y, kop.hoek, coKoppen.headSize, kop.stijl, { hol: coHol });
+      }
 
       ctx.save();
       if (annotation.rotation || annotation.flipX || annotation.flipY) {
@@ -2743,6 +2767,40 @@ function drawTextEdits(ctx, pageNum) {
 // Track annotation count to know when spatial index needs rebuild
 let _lastIndexedCount = -1;
 
+// Het paginacanvas onder een annotatie-overlay op het scherm: #pdf-canvas
+// onder #annotation-canvas, .pdf-canvas in dezelfde paginacontainer in de
+// doorlopende weergave. Null voor een canvas buiten beeld (export, afdruk,
+// miniatuur): daar staat de pagina op hetzelfde canvas of draagt het bestand
+// de mengmodus zelf (/BM).
+function _paginaOnder(canvas) {
+  if (!canvas || typeof canvas.getBoundingClientRect !== 'function') return null;
+  if (canvas.id === 'annotation-canvas') return document.getElementById('pdf-canvas');
+  if (canvas.classList?.contains('annotation-canvas')) {
+    return canvas.parentElement?.querySelector(':scope > .pdf-canvas') || null;
+  }
+  return null;
+}
+
+// Een annotatie met mengmodus (#614): op de doorzichtige overlay mengt
+// globalCompositeOperation met niets, dus mengen we met de pagina eronder
+// (rendering/mengen-tegen-pagina.js). Valt dat terug, dan gewoon tekenen.
+function _tekenGemengd(ctx, annotation, snippetBitmaps, tussenlagen) {
+  const teken = (c, normaal) => {
+    c.save();
+    _zonderMengmodus = normaal;
+    try {
+      drawAnnotation(c, annotation, snippetBitmaps);
+    } finally {
+      _zonderMengmodus = false;
+      c.restore();
+    }
+  };
+  const gelukt = tekenGemengdTegenPagina(ctx, _paginaOnder(ctx.canvas), teken,
+    annotationBounds(annotation, { goedkoop: true }),
+    { marge: Math.max(4, (annotation.lineWidth || 1) * 2), tussenlagen });
+  if (!gelukt) teken(ctx, false);
+}
+
 // Valt deze annotatie volledig buiten het (ruim genomen) zichtbare gebied?
 // De omhullende komt uit annotationBounds — dezelfde definitie die de spatial
 // index hanteert — zodat lijnen, polylijnen, vrije hand, wolken en metingen
@@ -2939,6 +2997,14 @@ export function redrawAnnotations(lightweight = false) {
   metSchaalBronnen(() => annotations.forEach(annotation => {
     if (annotation.page !== curPage) return;
     if (_buitenBeeld(annotation, vpX, vpY, vpW, vpH)) return;
+    // Een tekstmarkering met een andere mengmodus dan vermenigvuldigen mengt
+    // zelf met de pagina; de markeerlaag kan alleen vermenigvuldigen.
+    const gemengd = isGemengd(annotation.blendMode);
+    if (gemengd && !(annotation.type === 'textHighlight' && textHighlightCtx && annotation.blendMode === 'multiply')) {
+      _tekenGemengd(annotationCtx, annotation, null,
+        textHighlightCanvas ? [{ canvas: textHighlightCanvas, op: 'multiply' }] : []);
+      return;
+    }
     const targetCtx = (annotation.type === 'textHighlight' && textHighlightCtx)
       ? textHighlightCtx
       : annotationCtx;
@@ -3141,6 +3207,10 @@ function tekenPaginaLagen(ctx, pageNum, width, height, overrideDpr, renderOffset
   metSchaalBronnen(() => annotations.forEach(annotation => {
     if (annotation.page !== pageNum) return;
     if (_buitenBeeld(annotation, cvX, cvY, cvW, cvH)) return;
+    if (isGemengd(annotation.blendMode) && _paginaOnder(ctx.canvas)) {
+      _tekenGemengd(ctx, annotation, snippetBitmaps, []);
+      return;
+    }
     drawAnnotation(ctx, annotation, snippetBitmaps);
   }));
 

@@ -64,6 +64,9 @@
     "screenshot": "Tangkap Skrin",
     "captureFullPage": "Tangkap Halaman Penuh",
     "screenshotOptions": "Pilihan tangkap skrin",
+    "captureRegionTitle": "Tangkap skrin: pilih kawasan dan salin atau simpan sebagai imej",
+    "quickCopy": "Salin kawasan pada resolusi skrin",
+    "quickCopyTitle": "Pilih kawasan dan terus salin ke papan keratan pada resolusi skrin",
     "fullPage": "Halaman Penuh",
     "region": "Kawasan",
     "placeAsOverlay": "Letak sebagai Tindihan",
@@ -161,7 +164,11 @@
     "snapActive": "Rakam Hidup",
     "loading": "Memuatkan...",
     "northArrow": "Anak Panah Utara",
-    "parametricSymbol": "Simbol parametrik"
+    "parametricSymbol": "Simbol parametrik",
+    "flattenAll": "Ratakan semua",
+    "flattenAllTooltip": "Ratakan semua penanda ke dalam kandungan halaman",
+    "unflattenAll": "Buat asal perataan",
+    "unflattenAllTooltip": "Pulihkan penanda yang diratakan dengan pemulihan dibenarkan"
   },
   "view": {
     "pageDisplay": "Paparan Halaman",
@@ -372,6 +379,25 @@
     "blendMode": "Mod Campuran",
     "normal": "Normal",
     "multiply": "Darab",
+    "blend": {
+      "normal": "Normal",
+      "multiply": "Darab",
+      "screen": "Skrin",
+      "overlay": "Tindihan",
+      "darken": "Gelapkan",
+      "lighten": "Cerahkan",
+      "colorDodge": "Elak Warna",
+      "colorBurn": "Bakar Warna",
+      "hardLight": "Cahaya Keras",
+      "softLight": "Cahaya Lembut",
+      "difference": "Perbezaan",
+      "exclusion": "Pengecualian",
+      "hue": "Rona",
+      "saturation": "Ketepuan",
+      "color": "Warna",
+      "luminosity": "Kecerahan"
+    },
+    "blendHint": "Cara penanda bergabung dengan halaman di bawahnya. Isian dan garisan memberikan warnanya; mod campuran hanya menentukan cara warna itu bercampur dengan halaman.",
     "startLabel": "Mula:",
     "startArrow": "Anak Panah Mula",
     "endLabel": "Akhir:",
@@ -579,6 +605,7 @@
     "enlarge": "Besarkan",
     "dimHint": "klik, kemudian taip cth. 500,300 + Enter",
     "dimInputHint": "Taip dimensi (cth. 500,300 atau satu saiz) dan tekan Enter — atau seret untuk melukis",
+    "calloutStep2": "Klik di tempat nota patut diletakkan — Esc untuk membatalkan",
     "offsetPick": "Anjakan: klik objek untuk dianjak",
     "offsetDistance": "Anjakan: taip jarak dan tekan Enter (cth. 100)",
     "offsetDistanceInvalid": "Anjakan: masukkan jarak positif, cth. 100",
@@ -635,5 +662,28 @@
     "noCorrections": "Belum ada pembetulan.",
     "insertPlaceholder": "Teks untuk disisip",
     "replacePlaceholder": "Teks gantian"
+  },
+  "flattenAll": {
+    "title": "Ratakan semua penanda",
+    "message": "Penanda dalam dokumen ini ({{count}}) menjadi sebahagian daripada kandungan halaman. Setiap pemapar PDF memaparkannya, tetapi ia tidak lagi boleh dipilih atau disunting sebagai penanda.",
+    "allowUnflatten": "Benarkan pemulihan",
+    "allowUnflattenHint": "Salinan penanda disimpan dalam fail, supaya \"Buat asal perataan\" boleh memulihkannya kemudian, walaupun selepas disimpan dan dibuka semula.",
+    "noUnflattenHint": "Tiada salinan disimpan: selepas disimpan, penanda menjadi sebahagian halaman secara kekal.",
+    "saveNote": "Nota dan penanda lain tanpa rupa pada halaman kekal sebagai penanda. Fail hanya berubah apabila anda menyimpan; sehingga itu Buat asal membatalkan langkah ini.",
+    "ok": "Ratakan",
+    "busy": "Meratakan penanda...",
+    "nothing": "Dokumen ini tiada penanda untuk diratakan.",
+    "nothingBaked": "Tiada penanda yang mempunyai rupa pada halaman, jadi tiada apa yang diratakan.",
+    "notLoaded": "Penanda dokumen ini masih dimuatkan. Cuba lagi sebentar nanti.",
+    "done": "Penanda diratakan: {{count}}.",
+    "kept": "Kekal sebagai penanda (tiada rupa pada halaman): {{count}}.",
+    "failed": "Perataan gagal: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Memulihkan penanda...",
+    "nothing": "Dokumen ini tiada penanda yang diratakan untuk dipulihkan.",
+    "noRecovery": "Penanda dalam dokumen ini diratakan tanpa membenarkan pemulihan. Ia sebahagian daripada kandungan halaman dan tidak boleh dipulihkan.",
+    "done": "Penanda dipulihkan: {{count}}.",
+    "failed": "Pemulihan gagal: {{error}}"
   }
 }

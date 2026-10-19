@@ -29,6 +29,7 @@ import ShiftPageDialog from './dialogs/ShiftPageDialog.jsx';
 import OcrLanguageDialog from './dialogs/OcrLanguageDialog.jsx';
 import ResizePagesDialog from './dialogs/ResizePagesDialog.jsx';
 import CompressDialog from './dialogs/CompressDialog.jsx';
+import ScreenshotDialog from './dialogs/ScreenshotDialog.jsx';
 import FeedbackDialog from './dialogs/FeedbackDialog.jsx';
 import MessageDialog from './dialogs/MessageDialog.jsx';
 import AboutDialog from './dialogs/AboutDialog.jsx';
@@ -47,6 +48,7 @@ import CompareDialog from './compare/CompareDialog.jsx';
 import CadExportDialog from './dialogs/CadExportDialog.jsx';
 import CadImportDialog from './dialogs/CadImportDialog.jsx';
 import AnnotationLayerDeleteDialog from './dialogs/AnnotationLayerDeleteDialog.jsx';
+import FlattenAllDialog from './dialogs/FlattenAllDialog.jsx';
 import TextEditOverlay from './TextEditOverlay.jsx';
 import StavenreeksInlineEditor from './StavenreeksInlineEditor.jsx';
 import ParametricLabelInlineEditor from './ParametricLabelInlineEditor.jsx';
@@ -93,6 +95,7 @@ const DIALOG_MAP = {
   'ocr-language': OcrLanguageDialog,
   'resize-pages': ResizePagesDialog,
   'compress': CompressDialog,
+  'screenshot': ScreenshotDialog,
   'feedback': FeedbackDialog,
   'message': MessageDialog,
   'about': AboutDialog,
@@ -110,6 +113,7 @@ const DIALOG_MAP = {
   'cad-export': CadExportDialog,
   'cad-import': CadImportDialog,
   'annotation-layer-delete': AnnotationLayerDeleteDialog,
+  'flatten-all': FlattenAllDialog,
   'pdf-password': PasswordDialog,
 };
 

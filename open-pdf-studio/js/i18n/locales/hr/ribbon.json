@@ -64,6 +64,9 @@
     "screenshot": "Snimka zaslona",
     "captureFullPage": "Snimi cijelu stranicu",
     "screenshotOptions": "Opcije snimke zaslona",
+    "captureRegionTitle": "Snimka zaslona: odaberite područje i kopirajte ga ili spremite kao sliku",
+    "quickCopy": "Kopiraj područje u razlučivosti zaslona",
+    "quickCopyTitle": "Odaberite područje i odmah ga kopirajte u međuspremnik, u razlučivosti zaslona",
     "fullPage": "Cijela stranica",
     "region": "Područje",
     "placeAsOverlay": "Postavi kao preklop",
@@ -161,7 +164,11 @@
     "snapActive": "Privlačenje uklj.",
     "loading": "Učitavanje...",
     "northArrow": "Strelica sjevera",
-    "parametricSymbol": "Parametarski simbol"
+    "parametricSymbol": "Parametarski simbol",
+    "flattenAll": "Spljošti sve",
+    "flattenAllTooltip": "Spljošti sve oznake u sadržaj stranice",
+    "unflattenAll": "Poništi spljoštenje",
+    "unflattenAllTooltip": "Vrati oznake spljoštene uz dopušteno vraćanje"
   },
   "view": {
     "pageDisplay": "Prikaz stranice",
@@ -372,6 +379,25 @@
     "blendMode": "Način miješanja",
     "normal": "Normalno",
     "multiply": "Množenje",
+    "blend": {
+      "normal": "Normalno",
+      "multiply": "Množenje",
+      "screen": "Zaslon",
+      "overlay": "Preklapanje",
+      "darken": "Tamnije",
+      "lighten": "Svjetlije",
+      "colorDodge": "Posvjetljivanje boje",
+      "colorBurn": "Zatamnjivanje boje",
+      "hardLight": "Jako svjetlo",
+      "softLight": "Meko svjetlo",
+      "difference": "Razlika",
+      "exclusion": "Isključenje",
+      "hue": "Nijansa",
+      "saturation": "Zasićenost",
+      "color": "Boja",
+      "luminosity": "Svjetlina"
+    },
+    "blendHint": "Kako se oznaka miješa sa stranicom ispod nje. Ispuna i obrub daju joj boju; način miješanja određuje samo kako se ta boja miješa sa stranicom.",
     "startLabel": "Početak:",
     "startArrow": "Početna strelica",
     "endLabel": "Kraj:",
@@ -579,6 +605,7 @@
     "enlarge": "Povećaj",
     "dimHint": "kliknite, zatim upišite npr. 500,300 + Enter",
     "dimInputHint": "Upišite dimenzije (npr. 500,300 ili jednu veličinu) i pritisnite Enter — ili crtajte povlačenjem",
+    "calloutStep2": "Kliknite gdje treba stajati bilješka — Esc za odustajanje",
     "offsetPick": "Odmak: kliknite objekt koji treba odmaknuti",
     "offsetDistance": "Odmak: upišite udaljenost i pritisnite Enter (npr. 100)",
     "offsetDistanceInvalid": "Odmak: unesite pozitivnu udaljenost, npr. 100",
@@ -635,5 +662,28 @@
     "noCorrections": "Još nema ispravaka.",
     "insertPlaceholder": "Umetni tekst",
     "replacePlaceholder": "Zamjenski tekst"
+  },
+  "flattenAll": {
+    "title": "Spljošti sve oznake",
+    "message": "Oznake u ovom dokumentu ({{count}}) postaju dio sadržaja stranice. Svaki PDF preglednik ih prikazuje, ali ih više nije moguće odabrati ni uređivati kao oznake.",
+    "allowUnflatten": "Dopusti vraćanje",
+    "allowUnflattenHint": "U datoteci ostaje kopija oznaka, pa ih „Poništi spljoštenje” može kasnije vratiti, i nakon spremanja i ponovnog otvaranja.",
+    "noUnflattenHint": "Kopija se ne čuva: nakon spremanja oznake su trajno dio stranice.",
+    "saveNote": "Bilješke i druge oznake bez izgleda na stranici ostaju oznake. Datoteka se mijenja tek pri spremanju; do tada Poništi vraća ovaj korak.",
+    "ok": "Spljošti",
+    "busy": "Spljoštavanje oznaka...",
+    "nothing": "Ovaj dokument nema oznaka za spljoštavanje.",
+    "nothingBaked": "Nijedna oznaka nema izgled na stranici, pa ništa nije spljošteno.",
+    "notLoaded": "Oznake ovog dokumenta još se učitavaju. Pokušajte ponovno za trenutak.",
+    "done": "Spljoštene oznake: {{count}}.",
+    "kept": "Zadržano kao oznake (bez izgleda na stranici): {{count}}.",
+    "failed": "Spljoštavanje nije uspjelo: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Vraćanje oznaka...",
+    "nothing": "Ovaj dokument nema spljoštenih oznaka za vraćanje.",
+    "noRecovery": "Oznake u ovom dokumentu spljoštene su bez dopuštenja vraćanja. Dio su sadržaja stranice i ne mogu se vratiti.",
+    "done": "Vraćene oznake: {{count}}.",
+    "failed": "Vraćanje nije uspjelo: {{error}}"
   }
 }

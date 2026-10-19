@@ -11,6 +11,7 @@ import {
   endUndoTransaction,
 } from '../../core/undo-manager.js';
 import { cloneAnnotation } from '../../annotations/factory.js';
+import { lintZetLijnkoppen, koppenVan } from '../../pdf/lijnkoppen.js';
 import { ondersteuntKruis, kruisZichtbaarVoorSelectie } from '../../annotations/kruis-geometrie.js';
 import { redrawAnnotations, redrawContinuous } from '../../annotations/rendering.js';
 import { computeTextboxContentHeight } from '../../annotations/rendering/shapes.js';
@@ -244,7 +245,6 @@ function computeSectionVisibility(type) {
   // Een invoegteken (#508) heeft de ingevoegde tekst als inhoud.
   const isTextContent = type === 'text' || type === 'comment' || type === 'caret';
   const isImage = type === 'image';
-  const isArrow = type === 'arrow';
   const isLineOrArrow = type === 'arrow' || type === 'line';
   const isTextMarkup = isTextAnchored({ type });
   const hideLineWidth = ['highlight', 'comment', 'image', 'textHighlight', 'caret'].includes(type);
@@ -267,7 +267,7 @@ function computeSectionVisibility(type) {
     general: true,
     replies: !isScaleBar,
     appearance: !isScaleBar,
-    lineEndings: isArrow || type === 'splineArrow' || type === 'measureDistance' || type === 'measurePerimeter',
+    lineEndings: lintZetLijnkoppen(type) || type === 'measureDistance' || type === 'measurePerimeter',
     dimensions: isLineOrArrow,
     measurement: isMeasurement,
     scaleBar: isScaleBar,
@@ -427,9 +427,12 @@ export function storeShowProperties(annotation) {
     cropTop: annotation.type === 'image' ? Math.round((annotation.cropTop || 0) * 100) : 0,
     cropRight: annotation.type === 'image' ? Math.round((annotation.cropRight || 0) * 100) : 0,
     cropBottom: annotation.type === 'image' ? Math.round((annotation.cropBottom || 0) * 100) : 0,
-    startHead: annotation.startHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'none'),
-    endHead: annotation.endHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'open'),
-    headSize: annotation.headSize || 12,
+    // Pijl, gebogen pijl en callout: de koppen zoals het scherm ze tekent (#612).
+    ...(lintZetLijnkoppen(annotation.type) ? koppenVan(annotation) : {
+      startHead: annotation.startHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'none'),
+      endHead: annotation.endHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'open'),
+      headSize: annotation.headSize || 12,
+    }),
     arrowLength: (annotation.type === 'arrow' || annotation.type === 'line')
       ? (() => {
           // Show the length in measured units (mm etc.), resolved at the
@@ -725,9 +728,9 @@ export function storeShowMultiSelection(selected) {
     cropTop: 0,
     cropRight: 0,
     cropBottom: 0,
-    startHead: sharedValue(selected, a => a.startHead || 'none', 'mixed'),
-    endHead: sharedValue(selected, a => a.endHead || 'open', 'mixed'),
-    headSize: sharedValue(selected, a => a.headSize || 12, 'mixed'),
+    startHead: sharedValue(selected, a => koppenVan(a).startHead, 'mixed'),
+    endHead: sharedValue(selected, a => koppenVan(a).endHead, 'mixed'),
+    headSize: sharedValue(selected, a => koppenVan(a).headSize, 'mixed'),
     arrowLength: '',
     replies: [],
     multiCount: selected.length,
@@ -751,7 +754,7 @@ export function storeShowMultiSelection(selected) {
     general: true,
     replies: false,
     appearance: true,
-    lineEndings: allSameType && (sharedType === 'arrow' || sharedType === 'splineArrow'),
+    lineEndings: allSameType && lintZetLijnkoppen(sharedType),
     dimensions: false,
     measurement: false,
     textFormat: allMatch(t => textboxTypes.has(t)),

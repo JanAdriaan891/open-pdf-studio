@@ -64,6 +64,9 @@
     "screenshot": "Capture d'écran",
     "captureFullPage": "Capturer la page entière",
     "screenshotOptions": "Options de capture d'écran",
+    "captureRegionTitle": "Capture d'écran : sélectionnez une zone et copiez-la ou enregistrez-la comme image",
+    "quickCopy": "Copier la zone à la résolution de l'écran",
+    "quickCopyTitle": "Sélectionnez une zone et copiez-la immédiatement dans le presse-papiers, à la résolution de l'écran",
     "fullPage": "Page entière",
     "region": "Zone",
     "placeAsOverlay": "Placer en superposition",
@@ -161,7 +164,11 @@
     "snapActive": "Snap Act.",
     "loading": "Chargement...",
     "northArrow": "Flèche du nord",
-    "parametricSymbol": "Symbole paramétrique"
+    "parametricSymbol": "Symbole paramétrique",
+    "flattenAll": "Tout aplatir",
+    "flattenAllTooltip": "Aplatir toutes les annotations dans le contenu de la page",
+    "unflattenAll": "Annuler l'aplatissement",
+    "unflattenAllTooltip": "Restaurer les annotations aplaties avec restauration autorisée"
   },
   "view": {
     "pageDisplay": "Affichage de la page",
@@ -372,6 +379,25 @@
     "blendMode": "Mode de fusion",
     "normal": "Normal",
     "multiply": "Multiplication",
+    "blend": {
+      "normal": "Normal",
+      "multiply": "Multiplication",
+      "screen": "Écran",
+      "overlay": "Incrustation",
+      "darken": "Obscurcir",
+      "lighten": "Éclaircir",
+      "colorDodge": "Densité couleur -",
+      "colorBurn": "Densité couleur +",
+      "hardLight": "Lumière crue",
+      "softLight": "Lumière tamisée",
+      "difference": "Différence",
+      "exclusion": "Exclusion",
+      "hue": "Teinte",
+      "saturation": "Saturation",
+      "color": "Couleur",
+      "luminosity": "Luminosité"
+    },
+    "blendHint": "Comment l’annotation se combine avec la page en dessous. Le remplissage et le contour lui donnent sa couleur ; le mode de fusion décide seulement comment cette couleur se mêle à la page.",
     "startLabel": "Début :",
     "startArrow": "Flèche de début",
     "endLabel": "Fin :",
@@ -579,6 +605,7 @@
     "enlarge": "Agrandir",
     "dimHint": "cliquez, puis tapez ex. 500,300 + Enter",
     "dimInputHint": "Tapez les dimensions (ex. 500,300 ou une seule taille) et appuyez sur Enter — ou faites glisser pour dessiner",
+    "calloutStep2": "Cliquez à l'endroit où placer la note — Échap pour annuler",
     "offsetPick": "Décaler : cliquez sur un objet à décaler",
     "offsetDistance": "Décaler : tapez la distance et appuyez sur Enter (ex. 100)",
     "offsetDistanceInvalid": "Décaler : saisissez une distance positive, ex. 100",
@@ -635,5 +662,28 @@
     "noCorrections": "Il n’y a pas encore de corrections.",
     "insertPlaceholder": "Texte à insérer",
     "replacePlaceholder": "Texte de remplacement"
+  },
+  "flattenAll": {
+    "title": "Aplatir toutes les annotations",
+    "message": "Les annotations de ce document ({{count}}) font désormais partie du contenu de la page. Tous les lecteurs PDF les affichent, mais elles ne peuvent plus être sélectionnées ni modifiées comme annotations.",
+    "allowUnflatten": "Autoriser la restauration",
+    "allowUnflattenHint": "Une copie des annotations est conservée dans le fichier ; « Annuler l'aplatissement » peut ainsi les restaurer plus tard, même après enregistrement et réouverture.",
+    "noUnflattenHint": "Aucune copie n'est conservée : une fois enregistré, les annotations font définitivement partie de la page.",
+    "saveNote": "Les notes et autres annotations sans apparence sur la page restent des annotations. Le fichier ne change qu'à l'enregistrement ; d'ici là, Annuler annule cette étape.",
+    "ok": "Aplatir",
+    "busy": "Aplatissement des annotations...",
+    "nothing": "Ce document ne contient aucune annotation à aplatir.",
+    "nothingBaked": "Aucune annotation n'a d'apparence sur la page ; rien n'a été aplati.",
+    "notLoaded": "Les annotations de ce document sont encore en cours de chargement. Réessayez dans un instant.",
+    "done": "Annotations aplaties : {{count}}.",
+    "kept": "Conservées comme annotations (sans apparence sur la page) : {{count}}.",
+    "failed": "Échec de l'aplatissement : {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Restauration des annotations...",
+    "nothing": "Ce document ne contient aucune annotation aplatie à restaurer.",
+    "noRecovery": "Les annotations de ce document ont été aplaties sans autoriser la restauration. Elles font partie du contenu de la page et ne peuvent pas être restaurées.",
+    "done": "Annotations restaurées : {{count}}.",
+    "failed": "Échec de la restauration : {{error}}"
   }
 }
