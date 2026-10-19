@@ -803,6 +803,21 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         const ha = pdfNum(context.lookup(haRaw) || haRaw);
         if (ha !== null) colors.opsHatchAngle = ha;
       }
+      // Tegelpatroon van een ander programma (#621): de naam in /PatternName
+      // (tekst of naam) en de kleur in /PatternColor. Het patroon zelf staat
+      // in de appearance; een bekende naam wordt een arcering van de app
+      // (saver/hatch-meta.js), de sleutels zelf reizen ongewijzigd mee.
+      const pnRaw = annotDict.get(PDFName.of('PatternName'));
+      if (pnRaw !== undefined) {
+        const pn = context.lookup(pnRaw) || pnRaw;
+        const naam = pn instanceof PDFName ? pn.decodeText() : leesTekstString(context, pn);
+        if (naam) colors.pdfPatternName = naam;
+      }
+      const pcRaw = annotDict.get(PDFName.of('PatternColor'));
+      if (pcRaw !== undefined) {
+        const pc = pdfColorToHex(context.lookup(pcRaw) || pcRaw, context);
+        if (pc) colors.pdfPatternColor = pc;
+      }
 
       // Read /OPS_DikteMm — wall thickness in real-world mm (wall round-trip)
       const dkRaw = annotDict.get(PDFName.of('OPS_DikteMm'));

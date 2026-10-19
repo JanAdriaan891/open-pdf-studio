@@ -3,6 +3,37 @@ import { kruisEindpuntenEllips } from '../../annotations/kruis-geometrie.js';
 import { hasFill, hasStroke, colorWithoutStroke, kanZonderRand } from '../../annotations/fill-utils.js';
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
 import { blendPdfNaam } from '../../annotations/blend-modes.js';
+import { hatchFillOps } from './appearance-vectors.js';
+
+/** Heeft de vorm een arcering uit het eigenschappenpaneel (#621)? */
+function heeftArcering(ann) {
+  return !!ann?.hatchPattern && ann.hatchPattern !== 'none';
+}
+
+/**
+ * Arcering van een rechthoek of ellips in de appearance (#621), in de eigen
+ * ruimte van de stream: oorsprong linksonder, y omhoog, het vak 0 0 w h. De
+ * punten zijn de omtrek in app-coördinaten van het vak.
+ */
+function vormArcering(ann, punten, w, h) {
+  if (!heeftArcering(ann)) return '';
+  const X = (x) => x - ann.x;
+  const Y = (y) => ann.y + h - y;
+  return hatchFillOps({
+    points: punten, holes: null, hatchPattern: ann.hatchPattern,
+    hatchColorRgb: hexToRgb(ann.hatchColor || ann.strokeColor || ann.color || '#000000'),
+    hatchScale: ann.hatchScale, hatchAngle: ann.hatchAngle, X, Y,
+  });
+}
+
+/** De ellips van een vak als veelhoek in app-coördinaten (voor de arcering). */
+function ellipsPunten(ann, w, h, n = 72) {
+  const cx = ann.x + w / 2, cy = ann.y + h / 2;
+  return [...Array(n)].map((_, i) => {
+    const a = (i / n) * 2 * Math.PI;
+    return { x: cx + (w / 2) * Math.cos(a), y: cy + (h / 2) * Math.sin(a) };
+  });
+}
 
 // Convert hex color to RGB values (0-1 range)
 export function hexToRgb(hex) {
@@ -422,11 +453,15 @@ export function generateAppearanceStream(context, ann, convertY) {
         const lw = ann.lineWidth ?? 2;
         // Geen rand (#431): alleen de vulling. Het kruis blijft, in de kleur
         // waarin het scherm het tekent.
+        const vakArcering = ann.type === 'box' ? vormArcering(ann, [
+          { x: ann.x, y: ann.y }, { x: ann.x + w, y: ann.y },
+          { x: ann.x + w, y: ann.y + h }, { x: ann.x, y: ann.y + h }], w, h) : '';
         if (randSleutelZonderRand(ann)) {
           if (hasFill(ann.fillColor)) {
             const [fr, fg, fb] = hexToRgb(ann.fillColor);
             streamContent += `${fr} ${fg} ${fb} rg\n0 0 ${w} ${h} re f\n`;
           }
+          streamContent += vakArcering;
           if (ann.cross) {
             const [kr, kg, kb] = hexToRgb(colorWithoutStroke(ann));
             streamContent += `${lw} w\n${kr} ${kg} ${kb} RG\n0 0 m ${w} ${h} l ${w} 0 m 0 ${h} l S\n`;
@@ -438,7 +473,7 @@ export function generateAppearanceStream(context, ann, convertY) {
         // vast dat er bewust niets geschilderd wordt, zodat geen enkele lezer
         // er alsnog zelf een rand bij verzint.
         if (onzichtbaarVlak(ann)) {
-          streamContent = `0 0 ${w} ${h} re n\n`;
+          streamContent = `0 0 ${w} ${h} re n\n${vakArcering}`;
           if (ann.type === 'box' && ann.cross) {
             streamContent += `${lw} w\n${r} ${g} ${b} RG\n0 0 m ${w} ${h} l ${w} 0 m 0 ${h} l S\n`;
           }
@@ -449,7 +484,14 @@ export function generateAppearanceStream(context, ann, convertY) {
         // en 'transparent' zijn waar, en hexToRgb() maakt er ZWART van — een
         // vorm zonder vulling kreeg zo een zwart blok in zijn uiterlijk (#433),
         // terwijl het annotatie-woordenboek er terecht geen /IC bij zette.
-        if (hasFill(ann.fillColor)) {
+        if (vakArcering) {
+          // Met arcering (#621): vulling, arcering, rand — de volgorde van het scherm.
+          if (hasFill(ann.fillColor)) {
+            const [fr, fg, fb] = hexToRgb(ann.fillColor);
+            streamContent += `${fr} ${fg} ${fb} rg\n0 0 ${w} ${h} re f\n`;
+          }
+          streamContent += `${vakArcering}0 0 ${w} ${h} re S\n`;
+        } else if (hasFill(ann.fillColor)) {
           const [fr, fg, fb] = hexToRgb(ann.fillColor);
           streamContent += `${fr} ${fg} ${fb} rg\n0 0 ${w} ${h} re B\n`;
         } else {
@@ -482,6 +524,7 @@ export function generateAppearanceStream(context, ann, convertY) {
           }
           kruis += 'S\n';
         }
+        const ellipsArcering = vormArcering(ann, ellipsPunten(ann, w, h), w, h);
         // Geen rand (#431): alleen de vulling; het kruis blijft, in de kleur
         // waarin het scherm het tekent.
         if (randSleutelZonderRand(ann)) {
@@ -489,6 +532,7 @@ export function generateAppearanceStream(context, ann, convertY) {
             const [fr, fg, fb] = hexToRgb(ann.fillColor);
             streamContent += `${fr} ${fg} ${fb} rg\n${ellips}f\n`;
           }
+          streamContent += ellipsArcering;
           if (kruis) {
             const [kr, kg, kb] = hexToRgb(colorWithoutStroke(ann));
             streamContent += `${lw} w\n${kr} ${kg} ${kb} RG\n${kruis}`;
@@ -498,7 +542,7 @@ export function generateAppearanceStream(context, ann, convertY) {
         const [r, g, b] = hexToRgb(ann.strokeColor || ann.color || '#000000');
         // Onzichtbaar vlak (#435): zie de rechthoek hierboven.
         if (onzichtbaarVlak(ann)) {
-          streamContent = `${ellips}n\n`;
+          streamContent = `${ellips}n\n${ellipsArcering}`;
           if (kruis) streamContent += `${lw} w\n${r} ${g} ${b} RG\n${kruis}`;
           break;
         }
@@ -509,8 +553,14 @@ export function generateAppearanceStream(context, ann, convertY) {
           const [fr, fg, fb] = hexToRgb(ann.fillColor);
           streamContent += `${fr} ${fg} ${fb} rg\n`;
         }
-        streamContent += ellips;
-        streamContent += ellipsVulling ? 'B\n' : 'S\n';
+        if (ellipsArcering) {
+          // Met arcering (#621): vulling, arcering, rand.
+          if (ellipsVulling) streamContent += `${ellips}f\n`;
+          streamContent += `${ellipsArcering}${ellips}S\n`;
+        } else {
+          streamContent += ellips;
+          streamContent += ellipsVulling ? 'B\n' : 'S\n';
+        }
         streamContent += kruis;
         break;
       }

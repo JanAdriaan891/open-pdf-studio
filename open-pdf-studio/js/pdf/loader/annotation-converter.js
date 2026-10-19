@@ -9,7 +9,7 @@ import { ifcCategoryForAnnotationType, ifcCategoryForParametric } from '../../so
 import { nenIfcForStamp } from '../../solid/data/nenIfcMap.js';
 import { STAVENREEKS_DEFAULTS } from '../../annotations/stavenreeks.js';
 import { knipselUitExtra } from './vector-snippet-load.js';
-import { hatchUitExtra } from '../saver/hatch-meta.js';
+import { hatchUitExtra, vormHatchUitExtra } from '../saver/hatch-meta.js';
 import { wandJoinUitExtra } from '../saver/wand-join-meta.js';
 import { wolkVakUitHoeken, wolkVakUitZeshoek } from '../saver/veelhoek-grondvorm.js';
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
@@ -457,6 +457,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         borderStyle: mapBorderStyle(annot, extraColors)
       };
       if (sqRotation) sqProps.rotation = sqRotation;
+      // Arcering (#621): eigen sleutels of een bekend /PatternName.
+      Object.assign(sqProps, vormHatchUitExtra(extraColors));
       if (extraColors.cross && sqProps.type === 'box') sqProps.cross = true;
       // Vorm zonder rand (#431): strokeColor 'none' met de lijndikte-instelling.
       Object.assign(sqProps, randloosUitExtra(extraColors));
@@ -500,6 +502,7 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         borderStyle: mapBorderStyle(annot, extraColors)
       };
       if (crRotation) crProps.rotation = crRotation;
+      Object.assign(crProps, vormHatchUitExtra(extraColors)); // arcering (#621)
       if (extraColors.cross) crProps.cross = true;
       Object.assign(crProps, randloosUitExtra(extraColors)); // zonder rand (#431)
       // Onzichtbaar vlak (#435): hulplijn op het scherm, geen streek bij opslaan.
@@ -1100,6 +1103,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
           ...(polyRotatie ? { rotation: polyRotatie } : {}),
         };
         Object.assign(polyProps, randloosUitExtra(extraColors)); // zonder rand (#431)
+        // Arcering (#621); een vrije wolk biedt het paneel niet aan.
+        if (polyType !== 'cloudPolyline') Object.assign(polyProps, vormHatchUitExtra(extraColors));
 
         // Rechthoekige wolk: het vak terug, de punten weg (#434). Een wolk
         // tekent en raakt op zijn vak, dus punten die niets meer zeggen dan

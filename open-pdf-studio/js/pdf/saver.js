@@ -52,7 +52,7 @@ import { catmullRomSpline } from '../tools/tools/spline-tool.js';
 import { buildFilledAreaAP, buildMeasureAreaAP, buildPolylineMeasureAP,
   buildWallAP, buildCloudAP, buildSplineArrowAP,
   buildStavenreeksAP, buildBetonbalkAP, buildSysteemrasterAP, buildLineAP, calloutLeiderOps, buildPolylineAP, polylijnOmhullende, lijnOmhullende, buildLeiderAP, leiderOmhullende, apLijndikte,
-  cloudRectOutlinePts, cloudPolyOutlinePts } from './saver/appearance-vectors.js';
+  cloudRectOutlinePts, cloudPolyOutlinePts, hatchFillOps } from './saver/appearance-vectors.js';
 import { veelhoekGrondvorm } from './saver/veelhoek-grondvorm.js';
 import { draaiPunt, draaiMidden, draaiCm } from './saver/vorm-draaiing.js';
 import { schrijfAlgemeneSleutels, antwoordAnnotaties, schrijfKoppelingen } from './saver/annotatie-algemeen.js';
@@ -651,6 +651,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             if (ann.rotation) annDictObj.OPS_Rotation = ann.rotation;
 
             annotDict = context.obj(annDictObj);
+            // Arcering uit het eigenschappenpaneel (#621): de sleutels voor de
+            // rondgang; de appearance tekent haar (generateAppearanceStream).
+            if (ann.type === 'box') schrijfHatchMeta(annotDict, ann, context);
             break;
           }
 
@@ -774,6 +777,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             if (ann.cross) annDictObj.OPS_Cross = true;
 
             annotDict = context.obj(annDictObj);
+            // Arcering (#621), zie de rechthoek.
+            schrijfHatchMeta(annotDict, ann, context);
             break;
           }
 
@@ -1133,6 +1138,15 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             if (polyRotatie) polygonDict.OPS_Rotation = polyRotatie;
 
             annotDict = context.obj(polygonDict);
+            // Arcering (#621): de sleutels voor de rondgang; de appearance
+            // hieronder tekent haar. Een vrije wolk biedt het paneel niet aan.
+            if (ann.type !== 'cloudPolyline') schrijfHatchMeta(annotDict, ann, context);
+            // De hoek van de arcering in de ruimte van `ann` (ongedraaide
+            // pagina): op het scherm staat hij ten opzichte van de getoonde pagina.
+            const polyArcering = ann.type !== 'cloudPolyline' && ann.hatchPattern && ann.hatchPattern !== 'none'
+              ? { hatchPattern: ann.hatchPattern, hatchColorHex: ann.hatchColor || ann.strokeColor || ann.color || '#000000',
+                hatchScale: ann.hatchScale, hatchAngle: (ann.hatchAngle || 0) - (pageRot || 0) }
+              : null;
 
             // Vector /AP voor GEWONE polygonen: viewers die zelf uit /Vertices
             // synthetiseren tekenen alleen de rand en laten /IC-vulling (en al
@@ -1156,6 +1170,15 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                 const [fr, fg, fb] = hexToRgb(ann.fillColor);
                 // Vulling apart binnen q…Q zodat de vul-alfa de rand niet raakt.
                 pgContent += `q\n${pgFillAlpha < 1 ? '/GSf gs\n' : ''}${fr} ${fg} ${fb} rg\n${pad}f\nQ\n`;
+              }
+              if (polyArcering) {
+                // Ongedraaid berekend en met één cm om het midden gedraaid,
+                // zoals het scherm de arcering met de vorm meedraait.
+                const ongedraaid = grondvorm.map((pt) => naarPagina(pt.x, pt.y));
+                const ops = hatchFillOps({ points: ongedraaid, holes: null, ...polyArcering,
+                  hatchColorRgb: hexToRgb(polyArcering.hatchColorHex), X: convertX, Y: convertY });
+                pgContent += polyRotatie
+                  ? `q\n${draaiCm(convertX(polyMidden.x), convertY(polyMidden.y), polyRotatie)}${ops}Q\n` : ops;
               }
               if (pgStroke) {
                 const [psr, psg, psb] = hexToRgb(ann.strokeColor || ann.color || '#000000');
@@ -1193,6 +1216,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   strokeColorHex: ann.strokeColor || ann.color || '#000000',
                   lineWidth: borderWidth, borderStyle: ann.borderStyle,
                   heeftRand: !randSleutelZonderRand(ann),
+                  ...(polyArcering || {}),
                 });
                 // Gedraaid: de ongedraaide wolk met één cm om het midden.
                 if (wolkAp && polyRotatie) {
@@ -2854,7 +2878,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
         // Generate appearance stream for better compatibility with other PDF viewers
         // Skip if AP was already set (e.g. image/signature with embedded image)
         if (annotDict && !annotDict.get(PDFName.of('AP'))) {
-          const apStream = generateAppearanceStream(context, ann, convertY);
+          // Arcering (#621): de hoek geldt op het scherm, de appearance staat
+          // in de ongedraaide pagina.
+          const apAnn = pageRot && ann.hatchPattern && ann.hatchPattern !== 'none'
+            ? { ...ann, hatchAngle: (ann.hatchAngle || 0) - pageRot } : ann;
+          const apStream = generateAppearanceStream(context, apAnn, convertY);
           if (apStream) {
             const apStreamRef = context.register(apStream);
             const apDict = context.obj({ N: apStreamRef });
