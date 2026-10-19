@@ -250,3 +250,34 @@ test('lagen van een ander programma: naam, zichtbaarheid en dezelfde groep na tw
   const lijn = (await woordenboeken(bytes)).find(({ dict }) => dict.get(PDFName.of('LineStyle'))).dict;
   assert.equal(lijn.get(PDFName.of('OC')).toString(), refA.toString());
 });
+
+// ── 3. tellingen ────────────────────────────────────────────────────────────
+
+test('een telmarkering van de app overleeft opslaan (verdween zonder melding)', async () => {
+  const tel = (id, x, number) => ({
+    ...basis, id, type: 'count', x, y: 500, number, categoryId: 'deuren', markerStyle: 'dot',
+    color: '#e11d48', strokeColor: '#e11d48',
+  });
+  const { modellen, bytes } = await rondgang([tel('t1', 100, 1), tel('t2', 160, 2)]);
+  const tellingen = modellen.filter((m) => m.type === 'count').sort((a, b) => a.number - b.number);
+  assert.equal(tellingen.length, 2);
+  assert.deepEqual(tellingen.map((t) => [Math.round(t.x), Math.round(t.y), t.number, t.categoryId, t.markerStyle, t.color]),
+    [[100, 500, 1, 'deuren', 'dot', '#e11d48'], [160, 500, 2, 'deuren', 'dot', '#e11d48']]);
+  // Andere lezers zien de stip met zijn nummer.
+  const dicts = await woordenboeken(bytes);
+  assert.ok(dicts.every(({ dict }) => subtype(dict) === '/Circle'));
+  const ap = apInhoud(dicts.doc, dicts.find(({ dict }) => tekst(dict, 'OPS_Subtype') === 'count').dict);
+  assert.match(ap, /\((1|2)\) Tj/);
+});
+
+test('een telling van een ander programma wordt als stippen getekend, niet als veelhoek (3)', async () => {
+  const bron = await vreemdBlad();
+  const { bytes, modellen } = await rondgang(await laad(bron), { bron });
+  const telling = modellen.find((m) => m.type === 'polygon');
+  assert.equal(telling.points.length, 3);
+  const dicts = await woordenboeken(bytes);
+  const pg = dicts.find(({ dict }) => naam(dict, 'IT') === '/PolygonCount').dict;
+  const ap = apInhoud(dicts.doc, pg);
+  assert.equal((ap.match(/ c f\n/g) || []).length, 3, 'drie stippen');
+  assert.doesNotMatch(ap, / S\n/, 'geen omtrek');
+});

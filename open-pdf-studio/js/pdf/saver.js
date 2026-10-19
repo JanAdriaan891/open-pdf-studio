@@ -57,6 +57,8 @@ import { veelhoekGrondvorm } from './saver/veelhoek-grondvorm.js';
 import { draaiPunt, draaiMidden, draaiCm } from './saver/vorm-draaiing.js';
 import { schrijfAlgemeneSleutels, antwoordAnnotaties, schrijfKoppelingen } from './saver/annotatie-algemeen.js';
 import { schrijfRuweSleutels } from './saver/ruwe-sleutels.js';
+import { bouwTellingDict } from './saver/telling.js';
+import { isVreemdeTelling, tellingStraal } from '../annotations/telling.js';
 import { tekstvakRc, dsTekstDecoratie } from './saver/tekstvak-rc.js';
 import { _rotVisualMapper, _remapRect } from './saver/rotatie-mapper.js';
 import { makePointMapper, buildTextEditStrikeDict, buildCaretDict, addLoadedMarkupKeys,
@@ -890,6 +892,14 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             break;
           }
 
+          case 'count': {
+            // Telmarkering (#621): verdween bij opslaan. Zie saver/telling.js.
+            annotDict = bouwTellingDict(context, ann, convertX, convertY, {
+              opacity, flags: computeAnnotFlags(ann),
+            });
+            break;
+          }
+
           case 'arc': {
             // Approximate arc with polyline segments for PDF compatibility
             const arcSteps = 36;
@@ -1157,7 +1167,27 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             // staan in absolute PDF-coordinaten en draaien vanzelf met de
             // pagina mee — geen /Rotate-compensatie nodig, anders dan bij
             // tekst- en beeldinhoud.
-            if (ann.type === 'polygon' && polyVertices.length >= 6) {
+            if (isVreemdeTelling(ann) && polyVertices.length >= 2) {
+              // Telling van een ander programma (#621): een stip per hoekpunt,
+              // zoals dat programma hem tekent, geen gesloten veelhoek.
+              const tr = tellingStraal(ann);
+              const k = 0.5522847498;
+              const [sr, sg, sb] = hexToRgb(ann.strokeColor || ann.color || '#ff0000');
+              let stippen = `q ${sr} ${sg} ${sb} rg\n`;
+              for (let vi = 0; vi < polyVertices.length; vi += 2) {
+                const x = polyVertices[vi], y = polyVertices[vi + 1];
+                stippen += `${x + tr} ${y} m ${x + tr} ${y + k * tr} ${x + k * tr} ${y + tr} ${x} ${y + tr} c `
+                  + `${x - k * tr} ${y + tr} ${x - tr} ${y + k * tr} ${x - tr} ${y} c `
+                  + `${x - tr} ${y - k * tr} ${x - k * tr} ${y - tr} ${x} ${y - tr} c `
+                  + `${x + k * tr} ${y - tr} ${x + tr} ${y - k * tr} ${x + tr} ${y} c f\n`;
+              }
+              stippen += 'Q\n';
+              const xs = polyVertices.filter((_, i) => i % 2 === 0);
+              const ys = polyVertices.filter((_, i) => i % 2 === 1);
+              const tRect = [Math.min(...xs) - tr - 1, Math.min(...ys) - tr - 1, Math.max(...xs) + tr + 1, Math.max(...ys) + tr + 1];
+              annotDict.set(PDFName.of('Rect'), context.obj(tRect));
+              attachVectorAP(context, annotDict, { content: stippen }, tRect);
+            } else if (ann.type === 'polygon' && polyVertices.length >= 6) {
               const pgFill = hasFill(ann.fillColor);
               const pgStroke = borderWidth > 0 && hasStroke(ann.strokeColor);
               let pad = '';
@@ -2850,6 +2880,23 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             // Existing page-baking handlers keep their original contract.
             // Render-only handlers use a visible /Square with editable metadata.
             const pluginHandler = getAnnotationType(ann.type);
+            const pluginRect = () => {
+              const rawBounds = pluginHandler?.getBounds?.(annRaw) || annRaw;
+              const bounds = pageRot
+                ? _remapRect(rawBounds, _rotVisualMapper(pageRot, cropBox.width, cropBox.height))
+                : rawBounds;
+              return [convertX(bounds.x), convertY(bounds.y + bounds.height),
+                convertX(bounds.x + bounds.width), convertY(bounds.y)];
+            };
+            // Bewaard als /Square met de gegevens van de extensie, met een
+            // afbeelding als de extensie kan tekenen (render), anders zonder.
+            const alsPluginVlak = async () => {
+              let png = null;
+              if (pluginHandler?.render) {
+                try { png = renderPluginAnnotationPng(annRaw, pluginHandler, pageRot); } catch (_) { png = null; }
+              }
+              return createPluginPdfAnnotation(pdfDocLib, annRaw, pluginRect(), png);
+            };
             if (pluginHandler && typeof pluginHandler.serializeToPdf === 'function') {
               try {
                 await pluginHandler.serializeToPdf({
@@ -2860,17 +2907,16 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
                   convertY,
                 });
               } catch (err) {
-                console.warn(`[saver] plugin serializeToPdf failed for type "${ann.type}":`, err);
+                // Een fout in een extensie mag geen markering van de gebruiker
+                // kosten (#621): bewaar haar gegevens zoals bij een extensie
+                // zonder serializeToPdf.
+                console.warn(`[saver] plugin serializeToPdf failed for type "${ann.type}", kept as plugin data:`, err);
+                try { annotDict = await alsPluginVlak(); } catch (e2) {
+                  console.warn(`[saver] plugin annotation "${ann.type}" could not be kept:`, e2);
+                }
               }
             } else if (pluginHandler?.render) {
-              const rawBounds = pluginHandler.getBounds?.(annRaw) || annRaw;
-              const bounds = pageRot
-                ? _remapRect(rawBounds, _rotVisualMapper(pageRot, cropBox.width, cropBox.height))
-                : rawBounds;
-              const rect = [convertX(bounds.x), convertY(bounds.y + bounds.height),
-                convertX(bounds.x + bounds.width), convertY(bounds.y)];
-              const png = renderPluginAnnotationPng(annRaw, pluginHandler, pageRot);
-              annotDict = await createPluginPdfAnnotation(pdfDocLib, annRaw, rect, png);
+              annotDict = await alsPluginVlak();
             }
             break;
           }

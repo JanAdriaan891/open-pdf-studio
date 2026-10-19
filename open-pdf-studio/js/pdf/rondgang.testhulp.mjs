@@ -37,12 +37,14 @@ export async function leegBlad({ rotatie = 0 } = {}) {
 
 /**
  * Opslaan met de echte saver, op de bytes van het geopende bestand.
- * @param {{ lagen?: object[]|null }} [opties]  de annotatielagen van het document
+ * @param {{ lagen?: object[]|null, impl?: object }} [opties]  de annotatielagen van
+ *   het document, en vervangers voor gestubde modules (zie saver-test-hooks.mjs)
  */
-export async function opslaan(bronBytes, modellen, { lagen = null } = {}) {
+export async function opslaan(bronBytes, modellen, { lagen = null, impl = {} } = {}) {
   let uit = null;
   globalThis.__saverTest = {
     impl: {
+      ...impl,
       getCachedPdfBytes: () => bronBytes,
       writeBinaryFile: (_pad, bytes) => { uit = bytes; return true; },
       writeBinaryFileAtomic: (_pad, bytes) => { uit = bytes; return true; },

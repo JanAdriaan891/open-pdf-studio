@@ -780,6 +780,18 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
         }
       }
 
+      // Telmarkering van de app (#621, saver/telling.js).
+      if (subtypeName === '/Circle') {
+        const nr = annotDict.get(PDFName.of('OPS_CountNumber'));
+        const nv = nr !== undefined ? pdfNum(context.lookup(nr) || nr) : null;
+        if (nv !== null) colors.opsCountNumber = nv;
+        for (const [sleutel, veld] of [['OPS_CountCategory', 'opsCountCategory'],
+          ['OPS_MarkerStyle', 'opsMarkerStyle'], ['OPS_SymbolId', 'opsSymbolId']]) {
+          const t = leesPdfTekst(context, annotDict.get(PDFName.of(sleutel)));
+          if (t) colors[veld] = t;
+        }
+      }
+
       // Read /OPS_HatchPattern, /OPS_HatchColor, /OPS_HatchScale, /OPS_HatchAngle
       // (used by 'filledArea' annotations to persist user-controlled hatch fill).
       const hpRaw = annotDict.get(PDFName.of('OPS_HatchPattern'));

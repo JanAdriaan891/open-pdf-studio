@@ -10,6 +10,7 @@ import { nenIfcForStamp } from '../../solid/data/nenIfcMap.js';
 import { STAVENREEKS_DEFAULTS } from '../../annotations/stavenreeks.js';
 import { knipselUitExtra } from './vector-snippet-load.js';
 import { hatchUitExtra, vormHatchUitExtra } from '../saver/hatch-meta.js';
+import { tellingUitExtra } from '../saver/telling.js';
 import { wandJoinUitExtra } from '../saver/wand-join-meta.js';
 import { wolkVakUitHoeken, wolkVakUitZeshoek } from '../saver/veelhoek-grondvorm.js';
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
@@ -468,6 +469,12 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
     }
 
     case 'Circle': {
+      // Telmarkering van de app (#621, saver/telling.js).
+      const telling = tellingUitExtra(extraColors, convertRect(annot.rect));
+      if (telling) {
+        const kleur = colorArrayToHex(annot.color, '#e11d48');
+        return createAnnotation({ ...baseProps, ...telling, color: kleur, strokeColor: kleur });
+      }
       const crRect = convertRect(annot.rect);
       let crX = crRect.x, crY = crRect.y, crW = crRect.width, crH = crRect.height;
       let crRotation = 0;
