@@ -2,10 +2,19 @@ use open_pdf_kernel::dl::{BlendMode, Color, DisplayList, FillRule, Item, Path, S
 use open_pdf_kernel::raster::{render, RasterError, RasterTarget, RgbaImage};
 
 const IDENTITY: [f64; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
-const RED: Color = Color { r: 255, g: 0, b: 0, a: 255 };
+const RED: Color = Color {
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 255,
+};
 
 fn target(width: u32, height: u32, transform: [f64; 6]) -> RasterTarget {
-    RasterTarget { width, height, transform }
+    RasterTarget {
+        width,
+        height,
+        transform,
+    }
 }
 
 fn px(img: &RgbaImage, x: u32, y: u32) -> [u8; 4] {
@@ -14,7 +23,11 @@ fn px(img: &RgbaImage, x: u32, y: u32) -> [u8; 4] {
 }
 
 fn fill(path: Path, color: Color) -> Item {
-    Item::Fill { path, color, rule: FillRule::NonZero }
+    Item::Fill {
+        path,
+        color,
+        rule: FillRule::NonZero,
+    }
 }
 
 fn red_rect() -> DisplayList {
@@ -26,7 +39,10 @@ fn red_rect() -> DisplayList {
 #[test]
 fn fill_rect_is_opaque_inside_and_empty_outside() {
     let img = render(&red_rect(), &target(20, 20, IDENTITY)).unwrap();
-    assert_eq!((img.width, img.height, img.data.len()), (20, 20, 20 * 20 * 4));
+    assert_eq!(
+        (img.width, img.height, img.data.len()),
+        (20, 20, 20 * 20 * 4)
+    );
     assert_eq!(px(&img, 10, 10), [255, 0, 0, 255]);
     assert_eq!(px(&img, 1, 1), [0, 0, 0, 0]);
 }
@@ -43,7 +59,11 @@ fn transform_scales_geometry() {
 #[test]
 fn group_opacity_halves_alpha() {
     let mut dl = DisplayList::new();
-    dl.push(Item::PushGroup { opacity: 0.5, blend: BlendMode::Normal, clip: None });
+    dl.push(Item::PushGroup {
+        opacity: 0.5,
+        blend: BlendMode::Normal,
+        clip: None,
+    });
     dl.push(fill(Path::rect(5.0, 5.0, 10.0, 10.0), RED));
     dl.push(Item::PopGroup);
     let p = px(&render(&dl, &target(20, 20, IDENTITY)).unwrap(), 10, 10);
@@ -54,9 +74,29 @@ fn group_opacity_halves_alpha() {
 #[test]
 fn multiply_blend_darkens() {
     let mut dl = DisplayList::new();
-    dl.push(fill(Path::rect(0.0, 0.0, 20.0, 20.0), Color { r: 200, g: 200, b: 200, a: 255 }));
-    dl.push(Item::PushGroup { opacity: 1.0, blend: BlendMode::Multiply, clip: None });
-    dl.push(fill(Path::rect(0.0, 0.0, 20.0, 20.0), Color { r: 128, g: 128, b: 128, a: 255 }));
+    dl.push(fill(
+        Path::rect(0.0, 0.0, 20.0, 20.0),
+        Color {
+            r: 200,
+            g: 200,
+            b: 200,
+            a: 255,
+        },
+    ));
+    dl.push(Item::PushGroup {
+        opacity: 1.0,
+        blend: BlendMode::Multiply,
+        clip: None,
+    });
+    dl.push(fill(
+        Path::rect(0.0, 0.0, 20.0, 20.0),
+        Color {
+            r: 128,
+            g: 128,
+            b: 128,
+            a: 255,
+        },
+    ));
     dl.push(Item::PopGroup);
     let p = px(&render(&dl, &target(20, 20, IDENTITY)).unwrap(), 10, 10);
     for c in &p[..3] {
@@ -70,8 +110,16 @@ fn transparent_pixels_are_zero() {
     let mut dl = DisplayList::new();
     dl.push(Item::Stroke {
         path: Path::polyline(&[(1.0, 2.0), (19.0, 17.0)], false),
-        color: Color { r: 30, g: 140, b: 220, a: 255 },
-        style: StrokeStyle { width: 1.3, ..StrokeStyle::default() },
+        color: Color {
+            r: 30,
+            g: 140,
+            b: 220,
+            a: 255,
+        },
+        style: StrokeStyle {
+            width: 1.3,
+            ..StrokeStyle::default()
+        },
     });
     let img = render(&dl, &target(20, 20, IDENTITY)).unwrap();
     let mut partial = 0;
@@ -88,19 +136,38 @@ fn transparent_pixels_are_zero() {
 #[test]
 fn rejects_oversized_target() {
     let dl = red_rect();
-    assert!(matches!(render(&dl, &target(0, 20, IDENTITY)), Err(RasterError::EmptyTarget)));
-    assert!(matches!(render(&dl, &target(20_000, 20, IDENTITY)), Err(RasterError::TooLarge { .. })));
-    assert!(matches!(render(&dl, &target(9_000, 9_000, IDENTITY)), Err(RasterError::TooLarge { .. })));
+    assert!(matches!(
+        render(&dl, &target(0, 20, IDENTITY)),
+        Err(RasterError::EmptyTarget)
+    ));
+    assert!(matches!(
+        render(&dl, &target(20_000, 20, IDENTITY)),
+        Err(RasterError::TooLarge { .. })
+    ));
+    assert!(matches!(
+        render(&dl, &target(9_000, 9_000, IDENTITY)),
+        Err(RasterError::TooLarge { .. })
+    ));
 }
 
 #[test]
 fn unbalanced_groups_error() {
     let mut dl = red_rect();
-    dl.push(Item::PushGroup { opacity: 1.0, blend: BlendMode::Normal, clip: None });
-    assert!(matches!(render(&dl, &target(20, 20, IDENTITY)), Err(RasterError::UnbalancedGroups)));
+    dl.push(Item::PushGroup {
+        opacity: 1.0,
+        blend: BlendMode::Normal,
+        clip: None,
+    });
+    assert!(matches!(
+        render(&dl, &target(20, 20, IDENTITY)),
+        Err(RasterError::UnbalancedGroups)
+    ));
     let mut extra_pop = red_rect();
     extra_pop.push(Item::PopGroup);
-    assert!(matches!(render(&extra_pop, &target(20, 20, IDENTITY)), Err(RasterError::UnbalancedGroups)));
+    assert!(matches!(
+        render(&extra_pop, &target(20, 20, IDENTITY)),
+        Err(RasterError::UnbalancedGroups)
+    ));
 }
 
 #[test]

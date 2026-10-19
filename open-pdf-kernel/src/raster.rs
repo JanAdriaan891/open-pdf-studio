@@ -9,7 +9,9 @@ use vello_cpu::kurbo::{Affine, BezPath, Cap, Join, Stroke};
 use vello_cpu::peniko::{BlendMode as VBlend, Fill, Mix};
 use vello_cpu::{Pixmap, RenderContext, Resources};
 
-use crate::dl::{BlendMode, Color, DisplayList, FillRule, Item, LineCap, LineJoin, Path, PathEl, StrokeStyle};
+use crate::dl::{
+    BlendMode, Color, DisplayList, FillRule, Item, LineCap, LineJoin, Path, PathEl, StrokeStyle,
+};
 
 pub const MAX_SIDE: u32 = 16_384;
 pub const MAX_PIXELS: u64 = 64 * 1024 * 1024;
@@ -45,7 +47,9 @@ impl fmt::Display for RasterError {
             RasterError::TooLarge { width, height } => {
                 write!(f, "raster target {width}x{height} exceeds {MAX_SIDE} px per side or {MAX_PIXELS} pixels")
             }
-            RasterError::UnbalancedGroups => write!(f, "display list has unbalanced PushGroup/PopGroup"),
+            RasterError::UnbalancedGroups => {
+                write!(f, "display list has unbalanced PushGroup/PopGroup")
+            }
         }
     }
 }
@@ -58,7 +62,10 @@ pub fn render(dl: &DisplayList, target: &RasterTarget) -> Result<RgbaImage, Rast
         return Err(RasterError::EmptyTarget);
     }
     if w > MAX_SIDE || h > MAX_SIDE || u64::from(w) * u64::from(h) > MAX_PIXELS {
-        return Err(RasterError::TooLarge { width: w, height: h });
+        return Err(RasterError::TooLarge {
+            width: w,
+            height: h,
+        });
     }
     check_groups(dl)?;
 
@@ -81,7 +88,11 @@ pub fn render(dl: &DisplayList, target: &RasterTarget) -> Result<RgbaImage, Rast
                 ctx.set_paint(to_color(*color));
                 ctx.stroke_path(&to_bez(path));
             }
-            Item::PushGroup { opacity, blend, clip } => {
+            Item::PushGroup {
+                opacity,
+                blend,
+                clip,
+            } => {
                 let clip = clip.as_ref().map(to_bez);
                 let mode: VBlend = match blend {
                     BlendMode::Normal => Mix::Normal.into(),
@@ -98,9 +109,19 @@ pub fn render(dl: &DisplayList, target: &RasterTarget) -> Result<RgbaImage, Rast
     let data = pixmap
         .take_unpremultiplied()
         .into_iter()
-        .flat_map(|p| if p.a == 0 { [0, 0, 0, 0] } else { [p.r, p.g, p.b, p.a] })
+        .flat_map(|p| {
+            if p.a == 0 {
+                [0, 0, 0, 0]
+            } else {
+                [p.r, p.g, p.b, p.a]
+            }
+        })
         .collect();
-    Ok(RgbaImage { width: w, height: h, data })
+    Ok(RgbaImage {
+        width: w,
+        height: h,
+        data,
+    })
 }
 
 impl RgbaImage {
@@ -111,7 +132,9 @@ impl RgbaImage {
         enc.set_color(png::ColorType::Rgba);
         enc.set_depth(png::BitDepth::Eight);
         let mut writer = enc.write_header().expect("PNG header to a Vec cannot fail");
-        writer.write_image_data(&self.data).expect("PNG data to a Vec cannot fail");
+        writer
+            .write_image_data(&self.data)
+            .expect("PNG data to a Vec cannot fail");
         writer.finish().expect("PNG finish to a Vec cannot fail");
         out
     }
@@ -122,10 +145,17 @@ impl RgbaImage {
         let mut buf = vec![0; reader.output_buffer_size().ok_or("PNG too large")?];
         let info = reader.next_frame(&mut buf).map_err(|e| e.to_string())?;
         if info.color_type != png::ColorType::Rgba || info.bit_depth != png::BitDepth::Eight {
-            return Err(format!("expected 8-bit RGBA PNG, got {:?} {:?}", info.color_type, info.bit_depth));
+            return Err(format!(
+                "expected 8-bit RGBA PNG, got {:?} {:?}",
+                info.color_type, info.bit_depth
+            ));
         }
         buf.truncate(info.buffer_size());
-        Ok(RgbaImage { width: info.width, height: info.height, data: buf })
+        Ok(RgbaImage {
+            width: info.width,
+            height: info.height,
+            data: buf,
+        })
     }
 }
 
@@ -138,7 +168,11 @@ fn check_groups(dl: &DisplayList) -> Result<(), RasterError> {
             _ => {}
         }
     }
-    if depth == 0 { Ok(()) } else { Err(RasterError::UnbalancedGroups) }
+    if depth == 0 {
+        Ok(())
+    } else {
+        Err(RasterError::UnbalancedGroups)
+    }
 }
 
 fn to_color(c: Color) -> AlphaColor<Srgb> {
@@ -170,7 +204,10 @@ fn to_stroke(s: &StrokeStyle) -> Stroke {
         LineJoin::Round => Join::Round,
         LineJoin::Bevel => Join::Bevel,
     };
-    let stroke = Stroke::new(s.width).with_caps(cap).with_join(join).with_miter_limit(s.miter_limit);
+    let stroke = Stroke::new(s.width)
+        .with_caps(cap)
+        .with_join(join)
+        .with_miter_limit(s.miter_limit);
     if s.dash.is_empty() {
         stroke
     } else {

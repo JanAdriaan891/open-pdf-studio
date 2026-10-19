@@ -21,7 +21,12 @@ fn assert_golden(name: &str, img: &RgbaImage) {
     }
     let expected = std::fs::read(&file)
         .map(|b| RgbaImage::from_png(&b).unwrap())
-        .unwrap_or_else(|e| panic!("golden {} missing ({e}); run with OPDS_UPDATE_GOLDEN=1", file.display()));
+        .unwrap_or_else(|e| {
+            panic!(
+                "golden {} missing ({e}); run with OPDS_UPDATE_GOLDEN=1",
+                file.display()
+            )
+        });
     let mismatch = if (expected.width, expected.height) != (img.width, img.height) {
         Some(format!(
             "size {}x{} differs from golden {}x{}",
@@ -49,12 +54,19 @@ fn assert_golden(name: &str, img: &RgbaImage) {
         std::fs::create_dir_all(&out).unwrap();
         let actual = out.join(format!("{name}.actual.png"));
         std::fs::write(&actual, img.to_png()).unwrap();
-        panic!("golden {name}: {msg}; actual written to {}", actual.display());
+        panic!(
+            "golden {name}: {msg}; actual written to {}",
+            actual.display()
+        );
     }
 }
 
 fn scene(dl: &DisplayList) -> RgbaImage {
-    let target = RasterTarget { width: 200, height: 200, transform: [2.0, 0.0, 0.0, 2.0, 0.0, 0.0] };
+    let target = RasterTarget {
+        width: 200,
+        height: 200,
+        transform: [2.0, 0.0, 0.0, 2.0, 0.0, 0.0],
+    };
     render(dl, &target).unwrap()
 }
 
@@ -63,8 +75,18 @@ fn golden_dashed_round_cap_line() {
     let mut dl = DisplayList::new();
     dl.push(Item::Stroke {
         path: Path::polyline(&[(10.0, 10.0), (90.0, 60.0)], false),
-        color: Color { r: 0, g: 90, b: 200, a: 255 },
-        style: StrokeStyle { width: 3.0, cap: LineCap::Round, dash: vec![6.0, 4.0], ..StrokeStyle::default() },
+        color: Color {
+            r: 0,
+            g: 90,
+            b: 200,
+            a: 255,
+        },
+        style: StrokeStyle {
+            width: 3.0,
+            cap: LineCap::Round,
+            dash: vec![6.0, 4.0],
+            ..StrokeStyle::default()
+        },
     });
     assert_golden("dashed_round_cap_line", &scene(&dl));
 }
@@ -74,18 +96,43 @@ fn golden_evenodd_polygon_with_hole() {
     let mut outer = Path::rect(10.0, 10.0, 80.0, 80.0);
     outer.0.extend(Path::rect(30.0, 30.0, 40.0, 40.0).0);
     let mut dl = DisplayList::new();
-    dl.push(Item::Fill { path: outer, color: Color { r: 230, g: 120, b: 0, a: 255 }, rule: FillRule::EvenOdd });
+    dl.push(Item::Fill {
+        path: outer,
+        color: Color {
+            r: 230,
+            g: 120,
+            b: 0,
+            a: 255,
+        },
+        rule: FillRule::EvenOdd,
+    });
     assert_golden("evenodd_polygon_with_hole", &scene(&dl));
 }
 
 #[test]
 fn golden_curve_in_opacity_group() {
     let mut dl = DisplayList::new();
-    dl.push(Item::PushGroup { opacity: 0.6, blend: BlendMode::Normal, clip: None });
+    dl.push(Item::PushGroup {
+        opacity: 0.6,
+        blend: BlendMode::Normal,
+        clip: None,
+    });
     dl.push(Item::Stroke {
-        path: Path(vec![PathEl::MoveTo(10.0, 90.0), PathEl::CubicTo(30.0, 10.0, 70.0, 10.0, 90.0, 90.0)]),
-        color: Color { r: 20, g: 20, b: 20, a: 255 },
-        style: StrokeStyle { width: 5.0, join: LineJoin::Round, ..StrokeStyle::default() },
+        path: Path(vec![
+            PathEl::MoveTo(10.0, 90.0),
+            PathEl::CubicTo(30.0, 10.0, 70.0, 10.0, 90.0, 90.0),
+        ]),
+        color: Color {
+            r: 20,
+            g: 20,
+            b: 20,
+            a: 255,
+        },
+        style: StrokeStyle {
+            width: 5.0,
+            join: LineJoin::Round,
+            ..StrokeStyle::default()
+        },
     });
     dl.push(Item::PopGroup);
     assert_golden("curve_in_opacity_group", &scene(&dl));

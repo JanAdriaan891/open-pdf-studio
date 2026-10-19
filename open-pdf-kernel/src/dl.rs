@@ -28,7 +28,11 @@ impl Path {
     pub fn polyline(points: &[(f64, f64)], closed: bool) -> Path {
         let mut els = Vec::with_capacity(points.len() + 1);
         for (i, &(x, y)) in points.iter().enumerate() {
-            els.push(if i == 0 { PathEl::MoveTo(x, y) } else { PathEl::LineTo(x, y) });
+            els.push(if i == 0 {
+                PathEl::MoveTo(x, y)
+            } else {
+                PathEl::LineTo(x, y)
+            });
         }
         if closed && !points.is_empty() {
             els.push(PathEl::Close);
@@ -40,7 +44,12 @@ impl Path {
     fn control_bounds(&self) -> Option<Rect> {
         let mut acc: Option<Rect> = None;
         let mut add = |x: f64, y: f64| {
-            let p = Rect { x0: x, y0: y, x1: x, y1: y };
+            let p = Rect {
+                x0: x,
+                y0: y,
+                x1: x,
+                y1: y,
+            };
             acc = Some(acc.map_or(p, |r| r.union(&p)));
         };
         for el in &self.0 {
@@ -122,9 +131,21 @@ pub enum BlendMode {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Item {
-    Fill { path: Path, color: Color, rule: FillRule },
-    Stroke { path: Path, color: Color, style: StrokeStyle },
-    PushGroup { opacity: f32, blend: BlendMode, clip: Option<Path> },
+    Fill {
+        path: Path,
+        color: Color,
+        rule: FillRule,
+    },
+    Stroke {
+        path: Path,
+        color: Color,
+        style: StrokeStyle,
+    },
+    PushGroup {
+        opacity: f32,
+        blend: BlendMode,
+        clip: Option<Path>,
+    },
     PopGroup,
 }
 
@@ -157,7 +178,12 @@ impl Rect {
     }
 
     fn inflate(&self, d: f64) -> Rect {
-        Rect { x0: self.x0 - d, y0: self.y0 - d, x1: self.x1 + d, y1: self.y1 + d }
+        Rect {
+            x0: self.x0 - d,
+            y0: self.y0 - d,
+            x1: self.x1 + d,
+            y1: self.y1 + d,
+        }
     }
 }
 
@@ -186,7 +212,11 @@ impl DisplayList {
                 Item::Fill { path, .. } => path.control_bounds(),
                 Item::Stroke { path, style, .. } => {
                     let half = style.width / 2.0;
-                    let grow = if style.join == LineJoin::Miter { half * style.miter_limit } else { half };
+                    let grow = if style.join == LineJoin::Miter {
+                        half * style.miter_limit
+                    } else {
+                        half
+                    };
                     path.control_bounds().map(|r| r.inflate(grow))
                 }
                 Item::PushGroup { clip, .. } => {

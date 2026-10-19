@@ -2,10 +2,19 @@ use open_pdf_kernel::dl::{
     BlendMode, Color, DisplayList, FillRule, Item, LineJoin, Path, PathEl, Rect, StrokeStyle,
 };
 
-const RED: Color = Color { r: 255, g: 0, b: 0, a: 255 };
+const RED: Color = Color {
+    r: 255,
+    g: 0,
+    b: 0,
+    a: 255,
+};
 
 fn fill(path: Path) -> Item {
-    Item::Fill { path, color: RED, rule: FillRule::NonZero }
+    Item::Fill {
+        path,
+        color: RED,
+        rule: FillRule::NonZero,
+    }
 }
 
 #[test]
@@ -17,19 +26,39 @@ fn bounds_of_empty_is_none() {
 fn bounds_of_fill_rect() {
     let mut dl = DisplayList::new();
     dl.push(fill(Path::rect(10.0, 20.0, 30.0, 40.0)));
-    assert_eq!(dl.bounds(), Some(Rect { x0: 10.0, y0: 20.0, x1: 40.0, y1: 60.0 }));
+    assert_eq!(
+        dl.bounds(),
+        Some(Rect {
+            x0: 10.0,
+            y0: 20.0,
+            x1: 40.0,
+            y1: 60.0
+        })
+    );
 }
 
 #[test]
 fn bounds_include_half_stroke_width() {
     let mut dl = DisplayList::new();
-    let style = StrokeStyle { width: 4.0, join: LineJoin::Round, ..StrokeStyle::default() };
+    let style = StrokeStyle {
+        width: 4.0,
+        join: LineJoin::Round,
+        ..StrokeStyle::default()
+    };
     dl.push(Item::Stroke {
         path: Path::polyline(&[(0.0, 0.0), (100.0, 0.0)], false),
         color: RED,
         style,
     });
-    assert_eq!(dl.bounds(), Some(Rect { x0: -2.0, y0: -2.0, x1: 102.0, y1: 2.0 }));
+    assert_eq!(
+        dl.bounds(),
+        Some(Rect {
+            x0: -2.0,
+            y0: -2.0,
+            x1: 102.0,
+            y1: 2.0
+        })
+    );
 }
 
 #[test]
@@ -42,7 +71,15 @@ fn bounds_clipped_by_group() {
     });
     dl.push(fill(Path::rect(0.0, 0.0, 100.0, 100.0)));
     dl.push(Item::PopGroup);
-    assert_eq!(dl.bounds(), Some(Rect { x0: 50.0, y0: 50.0, x1: 60.0, y1: 60.0 }));
+    assert_eq!(
+        dl.bounds(),
+        Some(Rect {
+            x0: 50.0,
+            y0: 50.0,
+            x1: 60.0,
+            y1: 60.0
+        })
+    );
 }
 
 #[test]

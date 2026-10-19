@@ -44,13 +44,19 @@ fn find<'a>(list: &'a Value, id: &str) -> &'a Value {
 #[test]
 fn model_roundtrip_is_lossless() {
     let (before, after) = roundtrip();
-    assert!(json_equivalent(&before, &after), "round trip changed the model:\n{after}");
+    assert!(
+        json_equivalent(&before, &after),
+        "round trip changed the model:\n{after}"
+    );
 }
 
 #[test]
 fn kind_maps_all_known_types() {
     let parsed = annotations_from_json(FIXTURE).unwrap();
-    let known: Vec<_> = parsed.iter().filter(|a| a.r#type != "pluginShape").collect();
+    let known: Vec<_> = parsed
+        .iter()
+        .filter(|a| a.r#type != "pluginShape")
+        .collect();
     assert!(known.iter().all(|a| a.kind() != Kind::Unknown));
     let distinct: HashSet<Kind> = known.iter().map(|a| a.kind()).collect();
     assert_eq!(distinct.len(), 40);
