@@ -161,7 +161,7 @@ async function bronBytesVan(doc) {
  *           orientatie?:'auto'|'portrait'|'landscape',
  *           vel?: {breedteMm:number, hoogteMm:number}|'pagina'|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
- *           poster?: object|null, boekje?: boolean|{katern:number},
+ *           poster?: object|null, boekje?: boolean|{katern?:number, binding?:string, kanten?:string, omgekeerd?:boolean, draaiAchter?:boolean, kruipMm?:number},
  *           openen?: ((pad:string) => void)|null,
  *           afgebroken?: () => boolean }} opts
  *   vel 'pagina' = elke pagina haar eigen vel, in de gekozen stand
@@ -256,13 +256,22 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
 /**
  * Boekje (print-boekje.js): de print-PDF (één pagina per bronpagina, in
  * printvolgorde) naar liggende vellen met twee pagina's per zijde in
- * genietvolgorde, aangevuld tot een viervoud. `boekje` is true of
- * { katern } (vellen per katern, #607; 0 = één boekje).
+ * genietvolgorde, aangevuld tot een viervoud. `boekje` is true of een object
+ * met de boekje-opties (#607): { katern, binding, kanten, omgekeerd,
+ * draaiAchter, kruipMm } (zie maakBoekje).
  */
 async function metBoekje(pdf, boekje, vel) {
   if (!boekje) return pdf;
-  const katern = typeof boekje === 'object' ? boekje.katern || 0 : 0;
-  return maakBoekje(pdf, { papier: vel && typeof vel === 'object' ? vel : null, katern });
+  const opties = typeof boekje === 'object' ? boekje : {};
+  return maakBoekje(pdf, {
+    papier: vel && typeof vel === 'object' ? vel : null,
+    katern: opties.katern || 0,
+    binding: opties.binding,
+    kanten: opties.kanten,
+    omgekeerd: !!opties.omgekeerd,
+    draaiAchter: !!opties.draaiAchter,
+    kruipMm: opties.kruipMm || 0,
+  });
 }
 
 /**
@@ -308,7 +317,7 @@ async function metPoster(pdf, poster, { vel, orientatie, pages, doc }) {
  *           orientatie?:'auto'|'portrait'|'landscape', papier?:string,
  *           vel?: {breedteMm:number, hoogteMm:number}|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
- *           poster?: object|null, boekje?: boolean|{katern:number},
+ *           poster?: object|null, boekje?: boolean|{katern?:number, binding?:string, kanten?:string, omgekeerd?:boolean, draaiAchter?:boolean, kruipMm?:number},
  *           afgebroken?: () => boolean }} opts
  *   boekje: een geniet boekje (print-boekje.js), twee pagina's per liggend vel.
  *   poster: de tegelkeuzes van de posterafdruk (print-poster.js) of null; de
