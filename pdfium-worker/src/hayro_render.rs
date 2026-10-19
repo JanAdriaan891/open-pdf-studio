@@ -20,9 +20,33 @@ struct CachedDoc {
     doc: HayroDocument,
 }
 
-#[derive(Default)]
+/// Workers the app's pool runs side by side (src-tauri, WorkerPool).
+const POOL_WORKERS: usize = 4;
+/// Measured on the verification set: 4 threads make Hayro as fast as PDFium
+/// on light pages and ~2.6x faster on heavy drawings; 8 adds little.
+const MAX_THREADS: usize = 4;
+
+/// Extra rasterizer threads per worker: a fair share of the machine for each
+/// of the pool's workers, at most MAX_THREADS. OPDS_HAYRO_THREADS overrides.
+pub fn default_threads(cores: usize) -> u16 {
+    (cores / POOL_WORKERS).saturating_sub(1).min(MAX_THREADS) as u16
+}
+
 pub struct HayroRenderer {
     cache: Vec<CachedDoc>,
+    threads: u16,
+}
+
+impl Default for HayroRenderer {
+    fn default() -> Self {
+        let threads = std::env::var("OPDS_HAYRO_THREADS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or_else(|| {
+                default_threads(std::thread::available_parallelism().map_or(1, |n| n.get()))
+            });
+        HayroRenderer { cache: Vec::new(), threads }
+    }
 }
 
 impl HayroRenderer {
@@ -44,7 +68,7 @@ impl HayroRenderer {
             None => {
                 self.cache.retain(|c| c.path != path);
                 let bytes = std::fs::read(path).with_context(|| format!("read {}", path))?;
-                let doc = HayroDocument::open(Arc::new(bytes))?;
+                let doc = HayroDocument::open(Arc::new(bytes))?.with_threads(self.threads);
                 if self.cache.len() >= DOC_CACHE_CAP {
                     self.cache.remove(0);
                 }
@@ -130,6 +154,15 @@ mod tests {
             Err(e) => e.to_string(),
         };
         assert!(err.contains("too large for SHM"), "{err}");
+    }
+
+    #[test]
+    fn thread_share_fits_the_machine() {
+        assert_eq!(default_threads(1), 0);
+        assert_eq!(default_threads(8), 1);
+        assert_eq!(default_threads(16), 3);
+        assert_eq!(default_threads(32), 4);
+        assert_eq!(default_threads(128), 4);
     }
 
     #[test]

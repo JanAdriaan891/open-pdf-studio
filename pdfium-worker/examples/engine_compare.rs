@@ -75,6 +75,8 @@ fn main() -> anyhow::Result<()> {
     }
 
     let mut pdfium = render::Renderer::new()?;
+    let threads: u16 = std::env::var("OPDS_HAYRO_THREADS").ok().and_then(|v| v.parse().ok()).unwrap_or(0);
+    eprintln!("Hayro threads: {threads}");
     let mut rows: Vec<PageRow> = Vec::new();
     for file in &files {
         let name = file.file_name().unwrap().to_string_lossy().to_string();
@@ -90,6 +92,7 @@ fn main() -> anyhow::Result<()> {
                 continue;
             }
         };
+        let mut hayro = HayroWorker::new(threads);
         eprintln!("{name}: {pages} pages (Hayro open {hayro_open_ms:.1} ms{})",
             if hayro_doc.is_err() { ", FAILED" } else { "" });
         for page in 0..pages {
@@ -99,7 +102,7 @@ fn main() -> anyhow::Result<()> {
             };
             let p = shot_pdfium(&mut pdfium, &path, page, scale);
             let h = match &hayro_doc {
-                Ok(_) => shot_hayro(bytes.clone(), page, scale),
+                Ok(_) => hayro.shot(&bytes, page, scale),
                 Err(e) => Shot { ms_first: 0.0, ms_repeat: 0.0, img: None, error: Some(e.to_string()) },
             };
             let mut row = PageRow {
@@ -166,35 +169,74 @@ fn shot_pdfium(r: &mut render::Renderer, path: &str, page: u32, scale: f32) -> S
     }
 }
 
-/// Hayro on its own thread: a panic or a hang costs one page, not the run.
-/// The document is opened inside the measurement (Hayro parses lazily).
-fn shot_hayro(bytes: Arc<Vec<u8>>, page: u32, scale: f32) -> Shot {
-    let (tx, rx) = mpsc::channel();
-    std::thread::spawn(move || {
-        let run = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let t = Instant::now();
-            let doc = HayroDocument::open(bytes).map_err(|e| e.to_string())?;
-            let first = doc.render_page(page, scale, 0).map_err(|e| e.to_string());
-            let ms_first = ms(t);
-            let t = Instant::now();
-            let _ = doc.render_page(page, scale, 0);
-            Ok::<_, String>((first, ms_first, ms(t)))
-        }));
-        let _ = tx.send(run);
-    });
-    match rx.recv_timeout(HAYRO_TIMEOUT) {
-        Ok(Ok(Ok((first, ms_first, ms_repeat)))) => match first {
-            Ok(img) => Shot { ms_first, ms_repeat, img: Some(img), error: None },
-            Err(e) => Shot { ms_first, ms_repeat, img: None, error: Some(e) },
-        },
-        Ok(Ok(Err(e))) => Shot { ms_first: 0.0, ms_repeat: 0.0, img: None, error: Some(e) },
-        Ok(Err(_)) => Shot { ms_first: 0.0, ms_repeat: 0.0, img: None, error: Some("panic".into()) },
-        Err(_) => Shot {
-            ms_first: HAYRO_TIMEOUT.as_secs_f64() * 1000.0,
-            ms_repeat: 0.0,
-            img: None,
-            error: Some("timeout".into()),
-        },
+/// One Hayro document per file on its own thread, so its render cache is
+/// reused across the pages of that file, as in the app's worker. A panic or a
+/// hang costs one page: a hung thread is abandoned and a fresh one starts.
+struct HayroWorker {
+    threads: u16,
+    tx: Option<mpsc::Sender<(Arc<Vec<u8>>, u32, f32, mpsc::Sender<Shot>)>>,
+}
+
+impl HayroWorker {
+    fn new(threads: u16) -> Self {
+        HayroWorker { threads, tx: None }
+    }
+
+    fn spawn(&mut self) {
+        let (tx, rx) = mpsc::channel::<(Arc<Vec<u8>>, u32, f32, mpsc::Sender<Shot>)>();
+        let threads = self.threads;
+        std::thread::spawn(move || {
+            let mut doc: Option<HayroDocument> = None;
+            for (bytes, page, scale, reply) in rx {
+                let run = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    let t = Instant::now();
+                    if doc.is_none() {
+                        doc = Some(HayroDocument::open(bytes).map_err(|e| e.to_string())?.with_threads(threads));
+                    }
+                    let d = doc.as_ref().unwrap();
+                    let first = d.render_page(page, scale, 0).map_err(|e| e.to_string());
+                    let ms_first = ms(t);
+                    let t = Instant::now();
+                    let _ = d.render_page(page, scale, 0);
+                    Ok::<_, String>((first, ms_first, ms(t)))
+                }));
+                let shot = match run {
+                    Ok(Ok((Ok(img), ms_first, ms_repeat))) => Shot { ms_first, ms_repeat, img: Some(img), error: None },
+                    Ok(Ok((Err(e), ms_first, ms_repeat))) => Shot { ms_first, ms_repeat, img: None, error: Some(e) },
+                    Ok(Err(e)) => Shot { ms_first: 0.0, ms_repeat: 0.0, img: None, error: Some(e) },
+                    Err(_) => {
+                        doc = None;
+                        Shot { ms_first: 0.0, ms_repeat: 0.0, img: None, error: Some("panic".into()) }
+                    }
+                };
+                let _ = reply.send(shot);
+            }
+        });
+        self.tx = Some(tx);
+    }
+
+    fn shot(&mut self, bytes: &Arc<Vec<u8>>, page: u32, scale: f32) -> Shot {
+        if self.tx.is_none() {
+            self.spawn();
+        }
+        let (reply_tx, reply_rx) = mpsc::channel();
+        let sent = self.tx.as_ref().unwrap().send((bytes.clone(), page, scale, reply_tx));
+        if sent.is_err() {
+            self.tx = None;
+            return Shot { ms_first: 0.0, ms_repeat: 0.0, img: None, error: Some("worker gone".into()) };
+        }
+        match reply_rx.recv_timeout(HAYRO_TIMEOUT) {
+            Ok(shot) => shot,
+            Err(_) => {
+                self.tx = None;
+                Shot {
+                    ms_first: HAYRO_TIMEOUT.as_secs_f64() * 1000.0,
+                    ms_repeat: 0.0,
+                    img: None,
+                    error: Some("timeout".into()),
+                }
+            }
+        }
     }
 }
 

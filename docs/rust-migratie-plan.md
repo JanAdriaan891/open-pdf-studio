@@ -300,3 +300,42 @@ Bekende verschillen:
 - `thin_lines` werkt nog niet met Hayro.
 - PDFium tekent het uiterlijk van formuliervelden in de paginabitmap mee, Hayro niet. De app heeft een eigen formulierlaag (`form-layer.js`); of die dit volledig opvangt, wordt in de sweep met formulierbestanden gecontroleerd.
 - Het geheugengebruik op zware scans is niet gemeten.
+
+**Geheugenwacht voor mesh-shadings (bevinding uit de sweep in de app)**
+
+Hayro sampelt elke mesh- of functie-shading naar een textuur zo groot als het gevulde gebied, en houdt alle texturen vast tot de pagina is gerasterd.
+
+Gevolg op 2196-CB-21 (576 mesh-vullingen):
+- 4,4 GB bij 50 %;
+- 14,8 GB bij 100 %;
+- vastgelopen bij 200 %.
+
+In de app tellen vier workers dit op, waarna het geheugen opraakte en de app crashte.
+
+Oplossing:
+- De kernel weigert vooraf een pagina met meer dan 64 van zulke shadings, of waarvan de texturen bij de gevraagde grootte boven 1 GiB kunnen uitkomen. De weigering is herkenbaar aan `HAYRO_UNSUPPORTED`.
+- De app rendert zo'n pagina vanaf dan met PDFium, en de statuschip toont daar "PDFium".
+- Andere fouten worden niet verborgen.
+
+**Optimalisatie: cache-hergebruik en multithreading**
+
+Hayro's render-cache (fonts, glyph-contouren) blijft nu per document bestaan. De rasterizer kan extra threads gebruiken.
+
+Meting:
+- verificatiemap, 213 pagina's;
+- 32 logische kernen;
+- verhouding van de totale rendertijd Hayro/PDFium (lager is beter voor Hayro);
+- de geweigerde mesh-pagina telt niet mee.
+
+| Threads | Alle pagina's | Lichte pagina's | Zware pagina's | Mediaan licht (ms, H/P) | Mediaan zwaar (ms, H/P) |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 0,56 | 1,21 | 0,51 | 57 / 36 | 478 / 665 |
+| 2 | 0,45 | 1,06 | 0,41 | 45 / 32 | 370 / 611 |
+| 4 | 0,42 | 1,00 | 0,38 | 37 / 27 | 378 / 554 |
+| 8 | 0,39 | 0,98 | 0,35 | 33 / 25 | 355 / 507 |
+
+De worker kiest `min(4, kernen/4 − 1)` threads, omdat de app vier workers naast elkaar draait. Op deze machine zijn dat 4 threads; `OPDS_HAYRO_THREADS` overschrijft dit.
+
+Met 4 threads is Hayro:
+- op lichte pagina's even snel als PDFium;
+- op zware tekeningen ongeveer 2,6× sneller.
