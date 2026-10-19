@@ -7,6 +7,7 @@ import { bewaar as bewaarKnipsel } from '../../annotations/vector-snippet-store.
 import { decodePdfTextObject } from '../saver/pdf-text.js';
 import { readPluginPdfAnnotation } from '../../plugins/plugin-pdf.js';
 import { laagVanOc } from '../saver/annotatie-lagen.js';
+import { leesRuweSleutels } from '../saver/ruwe-sleutels.js';
 import { leesPlattegrondMeta } from './plattegrond-meta.js';
 import { leesLijnSleutels } from './maatlijn-uit-bestand.js';
 import { blendUitPdf } from '../../annotations/blend-modes.js';
@@ -1707,6 +1708,10 @@ const result = {};
         }
         delete colors.rawLineHeight;
       }
+
+      // Sleutels die het model niet kent, ruw bewaard voor de saver (#621).
+      const ruw = leesRuweSleutels(context, annotDict);
+      if (ruw) colors.pdfRaw = ruw;
 
       if (Object.keys(colors).length > 0) colorMap.set(key, colors);
       // Invoegteken en tekstmarkeringen ook op objectverwijzing, ook zonder

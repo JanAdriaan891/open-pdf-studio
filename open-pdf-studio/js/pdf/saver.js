@@ -56,6 +56,7 @@ import { buildFilledAreaAP, buildMeasureAreaAP, buildPolylineMeasureAP,
 import { veelhoekGrondvorm } from './saver/veelhoek-grondvorm.js';
 import { draaiPunt, draaiMidden, draaiCm } from './saver/vorm-draaiing.js';
 import { schrijfAlgemeneSleutels, antwoordAnnotaties, schrijfKoppelingen } from './saver/annotatie-algemeen.js';
+import { schrijfRuweSleutels } from './saver/ruwe-sleutels.js';
 import { tekstvakRc, dsTekstDecoratie } from './saver/tekstvak-rc.js';
 import { _rotVisualMapper, _remapRect } from './saver/rotatie-mapper.js';
 import { makePointMapper, buildTextEditStrikeDict, buildCaretDict, addLoadedMarkupKeys,
@@ -2920,6 +2921,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
           // Naam, onderwerp, alternatieve tekst en IFC-categorie (#619) — ook
           // één plek voor alle soorten. Zie saver/annotatie-algemeen.js.
           schrijfAlgemeneSleutels(annotDict, ann, gebruikteNm);
+          // Sleutels uit het bestand die het model niet kent (#621): ruw terug.
+          schrijfRuweSleutels(context, annotDict, ann.pdfRaw);
           // Alles vlakken (#615): welke model-annotatie dit is; vlakken haalt
           // de sleutel weer weg (flatten-bytes.js).
           if (alleenAnnotaties && typeof annotDict.set === 'function') {

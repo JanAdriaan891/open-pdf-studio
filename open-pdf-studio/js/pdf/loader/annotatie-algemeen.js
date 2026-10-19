@@ -28,6 +28,8 @@ export function algemeneEigenschappen(extra, model) {
   }
   if (e.opsAltText && m.altText === undefined) uit.altText = e.opsAltText;
   if (e.opsIfcCategory && m.ifcCategory === undefined) uit.ifcCategory = e.opsIfcCategory;
+  // Wat het model niet kent, ruw voor de saver (#621, saver/ruwe-sleutels.js).
+  if (e.pdfRaw && m.pdfRaw === undefined) uit.pdfRaw = e.pdfRaw;
   return uit;
 }
 
