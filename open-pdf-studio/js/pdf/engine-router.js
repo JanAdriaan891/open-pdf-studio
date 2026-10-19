@@ -18,7 +18,7 @@
 import { state } from '../core/state.js';
 import { invoke } from '../core/platform.js';
 import { thinLinesOn } from './thin-lines.js';
-import { renderEngineOn } from './render-engine.js';
+import { renderEngineOn, withPageEngine } from './render-engine.js';
 
 /**
  * Render one whole page via the user-selected engine.
@@ -32,7 +32,8 @@ export async function renderPdfPage({ path, pageIndex, scale, rotation = 0, thin
   if (state?.renderEngineOverride === 'rust-skia') {
     return invoke('render_pdf_page_skia', { path, pageIndex, scale, rotation, thinLines: !!thinLines });
   }
-  return invoke('render_pdf_page', { path, pageIndex, scale, rotation, thinLines: !!thinLines, engine });
+  return withPageEngine(engine, path, pageIndex, (eng) =>
+    invoke('render_pdf_page', { path, pageIndex, scale, rotation, thinLines: !!thinLines, engine: eng }));
 }
 
 /**

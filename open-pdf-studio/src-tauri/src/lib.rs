@@ -1886,7 +1886,9 @@ async fn render_pdf_page(
                 // failure isolated and let the UI show a render error.
                 // Other failures (timeout, bitmap too large for the shared
                 // memory, an older worker) still fall back to in-proc.
-                if worker_died(&e) {
+                // A dead worker, or Hayro refusing the page (the frontend
+                // then asks PDFium): retrying in-process would not help.
+                if worker_died(&e) || e.to_string().contains("HAYRO_UNSUPPORTED") {
                     return Err(format!("{engine} worker render failed: {e}"));
                 }
                 eprintln!("[render_pdf_page] pool render failed: {} — falling back to in-proc", e);
@@ -2038,7 +2040,7 @@ async fn render_pdf_page_region(
                 return Ok(tauri::ipc::Response::new(data));
             }
             Err(e) => {
-                if worker_died(&e) {
+                if worker_died(&e) || e.to_string().contains("HAYRO_UNSUPPORTED") {
                     return Err(format!("{engine} worker region render failed: {e}"));
                 }
                 eprintln!("[render_pdf_page_region] pool failed: {} — in-proc fallback", e);

@@ -25,6 +25,9 @@ globalThis.__TAURI__ = {
     invoke: async (cmd, args) => {
       calls.push({ cmd, args });
       if (cmd === 'page_content_size') return contentBytes;
+      if (args?.engine === 'hayro' && String(args.path).startsWith('mesh')) {
+        throw 'hayro worker render failed: HAYRO_UNSUPPORTED: page uses 576 mesh or function shadings (limit 64)';
+      }
       return wire();
     },
   },
@@ -35,7 +38,7 @@ globalThis.ImageData ??= class ImageData {
 globalThis.createImageBitmap ??= async (src) => ({ width: src.width, height: src.height, close() {} });
 
 const { state } = await import('../core/state.js');
-const { renderEngineOn } = await import('./render-engine.js');
+const { renderEngineOn, engineForPage } = await import('./render-engine.js');
 const { thinLinesKey } = await import('./thin-lines.js');
 const { renderPdfPage } = await import('./engine-router.js');
 const tc = await import('./tile-cache.js');
@@ -117,4 +120,40 @@ test('cache keys differ per engine', async () => {
   assert.notEqual(tc.tileCacheGet('a.pdf', 1, 2, 0, '0,0', false), null);
   setEngine('pdfium');
   tc.tileCacheClearAll();
+});
+
+test('a page Hayro refuses is rendered with PDFium, and stays with PDFium', async () => {
+  calls.length = 0;
+  setEngine('hayro');
+  const out = await renderPdfPage({ path: 'mesh.pdf', pageIndex: 0, scale: 1, rotation: 0 });
+  assert.ok(out.length > 8, 'a bitmap comes back');
+  assert.deepEqual(calls.map((c) => c.args.engine), ['hayro', 'pdfium']);
+  assert.equal(engineForPage('hayro', 'mesh.pdf', 0), 'pdfium');
+  assert.equal(engineForPage('hayro', 'mesh.pdf', 1), 'hayro', 'other pages keep Hayro');
+  calls.length = 0;
+  await renderPdfPage({ path: 'mesh.pdf', pageIndex: 0, scale: 2, rotation: 0 });
+  assert.deepEqual(calls.map((c) => c.args.engine), ['pdfium'], 'no second Hayro attempt');
+  setEngine('pdfium');
+});
+
+test('a tile of a page Hayro refuses is rendered with PDFium', async () => {
+  calls.length = 0;
+  setEngine('hayro');
+  await invokeTileRegion({
+    path: 'mesh-tiles.pdf', pageIndex: 2, scale: 2, rotation: 0,
+    regionXPt: 0, regionYPt: 0, regionWPt: 100, regionHPt: 100,
+  });
+  const regions = calls.filter((c) => c.cmd === 'render_pdf_page_region');
+  assert.deepEqual(regions.map((c) => c.args.engine), ['hayro', 'pdfium']);
+  assert.equal(engineForPage('hayro', 'mesh-tiles.pdf', 2), 'pdfium');
+  setEngine('pdfium');
+});
+
+test('other Hayro errors are not hidden by a PDFium retry', async () => {
+  const saved = globalThis.__TAURI__.core.invoke;
+  globalThis.__TAURI__.core.invoke = async () => { throw 'hayro worker render failed: read error'; };
+  setEngine('hayro');
+  await assert.rejects(renderPdfPage({ path: 'x.pdf', pageIndex: 0, scale: 1, rotation: 0 }));
+  globalThis.__TAURI__.core.invoke = saved;
+  setEngine('pdfium');
 });

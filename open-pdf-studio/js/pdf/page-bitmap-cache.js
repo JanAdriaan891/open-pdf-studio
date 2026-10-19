@@ -20,7 +20,7 @@
 import { isTauri, invoke } from '../core/platform.js';
 import { sharpenPageRgba } from './render-sharpen-pref.js';
 import { thinLinesKey, thinLinesOn } from './thin-lines.js';
-import { renderEngineOn } from './render-engine.js';
+import { renderEngineOn, engineForPage } from './render-engine.js';
 
 // Map<key, { bitmap: ImageBitmap, w, h, scale }>
 const _cache = new Map();
@@ -214,7 +214,7 @@ function _ensureBitmapAtScale(filePath, pageNum, rotation, cacheBucket, renderSc
       const imageData = new ImageData(rgba, w, h);
       const bitmap = await createImageBitmap(imageData);
       import('../solid/stores/engineStatusStore.js')
-        .then((m) => m.reportActiveEngine(engine, filePath, pageNum))
+        .then((m) => m.reportActiveEngine(engineForPage(engine, filePath, pageNum - 1), filePath, pageNum))
         .catch(() => {});
       const entry = { bitmap, w, h, scale: renderScale };
       _cache.set(key, entry);

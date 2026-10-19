@@ -194,13 +194,16 @@ export async function invokeTileRegion(args) {
   // scene-engine zijn afgewezen pinnen juist op één affinity-worker: anders
   // parsen vier processen elk dezelfde enorme content-stream en groeit de
   // worker-RSS tot meerdere gigabytes.
-  const res = await invoke('render_pdf_page_region', {
-    ...args,
-    spread: shouldSpreadPdfiumFallback(sceneWorthIt),
-  });
+  const { withPageEngine, engineForPage } = await import('./render-engine.js');
+  const res = await withPageEngine(args.engine, args.path, args.pageIndex, (engine) =>
+    invoke('render_pdf_page_region', {
+      ...args,
+      engine,
+      spread: shouldSpreadPdfiumFallback(sceneWorthIt),
+    }));
   try {
     const { reportActiveEngine } = await import('../solid/stores/engineStatusStore.js');
-    reportActiveEngine(args.engine, args.path, args.pageIndex + 1);
+    reportActiveEngine(engineForPage(args.engine, args.path, args.pageIndex), args.path, args.pageIndex + 1);
   } catch {}
   return res;
 }
