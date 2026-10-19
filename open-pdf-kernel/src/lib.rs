@@ -4,4 +4,5 @@
 //! annotation model, a display list shared by screen and PDF output, and a
 //! rasterizer. The crate has no Tauri dependency; the app talks to it through
 //! thin commands.
+pub mod dl;
 pub mod model;
