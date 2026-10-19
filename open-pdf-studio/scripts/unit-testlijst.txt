@@ -393,3 +393,8 @@ js/tools/callout-plaatsing.test.mjs
 js/tools/voorbeeld-doorlopend.test.mjs
 js/pdf/flatten-bytes.test.mjs
 js/pdf/flatten-rondgang.test.mjs
+js/annotations/blend-modes.test.mjs
+js/annotations/rendering/mengen-tegen-pagina.test.mjs
+js/pdf/saver/blend-mode-ap.test.mjs
+js/pdf/mengmodus-rondgang.test.mjs
+js/solid/components/ribbon/ribbon-popup.test.mjs

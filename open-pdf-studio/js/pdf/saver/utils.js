@@ -2,6 +2,7 @@ import { PDFName, PDFDict, PDFRef, PDFRawStream, decodePDFRawStream } from 'pdf-
 import { kruisEindpuntenEllips } from '../../annotations/kruis-geometrie.js';
 import { hasFill, hasStroke, colorWithoutStroke, kanZonderRand } from '../../annotations/fill-utils.js';
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
+import { blendPdfNaam } from '../../annotations/blend-modes.js';
 
 // Convert hex color to RGB values (0-1 range)
 export function hexToRgb(hex) {
@@ -327,9 +328,17 @@ export function stripPdfAMetadata(pdfDocLib) {
  * Met `alsGroep` gaat de inhoud ongewijzigd in een transparantiegroep die één
  * keer met de alfa getekend wordt: overlappende delen (schacht en kop van een
  * pijl) worden dan niet donkerder, zoals op het scherm.
+ *
+ * Een mengmodus (#614) gaat als /BM in dezelfde graphics-state, ook bij
+ * volledige dekking. Normaal schrijft niets: dat is de standaard. De
+ * niet-scheidbare modi (Hue … Luminosity) vragen niets extra's; /OP en /OPM
+ * gaan over overdrukken, niet over mengen. /BM komt bewust niet ook op de
+ * annotatie-dict (PDF 2.0): een lezer die beide toepast, mengt dubbel.
  */
-export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep = false } = {}) {
-  if (!(opacity >= 0 && opacity < 1)) return;
+export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep = false, blendMode = null } = {}) {
+  const alfa = opacity >= 0 && opacity < 1;
+  const bm = blendPdfNaam(blendMode);
+  if (!alfa && !bm) return;
   const apRaw = annotDict.get(PDFName.of('AP'));
   const ap = apRaw && context.lookup(apRaw);
   const nRef = ap?.get?.(PDFName.of('N'));
@@ -351,7 +360,10 @@ export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep =
     if (naam === '/Filter' || naam === '/DecodeParms' || naam === '/Length') continue;
     dict[naam.slice(1)] = waarde;
   }
-  const gso = context.obj({ Type: 'ExtGState', CA: opacity, ca: opacity });
+  const gsVelden = { Type: 'ExtGState' };
+  if (alfa) { gsVelden.CA = opacity; gsVelden.ca = opacity; }
+  if (bm) gsVelden.BM = PDFName.of(bm);
+  const gso = context.obj(gsVelden);
   const resOud = n.dict.get(PDFName.of('Resources'));
   const res = context.lookup(resOud);
 

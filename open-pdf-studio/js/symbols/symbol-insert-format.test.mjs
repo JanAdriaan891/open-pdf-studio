@@ -60,12 +60,16 @@ test('onbruikbare waarden worden genegeerd in plaats van de voorkeur te wissen',
     strokeColor: '#00ff00', lineWidth: 2, opacity: 0.4, blendMode: 'multiply',
   });
   const na = mergeInsertFormat(p, {
-    strokeColor: '', lineWidth: -1, opacity: 3, blendMode: 'screen', onbekend: 5,
+    strokeColor: '', lineWidth: -1, opacity: 3, blendMode: 'plasma', onbekend: 5,
   });
   assert.deepEqual(na, p);
   assert.equal('onbekend' in na, false);
   assert.deepEqual(mergeInsertFormat(p, { lineWidth: NaN, opacity: 'abc' }), p);
   assert.deepEqual(mergeInsertFormat(p, { lineWidth: 500 }), p);
+  // Alle zestien mengmodi van het menu (#614), met de modelnamen.
+  assert.equal(mergeInsertFormat(p, { blendMode: 'screen' }).blendMode, 'screen');
+  assert.equal(mergeInsertFormat(p, { blendMode: 'colorDodge' }).blendMode, 'colorDodge');
+  assert.equal(mergeInsertFormat(p, { blendMode: 'color-dodge' }).blendMode, 'multiply');
 });
 
 test('null zet één optie terug op de eigen opmaak van het symbool', () => {
