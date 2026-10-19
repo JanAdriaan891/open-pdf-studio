@@ -298,5 +298,5 @@ Volledigheid:
 
 Bekende verschillen:
 - `thin_lines` werkt nog niet met Hayro.
-- Formuliervelden tekent PDFium wel en Hayro niet. De app tekent annotaties zelf, maar AcroForm-widgets nog niet.
+- PDFium tekent het uiterlijk van formuliervelden in de paginabitmap mee, Hayro niet. De app heeft een eigen formulierlaag (`form-layer.js`); of die dit volledig opvangt, wordt in de sweep met formulierbestanden gecontroleerd.
 - Het geheugengebruik op zware scans is niet gemeten.
