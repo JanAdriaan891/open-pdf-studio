@@ -606,6 +606,7 @@
     "dimHint": "tıklayın, ardından örn. 500,300 yazıp Enter'a basın",
     "dimInputHint": "Ölçüleri yazın (örn. 500,300 veya tek bir boyut) ve Enter'a basın — ya da çizmek için sürükleyin",
     "calloutStep2": "Notun yerleşeceği yere tıklayın — iptal için Esc",
+    "polygonHint": "Her köşeye tıklayın — bitirmek için çift tıklayın, Enter'a basın veya ilk köşeye tıklayın; Geri tuşu son köşeyi kaldırır, Esc iptal eder. Düzgün altıgen için sürükleyin.",
     "offsetPick": "Ötele: ötelenecek bir nesneye tıklayın",
     "offsetDistance": "Ötele: mesafeyi yazıp Enter'a basın (örn. 100)",
     "offsetDistanceInvalid": "Ötele: pozitif bir mesafe girin, örn. 100",

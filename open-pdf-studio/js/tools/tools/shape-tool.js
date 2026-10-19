@@ -1,5 +1,6 @@
 /**
- * Shape tool — handles box, circle, highlight, cloud, polygon, redaction, textbox, callout
+ * Shape tool — handles box, circle, highlight, cloud, redaction, textbox, callout
+ * (the polygon has its own corner-by-corner tool, polygon-tool.js)
  * All use the same drag-to-create pattern via buildAnnotationProps + drawShapePreview
  */
 import { isKlikSleep } from '../../annotations/minimummaat.js';
@@ -35,7 +36,7 @@ function _calloutStop(ctx) {
 // maten. `500,300` = breedte × hoogte, één getal = vierkant / diameter.
 // De geometrie volgt de cursorrichting (net als de lijn-tool), zodat je met
 // de muis nog kantelt WAT je typt.
-const MAAT_TOOLS = new Set(['box', 'circle', 'ellipse', 'polygon', 'lshape']);
+const MAAT_TOOLS = new Set(['box', 'circle', 'ellipse', 'lshape']);
 const _dim = { actief: false, startX: 0, startY: 0, cursor: null, end: null, ctx: null };
 
 function _dimStop() {

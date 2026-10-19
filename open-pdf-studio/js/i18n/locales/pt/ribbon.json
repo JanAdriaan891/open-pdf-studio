@@ -606,6 +606,7 @@
     "dimHint": "clique e digite ex. 500,300 + Enter",
     "dimInputHint": "Digite as dimensões (ex. 500,300 ou um único tamanho) e pressione Enter — ou arraste para desenhar",
     "calloutStep2": "Clique onde a nota deve ficar — Esc para cancelar",
+    "polygonHint": "Clique em cada vértice — clique duplo, Enter ou clique no primeiro vértice para concluir; Backspace remove o último vértice, Esc cancela. Arraste para um hexágono regular.",
     "offsetPick": "Deslocamento: clique em um objeto para deslocar",
     "offsetDistance": "Deslocamento: digite a distância e pressione Enter (ex. 100)",
     "offsetDistanceInvalid": "Deslocamento: digite uma distância positiva, ex. 100",

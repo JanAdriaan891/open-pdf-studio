@@ -606,6 +606,7 @@
     "dimHint": "faceți clic, apoi tastați ex. 500,300 + Enter",
     "dimInputHint": "Tastați dimensiunile (ex. 500,300 sau o singură dimensiune) și apăsați Enter — sau trageți pentru a desena",
     "calloutStep2": "Faceți clic unde trebuie să fie nota — Esc pentru anulare",
+    "polygonHint": "Faceți clic pe fiecare colț — dublu clic, Enter sau clic pe primul colț pentru a termina; Backspace elimină ultimul colț, Esc anulează. Trageți pentru un hexagon regulat.",
     "offsetPick": "Decalare: faceți clic pe un obiect de decalat",
     "offsetDistance": "Decalare: tastați distanța și apăsați Enter (ex. 100)",
     "offsetDistanceInvalid": "Decalare: introduceți o distanță pozitivă, ex. 100",

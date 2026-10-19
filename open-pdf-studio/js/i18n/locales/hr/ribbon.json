@@ -606,6 +606,7 @@
     "dimHint": "kliknite, zatim upišite npr. 500,300 + Enter",
     "dimInputHint": "Upišite dimenzije (npr. 500,300 ili jednu veličinu) i pritisnite Enter — ili crtajte povlačenjem",
     "calloutStep2": "Kliknite gdje treba stajati bilješka — Esc za odustajanje",
+    "polygonHint": "Kliknite svaki vrh — dvoklik, Enter ili klik na prvi vrh za završetak; Backspace uklanja zadnji vrh, Esc odustaje. Povucite za pravilni šesterokut.",
     "offsetPick": "Odmak: kliknite objekt koji treba odmaknuti",
     "offsetDistance": "Odmak: upišite udaljenost i pritisnite Enter (npr. 100)",
     "offsetDistanceInvalid": "Odmak: unesite pozitivnu udaljenost, npr. 100",

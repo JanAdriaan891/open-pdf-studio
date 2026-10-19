@@ -606,6 +606,7 @@
     "dimHint": "kliknite a potom zadajte napr. 500,300 + Enter",
     "dimInputHint": "Zadajte rozmery (napr. 500,300 alebo jeden rozmer) a stlačte Enter — alebo kreslite ťahaním",
     "calloutStep2": "Kliknite tam, kam má prísť poznámka — Esc na zrušenie",
+    "polygonHint": "Kliknite na každý vrchol — dvojklik, Enter alebo klik na prvý vrchol dokončí; Backspace odstráni posledný vrchol, Esc zruší. Ťahaním nakreslíte pravidelný šesťuholník.",
     "offsetPick": "Odsadiť: kliknite na objekt, ktorý chcete odsadiť",
     "offsetDistance": "Odsadiť: zadajte vzdialenosť a stlačte Enter (napr. 100)",
     "offsetDistanceInvalid": "Odsadiť: zadajte kladnú vzdialenosť, napr. 100",

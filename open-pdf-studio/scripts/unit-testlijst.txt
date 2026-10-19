@@ -410,4 +410,5 @@ js/pdf/extensie-opslaan.test.mjs
 js/annotations/veelhoek-punten.test.mjs
 js/annotations/veelhoek-bewerken.test.mjs
 js/annotations/veelhoek-raak.test.mjs
+js/tools/tools/polygon-tool.test.mjs
 js/pdf/veelhoek-rondgang.test.mjs
