@@ -1073,5 +1073,32 @@
     "message": "Plik „{{fileName}}” jest chroniony hasłem. Wprowadź hasło, aby otworzyć go tylko do odczytu.",
     "label": "Hasło:",
     "wrong": "Nieprawidłowe hasło, spróbuj ponownie."
+  },
+  "screenshot": {
+    "title": "Zrzut ekranu",
+    "selectHint": "Przeciągnij, aby zaznaczyć obszar. Esc anuluje.",
+    "area": "Strona {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(zaznaczenie przycięte do tej strony)",
+    "resolution": "Rozdzielczość",
+    "screenResolution": "Ekran ({{dpi}} dpi)",
+    "custom": "Niestandardowa",
+    "size": "Rozmiar",
+    "limited": "Ograniczono do maksymalnego rozmiaru obrazu: {{dpi}} dpi.",
+    "format": "Format pliku",
+    "quality": "Jakość JPEG",
+    "clipboardNote": "Do schowka trafia zawsze obraz PNG; format pliku dotyczy polecenia Zapisz jako.",
+    "copy": "Kopiuj do schowka",
+    "saveAs": "Zapisz jako…",
+    "busy": "Renderowanie…",
+    "copied": "Zrzut ekranu skopiowano do schowka ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Zrzut ekranu zapisano w {{path}}",
+    "copyFailed": "Nie można skopiować zrzutu ekranu do schowka",
+    "saveFailed": "Nie można zapisać zrzutu ekranu",
+    "cancelled": "Zrzut ekranu anulowany",
+    "noPage": "Brak strony PDF do przechwycenia",
+    "notOnPage": "Zaznaczenie nie leży na stronie",
+    "documentChanged": "Dokument się zmienił. Wykonaj zrzut ponownie.",
+    "pngFiles": "Obraz PNG",
+    "jpegFiles": "Obraz JPEG"
   }
 }

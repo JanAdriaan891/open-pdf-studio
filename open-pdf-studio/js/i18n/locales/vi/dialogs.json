@@ -1073,5 +1073,32 @@
     "message": "\"{{fileName}}\" được bảo vệ bằng mật khẩu. Nhập mật khẩu để mở ở chế độ chỉ đọc.",
     "label": "Mật khẩu:",
     "wrong": "Sai mật khẩu, hãy thử lại."
+  },
+  "screenshot": {
+    "title": "Chụp màn hình",
+    "selectHint": "Kéo để chọn một vùng. Esc để hủy.",
+    "area": "Trang {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(vùng chọn được cắt theo trang này)",
+    "resolution": "Độ phân giải",
+    "screenResolution": "Màn hình ({{dpi}} dpi)",
+    "custom": "Tùy chỉnh",
+    "size": "Kích thước",
+    "limited": "Đã giới hạn ở kích thước ảnh tối đa: {{dpi}} dpi.",
+    "format": "Định dạng tệp",
+    "quality": "Chất lượng JPEG",
+    "clipboardNote": "Bộ nhớ tạm luôn nhận ảnh PNG; định dạng tệp áp dụng cho Lưu thành.",
+    "copy": "Sao chép vào bộ nhớ tạm",
+    "saveAs": "Lưu thành…",
+    "busy": "Đang kết xuất…",
+    "copied": "Đã sao chép ảnh chụp vào bộ nhớ tạm ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Đã lưu ảnh chụp vào {{path}}",
+    "copyFailed": "Không thể sao chép ảnh chụp vào bộ nhớ tạm",
+    "saveFailed": "Không thể lưu ảnh chụp",
+    "cancelled": "Đã hủy chụp màn hình",
+    "noPage": "Không có trang PDF để chụp",
+    "notOnPage": "Vùng chọn không nằm trên trang nào",
+    "documentChanged": "Tài liệu đã thay đổi. Hãy chụp lại.",
+    "pngFiles": "Ảnh PNG",
+    "jpegFiles": "Ảnh JPEG"
   }
 }

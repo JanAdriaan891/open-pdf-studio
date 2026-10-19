@@ -1073,5 +1073,32 @@
     "message": "«{{fileName}}» er beskyttet med passord. Skriv inn passordet for å åpne den skrivebeskyttet.",
     "label": "Passord:",
     "wrong": "Feil passord, prøv igjen."
+  },
+  "screenshot": {
+    "title": "Skjermbilde",
+    "selectHint": "Dra for å merke et område. Esc avbryter.",
+    "area": "Side {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(merkingen er beskåret til denne siden)",
+    "resolution": "Oppløsning",
+    "screenResolution": "Skjerm ({{dpi}} dpi)",
+    "custom": "Egendefinert",
+    "size": "Størrelse",
+    "limited": "Begrenset til maksimal bildestørrelse: {{dpi}} dpi.",
+    "format": "Filformat",
+    "quality": "JPEG-kvalitet",
+    "clipboardNote": "Utklippstavlen får alltid et PNG-bilde; filformatet gjelder for Lagre som.",
+    "copy": "Kopier til utklippstavlen",
+    "saveAs": "Lagre som…",
+    "busy": "Gjengir…",
+    "copied": "Skjermbilde kopiert til utklippstavlen ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Skjermbilde lagret i {{path}}",
+    "copyFailed": "Kunne ikke kopiere skjermbildet til utklippstavlen",
+    "saveFailed": "Kunne ikke lagre skjermbildet",
+    "cancelled": "Skjermbilde avbrutt",
+    "noPage": "Ingen PDF-side å ta bilde av",
+    "notOnPage": "Merkingen ligger ikke på en side",
+    "documentChanged": "Dokumentet er endret. Ta skjermbildet på nytt.",
+    "pngFiles": "PNG-bilde",
+    "jpegFiles": "JPEG-bilde"
   }
 }

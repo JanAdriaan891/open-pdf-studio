@@ -1073,5 +1073,32 @@
     "message": "\"{{fileName}}\" parola ile korunuyor. Salt okunur açmak için parolayı girin.",
     "label": "Parola:",
     "wrong": "Yanlış parola, tekrar deneyin."
+  },
+  "screenshot": {
+    "title": "Ekran Görüntüsü",
+    "selectHint": "Bir alan seçmek için sürükleyin. Esc iptal eder.",
+    "area": "Sayfa {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(seçim bu sayfaya kırpıldı)",
+    "resolution": "Çözünürlük",
+    "screenResolution": "Ekran ({{dpi}} dpi)",
+    "custom": "Özel",
+    "size": "Boyut",
+    "limited": "En büyük görüntü boyutuyla sınırlandı: {{dpi}} dpi.",
+    "format": "Dosya biçimi",
+    "quality": "JPEG kalitesi",
+    "clipboardNote": "Panoya her zaman PNG görüntüsü gider; dosya biçimi Farklı kaydet için geçerlidir.",
+    "copy": "Panoya kopyala",
+    "saveAs": "Farklı kaydet…",
+    "busy": "İşleniyor…",
+    "copied": "Ekran görüntüsü panoya kopyalandı ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Ekran görüntüsü kaydedildi: {{path}}",
+    "copyFailed": "Ekran görüntüsü panoya kopyalanamadı",
+    "saveFailed": "Ekran görüntüsü kaydedilemedi",
+    "cancelled": "Ekran görüntüsü iptal edildi",
+    "noPage": "Yakalanacak PDF sayfası yok",
+    "notOnPage": "Seçim bir sayfanın üzerinde değil",
+    "documentChanged": "Belge değişti. Ekran görüntüsünü yeniden alın.",
+    "pngFiles": "PNG görüntüsü",
+    "jpegFiles": "JPEG görüntüsü"
   }
 }

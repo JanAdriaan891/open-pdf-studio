@@ -1073,5 +1073,32 @@
     "message": "”{{fileName}}” on suojattu salasanalla. Avaa se vain luku -tilassa antamalla salasana.",
     "label": "Salasana:",
     "wrong": "Väärä salasana, yritä uudelleen."
+  },
+  "screenshot": {
+    "title": "Kuvakaappaus",
+    "selectHint": "Valitse alue vetämällä. Esc peruuttaa.",
+    "area": "Sivu {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(valinta rajattu tälle sivulle)",
+    "resolution": "Tarkkuus",
+    "screenResolution": "Näyttö ({{dpi}} dpi)",
+    "custom": "Mukautettu",
+    "size": "Koko",
+    "limited": "Rajoitettu kuvan enimmäiskokoon: {{dpi}} dpi.",
+    "format": "Tiedostomuoto",
+    "quality": "JPEG-laatu",
+    "clipboardNote": "Leikepöydälle menee aina PNG-kuva; tiedostomuoto koskee Tallenna nimellä -toimintoa.",
+    "copy": "Kopioi leikepöydälle",
+    "saveAs": "Tallenna nimellä…",
+    "busy": "Hahmonnetaan…",
+    "copied": "Kuvakaappaus kopioitu leikepöydälle ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Kuvakaappaus tallennettu: {{path}}",
+    "copyFailed": "Kuvakaappausta ei voitu kopioida leikepöydälle",
+    "saveFailed": "Kuvakaappausta ei voitu tallentaa",
+    "cancelled": "Kuvakaappaus peruutettu",
+    "noPage": "Ei kaapattavaa PDF-sivua",
+    "notOnPage": "Valinta ei ole sivulla",
+    "documentChanged": "Asiakirja on muuttunut. Ota kuvakaappaus uudelleen.",
+    "pngFiles": "PNG-kuva",
+    "jpegFiles": "JPEG-kuva"
   }
 }

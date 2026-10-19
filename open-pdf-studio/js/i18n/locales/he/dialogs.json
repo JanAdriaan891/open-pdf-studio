@@ -1073,5 +1073,32 @@
     "message": "\"{{fileName}}\" מוגן בסיסמה. הזינו את הסיסמה כדי לפתוח אותו לקריאה בלבד.",
     "label": "סיסמה:",
     "wrong": "סיסמה שגויה, נסו שוב."
+  },
+  "screenshot": {
+    "title": "צילום מסך",
+    "selectHint": "גררו כדי לבחור אזור. Esc מבטל.",
+    "area": "עמוד {{page}} · {{width}} × {{height}} מ\"מ",
+    "clipped": "(הבחירה נחתכה לעמוד זה)",
+    "resolution": "רזולוציה",
+    "screenResolution": "מסך ({{dpi}} dpi)",
+    "custom": "מותאם אישית",
+    "size": "גודל",
+    "limited": "הוגבל לגודל התמונה המרבי: {{dpi}} dpi.",
+    "format": "תבנית קובץ",
+    "quality": "איכות JPEG",
+    "clipboardNote": "ללוח תמיד נשלחת תמונת PNG; תבנית הקובץ חלה על שמירה בשם.",
+    "copy": "העתקה ללוח",
+    "saveAs": "שמירה בשם…",
+    "busy": "מעבד…",
+    "copied": "צילום המסך הועתק ללוח ({{width}} × {{height}} פיקסלים, {{dpi}} dpi)",
+    "saved": "צילום המסך נשמר ב-{{path}}",
+    "copyFailed": "לא ניתן להעתיק את צילום המסך ללוח",
+    "saveFailed": "לא ניתן לשמור את צילום המסך",
+    "cancelled": "צילום המסך בוטל",
+    "noPage": "אין עמוד PDF לצילום",
+    "notOnPage": "הבחירה אינה על עמוד",
+    "documentChanged": "המסמך השתנה. צלמו שוב את המסך.",
+    "pngFiles": "תמונת PNG",
+    "jpegFiles": "תמונת JPEG"
   }
 }

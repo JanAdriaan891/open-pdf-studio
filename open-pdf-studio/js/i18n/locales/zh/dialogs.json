@@ -1073,5 +1073,32 @@
     "message": "“{{fileName}}”受密码保护。输入密码以只读方式打开。",
     "label": "密码：",
     "wrong": "密码错误，请重试。"
+  },
+  "screenshot": {
+    "title": "截图",
+    "selectHint": "拖动以选择区域。按 Esc 取消。",
+    "area": "第 {{page}} 页 · {{width}} × {{height}} 毫米",
+    "clipped": "（选区已裁剪到此页）",
+    "resolution": "分辨率",
+    "screenResolution": "屏幕（{{dpi}} dpi）",
+    "custom": "自定义",
+    "size": "尺寸",
+    "limited": "已限制为最大图像尺寸：{{dpi}} dpi。",
+    "format": "文件格式",
+    "quality": "JPEG 质量",
+    "clipboardNote": "剪贴板始终接收 PNG 图像；文件格式用于“另存为”。",
+    "copy": "复制到剪贴板",
+    "saveAs": "另存为…",
+    "busy": "正在渲染…",
+    "copied": "截图已复制到剪贴板（{{width}} × {{height}} 像素，{{dpi}} dpi）",
+    "saved": "截图已保存到 {{path}}",
+    "copyFailed": "无法将截图复制到剪贴板",
+    "saveFailed": "无法保存截图",
+    "cancelled": "已取消截图",
+    "noPage": "没有可截取的 PDF 页面",
+    "notOnPage": "选区不在页面上",
+    "documentChanged": "文档已更改。请重新截图。",
+    "pngFiles": "PNG 图像",
+    "jpegFiles": "JPEG 图像"
   }
 }

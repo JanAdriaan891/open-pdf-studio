@@ -1073,5 +1073,32 @@
     "message": "\"{{fileName}}\" er beskyttet med en adgangskode. Angiv adgangskoden for at åbne den skrivebeskyttet.",
     "label": "Adgangskode:",
     "wrong": "Forkert adgangskode, prøv igen."
+  },
+  "screenshot": {
+    "title": "Skærmbillede",
+    "selectHint": "Træk for at markere et område. Esc annullerer.",
+    "area": "Side {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(markering beskåret til denne side)",
+    "resolution": "Opløsning",
+    "screenResolution": "Skærm ({{dpi}} dpi)",
+    "custom": "Brugerdefineret",
+    "size": "Størrelse",
+    "limited": "Begrænset til den maksimale billedstørrelse: {{dpi}} dpi.",
+    "format": "Filformat",
+    "quality": "JPEG-kvalitet",
+    "clipboardNote": "Udklipsholderen får altid et PNG-billede; filformatet gælder for Gem som.",
+    "copy": "Kopiér til udklipsholder",
+    "saveAs": "Gem som…",
+    "busy": "Gengiver…",
+    "copied": "Skærmbillede kopieret til udklipsholderen ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Skærmbillede gemt i {{path}}",
+    "copyFailed": "Skærmbilledet kunne ikke kopieres til udklipsholderen",
+    "saveFailed": "Skærmbilledet kunne ikke gemmes",
+    "cancelled": "Skærmbillede annulleret",
+    "noPage": "Ingen PDF-side at optage",
+    "notOnPage": "Markeringen ligger ikke på en side",
+    "documentChanged": "Dokumentet er ændret. Tag skærmbilledet igen.",
+    "pngFiles": "PNG-billede",
+    "jpegFiles": "JPEG-billede"
   }
 }

@@ -2119,6 +2119,41 @@
   gap: 6px;
 }
 
+/* Screenshot Dialog (Home → Screenshot) */
+.screenshot-dialog {
+  width: 420px;
+}
+
+.screenshot-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 210px;
+  border: 1px solid var(--theme-border, #acacac);
+  background: var(--theme-surface-alt, #e8e8e8);
+  overflow: hidden;
+}
+
+.screenshot-preview canvas {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  background: #fff;
+}
+
+.screenshot-unit {
+  font-size: 11px;
+  color: var(--theme-text, #333);
+  white-space: nowrap;
+}
+
+.screenshot-warning {
+  color: var(--theme-error, #c42b1c);
+}
+
+.screenshot-status {
+  font-size: 11px;
+  color: var(--theme-text-secondary, #666);
+}
+
 /* Extract Pages Dialog */
 .extract-pages-overlay { }
 

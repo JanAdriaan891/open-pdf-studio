@@ -1073,5 +1073,32 @@
     "message": "«{{fileName}}» està protegit amb una contrasenya. Introduïu la contrasenya per obrir-lo només de lectura.",
     "label": "Contrasenya:",
     "wrong": "Contrasenya incorrecta, torneu-ho a provar."
+  },
+  "screenshot": {
+    "title": "Captura de pantalla",
+    "selectHint": "Arrossegueu per seleccionar una àrea. Esc cancel·la.",
+    "area": "Pàgina {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(selecció retallada a aquesta pàgina)",
+    "resolution": "Resolució",
+    "screenResolution": "Pantalla ({{dpi}} ppp)",
+    "custom": "Personalitzada",
+    "size": "Mida",
+    "limited": "Limitada a la mida màxima d'imatge: {{dpi}} ppp.",
+    "format": "Format de fitxer",
+    "quality": "Qualitat JPEG",
+    "clipboardNote": "El porta-retalls sempre rep una imatge PNG; el format de fitxer s'aplica a Desa com a.",
+    "copy": "Copia al porta-retalls",
+    "saveAs": "Desa com a…",
+    "busy": "S'està renderitzant…",
+    "copied": "Captura copiada al porta-retalls ({{width}} × {{height}} px, {{dpi}} ppp)",
+    "saved": "Captura desada a {{path}}",
+    "copyFailed": "No s'ha pogut copiar la captura al porta-retalls",
+    "saveFailed": "No s'ha pogut desar la captura",
+    "cancelled": "Captura cancel·lada",
+    "noPage": "No hi ha cap pàgina PDF per capturar",
+    "notOnPage": "La selecció no és sobre una pàgina",
+    "documentChanged": "El document ha canviat. Torneu a fer la captura.",
+    "pngFiles": "Imatge PNG",
+    "jpegFiles": "Imatge JPEG"
   }
 }

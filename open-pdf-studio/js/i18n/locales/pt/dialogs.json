@@ -1073,5 +1073,32 @@
     "message": "\"{{fileName}}\" está protegido por senha. Digite a senha para abri-lo somente para leitura.",
     "label": "Senha:",
     "wrong": "Senha incorreta, tente novamente."
+  },
+  "screenshot": {
+    "title": "Captura de tela",
+    "selectHint": "Arraste para selecionar uma área. Esc cancela.",
+    "area": "Página {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(seleção recortada para esta página)",
+    "resolution": "Resolução",
+    "screenResolution": "Tela ({{dpi}} dpi)",
+    "custom": "Personalizada",
+    "size": "Tamanho",
+    "limited": "Limitada ao tamanho máximo de imagem: {{dpi}} dpi.",
+    "format": "Formato do arquivo",
+    "quality": "Qualidade JPEG",
+    "clipboardNote": "A área de transferência sempre recebe uma imagem PNG; o formato do arquivo vale para Salvar como.",
+    "copy": "Copiar para a área de transferência",
+    "saveAs": "Salvar como…",
+    "busy": "Renderizando…",
+    "copied": "Captura copiada para a área de transferência ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Captura salva em {{path}}",
+    "copyFailed": "Não foi possível copiar a captura para a área de transferência",
+    "saveFailed": "Não foi possível salvar a captura",
+    "cancelled": "Captura cancelada",
+    "noPage": "Nenhuma página PDF para capturar",
+    "notOnPage": "A seleção não está sobre uma página",
+    "documentChanged": "O documento mudou. Faça a captura novamente.",
+    "pngFiles": "Imagem PNG",
+    "jpegFiles": "Imagem JPEG"
   }
 }

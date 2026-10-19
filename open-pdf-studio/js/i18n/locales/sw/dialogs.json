@@ -1073,5 +1073,32 @@
     "message": "\"{{fileName}}\" imelindwa kwa nenosiri. Weka nenosiri ili kuifungua kwa kusoma tu.",
     "label": "Nenosiri:",
     "wrong": "Nenosiri si sahihi, jaribu tena."
+  },
+  "screenshot": {
+    "title": "Picha ya Skrini",
+    "selectHint": "Buruta ili kuchagua eneo. Esc inaghairi.",
+    "area": "Ukurasa {{page}} · {{width}} × {{height}} mm",
+    "clipped": "(uteuzi umekatwa kwa ukurasa huu)",
+    "resolution": "Ubora wa picha",
+    "screenResolution": "Skrini ({{dpi}} dpi)",
+    "custom": "Maalum",
+    "size": "Ukubwa",
+    "limited": "Imewekewa kikomo cha ukubwa wa juu wa picha: {{dpi}} dpi.",
+    "format": "Muundo wa faili",
+    "quality": "Ubora wa JPEG",
+    "clipboardNote": "Ubao wa kunakili hupokea picha ya PNG kila wakati; muundo wa faili unatumika kwa Hifadhi kama.",
+    "copy": "Nakili kwenye ubao wa kunakili",
+    "saveAs": "Hifadhi kama…",
+    "busy": "Inachora…",
+    "copied": "Picha ya skrini imenakiliwa kwenye ubao wa kunakili ({{width}} × {{height}} px, {{dpi}} dpi)",
+    "saved": "Picha ya skrini imehifadhiwa kwenye {{path}}",
+    "copyFailed": "Imeshindwa kunakili picha ya skrini kwenye ubao wa kunakili",
+    "saveFailed": "Imeshindwa kuhifadhi picha ya skrini",
+    "cancelled": "Picha ya skrini imeghairiwa",
+    "noPage": "Hakuna ukurasa wa PDF wa kunasa",
+    "notOnPage": "Uteuzi haupo kwenye ukurasa",
+    "documentChanged": "Hati imebadilika. Piga picha ya skrini tena.",
+    "pngFiles": "Picha ya PNG",
+    "jpegFiles": "Picha ya JPEG"
   }
 }
