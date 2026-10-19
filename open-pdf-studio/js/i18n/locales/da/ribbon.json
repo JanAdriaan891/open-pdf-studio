@@ -579,6 +579,7 @@
     "enlarge": "Forstør",
     "dimHint": "klik, og skriv derefter f.eks. 500,300 + Enter",
     "dimInputHint": "Skriv mål (f.eks. 500,300 eller én størrelse), og tryk på Enter — eller træk for at tegne",
+    "calloutStep2": "Klik der, hvor noten skal stå — Esc for at annullere",
     "offsetPick": "Forskyd: klik på et objekt, der skal forskydes",
     "offsetDistance": "Forskyd: skriv afstanden, og tryk på Enter (f.eks. 100)",
     "offsetDistanceInvalid": "Forskyd: indtast en positiv afstand, f.eks. 100",

@@ -579,6 +579,7 @@
     "enlarge": "Perbesar",
     "dimHint": "klik, lalu ketik mis. 500,300 + Enter",
     "dimInputHint": "Ketik dimensi (mis. 500,300 atau satu ukuran) lalu tekan Enter — atau seret untuk menggambar",
+    "calloutStep2": "Klik di tempat catatan akan diletakkan — Esc untuk membatalkan",
     "offsetPick": "Offset: klik objek yang akan di-offset",
     "offsetDistance": "Offset: ketik jarak lalu tekan Enter (mis. 100)",
     "offsetDistanceInvalid": "Offset: masukkan jarak positif, mis. 100",

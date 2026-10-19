@@ -11,7 +11,7 @@ import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
 import { getCachedPdfBytes, setCachedPdfBytes, hidePdfABar } from './loader.js';
 import { PDFDocument, PDFString, PDFHexString, PDFName, PDFArray, PDFStream, degrees,
   PDFTextField, PDFCheckBox, PDFDropdown, PDFRadioGroup, PDFOptionList } from 'pdf-lib';
-import { kopNaarLE, koppenSleutel } from './lijnkoppen.js';
+import { kopNaarLE, koppenSleutel, koppenVan, calloutKoppenNaarBestand } from './lijnkoppen.js';
 import { bouwKnipselAppearance, tekenKnipselInPagina, alInBasis, markeerGebakken, ruimKnipselRestenOp, CATALOGUS_SLEUTEL as KNIPSEL_CATALOGUS } from './saver/vector-snippet.js';
 import { schrijfHatchMeta } from './saver/hatch-meta.js';
 import { schrijfWandJoinMeta } from './saver/wand-join-meta.js';
@@ -48,10 +48,9 @@ import { layersForSave, currentLayerId } from '../annotations/annotatie-lagen.js
 import { heeftNietWinAnsi, pdfTextString, toWinAnsiText, winAnsiLiteral, asciiPdfName } from './saver/pdf-text.js';
 import { typemachineVak, typemachineRegelBreedte } from './saver/typemachine.js';
 import { catmullRomSpline } from '../tools/tools/spline-tool.js';
-import { catmullRomToBezier, splineArrowEndTangent } from '../annotations/spline-arrow-geometry.js';
 import { buildFilledAreaAP, buildMeasureAreaAP, buildPolylineMeasureAP,
   buildWallAP, buildCloudAP, buildSplineArrowAP,
-  buildStavenreeksAP, buildBetonbalkAP, buildSysteemrasterAP, buildLineAP, buildPolylineAP, polylijnOmhullende, lijnOmhullende, buildLeiderAP, leiderOmhullende, apLijndikte,
+  buildStavenreeksAP, buildBetonbalkAP, buildSysteemrasterAP, buildLineAP, calloutLeiderOps, buildPolylineAP, polylijnOmhullende, lijnOmhullende, buildLeiderAP, leiderOmhullende, apLijndikte,
   cloudRectOutlinePts, cloudPolyOutlinePts } from './saver/appearance-vectors.js';
 import { veelhoekGrondvorm } from './saver/veelhoek-grondvorm.js';
 import { _rotVisualMapper, _remapRect } from './saver/rotatie-mapper.js';
@@ -1293,12 +1292,15 @@ async function _savePDFNu(saveAsPath, activeDoc) {
               // Save original text box Rect before expanding
               const tbX1 = x1, tbY1 = y1, tbX2 = x2, tbY2 = y2;
 
-              // Expand Rect to include all callout points (with padding for arrowhead)
-              const clPad = 12;
-              x1 = Math.min(x1, clArrowX - clPad, clKneeX, textConnectionX);
-              y1 = Math.min(y1, clArrowY - clPad, clKneeY, textConnectionY);
-              x2 = Math.max(x2, clArrowX + clPad, clKneeX, textConnectionX);
-              y2 = Math.max(y2, clArrowY + clPad, clKneeY, textConnectionY);
+              // Expand Rect to include all callout points (with padding for
+              // the heads: at most headSize / cos 30° from their point, #612).
+              const clKoppen = koppenVan(ann);
+              const clPad = Math.max(12, clKoppen.headSize / Math.cos(Math.PI / 6) + Math.max(ftBorderWidth, 1));
+              const clArmPad = clKoppen.startHead !== 'none' ? clPad : 0;
+              x1 = Math.min(x1, clArrowX - clPad, clKneeX, textConnectionX - clArmPad);
+              y1 = Math.min(y1, clArrowY - clPad, clKneeY, textConnectionY - clArmPad);
+              x2 = Math.max(x2, clArrowX + clPad, clKneeX, textConnectionX + clArmPad);
+              y2 = Math.max(y2, clArrowY + clPad, clKneeY, textConnectionY + clArmPad);
               annDictObj.Rect = [x1, y1, x2, y2];
 
               calloutData = {
@@ -1328,7 +1330,13 @@ async function _savePDFNu(saveAsPath, activeDoc) {
             if (calloutData) {
               annotDict.set(PDFName.of('CL'), context.obj(calloutData.cl));
               annotDict.set(PDFName.of('IT'), PDFName.of('FreeTextCallout'));
-              annotDict.set(PDFName.of('LE'), PDFName.of('OpenArrow'));
+              // Koppen (#612): /LE is bij een FreeText één naam, voor de punt;
+              // beide koppen (ook die aan het tekstvak) in /OPS_LineHeads.
+              const clKoppen = koppenVan(ann);
+              const clLe = calloutKoppenNaarBestand(clKoppen.startHead, clKoppen.endHead);
+              annotDict.set(PDFName.of('LE'), PDFName.of(clLe.le));
+              annotDict.set(PDFName.of('OPS_LineHeads'), pdfTextString(clLe.sleutel));
+              annotDict.set(PDFName.of('OPS_HeadSize'), context.obj(clKoppen.headSize));
               annotDict.set(PDFName.of('RD'), context.obj(calloutData.rd));
               // Round (curved) leader flag — private key so OPDS restores the
               // curved leader on reload. External viewers ignore it and fall back
@@ -1355,47 +1363,22 @@ async function _savePDFNu(saveAsPath, activeDoc) {
 
               // Draw callout leader line and arrowhead first (using absolute page coords)
               if (isCallout) {
-                const clAX = convertX(ann.arrowX);
-                const clAY = convertY(ann.arrowY);
-                const clKX = ann.kneeX !== undefined ? convertX(ann.kneeX) : convertX(ann.arrowX);
-                const clKY = ann.kneeY !== undefined ? convertY(ann.kneeY) : convertY(ann.arrowY);
-                const clOX = ann.armOriginX !== undefined ? convertX(ann.armOriginX) : tbX1;
-                const clOY = ann.armOriginY !== undefined ? convertY(ann.armOriginY) : (tbY1 + ftH / 2);
-
                 const dashOp = ann.borderStyle === 'dashed' ? '[8 4] 0 d\n' : ann.borderStyle === 'dotted' ? '[2 2] 0 d\n' : '';
-                ftStreamContent += `${sr} ${sg} ${sb} RG ${ftBorderWidth} w\n${dashOp}`;
-                // Leader line. 'curved' = a smooth Catmull-Rom spline (as cubic
-                // Bézier `c` operators) through [armOrigin, knee, tip] so the saved
-                // appearance matches the on-screen round leader; otherwise two
-                // straight segments. Points are already in PDF page coords, so the
-                // affine Catmull-Rom→Bézier conversion yields the identical curve.
-                const clCurved = ann.leaderStyle === 'curved';
-                let aAngle;
-                if (clCurved) {
-                  const clPts = [
-                    { x: clOX, y: clOY },
-                    { x: clKX, y: clKY },
-                    { x: clAX, y: clAY },
-                  ];
-                  const clSegs = catmullRomToBezier(clPts);
-                  ftStreamContent += `${clOX} ${clOY} m `;
-                  for (const s of clSegs) {
-                    ftStreamContent += `${s.c1x} ${s.c1y} ${s.c2x} ${s.c2y} ${s.x1} ${s.y1} c `;
-                  }
-                  ftStreamContent += 'S\n';
-                  aAngle = splineArrowEndTangent(clPts);
-                } else {
-                  // Leader line: armOrigin -> knee -> arrow tip
-                  ftStreamContent += `${clOX} ${clOY} m ${clKX} ${clKY} l ${clAX} ${clAY} l S\n`;
-                  aAngle = Math.atan2(clAY - clKY, clAX - clKX);
-                }
-                // Arrowhead at arrow tip (3-point open arrow: point1 -> tip -> point2)
-                const aSize = 8;
-                const ah1x = clAX - aSize * Math.cos(aAngle - Math.PI / 6);
-                const ah1y = clAY - aSize * Math.sin(aAngle - Math.PI / 6);
-                const ah2x = clAX - aSize * Math.cos(aAngle + Math.PI / 6);
-                const ah2y = clAY - aSize * Math.sin(aAngle + Math.PI / 6);
-                ftStreamContent += `${ah1x} ${ah1y} m ${clAX} ${clAY} l ${ah2x} ${ah2y} l S\n`;
+                // Leader armOrigin -> knee -> tip with its heads, as the screen
+                // draws it (calloutLeiderOps, #612). 'curved' = a smooth
+                // Catmull-Rom spline (cubic Bézier `c` operators) through the
+                // same points. Points in app space; convertX/convertY map them.
+                const clKoppen = koppenVan(ann);
+                ftStreamContent += calloutLeiderOps({
+                  arm: { x: ann.armOriginX !== undefined ? ann.armOriginX : ann.x, y: ann.armOriginY !== undefined ? ann.armOriginY : ann.y + ftH / 2 },
+                  knie: { x: ann.kneeX !== undefined ? ann.kneeX : ann.arrowX, y: ann.kneeY !== undefined ? ann.kneeY : ann.arrowY },
+                  tip: { x: ann.arrowX, y: ann.arrowY },
+                  startHead: clKoppen.startHead, endHead: clKoppen.endHead, headSize: clKoppen.headSize,
+                  // Zoals het scherm: een lijn van 0 wordt 1 breed.
+                  lineWidth: ftBorderWidth > 0 ? ftBorderWidth : 1,
+                  hol: ann.headFill === false, gebogen: ann.leaderStyle === 'curved',
+                  X: convertX, Y: convertY, strokeRgb: [sr, sg, sb], dash: dashOp,
+                });
               }
 
               // Draw text box fill + stroke (absolute coords)

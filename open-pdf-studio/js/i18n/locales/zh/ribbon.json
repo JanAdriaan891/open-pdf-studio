@@ -579,6 +579,7 @@
     "enlarge": "放大",
     "dimHint": "单击后输入，例如 500,300 + Enter",
     "dimInputHint": "输入尺寸（例如 500,300 或单个尺寸）后按 Enter，或拖动进行绘制",
+    "calloutStep2": "单击要放置注释的位置 — 按 Esc 取消",
     "offsetPick": "偏移：单击要偏移的对象",
     "offsetDistance": "偏移：输入距离并按 Enter（例如 100）",
     "offsetDistanceInvalid": "偏移：请输入正数距离，例如 100",

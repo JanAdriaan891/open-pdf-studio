@@ -579,6 +579,7 @@
     "enlarge": "Forstørr",
     "dimHint": "klikk, og skriv deretter f.eks. 500,300 + Enter",
     "dimInputHint": "Skriv mål (f.eks. 500,300 eller én størrelse) og trykk Enter — eller dra for å tegne",
+    "calloutStep2": "Klikk der notatet skal stå — Esc for å avbryte",
     "offsetPick": "Forskyv: klikk på et objekt som skal forskyves",
     "offsetDistance": "Forskyv: skriv avstanden og trykk Enter (f.eks. 100)",
     "offsetDistanceInvalid": "Forskyv: skriv inn en positiv avstand, f.eks. 100",

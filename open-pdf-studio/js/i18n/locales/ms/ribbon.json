@@ -579,6 +579,7 @@
     "enlarge": "Besarkan",
     "dimHint": "klik, kemudian taip cth. 500,300 + Enter",
     "dimInputHint": "Taip dimensi (cth. 500,300 atau satu saiz) dan tekan Enter — atau seret untuk melukis",
+    "calloutStep2": "Klik di tempat nota patut diletakkan — Esc untuk membatalkan",
     "offsetPick": "Anjakan: klik objek untuk dianjak",
     "offsetDistance": "Anjakan: taip jarak dan tekan Enter (cth. 100)",
     "offsetDistanceInvalid": "Anjakan: masukkan jarak positif, cth. 100",

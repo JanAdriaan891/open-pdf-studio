@@ -579,6 +579,7 @@
     "enlarge": "拡大",
     "dimHint": "クリックして、例: 500,300 と入力 + Enter",
     "dimInputHint": "寸法を入力（例: 500,300 または単一のサイズ）して Enter を押すか、ドラッグして描画します",
+    "calloutStep2": "メモを置く位置をクリック — Esc でキャンセル",
     "offsetPick": "オフセット：オフセットするオブジェクトをクリックしてください",
     "offsetDistance": "オフセット：距離を入力して Enter を押してください（例: 100）",
     "offsetDistanceInvalid": "オフセット：正の距離を入力してください。例: 100",

@@ -579,6 +579,7 @@
     "enlarge": "확대",
     "dimHint": "클릭한 다음 입력(예: 500,300) + Enter",
     "dimInputHint": "치수를 입력하고(예: 500,300 또는 단일 크기) Enter 키를 누르거나, 끌어서 그리세요",
+    "calloutStep2": "메모를 놓을 위치를 클릭하세요 — 취소하려면 Esc",
     "offsetPick": "간격띄우기: 간격을 띄울 객체를 클릭하세요",
     "offsetDistance": "간격띄우기: 거리를 입력하고 Enter 키를 누르세요(예: 100)",
     "offsetDistanceInvalid": "간격띄우기: 양수 거리를 입력하세요. 예: 100",

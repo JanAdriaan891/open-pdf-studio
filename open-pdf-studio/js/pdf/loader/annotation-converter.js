@@ -34,7 +34,7 @@ import {
   maatlijnUitBestand, lijnBreedteUitBestand, pijlKopVullingUitBestand, meetlijnKoppenUitBestand,
 } from './maatlijn-uit-bestand.js';
 import { eigenTekststempel, tekststempelKleur } from './stempel-tekst.js';
-import { koppenUitBestand } from '../lijnkoppen.js';
+import { koppenUitBestand, calloutKoppenUitBestand } from '../lijnkoppen.js';
 import { kiesTekstvakTekst, runsZonderInspringing } from './tekstvak-tekst.js';
 import { inzetUitDsMarge, tolerantieVoorDsInzet } from '../../annotations/rendering/textbox-layout.js';
 import { caretPropsFromPdf, textEditPropsFromPdf } from './correction-load.js';
@@ -1294,6 +1294,9 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
           armOriginY: clArmVy,
           // Ronde aanhaallijn: restore curved leader when the private key is set.
           ...(extraColors.opsLeaderStyle === 'curved' ? { leaderStyle: 'curved' } : {}),
+          // Koppen (#612): /LE (de punt) en /OPS_LineHeads (beide), kopgrootte.
+          ...calloutKoppenUitBestand(extraColors.calloutLE, extraColors.opsLineHeads, { eigenBestand: !!extraColors.opsRotationKey }),
+          ...(extraColors.opsHeadSize > 0 ? { headSize: extraColors.opsHeadSize } : {}),
           ...(extraColors.borderCloudy ? {
             borderEffect: 'cloudy',
             ...(extraColors.cloudIntensity !== undefined ? { cloudIntensity: extraColors.cloudIntensity } : {})
