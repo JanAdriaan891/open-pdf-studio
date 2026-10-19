@@ -54,7 +54,11 @@
         "template": "./nsis/installer.nsi",
         "installerHooks": "./nsis/hooks.nsh",
         "installMode": "perMachine",
-        "installerIcon": "icons/icon.ico"
+        "installerIcon": "icons/icon.ico",
+        "languages": [
+          "English",
+          "Dutch"
+        ]
       },
       "webviewInstallMode": {
         "type": "embedBootstrapper",
