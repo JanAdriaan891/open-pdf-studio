@@ -63,6 +63,7 @@
     "strokeColor": "Color de traç",
     "color": "Color",
     "opacity": "Opacitat",
+    "fillOpacity": "Opacitat de l'emplenament",
     "lineWidth": "Amplada de línia",
     "borderWidth": "Amplada de la vora",
     "borderStyle": "Estil de vora",

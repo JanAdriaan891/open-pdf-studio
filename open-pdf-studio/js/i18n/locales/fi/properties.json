@@ -63,6 +63,7 @@
     "strokeColor": "Reunaväri",
     "color": "Väri",
     "opacity": "Peittävyys",
+    "fillOpacity": "Täytön peittävyys",
     "lineWidth": "Viivan leveys",
     "borderWidth": "Reunan leveys",
     "borderStyle": "Reunatyyli",

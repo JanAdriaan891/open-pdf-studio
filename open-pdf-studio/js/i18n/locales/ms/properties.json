@@ -63,6 +63,7 @@
     "strokeColor": "Warna Garis",
     "color": "Warna",
     "opacity": "Kelegapan",
+    "fillOpacity": "Kelegapan Isian",
     "lineWidth": "Lebar Garisan",
     "borderWidth": "Lebar Sempadan",
     "borderStyle": "Gaya Sempadan",

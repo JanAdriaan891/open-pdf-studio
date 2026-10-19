@@ -63,6 +63,7 @@
     "strokeColor": "Strekfarge",
     "color": "Farge",
     "opacity": "Ugjennomsiktighet",
+    "fillOpacity": "Ugjennomsiktighet for fyll",
     "lineWidth": "Linjebredde",
     "borderWidth": "Kantlinjebredde",
     "borderStyle": "Kantlinjestil",

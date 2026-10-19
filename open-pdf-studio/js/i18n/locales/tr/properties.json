@@ -63,6 +63,7 @@
     "strokeColor": "Çizgi Rengi",
     "color": "Renk",
     "opacity": "Opasite",
+    "fillOpacity": "Dolgu Opasitesi",
     "borderStyle": "Kenarlık Stili",
     "cross": "Çarpı",
     "crossHint": "Dikdörtgen, daire veya elipsin içine çarpı çizer (örn. bir boşluk)",

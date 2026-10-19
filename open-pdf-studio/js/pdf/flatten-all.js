@@ -18,6 +18,34 @@ import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
 
 /**
+ * Een schaalgebied is een meethulp van de app, geen tekening: het blijft bij
+ * vlakken een markering (en houdt zo zijn kalibratie), ook nu het een
+ * appearance heeft (#611). Daarvoor had het geen appearance en bleef het om
+ * die reden staan.
+ * @param {import('pdf-lib').PDFDict} dict
+ */
+function isMeethulpDict(dict) {
+  // Zonder pdf-lib te importeren (die laadt deze module pas bij gebruik).
+  let v = null;
+  for (const [sleutel, waarde] of dict?.entries?.() || []) {
+    if (String(sleutel) === '/OPS_Subtype') { v = waarde; break; }
+  }
+  if (!v) return false;
+  const tekst = typeof v.decodeText === 'function' ? v.decodeText() : String(v);
+  return tekst === 'scaleRegion' || tekst === '(scaleRegion)';
+}
+
+/**
+ * Welke annotaties in het opgebouwde document vlakken bakt: alleen wat de
+ * saver uit het model schreef (objectnummer boven eersteNieuwObject), behalve
+ * de meethulpen.
+ * @param {number} eersteNieuwObject
+ */
+export function teVlakkenNa(eersteNieuwObject) {
+  return (ref, dict) => ref.objectNumber > eersteNieuwObject && !isMeethulpDict(dict);
+}
+
+/**
  * Welke markeringen vlakken meeneemt. Een vastgezet knipsel staat al in de
  * pagina-inhoud (of komt er bij de volgende save in): dat hoort niet in de
  * herstelkopie, anders staat het na terughalen dubbel.
@@ -146,13 +174,15 @@ export async function flattenAllMarkups({ herstelbaar = true, vragen = true, doc
     const { vlakDocument, ruimOnbereikbaarOp } = await import('./flatten-bytes.js');
     const { pdfDocLib, eersteNieuwObject } = await bouwAnnotatieDocument(doc);
     // Alleen wat deze bouw uit het model schreef (objectnummer boven
-    // eersteNieuwObject): annotaties die de app niet beheert blijven staan.
+    // eersteNieuwObject): annotaties die de app niet beheert blijven staan,
+    // en een schaalgebied blijft meethulp (#611).
     const uitkomst = vlakDocument(pdfDocLib, {
       annotaties: teVlakken,
       herstelbaar,
-      isTeVlakken: (ref) => ref.objectNumber > eersteNieuwObject,
+      isTeVlakken: teVlakkenNa(eersteNieuwObject),
     });
-    const blijven = uitkomst.zonderUiterlijk + uitkomst.verborgen + uitkomst.overgeslagen;
+    const meethulpen = teVlakken.filter((a) => a.type === 'scaleRegion').length;
+    const blijven = uitkomst.zonderUiterlijk + uitkomst.verborgen + uitkomst.overgeslagen + meethulpen;
     if (uitkomst.gebakken === 0) {
       hideLoading();
       showMessage(t('flattenAll.nothingBaked'));

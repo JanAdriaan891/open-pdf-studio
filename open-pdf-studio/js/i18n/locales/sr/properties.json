@@ -63,6 +63,7 @@
     "strokeColor": "Боја потеза",
     "color": "Боја",
     "opacity": "Непрозирност",
+    "fillOpacity": "Непрозирност испуне",
     "lineWidth": "Ширина линије",
     "borderWidth": "Ширина ивице",
     "borderStyle": "Стил ивице",

@@ -22,6 +22,7 @@ import { vlakZijdeTeksten } from '../annotations/measurement.js';
 import { verzamelSchaalBronnen } from '../annotations/schaal-op-punt.js';
 import { attachVectorAP } from './saver/vector-ap.js';
 import { MODEL_ID_SLEUTEL } from './flatten-bytes.js';
+import { schaalgebiedAppearance } from './saver/scale-region-ap.js';
 import { bytesVan as knipselBytesVan } from '../annotations/vector-snippet-store.js';
 import { getAnnotationStorage, getAnnotIdToFieldName } from './form-layer.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
@@ -2024,8 +2025,28 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
             const m = String(ann.scaleString || '').match(/1\s*[:/]\s*(\d+(?:\.\d+)?)/);
             if (m) srDict.OPS_ScaleRatio = 1 / parseFloat(m[1]);
             if (ann.lineWidth) srDict.OPS_LineWidth = ann.lineWidth;
+            // Vulling (#611): een eigen vulkleur als /IC; een eigen
+            // vul-doorzichtigheid altijd in OPS_FillOpacity (ook als hij gelijk
+            // is aan /CA). Zonder die sleutel geldt bij heropenen het oude
+            // uiterlijk (10 % van de doorzichtigheid), zie scale-region-style.js.
+            if (hasFill(ann.fillColor)) srDict.IC = hexToColorArray(ann.fillColor);
+            if (ann.fillOpacity !== undefined && ann.fillOpacity !== null) srDict.OPS_FillOpacity = ann.fillOpacity;
             annotDict = context.obj(srDict);
             annotDict.set(PDFName.of('BS'), buildBorderStyle(context, ann.lineWidth || 1.5, 'dashed'));
+            // Appearance met vulling en rand op hun eigen alfa, zodat andere
+            // lezers hetzelfde tonen als het scherm.
+            const srAp = schaalgebiedAppearance(ann);
+            if (srAp) {
+              const srGs = {};
+              for (const [naam, velden] of Object.entries(srAp.extGState)) {
+                srGs[naam] = context.obj({ Type: 'ExtGState', ...velden });
+              }
+              const srStream = context.stream(srAp.inhoud, {
+                Type: 'XObject', Subtype: 'Form', BBox: srAp.bbox,
+                Resources: context.obj(Object.keys(srGs).length ? { ExtGState: context.obj(srGs) } : {}),
+              });
+              annotDict.set(PDFName.of('AP'), context.obj({ N: context.register(srStream) }));
+            }
             break;
           }
 

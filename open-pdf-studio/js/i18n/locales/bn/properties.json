@@ -63,6 +63,7 @@
     "strokeColor": "স্ট্রোক রঙ",
     "color": "রঙ",
     "opacity": "অস্বচ্ছতা",
+    "fillOpacity": "ভরাটের অস্বচ্ছতা",
     "lineWidth": "রেখার প্রস্থ",
     "borderWidth": "সীমানার প্রস্থ",
     "borderStyle": "সীমানা শৈলী",
