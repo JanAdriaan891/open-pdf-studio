@@ -1313,6 +1313,20 @@ const result = {};
         if (opsRotRaw) {
           const rv = pdfNum(context.lookup(opsRotRaw) || opsRotRaw);
           if (rv !== null) colors.rotation = rv;
+          // De app schrijft deze sleutel bij elke FreeText: een eigen bestand.
+          colors.opsRotationKey = true;
+        }
+
+        // /LE van een callout (#612): volgens de specificatie één naam, sommige
+        // programma's schrijven een rij. pdf.js geeft /LE alleen voor lijnen.
+        const ftLeRaw = annotDict.get(PDFName.of('LE'));
+        if (ftLeRaw) {
+          const ftLe = context.lookup(ftLeRaw) || ftLeRaw;
+          const naam = (o) => (o instanceof PDFName ? o.decodeText() : null);
+          if (ftLe instanceof PDFName) colors.calloutLE = naam(ftLe);
+          else if (ftLe && typeof ftLe.size === 'function') {
+            colors.calloutLE = Array.from({ length: ftLe.size() }, (_, i) => naam(context.lookup(ftLe.get(i)) || ftLe.get(i)) || 'None');
+          }
         }
 
         // Extract /C (Color) entry directly for FreeText — needed for callout stroke detection

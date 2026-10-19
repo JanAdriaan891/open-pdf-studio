@@ -23,6 +23,7 @@ import {
 } from '../../data/ribbonIcons.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { paginaMaat } from '../../../pdf/weergave-ruimte.js';
+import { lintZetLijnkoppen } from '../../../pdf/lijnkoppen.js';
 
 const STYLE_GALLERY = [
   { name: 'red', labelKey: 'format.styleRed', color: '#ff0000', cloudy: false },
@@ -328,7 +329,7 @@ export default function FormatTab() {
                 value={arrowStart()}
                 disabled={invoegen()}
                 onChange={(e) => {
-                  applyToSelected(ann => { if (ann.type === 'arrow') ann.startHead = e.target.value; });
+                  applyToSelected(ann => { if (lintZetLijnkoppen(ann.type)) ann.startHead = e.target.value; });
                   syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
                 }}>
                 <option value="none">{tc('none')}</option>
@@ -347,7 +348,7 @@ export default function FormatTab() {
                 value={arrowEnd()}
                 disabled={invoegen()}
                 onChange={(e) => {
-                  applyToSelected(ann => { if (ann.type === 'arrow') ann.endHead = e.target.value; });
+                  applyToSelected(ann => { if (lintZetLijnkoppen(ann.type)) ann.endHead = e.target.value; });
                   syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
                 }}>
                 <option value="none">{tc('none')}</option>

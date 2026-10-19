@@ -18,6 +18,7 @@ import { hexToRgb } from './utils.js';
 import { ringenRichten, vlakOmhullende } from '../../annotations/vlak-ringen.js';
 import { getHatchLineFamilies } from './hatch-catalog.js';
 import { catmullRomToBezier, splineArrowEndTangent } from '../../annotations/spline-arrow-geometry.js';
+import { calloutLeiderKoppen } from '../../annotations/callout-koppen.js';
 import { toWinAnsiText, winAnsiLiteral } from './pdf-text.js';
 import { maatTekstMarge, leesbareHoek } from '../../annotations/maat-label.js';
 import { maatlijnGeometrie } from '../../annotations/maatlijn-geometrie.js';
@@ -887,7 +888,7 @@ const _KAPPA = 0.5522847498;
 // drawArrowheadOnCanvas draws it. Filled shapes use the thin (≤1) outline the
 // screen uses so the visual tip stays on the end point. `hol`: a closed shape
 // without a fill (PDF /LE without /IC), only its outline at the full width.
-function lineHeadOps(tx, ty, angle, size, style, strokeRgb, fillRgb, lineWidth, X, Y, { hol = false } = {}) {
+export function lineHeadOps(tx, ty, angle, size, style, strokeRgb, fillRgb, lineWidth, X, Y, { hol = false } = {}) {
   const cos = Math.cos(angle), sin = Math.sin(angle);
   const pt = (lx, ly) => `${f(X(tx + lx * cos - ly * sin))} ${f(Y(ty + lx * sin + ly * cos))}`;
   const poly = (pts, close) => pts.map((p, i) => `${pt(p[0], p[1])} ${i ? 'l' : 'm'}`).join(' ') + (close ? ' h' : '');
@@ -922,6 +923,33 @@ function lineHeadOps(tx, ty, angle, size, style, strokeRgb, fillRgb, lineWidth, 
     case 'slash':          return stroked(poly([[0, -s / 2], [0, s / 2]]));
     default:               return '';
   }
+}
+
+/**
+ * Aanhaallijn van een callout met zijn koppen (#612), zoals rendering.js
+ * ('callout') hem tekent: dezelfde inkorting en hoeken (callout-koppen.js) en
+ * dezelfde kopvormen. Punten in app-ruimte, X/Y zetten om naar PDF. In q/Q,
+ * zodat lijndikte, verbinding en kleur van de koppen het tekstvak niet raken.
+ * @param {{dash?: string}} o  dash: de streepjes-operator van de aanhaallijn
+ */
+export function calloutLeiderOps({ arm, knie, tip, startHead, endHead, headSize, lineWidth, hol = false, gebogen = false,
+  X, Y, strokeRgb, dash = '' }) {
+  const r = calloutLeiderKoppen({ arm, knie, tip, startHead, endHead, headSize, lineWidth, hol, gebogen });
+  const pt = (p) => `${f(X(p.x))} ${f(Y(p.y))}`;
+  let s = `q\n${f(strokeRgb[0])} ${f(strokeRgb[1])} ${f(strokeRgb[2])} RG ${f(lineWidth)} w\n${dash}`;
+  if (gebogen) {
+    s += `${pt(r.lijn[0])} m `;
+    for (const seg of catmullRomToBezier(r.lijn)) {
+      s += `${pt({ x: seg.c1x, y: seg.c1y })} ${pt({ x: seg.c2x, y: seg.c2y })} ${pt({ x: seg.x1, y: seg.y1 })} c `;
+    }
+    s += 'S\n';
+  } else {
+    s += `${pt(r.lijn[0])} m ${pt(r.lijn[1])} l ${pt(r.lijn[2])} l S\n`;
+  }
+  for (const kop of [r.eind, r.begin]) {
+    if (kop) s += lineHeadOps(kop.x, kop.y, kop.hoek, headSize, kop.stijl, strokeRgb, strokeRgb, lineWidth, X, Y, { hol });
+  }
+  return `${s}Q\n`;
 }
 
 const _FILLED_LINE_HEADS = new Set(['closed', 'closedReversed', 'diamond', 'square', 'circle']);

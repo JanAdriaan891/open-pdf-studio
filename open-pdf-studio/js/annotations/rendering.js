@@ -10,6 +10,8 @@ import { tekstvakKnipvlak } from './rendering/textbox-layout.js';
 import { drawArrowheadOnCanvas, applyBorderStyle, drawDimensionLineEnding } from './rendering/decorations.js';
 import { catmullRomSpline } from '../tools/tools/spline-tool.js';
 import { catmullRomToBezier, splineArrowEndTangent } from './spline-arrow-geometry.js';
+import { calloutLeiderKoppen } from './callout-koppen.js';
+import { koppenVan } from '../pdf/lijnkoppen.js';
 import { drawDimension, drawMeasureAreaShape, drawCentroidLabel, drawMeasurePerimeterShape, drawVlakZijdematen } from './rendering/measurements.js';
 import { vlakZijdeTeksten } from './measurement.js';
 import { maatlijnTekst } from './maat-label.js';
@@ -1203,33 +1205,36 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       // Draw the leader line (not rotated - arrow stays in place).
       // 'curved' leader = vloeiende Catmull-Rom-spline door
       // [armOrigin, knee, arrowTip] i.p.v. twee rechte segmenten (ronde aanhaallijn).
+      // Koppen (#612): End op de punt, Start waar de lijn het tekstvak
+      // verlaat, beide op headSize (callout-koppen.js, ook voor de saver).
       const coCurved = annotation.leaderStyle === 'curved';
-      let angle;
+      const coKoppen = koppenVan(annotation);
+      const coHol = annotation.headFill === false;
+      const coLeider = calloutLeiderKoppen({
+        arm: { x: armOriginX, y: armOriginY }, knie: { x: kneeX, y: kneeY }, tip: { x: arrowX, y: arrowY },
+        startHead: coKoppen.startHead, endHead: coKoppen.endHead, headSize: coKoppen.headSize,
+        lineWidth: ctx.lineWidth, hol: coHol, gebogen: coCurved,
+      });
       ctx.beginPath();
       if (coCurved) {
-        const coLeaderPts = [
-          { x: armOriginX, y: armOriginY },
-          { x: kneeX, y: kneeY },
-          { x: arrowX, y: arrowY },
-        ];
-        const coSegs = catmullRomToBezier(coLeaderPts);
+        const coSegs = catmullRomToBezier(coLeider.lijn);
         ctx.moveTo(armOriginX, armOriginY);
         for (const s of coSegs) {
           ctx.bezierCurveTo(s.c1x, s.c1y, s.c2x, s.c2y, s.x1, s.y1);
         }
-        ctx.stroke();
-        angle = splineArrowEndTangent(coLeaderPts);
       } else {
-        ctx.moveTo(armOriginX, armOriginY);
-        ctx.lineTo(kneeX, kneeY);
-        ctx.lineTo(arrowX, arrowY);
-        ctx.stroke();
-        angle = Math.atan2(arrowY - kneeY, arrowX - kneeX);
+        const [coL0, coL1, coL2] = coLeider.lijn;
+        ctx.moveTo(coL0.x, coL0.y);
+        ctx.lineTo(coL1.x, coL1.y);
+        ctx.lineTo(coL2.x, coL2.y);
       }
+      ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Draw arrowhead — filled (closed) by default, but honor explicit per-annotation style if set
       ctx.fillStyle = rawStrokeColor || strokeColor;
-      drawArrowheadOnCanvas(ctx, arrowX, arrowY, angle, annotation.headSize || 7, annotation.arrowStyle || 'closed');
+      for (const kop of [coLeider.eind, coLeider.begin]) {
+        if (kop) drawArrowheadOnCanvas(ctx, kop.x, kop.y, kop.hoek, coKoppen.headSize, kop.stijl, { hol: coHol });
+      }
 
       ctx.save();
       if (annotation.rotation || annotation.flipX || annotation.flipY) {
