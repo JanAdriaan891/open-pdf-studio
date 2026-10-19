@@ -380,6 +380,7 @@ js/pdf/splits-i18n.test.mjs
 js/pdf/print-bereik.test.mjs
 js/pdf/print-flyer.test.mjs
 js/pdf/print-katern.test.mjs
+js/pdf/print-boekje-opties.test.mjs
 js/solid/stores/print-queue-model.test.mjs
 js/solid/components/print-queue-i18n.test.mjs
 js/ui/chrome/tab-losmaken.test.mjs

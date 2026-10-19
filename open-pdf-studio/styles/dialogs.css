@@ -2669,8 +2669,18 @@
 
 .print-zoom-row { margin-left: 58px; }
 .print-note { font-size: 11px; color: var(--theme-text-secondary); }
-/* Pad van de paginavolgorde naast de keuzelijst (#607). */
-.print-order-icon { flex-shrink: 0; margin-left: 6px; color: var(--theme-text-secondary); }
+/* Afdrukwijzen bovenaan de plaatsing (#607); een lange vertaling breekt af. */
+.print-mode-btns { flex-wrap: wrap; row-gap: 2px; }
+.print-mode-btns .print-page-btn { padding: 2px 7px; }
+/* Paginavolgorde als vier knoppen met het leespad (#607). */
+.print-order-btn { padding: 2px 5px; line-height: 0; }
+.print-order-icon { flex-shrink: 0; color: inherit; }
+/* De plaatsing heeft langere labels (Paginavolgorde, Vellen per katern): een
+   bredere labelkolom, en de vinkjes en invoerregels lijnen daarop uit. */
+.print-placement-group .print-label { width: 96px; }
+.print-placement-group .print-checkbox-row { padding-left: 102px; }
+.print-placement-group .print-zoom-row { margin-left: 0; }
+.print-placement-group .print-note { padding-left: 102px; }
 
 .print-pages-row { margin-bottom: 4px; }
 
