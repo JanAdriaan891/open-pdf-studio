@@ -579,6 +579,7 @@
     "enlarge": "Phóng to",
     "dimHint": "nhấp, rồi nhập vd. 500,300 + Enter",
     "dimInputHint": "Nhập kích thước (vd. 500,300 hoặc một giá trị) rồi nhấn Enter — hoặc kéo để vẽ",
+    "calloutStep2": "Nhấp vào nơi đặt ghi chú — Esc để hủy",
     "offsetPick": "Vẽ song song: nhấp vào đối tượng cần vẽ song song",
     "offsetDistance": "Vẽ song song: nhập khoảng cách rồi nhấn Enter (vd. 100)",
     "offsetDistanceInvalid": "Vẽ song song: nhập khoảng cách dương, vd. 100",

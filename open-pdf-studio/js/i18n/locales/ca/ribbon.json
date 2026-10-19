@@ -579,6 +579,7 @@
     "enlarge": "Amplia",
     "dimHint": "feu clic i escriviu p. ex. 500,300 + Enter",
     "dimInputHint": "Escriviu les dimensions (p. ex. 500,300 o una sola mida) i premeu Enter — o arrossegueu per dibuixar",
+    "calloutStep2": "Feu clic on ha d'anar la nota — Esc per cancel·lar",
     "offsetPick": "Desplaçament: feu clic en un objecte per desplaçar-lo",
     "offsetDistance": "Desplaçament: escriviu la distància i premeu Enter (p. ex. 100)",
     "offsetDistanceInvalid": "Desplaçament: introduïu una distància positiva, p. ex. 100",

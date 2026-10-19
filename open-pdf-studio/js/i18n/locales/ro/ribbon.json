@@ -579,6 +579,7 @@
     "enlarge": "Mărire",
     "dimHint": "faceți clic, apoi tastați ex. 500,300 + Enter",
     "dimInputHint": "Tastați dimensiunile (ex. 500,300 sau o singură dimensiune) și apăsați Enter — sau trageți pentru a desena",
+    "calloutStep2": "Faceți clic unde trebuie să fie nota — Esc pentru anulare",
     "offsetPick": "Decalare: faceți clic pe un obiect de decalat",
     "offsetDistance": "Decalare: tastați distanța și apăsați Enter (ex. 100)",
     "offsetDistanceInvalid": "Decalare: introduceți o distanță pozitivă, ex. 100",

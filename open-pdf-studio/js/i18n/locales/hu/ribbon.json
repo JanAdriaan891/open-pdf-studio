@@ -579,6 +579,7 @@
     "enlarge": "Nagyítás",
     "dimHint": "kattintson, majd írja be pl. 500,300 + Enter",
     "dimInputHint": "Írja be a méreteket (pl. 500,300 vagy egyetlen méret), és nyomja meg az Entert — vagy rajzoljon húzással",
+    "calloutStep2": "Kattintson oda, ahová a megjegyzés kerüljön — Esc a megszakításhoz",
     "offsetPick": "Eltolás: kattintson az eltolandó objektumra",
     "offsetDistance": "Eltolás: írja be a távolságot, és nyomja meg az Entert (pl. 100)",
     "offsetDistanceInvalid": "Eltolás: adjon meg pozitív távolságot, pl. 100",

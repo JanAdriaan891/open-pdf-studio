@@ -579,6 +579,7 @@
     "enlarge": "Zvětšit",
     "dimHint": "klikněte a pak zadejte např. 500,300 + Enter",
     "dimInputHint": "Zadejte rozměry (např. 500,300 nebo jeden rozměr) a stiskněte Enter — nebo kreslete tažením",
+    "calloutStep2": "Klikněte tam, kam má přijít poznámka — Esc pro zrušení",
     "offsetPick": "Ekvidistanta: klikněte na objekt, ke kterému se má vytvořit ekvidistanta",
     "offsetDistance": "Ekvidistanta: zadejte vzdálenost a stiskněte Enter (např. 100)",
     "offsetDistanceInvalid": "Ekvidistanta: zadejte kladnou vzdálenost, např. 100",
