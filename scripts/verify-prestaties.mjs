@@ -181,14 +181,14 @@ async function meetRun(exe, bestand, engine) {
   return uit;
 }
 
-async function meetBuild(exe, label) {
-  console.log(`\n===== ${label} — ${exe}`);
+async function meetBuild(exe, label, engine) {
+  console.log(`\n===== ${label} — ${exe}${engine ? ` (engine ${engine})` : ''}`);
   const per = {};
   for (const bestand of BESTANDEN) {
     const runs = [];
     for (let i = 0; i < RONDES; i++) {
       try {
-        runs.push(await meetRun(exe, bestand));
+        runs.push(await meetRun(exe, bestand, engine));
       } catch (e) {
         console.log(`  run mislukt (${bestand.naam}):`, e.message);
       }
@@ -212,9 +212,10 @@ if (!exeA || !labelA) {
   console.log('gebruik: node scripts/verify-prestaties.mjs <exe-A> <label-A> [<exe-B> <label-B>]');
   process.exit(1);
 }
-const resA = await meetBuild(exeA, labelA);
+const [engineA, engineB] = (process.env.PRESTATIE_ENGINES || '').split(',').map((e) => e.trim() || undefined);
+const resA = await meetBuild(exeA, labelA, engineA);
 let resB = null;
-if (exeB && labelB) resB = await meetBuild(exeB, labelB);
+if (exeB && labelB) resB = await meetBuild(exeB, labelB, engineB);
 
 if (resB) {
   console.log(`\n===== VERGELIJKING (${labelA} -> ${labelB}, mediaan in ms)`);
