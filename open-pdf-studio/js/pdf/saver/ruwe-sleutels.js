@@ -27,7 +27,12 @@
 // - alle OPS_-sleutels (de eigen sleutels van de app);
 // - een waarde die naar een pagina, annotatie, catalogus of laag (OCG)
 //   verwijst: een kopie daarvan zou een tweede pagina of een losse laag zijn.
-//   /OC (de laag) loopt via saver/annotatie-lagen.js.
+//   /OC (de laag) loopt via saver/annotatie-lagen.js;
+// - een sleutel die vorm beschrijft (GEOMETRIE_SLEUTELS: een eigen pad, een
+//   kromme, een tweede arm, booghoeken …) zodra de gebruiker de vorm in de
+//   app veranderde: dan klopt hij niet meer, en een programma dat er zijn
+//   tekening uit opbouwt zou de oude vorm tonen. Of de vorm veranderde,
+//   zegt de vingerafdruk die de lader bij het lezen vastlegt.
 //
 // Alleen pdf-lib: ook in node te testen.
 
@@ -52,7 +57,32 @@ export const EIGEN_SLEUTELS = new Set([
   'Q', 'RC',
   // meting: schaal, bijschrift en hulplijnen schrijft de saver uit het model
   'Measure', 'Cap', 'CP', 'LL', 'LLE', 'LLO',
+  // draaiing: de app tekent haar in de appearance en bewaart haar zelf
+  // (/OPS_Rotation); een oude /Rotation zou na draaien in de app niet kloppen
+  'Rotation',
 ]);
+
+/** Sleutels die vorm beschrijven; zie de kop van dit bestand. */
+export const GEOMETRIE_SLEUTELS = new Set([
+  'Path', 'PathPressureList', 'PressureList', 'Curves', 'SO', 'CLEx', 'Segments',
+  'Angle1', 'Angle2', 'RiseDrop',
+]);
+
+const VORM_VELDEN = [
+  'x', 'y', 'width', 'height', 'rotation', 'startX', 'startY', 'endX', 'endY', 'centerX', 'centerY',
+  'radius', 'startAngle', 'endAngle', 'arrowX', 'arrowY', 'kneeX', 'kneeY', 'armOriginX', 'armOriginY',
+  'points', 'path', 'controlPoints', 'rects',
+];
+const rond = (v) => (typeof v === 'number' ? Math.round(v * 100) / 100 : v);
+
+/** Vingerafdruk van de vorm van een model (posities op 0,01 pt). */
+export function vormVingerafdruk(ann) {
+  return JSON.stringify(VORM_VELDEN.map((k) => {
+    const v = ann?.[k];
+    if (Array.isArray(v)) return v.map((p) => (p && typeof p === 'object' ? [rond(p.x), rond(p.y), rond(p.width), rond(p.height)] : rond(p)));
+    return rond(v);
+  }));
+}
 
 // Soorten waarvan de app de bedoeling (/IT) zelf leest en schrijft.
 const IT_VAN_APP = new Set(['/FreeText', '/Caret', '/Highlight', '/Underline', '/StrikeOut', '/Squiggly']);
@@ -181,20 +211,24 @@ function bouwDict(context, obj) {
 }
 
 /**
- * Zet de bewaarde sleutels terug op het nieuwe woordenboek. Een sleutel die
+ * Zet de bewaarde sleutels terug op het nieuwe woordenboek. Met `ann` (het
+ * model zoals de gebruiker het nu heeft) vallen de vormsleutels weg als de
+ * vorm sinds het laden veranderde. Een sleutel die
  * de saver al schreef blijft van de saver, met één uitzondering: de bedoeling
  * (/IT) van een meting. Schreef de saver /PolygonDimension voor een vlak dat
  * als /RectangleSketchToScale binnenkwam, dan gaat de oorspronkelijke terug —
  * de app herkent de meting aan haar eigen /OPS_Subtype.
  * @returns {string[]} de teruggezette sleutels
  */
-export function schrijfRuweSleutels(context, dict, ruw) {
+export function schrijfRuweSleutels(context, dict, ruw, ann) {
   if (!ruw || typeof ruw !== 'object' || !ruw.sleutels || !(dict instanceof PDFDict)) return [];
   const soort = dict.get(PDFName.of('Subtype'))?.toString();
   if (ruw.soort !== soort) return [];
+  const vormGewijzigd = !!ann && typeof ruw.vorm === 'string' && ruw.vorm !== vormVingerafdruk(ann);
   const gezet = [];
   for (const [sleutel, waarde] of Object.entries(ruw.sleutels)) {
     if (sleutel.startsWith('OPS_')) continue;
+    if (vormGewijzigd && GEOMETRIE_SLEUTELS.has(sleutel)) continue;
     if (sleutel === 'IT') {
       if (IT_VAN_APP.has(soort)) continue;
       const huidig = dict.get(PDFName.of('IT'));

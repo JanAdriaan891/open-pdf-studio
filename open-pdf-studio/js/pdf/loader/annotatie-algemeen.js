@@ -7,6 +7,7 @@
 
 import { onderwerpPlek } from './annotatie-opmerking.js';
 import { toIsoDate } from './status-replies.js';
+import { vormVingerafdruk } from '../saver/ruwe-sleutels.js';
 
 /**
  * De gedeelde velden voor het model, uit de gegevens die color-extraction.js
@@ -29,7 +30,9 @@ export function algemeneEigenschappen(extra, model) {
   if (e.opsAltText && m.altText === undefined) uit.altText = e.opsAltText;
   if (e.opsIfcCategory && m.ifcCategory === undefined) uit.ifcCategory = e.opsIfcCategory;
   // Wat het model niet kent, ruw voor de saver (#621, saver/ruwe-sleutels.js).
-  if (e.pdfRaw && m.pdfRaw === undefined) uit.pdfRaw = e.pdfRaw;
+  // Met de vingerafdruk van de vorm zoals geladen: verandert de gebruiker de
+  // vorm, dan gaan de vormsleutels niet meer mee.
+  if (e.pdfRaw && m.pdfRaw === undefined) uit.pdfRaw = { ...e.pdfRaw, vorm: vormVingerafdruk(m) };
   return uit;
 }
 

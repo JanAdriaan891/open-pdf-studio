@@ -281,3 +281,16 @@ test('een telling van een ander programma wordt als stippen getekend, niet als v
   assert.equal((ap.match(/ c f\n/g) || []).length, 3, 'drie stippen');
   assert.doesNotMatch(ap, / S\n/, 'geen omtrek');
 });
+
+test('na een vormwijziging in de app vallen de vormsleutels weg, de rest blijft', async () => {
+  // Een oude kromme bij een verplaatste lijn zou een ander programma de oude
+  // vorm laten tekenen.
+  const bron = await vreemdBlad();
+  const modellen = await laad(bron);
+  const kromme = modellen.find((m) => m.pdfRaw?.sleutels?.Curves);
+  kromme.endX += 40;
+  const bytes = await opslaan(bron, modellen);
+  const dicts = await woordenboeken(bytes);
+  assert.equal(dicts.filter(({ dict }) => dict.get(PDFName.of('Curves'))).length, 0, 'geen oude kromme');
+  assert.equal(dicts.filter(({ dict }) => dict.get(PDFName.of('LineStyle'))).length, 1, 'de lijnstijl van de andere lijn blijft');
+});

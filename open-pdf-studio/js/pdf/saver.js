@@ -2968,7 +2968,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
           // één plek voor alle soorten. Zie saver/annotatie-algemeen.js.
           schrijfAlgemeneSleutels(annotDict, ann, gebruikteNm);
           // Sleutels uit het bestand die het model niet kent (#621): ruw terug.
-          schrijfRuweSleutels(context, annotDict, ann.pdfRaw);
+          schrijfRuweSleutels(context, annotDict, annRaw.pdfRaw, annRaw);
           // Alles vlakken (#615): welke model-annotatie dit is; vlakken haalt
           // de sleutel weer weg (flatten-bytes.js).
           if (alleenAnnotaties && typeof annotDict.set === 'function') {
