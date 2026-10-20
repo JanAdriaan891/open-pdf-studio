@@ -8,12 +8,13 @@
 import { state } from '../core/state.js';
 
 /**
- * Content-stream size from which automatic picks Hayro. Measured on the
- * verification set: from 0.5 MB on, Hayro rendered all 35 pages faster than
- * PDFium (0.2-0.66x the time); below it the two are close and PDFium is the
- * proven route.
+ * Page weight (raw bytes of the content streams plus every form XObject the
+ * page draws; see the page_render_weight command) from which automatic picks
+ * Hayro. Measured on the verification set with 4 render threads: all 36 pages
+ * from 100 KB on rendered faster with Hayro (0.21-0.63x the time of PDFium);
+ * below it the two are close and PDFium is the proven route.
  */
-export const HEAVY_CONTENT_BYTES = 512 * 1024;
+export const HEAVY_PAGE_WEIGHT = 100 * 1024;
 
 /** The engine preference: 'pdfium', 'hayro' or 'auto' (default). */
 export function renderEngineOn(prefs = state.preferences) {
@@ -21,14 +22,34 @@ export function renderEngineOn(prefs = state.preferences) {
   return v === 'pdfium' || v === 'hayro' ? v : 'auto';
 }
 
-/** The engine for a page with `contentBytes` of content under preference `pref`. */
-export function engineForContent(pref, contentBytes) {
+/** The engine for a page of `weight` bytes under preference `pref`. */
+export function engineForWeight(pref, weight) {
   if (pref !== 'auto') return pref;
-  return contentBytes >= HEAVY_CONTENT_BYTES ? 'hayro' : 'pdfium';
+  return weight >= HEAVY_PAGE_WEIGHT ? 'hayro' : 'pdfium';
 }
 
-// Automatic choice per page, filled by resolvePageEngine.
+// Automatic choice per page, filled by resolvePageEngine: { engine, weight }.
 const _autoChoice = new Map();
+const _weights = new Map();
+let _threads = null;
+
+/** Page weight in bytes (desktop with the Rust renderer only; else 0), cached. */
+export async function pageRenderWeight(path, pageIndex) {
+  const key = `${path}|${pageIndex}`;
+  if (_weights.has(key)) return _weights.get(key);
+  let weight = 0;
+  try {
+    const { heeftRustRenderer, invoke } = await import('../core/platform.js');
+    if (heeftRustRenderer()) {
+      weight = Number(await invoke('page_render_weight', { path, pageIndex })) || 0;
+      if (_threads === null) _threads = Number(await invoke('hayro_render_threads')) || 0;
+    }
+  } catch {
+    weight = 0;
+  }
+  _weights.set(key, weight);
+  return weight;
+}
 
 // Pages Hayro refused (HAYRO_UNSUPPORTED: e.g. hundreds of mesh shadings
 // that would need gigabytes). They are rendered with PDFium from then on, and
@@ -47,7 +68,7 @@ export function isHayroUnsupported(err) {
  */
 export function engineForPage(engine, path, pageIndex) {
   const key = `${path}|${pageIndex}`;
-  const eng = engine === 'auto' ? (_autoChoice.get(key) || 'pdfium') : engine;
+  const eng = engine === 'auto' ? (_autoChoice.get(key)?.engine || 'pdfium') : engine;
   return eng === 'hayro' && _pdfiumPages.has(key) ? 'pdfium' : eng;
 }
 
@@ -56,11 +77,48 @@ export async function resolvePageEngine(engine, path, pageIndex) {
   if (engine === 'auto') {
     const key = `${path}|${pageIndex}`;
     if (!_autoChoice.has(key)) {
-      const { pageContentBytes } = await import('./progressive-render.js');
-      _autoChoice.set(key, engineForContent('auto', await pageContentBytes(path, pageIndex + 1)));
+      const weight = await pageRenderWeight(path, pageIndex);
+      const choice = { engine: engineForWeight('auto', weight), weight };
+      _autoChoice.set(key, choice);
+      console.info(`[render-engine] ${fileName(path)} p${pageIndex + 1}: ${describeLine(describePageEngine(path, pageIndex))}`);
     }
   }
   return engineForPage(engine, path, pageIndex);
+}
+
+/**
+ * Which engine draws this page and why, for logs, the MCP viewport state and
+ * the test scripts: { mode, engine, reason, weightKB, threads }.
+ * reason: 'forced' | 'auto-heavy' | 'auto-light' | 'not-measured' | 'hayro-refused'.
+ */
+export function describePageEngine(path, pageIndex, mode = renderEngineOn()) {
+  const key = `${path}|${pageIndex}`;
+  const choice = _autoChoice.get(key);
+  const engine = engineForPage(mode, path, pageIndex);
+  let reason;
+  if (_pdfiumPages.has(key) && (mode === 'hayro' || choice?.engine === 'hayro')) reason = 'hayro-refused';
+  else if (mode !== 'auto') reason = 'forced';
+  else if (!choice) reason = 'not-measured';
+  else reason = choice.engine === 'hayro' ? 'auto-heavy' : 'auto-light';
+  const weight = choice?.weight ?? _weights.get(key);
+  return {
+    mode,
+    engine,
+    reason,
+    weightKB: weight === undefined ? null : Math.round(weight / 1024),
+    threads: engine === 'hayro' ? _threads : null,
+  };
+}
+
+function describeLine(d) {
+  const parts = [`${d.engine} (${d.reason}`];
+  if (d.weightKB !== null) parts.push(`, weight ${d.weightKB} KB, threshold ${HEAVY_PAGE_WEIGHT / 1024} KB`);
+  if (d.threads !== null) parts.push(`, ${d.threads} threads`);
+  return parts.join('') + ')';
+}
+
+function fileName(path) {
+  return String(path).split(/[\/]/).pop();
 }
 
 /**
@@ -75,6 +133,7 @@ export async function withPageEngine(engine, path, pageIndex, run) {
     if (eng !== 'hayro' || !isHayroUnsupported(err)) throw err;
     console.warn(`[render-engine] Hayro refused p${pageIndex + 1} of ${path}: ${String(err?.message ?? err).slice(0, 160)} — PDFium renders it`);
     _pdfiumPages.add(`${path}|${pageIndex}`);
+    console.info(`[render-engine] ${fileName(path)} p${pageIndex + 1}: ${describeLine(describePageEngine(path, pageIndex))}`);
     return run('pdfium');
   }
 }

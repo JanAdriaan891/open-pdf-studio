@@ -365,3 +365,82 @@ fn the_render_cache_is_reused_between_renders() {
     let again = doc.render_page(0, 1.0, 0).unwrap();
     assert_eq!(first, again, "a warm cache draws the same page");
 }
+
+/// A PDF from raw object bodies (object i+1 = objs[i]), catalog = object 1.
+fn build_pdf(objs: &[Vec<u8>]) -> Arc<Vec<u8>> {
+    let mut out = b"%PDF-1.7\n".to_vec();
+    let mut offsets = Vec::new();
+    for (i, body) in objs.iter().enumerate() {
+        offsets.push(out.len());
+        out.extend_from_slice(format!("{} 0 obj\n", i + 1).as_bytes());
+        out.extend_from_slice(body);
+        out.extend_from_slice(b"\nendobj\n");
+    }
+    let xref = out.len();
+    out.extend_from_slice(format!("xref\n0 {}\n0000000000 65535 f \n", objs.len() + 1).as_bytes());
+    for o in offsets {
+        out.extend_from_slice(format!("{o:010} 00000 n \n").as_bytes());
+    }
+    out.extend_from_slice(
+        format!(
+            "trailer\n<< /Size {} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n",
+            objs.len() + 1
+        )
+        .as_bytes(),
+    );
+    Arc::new(out)
+}
+
+fn stream(dict: &str, data: &[u8]) -> Vec<u8> {
+    let mut s = format!("<< {dict} /Length {} >>\nstream\n", data.len()).into_bytes();
+    s.extend_from_slice(data);
+    s.extend_from_slice(b"\nendstream");
+    s
+}
+
+#[test]
+fn page_weight_counts_the_content_stream() {
+    let content = "1 0 0 rg 0 0 50 100 re f";
+    let doc = HayroDocument::open(red_left_strip(0, None)).unwrap();
+    assert_eq!(doc.page_weight(0).unwrap(), content.len() as u64);
+}
+
+#[test]
+fn page_weight_includes_forms_but_not_images() {
+    // Page draws form F0 and image Im0; F0 draws nested form F1, which the
+    // page also draws directly: F1 counts once.
+    let page_content = b"/F0 Do /F1 Do /Im0 Do".to_vec();
+    let f0 = vec![b'x'; 3000];
+    let f1 = vec![b'y'; 700];
+    let image = vec![0u8; 50_000];
+    let objs = vec![
+        b"<< /Type /Catalog /Pages 2 0 R >>".to_vec(),
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>".to_vec(),
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 100] /Contents 4 0 R /Resources << /XObject << /F0 5 0 R /F1 6 0 R /Im0 7 0 R >> >> >>".to_vec(),
+        stream("", &page_content),
+        stream("/Type /XObject /Subtype /Form /BBox [0 0 10 10] /Resources << /XObject << /F1 6 0 R >> >>", &f0),
+        stream("/Type /XObject /Subtype /Form /BBox [0 0 10 10]", &f1),
+        stream("/Type /XObject /Subtype /Image /Width 100 /Height 125 /ColorSpace /DeviceGray /BitsPerComponent 8", &image),
+    ];
+    let doc = HayroDocument::open(build_pdf(&objs)).unwrap();
+    assert_eq!(
+        doc.page_weight(0).unwrap(),
+        (page_content.len() + f0.len() + f1.len()) as u64
+    );
+}
+
+#[test]
+fn page_weight_of_a_missing_page_is_an_error() {
+    let doc = HayroDocument::open(red_left_strip(0, None)).unwrap();
+    assert!(matches!(doc.page_weight(3), Err(RenderError::PageOutOfRange(3))));
+}
+
+#[test]
+fn the_thread_share_fits_the_machine() {
+    use open_pdf_kernel::pdfrender::default_render_threads;
+    assert_eq!(default_render_threads(1), 0);
+    assert_eq!(default_render_threads(8), 1);
+    assert_eq!(default_render_threads(16), 3);
+    assert_eq!(default_render_threads(32), 4);
+    assert_eq!(default_render_threads(128), 4);
+}

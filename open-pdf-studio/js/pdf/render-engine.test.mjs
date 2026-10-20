@@ -38,7 +38,7 @@ globalThis.ImageData ??= class ImageData {
 globalThis.createImageBitmap ??= async (src) => ({ width: src.width, height: src.height, close() {} });
 
 const { state } = await import('../core/state.js');
-const { renderEngineOn, engineForPage, engineForContent, HEAVY_CONTENT_BYTES } = await import('./render-engine.js');
+const { renderEngineOn, engineForPage, engineForWeight, HEAVY_PAGE_WEIGHT, describePageEngine } = await import('./render-engine.js');
 const { thinLinesKey } = await import('./thin-lines.js');
 const { renderPdfPage } = await import('./engine-router.js');
 const tc = await import('./tile-cache.js');
@@ -58,12 +58,25 @@ test('the default is automatic; PDFium and Hayro can be forced', () => {
 });
 
 test('automatic picks Hayro for heavy pages only', () => {
-  assert.equal(HEAVY_CONTENT_BYTES, 512 * 1024);
-  assert.equal(engineForContent('auto', HEAVY_CONTENT_BYTES), 'hayro');
-  assert.equal(engineForContent('auto', HEAVY_CONTENT_BYTES - 1), 'pdfium');
-  assert.equal(engineForContent('auto', 0), 'pdfium');
-  assert.equal(engineForContent('pdfium', 50 * 1024 * 1024), 'pdfium', 'a forced engine stays');
-  assert.equal(engineForContent('hayro', 0), 'hayro', 'a forced engine stays');
+  assert.equal(HEAVY_PAGE_WEIGHT, 100 * 1024);
+  assert.equal(engineForWeight('auto', HEAVY_PAGE_WEIGHT), 'hayro');
+  assert.equal(engineForWeight('auto', HEAVY_PAGE_WEIGHT - 1), 'pdfium');
+  assert.equal(engineForWeight('auto', 0), 'pdfium');
+  assert.equal(engineForWeight('pdfium', 50 * 1024 * 1024), 'pdfium', 'a forced engine stays');
+  assert.equal(engineForWeight('hayro', 0), 'hayro', 'a forced engine stays');
+});
+
+test('the per-page description says which engine draws and why', async () => {
+  setEngine('auto');
+  await renderPdfPage({ path: 'light2.pdf', pageIndex: 0, scale: 1, rotation: 0 });
+  const light = describePageEngine('light2.pdf', 0);
+  assert.equal(light.mode, 'auto');
+  assert.equal(light.engine, 'pdfium');
+  assert.equal(light.reason, 'auto-light');
+  assert.equal(light.weightKB, 0);
+  setEngine('hayro');
+  assert.equal(describePageEngine('light2.pdf', 0).reason, 'forced');
+  setEngine('pdfium');
 });
 
 test('automatic never sends "auto" to Rust', async () => {
@@ -155,6 +168,7 @@ test('a page Hayro refuses is rendered with PDFium, and stays with PDFium', asyn
   assert.deepEqual(calls.map((c) => c.args.engine), ['hayro', 'pdfium']);
   assert.equal(engineForPage('hayro', 'mesh.pdf', 0), 'pdfium');
   assert.equal(engineForPage('hayro', 'mesh.pdf', 1), 'hayro', 'other pages keep Hayro');
+  assert.equal(describePageEngine('mesh.pdf', 0).reason, 'hayro-refused');
   calls.length = 0;
   await renderPdfPage({ path: 'mesh.pdf', pageIndex: 0, scale: 2, rotation: 0 });
   assert.deepEqual(calls.map((c) => c.args.engine), ['pdfium'], 'no second Hayro attempt');

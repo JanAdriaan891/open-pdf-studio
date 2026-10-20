@@ -2218,6 +2218,28 @@ async fn render_tile_scene_region(
     Ok(tauri::ipc::Response::new(data))
 }
 
+/// Page weight for the automatic engine choice (#625): raw bytes of the
+/// page's content streams plus every form XObject it can draw (recursively,
+/// once each). Images are left out. Reads the file directly; Hayro parses
+/// lazily, so only the page's own objects are touched.
+#[tauri::command]
+async fn page_render_weight(path: String, page_index: u32) -> Result<u64, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let bytes = std::fs::read(&path).map_err(|e| format!("Read: {e}"))?;
+        let doc = open_pdf_kernel::pdfrender::HayroDocument::open(std::sync::Arc::new(bytes))
+            .map_err(|e| e.to_string())?;
+        doc.page_weight(page_index).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| format!("page weight task failed: {e}"))?
+}
+
+/// Rasterizer threads each worker uses for Hayro (for logs and diagnostics).
+#[tauri::command]
+fn hayro_render_threads() -> u16 {
+    open_pdf_kernel::pdfrender::render_threads()
+}
+
 /// Goedkope zwaarte-probe: som van de GECOMPRIMEERDE content-stream-lengtes van
 /// een pagina (raw stream-bytes, geen decompressie). Groot => zware vector-pagina.
 /// Gebruikt door het progressieve render-pad om alleen echt-zware pagina's tegel-
@@ -3036,6 +3058,8 @@ pub fn run(opts: StartupOpts) {
             render_pdf_page_region,
             render_tile_scene_region,
             page_content_size,
+            page_render_weight,
+            hayro_render_threads,
             get_page_dimensions,
             invalidate_pdf_cache,
             handtekening::certificaat::pdf_certificate_info,

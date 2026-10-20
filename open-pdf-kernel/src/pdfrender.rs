@@ -14,7 +14,7 @@ use std::sync::Arc;
 
 use hayro::hayro_interpret::util::TransformExt;
 use hayro::hayro_interpret::InterpreterSettings;
-use hayro::hayro_syntax::object::{Dict, ObjectIdentifier, Stream};
+use hayro::hayro_syntax::object::{Array, Dict, Name, ObjectIdentifier, Stream};
 use hayro::hayro_syntax::Pdf;
 use hayro::{render_into, RenderCache, RenderSettings};
 use vello_cpu::color::palette::css::WHITE;
@@ -110,6 +110,29 @@ impl HayroDocument {
             .get(page_index as usize)
             .ok_or(RenderError::PageOutOfRange(page_index))?;
         Ok(page.render_dimensions())
+    }
+
+    /// How much vector work the page asks for: the raw (compressed) bytes
+    /// of its content streams plus those of every form XObject it can draw,
+    /// followed recursively and counted once. Images are left out: both
+    /// engines decode them at about the same cost.
+    pub fn page_weight(&self, page_index: u32) -> Result<u64, RenderError> {
+        let pages = self.inner.borrow_owner().pages();
+        let page = pages
+            .get(page_index as usize)
+            .ok_or(RenderError::PageOutOfRange(page_index))?;
+        let raw = page.raw();
+        let mut total: u64 = 0;
+        if let Some(content) = raw.get::<Stream<'_>>(b"Contents".as_slice()) {
+            total += content.raw_data().len() as u64;
+        } else if let Some(parts) = raw.get::<Array<'_>>(b"Contents".as_slice()) {
+            for part in parts.iter::<Stream<'_>>() {
+                total += part.raw_data().len() as u64;
+            }
+        }
+        let mut seen = HashSet::new();
+        total += form_weight(&page.resources().x_objects, 0, &mut seen);
+        Ok(total)
     }
 
     pub fn render_page(
@@ -332,6 +355,56 @@ fn count_sampled_shadings(
             seen,
         );
     }
+}
+
+/// Raw bytes of the form XObjects in `x_objects`, recursively, each once.
+fn form_weight(x_objects: &Dict<'_>, depth: u32, seen: &mut HashSet<ObjectIdentifier>) -> u64 {
+    if depth > 8 {
+        return 0;
+    }
+    let mut total = 0;
+    for name in x_objects.keys() {
+        let Some(form) = x_objects.get::<Stream<'_>>(name.as_ref()) else {
+            continue;
+        };
+        let is_form = form
+            .dict()
+            .get::<Name<'_>>(b"Subtype".as_slice())
+            .is_some_and(|s| s.as_ref() == b"Form");
+        if !is_form || !seen.insert(form.obj_id()) {
+            continue;
+        }
+        total += form.raw_data().len() as u64;
+        if let Some(res) = form.dict().get::<Dict<'_>>(b"Resources".as_slice()) {
+            if let Some(inner) = res.get::<Dict<'_>>(b"XObject".as_slice()) {
+                total += form_weight(&inner, depth + 1, seen);
+            }
+        }
+    }
+    total
+}
+
+/// Workers the app's pool runs side by side (src-tauri, WorkerPool).
+const POOL_WORKERS: usize = 4;
+/// Measured on the verification set: 4 threads make Hayro as fast as PDFium
+/// on light pages and ~2.6x faster on heavy drawings; 8 adds little.
+const MAX_RENDER_THREADS: usize = 4;
+
+/// Extra rasterizer threads per pool worker: a fair share of `cores` for each
+/// of the pool's workers, at most MAX_RENDER_THREADS.
+pub fn default_render_threads(cores: usize) -> u16 {
+    (cores / POOL_WORKERS).saturating_sub(1).min(MAX_RENDER_THREADS) as u16
+}
+
+/// Threads a worker uses for Hayro: OPDS_HAYRO_THREADS, or the default share
+/// of this machine.
+pub fn render_threads() -> u16 {
+    std::env::var("OPDS_HAYRO_THREADS")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or_else(|| {
+            default_render_threads(std::thread::available_parallelism().map_or(1, |n| n.get()))
+        })
 }
 
 /// A shading resource is a dictionary (types 1-3) or a stream (types 4-7).

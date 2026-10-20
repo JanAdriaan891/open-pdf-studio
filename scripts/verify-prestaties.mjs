@@ -29,7 +29,8 @@ const CDP_POORT = 9351;
 const BESTANDEN = [
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/Tekst.pdf', naam: 'licht (Tekst)', paginas: true },
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/Technische tekening.pdf', naam: 'middel (Technische tekening)', paginas: true },
-  { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/NKD1a_opm_aw.pdf', naam: 'annotatierijk (NKD1a, 7p)', paginas: true },
+  // Pagina 1 van NKD1a is vrijwel leeg; meet op pagina 2, een zware tekening.
+  { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/NKD1a_opm_aw.pdf', naam: 'annotatierijk (NKD1a, p2)', paginas: true, startPagina: 2 },
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/Zware vector PDF.pdf', naam: 'zwaar (Zware vector)', paginas: false },
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/MV-03_Mechanische ventilatie, 3e verdieping ontwerp ACH van 1,5 naar 2,0.pdf', naam: 'zwaar A0 (MV-03)', paginas: false },
 ];
@@ -175,6 +176,7 @@ async function meetRun(exe, bestand, engine) {
     const mcp = maakMcp(MCP_POORT);
     const tOpen = Date.now();
     await mcp('app_open_pdf', { path: bestand.pad }, 90000);
+    if (bestand.startPagina) await mcp('app_go_to_page', { page: bestand.startPagina }, 30000).catch(() => null);
     const inktNa = await wachtOpInkt(evalJs, 60000);
     uit.openMs = inktNa < 0 ? -1 : (Date.now() - tOpen);
     const scherpNa = await wachtOpScherp(evalJs, 60000);
@@ -196,6 +198,8 @@ async function meetRun(exe, bestand, engine) {
     await sleep(150);
     const z4Scherp = await wachtOpScherp(evalJs, 60000);
     uit.zoom4ScherpMs = z4Scherp < 0 ? -1 : (Date.now() - tZoom4);
+    // Welke engine tekende deze pagina, en waarom (#625).
+    uit.pageEngine = (await mcp('app_get_viewport_state', {}, 30000).catch(() => null))?.pageEngine || null;
     await mcp('app_set_zoom', { scale: 2 }, 30000).catch(() => null);
 
     if (bestand.paginas) {
@@ -243,6 +247,8 @@ async function meetBuild(exe, label, engine) {
       zoom4ScherpMs: med('zoom4ScherpMs') ?? -1,
       paginaMs: bestand.paginas ? (med('paginaMs') ?? -1) : undefined,
     };
+    const pe = runs.map((r) => r.pageEngine).find(Boolean);
+    if (pe) per[bestand.naam].pageEngine = `${pe.engine} (${pe.reason}${pe.weightKB != null ? `, ${pe.weightKB} KB` : ''}${pe.threads ? `, ${pe.threads} threads` : ''})`;
     console.log(`  ${bestand.naam}:`, JSON.stringify(per[bestand.naam]));
   }
   return per;
