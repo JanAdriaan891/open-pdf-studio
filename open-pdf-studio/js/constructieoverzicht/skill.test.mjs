@@ -53,7 +53,7 @@ test('de conventies van een constructieoverzicht staan erin', () => {
   for (const stuk of [
     'ONDERLIGGENDE bouwlaag als onderlegger', 'GESTIPPELD', 'zonder lateien', 'opacity:0.2', 'op één lijn',
     'alleen het hellende dak', 'Platte daken op de hoogte van een verdiepingsvloer', 'kolommetjes',
-    'koker 100x100', 'geen Rc-waarden', 'Raster-PDF', 'geen app_structural_layout',
+    'hoekkolom K100/5', 'geen Rc-waarden', 'Raster-PDF', 'geen app_structural_layout',
   ]) assert.ok(CONSTRUCTIEOVERZICHT_PROMPT.includes(stuk), `de instructie noemt ${stuk}`);
 });
 

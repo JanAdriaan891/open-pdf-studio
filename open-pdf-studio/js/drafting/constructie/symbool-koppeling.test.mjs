@@ -59,7 +59,7 @@ test('een keuzewaarde die het plan zet, staat ook in de keuzelijst', () => {
 });
 
 test('elke stalen profielfamilie wijst naar een bestaand symbool met die maat', () => {
-  for (const tekst of ['HE200B', 'HE 200 A', 'IPE 300', 'UNP 200', 'Koker 100x100x5', 'L 100x100x10']) {
+  for (const tekst of ['HE200B', 'HE 200 A', 'IPE 300', 'UNP 200', 'K100/5', 'Koker 100x100x5', 'Koker 100x50x5', 'K300/12.5', 'L 100x100x10']) {
     const profiel = ontleedProfiel(tekst);
     const tpl = getTemplate(profiel.symbolId);
     assert.ok(tpl, `${tekst}: onbekend symbool ${profiel.symbolId}`);
