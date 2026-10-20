@@ -74,6 +74,7 @@ export default function PageDisplayTab(props) {
             value={p.renderEngine[0]}
             setValue={p.renderEngine[1]}
             options={[
+              { value: 'auto', label: t('pageDisplay.renderEngineAuto') },
               { value: 'pdfium', label: t('pageDisplay.renderEnginePdfium') },
               { value: 'hayro', label: t('pageDisplay.renderEngineHayro') },
             ]}

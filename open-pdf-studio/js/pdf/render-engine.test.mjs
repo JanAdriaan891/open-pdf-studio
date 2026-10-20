@@ -38,7 +38,7 @@ globalThis.ImageData ??= class ImageData {
 globalThis.createImageBitmap ??= async (src) => ({ width: src.width, height: src.height, close() {} });
 
 const { state } = await import('../core/state.js');
-const { renderEngineOn, engineForPage } = await import('./render-engine.js');
+const { renderEngineOn, engineForPage, engineForContent, HEAVY_CONTENT_BYTES } = await import('./render-engine.js');
 const { thinLinesKey } = await import('./thin-lines.js');
 const { renderPdfPage } = await import('./engine-router.js');
 const tc = await import('./tile-cache.js');
@@ -47,13 +47,36 @@ const { DEFAULT_PREFERENCES } = await import('../core/constants.js');
 
 function setEngine(engine) { state.preferences.renderEngine = engine; }
 
-test('the default engine is PDFium; only "hayro" selects Hayro', () => {
-  assert.equal(DEFAULT_PREFERENCES.renderEngine, 'pdfium');
+test('the default is automatic; PDFium and Hayro can be forced', () => {
+  assert.equal(DEFAULT_PREFERENCES.renderEngine, 'auto');
   assert.equal(renderEngineOn({ renderEngine: 'hayro' }), 'hayro');
   assert.equal(renderEngineOn({ renderEngine: 'pdfium' }), 'pdfium');
-  assert.equal(renderEngineOn({ renderEngine: 'other' }), 'pdfium');
-  assert.equal(renderEngineOn({}), 'pdfium');
-  assert.equal(renderEngineOn(null), 'pdfium');
+  assert.equal(renderEngineOn({ renderEngine: 'auto' }), 'auto');
+  assert.equal(renderEngineOn({ renderEngine: 'other' }), 'auto');
+  assert.equal(renderEngineOn({}), 'auto');
+  assert.equal(renderEngineOn(null), 'auto');
+});
+
+test('automatic picks Hayro for heavy pages only', () => {
+  assert.equal(HEAVY_CONTENT_BYTES, 512 * 1024);
+  assert.equal(engineForContent('auto', HEAVY_CONTENT_BYTES), 'hayro');
+  assert.equal(engineForContent('auto', HEAVY_CONTENT_BYTES - 1), 'pdfium');
+  assert.equal(engineForContent('auto', 0), 'pdfium');
+  assert.equal(engineForContent('pdfium', 50 * 1024 * 1024), 'pdfium', 'a forced engine stays');
+  assert.equal(engineForContent('hayro', 0), 'hayro', 'a forced engine stays');
+});
+
+test('automatic never sends "auto" to Rust', async () => {
+  calls.length = 0;
+  setEngine('auto');
+  await renderPdfPage({ path: 'light.pdf', pageIndex: 0, scale: 1, rotation: 0 });
+  await invokeTileRegion({
+    path: 'light.pdf', pageIndex: 0, scale: 2, rotation: 0,
+    regionXPt: 0, regionYPt: 0, regionWPt: 10, regionHPt: 10,
+  });
+  const engines = calls.filter((c) => c.cmd.startsWith('render_')).map((c) => c.args.engine);
+  assert.deepEqual(engines, ['pdfium', 'pdfium'], 'a light page is PDFium');
+  setEngine('pdfium');
 });
 
 test('a whole-page render sends the engine to Rust', async () => {
@@ -106,6 +129,8 @@ test('a tile render keeps the engine it was started with', async () => {
 
 test('cache keys differ per engine', async () => {
   assert.notEqual(thinLinesKey(false, 'pdfium'), thinLinesKey(false, 'hayro'));
+  assert.notEqual(thinLinesKey(false, 'pdfium'), thinLinesKey(false, 'auto'));
+  assert.notEqual(thinLinesKey(false, 'hayro'), thinLinesKey(false, 'auto'));
   assert.notEqual(thinLinesKey(true, 'pdfium'), thinLinesKey(true, 'hayro'));
   // PDFium keys are unchanged, so existing cache keys stay valid.
   assert.equal(thinLinesKey(false, 'pdfium'), 'true');

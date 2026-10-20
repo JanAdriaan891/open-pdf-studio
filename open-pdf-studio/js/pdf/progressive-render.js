@@ -168,9 +168,11 @@ export async function invokeTileRegion(args) {
     args = { ...args, engine: renderEngineOn() };
   }
   const key = `${args.path}|${args.pageIndex}|${args.rotation || 0}`;
+  const { resolvePageEngine } = await import('./render-engine.js');
+  const pageEngine = await resolvePageEngine(args.engine, args.path, args.pageIndex);
   const sceneWorthIt = usesSceneEngine(
-    args.engine,
-    args.engine === 'pdfium' ? await pageContentBytes(args.path, args.pageIndex + 1) : 0,
+    pageEngine,
+    pageEngine === 'pdfium' ? await pageContentBytes(args.path, args.pageIndex + 1) : 0,
   );
   if (sceneWorthIt) {
     const res = await _sceneAttempts.tryRegion(

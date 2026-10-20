@@ -29,7 +29,7 @@ export function withThinLines(args, thin = thinLinesOn()) {
  */
 export function thinLinesKey(thin = thinLinesOn(), engine = renderEngineOn()) {
   const lines = thin ? 'thin' : 'true';
-  return engine === 'hayro' ? `${lines}+hayro` : lines;
+  return engine === 'pdfium' ? lines : `${lines}+${engine}`;
 }
 
 /**
