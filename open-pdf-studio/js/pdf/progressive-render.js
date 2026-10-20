@@ -278,7 +278,7 @@ export async function isHeavyPage(filePath, pageNum) {
 // ondertussen doorontwikkeld tot volwaardige engine (clips, images, tekst-
 // randgevallen) en de drempel zakt pas wanneer de corpus-benchmark
 // (examples/corpus_diff.rs) dat per bladklasse aantoont.
-const SCENE_CONTENT_BYTES = 6_000_000;
+export const SCENE_CONTENT_BYTES = 6_000_000;
 
 export function isSceneCandidateBytes(bytes) {
   return typeof bytes === 'number' && bytes > SCENE_CONTENT_BYTES;

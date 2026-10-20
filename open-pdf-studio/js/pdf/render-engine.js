@@ -22,9 +22,22 @@ export function renderEngineOn(prefs = state.preferences) {
   return v === 'pdfium' || v === 'hayro' ? v : 'auto';
 }
 
-/** The engine for a page of `weight` bytes under preference `pref`. */
-export function engineForWeight(pref, weight) {
+/**
+ * Raw content size above which the PDFium route renders tiles with the scene
+ * engine (progressive-render.js, SCENE_CONTENT_BYTES): it prepares the page
+ * once and rasterizes every tile from it, while Hayro interprets the whole
+ * page per tile. Measured on MV-03 (8.7 MB): Hayro opened in 31.6 s against
+ * 11 s. Kept equal to SCENE_CONTENT_BYTES (a test checks it).
+ */
+export const SCENE_PAGE_CONTENT = 6_000_000;
+
+/**
+ * The engine for a page of `weight` bytes (content plus forms) with
+ * `contentBytes` of raw content, under preference `pref`.
+ */
+export function engineForWeight(pref, weight, contentBytes = 0) {
   if (pref !== 'auto') return pref;
+  if (contentBytes > SCENE_PAGE_CONTENT) return 'pdfium';
   return weight >= HEAVY_PAGE_WEIGHT ? 'hayro' : 'pdfium';
 }
 
@@ -78,7 +91,9 @@ export async function resolvePageEngine(engine, path, pageIndex) {
     const key = `${path}|${pageIndex}`;
     if (!_autoChoice.has(key)) {
       const weight = await pageRenderWeight(path, pageIndex);
-      const choice = { engine: engineForWeight('auto', weight), weight };
+      const { pageContentBytes } = await import('./progressive-render.js');
+      const content = await pageContentBytes(path, pageIndex + 1);
+      const choice = { engine: engineForWeight('auto', weight, content), weight, scene: content > SCENE_PAGE_CONTENT };
       _autoChoice.set(key, choice);
       console.info(`[render-engine] ${fileName(path)} p${pageIndex + 1}: ${describeLine(describePageEngine(path, pageIndex))}`);
     }
@@ -89,7 +104,8 @@ export async function resolvePageEngine(engine, path, pageIndex) {
 /**
  * Which engine draws this page and why, for logs, the MCP viewport state and
  * the test scripts: { mode, engine, reason, weightKB, threads }.
- * reason: 'forced' | 'auto-heavy' | 'auto-light' | 'not-measured' | 'hayro-refused'.
+ * reason: 'forced' | 'auto-heavy' | 'auto-light' | 'auto-scene' (PDFium with the
+ * scene engine) | 'not-measured' | 'hayro-refused'.
  */
 export function describePageEngine(path, pageIndex, mode = renderEngineOn()) {
   const key = `${path}|${pageIndex}`;
@@ -99,6 +115,7 @@ export function describePageEngine(path, pageIndex, mode = renderEngineOn()) {
   if (_pdfiumPages.has(key) && (mode === 'hayro' || choice?.engine === 'hayro')) reason = 'hayro-refused';
   else if (mode !== 'auto') reason = 'forced';
   else if (!choice) reason = 'not-measured';
+  else if (choice.scene) reason = 'auto-scene';
   else reason = choice.engine === 'hayro' ? 'auto-heavy' : 'auto-light';
   const weight = choice?.weight ?? _weights.get(key);
   return {

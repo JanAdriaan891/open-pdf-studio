@@ -66,6 +66,20 @@ test('automatic picks Hayro for heavy pages only', () => {
   assert.equal(engineForWeight('hayro', 0), 'hayro', 'a forced engine stays');
 });
 
+test('automatic leaves pages for the scene engine on the PDFium route', () => {
+  // MV-03: 8.7 MB of content. The scene engine prepares the page once and
+  // rasterizes every tile from it; Hayro would interpret the page per tile.
+  assert.equal(engineForWeight('auto', 9_000_000, 8_900_000), 'pdfium');
+  assert.equal(engineForWeight('auto', 3_000_000, 3_000_000), 'hayro');
+  assert.equal(engineForWeight('hayro', 9_000_000, 8_900_000), 'hayro', 'forced Hayro stays');
+});
+
+test('the scene limit matches the one of the tile route', async () => {
+  const { SCENE_CONTENT_BYTES } = await import('./progressive-render.js');
+  const { SCENE_PAGE_CONTENT } = await import('./render-engine.js');
+  assert.equal(SCENE_PAGE_CONTENT, SCENE_CONTENT_BYTES);
+});
+
 test('the per-page description says which engine draws and why', async () => {
   setEngine('auto');
   await renderPdfPage({ path: 'light2.pdf', pageIndex: 0, scale: 1, rotation: 0 });
