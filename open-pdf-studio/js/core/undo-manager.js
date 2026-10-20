@@ -228,7 +228,7 @@ export async function undo() {
 
   if (cmd.type === 'pageStructure') {
     const { restorePageState } = await import('../pdf/page-manager.js');
-    await restorePageState(cmd.oldBytes, cmd.oldAnnotations, cmd.oldRotations, cmd.oldPage);
+    await restorePageState(cmd.oldBytes, cmd.oldAnnotations, cmd.oldRotations, cmd.oldPage, { bookmarks: cmd.bookmarks?.old });
     applyOcrShift(getActiveDocument()?.ocrResults, cmd.ocrShift, -1);
     syncModifiedState();
     updateButtons();
@@ -282,7 +282,7 @@ export async function redo() {
 
   if (cmd.type === 'pageStructure') {
     const { restorePageState } = await import('../pdf/page-manager.js');
-    await restorePageState(cmd.newBytes, cmd.newAnnotations, cmd.newRotations, cmd.newPage);
+    await restorePageState(cmd.newBytes, cmd.newAnnotations, cmd.newRotations, cmd.newPage, { bookmarks: cmd.bookmarks?.new });
     applyOcrShift(getActiveDocument()?.ocrResults, cmd.ocrShift, 1);
     syncModifiedState();
     updateButtons();
@@ -1054,5 +1054,10 @@ export function recordPageStructure(oldBytes, oldAnnotations, oldRotations, oldP
     newRotations: { ...newRotations },
     newPage: newPage,
     ...(extra.ocrShift ? { ocrShift: { ...extra.ocrShift, pages: [...extra.ocrShift.pages] } } : {}),
+    // Bladwijzers vóór en na (samenvoegen): de bewerking verandert ze.
+    ...(extra.bookmarks ? { bookmarks: {
+      old: extra.bookmarks.old.map((b) => ({ ...b })),
+      new: extra.bookmarks.new.map((b) => ({ ...b })),
+    } } : {}),
   });
 }

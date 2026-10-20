@@ -177,6 +177,9 @@ async function imageBytesFromDataUrl(dataUrl) {
   return { bytes, isJpeg };
 }
 
+// Gedeclareerd in het deel hieronder, dat save-document.test.mjs los draait.
+export { schrijfFormulierWaarden };
+
 // Save PDF with annotations
 // Eén save tegelijk. Twee overlappende saves (Ctrl+S twee keer snel, of
 // opslaan-bij-sluiten tijdens een lopende save) lazen allebei dezelfde
@@ -195,6 +198,50 @@ function weigerOpslaanBeveiligd(doc) {
   if (!opslaanGeweigerd(doc)) return false;
   showMessage(i18next.t('protectedPdfReadOnly'));
   return true;
+}
+
+/**
+ * De ingevulde waarden van de formuliervelden (AnnotationStorage van pdf.js)
+ * in het pdf-lib-document zetten. Ook voor een paginabewerking die het
+ * document uit nieuwe bytes herlaadt (samenvoegen): die waarden staan anders
+ * alleen in het pdf.js-document dat daarbij weggaat.
+ */
+function schrijfFormulierWaarden(pdfDocLib, activeDoc) {
+  const storage = getAnnotationStorage(activeDoc);
+  const fieldNameMap = getAnnotIdToFieldName(activeDoc);
+  let gezet = 0;
+  if (storage && storage.size > 0 && fieldNameMap.size > 0) {
+    try {
+      const form = pdfDocLib.getForm();
+      for (const [annotId, fieldName] of fieldNameMap.entries()) {
+        const storedValue = storage.getRawValue(annotId);
+        if (storedValue === undefined) continue;
+        try {
+          const field = form.getField(fieldName);
+          gezet += 1;
+          if (field instanceof PDFTextField) {
+            field.setText(storedValue.value != null ? String(storedValue.value) : '');
+          } else if (field instanceof PDFCheckBox) {
+            storedValue.value ? field.check() : field.uncheck();
+          } else if (field instanceof PDFDropdown) {
+            if (storedValue.value != null) field.select(storedValue.value);
+          } else if (field instanceof PDFRadioGroup) {
+            if (storedValue.value != null) field.select(storedValue.value);
+          } else if (field instanceof PDFOptionList) {
+            if (storedValue.value != null) {
+              const vals = Array.isArray(storedValue.value) ? storedValue.value : [storedValue.value];
+              field.select(vals);
+            }
+          }
+        } catch (fieldErr) {
+          // Skip fields that can't be set (e.g. read-only, signature, etc.)
+        }
+      }
+    } catch (formErr) {
+      console.warn('Failed to persist form field values:', formErr);
+    }
+  }
+  return gezet;
 }
 
 export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getActiveDocument()) {
@@ -357,38 +404,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     const context = pdfDocLib.context;
 
     // Persist interactive form field values from AnnotationStorage
-    const storage = getAnnotationStorage(activeDoc);
-    const fieldNameMap = getAnnotIdToFieldName(activeDoc);
-    if (storage && storage.size > 0 && fieldNameMap.size > 0) {
-      try {
-        const form = pdfDocLib.getForm();
-        for (const [annotId, fieldName] of fieldNameMap.entries()) {
-          const storedValue = storage.getRawValue(annotId);
-          if (storedValue === undefined) continue;
-          try {
-            const field = form.getField(fieldName);
-            if (field instanceof PDFTextField) {
-              field.setText(storedValue.value != null ? String(storedValue.value) : '');
-            } else if (field instanceof PDFCheckBox) {
-              storedValue.value ? field.check() : field.uncheck();
-            } else if (field instanceof PDFDropdown) {
-              if (storedValue.value != null) field.select(storedValue.value);
-            } else if (field instanceof PDFRadioGroup) {
-              if (storedValue.value != null) field.select(storedValue.value);
-            } else if (field instanceof PDFOptionList) {
-              if (storedValue.value != null) {
-                const vals = Array.isArray(storedValue.value) ? storedValue.value : [storedValue.value];
-                field.select(vals);
-              }
-            }
-          } catch (fieldErr) {
-            // Skip fields that can't be set (e.g. read-only, signature, etc.)
-          }
-        }
-      } catch (formErr) {
-        console.warn('Failed to persist form field values:', formErr);
-      }
-    }
+    schrijfFormulierWaarden(pdfDocLib, activeDoc);
 
     // Ensure AcroForm DR (Default Resources) has fonts for FreeText annotations.
     // PDF viewers resolve font names in DA strings through these resources.

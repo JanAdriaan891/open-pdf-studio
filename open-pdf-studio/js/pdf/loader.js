@@ -1187,6 +1187,26 @@ export async function ensureAnnotationsForPage(pageNum, doc) {
   console.log(`[PERF] ensureAnnotationsForPage(${pageNum}) DONE: ${(performance.now() - _ea0).toFixed(0)}ms`);
 }
 
+/**
+ * Annotaties van deze pagina's nu laden, met kleuren en stempelbeelden, en
+ * wachten tot ze in het model staan. Voor pagina's die een paginabewerking
+ * nieuw in het document bracht (samenvoegen, invoegen): hun annotaties
+ * staan alleen in de bytes, en het model moet ze hebben vóór er getekend,
+ * ongedaan gemaakt of opgeslagen wordt.
+ * @returns {Promise<import('pdf-lib').PDFDocument|null>} het pdf-lib-document
+ *   als het geladen moest worden (voor de lagen van die annotaties)
+ */
+export async function laadAnnotatiesVoorPaginas(doc, paginas) {
+  if (!doc?.pdfDoc) return null;
+  for (const pageNum of paginas) {
+    if (doc._annotationPagesReady?.has(pageNum)) continue;
+    doc._loadedAnnotationPages.add(pageNum);
+    await loadAnnotationsForSinglePage(doc, pageNum, true);
+    if (doc._annotationPagesReady) doc._annotationPagesReady.add(pageNum);
+  }
+  return doc._sharedPdfLibDoc || null;
+}
+
 // Load existing annotations from PDF
 export async function loadExistingAnnotations(doc) {
   if (!doc) {
