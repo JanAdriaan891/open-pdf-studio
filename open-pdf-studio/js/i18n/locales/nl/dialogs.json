@@ -1119,5 +1119,30 @@
     "documentChanged": "Het document is gewijzigd. Maak de schermafbeelding opnieuw.",
     "pngFiles": "PNG-afbeelding",
     "jpegFiles": "JPEG-afbeelding"
+  },
+  "recovery": {
+    "title": "Niet-opgeslagen werk herstellen",
+    "intro": "Open PDF Studio is de vorige keer niet normaal afgesloten. Van deze documenten is niet-opgeslagen werk bewaard:",
+    "savedAt": "Bewaard op {{time}}",
+    "pages": "Pagina's: {{count}}",
+    "untitled": "Naamloos document",
+    "neverSaved": "Nog nooit opgeslagen",
+    "originalChanged": "Het oorspronkelijke bestand is sindsdien gewijzigd.",
+    "open": "Openen",
+    "saveAs": "Opslaan als...",
+    "delete": "Verwijderen",
+    "deleteAll": "Alles verwijderen",
+    "later": "Later",
+    "keepNote": "Wat u nu niet afhandelt, blijft 14 dagen bewaard en wordt bij de volgende start opnieuw aangeboden.",
+    "confirmDelete": "Dit werk definitief verwijderen?",
+    "confirmDeleteAll": "Al dit werk definitief verwijderen?",
+    "yesDelete": "Ja, verwijderen",
+    "cancel": "Annuleren",
+    "openFailed": "Het herstelde document kon niet worden geopend: {{error}}",
+    "saveFailed": "Het herstelde document kon niet worden opgeslagen: {{error}}",
+    "deleteFailed": "Verwijderen is mislukt: {{error}}",
+    "tabLabel": "hersteld",
+    "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
+    "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
   }
 }

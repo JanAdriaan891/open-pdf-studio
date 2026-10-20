@@ -17,6 +17,7 @@ import { actiefNaSluiten } from '../../pdf/handtekeningen/opslaan.js';
 import { compareActive, compareFocused, focusCompareTab, blurCompareTab } from '../../compare/compare-store.js';
 import { volgendTabDoel, voerTabWisselUit } from './tab-sneltoets.js';
 import { isBeveiligdDocument } from '../../pdf/wachtwoord-pdf.js';
+import { meldWijziging, meldGesloten } from '../../herstel/haken.js';
 
 /**
  * Create a new tab for a document
@@ -342,6 +343,8 @@ export async function closeTab(index, force = false, dialogAction = null) {
 
   // Remove the document
   state.documents.splice(index, 1);
+  // Gesloten (opgeslagen of bewust niet): de herstelmomentopname kan weg.
+  meldGesloten(doc);
 
   // Geef vrij wat dit document in het geheugen vasthield: de PDF.js-instantie,
   // de ruwe bestandsbytes, vector-commandobuffers, bitmaps en de documentcaches
@@ -583,6 +586,7 @@ export function markDocumentModified(doc = getActiveDocument()) {
     doc.modified = true;
     // Direct modification bypasses undo stack, so clean point is unreachable
     doc.savedUndoStackLength = -1;
+    meldWijziging(doc);
     updateTabBar();
     updateWindowTitle();
   }

@@ -1119,5 +1119,30 @@
     "documentChanged": "Dokument sa zmenil. Urobte snímku znova.",
     "pngFiles": "Obrázok PNG",
     "jpegFiles": "Obrázok JPEG"
+  },
+  "recovery": {
+    "title": "Obnoviť neuloženú prácu",
+    "intro": "Open PDF Studio sa naposledy neukončil normálne. Neuložená práca z týchto dokumentov bola zachovaná:",
+    "savedAt": "Zachované {{time}}",
+    "pages": "Strany: {{count}}",
+    "untitled": "Dokument bez názvu",
+    "neverSaved": "Nikdy neuložené",
+    "originalChanged": "Pôvodný súbor sa medzitým zmenil.",
+    "open": "Otvoriť",
+    "saveAs": "Uložiť ako...",
+    "delete": "Odstrániť",
+    "deleteAll": "Odstrániť všetko",
+    "later": "Neskôr",
+    "keepNote": "Čo teraz nevybavíte, zostane uložené 14 dní a bude znova ponúknuté pri ďalšom spustení.",
+    "confirmDelete": "Natrvalo odstrániť túto prácu?",
+    "confirmDeleteAll": "Natrvalo odstrániť celú túto prácu?",
+    "yesDelete": "Áno, odstrániť",
+    "cancel": "Zrušiť",
+    "openFailed": "Obnovený dokument sa nepodarilo otvoriť: {{error}}",
+    "saveFailed": "Obnovený dokument sa nepodarilo uložiť: {{error}}",
+    "deleteFailed": "Odstránenie zlyhalo: {{error}}",
+    "tabLabel": "obnovené",
+    "tabTip": "Obnovené po neočakávanom ukončení. Uloženie zapisuje do pôvodného súboru.",
+    "reloadStopped": "Okno Open PDF Studio niekoľkokrát po sebe prestalo fungovať a už sa automaticky znova nenačíta. Uložte svoju prácu a aplikáciu reštartujte."
   }
 }

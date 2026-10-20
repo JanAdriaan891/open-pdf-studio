@@ -8,6 +8,7 @@ mod atomic_file;
 pub mod beveiligde_pdf;
 pub mod cad_export;
 pub mod cad_import;
+pub mod crashlog;
 pub mod datamap;
 mod email;
 pub mod extensie_installatie;
@@ -25,6 +26,7 @@ pub mod pdfium_renderer;
 pub mod pdfx_cmyk;
 pub mod handtekening;
 pub mod headless;
+pub mod herstel;
 pub mod instantie;
 pub mod print_formulieren;
 pub mod print_instelling;
@@ -2618,6 +2620,11 @@ pub fn run(opts: StartupOpts) {
         }
     }
 
+    // Crashlog en noodmomentopname bij een paniek (crashlog.rs, herstel.rs):
+    // zo vroeg mogelijk, zodat ook een paniek tijdens het opstarten gelogd wordt.
+    crashlog::installeer_paniekhaak();
+    let tweede_instantie = instantie::is_nieuwe_instantie(&args);
+
     // Headless testinstantie (OPDS_HEADLESS=1, zie headless.rs): vaststellen en
     // de WebView2-argumenten zetten vóór er een draad of venster bestaat.
     let headless_browser_args = if headless::init(mcp_enabled) {
@@ -2714,6 +2721,12 @@ pub fn run(opts: StartupOpts) {
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_store::Builder::default().build());
+    // Uitvallende WebView2-processen in het crashlog (crashlog.rs); alleen op
+    // het bureaublad (op Windows via WebView2, elders een lege plugin).
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(crashlog::plugin());
+    }
     // Drag-out window detach is desktop-only (no mobile backend in the crate).
     #[cfg(not(target_os = "android"))]
     {
@@ -2814,6 +2827,12 @@ pub fn run(opts: StartupOpts) {
                 Ok(map) => eprintln!("[startup] logboek in {}", map.display()),
                 Err(e) => eprintln!("[startup] geen logboek: {e}"),
             }
+
+            // Herstel van niet-opgeslagen werk (herstel.rs): de paniekhaak
+            // kan nu de frontend bereiken, en de markering "deze instantie
+            // draait" gaat pas weg bij een nette afsluiting.
+            crashlog::koppel(app.handle());
+            herstel::start(tweede_instantie);
 
             let diagnostics_path = datamap::tauri_map(app.handle(), datamap::TauriMap::Logs)
                 .map_err(|e| format!("Cannot resolve app log directory: {e}"))?
@@ -3090,6 +3109,23 @@ pub fn run(opts: StartupOpts) {
             startup_diagnostics::startup_diagnostic,
             startup_diagnostics::startup_diagnostics_path,
             datamap::app_data_dir_effectief,
+            herstel::herstel_info,
+            herstel::herstel_schrijf,
+            herstel::herstel_lees,
+            herstel::herstel_lees_tekst,
+            herstel::herstel_lijst,
+            herstel::herstel_verwijder,
+            herstel::herstel_hernoem,
+            herstel::herstel_processen,
+            herstel::herstel_claim,
+            herstel::herstel_werkkopie,
+            herstel::herstel_kopieer,
+            herstel::herstel_bron_info,
+            herstel::herstel_crashlog,
+            herstel::herstel_log,
+            herstel::herstel_schoon_afsluiten,
+            herstel::herstel_nood_klaar,
+            herstel::herstel_test_paniek,
             read_clipboard_image_png,
             set_prtscn_hotkey,
         ])
@@ -3100,6 +3136,9 @@ pub fn run(opts: StartupOpts) {
             // opruimen (best effort; wat blijft staan ruimt de volgende start op).
             if let tauri::RunEvent::Exit = &_event {
                 beveiligde_pdf::ruim_eigen_kopieen_op(&_app.state::<beveiligde_pdf::BeveiligdeKopieen>());
+                // De markering "draait" alleen weg na een nette afsluiting van
+                // de frontend; anders ziet de volgende start een crash.
+                herstel::bij_afsluiten();
             }
             // macOS (en iOS) leveren een dubbelklik in Finder NIET als
             // argv-argument aan (zoals Windows/Linux), maar als Apple Event

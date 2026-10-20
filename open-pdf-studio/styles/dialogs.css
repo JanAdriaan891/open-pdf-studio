@@ -5465,3 +5465,77 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
   pointer-events: none;
   white-space: nowrap;
 }
+
+/* ===== Niet-opgeslagen werk herstellen (js/herstel/) ===== */
+.recovery-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 480px;
+  max-width: 640px;
+  font-size: 12px;
+  color: var(--theme-text, #1a1a1a);
+}
+.recovery-intro,
+.recovery-note {
+  margin: 0;
+}
+.recovery-note {
+  color: var(--theme-text-secondary, #666);
+}
+.recovery-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--theme-border, #d4d4d4);
+  max-height: 320px;
+  overflow-y: auto;
+}
+.recovery-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-bottom: 1px solid var(--theme-border, #d4d4d4);
+}
+.recovery-row:last-child {
+  border-bottom: none;
+}
+.recovery-info {
+  flex: 1;
+  min-width: 0;
+}
+.recovery-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.recovery-path,
+.recovery-meta {
+  color: var(--theme-text-secondary, #666);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.recovery-warning {
+  color: #a4262c;
+  font-size: 11px;
+}
+.recovery-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.recovery-actions .pref-btn,
+.recovery-footer .pref-btn {
+  min-width: 0;
+  padding: 4px 12px;
+}
+.recovery-confirm-text {
+  font-size: 11px;
+}
+.recovery-footer {
+  align-items: center;
+}

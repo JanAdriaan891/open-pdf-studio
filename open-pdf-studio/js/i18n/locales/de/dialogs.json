@@ -1119,5 +1119,30 @@
     "documentChanged": "Das Dokument wurde geändert. Erstellen Sie das Bildschirmfoto erneut.",
     "pngFiles": "PNG-Bild",
     "jpegFiles": "JPEG-Bild"
+  },
+  "recovery": {
+    "title": "Nicht gespeicherte Arbeit wiederherstellen",
+    "intro": "Open PDF Studio wurde beim letzten Mal nicht normal beendet. Für diese Dokumente wurde nicht gespeicherte Arbeit aufbewahrt:",
+    "savedAt": "Aufbewahrt am {{time}}",
+    "pages": "Seiten: {{count}}",
+    "untitled": "Unbenanntes Dokument",
+    "neverSaved": "Noch nie gespeichert",
+    "originalChanged": "Die Originaldatei wurde seitdem geändert.",
+    "open": "Öffnen",
+    "saveAs": "Speichern unter...",
+    "delete": "Löschen",
+    "deleteAll": "Alle löschen",
+    "later": "Später",
+    "keepNote": "Was Sie jetzt nicht erledigen, wird 14 Tage aufbewahrt und beim nächsten Start erneut angeboten.",
+    "confirmDelete": "Diese Arbeit endgültig löschen?",
+    "confirmDeleteAll": "Diese gesamte Arbeit endgültig löschen?",
+    "yesDelete": "Ja, löschen",
+    "cancel": "Abbrechen",
+    "openFailed": "Das wiederhergestellte Dokument konnte nicht geöffnet werden: {{error}}",
+    "saveFailed": "Das wiederhergestellte Dokument konnte nicht gespeichert werden: {{error}}",
+    "deleteFailed": "Löschen fehlgeschlagen: {{error}}",
+    "tabLabel": "wiederhergestellt",
+    "tabTip": "Nach einem unerwarteten Beenden wiederhergestellt. Speichern schreibt in die Originaldatei.",
+    "reloadStopped": "Das Fenster von Open PDF Studio ist mehrmals kurz hintereinander abgestürzt und wird nicht mehr automatisch neu geladen. Speichern Sie Ihre Arbeit und starten Sie die App neu."
   }
 }

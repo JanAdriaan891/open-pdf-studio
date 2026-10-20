@@ -1119,5 +1119,30 @@
     "documentChanged": "Dokument se promijenio. Ponovno napravite snimku.",
     "pngFiles": "PNG slika",
     "jpegFiles": "JPEG slika"
+  },
+  "recovery": {
+    "title": "Vraćanje nespremljenog rada",
+    "intro": "Open PDF Studio prošli put nije normalno zatvoren. Nespremljeni rad iz ovih dokumenata je sačuvan:",
+    "savedAt": "Sačuvano {{time}}",
+    "pages": "Stranice: {{count}}",
+    "untitled": "Dokument bez naslova",
+    "neverSaved": "Nikada nije spremljeno",
+    "originalChanged": "Izvorna datoteka se u međuvremenu promijenila.",
+    "open": "Otvori",
+    "saveAs": "Spremi kao...",
+    "delete": "Izbriši",
+    "deleteAll": "Izbriši sve",
+    "later": "Kasnije",
+    "keepNote": "Ono što sada ne riješite čuva se 14 dana i ponovno će se ponuditi pri sljedećem pokretanju.",
+    "confirmDelete": "Trajno izbrisati ovaj rad?",
+    "confirmDeleteAll": "Trajno izbrisati sav ovaj rad?",
+    "yesDelete": "Da, izbriši",
+    "cancel": "Odustani",
+    "openFailed": "Vraćeni dokument nije moguće otvoriti: {{error}}",
+    "saveFailed": "Vraćeni dokument nije moguće spremiti: {{error}}",
+    "deleteFailed": "Brisanje nije uspjelo: {{error}}",
+    "tabLabel": "vraćeno",
+    "tabTip": "Vraćeno nakon neočekivanog zatvaranja. Spremanje zapisuje u izvornu datoteku.",
+    "reloadStopped": "Prozor programa Open PDF Studio nekoliko je puta zaredom prestao raditi i više se ne učitava ponovno automatski. Spremite svoj rad i ponovno pokrenite aplikaciju."
   }
 }

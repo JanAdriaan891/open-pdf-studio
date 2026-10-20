@@ -32,6 +32,7 @@ import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnno
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
 import { opslaanGeweigerd } from './wachtwoord-pdf.js';
+import { meldOpgeslagen } from '../herstel/haken.js';
 
 // Sub-modules
 import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
@@ -184,6 +185,10 @@ async function imageBytesFromDataUrl(dataUrl) {
 // door elkaar. De tweede aanroep wacht nu op de eerste en werkt daarna op
 // het bijgewerkte document. (#345)
 let _saveBezig = null;
+// Een herstelmomentopname (bouwMomentopname) die nog loopt: een echte save
+// wacht daarop, zodat de twee niet door elkaar heen de text-edit-administratie
+// (_pendingBakeInfo) bijwerken.
+let _momentopnameBezig = null;
 
 /** Meldt en weigert het opslaan van een met een wachtwoord geopende PDF. */
 function weigerOpslaanBeveiligd(doc) {
@@ -216,6 +221,8 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
     return await savePDFAs(activeDoc);
   }
 
+  if (_momentopnameBezig) await _momentopnameBezig.catch(() => {});
+
   // Loopt er al een save, dan eerst die afwachten: pas daarna is bekend of
   // dit document nog intacte handtekeningen heeft (anders vroeg een tweede
   // Ctrl+S tijdens het opslaan nogmaals).
@@ -245,6 +252,8 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // meteen, zodat een tweede save ook tijdens het wachten op de eerste wacht.
   _saveBezig = metOpslagSlot(() => _savePDFNu(saveAsPath, activeDoc)).finally(() => { _saveBezig = null; });
   const gelukt = await _saveBezig;
+  // Opgeslagen: de herstelmomentopname van dit document is niet meer nodig.
+  if (gelukt && activeDoc) meldOpgeslagen(activeDoc);
   if (gelukt && activeDoc) {
     // De vorige uitkomst gold voor het oude bestand: opnieuw verifiëren. Het
     // nieuwe verzoek maakt lopende en eerdere uitkomsten direct ongeldig en
@@ -277,7 +286,30 @@ export async function bouwAnnotatieDocument(activeDoc = getActiveDocument()) {
   return metOpslagSlot(() => _savePDFNu(null, activeDoc, { alleenAnnotaties: true }));
 }
 
-async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = {}) {
+/**
+ * Herstelmomentopname (js/herstel/): de bytes die opslaan nu zou schrijven,
+ * zonder iets weg te schrijven of het document als opgeslagen te markeren,
+ * zonder laadvenster en zonder melding bij een fout (die gaat naar de
+ * aanroeper). pdf-lib geeft de event-loop vaker ruimte dan bij gewoon opslaan
+ * en elke pagina krijgt een pauze, zodat de bediening blijft reageren.
+ * @returns {Promise<Uint8Array>}
+ */
+export async function bouwMomentopname(doc) {
+  if (!doc?.pdfDoc) throw new Error('no document');
+  if (opslaanGeweigerd(doc)) throw new Error('password-protected documents are not snapshotted');
+  if (_saveBezig) await _saveBezig.catch(() => {});
+  if (_momentopnameBezig) await _momentopnameBezig.catch(() => {});
+  const taak = metOpslagSlot(() => _savePDFNu(null, doc, { momentopname: true }));
+  const klaar = taak.then(() => {}, () => {});
+  _momentopnameBezig = klaar;
+  klaar.then(() => { if (_momentopnameBezig === klaar) _momentopnameBezig = null; });
+  return taak;
+}
+
+/** Objecten per pauze bij een momentopname (gewoon opslaan: 5000, pdf-lib-snelheid.js). */
+const MOMENTOPNAME_OBJECTEN_PER_TIK = 500;
+
+async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, momentopname = false } = {}) {
   const currentPath = activeDoc?.filePath;
   const sourcePdf = activeDoc?.pdfDoc;
   const stillCurrent = () => state.documents.includes(activeDoc)
@@ -286,7 +318,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
     defaultValue: 'The document changed while saving. Save again.',
   }));
   try {
-    showLoading('Saving PDF...');
+    if (!momentopname) showLoading('Saving PDF...');
 
     // Get original PDF bytes (from cache or disk, with memory key fallback for untitled docs)
     let existingPdfBytes = getCachedPdfBytes(currentPath);
@@ -299,7 +331,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
       existingPdfBytes = await readBinaryFile(currentPath);
     }
 
-    const pdfDocLib = await PDFDocument.load(existingPdfBytes);
+    const pdfDocLib = momentopname
+      ? await PDFDocument.load(existingPdfBytes, { parseSpeed: MOMENTOPNAME_OBJECTEN_PER_TIK })
+      : await PDFDocument.load(existingPdfBytes);
     // Een voorbeeld van het importvenster kan inhoud missen en wordt nooit
     // als document opgeslagen (#400).
     {
@@ -390,6 +424,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
 
     // Process each page
     for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
+      // Momentopname: de bediening krijgt na elke pagina even ruimte.
+      if (momentopname) await new Promise((r) => setTimeout(r, 0));
       const pageNum = pageIndex + 1;
       const page = pages[pageIndex];
 
@@ -3143,6 +3179,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
     await pdfDocLib.flush();
     ruimOngebruikteObjectenOp(pdfDocLib, { nieuwVanaf: eersteNieuwObject });
 
+    // Herstelmomentopname: alleen de bytes; niets wegschrijven of bijwerken.
+    if (momentopname) {
+      return new Uint8Array(await pdfDocLib.save({ objectsPerTick: MOMENTOPNAME_OBJECTEN_PER_TIK }));
+    }
+
     // Save the PDF
     const pdfBytes = await pdfDocLib.save({ updateFieldAppearances: false });
     const outputPath = saveAsPath || activeDoc?.saveTargetPath || currentPath;
@@ -3280,12 +3321,12 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
 
     return true;
   } catch (error) {
-    if (alleenAnnotaties) throw error;
+    if (alleenAnnotaties || momentopname) throw error;
     console.error('Error saving PDF:', error);
     showMessage(i18next.t('failedToSavePdf', { error: error?.message || String(error) }));
     return false;
   } finally {
-    hideLoading();
+    if (!momentopname) hideLoading();
   }
 }
 

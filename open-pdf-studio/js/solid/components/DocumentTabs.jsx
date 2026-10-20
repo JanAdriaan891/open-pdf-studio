@@ -486,6 +486,7 @@ export default function DocumentTabs() {
   const { t } = useTranslation('statusbar');
   const { t: tCtx } = useTranslation('context');
   const { t: tCommon } = useTranslation('common');
+  const { t: tDialogs } = useTranslation('dialogs');
 
   const baseName = (p) => ((p || '').split(/[\\/]/).pop() || '').replace(/\.pdf$/i, '');
   const compareTabTip = () => {
@@ -532,6 +533,9 @@ export default function DocumentTabs() {
             onContextMenu={(e) => handleTabContextMenu(e, i())}
           >
             <span class="document-tab-modified">{doc.modified ? '*' : ''}</span>
+            <Show when={doc.hersteld}>
+              <span class="document-tab-recovered" title={tDialogs('recovery.tabTip')}>{tDialogs('recovery.tabLabel')}</span>
+            </Show>
             <Show when={editingIndex() === i()} fallback={
               <span class="document-tab-title" title={doc.filePath || doc.fileName}>{doc.fileName}</span>
             }>

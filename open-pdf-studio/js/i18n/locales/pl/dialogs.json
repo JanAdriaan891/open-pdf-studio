@@ -1119,5 +1119,30 @@
     "documentChanged": "Dokument się zmienił. Wykonaj zrzut ponownie.",
     "pngFiles": "Obraz PNG",
     "jpegFiles": "Obraz JPEG"
+  },
+  "recovery": {
+    "title": "Odzyskaj niezapisaną pracę",
+    "intro": "Open PDF Studio nie został ostatnio zamknięty prawidłowo. Zachowano niezapisaną pracę z tych dokumentów:",
+    "savedAt": "Zachowano {{time}}",
+    "pages": "Strony: {{count}}",
+    "untitled": "Dokument bez nazwy",
+    "neverSaved": "Nigdy nie zapisano",
+    "originalChanged": "Oryginalny plik został od tego czasu zmieniony.",
+    "open": "Otwórz",
+    "saveAs": "Zapisz jako...",
+    "delete": "Usuń",
+    "deleteAll": "Usuń wszystko",
+    "later": "Później",
+    "keepNote": "To, czym nie zajmiesz się teraz, zostanie zachowane przez 14 dni i zaproponowane ponownie przy następnym uruchomieniu.",
+    "confirmDelete": "Trwale usunąć tę pracę?",
+    "confirmDeleteAll": "Trwale usunąć całą tę pracę?",
+    "yesDelete": "Tak, usuń",
+    "cancel": "Anuluj",
+    "openFailed": "Nie udało się otworzyć odzyskanego dokumentu: {{error}}",
+    "saveFailed": "Nie udało się zapisać odzyskanego dokumentu: {{error}}",
+    "deleteFailed": "Usuwanie nie powiodło się: {{error}}",
+    "tabLabel": "odzyskany",
+    "tabTip": "Odzyskany po nieoczekiwanym zamknięciu. Zapisywanie zapisuje do oryginalnego pliku.",
+    "reloadStopped": "Okno Open PDF Studio kilka razy z rzędu przestało działać i nie jest już automatycznie ponownie ładowane. Zapisz swoją pracę i uruchom aplikację ponownie."
   }
 }

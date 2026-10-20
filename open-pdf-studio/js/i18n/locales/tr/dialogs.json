@@ -1119,5 +1119,30 @@
     "documentChanged": "Belge değişti. Ekran görüntüsünü yeniden alın.",
     "pngFiles": "PNG görüntüsü",
     "jpegFiles": "JPEG görüntüsü"
+  },
+  "recovery": {
+    "title": "Kaydedilmemiş çalışmayı kurtar",
+    "intro": "Open PDF Studio geçen sefer normal şekilde kapanmadı. Bu belgelerdeki kaydedilmemiş çalışma korundu:",
+    "savedAt": "Korunma zamanı: {{time}}",
+    "pages": "Sayfa: {{count}}",
+    "untitled": "Adsız belge",
+    "neverSaved": "Hiç kaydedilmedi",
+    "originalChanged": "Özgün dosya o zamandan beri değişti.",
+    "open": "Aç",
+    "saveAs": "Farklı kaydet...",
+    "delete": "Sil",
+    "deleteAll": "Tümünü sil",
+    "later": "Daha sonra",
+    "keepNote": "Şimdi ilgilenmediğiniz çalışmalar 14 gün saklanır ve bir sonraki başlatmada yeniden sunulur.",
+    "confirmDelete": "Bu çalışma kalıcı olarak silinsin mi?",
+    "confirmDeleteAll": "Bu çalışmanın tümü kalıcı olarak silinsin mi?",
+    "yesDelete": "Evet, sil",
+    "cancel": "İptal",
+    "openFailed": "Kurtarılan belge açılamadı: {{error}}",
+    "saveFailed": "Kurtarılan belge kaydedilemedi: {{error}}",
+    "deleteFailed": "Silme başarısız oldu: {{error}}",
+    "tabLabel": "kurtarıldı",
+    "tabTip": "Beklenmedik bir kapanmanın ardından kurtarıldı. Kaydetme özgün dosyaya yazar.",
+    "reloadStopped": "Open PDF Studio penceresi art arda birkaç kez çalışmayı durdurdu ve artık otomatik olarak yeniden yüklenmiyor. Çalışmanızı kaydedin ve uygulamayı yeniden başlatın."
   }
 }
