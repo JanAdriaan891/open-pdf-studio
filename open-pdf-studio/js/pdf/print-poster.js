@@ -28,6 +28,7 @@ import {
   pushGraphicsState, popGraphicsState, rectangle, clip, endPath,
 } from 'pdf-lib';
 import { berekenPlaatsing, margesVoor } from './print-plaatsing.js';
+import { leesGetalBegin } from '../core/getal-invoer.js';
 
 const MM_PER_PT = 25.4 / 72;
 const PT_PER_MM = 72 / 25.4;
@@ -73,7 +74,7 @@ function geldig(n) {
 
 function getal(v) {
   if (v === null || v === undefined || v === '') return NaN;
-  return typeof v === 'string' ? Number.parseFloat(v.replace(',', '.')) : Number(v);
+  return typeof v === 'string' ? leesGetalBegin(v) : Number(v);
 }
 
 /** Tegelschaal begrensd op 10..400 %, hele procenten; onzin → 100. */

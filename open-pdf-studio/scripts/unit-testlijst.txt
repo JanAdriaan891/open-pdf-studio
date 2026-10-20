@@ -432,3 +432,5 @@ js/herstel/beleid.test.mjs
 js/herstel/foutvanger.test.mjs
 js/herstel/bedrading.test.mjs
 js/herstel/herladen.test.mjs
+js/core/getal-invoer.test.mjs
+js/core/getal-invoer-velden.test.mjs
