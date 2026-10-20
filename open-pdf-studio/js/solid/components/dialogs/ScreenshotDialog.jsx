@@ -182,7 +182,7 @@ export default function ScreenshotDialog(props) {
           <input
             id="screenshot-dpi"
             class="crop-margins-input"
-            type="number"
+            type="text" inputmode="decimal" data-getal
             min={MIN_DPI}
             max={MAX_DPI}
             step="1"
@@ -201,7 +201,7 @@ export default function ScreenshotDialog(props) {
           <input
             id="screenshot-width"
             class="crop-margins-input"
-            type="number"
+            type="text" inputmode="decimal" data-getal
             min="1"
             step="1"
             value={pxB()}

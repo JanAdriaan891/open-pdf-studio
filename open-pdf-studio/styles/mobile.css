@@ -682,7 +682,7 @@
   flex: 1;
 }
 
-.mobile-prefs-row input[type="number"] {
+.mobile-prefs-row input[data-getal] {
   width: 64px;
   padding: 8px 10px;
   font-size: 15px;

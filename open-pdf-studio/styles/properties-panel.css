@@ -179,7 +179,7 @@
 }
 
 .property-group input[type="color"],
-.property-group input[type="number"],
+.property-group input[data-getal],
 .property-group input[type="text"],
 .property-group textarea,
 .property-group select {
