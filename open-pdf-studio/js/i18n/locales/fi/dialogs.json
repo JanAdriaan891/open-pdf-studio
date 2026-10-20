@@ -1119,5 +1119,29 @@
     "documentChanged": "Asiakirja on muuttunut. Ota kuvakaappaus uudelleen.",
     "pngFiles": "PNG-kuva",
     "jpegFiles": "JPEG-kuva"
+  },
+  "recovery": {
+    "title": "Palauta tallentamaton työ",
+    "intro": "Open PDF Studio ei sulkeutunut normaalisti viime kerralla. Näiden asiakirjojen tallentamaton työ on säilytetty:",
+    "savedAt": "Säilytetty {{time}}",
+    "pages": "Sivuja: {{count}}",
+    "untitled": "Nimetön asiakirja",
+    "neverSaved": "Ei koskaan tallennettu",
+    "originalChanged": "Alkuperäinen tiedosto on muuttunut sen jälkeen.",
+    "open": "Avaa",
+    "saveAs": "Tallenna nimellä...",
+    "delete": "Poista",
+    "deleteAll": "Poista kaikki",
+    "later": "Myöhemmin",
+    "keepNote": "Se, mitä et käsittele nyt, säilytetään 14 päivää ja tarjotaan uudelleen seuraavalla käynnistyskerralla.",
+    "confirmDelete": "Poistetaanko tämä työ pysyvästi?",
+    "confirmDeleteAll": "Poistetaanko kaikki tämä työ pysyvästi?",
+    "yesDelete": "Kyllä, poista",
+    "cancel": "Peruuta",
+    "openFailed": "Palautettua asiakirjaa ei voitu avata: {{error}}",
+    "saveFailed": "Palautettua asiakirjaa ei voitu tallentaa: {{error}}",
+    "deleteFailed": "Poistaminen epäonnistui: {{error}}",
+    "tabLabel": "palautettu",
+    "tabTip": "Palautettu odottamattoman sulkeutumisen jälkeen. Tallennus kirjoittaa alkuperäiseen tiedostoon."
   }
 }

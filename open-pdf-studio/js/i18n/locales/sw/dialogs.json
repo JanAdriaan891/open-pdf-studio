@@ -1119,5 +1119,29 @@
     "documentChanged": "Hati imebadilika. Piga picha ya skrini tena.",
     "pngFiles": "Picha ya PNG",
     "jpegFiles": "Picha ya JPEG"
+  },
+  "recovery": {
+    "title": "Rejesha kazi ambayo haijahifadhiwa",
+    "intro": "Open PDF Studio haikufungwa kwa kawaida mara ya mwisho. Kazi ambayo haijahifadhiwa ya hati hizi imetunzwa:",
+    "savedAt": "Imetunzwa {{time}}",
+    "pages": "Kurasa: {{count}}",
+    "untitled": "Hati isiyo na jina",
+    "neverSaved": "Haijawahi kuhifadhiwa",
+    "originalChanged": "Faili asili imebadilika tangu wakati huo.",
+    "open": "Fungua",
+    "saveAs": "Hifadhi kama...",
+    "delete": "Futa",
+    "deleteAll": "Futa zote",
+    "later": "Baadaye",
+    "keepNote": "Usichoshughulikia sasa kitatunzwa kwa siku 14 na kutolewa tena utakapoanzisha programu wakati ujao.",
+    "confirmDelete": "Futa kazi hii kabisa?",
+    "confirmDeleteAll": "Futa kazi hii yote kabisa?",
+    "yesDelete": "Ndiyo, futa",
+    "cancel": "Ghairi",
+    "openFailed": "Hati iliyorejeshwa haikuweza kufunguliwa: {{error}}",
+    "saveFailed": "Hati iliyorejeshwa haikuweza kuhifadhiwa: {{error}}",
+    "deleteFailed": "Kufuta kumeshindikana: {{error}}",
+    "tabLabel": "imerejeshwa",
+    "tabTip": "Imerejeshwa baada ya kufungwa bila kutarajia. Kuhifadhi kunaandika kwenye faili asili."
   }
 }

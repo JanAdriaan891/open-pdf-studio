@@ -1119,5 +1119,29 @@
     "documentChanged": "Documentul s-a modificat. Refaceți captura.",
     "pngFiles": "Imagine PNG",
     "jpegFiles": "Imagine JPEG"
+  },
+  "recovery": {
+    "title": "Recuperează munca nesalvată",
+    "intro": "Open PDF Studio nu s-a închis normal data trecută. Munca nesalvată din aceste documente a fost păstrată:",
+    "savedAt": "Păstrat la {{time}}",
+    "pages": "Pagini: {{count}}",
+    "untitled": "Document fără titlu",
+    "neverSaved": "Niciodată salvat",
+    "originalChanged": "Fișierul original s-a modificat între timp.",
+    "open": "Deschide",
+    "saveAs": "Salvează ca...",
+    "delete": "Șterge",
+    "deleteAll": "Șterge tot",
+    "later": "Mai târziu",
+    "keepNote": "Ce nu rezolvați acum se păstrează 14 zile și vă este oferit din nou la următoarea pornire.",
+    "confirmDelete": "Ștergeți definitiv această muncă?",
+    "confirmDeleteAll": "Ștergeți definitiv toată această muncă?",
+    "yesDelete": "Da, șterge",
+    "cancel": "Anulează",
+    "openFailed": "Documentul recuperat nu a putut fi deschis: {{error}}",
+    "saveFailed": "Documentul recuperat nu a putut fi salvat: {{error}}",
+    "deleteFailed": "Ștergerea a eșuat: {{error}}",
+    "tabLabel": "recuperat",
+    "tabTip": "Recuperat după o închidere neașteptată. Salvarea scrie în fișierul original."
   }
 }

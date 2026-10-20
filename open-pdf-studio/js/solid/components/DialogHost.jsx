@@ -38,6 +38,7 @@ import ShortcutsDialog from './dialogs/ShortcutsDialog.jsx';
 import ExtensionsDialog from './dialogs/ExtensionsDialog.jsx';
 import ConfirmDialog from './dialogs/ConfirmDialog.jsx';
 import PasswordDialog from './dialogs/PasswordDialog.jsx';
+import RecoveryDialog from './dialogs/RecoveryDialog.jsx';
 import HandtekeningDetailDialog from './dialogs/HandtekeningDetailDialog.jsx';
 import ViewportScaleDialog from './dialogs/ViewportScaleDialog.jsx';
 import ScaleRegionDialog from './dialogs/ScaleRegionDialog.jsx';
@@ -115,6 +116,7 @@ const DIALOG_MAP = {
   'annotation-layer-delete': AnnotationLayerDeleteDialog,
   'flatten-all': FlattenAllDialog,
   'pdf-password': PasswordDialog,
+  'recovery': RecoveryDialog,
 };
 
 export default function DialogHost() {

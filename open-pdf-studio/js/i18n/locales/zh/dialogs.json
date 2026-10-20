@@ -1119,5 +1119,29 @@
     "documentChanged": "文档已更改。请重新截图。",
     "pngFiles": "PNG 图像",
     "jpegFiles": "JPEG 图像"
+  },
+  "recovery": {
+    "title": "恢复未保存的工作",
+    "intro": "Open PDF Studio 上次没有正常关闭。已为以下文档保留未保存的工作：",
+    "savedAt": "保留于 {{time}}",
+    "pages": "页数：{{count}}",
+    "untitled": "无标题文档",
+    "neverSaved": "从未保存",
+    "originalChanged": "原始文件此后已被更改。",
+    "open": "打开",
+    "saveAs": "另存为...",
+    "delete": "删除",
+    "deleteAll": "全部删除",
+    "later": "稍后",
+    "keepNote": "现在未处理的内容将保留 14 天，并在下次启动时再次提供。",
+    "confirmDelete": "永久删除此工作？",
+    "confirmDeleteAll": "永久删除所有这些工作？",
+    "yesDelete": "是，删除",
+    "cancel": "取消",
+    "openFailed": "无法打开恢复的文档：{{error}}",
+    "saveFailed": "无法保存恢复的文档：{{error}}",
+    "deleteFailed": "删除失败：{{error}}",
+    "tabLabel": "已恢复",
+    "tabTip": "在意外关闭后恢复。保存时将写入原始文件。"
   }
 }

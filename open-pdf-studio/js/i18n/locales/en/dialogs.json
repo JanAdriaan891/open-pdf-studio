@@ -1118,5 +1118,29 @@
     "documentChanged": "The document changed. Take the screenshot again.",
     "pngFiles": "PNG image",
     "jpegFiles": "JPEG image"
+  },
+  "recovery": {
+    "title": "Recover unsaved work",
+    "intro": "Open PDF Studio did not close normally last time. Unsaved work was kept for these documents:",
+    "savedAt": "Kept on {{time}}",
+    "pages": "Pages: {{count}}",
+    "untitled": "Untitled document",
+    "neverSaved": "Never saved",
+    "originalChanged": "The original file has changed since then.",
+    "open": "Open",
+    "saveAs": "Save as...",
+    "delete": "Delete",
+    "deleteAll": "Delete all",
+    "later": "Later",
+    "keepNote": "Anything you don't deal with now is kept for 14 days and offered again the next time you start the app.",
+    "confirmDelete": "Permanently delete this work?",
+    "confirmDeleteAll": "Permanently delete all of this work?",
+    "yesDelete": "Yes, delete",
+    "cancel": "Cancel",
+    "openFailed": "The recovered document could not be opened: {{error}}",
+    "saveFailed": "The recovered document could not be saved: {{error}}",
+    "deleteFailed": "Deleting failed: {{error}}",
+    "tabLabel": "recovered",
+    "tabTip": "Recovered after an unexpected shutdown. Saving writes to the original file."
   }
 }

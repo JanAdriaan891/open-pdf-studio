@@ -19,6 +19,9 @@ export const ALLEEN_HOOFDINSTANTIE = Object.freeze([
   'prtscn',
   // De vraag "standaard-app?" hoeft niet per venster.
   'standaard-app',
+  // Het aanbod "niet-opgeslagen werk herstellen" na een onverwachte
+  // afsluiting (js/herstel/): één keer, in de hoofdinstantie.
+  'herstel-aanbieden',
 ]);
 
 /**

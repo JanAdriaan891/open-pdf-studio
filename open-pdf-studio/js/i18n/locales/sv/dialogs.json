@@ -1119,5 +1119,29 @@
     "documentChanged": "Dokumentet har ändrats. Ta skärmbilden igen.",
     "pngFiles": "PNG-bild",
     "jpegFiles": "JPEG-bild"
+  },
+  "recovery": {
+    "title": "Återställ osparat arbete",
+    "intro": "Open PDF Studio avslutades inte normalt förra gången. Osparat arbete har bevarats för dessa dokument:",
+    "savedAt": "Bevarat {{time}}",
+    "pages": "Sidor: {{count}}",
+    "untitled": "Namnlöst dokument",
+    "neverSaved": "Aldrig sparat",
+    "originalChanged": "Originalfilen har ändrats sedan dess.",
+    "open": "Öppna",
+    "saveAs": "Spara som...",
+    "delete": "Ta bort",
+    "deleteAll": "Ta bort alla",
+    "later": "Senare",
+    "keepNote": "Det du inte hanterar nu bevaras i 14 dagar och erbjuds igen vid nästa start.",
+    "confirmDelete": "Ta bort detta arbete permanent?",
+    "confirmDeleteAll": "Ta bort allt detta arbete permanent?",
+    "yesDelete": "Ja, ta bort",
+    "cancel": "Avbryt",
+    "openFailed": "Det återställda dokumentet kunde inte öppnas: {{error}}",
+    "saveFailed": "Det återställda dokumentet kunde inte sparas: {{error}}",
+    "deleteFailed": "Borttagningen misslyckades: {{error}}",
+    "tabLabel": "återställt",
+    "tabTip": "Återställt efter en oväntad avstängning. Spara skriver till originalfilen."
   }
 }

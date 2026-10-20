@@ -10,6 +10,7 @@ import { showPreferencesDialog } from '../../../core/preferences.js';
 import { showDocPropertiesDialog, showNewDocDialog, showPrintDialog } from '../../../ui/chrome/dialogs.js';
 import { hasUnsavedChanges, getUnsavedDocumentNames } from '../../../ui/chrome/tabs.js';
 import { closeWindow, isTauri } from '../../../core/platform.js';
+import { meldSchoonAfsluiten } from '../../../herstel/haken.js';
 import { knopUit, meldingTekst } from '../../../core/webfuncties.js';
 import i18next from '../../../i18n/config.js';
 import { persistAllReaderPositions } from '../../../pdf/reader-mode-view.js';
@@ -85,6 +86,9 @@ export default function AppMenu() {
     // per-tab close that normally saves the Reader Mode positions never
     // runs. Save them here, for the documents whose tracking is on.
     await persistAllReaderPositions();
+    // De gebruiker koos afsluiten (en verwerpt wat niet is opgeslagen): een
+    // nette afsluiting, de herstelmomentopnamen mogen weg.
+    await meldSchoonAfsluiten();
     closeWindow();
   }
 

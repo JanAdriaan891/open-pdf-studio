@@ -1119,5 +1119,29 @@
     "documentChanged": "Le document a changé. Refaites la capture d'écran.",
     "pngFiles": "Image PNG",
     "jpegFiles": "Image JPEG"
+  },
+  "recovery": {
+    "title": "Récupérer le travail non enregistré",
+    "intro": "Open PDF Studio ne s'est pas fermé normalement la dernière fois. Le travail non enregistré de ces documents a été conservé :",
+    "savedAt": "Conservé le {{time}}",
+    "pages": "Pages : {{count}}",
+    "untitled": "Document sans titre",
+    "neverSaved": "Jamais enregistré",
+    "originalChanged": "Le fichier d'origine a été modifié depuis.",
+    "open": "Ouvrir",
+    "saveAs": "Enregistrer sous...",
+    "delete": "Supprimer",
+    "deleteAll": "Tout supprimer",
+    "later": "Plus tard",
+    "keepNote": "Ce que vous ne traitez pas maintenant est conservé 14 jours et vous sera de nouveau proposé au prochain démarrage.",
+    "confirmDelete": "Supprimer définitivement ce travail ?",
+    "confirmDeleteAll": "Supprimer définitivement tout ce travail ?",
+    "yesDelete": "Oui, supprimer",
+    "cancel": "Annuler",
+    "openFailed": "Impossible d'ouvrir le document récupéré : {{error}}",
+    "saveFailed": "Impossible d'enregistrer le document récupéré : {{error}}",
+    "deleteFailed": "La suppression a échoué : {{error}}",
+    "tabLabel": "récupéré",
+    "tabTip": "Récupéré après une fermeture inattendue. L'enregistrement écrit dans le fichier d'origine."
   }
 }

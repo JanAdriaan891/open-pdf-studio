@@ -1119,5 +1119,29 @@
     "documentChanged": "El document ha canviat. Torneu a fer la captura.",
     "pngFiles": "Imatge PNG",
     "jpegFiles": "Imatge JPEG"
+  },
+  "recovery": {
+    "title": "Recupera la feina no desada",
+    "intro": "Open PDF Studio no es va tancar correctament l'última vegada. S'ha conservat la feina no desada d'aquests documents:",
+    "savedAt": "Conservat el {{time}}",
+    "pages": "Pàgines: {{count}}",
+    "untitled": "Document sense títol",
+    "neverSaved": "Mai desat",
+    "originalChanged": "El fitxer original ha canviat des d'aleshores.",
+    "open": "Obre",
+    "saveAs": "Desa com a...",
+    "delete": "Suprimeix",
+    "deleteAll": "Suprimeix-ho tot",
+    "later": "Més tard",
+    "keepNote": "El que no gestioneu ara es conserva 14 dies i se us tornarà a oferir en el proper inici.",
+    "confirmDelete": "Voleu suprimir definitivament aquesta feina?",
+    "confirmDeleteAll": "Voleu suprimir definitivament tota aquesta feina?",
+    "yesDelete": "Sí, suprimeix",
+    "cancel": "Cancel·la",
+    "openFailed": "No s'ha pogut obrir el document recuperat: {{error}}",
+    "saveFailed": "No s'ha pogut desar el document recuperat: {{error}}",
+    "deleteFailed": "No s'ha pogut suprimir: {{error}}",
+    "tabLabel": "recuperat",
+    "tabTip": "Recuperat després d'un tancament inesperat. Desar escriu al fitxer original."
   }
 }
