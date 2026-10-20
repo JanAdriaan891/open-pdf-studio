@@ -17,6 +17,7 @@ import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
 import { vlakSchaalUitMeasure } from '../../annotations/vlak-zijden.js';
 import { heeft as heeftKnipselBron } from '../../annotations/vector-snippet-store.js';
 import { syncTwoPointGeometry } from '../../symbols/two-point.js';
+import { migreerProfielParams } from '../../symbols/koker-notatie.js';
 import { systeemFromOps, sparingenFromJson } from '../../annotations/systeemraster.js';
 import { linksUitJson } from '../../annotations/systeem-instance-links.js';
 import { systeemTypeFromJson, ifcPredefinedNaLaden } from '../../annotations/systeem-typen.js';
@@ -298,6 +299,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         const symbolId = extraColors.opsSymbolId || '';
         let params = {};
         try { if (extraColors.opsParams) params = JSON.parse(extraColors.opsParams); } catch (_) {}
+        // Oude kokermaat ("Koker 100x100x5") → huidige naam ("K100/5").
+        params = migreerProfielParams(symbolId, params);
         const symbol = createAnnotation({
           ...baseProps,
           type: 'parametricSymbol',
