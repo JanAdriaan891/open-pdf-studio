@@ -313,7 +313,8 @@
     "clickToAdd": "Kliknutím na + pridáte PDF súbory",
     "pg": "str",
     "filesAndPages": "{{files}} súbor(y), {{pages}} strán celkom",
-    "addAtLeastOne": "Prosím, pridajte aspoň jeden PDF súbor na zlúčenie."
+    "addAtLeastOne": "Prosím, pridajte aspoň jeden PDF súbor na zlúčenie.",
+    "signedWarning": "Jeden alebo viac súborov je digitálne podpísaných. Zlúčenie podpisy odstráni: zlúčený dokument nie je podpísaný."
   },
   "watermark": {
     "addTitle": "Pridať vodotlač",

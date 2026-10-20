@@ -313,7 +313,8 @@
     "clickToAdd": "+ をクリックして PDF ファイルを追加",
     "pg": "ページ",
     "filesAndPages": "{{files}} ファイル、合計 {{pages}} ページ",
-    "addAtLeastOne": "結合するには少なくとも 1 つの PDF ファイルを追加してください。"
+    "addAtLeastOne": "結合するには少なくとも 1 つの PDF ファイルを追加してください。",
+    "signedWarning": "1 つ以上のファイルにデジタル署名があります。結合すると署名は削除され、結合後の文書は署名されていません。"
   },
   "watermark": {
     "addTitle": "透かしを追加",

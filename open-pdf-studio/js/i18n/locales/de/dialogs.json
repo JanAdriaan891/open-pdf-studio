@@ -313,7 +313,8 @@
     "clickToAdd": "Klicken Sie auf +, um PDF-Dateien hinzuzufügen",
     "pg": "S.",
     "filesAndPages": "{{files}} Datei(en), {{pages}} Seiten insgesamt",
-    "addAtLeastOne": "Bitte fügen Sie mindestens eine PDF-Datei zum Zusammenführen hinzu."
+    "addAtLeastOne": "Bitte fügen Sie mindestens eine PDF-Datei zum Zusammenführen hinzu.",
+    "signedWarning": "Eine oder mehrere Dateien sind digital signiert. Beim Zusammenführen werden die Signaturen entfernt: Das zusammengeführte Dokument ist nicht signiert."
   },
   "watermark": {
     "addTitle": "Wasserzeichen hinzufügen",

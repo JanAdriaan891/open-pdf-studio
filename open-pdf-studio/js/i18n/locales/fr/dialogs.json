@@ -313,7 +313,8 @@
     "clickToAdd": "Cliquez sur + pour ajouter des fichiers PDF",
     "pg": "p.",
     "filesAndPages": "{{files}} fichier(s), {{pages}} pages au total",
-    "addAtLeastOne": "Veuillez ajouter au moins un fichier PDF à fusionner."
+    "addAtLeastOne": "Veuillez ajouter au moins un fichier PDF à fusionner.",
+    "signedWarning": "Un ou plusieurs fichiers sont signés numériquement. La fusion supprime leurs signatures : le document fusionné n'est pas signé."
   },
   "watermark": {
     "addTitle": "Ajouter un filigrane",

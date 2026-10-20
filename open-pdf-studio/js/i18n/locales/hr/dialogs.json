@@ -313,7 +313,8 @@
     "clickToAdd": "Kliknite + za dodavanje PDF datoteka",
     "pg": "str",
     "filesAndPages": "{{files}} datoteka, {{pages}} ukupno stranica",
-    "addAtLeastOne": "Molimo dodajte barem jednu PDF datoteku za spajanje."
+    "addAtLeastOne": "Molimo dodajte barem jednu PDF datoteku za spajanje.",
+    "signedWarning": "Jedna ili više datoteka digitalno su potpisane. Spajanje uklanja potpise: spojeni dokument nije potpisan."
   },
   "watermark": {
     "addTitle": "Dodaj vodeni žig",

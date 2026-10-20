@@ -313,7 +313,8 @@
     "clickToAdd": "Fare clic su + per aggiungere file PDF",
     "pg": "pag",
     "filesAndPages": "{{files}} file, {{pages}} pagine totali",
-    "addAtLeastOne": "Aggiungere almeno un file PDF da unire."
+    "addAtLeastOne": "Aggiungere almeno un file PDF da unire.",
+    "signedWarning": "Uno o più file sono firmati digitalmente. L'unione rimuove le firme: il documento unito non è firmato."
   },
   "watermark": {
     "addTitle": "Aggiungi filigrana",

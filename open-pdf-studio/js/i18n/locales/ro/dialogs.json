@@ -313,7 +313,8 @@
     "clickToAdd": "Faceti clic pe + pentru a adauga fisiere PDF",
     "pg": "pag",
     "filesAndPages": "{{files}} fisier(e), {{pages}} pagini in total",
-    "addAtLeastOne": "Adaugati cel putin un fisier PDF pentru imbinare."
+    "addAtLeastOne": "Adaugati cel putin un fisier PDF pentru imbinare.",
+    "signedWarning": "Unul sau mai multe fișiere sunt semnate digital. Combinarea elimină semnăturile: documentul combinat nu este semnat."
   },
   "watermark": {
     "addTitle": "Adaugare filigran",

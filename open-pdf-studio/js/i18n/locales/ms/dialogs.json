@@ -313,7 +313,8 @@
     "clickToAdd": "Klik + untuk menambah fail PDF",
     "pg": "hlm",
     "filesAndPages": "{{files}} fail, {{pages}} jumlah halaman",
-    "addAtLeastOne": "Sila tambah sekurang-kurangnya satu fail PDF untuk digabungkan."
+    "addAtLeastOne": "Sila tambah sekurang-kurangnya satu fail PDF untuk digabungkan.",
+    "signedWarning": "Satu atau lebih fail ditandatangani secara digital. Penggabungan membuang tandatangannya: dokumen yang digabungkan tidak ditandatangani."
   },
   "watermark": {
     "addTitle": "Tambah Tera Air",
