@@ -58,13 +58,13 @@ test('CP-21: elke schermafdruk is een oude schermafdruk en komt rechtop, vullend
   }
 });
 
-test('kiesStempelWeergave: eigen appearance zoals getekend, oude en andere bestanden zoals altijd', () => {
+test('kiesStempelWeergave: zoals getekend, behalve een oude /OPS_Rotation en oude schermafdrukken', () => {
   const geo = (o) => ({ rotation: 0, beeldHoek: 0, schermBeeld: false, eigenAp: false, ...o });
   // Eigen saver, geen /OPS_Rotation: precies de appearance.
   assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90, eigenAp: true }), paginaRotatie: 90 }), { rotation: 90, vak: 'ap' });
   // Gedraaid blad, appearance draait de bitmap niet (zoals VO Constructie):
-  // rechtop in de /Rect, zoals de app hem altijd toonde.
-  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90 }), paginaRotatie: 90 }), { rotation: 0, vak: 'rect' });
+  // zoals getekend, met de pagina mee gedraaid, niet in de staande /Rect geperst.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90 }), paginaRotatie: 90 }), { rotation: 90, vak: 'ap' });
   // ... met een oude /OPS_Rotation (vrijwel vierkant, geen schermafdruk): die draaiing.
   assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90 }), paginaRotatie: 90, opsRotation: -90 }), { rotation: -90, vak: 'rect' });
   // Oude schermafdruk (CP-21): rechtop, de oude /OPS_Rotation telt niet.
@@ -73,11 +73,32 @@ test('kiesStempelWeergave: eigen appearance zoals getekend, oude en andere besta
   assert.deepEqual(kiesStempelWeergave({ geometrie: geo(), paginaRotatie: 0, opsRotation: 45 }), { rotation: 45, vak: 'rect' });
   // Oude save op een gedraaid blad: de cm compenseert alleen de pagina.
   assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ beeldHoek: 90 }), paginaRotatie: 90, opsRotation: 30 }), { rotation: 30, vak: 'rect' });
-  // /Matrix van een ander programma (-CP-21-2): zoals altijd, uit /Matrix.
-  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 45, beeldHoek: -45 }), paginaRotatie: 0, matrixHoek: -45 }), { rotation: 45, vak: 'rect' });
+  // /Matrix van een ander programma (-CP-21-2): zoals getekend.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 45, beeldHoek: -45 }), paginaRotatie: 0, matrixHoek: -45 }), { rotation: 45, vak: 'ap' });
+  // Een /OPS_Rotation van 0 is geen draaiing: zoals getekend.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90 }), paginaRotatie: 90, opsRotation: 0 }), { rotation: 90, vak: 'ap' });
   // Een eigen appearance mét /OPS_Rotation is een oudere save: oude regels.
   assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ eigenAp: true }), paginaRotatie: 0, opsRotation: 30 }), { rotation: 30, vak: 'rect' });
   assert.equal(kiesStempelWeergave({ geometrie: null }), null);
+});
+
+test('kiesStempelWeergave: valt het getekende vak samen met de /Rect op het scherm, dan blijft de /Rect', () => {
+  const geo = (o) => ({ rotation: 0, beeldHoek: 0, schermBeeld: false, eigenAp: false, ...o });
+  // /Rotate 0: vak 52,86 × 101,38 om (441,24 ; 1022,99), /Rect 52,84 × 101,39 (-CP-21-2).
+  const rect = [414.82, 972.3, 467.66, 1073.69];
+  const midden = { x: 441.24, y: 1023.0 };
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ breedte: 52.86, hoogte: 101.38, midden }), rect }), { rotation: 0, vak: 'rect' });
+  // Een duidelijk ander vak, of een andere draaiing: zoals getekend.
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ breedte: 50, hoogte: 101.38, midden }), rect }), { rotation: 0, vak: 'ap' });
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ breedte: 52.86, hoogte: 101.38, midden: { x: 445, y: 1023 } }), rect }), { rotation: 0, vak: 'ap' });
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 180, breedte: 52.86, hoogte: 101.38, midden }), rect }), { rotation: 180, vak: 'ap' });
+  // /Rotate 90: de /Rect staat op het scherm met omgewisselde maten.
+  const vo = [56.85, 623.2, 565.32, 862.47]; // 508,47 × 239,27 in PDF-ruimte
+  const voMidden = { x: 311.08, y: 742.84 };
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ rotation: 90, breedte: 508.47, hoogte: 239.27, midden: voMidden }), paginaRotatie: 90, rect: vo }),
+    { rotation: 90, vak: 'ap' }, 'VO: liggend vak met de pagina mee gedraaid is niet het staande schermvak');
+  assert.deepEqual(kiesStempelWeergave({ geometrie: geo({ breedte: 239.27, hoogte: 508.47, midden: voMidden }), paginaRotatie: 90, rect: vo }),
+    { rotation: 0, vak: 'rect' }, 'rechtop getekend in het schermvak: hetzelfde');
 });
 
 test('oudeStempelDraaiing: /OPS_Rotation, anders /Matrix min de pagina-/Rotate', () => {

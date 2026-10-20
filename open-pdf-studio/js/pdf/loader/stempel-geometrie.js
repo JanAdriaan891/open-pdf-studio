@@ -6,12 +6,12 @@
 // de klok mee op het scherm). stempelGeometrie leidt vak en draaiing af uit
 // wat elke PDF-lezer tekent: de /Rect, de /BBox en /Matrix van de appearance
 // en de cm-operatoren in de inhoud, samen met de /Rotate van de pagina.
-// kiesStempelWeergave bepaalt wat de app toont: een appearance van de eigen
-// saver precies zoals getekend; bestanden van andere programma's en oudere
-// versies zoals de app ze altijd toonde (met /OPS_Rotation als oude bron van
-// de draaiing). De saver schrijft /OPS_Rotation niet meer voor stempels en
-// afbeeldingen; hij bakt de getoonde draaiing in de appearance, zodat elke
-// lezer daarna toont wat de app toont.
+// kiesStempelWeergave bepaalt wat de app toont: zoals de appearance de bitmap
+// tekent (wat elke andere lezer toont), behalve twee oude gevallen van deze
+// app zelf: een draaiing die alleen in /OPS_Rotation staat, en oude
+// schermafdrukken op een gedraaide pagina (zie hieronder). De saver schrijft
+// /OPS_Rotation niet meer voor stempels en afbeeldingen; hij bakt de getoonde
+// draaiing in de appearance, zodat elke lezer daarna toont wat de app toont.
 //
 // Oude schermafdrukken die op een gedraaide pagina geplakt zijn (bijv.
 // /Rotate 90, met /OPS_Rotation -90): de appearance tekent de bitmap zonder
@@ -338,6 +338,25 @@ export function oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie = 0
 }
 
 /**
+ * Valt het vak uit de appearance samen met de /Rect zoals die op het scherm
+ * staat, in dezelfde draaiing? Dan tekenen beide weergaven hetzelfde (op
+ * afrondingsruis na: een halve punt of 0,5 %).
+ */
+function zelfdeAlsRect(geometrie, rotatie, rect, paginaRotatie) {
+  if (!Array.isArray(rect) || rect.length < 4 || !rect.every(isGetal)) return false;
+  if (Math.abs(normaliseerHoek(geometrie.rotation - rotatie)) > 0.5) return false;
+  const rot = ((Math.round(paginaRotatie || 0) % 360) + 360) % 360;
+  const rw = Math.abs(rect[2] - rect[0]);
+  const rh = Math.abs(rect[3] - rect[1]);
+  const [sw, sh] = rot === 90 || rot === 270 ? [rh, rw] : [rw, rh];
+  const tol = (a) => Math.max(0.5, Math.abs(a) * 0.005);
+  const mx = (rect[0] + rect[2]) / 2;
+  const my = (rect[1] + rect[3]) / 2;
+  return Math.abs(geometrie.breedte - sw) <= tol(sw) && Math.abs(geometrie.hoogte - sh) <= tol(sh) &&
+    Math.hypot(geometrie.midden.x - mx, geometrie.midden.y - my) <= tol(Math.min(sw, sh));
+}
+
+/**
  * Wat de app van een stempel of afbeelding toont.
  *
  * - Een appearance van deze saver (eigenAp, zonder /OPS_Rotation): precies
@@ -345,9 +364,15 @@ export function oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie = 0
  * - Een oude schermafdruk op een gedraaide pagina (schermBeeld, zoals CP-21):
  *   rechtop, vullend in het vak zoals het op het scherm staat (/Rect); een
  *   oude /OPS_Rotation telt daar niet.
- * - Elk ander bestand (andere programma's, oudere versies) zoals de app het
- *   altijd toonde: de bitmap in de /Rect zoals die op het scherm staat, met
- *   oudeStempelDraaiing (een oude /OPS_Rotation, anders /Matrix).
+ * - Een oude /OPS_Rotation (een oudere versie van deze app; de appearance
+ *   draaide de bitmap toen niet zelf): de /Rect zoals op het scherm, in die
+ *   draaiing (-CP-21-3/-4).
+ * - Elke andere appearance die de plaats van de bitmap eenduidig vastlegt
+ *   (stempelGeometrie geeft een vak): precies zoals hij getekend is, zoals
+ *   elke andere lezer hem toont. Een bitmap die de appearance in een
+ *   liggend vak tekent, wordt dus niet in een staande /Rect geperst (VO
+ *   Constructie op een /Rotate-90-blad). Valt dat vak samen met de /Rect op
+ *   het scherm, dan blijft het de /Rect (zelfde beeld, geen afrondingsruis).
  * Opslaan bakt de getoonde draaiing in de appearance (saver/stempel-draaiing.js)
  * en schrijft /OPS_Rotation niet meer; daarna geldt het eerste geval en
  * tonen andere lezers hetzelfde.
@@ -357,12 +382,17 @@ export function oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie = 0
  * @param {number} p.paginaRotatie
  * @param {number|undefined} p.opsRotation  /OPS_Rotation uit het bestand, of undefined
  * @param {number|undefined} p.matrixHoek   hoek van /Matrix van de appearance, of undefined
+ * @param {number[]} [p.rect]               /Rect in PDF-ruimte (voor de vergelijking hierboven)
  * @returns {null|{ rotation:number, vak:'ap'|'rect' }}  vak: 'ap' = het vak uit de
  *   geometrie, 'rect' = de /Rect zoals hij op het scherm staat
  */
-export function kiesStempelWeergave({ geometrie, paginaRotatie = 0, opsRotation, matrixHoek }) {
+export function kiesStempelWeergave({ geometrie, paginaRotatie = 0, opsRotation, matrixHoek, rect }) {
   if (!geometrie) return null;
-  if (geometrie.eigenAp && !isGetal(opsRotation)) return { rotation: geometrie.rotation, vak: 'ap' };
+  const zoalsGetekend = { rotation: geometrie.rotation, vak: 'ap' };
+  if (geometrie.eigenAp && !isGetal(opsRotation)) return zoalsGetekend;
   if (geometrie.schermBeeld) return { rotation: 0, vak: 'rect' };
-  return { rotation: oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie }), vak: 'rect' };
+  const oud = { rotation: oudeStempelDraaiing({ opsRotation, matrixHoek, paginaRotatie }), vak: 'rect' };
+  if (isGetal(opsRotation) && opsRotation !== 0) return oud;
+  if (zelfdeAlsRect(geometrie, oud.rotation, rect, paginaRotatie)) return oud;
+  return zoalsGetekend;
 }

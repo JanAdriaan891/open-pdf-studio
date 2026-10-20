@@ -8,7 +8,8 @@
 // 180 en 270, met en zonder draaiing in de app. Daarnaast oude bestanden:
 // CP-21 (schermafdrukken op een /Rotate-90-blad, de bitmap zonder draaiing in
 // de ongedraaide /Rect en /OPS_Rotation -90), VO Constructie (zelfde opbouw,
-// pixels in PDF-ruimte) en -CP-21-3/-4 (draaiing alleen in /OPS_Rotation).
+// pixels in PDF-ruimte: zoals getekend), -CP-21-2 (/Matrix-draaiing) en
+// -CP-21-3/-4 (draaiing alleen in /OPS_Rotation). Opslaan vervormt nooit.
 
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -240,26 +241,107 @@ async function opslaanEnLaden(bytes, keer = 2) {
   return rondes;
 }
 
-test('VO Constructie: een bitmap die de appearance niet draait, staat op een gedraaid blad rechtop in zijn schermvak, zoals altijd', async () => {
-  // De pixels passen bij het ongedraaide vak (geen oude schermafdruk), maar
-  // de app toonde zulke bitmaps altijd rechtop in het vak op het scherm.
-  // Opslaan schrijft ze zo dat elke lezer dat ook toont, en dat blijft zo.
-  const rondes = await opslaanEnLaden(await cp21Achtig({ pixels: [78, 114], opsRotation: null }));
+/**
+ * Onafhankelijk van de lader: waar elke lezer de bitmap tekent. De cm's vóór
+ * `/Img Do`, dan /Matrix, dan de /BBox op de /Rect (algoritme 8.1 van de
+ * specificatie). Hoek op het scherm met de klok mee, lengtes van de
+ * beeldassen en het midden in PDF-ruimte.
+ */
+function extern(ap, rect, paginaRotatie) {
+  const s = opScherm(ap, 0);
+  const mul = (a, b) => [
+    a[0] * b[0] + a[1] * b[2], a[0] * b[1] + a[1] * b[3],
+    a[2] * b[0] + a[3] * b[2], a[2] * b[1] + a[3] * b[3],
+    a[4] * b[0] + a[5] * b[2] + b[4], a[4] * b[1] + a[5] * b[3] + b[5],
+  ];
+  const m = ap.matrix || [1, 0, 0, 1, 0, 0];
+  const hoeken = [[ap.bbox[0], ap.bbox[1]], [ap.bbox[2], ap.bbox[1]], [ap.bbox[0], ap.bbox[3]], [ap.bbox[2], ap.bbox[3]]]
+    .map(([x, y]) => [x * m[0] + y * m[2] + m[4], x * m[1] + y * m[3] + m[5]]);
+  const bx0 = Math.min(...hoeken.map((h) => h[0])), bx1 = Math.max(...hoeken.map((h) => h[0]));
+  const by0 = Math.min(...hoeken.map((h) => h[1])), by1 = Math.max(...hoeken.map((h) => h[1]));
+  const sx = (rect[2] - rect[0]) / (bx1 - bx0);
+  const sy = (rect[3] - rect[1]) / (by1 - by0);
+  const t = mul(mul(s.ctm, m), [sx, 0, 0, sy, rect[0] - sx * bx0, rect[1] - sy * by0]);
+  return {
+    hoek: norm(paginaRotatie - Math.atan2(t[1], t[0]) * 180 / Math.PI),
+    lx: Math.hypot(t[0], t[1]),
+    ly: Math.hypot(t[2], t[3]),
+    det: t[0] * t[3] - t[1] * t[2],
+    mx: 0.5 * t[0] + 0.5 * t[2] + t[4],
+    my: 0.5 * t[1] + 0.5 * t[3] + t[5],
+  };
+}
+
+/** De appearance en /Rect van de enige /Stamp in een bestand. */
+async function stempelInBestand(bytes) {
+  const lijst = await woordenboeken(bytes);
+  const { dict } = lijst.find(({ dict: d }) => d.get(PDFName.of('Subtype'))?.toString() === '/Stamp');
+  return { dict, ap: appearance(lijst.doc, dict), rect: getallen(dict.get(PDFName.of('Rect'))) };
+}
+
+function zelfdeExtern(a, b, wat, tol = 0.05) {
+  assert.ok(a.det > 0 && b.det > 0, `${wat}: niet gespiegeld`);
+  // 0,05°: ruis in een /Matrix (0,0117° in VO) wordt bij het laden een rechte hoek.
+  dichtbij(norm(a.hoek - b.hoek), 0, 0.05, `${wat}: hoek op het scherm`);
+  dichtbij(a.lx, b.lx, tol, `${wat}: lengte van de beeldas x`);
+  dichtbij(a.ly, b.ly, tol, `${wat}: lengte van de beeldas y`);
+  dichtbij(a.mx, b.mx, tol, `${wat}: midden x`);
+  dichtbij(a.my, b.my, tol, `${wat}: midden y`);
+}
+
+// VO Constructie.pdf, eerste plattegrond: /Rotate 90, de appearance tekent
+// een liggende bitmap (3125 × 1470, hier op schaal) zonder draaiing in een
+// liggende /Rect; op het gedraaide blad staat hij dus een kwartslag gedraaid
+// in een staand vak. /Matrix met afrondingsruis, zoals in het bestand.
+const VO = {
+  pixels: [125, 59], rect: [56.849008, 623.20028, 565.31649, 862.47158], opsRotation: null, rotatie: 90,
+  bbox: [0, 0, 937.5024, 441.01417], matrix: [1, 0.000205, -0.000205, 1, 0.090419, 0],
+  inhoud: 'q\n937.615723 0 0 440.957458 0 .056693 cm\n/Img Do\nQ\n',
+};
+
+test('VO Constructie: een bitmap die de appearance met de pagina mee draait, staat zoals getekend, onvervormd, ook na twee keer opslaan', async () => {
+  const origineel = await cp21Achtig(VO);
+  const voor = await stempelInBestand(origineel);
+  const ext0 = extern(voor.ap, voor.rect, 90);
+  dichtbij(ext0.hoek, 90, 0.05, 'origineel: een kwartslag gedraaid op het scherm');
+  const rondes = await opslaanEnLaden(origineel);
   for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
     const [m] = modellen.filter((a) => a.type === 'stamp');
-    assert.equal(m.rotation, 0, `ronde ${ronde}: rechtop`);
-    dichtbij(m.width, 474.666, 0.01, `ronde ${ronde}: breedte op het scherm`);
-    dichtbij(m.height, 326.967, 0.01, `ronde ${ronde}: hoogte op het scherm`);
-    dichtbij(midden(m).x, 437.333, 0.01, `ronde ${ronde}: midden x`);
-    dichtbij(midden(m).y, 463.4835, 0.01, `ronde ${ronde}: midden y`);
+    assert.equal(m.rotation, 90, `ronde ${ronde}: met de pagina mee gedraaid, zoals elke lezer`);
+    // Het vak is liggend, met de verhouding van de bitmap: niet in de
+    // staande /Rect geperst.
+    dichtbij(m.width, ext0.lx, 0.05, `ronde ${ronde}: breedte langs de bitmap`);
+    dichtbij(m.height, ext0.ly, 0.05, `ronde ${ronde}: hoogte langs de bitmap`);
+    dichtbij(m.width / m.height, 125 / 59, 0.02, `ronde ${ronde}: verhouding van de pixels`);
+    assert.equal(m.apImageSpace, 'visual');
+    // Midden: op het scherm x = y_pdf, y = x_pdf (/Rotate 90).
+    dichtbij(midden(m).x, ext0.my, 0.05, `ronde ${ronde}: midden x`);
+    dichtbij(midden(m).y, ext0.mx, 0.05, `ronde ${ronde}: midden y`);
     if (!dict) continue;
     assert.equal(dict.get(PDFName.of('OPS_Rotation')), undefined);
-    const s = opScherm(ap, 90);
-    dichtbij(s.hoek, 0, 0.01, `ronde ${ronde}: rechtop in het bestand`);
-    dichtbij(s.lx, 474.666, 0.01, `ronde ${ronde}: breedte in het bestand`);
-    dichtbij(s.ly, 326.967, 0.01, `ronde ${ronde}: hoogte in het bestand`);
-    const rect = getallen(dict.get(PDFName.of('Rect')));
-    [300, 200, 626.967, 674.666].forEach((v, i) => dichtbij(rect[i], v, 0.01, `ronde ${ronde}: /Rect[${i}]`));
+    // Elke lezer tekent hem na opslaan precies als in het origineel.
+    zelfdeExtern(extern(ap, getallen(dict.get(PDFName.of('Rect'))), 90), ext0, `ronde ${ronde}`);
+  }
+});
+
+test('een rotatie-cm in de appearance (liggende bitmap in een staande /Rect) staat zoals getekend, ook na opslaan', async () => {
+  // /Rotate 0; de appearance draait een liggende bitmap (170 × 80) een
+  // kwartslag tegen de klok in, in een staande /Rect van 80 × 170.
+  const origineel = await cp21Achtig({
+    pixels: [85, 40], rect: [300, 300, 380, 470], opsRotation: null, rotatie: 0,
+    inhoud: 'q\n0 1 -1 0 80 0 cm\n170 0 0 80 0 0 cm\n/Img Do\nQ\n', bbox: [0, 0, 80, 170],
+  });
+  const ext0 = extern((await stempelInBestand(origineel)).ap, [300, 300, 380, 470], 0);
+  dichtbij(ext0.hoek, -90, 0.01, 'origineel: een kwartslag tegen de klok in');
+  const rondes = await opslaanEnLaden(origineel);
+  for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
+    const [m] = modellen.filter((a) => a.type === 'stamp');
+    assert.equal(norm(m.rotation), -90, `ronde ${ronde}: draaiing`);
+    dichtbij(m.width, 170, 0.01, `ronde ${ronde}: breedte langs de bitmap`);
+    dichtbij(m.height, 80, 0.01, `ronde ${ronde}: hoogte langs de bitmap`);
+    dichtbij(midden(m).x, 340, 0.01, `ronde ${ronde}: midden x`);
+    if (!dict) continue;
+    zelfdeExtern(extern(ap, getallen(dict.get(PDFName.of('Rect'))), 0), ext0, `ronde ${ronde}`);
   }
 });
 
@@ -282,22 +364,35 @@ test('-CP-21-3/-4: een oude /OPS_Rotation zonder draaiing in de appearance draai
   }
 });
 
-test('-CP-21-2: een /Matrix-draaiing van een ander programma staat zoals altijd, en blijft zo na opslaan', async () => {
-  // /Matrix 45 graden met de klok mee; /Rect is de omhullende (59,2 × 59,2).
-  const c = Math.SQRT1_2;
-  const rondes = await opslaanEnLaden(await cp21Achtig({
-    pixels: [103, 102], rect: [353.5, 154.0, 412.7, 213.2], opsRotation: null, rotatie: 0,
-    inhoud: 'q\n309 0 0 306 0 0 cm\n/Img Do\nQ\n', bbox: [0, 0, 309, 306], matrix: [c, -c, c, c, 0, 218.5],
-  }));
-  for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
-    const [m] = modellen.filter((a) => a.type === 'stamp');
-    assert.equal(m.rotation, 45, `ronde ${ronde}: draaiing`);
-    dichtbij(m.width, 59.2, 0.01, `ronde ${ronde}: breedte`);
-    dichtbij(m.height, 59.2, 0.01, `ronde ${ronde}: hoogte`);
-    if (!dict) continue;
-    const s = opScherm(ap, 0);
-    dichtbij(s.hoek, 45, 0.01, `ronde ${ronde}: draaiing in de appearance`);
-    dichtbij(s.lx, 59.2, 0.01, `ronde ${ronde}: breedte in de appearance`);
+// -CP-21 Constructieoverzicht-2.pdf: /Matrix 45 graden met de klok mee,
+// /Rect is de omhullende (59,2 × 59,2); het beeld zelf is 42,1 × 41,7.
+const CP21_2_45 = {
+  pixels: [103, 102], rect: [353.5, 154.0, 412.7, 213.2], opsRotation: null, rotatie: 0,
+  inhoud: 'q\n309 0 0 306 0 0 cm\n/Img Do\nQ\n', bbox: [0, 0, 309, 306],
+  matrix: [Math.SQRT1_2, -Math.SQRT1_2, Math.SQRT1_2, Math.SQRT1_2, 0, 218.5],
+};
+// Idem, /Matrix [0 -1 1 0 0 257,25]: een kwartslag, /Rect 45,4 × 47,48.
+const CP21_2_90 = {
+  pixels: [103, 98], rect: [505.33, 141.86, 550.73, 189.34], opsRotation: null, rotatie: 0,
+  inhoud: 'q\n257.25 0 0 246 0 0 cm\n/Img Do\nQ\n', bbox: [0, 0, 257.25, 246], matrix: [0, -1, 1, 0, 0, 257.25],
+};
+
+test('-CP-21-2: een /Matrix-draaiing van een ander programma staat zoals getekend, en blijft zo na opslaan', async () => {
+  for (const [naam, opbouw, hoek] of [['45°', CP21_2_45, 45], ['90°', CP21_2_90, 90]]) {
+    const origineel = await cp21Achtig(opbouw);
+    const voor = await stempelInBestand(origineel);
+    const ext0 = extern(voor.ap, voor.rect, 0);
+    dichtbij(ext0.hoek, hoek, 0.01, `${naam}: origineel`);
+    const rondes = await opslaanEnLaden(origineel);
+    for (const [ronde, { modellen, dict, ap }] of rondes.entries()) {
+      const [m] = modellen.filter((a) => a.type === 'stamp');
+      assert.equal(m.rotation, hoek, `${naam}, ronde ${ronde}: draaiing`);
+      // Het beeld zelf, niet de omhullende /Rect.
+      dichtbij(m.width, ext0.lx, 0.05, `${naam}, ronde ${ronde}: breedte`);
+      dichtbij(m.height, ext0.ly, 0.05, `${naam}, ronde ${ronde}: hoogte`);
+      if (!dict) continue;
+      zelfdeExtern(extern(ap, getallen(dict.get(PDFName.of('Rect'))), 0), ext0, `${naam}, ronde ${ronde}`);
+    }
   }
 });
 
@@ -373,4 +468,43 @@ test('een vrijwel vierkante bitmap is geen oude schermafdruk: zijn /OPS_Rotation
   // Zoals de app hem altijd toonde: -90 in het schermvak.
   assert.equal(m.rotation, -90);
   dichtbij(m.width, 204, 0.01, 'breedte op het scherm');
+});
+
+test('opslaan vervormt nooit: de verhouding op het scherm is die van de opgeslagen appearance, en wat al zo getekend werd blijft gelijk', async () => {
+  // zoalsGetekend: de app toont de stempel zoals de appearance hem tekent;
+  // dan tekent elke lezer na opslaan precies hetzelfde. De andere (oude
+  // /OPS_Rotation, oude schermafdrukken) krijgen bewust een andere draaiing
+  // of een ander vak, maar ook die worden opgeslagen zoals de app ze toont.
+  const gevallen = [
+    ['VO', VO, true],
+    ['-CP-21-2 45°', CP21_2_45, true],
+    ['-CP-21-2 90°', CP21_2_90, true],
+    ['gewoon op /Rotate 0', { pixels: [80, 40], rect: [100, 100, 260, 180], opsRotation: null, rotatie: 0 }, true],
+    ['gewoon op /Rotate 90', { pixels: [40, 80], rect: [100, 100, 180, 260], opsRotation: null, rotatie: 90 }, true],
+    ['CP-21', {}, false],
+    ['-CP-21-3/-4 (90°)', { pixels: [100, 96], rect: [500, 140, 545.4, 187.48], opsRotation: 90, rotatie: 0 }, false],
+    ['-CP-21-3/-4 (45°)', { pixels: [100, 96], rect: [500, 140, 545.4, 187.48], opsRotation: 45, rotatie: 0 }, false],
+    ['vrijwel vierkant met /OPS_Rotation -90', { pixels: [100, 96], rect: [300, 200, 500, 404], opsRotation: -90 }, false],
+  ];
+  for (const [naam, opbouw, zoalsGetekend] of gevallen) {
+    const origineel = await cp21Achtig(opbouw);
+    const voor = await stempelInBestand(origineel);
+    const paginaRotatie = opbouw.rotatie ?? 90;
+    const ext0 = extern(voor.ap, voor.rect, paginaRotatie);
+    let bytes = origineel;
+    let [m] = (await laadMetBeelden(bytes)).filter((a) => a.type === 'stamp');
+    const verhouding = m.width / m.height;
+    if (zoalsGetekend) dichtbij(verhouding, ext0.lx / ext0.ly, 1e-3, `${naam}: geladen zoals getekend`);
+    for (let ronde = 1; ronde <= 2; ronde++) {
+      bytes = await opslaan(bytes, [m]);
+      const na = await stempelInBestand(bytes);
+      const ext = extern(na.ap, na.rect, paginaRotatie);
+      assert.ok(ext.det > 0, `${naam}, ronde ${ronde}: niet gespiegeld`);
+      dichtbij(ext.lx / ext.ly, m.width / m.height, 1e-3, `${naam}, ronde ${ronde}: appearance tekent de verhouding van de app`);
+      dichtbij(norm(ext.hoek - (m.rotation || 0)), 0, 0.01, `${naam}, ronde ${ronde}: appearance tekent de draaiing van de app`);
+      if (zoalsGetekend) zelfdeExtern(ext, ext0, `${naam}, ronde ${ronde}`);
+      [m] = (await laadMetBeelden(bytes)).filter((a) => a.type === 'stamp');
+      dichtbij(m.width / m.height, verhouding, 1e-3, `${naam}, ronde ${ronde}: verhouding blijft`);
+    }
+  }
 });
