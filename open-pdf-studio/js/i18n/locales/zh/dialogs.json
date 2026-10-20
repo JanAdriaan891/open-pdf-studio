@@ -313,7 +313,8 @@
     "clickToAdd": "点击 + 添加 PDF 文件",
     "pg": "页",
     "filesAndPages": "{{files}} 个文件，共 {{pages}} 页",
-    "addAtLeastOne": "请至少添加一个 PDF 文件进行合并。"
+    "addAtLeastOne": "请至少添加一个 PDF 文件进行合并。",
+    "signedWarning": "一个或多个文件带有数字签名。合并会移除这些签名：合并后的文档没有签名。"
   },
   "watermark": {
     "addTitle": "添加水印",

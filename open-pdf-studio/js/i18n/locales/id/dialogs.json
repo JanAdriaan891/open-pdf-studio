@@ -313,7 +313,8 @@
     "clickToAdd": "Klik + untuk menambah file PDF",
     "pg": "hal",
     "filesAndPages": "{{files}} file, {{pages}} total halaman",
-    "addAtLeastOne": "Silakan tambahkan setidaknya satu file PDF untuk digabungkan."
+    "addAtLeastOne": "Silakan tambahkan setidaknya satu file PDF untuk digabungkan.",
+    "signedWarning": "Satu atau beberapa file ditandatangani secara digital. Penggabungan menghapus tanda tangannya: dokumen gabungan tidak ditandatangani."
   },
   "watermark": {
     "addTitle": "Tambah Tanda Air",

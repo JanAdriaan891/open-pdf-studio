@@ -1,5 +1,5 @@
 import { state, getActiveDocument } from '../core/state.js';
-import { getCachedPdfBytes, setCachedPdfBytes, cancelAnnotationLoading, markAllAnnotationPagesLoaded } from './loader.js';
+import { getCachedPdfBytes, setCachedPdfBytes, cancelAnnotationLoading, markAllAnnotationPagesLoaded, laadAnnotatiesVoorPaginas } from './loader.js';
 import { setViewMode } from './renderer.js';
 import { generateThumbnails, clearThumbnailCache } from '../ui/panels/left-panel.js';
 import { markDocumentModified } from '../ui/chrome/tabs.js';
@@ -156,8 +156,8 @@ export async function pastePage(afterPageNum) {
 
     // Meetschalen van de ingevoegde pagina's komen uit die pagina's zelf (#400).
     const newViewports = viewportsVanPaginas(copiedPages, insertIdx + 1);
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
   } finally {
     hideLoading();
   }
@@ -171,7 +171,10 @@ export function getCacheKey() {
   return `__memory__${doc.id}`;
 }
 
-// Reload PDF.js from new bytes, preserving annotations and rotations
+// Reload PDF.js from new bytes, preserving annotations and rotations.
+// Returns the annotations now in the model: with a page mapping these include
+// the ones loaded from pages that are new in the bytes (see below), which the
+// caller records for redo.
 export async function reloadFromBytes(newBytes, annotations, rotations, targetPage, viewportUpdate = null, doc = getActiveDocument()) {
   if (!doc) return;
 
@@ -194,6 +197,10 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
     }
     doc._kopVoetBron = null;
   }
+
+  // Welke pagina's hun annotaties al in het model hadden, vóór het laden
+  // hieronder die administratie wist (zie de annotaties verderop).
+  const oudGereed = doc._annotationPagesReady ? new Set(doc._annotationPagesReady) : null;
 
   // Cancel any in-progress annotation loading
   cancelAnnotationLoading(doc);
@@ -307,11 +314,30 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
     leesViewportsOpnieuw(doc, newBytes);
   }
 
-  // Paginalabels verhuizen mee met hun pagina (#580).
+  // Pagina's die deze bewerking nieuw in het document bracht: geen beeld van
+  // een oude pagina in de toewijzing.
+  const nieuwePaginas = [];
+  if (viewportUpdate?.pageMapping) {
+    const beeld = new Set(Object.values(viewportUpdate.pageMapping).filter((n) => n != null));
+    for (let p = 1; p <= doc.pdfDoc.numPages; p++) if (!beeld.has(p)) nieuwePaginas.push(p);
+  }
+
+  // Paginalabels verhuizen mee met hun pagina (#580). Samenvoegen schreef de
+  // labels van de ingevoegde pagina's in de bytes; die komen erbij.
+  let ingevoegdeLabels = null;
+  if (viewportUpdate?.labelsUitBytes && nieuwePaginas.length) {
+    try {
+      const uitBytes = await doc.pdfDoc.getPageLabels();
+      if (Array.isArray(uitBytes)) ingevoegdeLabels = new Map(nieuwePaginas.map((p) => [p, String(uitBytes[p - 1] ?? '')]));
+    } catch (e) {
+      console.warn('[reloadFromBytes] paginalabels van de ingevoegde pagina’s niet gelezen', e);
+    }
+  }
   await labelsNaHerladen(doc, {
     oudeBytes,
     nieuweBytes: aangeleverdeBytes,
     pageMapping: viewportUpdate?.pageMapping || null,
+    ingevoegdeLabels,
   });
 
   // 3D models and 3D markup pages move with the pages: scan the new bytes.
@@ -339,6 +365,43 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
   // Mark all pages as loaded so background loader won't overwrite
   markAllAnnotationPagesLoaded(numPages, doc);
 
+  // Annotaties die alleen in de nieuwe bytes staan: die van ingevoegde
+  // pagina's (samenvoegen, pagina's uit een bestand), en die van pagina's
+  // die vóór deze bewerking nog niet geladen waren. Als 'geladen' gemarkeerd
+  // zonder dat ze in het model staan, tekent de app ze niet en haalt de
+  // volgende save ze weg (die vervangt de annotaties van een geladen pagina
+  // door die uit het model). Dus nu laden, vóór het tekenen en vóór de
+  // aanroeper de stand voor ongedaan maken vastlegt.
+  if (viewportUpdate?.pageMapping && oudGereed && doc._annotationPagesReady) {
+    const gereed = new Set();
+    for (const p of oudGereed) {
+      const n = viewportUpdate.pageMapping[p];
+      if (n != null) gereed.add(n);
+    }
+    for (const a of annotations) gereed.add(a.page);
+    const teLaden = [];
+    for (let p = 1; p <= numPages; p++) if (!gereed.has(p)) teLaden.push(p);
+    if (teLaden.length) {
+      // In _loadedAnnotationPages blijven ze staan: zo laadt het tekenen ze
+      // niet tegelijk nog een keer (dubbele annotaties).
+      for (const p of teLaden) doc._annotationPagesReady.delete(p);
+      try {
+        const lib = await laadAnnotatiesVoorPaginas(doc, teLaden);
+        if (lib) {
+          const { leesAnnotatieLagen, voegGelezenLagenToe } = await import('./saver/annotatie-lagen.js');
+          if (voegGelezenLagenToe(doc, leesAnnotatieLagen(lib))) {
+            const { refreshAnnotationLayers } = await import('../bridge.js');
+            refreshAnnotationLayers?.();
+          }
+        }
+      } catch (e) {
+        // Niet geladen blijft 'niet gereed': de saver laat de annotaties van
+        // die pagina's dan in het bestand staan.
+        console.warn('[reloadFromBytes] annotaties van nieuwe pagina’s niet geladen', e);
+      }
+    }
+  }
+
   // Clear selection
   if (doc) {
     doc.selectedAnnotation = null;
@@ -347,7 +410,7 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
   clearThumbnailCache(doc.id);
   doc.modified = true;
   doc.savedUndoStackLength = -1;
-  if (getActiveDocument() !== doc) return;
+  if (getActiveDocument() !== doc) return doc.annotations;
   hideProperties();
 
   // Re-render (preserve the book-spread / facing layout variants of continuous)
@@ -356,9 +419,10 @@ export async function reloadFromBytes(newBytes, annotations, rotations, targetPa
     : doc?.bookSpread && doc?.viewMode === 'continuous' ? 'book'
     : (doc?.viewMode || 'single')
   );
-  if (getActiveDocument() !== doc) return;
+  if (getActiveDocument() !== doc) return doc.annotations;
   generateThumbnails();
   updateAllStatus();
+  return doc.annotations;
 }
 
 // Leest de viewports van deze bytes op de achtergrond. Een lezing die nog liep
@@ -453,10 +517,10 @@ export async function insertBlankPages(position, refPage, count, widthPt, height
     // Determine which page to navigate to
     let targetPage = insertIdx + 1; // First inserted page
 
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping });
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping });
 
     // Record undo
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
   } finally {
     hideLoading();
   }
@@ -576,10 +640,10 @@ export async function insertPagesFromFile(refPage, position, sourcePath = null, 
     // De meetschalen van de ingevoegde pagina's komen uit de pagina's zelf;
     // die zijn hier al ingelezen (#400).
     const newViewports = viewportsVanPaginas(copiedPages, insertIdx + 1);
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
 
     // Record undo
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
     inserted = true;
   } catch (err) {
     console.error('Failed to insert pages from file:', err);
@@ -647,10 +711,10 @@ export async function deletePages(pageNumbers) {
     // Clamp current page
     let targetPage = Math.min(doc.currentPage, newNumPages);
 
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping });
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping });
 
     // Record undo
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
   } finally {
     hideLoading();
   }
@@ -766,10 +830,10 @@ export async function reorderPages(newPageOrder) {
     // Alle pagina's zijn gekopieerd; hun meetschalen komen uit de pagina's
     // zelf, genummerd vanaf de eerste (#400).
     const newViewports = viewportsVanPaginas(copiedPages, 1);
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
 
     // Record undo
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
   } finally {
     hideLoading();
   }
@@ -782,9 +846,13 @@ export async function reorderPages(newPageOrder) {
  * @param {Object} rotations - Page rotations to restore
  * @param {number} currentPage - Page to navigate to
  */
-export async function restorePageState(bytes, annotations, rotations, currentPage) {
+export async function restorePageState(bytes, annotations, rotations, currentPage, { bookmarks } = {}) {
   showLoading('Restoring...');
   try {
+    // Bladwijzers die bij deze stand horen (samenvoegen); de saver schrijft
+    // de outline uit het model.
+    const doc = getActiveDocument();
+    if (doc && Array.isArray(bookmarks)) doc.bookmarks = bookmarks.map((b) => ({ ...b }));
     await reloadFromBytes(bytes, annotations, rotations, currentPage);
   } finally {
     hideLoading();
@@ -877,10 +945,10 @@ export async function replacePages(pageNumber) {
     // De vervangende pagina's brengen hun eigen meetschalen mee, vanaf de
     // plek van de vervangen pagina (#400).
     const newViewports = viewportsVanPaginas(copiedPages, pageNumber);
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
 
     // Record undo
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
   } catch (err) {
     console.error('Failed to replace page:', err);
     showMessage(i18next.t('failedToReplacePage', { error: err.message }));
@@ -890,7 +958,34 @@ export async function replacePages(pageNumber) {
 }
 
 /**
- * Merge external PDF files into the current document.
+ * De bytes van een bronbestand om samen te voegen. Staat het bestand open in
+ * de app, dan telt wat daar staat — ook annotaties en velden die nog niet
+ * opgeslagen zijn — via dezelfde weg als opslaan, zonder iets weg te
+ * schrijven; anders het bestand op schijf. Het bronbestand zelf verandert
+ * nooit.
+ */
+async function bronBytesVoorSamenvoegen(filePath) {
+  const { openDocumentVoorPad } = await import('./samenvoegen-model.js');
+  const open = openDocumentVoorPad(state.documents, filePath);
+  if (open) {
+    try {
+      const { bouwMomentopname } = await import('./saver.js');
+      return { bytes: await bouwMomentopname(open), uitApp: true };
+    } catch (e) {
+      // Met een wachtwoord geopend, of de momentopname faalde: het bestand.
+      console.warn('[merge] in-app state not used, reading the file instead:', e?.message || e);
+    }
+  }
+  // Ensure the picked source file is inside the fs allowlist scope.
+  try { await window.__TAURI__?.core?.invoke?.('allow_fs_scope', { path: filePath }); } catch {}
+  return { bytes: new Uint8Array(await readBinaryFile(filePath)), uitApp: false };
+}
+
+/**
+ * Merge external PDF files into the current document, with everything that
+ * belongs to their pages: annotations, form fields, bookmarks, links and
+ * named destinations, layers and page labels (samenvoegen.js). The merged
+ * annotations are loaded into the model, so they show and can be edited.
  * @param {string[]} filePaths - Paths of PDF files to merge in
  * @param {'end'|'start'|'after'} position - Where to insert the merged pages
  * @returns {Promise<object>} what really happened (merge-verslag.js): the files
@@ -918,11 +1013,21 @@ export async function mergeFiles(filePaths, position) {
   const oldAnnotations = doc.annotations.map(a => ({ ...a }));
   const oldRotations = { ...doc.pageRotations };
   const oldPage = doc.currentPage;
+  const oldBookmarks = (doc.bookmarks || []).map(b => ({ ...b }));
 
   showLoading('Merging PDFs...');
   try {
     const destDoc = await PDFDocument.load(currentBytes, { ignoreEncryption: true });
     const oldNumPages = destDoc.getPageCount();
+    // Ingevulde velden van dit document staan alleen in pdf.js; dat document
+    // gaat bij het herladen weg.
+    let veldenGezet = 0;
+    try {
+      const { schrijfFormulierWaarden } = await import('./saver.js');
+      veldenGezet = schrijfFormulierWaarden(destDoc, doc) || 0;
+    } catch (e) {
+      console.warn('[merge] form values not carried over:', e);
+    }
 
     // Determine insertion index (0-based)
     let insertIdx;
@@ -933,14 +1038,11 @@ export async function mergeFiles(filePaths, position) {
       default: insertIdx = oldNumPages; break;
     }
 
-    // Read and merge each file
-    let totalInserted = 0;
+    // Read each file; what cannot go in is reported, the rest is merged.
+    const bronnen = [];
     for (const filePath of filePaths) {
       try {
-        // Ensure the picked source file is inside the fs allowlist scope.
-        try { await window.__TAURI__?.core?.invoke?.('allow_fs_scope', { path: filePath }); } catch {}
-        const fileData = await readBinaryFile(filePath);
-        const srcBytes = new Uint8Array(fileData);
+        const { bytes: srcBytes, uitApp } = await bronBytesVoorSamenvoegen(filePath);
         const srcDoc = await PDFDocument.load(srcBytes, { ignoreEncryption: true });
         const srcPageCount = srcDoc.getPageCount();
 
@@ -958,17 +1060,7 @@ export async function mergeFiles(filePaths, position) {
             continue;
           }
         }
-
-        const indices = [];
-        for (let i = 0; i < srcPageCount; i++) indices.push(i);
-        const copiedPages = await destDoc.copyPages(srcDoc, indices);
-
-        for (let i = 0; i < copiedPages.length; i++) {
-          destDoc.insertPage(insertIdx + totalInserted + i, copiedPages[i]);
-        }
-
-        totalInserted += srcPageCount;
-        verslag.merged.push(filePath);
+        bronnen.push({ doc: srcDoc, naam: filePath.split(/[\\/]/).pop(), pad: filePath, uitApp });
       } catch (err) {
         console.error(`Failed to merge file: ${filePath}`, err);
         const fileName = filePath.split(/[\\/]/).pop();
@@ -978,10 +1070,18 @@ export async function mergeFiles(filePaths, position) {
       }
     }
 
-    if (totalInserted === 0) {
+    if (bronnen.length === 0) {
       return verslag;
     }
+
+    const { voegPdfsSamen } = await import('./samenvoegen.js');
+    const samen = await voegPdfsSamen(destDoc, bronnen.map(({ doc: d, naam }) => ({ doc: d, naam })), {
+      invoegIndex: insertIdx, positie: position,
+    });
+    const totalInserted = samen.paginasIngevoegd;
+    for (const b of bronnen) verslag.merged.push(b.pad);
     verslag.pagesInserted = totalInserted;
+    verslag.carried = samen.bronnen.map((b, i) => ({ ...b, pad: bronnen[i].pad, uitApp: bronnen[i].uitApp }));
 
     // Build page mapping for existing annotations/rotations
     const pageMapping = {};
@@ -996,17 +1096,40 @@ export async function mergeFiles(filePaths, position) {
     const newAnnotations = remapAnnotations(doc.annotations, pageMapping);
     const newRotations = remapRotations(doc.pageRotations, pageMapping);
 
-    const newBytes = new Uint8Array(await destDoc.save());
+    const newBytes = new Uint8Array(await destDoc.save({ updateFieldAppearances: veldenGezet > 0 }));
 
     // Navigate to first merged page
     const targetPage = insertIdx + 1;
 
     // Meetschalen van alle samengevoegde pagina's, op hun nieuwe nummer (#400).
     const newViewports = viewportsVanPaginas(destDoc.getPages().slice(insertIdx, insertIdx + totalInserted), insertIdx + 1);
-    await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping, newViewports });
+    const inModel = await reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, {
+      pageMapping, newViewports, labelsUitBytes: true,
+    });
+    // De bladwijzers schrijft de saver uit het model: het model krijgt die van
+    // het document op hun nieuwe pagina en per bestand de nieuwe bladwijzer,
+    // met de bladwijzers van dat bestand eronder.
+    try {
+      const { loadBookmarksFromPdf } = await import('./bladwijzers-lezen.js');
+      const { bladwijzersNaSamenvoegen } = await import('./samenvoegen-model.js');
+      doc.bookmarks = bladwijzersNaSamenvoegen(oldBookmarks, await loadBookmarksFromPdf(doc.pdfDoc), {
+        groepIndexen: samen.bladwijzerGroepen, pageMapping, invoegIndex: insertIdx, positie: position,
+      });
+    } catch (e) {
+      console.warn('[merge] bookmarks of the merged files not added:', e);
+    }
 
     // Record undo
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage, {
+      bookmarks: { old: oldBookmarks, new: (doc.bookmarks || []) },
+    });
+    try {
+      const { activeTab } = await import('../solid/stores/leftPanelStore.js');
+      if (activeTab() === 'bookmarks') {
+        const { updateBookmarksList } = await import('../ui/panels/bookmarks.js');
+        updateBookmarksList();
+      }
+    } catch { /* paneel niet open */ }
     return verslag;
   } finally {
     hideLoading();

@@ -313,7 +313,8 @@
     "clickToAdd": "Clique em + para adicionar arquivos PDF",
     "pg": "pág",
     "filesAndPages": "{{files}} arquivo(s), {{pages}} páginas no total",
-    "addAtLeastOne": "Adicione pelo menos um arquivo PDF para mesclar."
+    "addAtLeastOne": "Adicione pelo menos um arquivo PDF para mesclar.",
+    "signedWarning": "Um ou mais ficheiros estão assinados digitalmente. A junção remove as assinaturas: o documento combinado não está assinado."
   },
   "watermark": {
     "addTitle": "Adicionar marca d'água",

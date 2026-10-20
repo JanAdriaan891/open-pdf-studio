@@ -313,7 +313,8 @@
     "clickToAdd": "Click + to add PDF files",
     "pg": "pg",
     "filesAndPages": "{{files}} file(s), {{pages}} total pages",
-    "addAtLeastOne": "Please add at least one PDF file to merge."
+    "addAtLeastOne": "Please add at least one PDF file to merge.",
+    "signedWarning": "One or more files are digitally signed. Merging removes their signatures: the merged document is not signed."
   },
   "watermark": {
     "addTitle": "Add Watermark",

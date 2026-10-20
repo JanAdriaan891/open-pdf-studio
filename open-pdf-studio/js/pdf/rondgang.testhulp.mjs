@@ -40,7 +40,7 @@ export async function leegBlad({ rotatie = 0 } = {}) {
  * @param {{ lagen?: object[]|null, impl?: object }} [opties]  de annotatielagen van
  *   het document, en vervangers voor gestubde modules (zie saver-test-hooks.mjs)
  */
-export async function opslaan(bronBytes, modellen, { lagen = null, impl = {} } = {}) {
+export async function opslaan(bronBytes, modellen, { lagen = null, impl = {}, document = {} } = {}) {
   let uit = null;
   globalThis.__saverTest = {
     impl: {
@@ -54,6 +54,8 @@ export async function opslaan(bronBytes, modellen, { lagen = null, impl = {} } =
     id: 'rondgang', filePath: 'C:/rondgang/bron.pdf', pdfDoc: {}, annotations: modellen,
     pageRotations: {}, _annotationPagesReady: new Set([1]), textEdits: [],
     ...(lagen ? { annotationLayers: lagen } : {}),
+    // Meer pagina's, bladwijzers, paginalabels: wat de test meegeeft.
+    ...document,
   }];
   state.activeDocumentIndex = 0;
   assert.equal(await savePDF('C:/rondgang/uit.pdf', { zonderHandtekeningVraag: true }), true, 'opslaan gelukt');
@@ -72,6 +74,28 @@ export async function laad(bytes) {
   const lib = await PDFDocument.load(bytes.slice());
   const kaart = await extractAnnotationColors(1, lib);
   const modellen = await zetPaginaAnnotatiesOm(await pagina.getAnnotations(), 1, viewport, new Map(), kaart);
+  await doc.loadingTask.destroy();
+  const gelezen = leesAnnotatieLagen(lib);
+  modellen.lagen = gelezen ? getLayers({ annotationLayers: gelezen.lagen }) : null;
+  return modellen;
+}
+
+/**
+ * De modellen van alle bladen zoals js/pdf/loader.js ze maakt (pagina per
+ * pagina), met het aantal bladen erbij.
+ */
+export async function laadAlles(bytes) {
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const doc = await pdfjs.getDocument({ data: bytes.slice(), isEvalSupported: false, verbosity: 0 }).promise;
+  const lib = await PDFDocument.load(bytes.slice());
+  const modellen = [];
+  for (let n = 1; n <= doc.numPages; n++) {
+    const pagina = await doc.getPage(n);
+    const viewport = pagina.getViewport({ scale: 1 });
+    const kaart = await extractAnnotationColors(n, lib);
+    modellen.push(...await zetPaginaAnnotatiesOm(await pagina.getAnnotations(), n, viewport, new Map(), kaart));
+  }
+  modellen.aantalPaginas = doc.numPages;
   await doc.loadingTask.destroy();
   const gelezen = leesAnnotatieLagen(lib);
   modellen.lagen = gelezen ? getLayers({ annotationLayers: gelezen.lagen }) : null;

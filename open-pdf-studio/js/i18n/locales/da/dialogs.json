@@ -313,7 +313,8 @@
     "clickToAdd": "Klik + for at tilføje PDF-filer",
     "pg": "s.",
     "filesAndPages": "{{files}} fil(er), {{pages}} sider i alt",
-    "addAtLeastOne": "Tilføj venligst mindst én PDF-fil at flette."
+    "addAtLeastOne": "Tilføj venligst mindst én PDF-fil at flette.",
+    "signedWarning": "En eller flere filer er digitalt signeret. Sammenfletning fjerner signaturerne: det samlede dokument er ikke signeret."
   },
   "watermark": {
     "addTitle": "Tilføj vandmærke",

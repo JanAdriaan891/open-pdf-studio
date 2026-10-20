@@ -294,7 +294,8 @@
     "clickToAdd": "Klik op + om PDF-bestanden toe te voegen",
     "pg": "pag",
     "filesAndPages": "{{files}} bestand(en), {{pages}} pagina's totaal",
-    "addAtLeastOne": "Voeg ten minste een PDF-bestand toe om samen te voegen."
+    "addAtLeastOne": "Voeg ten minste een PDF-bestand toe om samen te voegen.",
+    "signedWarning": "Een of meer bestanden zijn digitaal ondertekend. Samenvoegen verwijdert die handtekeningen: het samengevoegde document is niet ondertekend."
   },
   "watermark": {
     "addTitle": "Watermerk toevoegen",

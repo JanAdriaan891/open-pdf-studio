@@ -313,7 +313,8 @@
     "clickToAdd": "Bofya + kuongeza faili za PDF",
     "pg": "uk",
     "filesAndPages": "faili {{files}}, jumla ya kurasa {{pages}}",
-    "addAtLeastOne": "Tafadhali ongeza angalau faili moja ya PDF ili kuunganisha."
+    "addAtLeastOne": "Tafadhali ongeza angalau faili moja ya PDF ili kuunganisha.",
+    "signedWarning": "Faili moja au zaidi zimetiwa saini kidijitali. Kuunganisha huondoa sahihi hizo: hati iliyounganishwa haijatiwa saini."
   },
   "watermark": {
     "addTitle": "Ongeza Alama ya Maji",

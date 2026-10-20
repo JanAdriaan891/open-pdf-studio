@@ -313,7 +313,8 @@
     "clickToAdd": "Klikk + for å legge til PDF-filer",
     "pg": "s",
     "filesAndPages": "{{files}} fil(er), {{pages}} sider totalt",
-    "addAtLeastOne": "Vennligst legg til minst én PDF-fil for sammenslåing."
+    "addAtLeastOne": "Vennligst legg til minst én PDF-fil for sammenslåing.",
+    "signedWarning": "Én eller flere filer er digitalt signert. Sammenslåing fjerner signaturene: det sammenslåtte dokumentet er ikke signert."
   },
   "watermark": {
     "addTitle": "Legg til vannmerke",

@@ -313,7 +313,8 @@
     "clickToAdd": "Napsauta + lisätäksesi PDF-tiedostoja",
     "pg": "s.",
     "filesAndPages": "{{files}} tiedosto(a), {{pages}} sivua yhteensä",
-    "addAtLeastOne": "Lisää vähintään yksi PDF-tiedosto yhdistettäväksi."
+    "addAtLeastOne": "Lisää vähintään yksi PDF-tiedosto yhdistettäväksi.",
+    "signedWarning": "Yksi tai useampi tiedosto on allekirjoitettu digitaalisesti. Yhdistäminen poistaa allekirjoitukset: yhdistetty asiakirja ei ole allekirjoitettu."
   },
   "watermark": {
     "addTitle": "Lisää vesileima",
