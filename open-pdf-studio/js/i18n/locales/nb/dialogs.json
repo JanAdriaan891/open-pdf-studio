@@ -1142,6 +1142,7 @@
     "saveFailed": "Kunne ikke lagre det gjenopprettede dokumentet: {{error}}",
     "deleteFailed": "Sletting mislyktes: {{error}}",
     "tabLabel": "gjenopprettet",
-    "tabTip": "Gjenopprettet etter en uventet avslutning. Lagring skriver til originalfilen."
+    "tabTip": "Gjenopprettet etter en uventet avslutning. Lagring skriver til originalfilen.",
+    "reloadStopped": "Open PDF Studio-vinduet sluttet å fungere flere ganger på rad og lastes ikke lenger inn på nytt automatisk. Lagre arbeidet ditt og start appen på nytt."
   }
 }

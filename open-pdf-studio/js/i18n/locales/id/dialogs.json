@@ -1142,6 +1142,7 @@
     "saveFailed": "Dokumen yang dipulihkan tidak dapat disimpan: {{error}}",
     "deleteFailed": "Penghapusan gagal: {{error}}",
     "tabLabel": "dipulihkan",
-    "tabTip": "Dipulihkan setelah penutupan yang tidak terduga. Menyimpan akan menulis ke file asli."
+    "tabTip": "Dipulihkan setelah penutupan yang tidak terduga. Menyimpan akan menulis ke file asli.",
+    "reloadStopped": "Jendela Open PDF Studio berhenti berfungsi beberapa kali berturut-turut dan tidak lagi dimuat ulang secara otomatis. Simpan pekerjaan Anda dan mulai ulang aplikasi."
   }
 }

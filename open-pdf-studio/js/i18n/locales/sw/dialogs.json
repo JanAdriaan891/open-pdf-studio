@@ -1142,6 +1142,7 @@
     "saveFailed": "Hati iliyorejeshwa haikuweza kuhifadhiwa: {{error}}",
     "deleteFailed": "Kufuta kumeshindikana: {{error}}",
     "tabLabel": "imerejeshwa",
-    "tabTip": "Imerejeshwa baada ya kufungwa bila kutarajia. Kuhifadhi kunaandika kwenye faili asili."
+    "tabTip": "Imerejeshwa baada ya kufungwa bila kutarajia. Kuhifadhi kunaandika kwenye faili asili.",
+    "reloadStopped": "Dirisha la Open PDF Studio liliacha kufanya kazi mara kadhaa mfululizo na halipakiwi tena kiotomatiki. Hifadhi kazi yako na uanzishe programu upya."
   }
 }

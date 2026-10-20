@@ -1142,6 +1142,7 @@
     "saveFailed": "Não foi possível salvar o documento recuperado: {{error}}",
     "deleteFailed": "Falha ao excluir: {{error}}",
     "tabLabel": "recuperado",
-    "tabTip": "Recuperado após um encerramento inesperado. Salvar grava no arquivo original."
+    "tabTip": "Recuperado após um encerramento inesperado. Salvar grava no arquivo original.",
+    "reloadStopped": "A janela do Open PDF Studio parou de funcionar várias vezes seguidas e não é mais recarregada automaticamente. Salve seu trabalho e reinicie o aplicativo."
   }
 }

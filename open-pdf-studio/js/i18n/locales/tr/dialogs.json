@@ -1142,6 +1142,7 @@
     "saveFailed": "Kurtarılan belge kaydedilemedi: {{error}}",
     "deleteFailed": "Silme başarısız oldu: {{error}}",
     "tabLabel": "kurtarıldı",
-    "tabTip": "Beklenmedik bir kapanmanın ardından kurtarıldı. Kaydetme özgün dosyaya yazar."
+    "tabTip": "Beklenmedik bir kapanmanın ardından kurtarıldı. Kaydetme özgün dosyaya yazar.",
+    "reloadStopped": "Open PDF Studio penceresi art arda birkaç kez çalışmayı durdurdu ve artık otomatik olarak yeniden yüklenmiyor. Çalışmanızı kaydedin ve uygulamayı yeniden başlatın."
   }
 }

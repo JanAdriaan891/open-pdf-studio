@@ -296,11 +296,17 @@ pub struct HerstelInfo {
     pub instantie: Instantie,
     pub versie: String,
     pub headless: bool,
+    /// Automatisch herladen na een renderer-crash (crashlog.rs).
+    pub webview: crashlog::HerlaadStatus,
 }
 
+/// Wordt aangeroepen bij elke start van de frontend, ook na een herlaadbeurt:
+/// de WebView draait dan weer, een nette afsluiting mag de markering opruimen.
 #[tauri::command]
 pub fn herstel_info() -> Result<HerstelInfo, String> {
+    WEBVIEW_UITGEVALLEN.store(false, Ordering::SeqCst);
     Ok(HerstelInfo {
+        webview: crashlog::herlaad_status(),
         map: map()?.to_string_lossy().to_string(),
         crashlog_map: crashlog::crashlogmap().map(|p| p.to_string_lossy().to_string()).unwrap_or_default(),
         instantie: instantie().clone(),

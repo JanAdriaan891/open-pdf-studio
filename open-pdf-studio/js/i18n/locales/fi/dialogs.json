@@ -1142,6 +1142,7 @@
     "saveFailed": "Palautettua asiakirjaa ei voitu tallentaa: {{error}}",
     "deleteFailed": "Poistaminen epäonnistui: {{error}}",
     "tabLabel": "palautettu",
-    "tabTip": "Palautettu odottamattoman sulkeutumisen jälkeen. Tallennus kirjoittaa alkuperäiseen tiedostoon."
+    "tabTip": "Palautettu odottamattoman sulkeutumisen jälkeen. Tallennus kirjoittaa alkuperäiseen tiedostoon.",
+    "reloadStopped": "Open PDF Studion ikkuna lakkasi toimimasta useita kertoja peräkkäin, eikä sitä enää ladata automaattisesti uudelleen. Tallenna työsi ja käynnistä sovellus uudelleen."
   }
 }

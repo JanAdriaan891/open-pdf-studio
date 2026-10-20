@@ -20,6 +20,16 @@
 //! kort op. Op de hoofddraad kan dat niet: de WebView krijgt het verzoek pas
 //! als de event-loop weer draait, en die staat stil zolang de haak wacht.
 //! Daar blijft het bij de laatste regelmatige momentopname.
+//!
+//! Valt het renderproces van het hoofdvenster weg (of reageert het niet
+//! meer), dan herlaadt de app dat venster zelf (alleen bureaublad, WebView2).
+//! De nieuwe frontendsessie ziet de momentopnamen van de vorige sessie van dit
+//! proces als wees en biedt ze aan (js/herstel/beleid.js). Vlak voor het
+//! herladen valt er niets meer te bewaren: het renderproces met het model in
+//! zijn geheugen is al weg, dus de laatste regelmatige momentopname (of
+//! noodmomentopname) is wat er terugkomt. Tegen een crashlus: hooguit
+//! [`HERLAAD_MAX`] keer per [`HERLAAD_VENSTER_MS`]; daarna blijft het venster
+//! zoals het is en meldt de frontend het bij de eerstvolgende geslaagde start.
 
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -43,12 +53,22 @@ pub const NOOD_WACHTTIJD: Duration = Duration::from_secs(3);
 pub const NOOD_TUSSENPOOS_MS: u64 = 60_000;
 /// Naam van het event dat de frontend om een noodmomentopname vraagt.
 pub const NOOD_EVENT: &str = "herstel-nood";
+/// Hooguit zoveel automatische herlaadbeurten van het hoofdvenster ...
+pub const HERLAAD_MAX: usize = 2;
+/// ... binnen deze tijd (5 minuten).
+pub const HERLAAD_VENSTER_MS: u64 = 5 * 60_000;
+/// Wachttijd tussen de melding van WebView2 en het herladen.
+pub const HERLAAD_WACHT_MS: u64 = 500;
 
 static SCHRIJFSLOT: Mutex<()> = Mutex::new(());
 static APP: OnceLock<tauri::AppHandle> = OnceLock::new();
 static HOOFDDRAAD: OnceLock<std::thread::ThreadId> = OnceLock::new();
 static LAATSTE_NOOD_MS: AtomicU64 = AtomicU64::new(0);
 static NOOD: (Mutex<u64>, Condvar) = (Mutex::new(0), Condvar::new());
+/// Tijdstippen van de automatische herlaadbeurten van dit proces.
+static HERLADEN: Mutex<Vec<u64>> = Mutex::new(Vec::new());
+/// De grens is bereikt: niet meer automatisch herladen.
+static HERLAAD_GESTOPT: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
 /// De map met crashlogs: `<datamap>/OpenPDFStudio/logs`.
 pub fn crashlogmap() -> Option<PathBuf> {
@@ -237,6 +257,60 @@ pub fn nood_klaar() {
     signaal.notify_all();
 }
 
+// ─── Herladen na een renderer-crash ────────────────────────────────────────
+
+/// Wat te doen na een `ProcessFailed` van een WebView.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum HerlaadBesluit {
+    /// Herladen: het renderproces van het hoofdvenster is weg of hangt.
+    Herladen,
+    /// Ook herladen nodig, maar de grens tegen een crashlus is bereikt.
+    Grens,
+    /// Niets doen: ander venster of ander proces (GPU, hulpprocessen,
+    /// browserproces: dan is er geen WebView meer om te herladen).
+    NietNodig,
+}
+
+/// Pure regel: herladen na deze `ProcessFailed`-soort? `eerder` zijn de
+/// tijdstippen van eerdere automatische herlaadbeurten.
+pub fn herlaad_besluit(hoofdvenster: bool, soort: i32, eerder: &[u64], nu: u64, max: usize, venster_ms: u64) -> HerlaadBesluit {
+    // 1 = RENDER_PROCESS_EXITED, 2 = RENDER_PROCESS_UNRESPONSIVE.
+    if !hoofdvenster || !(soort == 1 || soort == 2) {
+        return HerlaadBesluit::NietNodig;
+    }
+    let recent = eerder.iter().filter(|t| nu.saturating_sub(**t) < venster_ms).count();
+    if recent >= max { HerlaadBesluit::Grens } else { HerlaadBesluit::Herladen }
+}
+
+/// Stand van het automatisch herladen, voor de frontend (herstel_info).
+#[derive(Debug, Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HerlaadStatus {
+    /// Zoveel keer is het hoofdvenster in dit proces automatisch herladen.
+    pub herladen: u32,
+    /// De grens is bereikt; er wordt niet meer automatisch herladen.
+    pub gestopt: bool,
+}
+
+pub fn herlaad_status() -> HerlaadStatus {
+    let n = HERLADEN.lock().map(|v| v.len() as u32).unwrap_or(0);
+    HerlaadStatus { herladen: n, gestopt: HERLAAD_GESTOPT.load(Ordering::SeqCst) }
+}
+
+/// Besluit voor een `ProcessFailed` van deze WebView en noteer het herladen.
+#[cfg_attr(not(target_os = "windows"), allow(dead_code))]
+fn besluit_en_noteer(label: &str, soort: i32) -> HerlaadBesluit {
+    let nu = nu_ms();
+    let mut lijst = HERLADEN.lock().unwrap_or_else(|e| e.into_inner());
+    let besluit = herlaad_besluit(label == "main", soort, &lijst, nu, HERLAAD_MAX, HERLAAD_VENSTER_MS);
+    match besluit {
+        HerlaadBesluit::Herladen => lijst.push(nu),
+        HerlaadBesluit::Grens => HERLAAD_GESTOPT.store(true, Ordering::SeqCst),
+        HerlaadBesluit::NietNodig => {}
+    }
+    besluit
+}
+
 // ─── Paniekhaak ────────────────────────────────────────────────────────────
 
 fn paniekbericht(info: &std::panic::PanicHookInfo<'_>) -> String {
@@ -304,9 +378,10 @@ pub fn procesfout_naam(soort: i32) -> &'static str {
 #[cfg(target_os = "windows")]
 pub fn bewaak_webview<R: tauri::Runtime>(webview: &tauri::Webview<R>) {
     let label = webview.label().to_string();
+    let voor_herladen = webview.clone();
     let _ = webview.with_webview(move |platform| {
         // SAFETY: with_webview draait op de UI-draad van deze WebView.
-        if let Err(e) = unsafe { registreer_procesfout(platform.controller(), label.clone()) } {
+        if let Err(e) = unsafe { registreer_procesfout(platform.controller(), label.clone(), voor_herladen) } {
             eprintln!("[crashlog] ProcessFailed handler for '{label}' not installed: {e}");
         }
     });
@@ -325,9 +400,10 @@ pub fn plugin<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
 }
 
 #[cfg(target_os = "windows")]
-unsafe fn registreer_procesfout(
+unsafe fn registreer_procesfout<R: tauri::Runtime>(
     controller: webview2_com::Microsoft::Web::WebView2::Win32::ICoreWebView2Controller,
     label: String,
+    webview: tauri::Webview<R>,
 ) -> Result<(), String> {
     use webview2_com::Microsoft::Web::WebView2::Win32::{
         ICoreWebView2ProcessFailedEventArgs2, COREWEBVIEW2_PROCESS_FAILED_KIND,
@@ -361,6 +437,42 @@ unsafe fn registreer_procesfout(
         log::error!("[crashlog] {tekst}");
         schrijf("webview-process-failed", &tekst);
         crate::herstel::meld_webview_uitval();
+        // Het renderproces is al weg: er valt niets meer te bewaren. De
+        // nieuwe sessie na het herladen biedt de laatste momentopnamen aan.
+        match besluit_en_noteer(&label, soort.0) {
+            HerlaadBesluit::Herladen => {
+                let n = herlaad_status().herladen;
+                let regel = format!(
+                    "reloading WebView '{label}' automatically ({n} of at most {HERLAAD_MAX} per {} min)",
+                    HERLAAD_VENSTER_MS / 60_000
+                );
+                eprintln!("[crashlog] {regel}");
+                log::warn!("[crashlog] {regel}");
+                schrijf("webview-reload", &regel);
+                // Niet vanuit de handler zelf: even later, via Tauri.
+                #[cfg(desktop)]
+                {
+                    let wv = webview.clone();
+                    std::thread::spawn(move || {
+                        std::thread::sleep(Duration::from_millis(HERLAAD_WACHT_MS));
+                        if let Err(e) = wv.reload() {
+                            eprintln!("[crashlog] reload of '{}' failed: {e}", wv.label());
+                            schrijf("webview-reload", &format!("reload of '{}' failed: {e}", wv.label()));
+                        }
+                    });
+                }
+            }
+            HerlaadBesluit::Grens => {
+                let regel = format!(
+                    "WebView '{label}' failed again: reload limit reached ({HERLAAD_MAX} per {} min); not reloading, the window stays as it is",
+                    HERLAAD_VENSTER_MS / 60_000
+                );
+                eprintln!("[crashlog] {regel}");
+                log::error!("[crashlog] {regel}");
+                schrijf("webview-reload-limit", &regel);
+            }
+            HerlaadBesluit::NietNodig => {}
+        }
         Ok(())
     }));
     let mut token = 0i64;
@@ -439,6 +551,38 @@ mod tests {
         assert!(nood_toegestaan(1_000, 0, NOOD_TUSSENPOOS_MS));
         assert!(!nood_toegestaan(30_000, 1_000, NOOD_TUSSENPOOS_MS));
         assert!(nood_toegestaan(61_000, 1_000, NOOD_TUSSENPOOS_MS));
+    }
+
+    #[test]
+    fn herladen_alleen_hoofdvenster_en_renderer() {
+        let n = 1_000_000;
+        assert_eq!(herlaad_besluit(true, 1, &[], n, 2, HERLAAD_VENSTER_MS), HerlaadBesluit::Herladen);
+        assert_eq!(herlaad_besluit(true, 2, &[], n, 2, HERLAAD_VENSTER_MS), HerlaadBesluit::Herladen, "unresponsive");
+        assert_eq!(herlaad_besluit(false, 1, &[], n, 2, HERLAAD_VENSTER_MS), HerlaadBesluit::NietNodig, "other window");
+        for soort in [0, 3, 4, 5, 6, 9] {
+            assert_eq!(herlaad_besluit(true, soort, &[], n, 2, HERLAAD_VENSTER_MS), HerlaadBesluit::NietNodig, "kind {soort}");
+        }
+    }
+
+    #[test]
+    fn herladen_hooguit_twee_keer_per_vijf_minuten() {
+        let v = HERLAAD_VENSTER_MS;
+        let t0 = 10_000_000u64;
+        // Drie crashes kort na elkaar: twee keer herladen, dan de grens.
+        let mut eerder = Vec::new();
+        let mut uit = Vec::new();
+        for i in 0..3u64 {
+            let nu = t0 + i * 20_000;
+            let b = herlaad_besluit(true, 1, &eerder, nu, HERLAAD_MAX, v);
+            if b == HerlaadBesluit::Herladen {
+                eerder.push(nu);
+            }
+            uit.push(b);
+        }
+        assert_eq!(uit, vec![HerlaadBesluit::Herladen, HerlaadBesluit::Herladen, HerlaadBesluit::Grens]);
+        // Na vijf minuten telt de oudste niet meer mee.
+        assert_eq!(herlaad_besluit(true, 1, &eerder, t0 + v, HERLAAD_MAX, v), HerlaadBesluit::Herladen);
+        assert_eq!(herlaad_besluit(true, 1, &eerder, t0 + v - 1, HERLAAD_MAX, v), HerlaadBesluit::Grens);
     }
 
     #[test]

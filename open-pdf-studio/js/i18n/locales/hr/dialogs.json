@@ -1142,6 +1142,7 @@
     "saveFailed": "Vraćeni dokument nije moguće spremiti: {{error}}",
     "deleteFailed": "Brisanje nije uspjelo: {{error}}",
     "tabLabel": "vraćeno",
-    "tabTip": "Vraćeno nakon neočekivanog zatvaranja. Spremanje zapisuje u izvornu datoteku."
+    "tabTip": "Vraćeno nakon neočekivanog zatvaranja. Spremanje zapisuje u izvornu datoteku.",
+    "reloadStopped": "Prozor programa Open PDF Studio nekoliko je puta zaredom prestao raditi i više se ne učitava ponovno automatski. Spremite svoj rad i ponovno pokrenite aplikaciju."
   }
 }

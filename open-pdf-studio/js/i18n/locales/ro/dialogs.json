@@ -1142,6 +1142,7 @@
     "saveFailed": "Documentul recuperat nu a putut fi salvat: {{error}}",
     "deleteFailed": "Ștergerea a eșuat: {{error}}",
     "tabLabel": "recuperat",
-    "tabTip": "Recuperat după o închidere neașteptată. Salvarea scrie în fișierul original."
+    "tabTip": "Recuperat după o închidere neașteptată. Salvarea scrie în fișierul original.",
+    "reloadStopped": "Fereastra Open PDF Studio a încetat să funcționeze de mai multe ori la rând și nu mai este reîncărcată automat. Salvați-vă munca și reporniți aplicația."
   }
 }

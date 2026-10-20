@@ -1142,6 +1142,7 @@
     "saveFailed": "Nie udało się zapisać odzyskanego dokumentu: {{error}}",
     "deleteFailed": "Usuwanie nie powiodło się: {{error}}",
     "tabLabel": "odzyskany",
-    "tabTip": "Odzyskany po nieoczekiwanym zamknięciu. Zapisywanie zapisuje do oryginalnego pliku."
+    "tabTip": "Odzyskany po nieoczekiwanym zamknięciu. Zapisywanie zapisuje do oryginalnego pliku.",
+    "reloadStopped": "Okno Open PDF Studio kilka razy z rzędu przestało działać i nie jest już automatycznie ponownie ładowane. Zapisz swoją pracę i uruchom aplikację ponownie."
   }
 }

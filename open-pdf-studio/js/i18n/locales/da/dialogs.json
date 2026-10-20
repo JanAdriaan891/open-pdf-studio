@@ -1142,6 +1142,7 @@
     "saveFailed": "Det gendannede dokument kunne ikke gemmes: {{error}}",
     "deleteFailed": "Sletning mislykkedes: {{error}}",
     "tabLabel": "gendannet",
-    "tabTip": "Gendannet efter en uventet lukning. Gem skriver til den oprindelige fil."
+    "tabTip": "Gendannet efter en uventet lukning. Gem skriver til den oprindelige fil.",
+    "reloadStopped": "Open PDF Studio-vinduet holdt op med at fungere flere gange i træk og genindlæses ikke længere automatisk. Gem dit arbejde, og genstart appen."
   }
 }

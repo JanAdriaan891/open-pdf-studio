@@ -17,6 +17,10 @@
 //    dat aan in "Niet-opgeslagen werk herstellen" (RecoveryDialog.jsx).
 //    Headless (OPDS_HEADLESS=1) komt er geen venster: het aanbod gaat naar het
 //    logboek.
+// 4. Valt het renderproces weg, dan herlaadt Rust het hoofdvenster (hooguit
+//    2 keer per 5 minuten, crashlog.rs). Vlak daarvoor valt er niets meer te
+//    bewaren; de nieuwe sessie biedt de laatste momentopnamen van de vorige
+//    sessie aan via laag 3 (herladen.js).
 //
 // Niet bewaard:
 //  * documenten die met een wachtwoord geopend zijn. Ze zijn in de app
@@ -36,6 +40,7 @@ import { schrijfMomentopname, schrijfManifest, leesAlle, leesMarkers } from './o
 import { deelIn, beoordeelMarkers, instantieUitSleutel, procesUitId } from './beleid.js';
 import { maakFoutvanger } from './foutvanger.js';
 import { zetOntvanger, wijzigTeller } from './haken.js';
+import { naHerladen } from './herladen.js';
 
 /** Grootste PDF (bytes) waarvan nog een momentopname gemaakt wordt. */
 export const MAX_BRON_BYTES = 64 * 1024 * 1024;
@@ -460,6 +465,16 @@ export async function startHerstel({ hoofd = true } = {}) {
   sessie = nieuweSessie();
   gestart = true;
   zetOntvanger(ontvanger);
+
+  // Na een automatische herlaadbeurt (renderer-crash, crashlog.rs): logregel,
+  // en een melding als er niet meer automatisch herladen wordt.
+  const naCrash = naHerladen(info.webview, { headless: !!(info.headless || isHeadless()) });
+  if (naCrash.log) logboek(naCrash.log);
+  if (naCrash.toonMelding) {
+    Promise.all([import('../solid/stores/dialogStore.js'), import('../i18n/config.js')])
+      .then(([{ showMessage }, { default: i18next }]) => showMessage(i18next.t('dialogs:recovery.reloadStopped')))
+      .catch(() => {});
+  }
 
   const vanger = maakFoutvanger({
     noodopslag: (soort) => noodopslag(soort),

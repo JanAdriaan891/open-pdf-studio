@@ -1142,6 +1142,7 @@
     "saveFailed": "Impossible d'enregistrer le document récupéré : {{error}}",
     "deleteFailed": "La suppression a échoué : {{error}}",
     "tabLabel": "récupéré",
-    "tabTip": "Récupéré après une fermeture inattendue. L'enregistrement écrit dans le fichier d'origine."
+    "tabTip": "Récupéré après une fermeture inattendue. L'enregistrement écrit dans le fichier d'origine.",
+    "reloadStopped": "La fenêtre d'Open PDF Studio a cessé de fonctionner plusieurs fois de suite et n'est plus rechargée automatiquement. Enregistrez votre travail et redémarrez l'application."
   }
 }

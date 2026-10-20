@@ -1142,6 +1142,7 @@
     "saveFailed": "Dokumen yang dipulihkan tidak dapat disimpan: {{error}}",
     "deleteFailed": "Pemadaman gagal: {{error}}",
     "tabLabel": "dipulihkan",
-    "tabTip": "Dipulihkan selepas penutupan yang tidak dijangka. Menyimpan menulis ke fail asal."
+    "tabTip": "Dipulihkan selepas penutupan yang tidak dijangka. Menyimpan menulis ke fail asal.",
+    "reloadStopped": "Tetingkap Open PDF Studio berhenti berfungsi beberapa kali berturut-turut dan tidak lagi dimuat semula secara automatik. Simpan kerja anda dan mulakan semula aplikasi."
   }
 }

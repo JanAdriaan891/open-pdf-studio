@@ -1142,6 +1142,7 @@
     "saveFailed": "No s'ha pogut desar el document recuperat: {{error}}",
     "deleteFailed": "No s'ha pogut suprimir: {{error}}",
     "tabLabel": "recuperat",
-    "tabTip": "Recuperat després d'un tancament inesperat. Desar escriu al fitxer original."
+    "tabTip": "Recuperat després d'un tancament inesperat. Desar escriu al fitxer original.",
+    "reloadStopped": "La finestra d'Open PDF Studio ha deixat de funcionar diverses vegades seguides i ja no es torna a carregar automàticament. Deseu la feina i reinicieu l'aplicació."
   }
 }

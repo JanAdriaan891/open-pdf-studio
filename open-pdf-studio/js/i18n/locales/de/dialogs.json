@@ -1142,6 +1142,7 @@
     "saveFailed": "Das wiederhergestellte Dokument konnte nicht gespeichert werden: {{error}}",
     "deleteFailed": "Löschen fehlgeschlagen: {{error}}",
     "tabLabel": "wiederhergestellt",
-    "tabTip": "Nach einem unerwarteten Beenden wiederhergestellt. Speichern schreibt in die Originaldatei."
+    "tabTip": "Nach einem unerwarteten Beenden wiederhergestellt. Speichern schreibt in die Originaldatei.",
+    "reloadStopped": "Das Fenster von Open PDF Studio ist mehrmals kurz hintereinander abgestürzt und wird nicht mehr automatisch neu geladen. Speichern Sie Ihre Arbeit und starten Sie die App neu."
   }
 }

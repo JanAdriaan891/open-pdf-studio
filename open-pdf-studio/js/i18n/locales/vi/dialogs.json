@@ -1142,6 +1142,7 @@
     "saveFailed": "Không thể lưu tài liệu đã khôi phục: {{error}}",
     "deleteFailed": "Xóa không thành công: {{error}}",
     "tabLabel": "đã khôi phục",
-    "tabTip": "Đã khôi phục sau khi đóng bất ngờ. Lưu sẽ ghi vào tệp gốc."
+    "tabTip": "Đã khôi phục sau khi đóng bất ngờ. Lưu sẽ ghi vào tệp gốc.",
+    "reloadStopped": "Cửa sổ Open PDF Studio đã ngừng hoạt động nhiều lần liên tiếp và sẽ không còn được tải lại tự động. Hãy lưu công việc và khởi động lại ứng dụng."
   }
 }

@@ -1141,6 +1141,7 @@
     "saveFailed": "The recovered document could not be saved: {{error}}",
     "deleteFailed": "Deleting failed: {{error}}",
     "tabLabel": "recovered",
-    "tabTip": "Recovered after an unexpected shutdown. Saving writes to the original file."
+    "tabTip": "Recovered after an unexpected shutdown. Saving writes to the original file.",
+    "reloadStopped": "The Open PDF Studio window stopped working several times in a row and is no longer reloaded automatically. Save your work and restart the app."
   }
 }

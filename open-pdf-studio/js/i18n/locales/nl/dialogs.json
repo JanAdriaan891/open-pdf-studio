@@ -1142,6 +1142,7 @@
     "saveFailed": "Het herstelde document kon niet worden opgeslagen: {{error}}",
     "deleteFailed": "Verwijderen is mislukt: {{error}}",
     "tabLabel": "hersteld",
-    "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand."
+    "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
+    "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
   }
 }

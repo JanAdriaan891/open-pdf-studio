@@ -1142,6 +1142,7 @@
     "saveFailed": "Det återställda dokumentet kunde inte sparas: {{error}}",
     "deleteFailed": "Borttagningen misslyckades: {{error}}",
     "tabLabel": "återställt",
-    "tabTip": "Återställt efter en oväntad avstängning. Spara skriver till originalfilen."
+    "tabTip": "Återställt efter en oväntad avstängning. Spara skriver till originalfilen.",
+    "reloadStopped": "Open PDF Studio-fönstret slutade fungera flera gånger i rad och läses inte längre in automatiskt igen. Spara ditt arbete och starta om appen."
   }
 }

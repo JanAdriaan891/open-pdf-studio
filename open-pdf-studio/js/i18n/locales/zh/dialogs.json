@@ -1142,6 +1142,7 @@
     "saveFailed": "无法保存恢复的文档：{{error}}",
     "deleteFailed": "删除失败：{{error}}",
     "tabLabel": "已恢复",
-    "tabTip": "在意外关闭后恢复。保存时将写入原始文件。"
+    "tabTip": "在意外关闭后恢复。保存时将写入原始文件。",
+    "reloadStopped": "Open PDF Studio 窗口连续多次停止工作，将不再自动重新加载。请保存您的工作并重新启动应用。"
   }
 }

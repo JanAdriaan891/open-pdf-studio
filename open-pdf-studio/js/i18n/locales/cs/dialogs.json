@@ -1142,6 +1142,7 @@
     "saveFailed": "Obnovený dokument nelze uložit: {{error}}",
     "deleteFailed": "Odstranění se nezdařilo: {{error}}",
     "tabLabel": "obnoveno",
-    "tabTip": "Obnoveno po neočekávaném ukončení. Uložení zapisuje do původního souboru."
+    "tabTip": "Obnoveno po neočekávaném ukončení. Uložení zapisuje do původního souboru.",
+    "reloadStopped": "Okno Open PDF Studio několikrát po sobě přestalo fungovat a už se automaticky znovu nenačte. Uložte svou práci a aplikaci restartujte."
   }
 }
