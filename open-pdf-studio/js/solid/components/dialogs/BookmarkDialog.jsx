@@ -80,7 +80,7 @@ export default function BookmarkDialog(props) {
       />
       <label>{t('bookmark.pageLabel')}</label>
       <input
-        type="number"
+        type="text" inputmode="decimal" data-getal
         min="1"
         value={page()}
         onInput={(e) => setPage(e.target.value)}

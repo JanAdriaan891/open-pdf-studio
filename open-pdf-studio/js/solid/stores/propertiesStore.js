@@ -52,6 +52,7 @@ import { nieuweAfbeeldingsMaat } from '../../annotations/papiermaat-eenheid.js';
 import { papierEenheid } from './papierEenheidStore.js';
 import { kanZonderRand } from '../../annotations/fill-utils.js';
 import { schaalgebiedStijl } from '../../annotations/scale-region-style.js';
+import { leesGetalBegin, leesGeheelGetal } from '../../core/getal-invoer.js';
 
 // Types whose single 'color' control IS their stroke colour and which render
 // via `strokeColor || color`. For these, the 'color' control must mirror onto
@@ -979,7 +980,7 @@ function _stampStatusMeta(ann, value) {
 // laatste poot), bovengrens 200 zoals het paneelbereik. Ongeldige invoer valt
 // terug op de standaardwaarde.
 function _clampLineTail(value) {
-  const n = parseFloat(String(value).replace(',', '.'));
+  const n = leesGetalBegin(value);
   if (!Number.isFinite(n)) return STAVENREEKS_DEFAULTS.lineTail;
   return Math.max(0, Math.min(200, n));
 }
@@ -987,7 +988,7 @@ function _clampLineTail(value) {
 // Tekstgrootte van het stavenreeks-label: 6..72, ongeldige invoer valt terug
 // op de standaardwaarde.
 function _clampFontSize(value) {
-  const n = parseFloat(String(value).replace(',', '.'));
+  const n = leesGetalBegin(value);
   if (!Number.isFinite(n) || !(n > 0)) return STAVENREEKS_DEFAULTS.fontSize;
   return Math.max(6, Math.min(72, Math.round(n)));
 }
@@ -997,7 +998,7 @@ function _clampFontSize(value) {
 // instanties met dat type veranderen mee; instance-sleutels (rasterhoek,
 // centreren, paneeltype) muteren alleen de annotatie.
 function _applySysteemProp(ann, key, value) {
-  const num = (v) => parseFloat(String(v).replace(',', '.'));
+  const num = (v) => leesGetalBegin(v);
   switch (key) {
     case 'sgTypeId':
       // Dezelfde regel als de plugin-API (#574): systeem-instance-links.js.
@@ -1062,7 +1063,7 @@ function _applySysteemProp(ann, key, value) {
     case 'sgSparingB': case 'sgSparingH': case 'sgSparingX': case 'sgSparingY': {
       const sub = ann.selectedSub;
       if (!sub || sub.kind !== 'sparing') break;
-      const n = parseFloat(String(value).replace(',', '.'));
+      const n = leesGetalBegin(value);
       if (!Number.isFinite(n)) break;
       const veld = { sgSparingB: 'bMm', sgSparingH: 'hMm',
         sgSparingX: 'xMm', sgSparingY: 'yMm' }[key];
@@ -1132,66 +1133,66 @@ function applyPropToAnnotation(ann, key, value) {
     case 'fillOpacity': ann.fillOpacity = _vulDoorzichtigheidUitPct(value); break;
     case 'strokeColor': ann.strokeColor = value; break;
     case 'lineWidth':
-      zetRanddikte(ann, parseFloat(value));
+      zetRanddikte(ann, leesGetalBegin(value));
       // Een stempel wordt als raster getekend en kent geen ctx.lineWidth; de
       // dikte moet in de SVG worden gezet. Synchroon, zodat undo de gewijzigde
       // stampSvg meekrijgt.
       if (ann.type === 'stamp') applyStampLineWidth(ann);
       break;
-    case 'opacity': ann.opacity = parseInt(value) / 100; break;
+    case 'opacity': ann.opacity = leesGeheelGetal(value) / 100; break;
     case 'icon': ann.icon = value; break;
     case 'borderStyle': ann.borderStyle = value; break;
     case 'cross': ann.cross = value === true || undefined; break;
     case 'hatchPattern': ann.hatchPattern = value; break;
     case 'hatchColor': ann.hatchColor = value; break;
-    case 'hatchScale': ann.hatchScale = parseInt(value); break;
-    case 'hatchAngle': ann.hatchAngle = parseInt(value); break;
+    case 'hatchScale': ann.hatchScale = leesGeheelGetal(value); break;
+    case 'hatchAngle': ann.hatchAngle = leesGeheelGetal(value); break;
     case 'text': ann.text = value; break;
-    case 'fontSize': ann.fontSize = parseInt(value); break;
+    case 'fontSize': ann.fontSize = leesGeheelGetal(value); break;
     case 'textColor':
       ann.textColor = value;
       ann.color = value;
       break;
     case 'fontFamily': ann.fontFamily = value; break;
-    case 'textFontSize': ann.fontSize = parseInt(value); break;
+    case 'textFontSize': ann.fontSize = leesGeheelGetal(value); break;
     case 'fontBold': ann.fontBold = value; zetRunsStijl(ann, 'bold', value); break;
     case 'fontItalic': ann.fontItalic = value; zetRunsStijl(ann, 'italic', value); break;
     case 'fontUnderline': ann.fontUnderline = value; break;
     case 'fontStrikethrough': ann.fontStrikethrough = value; break;
     case 'textAlign': ann.textAlign = value; break;
     case 'lineSpacing': {
-      ann.lineSpacing = parseFloat(value);
+      ann.lineSpacing = leesGetalBegin(value);
       if (['textbox', 'callout'].includes(ann.type) && ann.text) {
         ann.height = computeTextboxContentHeight(ann);
       }
       break;
     }
-    case 'rotation': ann.rotation = Math.max(-360, Math.min(360, parseInt(value) || 0)); break;
-    case 'measureScale': ann.measureScale = parseFloat(value) || 0; recomputeMeasureText(ann); break;
+    case 'rotation': ann.rotation = Math.max(-360, Math.min(360, leesGeheelGetal(value) || 0)); break;
+    case 'measureScale': ann.measureScale = leesGetalBegin(value) || 0; recomputeMeasureText(ann); break;
     case 'measureUnit': zetMeetEenheid(ann, value); break;
-    case 'measurePrecision': ann.measurePrecision = parseInt(value); recomputeMeasureText(ann); break;
+    case 'measurePrecision': ann.measurePrecision = leesGeheelGetal(value); recomputeMeasureText(ann); break;
     case 'measureName':
       ann.measureName = value;
       if (isRuimteVlak(ann)) ann.opsRuimteNaam = value;
       break;
     case 'scaleBarUnit': ann.unit = value; break;
-    case 'scaleBarTotalUnits': ann.totalUnits = parseFloat(value) || 1; break;
-    case 'scaleBarDivisions': ann.divisions = Math.max(1, Math.min(20, parseInt(value) || 5)); break;
+    case 'scaleBarTotalUnits': ann.totalUnits = leesGetalBegin(value) || 1; break;
+    case 'scaleBarDivisions': ann.divisions = Math.max(1, Math.min(20, leesGeheelGetal(value) || 5)); break;
     case 'scaleBarHeight': ann.height = _schaalbalkHoogte(value); break;
     // Stavenreeks — parameters; de geometrie wordt bij het renderen afgeleid
     // uit start/eind + deze waarden (geen coördinaten herberekenen hier).
-    case 'srCount': ann.count = Math.max(1, Math.min(999, parseInt(value) || 1)); break;
-    case 'srDiameter': ann.diameter = parseFloat(value) || 12; break;
-    case 'srBarLengthMm': ann.barLengthMm = Math.max(0, parseFloat(value) || 0); break;
+    case 'srCount': ann.count = Math.max(1, Math.min(999, leesGeheelGetal(value) || 1)); break;
+    case 'srDiameter': ann.diameter = leesGetalBegin(value) || 12; break;
+    case 'srBarLengthMm': ann.barLengthMm = Math.max(0, leesGetalBegin(value) || 0); break;
     case 'srLegDir': ann.legDir = value; break;
-    case 'srLegLength': ann.legLength = Math.max(1, parseFloat(value) || STAVENREEKS_DEFAULTS.legLength); break;
+    case 'srLegLength': ann.legLength = Math.max(1, leesGetalBegin(value) || STAVENREEKS_DEFAULTS.legLength); break;
     case 'srLineTail': ann.lineTail = _clampLineTail(value); break;
     case 'srFontSize': ann.fontSize = _clampFontSize(value); break;
     case 'srLabelSide': ann.labelSide = value; break;
     // Betonbalk — parameters; de band wordt bij het renderen opnieuw uit de
     // hartlijn + breedte afgeleid (geen coördinaten herberekenen hier).
     case 'breedteMm': {
-      const bw = parseFloat(String(value).replace(',', '.'));
+      const bw = leesGetalBegin(value);
       ann.breedteMm = Number.isFinite(bw) && bw > 0
         ? Math.max(BETONBALK_BREEDTE_RANGE.min, Math.min(BETONBALK_BREEDTE_RANGE.max, bw))
         : BETONBALK_DEFAULTS.breedteMm;
@@ -1199,7 +1200,7 @@ function applyPropToAnnotation(ann, key, value) {
       break;
     }
     case 'hoogteMm': {
-      const bh = parseFloat(String(value).replace(',', '.'));
+      const bh = leesGetalBegin(value);
       ann.hoogteMm = Number.isFinite(bh) && bh > 0
         ? Math.max(BETONBALK_HOOGTE_RANGE.min, Math.min(BETONBALK_HOOGTE_RANGE.max, bh))
         : BETONBALK_DEFAULTS.hoogteMm;
@@ -1215,14 +1216,14 @@ function applyPropToAnnotation(ann, key, value) {
     // Systeemraster — parameters; het raster wordt bij het renderen opnieuw
     // uit de contour + deze waarden afgeleid (geen coördinaten herrekenen).
     case 'plaatBreedteMm': {
-      const spb = parseFloat(String(value).replace(',', '.'));
+      const spb = leesGetalBegin(value);
       ann.plaatBreedteMm = Number.isFinite(spb) && spb > 0
         ? Math.max(SYSTEEMRASTER_PLAAT_RANGE.min, Math.min(SYSTEEMRASTER_PLAAT_RANGE.max, spb))
         : SYSTEEMRASTER_DEFAULTS.plaatBreedteMm;
       break;
     }
     case 'plaatHoogteMm': {
-      const sph = parseFloat(String(value).replace(',', '.'));
+      const sph = leesGetalBegin(value);
       ann.plaatHoogteMm = Number.isFinite(sph) && sph > 0
         ? Math.max(SYSTEEMRASTER_PLAAT_RANGE.min, Math.min(SYSTEEMRASTER_PLAAT_RANGE.max, sph))
         : SYSTEEMRASTER_DEFAULTS.plaatHoogteMm;
@@ -1235,7 +1236,7 @@ function applyPropToAnnotation(ann, key, value) {
         ? value : SYSTEEMRASTER_DEFAULTS.randConditie;
       break;
     case 'minRandMm': {
-      const smr = parseFloat(String(value).replace(',', '.'));
+      const smr = leesGetalBegin(value);
       ann.minRandMm = Number.isFinite(smr) && smr >= 0 ? smr : SYSTEEMRASTER_DEFAULTS.minRandMm;
       break;
     }
@@ -1250,7 +1251,7 @@ function applyPropToAnnotation(ann, key, value) {
       break;
     case 'viewportName': ann.name = value; break;
     case 'viewportScaleRatio': {
-      const ratio = parseInt(value);
+      const ratio = leesGeheelGetal(value);
       if (ratio > 0) {
         ann.scaleRatio = `1:${ratio}`;
         ann.pixelsPerUnit = 72 / (25.4 * ratio);
@@ -1539,42 +1540,42 @@ function applyAnnotProp(key, value) {
       if (currentAnnotation.type === 'parametricSymbol') currentAnnotation.color = value;
       break;
     case 'lineWidth':
-      zetRanddikte(currentAnnotation, parseFloat(value));
+      zetRanddikte(currentAnnotation, leesGetalBegin(value));
       // Zie applyPropToAnnotation: bij een stempel moet de dikte de SVG in.
       if (currentAnnotation.type === 'stamp') applyStampLineWidth(currentAnnotation);
       break;
     case 'opacity':
-      currentAnnotation.opacity = parseInt(value) / 100;
+      currentAnnotation.opacity = leesGeheelGetal(value) / 100;
       break;
     case 'icon': currentAnnotation.icon = value; break;
     case 'borderStyle': currentAnnotation.borderStyle = value; break;
     case 'cross': currentAnnotation.cross = value === true || undefined; break;
     case 'hatchPattern': currentAnnotation.hatchPattern = value; break;
     case 'hatchColor': currentAnnotation.hatchColor = value; break;
-    case 'hatchScale': currentAnnotation.hatchScale = parseInt(value); break;
-    case 'hatchAngle': currentAnnotation.hatchAngle = parseInt(value); break;
+    case 'hatchScale': currentAnnotation.hatchScale = leesGeheelGetal(value); break;
+    case 'hatchAngle': currentAnnotation.hatchAngle = leesGeheelGetal(value); break;
     case 'text': currentAnnotation.text = value; break;
-    case 'fontSize': currentAnnotation.fontSize = parseInt(value); break;
+    case 'fontSize': currentAnnotation.fontSize = leesGeheelGetal(value); break;
     case 'textColor':
       currentAnnotation.textColor = value;
       currentAnnotation.color = value;
       break;
     case 'fontFamily': currentAnnotation.fontFamily = value; break;
-    case 'textFontSize': currentAnnotation.fontSize = parseInt(value); break;
+    case 'textFontSize': currentAnnotation.fontSize = leesGeheelGetal(value); break;
     case 'fontBold': currentAnnotation.fontBold = value; zetRunsStijl(currentAnnotation, 'bold', value); break;
     case 'fontItalic': currentAnnotation.fontItalic = value; zetRunsStijl(currentAnnotation, 'italic', value); break;
     case 'fontUnderline': currentAnnotation.fontUnderline = value; break;
     case 'fontStrikethrough': currentAnnotation.fontStrikethrough = value; break;
     case 'textAlign': currentAnnotation.textAlign = value; break;
     case 'lineSpacing': {
-      currentAnnotation.lineSpacing = parseFloat(value);
+      currentAnnotation.lineSpacing = leesGetalBegin(value);
       // Resize textbox height to fit content with new line spacing
       if (['textbox', 'callout'].includes(currentAnnotation.type) && currentAnnotation.text) {
         currentAnnotation.height = computeTextboxContentHeight(currentAnnotation);
       }
       break;
     }
-    case 'rotation': currentAnnotation.rotation = Math.max(-360, Math.min(360, parseInt(value) || 0)); break;
+    case 'rotation': currentAnnotation.rotation = Math.max(-360, Math.min(360, leesGeheelGetal(value) || 0)); break;
     // Breedte/hoogte van een afbeelding: de getypte waarde staat in de
     // gekozen papiereenheid (mm, cm, in of pt, #598) en wordt paginapunten.
     // ELKE positieve waarde mag, met decimalen. Een tussenstand tijdens het
@@ -1591,7 +1592,7 @@ function applyAnnotProp(key, value) {
       setAnnotProps({ imageWidth: maat.width, imageHeight: maat.height });
       break;
     }
-    case 'imageRotation': currentAnnotation.rotation = parseInt(value) || 0; break;
+    case 'imageRotation': currentAnnotation.rotation = leesGeheelGetal(value) || 0; break;
     case 'linkedPath': currentAnnotation.linkedPath = value || undefined; break;
     case 'tintColor': currentAnnotation.tintColor = value || undefined; break;
     case 'lockAspectRatio': {
@@ -1611,7 +1612,7 @@ function applyAnnotProp(key, value) {
       // Non-destructive crop (issue #212): store as fraction 0-1 per side.
       // Clamp so each side stays within 0-90% AND the pair (left+right /
       // top+bottom) leaves at least 10% of the source visible.
-      const pct = Math.max(0, Math.min(90, parseFloat(value) || 0));
+      const pct = Math.max(0, Math.min(90, leesGetalBegin(value) || 0));
       const opposite = key === 'cropLeft' ? 'cropRight'
         : key === 'cropRight' ? 'cropLeft'
         : key === 'cropTop' ? 'cropBottom' : 'cropTop';
@@ -1622,9 +1623,9 @@ function applyAnnotProp(key, value) {
     }
     case 'startHead': currentAnnotation.startHead = value; break;
     case 'endHead': currentAnnotation.endHead = value; break;
-    case 'headSize': currentAnnotation.headSize = parseInt(value); break;
+    case 'headSize': currentAnnotation.headSize = leesGeheelGetal(value); break;
     case 'measureScale':
-      currentAnnotation.measureScale = parseFloat(value) || 0;
+      currentAnnotation.measureScale = leesGetalBegin(value) || 0;
       recomputeMeasureText(currentAnnotation);
       // Zonder eigen schaal volgt een meetvlak de eenheid van het document.
       if (currentAnnotation.type === 'measureArea') {
@@ -1635,7 +1636,7 @@ function applyAnnotProp(key, value) {
       zetMeetEenheid(currentAnnotation, value);
       if (currentAnnotation.type === 'measureArea') setAnnotProps('measureScale', currentAnnotation.measureScale || 0);
       break;
-    case 'measurePrecision': currentAnnotation.measurePrecision = parseInt(value); recomputeMeasureText(currentAnnotation); break;
+    case 'measurePrecision': currentAnnotation.measurePrecision = leesGeheelGetal(value); recomputeMeasureText(currentAnnotation); break;
     case 'measureName':
       currentAnnotation.measureName = value;
       if (isRuimteVlak(currentAnnotation)) currentAnnotation.opsRuimteNaam = value;
@@ -1659,7 +1660,7 @@ function applyAnnotProp(key, value) {
       break;
     }
     case 'scaleBarTotalUnits': {
-      const newTotal = parseFloat(value) || 1;
+      const newTotal = leesGetalBegin(value) || 1;
       currentAnnotation.totalUnits = newTotal;
       // pixelsPerUnit needs recalc: width stays the same, pixelsPerUnit = width / totalUnits
       currentAnnotation.pixelsPerUnit = currentAnnotation.width / newTotal;
@@ -1669,7 +1670,7 @@ function applyAnnotProp(key, value) {
       break;
     }
     case 'scaleBarDivisions': {
-      currentAnnotation.divisions = Math.max(1, Math.min(20, parseInt(value) || 5));
+      currentAnnotation.divisions = Math.max(1, Math.min(20, leesGeheelGetal(value) || 5));
       break;
     }
     case 'scaleBarHeight': {
@@ -1681,15 +1682,15 @@ function applyAnnotProp(key, value) {
     // Alleen parameters; de reekslijn (start/eind) blijft ongemoeid. De
     // poten, punten en het label worden bij het renderen afgeleid.
     case 'srCount': {
-      currentAnnotation.count = Math.max(1, Math.min(999, parseInt(value) || 1));
+      currentAnnotation.count = Math.max(1, Math.min(999, leesGeheelGetal(value) || 1));
       break;
     }
     case 'srDiameter': {
-      currentAnnotation.diameter = parseFloat(value) || 12;
+      currentAnnotation.diameter = leesGetalBegin(value) || 12;
       break;
     }
     case 'srBarLengthMm': {
-      currentAnnotation.barLengthMm = Math.max(0, parseFloat(String(value).replace(',', '.')) || 0);
+      currentAnnotation.barLengthMm = Math.max(0, leesGetalBegin(value) || 0);
       break;
     }
     case 'srLegDir': {
@@ -1697,7 +1698,7 @@ function applyAnnotProp(key, value) {
       break;
     }
     case 'srLegLength': {
-      currentAnnotation.legLength = Math.max(1, parseFloat(value) || STAVENREEKS_DEFAULTS.legLength);
+      currentAnnotation.legLength = Math.max(1, leesGetalBegin(value) || STAVENREEKS_DEFAULTS.legLength);
       break;
     }
     case 'srLineTail': {
@@ -1713,7 +1714,7 @@ function applyAnnotProp(key, value) {
       break;
     }
     case 'scaleBarPixelsPerUnit': {
-      const ppu = parseFloat(value);
+      const ppu = leesGetalBegin(value);
       if (ppu > 0) {
         currentAnnotation.pixelsPerUnit = ppu;
         currentAnnotation.width = currentAnnotation.totalUnits * ppu;
@@ -1724,7 +1725,7 @@ function applyAnnotProp(key, value) {
     }
     case 'viewportName': currentAnnotation.name = value; break;
     case 'viewportScaleRatio': {
-      const vpRatio = parseInt(value);
+      const vpRatio = leesGeheelGetal(value);
       if (vpRatio > 0) {
         currentAnnotation.scaleRatio = `1:${vpRatio}`;
         currentAnnotation.pixelsPerUnit = 72 / (25.4 * vpRatio);
@@ -1771,7 +1772,7 @@ function applyAnnotProp(key, value) {
     case 'scaleRegionHeight': {
       // Real-world size of the region itself (in its own scale + units) →
       // page-pixel bbox, top-left anchored.
-      const real = parseFloat(String(value).replace(',', '.'));
+      const real = leesGetalBegin(value);
       if (!(real > 0)) break;
       // Elke positieve waarde mag (ook kleiner dan de schermpixel-grens bij
       // slepen: die duwt een al kleiner gebied niet omhoog); alleen technisch
@@ -1873,7 +1874,7 @@ function _vulDoorzichtigheidPct(a) {
 }
 
 function _vulDoorzichtigheidUitPct(value) {
-  const n = parseInt(value);
+  const n = leesGeheelGetal(value);
   return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) / 100 : undefined;
 }
 
@@ -1887,7 +1888,7 @@ export const SCHAALBALK_MIN_HOOGTE_PT = 4;
 // Balkhoogte in paginapunten (het paneel rekent de gekozen papiereenheid al
 // om, #598). Decimalen blijven staan: 5 mm is 14,17 pt, niet 14.
 function _schaalbalkHoogte(value) {
-  const n = typeof value === 'number' ? value : parseFloat(String(value ?? '').replace(',', '.'));
+  const n = typeof value === 'number' ? value : leesGetalBegin(value ?? '');
   if (!Number.isFinite(n) || n <= 0) return 14;
   return Math.max(SCHAALBALK_MIN_HOOGTE_PT, n);
 }
@@ -2015,7 +2016,7 @@ export function resetImageSize() {
 
 // Update opacity with Ctrl-snap support
 export function updateOpacity(value, ctrlKey) {
-  let finalValue = parseInt(value);
+  let finalValue = leesGeheelGetal(value);
   if (ctrlKey) {
     finalValue = Math.round(finalValue / 10) * 10;
   }

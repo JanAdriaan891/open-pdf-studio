@@ -175,7 +175,7 @@ export default function PropertiesPanel() {
                     units — editable, resizes the region (top-left anchored). */}
                 <div class="property-group">
                   <label>Breedte ({annotProps.scaleRegionUnits || 'mm'})</label>
-                  <input type="number" step="1" min="1"
+                  <input type="text" inputmode="decimal" data-getal step="1" min="1"
                     value={annotProps.scaleRegionWidth ?? ''}
                     disabled={annotProps.locked === true || annotProps.locked === 'mixed'}
                     onChange={(e) => updateAnnotProp('scaleRegionWidth', e.target.value)}
@@ -183,7 +183,7 @@ export default function PropertiesPanel() {
                 </div>
                 <div class="property-group">
                   <label>Hoogte ({annotProps.scaleRegionUnits || 'mm'})</label>
-                  <input type="number" step="1" min="1"
+                  <input type="text" inputmode="decimal" data-getal step="1" min="1"
                     value={annotProps.scaleRegionHeight ?? ''}
                     disabled={annotProps.locked === true || annotProps.locked === 'mixed'}
                     onChange={(e) => updateAnnotProp('scaleRegionHeight', e.target.value)}
@@ -208,7 +208,7 @@ export default function PropertiesPanel() {
                 </div>
                 <div class="property-group">
                   <label>{t('scaleBar.totalLength')}</label>
-                  <input type="number" step="1" min="1"
+                  <input type="text" inputmode="decimal" data-getal step="1" min="1"
                     value={annotProps.scaleBarTotalUnits}
                     disabled={annotProps.locked === true || annotProps.locked === 'mixed'}
                     onChange={(e) => updateAnnotProp('scaleBarTotalUnits', e.target.value)}
@@ -216,7 +216,7 @@ export default function PropertiesPanel() {
                 </div>
                 <div class="property-group">
                   <label>{t('scaleBar.divisions')}</label>
-                  <input type="number" step="1" min="1" max="20"
+                  <input type="text" inputmode="decimal" data-getal step="1" min="1" max="20"
                     value={annotProps.scaleBarDivisions}
                     disabled={annotProps.locked === true || annotProps.locked === 'mixed'}
                     onChange={(e) => updateAnnotProp('scaleBarDivisions', e.target.value)}

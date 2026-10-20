@@ -10,6 +10,8 @@
 //
 // Een deel is { start, eind } met paginanummers vanaf 1, beide inclusief.
 
+import { leesGetal } from '../core/getal-invoer.js';
+
 /** Langste bestandsnaam (zonder .pdf) die we maken; ruim binnen 255 en MAX_PATH. */
 export const MAX_NAAM_LENGTE = 120;
 
@@ -18,14 +20,14 @@ export const SPLITS_MODI = Object.freeze(['pages', 'bookmarks', 'size']);
 
 /** Een geheel aantal pagina's per deel, minstens 1. */
 export function geldigAantal(waarde, terugval = 1) {
-  const n = Math.round(Number(String(waarde ?? '').replace(',', '.')));
+  const n = Math.round(leesGetal(String(waarde ?? '')));
   return Number.isFinite(n) && String(waarde ?? '').trim() !== '' ? Math.max(1, n) : terugval;
 }
 
 /** Een maximale grootte in MB, minstens 0,1 MB. Een komma telt als decimaalteken. */
 export function geldigeMb(waarde, terugval = 10) {
-  const tekst = String(waarde ?? '').replace(',', '.').trim();
-  const n = Number(tekst);
+  const tekst = String(waarde ?? '').trim();
+  const n = leesGetal(tekst);
   if (tekst === '' || !Number.isFinite(n)) return terugval;
   return Math.max(0.1, Math.round(n * 100) / 100);
 }

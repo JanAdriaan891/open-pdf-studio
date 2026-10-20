@@ -81,7 +81,9 @@ import { initFontDropdowns } from './utils/fonts.js';
 import { initMcpBridge } from './mcp-bridge.js';
 
 // i18n
-import './i18n/config.js';
+import i18next from './i18n/config.js';
+import { language } from './i18n/useTranslation.js';
+import { installeerGetalVelden, herformatteerGetalVelden } from './ui/getal-veld.js';
 
 // Solid.js
 import { render } from 'solid-js/web';
@@ -190,6 +192,10 @@ function disableBrowserShortcuts() {
 
 // Initialize application
 async function init() {
+  // Getalvelden accepteren komma én punt; ze tonen het decimaalteken van de
+  // app-taal en schakelen mee bij een taalwissel (ui/getal-veld.js).
+  installeerGetalVelden({ taal: () => language() });
+  i18next.on('languageChanged', () => queueMicrotask(() => herformatteerGetalVelden()));
   // Dev: versienummer live uit package.json zodat de titelbalk na een
   // versie-bump klopt zonder Vite-herstart.
   import('./core/app-version.js').then((m) => m.initDevVersionSync()).catch(() => {});

@@ -13,6 +13,7 @@
 // Node getest wordt (papiermaat-eenheid.test.mjs).
 
 import { klemMaat, veiligeVerhouding } from './minimummaat.js';
+import { leesGetalBegin } from '../core/getal-invoer.js';
 
 /** Keuzes in het paneel en de voorkeuren, in deze volgorde. */
 export const PAPIER_EENHEDEN = ['mm', 'cm', 'in', 'pt'];
@@ -85,7 +86,7 @@ export function toonInEenheid(pt, eenheid) {
 export function leesInvoerInEenheid(invoer, eenheid, grenzen = {}) {
   let n;
   if (typeof invoer === 'number') n = invoer;
-  else if (typeof invoer === 'string') n = parseFloat(invoer.trim().replace(',', '.'));
+  else if (typeof invoer === 'string') n = leesGetalBegin(invoer);
   else return null;
   if (!Number.isFinite(n) || n <= 0) return null;
   let pt = klemMaat(eenheidNaarPt(n, eenheid), grenzen.min);

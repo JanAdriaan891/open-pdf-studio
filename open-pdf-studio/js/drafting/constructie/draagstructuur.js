@@ -11,6 +11,7 @@
 
 import { RasterFout } from './raster.js';
 import { normaliseerKokerNaam } from '../../symbols/koker-notatie.js';
+import { leesGetal } from '../../core/getal-invoer.js';
 
 /** Standaard-voorvoegsels per elementsoort (NL tekenkamer). */
 export const VOORVOEGSELS = { kolom: 'K', balk: 'L', vloer: 'V' };
@@ -66,8 +67,8 @@ export function ontleedProfiel(tekst) {
 
   const beton = ruw.match(/^(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+(?:[.,]\d+)?)$/);
   if (beton) {
-    const breedteMm = parseFloat(beton[1].replace(',', '.'));
-    const hoogteMm = parseFloat(beton[2].replace(',', '.'));
+    const breedteMm = leesGetal(beton[1]);
+    const hoogteMm = leesGetal(beton[2]);
     if (!(breedteMm > 0) || !(hoogteMm > 0)) {
       throw new RasterFout('profiel', `onbruikbare doorsnede: ${ruw}`);
     }

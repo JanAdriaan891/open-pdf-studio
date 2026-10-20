@@ -36,7 +36,7 @@ export function PapierMaatInvoer(props) {
   });
 
   return (
-    <input ref={el} type="number" min="0" step="any"
+    <input ref={el} type="text" inputmode="decimal" data-getal min="0" step="any"
       class="papier-maat-invoer"
       disabled={props.disabled}
       onInput={(e) => props.onInvoer && props.onInvoer(e.target.value)}

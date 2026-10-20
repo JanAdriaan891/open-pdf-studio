@@ -269,7 +269,7 @@ export default function FormatTab() {
           <div class="ribbon-form-grid ribbon-form-grid-2col">
             <div class="ribbon-form-row">
               <label>{t('format.widthLabel')}</label>
-              <input type="number" class="ribbon-form-number" id="fmt-line-width" title={t('format.lineWidth')}
+              <input type="text" inputmode="decimal" data-getal class="ribbon-form-number" id="fmt-line-width" title={t('format.lineWidth')}
                 min="0.1" max="50" step="0.1"
                 value={fmtLineWidth()}
                 disabled={nietVoorSymbool('lineWidth')}
@@ -319,7 +319,7 @@ export default function FormatTab() {
                 const v = parseInt(e.currentTarget.value, 10) / 100;
                 zetOpmaak({ opacity: v }, ann => { ann.opacity = v; });
               }} />
-            <input type="number" class="ribbon-slider-number" title={t('format.opacity')}
+            <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number" title={t('format.opacity')}
               min="0" max="100" step="1"
               value={opacity()}
               disabled={nietVoorSymbool('opacity')}

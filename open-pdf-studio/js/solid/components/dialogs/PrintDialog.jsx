@@ -36,6 +36,7 @@ import {
   posterOpties, posterIndeling, posterVellen, posterLabel, geldigePosterSchaal, geldigeOverlap,
   POSTER_SCHAAL_MIN, POSTER_SCHAAL_MAX, OVERLAP_MAX_MM, SNIJTEKEN_DIKTE_PT,
 } from '../../../pdf/print-poster.js';
+import { leesGetalBegin } from '../../../core/getal-invoer.js';
 
 // Vak waarin het voorbeeld het vel tekent, in CSS-pixels.
 const VOORBEELD_BREEDTE = 300;
@@ -773,7 +774,7 @@ export default function PrintDialog(props) {
   }
 
   function onPosterOverlapInput(e) {
-    const n = Number.parseFloat(String(e.target.value).replace(',', '.'));
+    const n = leesGetalBegin(e.target.value);
     if (Number.isFinite(n) && n >= 0 && n <= OVERLAP_MAX_MM) setPosterOverlap(geldigeOverlap(n));
   }
 
@@ -1436,7 +1437,7 @@ export default function PrintDialog(props) {
             <label class="print-label">{t('print.copies')}</label>
             {/* Een bestand heeft geen exemplaren. */}
             <input
-              type="number"
+              type="text" inputmode="decimal" data-getal
               class="print-input"
               min="1"
               max="999"
@@ -1556,7 +1557,7 @@ export default function PrintDialog(props) {
             <div class="print-row print-zoom-row">
               <label class="print-label">{t('print.pageZoom')}</label>
               <input
-                type="number"
+                type="text" inputmode="decimal" data-getal
                 class="print-input"
                 min={ZOOM_MIN}
                 max={ZOOM_MAX}
@@ -1573,7 +1574,7 @@ export default function PrintDialog(props) {
             <div class="print-row print-zoom-row">
               <label class="print-label">{t('print.posterScale')}</label>
               <input
-                type="number"
+                type="text" inputmode="decimal" data-getal
                 class="print-input"
                 min={POSTER_SCHAAL_MIN}
                 max={POSTER_SCHAAL_MAX}
@@ -1586,7 +1587,7 @@ export default function PrintDialog(props) {
             <div class="print-row print-zoom-row">
               <label class="print-label">{t('print.posterOverlap')}</label>
               <input
-                type="number"
+                type="text" inputmode="decimal" data-getal
                 class="print-input"
                 min="0"
                 max={OVERLAP_MAX_MM}
@@ -1619,7 +1620,7 @@ export default function PrintDialog(props) {
               <div class="print-row print-zoom-row">
                 <label class="print-label">{t('print.perSheetGrid')}</label>
                 <input
-                  type="number"
+                  type="text" inputmode="decimal" data-getal
                   class="print-input"
                   min="1"
                   max="10"
@@ -1628,7 +1629,7 @@ export default function PrintDialog(props) {
                 />
                 <span>{t('print.perSheetBy')}</span>
                 <input
-                  type="number"
+                  type="text" inputmode="decimal" data-getal
                   class="print-input"
                   min="1"
                   max="10"
@@ -1740,7 +1741,7 @@ export default function PrintDialog(props) {
             <div class="print-row" title={t('print.bookletCreepHint')}>
               <label class="print-label">{t('print.bookletCreep')}</label>
               <input
-                type="number"
+                type="text" inputmode="decimal" data-getal
                 class="print-input"
                 min="0"
                 max={KRUIP_MAX_MM}
