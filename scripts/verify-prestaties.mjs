@@ -1,7 +1,8 @@
 // Release-poorttest: prestatievergelijking tussen twee app-builds
 // (typisch: vorige vrijgegeven versie vs. de nieuwe release-kandidaat).
-// Meet per testbestand: app-start, openen-tot-eerste-inkt, zoomen naar 200%,
-// en (bij meerpagina-bestanden) naar de volgende pagina.
+// Meet per testbestand: app-start, openen-tot-eerste-inkt, openen-tot-scherp,
+// zoomen naar 200% (inkt en scherp), zoomen naar 400% (scherp, tegels) en
+// (bij meerpagina-bestanden) naar de volgende pagina.
 //
 // Gebruik:
 //   node scripts/verify-prestaties.mjs <exe-A> <label-A> <exe-B> <label-B>
@@ -30,6 +31,7 @@ const BESTANDEN = [
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/Technische tekening.pdf', naam: 'middel (Technische tekening)', paginas: true },
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/NKD1a_opm_aw.pdf', naam: 'annotatierijk (NKD1a, 7p)', paginas: true },
   { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/Zware vector PDF.pdf', naam: 'zwaar (Zware vector)', paginas: false },
+  { pad: 'C:/Users/rickd/Documents/GitHub/verification-files/PDF-bestanden/MV-03_Mechanische ventilatie, 3e verdieping ontwerp ACH van 1,5 naar 2,0.pdf', naam: 'zwaar A0 (MV-03)', paginas: false },
 ];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -97,6 +99,29 @@ const INKT = `(() => {
   return 0;
 })()`;
 
+// "Scherp": de getoonde paginabitmap of tegel heeft minstens de resolutie van
+// het scherm (zoom x devicePixelRatio, 3 % marge). Bitmaps staan in
+// paginaruimte, dus hun schaal is breedte / paginabreedte in punten. Een tegel
+// die het beeld maar deels dekt telt ook mee: de meting is een benadering van
+// "het beeld is scherp geworden", geen pixelcontrole.
+const SCHERP = `(() => {
+  const vp = window.__pdfViewport;
+  if (!vp || !vp.active || !(vp.pageW > 0)) return false;
+  const nodig = vp.zoom * (window.devicePixelRatio || 1) * 0.97;
+  const bitmap = vp.currentBitmap ? vp.currentBitmap.width / vp.pageW : 0;
+  const tegel = vp.currentTile && vp.currentTileMeta ? (vp.currentTileMeta.renderScale || 0) : 0;
+  return Math.max(bitmap, tegel) >= nodig;
+})()`;
+
+async function wachtOpScherp(evalJs, maxMs) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < maxMs) {
+    if (await evalJs(SCHERP).catch(() => false)) return Date.now() - t0;
+    await sleep(50);
+  }
+  return -1;
+}
+
 async function wachtOpInkt(evalJs, maxMs, minInkt = 5) {
   const t0 = Date.now();
   while (Date.now() - t0 < maxMs) {
@@ -135,7 +160,7 @@ async function meetRun(exe, bestand, engine) {
   };
   const t0 = Date.now();
   const proc = spawn(exe, ['--mcp-server', '--mcp-port', String(MCP_POORT)], { env, detached: true, stdio: 'ignore' });
-  const uit = { appStartMs: -1, openMs: -1, zoomMs: -1, paginaMs: -1 };
+  const uit = { appStartMs: -1, openMs: -1, openScherpMs: -1, zoomMs: -1, zoomScherpMs: -1, zoom4ScherpMs: -1, paginaMs: -1 };
   try {
     const { ws, evalJs } = await cdpVerbind(CDP_POORT, 30000);
     // App-start: tot de ribbon in de DOM staat
@@ -152,6 +177,8 @@ async function meetRun(exe, bestand, engine) {
     await mcp('app_open_pdf', { path: bestand.pad }, 90000);
     const inktNa = await wachtOpInkt(evalJs, 60000);
     uit.openMs = inktNa < 0 ? -1 : (Date.now() - tOpen);
+    const scherpNa = await wachtOpScherp(evalJs, 60000);
+    uit.openScherpMs = scherpNa < 0 ? -1 : (Date.now() - tOpen);
 
     // Zoom naar 200%: meet tot er weer inkt staat na de schaalwissel
     const tZoom = Date.now();
@@ -159,6 +186,17 @@ async function meetRun(exe, bestand, engine) {
     await sleep(150);
     const zInkt = await wachtOpInkt(evalJs, 60000);
     uit.zoomMs = zInkt < 0 ? -1 : (Date.now() - tZoom);
+    const zScherp = await wachtOpScherp(evalJs, 60000);
+    uit.zoomScherpMs = zScherp < 0 ? -1 : (Date.now() - tZoom);
+
+    // Diep inzoomen (400%): hier zijn tegels nodig, waar de pagina-engine het
+    // meeste werk doet.
+    const tZoom4 = Date.now();
+    await mcp('app_set_zoom', { scale: 4 }, 30000).catch(() => null);
+    await sleep(150);
+    const z4Scherp = await wachtOpScherp(evalJs, 60000);
+    uit.zoom4ScherpMs = z4Scherp < 0 ? -1 : (Date.now() - tZoom4);
+    await mcp('app_set_zoom', { scale: 2 }, 30000).catch(() => null);
 
     if (bestand.paginas) {
       const tPag = Date.now();
@@ -199,7 +237,10 @@ async function meetBuild(exe, label, engine) {
     per[bestand.naam] = {
       appStartMs: med('appStartMs') ?? -1,
       openMs: med('openMs') ?? -1,
+      openScherpMs: med('openScherpMs') ?? -1,
       zoomMs: med('zoomMs') ?? -1,
+      zoomScherpMs: med('zoomScherpMs') ?? -1,
+      zoom4ScherpMs: med('zoom4ScherpMs') ?? -1,
       paginaMs: bestand.paginas ? (med('paginaMs') ?? -1) : undefined,
     };
     console.log(`  ${bestand.naam}:`, JSON.stringify(per[bestand.naam]));
@@ -223,7 +264,7 @@ if (resB) {
   for (const naam of Object.keys(resA)) {
     const a = resA[naam], b = resB[naam];
     if (!a || !b) { console.log(`  ${naam}: onvolledig`); continue; }
-    const velden = ['appStartMs', 'openMs', 'zoomMs', 'paginaMs'];
+    const velden = ['appStartMs', 'openMs', 'openScherpMs', 'zoomMs', 'zoomScherpMs', 'zoom4ScherpMs', 'paginaMs'];
     const delen = [];
     for (const v of velden) {
       if (a[v] === undefined || b[v] === undefined) continue;
