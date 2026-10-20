@@ -115,7 +115,7 @@ export default function ParametricSymbolSection() {
                     need the same per-locale treatment as the labels. */}
                 <label title={p.labelEn || ''}>{p.label}{p.unit ? ` (${p.unit})` : ''}</label>
                 <Show when={p.type === 'number'}>
-                  <input type="number"
+                  <input type="text" inputmode="decimal" data-getal
                     step={p.step ?? 1}
                     min={p.min}
                     max={p.max}

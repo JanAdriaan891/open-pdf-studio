@@ -98,7 +98,7 @@ export function CommentGroups() {
             </div>
             <div class="ribbon-input-row">
               <label class="ribbon-input-label">{t('comment.width')}</label>
-              <input type="number" id="line-width" class="ribbon-input" min="1" max="20"
+              <input type="text" inputmode="decimal" data-getal id="line-width" class="ribbon-input" min="1" max="20"
                 value={lineWidthValue()}
                 disabled={noPdf() || isPdfAReadOnly()}
                 onInput={(e) => setLineWidthValue(parseInt(e.target.value) || 3)} />

@@ -313,7 +313,8 @@
     "clickToAdd": "Feu clic a + per afegir fitxers PDF",
     "pg": "pàg",
     "filesAndPages": "{{files}} fitxer(s), {{pages}} pàgines en total",
-    "addAtLeastOne": "Afegiu almenys un fitxer PDF per combinar."
+    "addAtLeastOne": "Afegiu almenys un fitxer PDF per combinar.",
+    "signedWarning": "Un o més fitxers estan signats digitalment. En combinar-los se n'eliminen les signatures: el document combinat no està signat."
   },
   "watermark": {
     "addTitle": "Afegeix filigrana",

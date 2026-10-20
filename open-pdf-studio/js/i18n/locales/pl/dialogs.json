@@ -313,7 +313,8 @@
     "clickToAdd": "Kliknij +, aby dodać pliki PDF",
     "pg": "str.",
     "filesAndPages": "{{files}} plik(ów), {{pages}} stron łącznie",
-    "addAtLeastOne": "Proszę dodać co najmniej jeden plik PDF do scalenia."
+    "addAtLeastOne": "Proszę dodać co najmniej jeden plik PDF do scalenia.",
+    "signedWarning": "Co najmniej jeden plik jest podpisany cyfrowo. Scalanie usuwa podpisy: scalony dokument nie jest podpisany."
   },
   "watermark": {
     "addTitle": "Dodaj znak wodny",

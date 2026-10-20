@@ -313,7 +313,8 @@
     "clickToAdd": "+ 를 클릭하여 PDF 파일 추가",
     "pg": "페이지",
     "filesAndPages": "{{files}}개 파일, 총 {{pages}}페이지",
-    "addAtLeastOne": "병합하려면 PDF 파일을 하나 이상 추가하십시오."
+    "addAtLeastOne": "병합하려면 PDF 파일을 하나 이상 추가하십시오.",
+    "signedWarning": "하나 이상의 파일에 디지털 서명이 있습니다. 병합하면 서명이 제거되며 병합된 문서는 서명되지 않습니다."
   },
   "watermark": {
     "addTitle": "워터마크 추가",

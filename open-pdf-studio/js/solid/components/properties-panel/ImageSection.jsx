@@ -121,28 +121,28 @@ export default function ImageSection() {
             gangbare kantoorsoftware. */}
         <div class="property-group">
           <label>{t('image.cropLeft')}</label>
-          <input type="number" min="0" max="90" step="1"
+          <input type="text" inputmode="decimal" data-getal min="0" max="90" step="1"
             value={annotProps.cropLeft} disabled={isLocked()}
             onInput={(e) => updateAnnotProp('cropLeft', e.target.value)} />
         </div>
 
         <div class="property-group">
           <label>{t('image.cropRight')}</label>
-          <input type="number" min="0" max="90" step="1"
+          <input type="text" inputmode="decimal" data-getal min="0" max="90" step="1"
             value={annotProps.cropRight} disabled={isLocked()}
             onInput={(e) => updateAnnotProp('cropRight', e.target.value)} />
         </div>
 
         <div class="property-group">
           <label>{t('image.cropTop')}</label>
-          <input type="number" min="0" max="90" step="1"
+          <input type="text" inputmode="decimal" data-getal min="0" max="90" step="1"
             value={annotProps.cropTop} disabled={isLocked()}
             onInput={(e) => updateAnnotProp('cropTop', e.target.value)} />
         </div>
 
         <div class="property-group">
           <label>{t('image.cropBottom')}</label>
-          <input type="number" min="0" max="90" step="1"
+          <input type="text" inputmode="decimal" data-getal min="0" max="90" step="1"
             value={annotProps.cropBottom} disabled={isLocked()}
             onInput={(e) => updateAnnotProp('cropBottom', e.target.value)} />
         </div>

@@ -313,7 +313,8 @@
     "clickToAdd": "PDF dosyaları eklemek için + düğmesine tıklayın",
     "pg": "sf",
     "filesAndPages": "{{files}} dosya, toplam {{pages}} sayfa",
-    "addAtLeastOne": "Lütfen birleştirmek için en az bir PDF dosyası ekleyin."
+    "addAtLeastOne": "Lütfen birleştirmek için en az bir PDF dosyası ekleyin.",
+    "signedWarning": "Bir veya daha fazla dosya dijital olarak imzalı. Birleştirme imzaları kaldırır: birleştirilen belge imzalı değildir."
   },
   "watermark": {
     "addTitle": "Filigran Ekle",

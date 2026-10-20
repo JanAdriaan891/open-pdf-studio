@@ -611,7 +611,7 @@
 }
 
 .bookmark-dialog-body input[type="text"],
-.bookmark-dialog-body input[type="number"] {
+.bookmark-dialog-body input[data-getal] {
   width: 100%;
   padding: 4px 6px;
   font-size: 12px;
@@ -623,7 +623,7 @@
 }
 
 .bookmark-dialog-body input[type="text"]:focus,
-.bookmark-dialog-body input[type="number"]:focus {
+.bookmark-dialog-body input[data-getal]:focus {
   outline: none;
   border-color: #0078d4;
 }

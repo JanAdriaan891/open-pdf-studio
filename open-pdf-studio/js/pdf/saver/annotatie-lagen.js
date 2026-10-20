@@ -456,3 +456,23 @@ export function pasGelezenLagenToe(doc, gelezen) {
   const terug = getLayers(doc);
   return terug.length === lagen.length && lagen.every((l, i) => terug[i].id === l.id);
 }
+
+/**
+ * Lagen uit samengevoegde pagina's bij die van het document (samenvoegen.js):
+ * wat het model nog niet kent, komt erachter; een laag met hetzelfde id is
+ * dezelfde laag en blijft zoals het model hem had.
+ * @returns {boolean} of het model veranderd is
+ */
+export function voegGelezenLagenToe(doc, gelezen) {
+  if (!doc || !gelezen || !Array.isArray(gelezen.lagen) || gelezen.lagen.length === 0) return false;
+  const bestaand = getLayers(doc);
+  const ids = new Set(bestaand.map((l) => l.id));
+  const erbij = getLayers({ annotationLayers: gelezen.lagen }).filter((l) => !ids.has(l.id));
+  const ocgIds = new Set([...(doc._annotatieLaagOcgIds || []), ...(gelezen.ocgIds || [])]);
+  doc._annotatieLaagOcgIds = ocgIds;
+  if (!erbij.length) return false;
+  // Eén toewijzing (het document bewaart een kopie, zie hierboven).
+  doc.annotationLayers = [...bestaand, ...erbij];
+  doc._annotatieLagenGelezen = true;
+  return true;
+}

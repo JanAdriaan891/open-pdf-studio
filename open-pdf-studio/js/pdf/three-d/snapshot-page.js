@@ -83,8 +83,8 @@ export async function insertThreeDSnapshotPage(snap) {
     for (let p = 1; p <= oldCount; p++) pageMapping[p] = p;
     const newAnnotations = doc.annotations;
     const newRotations = { ...doc.pageRotations };
-    await pm.reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping });
-    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, newAnnotations, newRotations, targetPage);
+    const inModel = await pm.reloadFromBytes(newBytes, newAnnotations, newRotations, targetPage, { pageMapping });
+    recordPageStructure(currentBytes, oldAnnotations, oldRotations, oldPage, newBytes, inModel || newAnnotations, newRotations, targetPage);
     return targetPage;
   } finally {
     hideLoading();

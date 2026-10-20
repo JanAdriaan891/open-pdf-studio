@@ -313,7 +313,8 @@
     "clickToAdd": "Haga clic en + para agregar archivos PDF",
     "pg": "pág",
     "filesAndPages": "{{files}} archivo(s), {{pages}} páginas en total",
-    "addAtLeastOne": "Agregue al menos un archivo PDF para combinar."
+    "addAtLeastOne": "Agregue al menos un archivo PDF para combinar.",
+    "signedWarning": "Uno o más archivos están firmados digitalmente. Al combinarlos se eliminan sus firmas: el documento combinado no está firmado."
   },
   "watermark": {
     "addTitle": "Agregar marca de agua",

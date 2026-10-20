@@ -313,7 +313,8 @@
     "clickToAdd": "Kattintson a + gombra PDF fájlok hozzáadásához",
     "pg": "old.",
     "filesAndPages": "{{files}} fájl, összesen {{pages}} oldal",
-    "addAtLeastOne": "Kérem, adjon hozzá legalább egy PDF fájlt az összefűzéshez."
+    "addAtLeastOne": "Kérem, adjon hozzá legalább egy PDF fájlt az összefűzéshez.",
+    "signedWarning": "Egy vagy több fájl digitálisan alá van írva. Az egyesítés eltávolítja az aláírásokat: az egyesített dokumentum nincs aláírva."
   },
   "watermark": {
     "addTitle": "Vízjel hozzáadása",

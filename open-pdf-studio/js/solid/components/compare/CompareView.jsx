@@ -867,21 +867,21 @@ export default function CompareView() {
             <span style="color:#555;">{t('compare.align') || 'Align'}</span>
             <span style="color:#777;">dx</span>
             <input
-              type="number"
+              type="text" inputmode="decimal" data-getal
               style="width:56px;"
               value={compareOffset().dx}
               onInput={(e) => setCompareOffset({ dx: parseFloat(e.target.value) || 0 })}
             />
             <span style="color:#777;">dy</span>
             <input
-              type="number"
+              type="text" inputmode="decimal" data-getal
               style="width:56px;"
               value={compareOffset().dy}
               onInput={(e) => setCompareOffset({ dy: parseFloat(e.target.value) || 0 })}
             />
             <span style="color:#777;">rot</span>
             <input
-              type="number"
+              type="text" inputmode="decimal" data-getal
               step="0.1"
               style="width:56px;"
               value={compareOffset().rotation}

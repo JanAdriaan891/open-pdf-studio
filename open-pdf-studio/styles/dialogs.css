@@ -108,7 +108,7 @@
 .update-notes,
 #text-annot-input,
 .pref-row input[type="text"],
-.pref-row input[type="number"],
+.pref-row input[data-getal],
 .new-doc-input,
 .bs-export-input {
   user-select: text;
@@ -447,7 +447,7 @@
 }
 
 .pref-row input[type="text"],
-.pref-row input[type="number"] {
+.pref-row input[data-getal] {
   width: 100px;
   padding: 3px 6px;
   border: 1px solid var(--theme-border, #acacac);
@@ -459,7 +459,7 @@
 }
 
 .pref-row input[type="text"]:focus,
-.pref-row input[type="number"]:focus {
+.pref-row input[data-getal]:focus {
   outline: none;
   border-color: var(--theme-active, #0078d7);
 }
@@ -2455,6 +2455,13 @@
   max-height: 250px;
   overflow-y: auto;
   background: var(--theme-surface, #fff);
+}
+
+.merge-pdfs-warning {
+  margin-top: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--theme-warning, #9a6700);
 }
 
 .merge-pdfs-empty {

@@ -8,6 +8,7 @@ import i18next from '../i18n/config.js';
 import { showMessage, refreshAnnotationLayers } from '../bridge.js';
 import { ifcCategoryForParametric } from '../solid/data/ifcCategoryMap.js';
 import { syncTwoPointGeometry } from '../symbols/two-point.js';
+import { migreerProfielParams } from '../symbols/koker-notatie.js';
 import { colorWithoutStroke } from './fill-utils.js';
 import { colorToXFDF, xfdfColorToHex, randkleurAttribuut, randkleurUitAttribuut, vulkleurUitAttribuut } from './xfdf-kleur.js';
 import { laagAttribuut, laagUitAttribuut } from './xfdf-laag.js';
@@ -361,6 +362,8 @@ function xfdfElementToAnnotation(el) {
           const raw = el.getAttribute('opsparams');
           if (raw) params = JSON.parse(raw);
         } catch (_) { /* ignore */ }
+        // Oude kokermaat ("Koker 100x100x5") → huidige naam ("K100/5").
+        params = migreerProfielParams(symbolId, params);
         const symbol = createAnnotation({
           ...baseProps,
           type: 'parametricSymbol',

@@ -508,7 +508,7 @@ export default function MobileApp() {
           <div class="mobile-goto-dialog" onClick={(e) => e.stopPropagation()}>
             <h3>Go to Page</h3>
             <input
-              type="number"
+              type="text" inputmode="decimal" data-getal
               min="1"
               max={totalPages()}
               value={gotoValue()}
@@ -716,7 +716,7 @@ function MobilePreferences(props) {
           </div>
           <div class="mobile-prefs-row">
             <label>{t('annotations.defaultLineWidth')}</label>
-            <input type="number" min="1" max="20" value={state.preferences.defaultLineWidth || 3} onInput={e => update('defaultLineWidth', parseInt(e.target.value) || 3)} />
+            <input type="text" inputmode="decimal" data-getal min="1" max="20" value={state.preferences.defaultLineWidth || 3} onInput={e => update('defaultLineWidth', parseInt(e.target.value) || 3)} />
           </div>
           <div class="mobile-prefs-row">
             <label>{t('annotations.highlightOpacity')}</label>

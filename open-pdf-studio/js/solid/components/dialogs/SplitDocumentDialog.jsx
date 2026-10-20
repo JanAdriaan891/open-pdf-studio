@@ -115,7 +115,7 @@ export default function SplitDocumentDialog() {
             <input type="radio" name="split-doc-modus" checked={modus() === 'pages'} onChange={() => kiesModus('pages')} />
             <span>{t('splitDocument.everyN')}</span>
             <input
-              type="number"
+              type="text" inputmode="decimal" data-getal
               class="split-doc-number"
               min="1"
               max={Math.max(1, totaal)}

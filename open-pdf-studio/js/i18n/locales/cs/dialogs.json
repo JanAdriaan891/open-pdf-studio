@@ -313,7 +313,8 @@
     "clickToAdd": "Klikněte na + pro přidání souborů PDF",
     "pg": "str.",
     "filesAndPages": "{{files}} soubor(ů), {{pages}} stránek celkem",
-    "addAtLeastOne": "Přidejte prosím alespoň jeden soubor PDF ke sloučení."
+    "addAtLeastOne": "Přidejte prosím alespoň jeden soubor PDF ke sloučení.",
+    "signedWarning": "Jeden nebo více souborů je digitálně podepsáno. Sloučení podpisy odstraní: sloučený dokument není podepsán."
   },
   "watermark": {
     "addTitle": "Přidat vodoznak",

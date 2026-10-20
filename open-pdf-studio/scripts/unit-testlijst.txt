@@ -104,6 +104,8 @@ js/symbols/linework-catalog.test.mjs
 js/symbols/templates/constructie-bouwplaats.test.mjs
 js/symbols/templates/wapeningskorf.test.mjs
 js/symbols/templates/staalprofiel-hoeklijn.test.mjs
+js/symbols/koker-notatie.test.mjs
+js/pdf/koker-rondgang.test.mjs
 js/search/match-rect.test.mjs
 js/search/search-sources.test.mjs
 js/solid/stores/panels/annotationsStore.test.mjs
@@ -194,6 +196,8 @@ js/pdf/pdf-viewports-herschik.test.mjs
 js/pdf/page-manager-viewports.test.mjs
 js/pdf/cad-import-invoegen.test.mjs
 js/pdf/merge-verslag.test.mjs
+js/pdf/samenvoegen.test.mjs
+js/pdf/page-manager-samenvoegen.test.mjs
 js/i18n/cad-i18n-interpolatie.test.mjs
 js/pdf/print-opdracht.test.mjs
 js/pdf/saver/onzichtbaar-vlak.test.mjs
@@ -430,3 +434,7 @@ js/herstel/beleid.test.mjs
 js/herstel/foutvanger.test.mjs
 js/herstel/bedrading.test.mjs
 js/herstel/herladen.test.mjs
+js/core/getal-invoer.test.mjs
+js/core/getal-invoer-velden.test.mjs
+js/ui/getal-veld.test.mjs
+js/getal-velden-bron.test.mjs

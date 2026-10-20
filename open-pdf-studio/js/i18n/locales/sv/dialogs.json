@@ -313,7 +313,8 @@
     "clickToAdd": "Klicka + för att lägga till PDF-filer",
     "pg": "sid",
     "filesAndPages": "{{files}} fil(er), {{pages}} sidor totalt",
-    "addAtLeastOne": "Lägg till minst en PDF-fil för att sammanfoga."
+    "addAtLeastOne": "Lägg till minst en PDF-fil för att sammanfoga.",
+    "signedWarning": "En eller flera filer är digitalt signerade. Sammanfogningen tar bort signaturerna: det sammanfogade dokumentet är inte signerat."
   },
   "watermark": {
     "addTitle": "Lägg till vattenstampel",

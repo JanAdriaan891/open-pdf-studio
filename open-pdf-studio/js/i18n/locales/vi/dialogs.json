@@ -313,7 +313,8 @@
     "clickToAdd": "Nhấn + để thêm tệp PDF",
     "pg": "tr",
     "filesAndPages": "{{files}} tệp, tổng cộng {{pages}} trang",
-    "addAtLeastOne": "Vui lòng thêm ít nhất một tệp PDF để gộp."
+    "addAtLeastOne": "Vui lòng thêm ít nhất một tệp PDF để gộp.",
+    "signedWarning": "Một hoặc nhiều tệp được ký số. Việc gộp sẽ xóa các chữ ký: tài liệu đã gộp không được ký."
   },
   "watermark": {
     "addTitle": "Thêm Hình mờ",

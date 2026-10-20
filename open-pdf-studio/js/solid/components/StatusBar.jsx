@@ -1,7 +1,7 @@
 import { Show } from 'solid-js';
 import { state, getActiveDocument } from '../../core/state.js';
 import { labelVan, heeftEigenLabel } from '../../pdf/pagina-labels.js';
-import { useTranslation, localizeNumber } from '../../i18n/useTranslation.js';
+import { useTranslation, localizeNumber, language } from '../../i18n/useTranslation.js';
 
 // All page navigation goes through goToPage() so the side effects
 // (active thumbnail update, hide properties, fire events) happen in one
@@ -95,9 +95,9 @@ async function handleZoomOut() {
 async function handleZoomInput(e) {
   if (e.key !== 'Enter') return;
   e.preventDefault();
-  let val = e.target.value.replace('%', '').trim();
-  let pct = parseInt(val, 10);
-  if (!isNaN(pct) && pct >= 10 && pct <= 500) {
+  // Komma en punt allebei als decimaalteken: "62,5" en "62.5" (zoom-display.js).
+  const pct = leesZoomInvoer(e.target.value);
+  if (pct != null) {
     const doc = state.documents[state.activeDocumentIndex];
     if (doc) {
       // Vector viewport mode is the source of truth — setZoom() handles
@@ -110,18 +110,18 @@ async function handleZoomInput(e) {
 }
 
 async function handleZoomBlur(e) {
-  let val = e.target.value.replace('%', '').trim();
-  let pct = parseInt(val, 10);
-  if (isNaN(pct) || pct < 10 || pct > 500) {
+  const pct = leesZoomInvoer(e.target.value);
+  if (pct == null) {
     const doc = state.documents[state.activeDocumentIndex];
     e.target.value = scaleToPercent(doc ? doc.scale : 1.5) + '%';
   } else if (!e.target.value.includes('%')) {
-    e.target.value = pct + '%';
+    e.target.value = toonGetal(pct, language()) + '%';
   }
 }
 
 import { engineFor } from '../stores/engineStatusStore.js';
-import { scaleToPercent, percentToScale } from '../../core/zoom-display.js';
+import { scaleToPercent, percentToScale, leesZoomInvoer } from '../../core/zoom-display.js';
+import { toonGetal } from '../../core/getal-invoer.js';
 
 export default function StatusBar() {
   const { t } = useTranslation('statusbar');
@@ -201,7 +201,7 @@ export default function StatusBar() {
           </button>
 
           <span class="status-page-info">
-            {t('page')} <input type="number" class="status-page-input" tabIndex={-1} value={currentPage()} min="1" onKeyDown={handlePageInput} onBlur={handlePageBlur} /> / <span>{totalPages()}</span>
+            {t('page')} <input type="text" inputmode="decimal" data-getal class="status-page-input" tabIndex={-1} value={currentPage()} min="1" onKeyDown={handlePageInput} onBlur={handlePageBlur} /> / <span>{totalPages()}</span>
             <Show when={currentLabel()}>
               <span class="status-page-label" title={currentLabel()}>{currentLabel()}</span>
             </Show>
