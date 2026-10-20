@@ -13,6 +13,8 @@
 // 100x100x5", "K100x100x5", ...). Die worden herkend als hetzelfde profiel en
 // naar de nieuwe naam omgezet; het symbool-id ('staal-koker') blijft gelijk.
 
+import { leesGetal } from '../core/getal-invoer.js';
+
 export const KOKER_SYMBOOL_ID = 'staal-koker';
 
 const GETAL = String.raw`(\d+(?:[.,]\d+)?)`;
@@ -25,7 +27,7 @@ const SCHUINE_STREEP = new RegExp(String.raw`^(?:K|koker|SHS)\s*-?\s*${GETAL}\s*
 const DRIE_MATEN = new RegExp(String.raw`^(?:K|koker|buis|SHS|RHS)\s*-?\s*${GETAL}${KRUIS}${GETAL}${KRUIS}${GETAL}$`, 'i');
 
 function _getal(tekst) {
-  return Number(String(tekst).replace(',', '.'));
+  return leesGetal(String(tekst));
 }
 
 /** Getal zoals de catalogus het schrijft: 5 → "5", 12.5 → "12.5". */
