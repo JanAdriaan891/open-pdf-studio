@@ -237,6 +237,7 @@ fn parkeer_en_toon<R: Runtime>(venster: &Window<R>) {
         eprintln!("[headless] showing '{}' failed: {e}", venster.label());
     }
     // De taakbalk voegt bij het tonen soms alsnog een knop toe; nogmaals weghalen.
+    #[cfg(desktop)]
     let _ = venster.set_skip_taskbar(true);
 }
 
