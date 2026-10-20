@@ -269,9 +269,10 @@ function stukReeksen(context, reeksen, van, tot, doelStart) {
     if (tot > van) uit.push({ start: doelStart, dict: context.obj({ S: 'D', St: doelStart + 1 }) });
     return uit;
   }
-  // Pagina's vóór de eerste reeks hebben geen label: gewone nummers.
+  // Pagina's vóór de eerste reeks hadden in hun document een leeg label;
+  // dat blijft zo (een reeks zonder stijl en voorvoegsel).
   if (reeksen[0].start > van && tot > van) {
-    uit.push({ start: doelStart, dict: context.obj({ S: 'D', St: doelStart + 1 }) });
+    uit.push({ start: doelStart, dict: context.obj({}) });
   }
   for (let i = 0; i < reeksen.length; i++) {
     const r = reeksen[i];
@@ -751,7 +752,11 @@ export async function voegPdfsSamen(doel, bronnen, { invoegIndex, positie = 'end
       ...stukReeksen(context, doelLabels, 0, start0, 0),
     ];
     for (const stuk of labelStukken) {
-      if (stuk.reeksen) reeksen.push(...stuk.reeksen.map((r) => ({ start: stuk.start + r.start, dict: r.dict })));
+      if (stuk.reeksen) {
+        // Ook hier: vóór de eerste reeks van de bron een leeg label.
+        if (stuk.reeksen[0].start > 0) reeksen.push({ start: stuk.start, dict: context.obj({}) });
+        reeksen.push(...stuk.reeksen.map((r) => ({ start: stuk.start + r.start, dict: r.dict })));
+      }
       else reeksen.push(...stukReeksen(context, null, 0, stuk.aantal, stuk.start));
     }
     reeksen.push(...stukReeksen(context, doelLabels, start0, oudAantal, start0 + offset));

@@ -437,3 +437,16 @@ test('the MCP answer says what came along per file, including dropped signatures
     namedDestinations: 1, renamedDestinations: [], bookmarks: 1, layers: 1, signaturesRemoved: 1, fromOpenDocument: true,
   }]);
 });
+
+test('pages before the first label range keep their empty label', async () => {
+  const d = await PDFDocument.create();
+  for (let i = 0; i < 2; i++) d.addPage([300, 300]);
+  d.catalog.set(N('PageLabels'), d.context.obj({ Nums: [1, { P: PDFString.of('Blad ') , S: 'D' }] }));
+  const voor = await laadPdfjs(await d.save());
+  const verwacht = await voor.getPageLabels();
+  await voor.loadingTask.destroy();
+  const { bytes } = await samenvoegen(await doel(), [['b.pdf', await d.save()]]);
+  const pd = await laadPdfjs(bytes);
+  assert.deepEqual((await pd.getPageLabels()).slice(1), verwacht);
+  await pd.loadingTask.destroy();
+});
