@@ -74,6 +74,13 @@ test('automatic leaves pages for the scene engine on the PDFium route', () => {
   assert.equal(engineForWeight('hayro', 9_000_000, 8_900_000), 'hayro', 'forced Hayro stays');
 });
 
+test('automatic renders tiles with PDFium; forced Hayro renders them with Hayro', async () => {
+  const { tileEngine } = await import('./render-engine.js');
+  assert.equal(tileEngine('auto'), 'pdfium');
+  assert.equal(tileEngine('pdfium'), 'pdfium');
+  assert.equal(tileEngine('hayro'), 'hayro');
+});
+
 test('the scene limit matches the one of the tile route', async () => {
   const { SCENE_CONTENT_BYTES } = await import('./progressive-render.js');
   const { SCENE_PAGE_CONTENT } = await import('./render-engine.js');

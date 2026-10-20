@@ -168,8 +168,9 @@ export async function invokeTileRegion(args) {
     args = { ...args, engine: renderEngineOn() };
   }
   const key = `${args.path}|${args.pageIndex}|${args.rotation || 0}`;
-  const { resolvePageEngine } = await import('./render-engine.js');
-  const pageEngine = await resolvePageEngine(args.engine, args.path, args.pageIndex);
+  const { resolvePageEngine, tileEngine } = await import('./render-engine.js');
+  const tilePref = tileEngine(args.engine);
+  const pageEngine = await resolvePageEngine(tilePref, args.path, args.pageIndex);
   const sceneWorthIt = usesSceneEngine(
     pageEngine,
     pageEngine === 'pdfium' ? await pageContentBytes(args.path, args.pageIndex + 1) : 0,
@@ -197,7 +198,7 @@ export async function invokeTileRegion(args) {
   // parsen vier processen elk dezelfde enorme content-stream en groeit de
   // worker-RSS tot meerdere gigabytes.
   const { withPageEngine, engineForPage } = await import('./render-engine.js');
-  const res = await withPageEngine(args.engine, args.path, args.pageIndex, (engine) =>
+  const res = await withPageEngine(tilePref, args.path, args.pageIndex, (engine) =>
     invoke('render_pdf_page_region', {
       ...args,
       engine,
@@ -205,7 +206,7 @@ export async function invokeTileRegion(args) {
     }));
   try {
     const { reportActiveEngine } = await import('../solid/stores/engineStatusStore.js');
-    reportActiveEngine(engineForPage(args.engine, args.path, args.pageIndex), args.path, args.pageIndex + 1);
+    reportActiveEngine(engineForPage(tilePref, args.path, args.pageIndex), args.path, args.pageIndex + 1);
   } catch {}
   return res;
 }

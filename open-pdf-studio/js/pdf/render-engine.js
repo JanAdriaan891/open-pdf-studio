@@ -41,6 +41,17 @@ export function engineForWeight(pref, weight, contentBytes = 0) {
   return weight >= HEAVY_PAGE_WEIGHT ? 'hayro' : 'pdfium';
 }
 
+/**
+ * The engine preference for region tiles (zoomed-in views). Automatic keeps
+ * tiles on the PDFium route: PDFium keeps a heavy page parsed in its worker
+ * and only rasterizes per tile, while Hayro interprets the whole page for
+ * every tile (measured on NKD1a p2: sharp at 400 % after 4.2 s against
+ * 0.7 s). Forced Hayro renders tiles with Hayro too.
+ */
+export function tileEngine(pref) {
+  return pref === 'auto' ? 'pdfium' : pref;
+}
+
 // Automatic choice per page, filled by resolvePageEngine: { engine, weight }.
 const _autoChoice = new Map();
 const _weights = new Map();
@@ -121,6 +132,7 @@ export function describePageEngine(path, pageIndex, mode = renderEngineOn()) {
   return {
     mode,
     engine,
+    tiles: engineForPage(tileEngine(mode), path, pageIndex),
     reason,
     weightKB: weight === undefined ? null : Math.round(weight / 1024),
     threads: engine === 'hayro' ? _threads : null,
@@ -131,6 +143,7 @@ function describeLine(d) {
   const parts = [`${d.engine} (${d.reason}`];
   if (d.weightKB !== null) parts.push(`, weight ${d.weightKB} KB, threshold ${HEAVY_PAGE_WEIGHT / 1024} KB`);
   if (d.threads !== null) parts.push(`, ${d.threads} threads`);
+  if (d.tiles && d.tiles !== d.engine) parts.push(`; tiles ${d.tiles}`);
   return parts.join('') + ')';
 }
 
