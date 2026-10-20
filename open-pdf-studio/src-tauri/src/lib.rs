@@ -24,6 +24,7 @@ pub mod ocr;
 pub mod pdfium_renderer;
 pub mod pdfx_cmyk;
 pub mod handtekening;
+pub mod headless;
 pub mod instantie;
 pub mod print_formulieren;
 pub mod print_instelling;
@@ -279,6 +280,7 @@ fn file_exists(path: String) -> bool {
 
 #[tauri::command]
 async fn open_url(url: String) -> Result<(), String> {
+    headless::weiger("open_url")?;
     open::that(&url).map_err(|e| e.to_string())
 }
 
@@ -376,6 +378,7 @@ async fn explorer_thumbnails_set(
 /// xdg-mime default directly (no system UI for this exists on most desktops).
 #[tauri::command]
 fn open_default_apps_settings() -> Result<bool, String> {
+    headless::weiger("open_default_apps_settings")?;
     #[cfg(target_os = "windows")]
     {
         // Open the "Choose default apps by file type" settings page
@@ -681,6 +684,7 @@ async fn open_printer_properties(
     orientatie: Option<String>,
     devmodes: tauri::State<'_, print_instelling::PrinterDevmodes>,
 ) -> Result<Option<print_instelling::EigenschappenKeuze>, String> {
+    headless::weiger("printer properties dialog")?;
     #[cfg(target_os = "windows")]
     {
         // The HWND makes the dialog modal to this window; passed on as usize
@@ -1361,6 +1365,7 @@ fn discard_spool_pdf(path: String) -> Result<bool, String> {
 /// Linux: `xdg-open "<path>"` honours the `application/pdf` MIME default.
 #[tauri::command]
 fn open_pdf_in_default_viewer(path: String) -> Result<bool, String> {
+    headless::weiger("open_pdf_in_default_viewer")?;
     if !std::path::Path::new(&path).exists() {
         return Err(format!("File not found: {}", path));
     }
@@ -1409,6 +1414,7 @@ fn open_pdf_in_default_viewer(path: String) -> Result<bool, String> {
 /// manager), with the file selected where the platform supports it.
 #[tauri::command]
 fn reveal_in_file_manager(path: String) -> Result<bool, String> {
+    headless::weiger("reveal_in_file_manager")?;
     if !std::path::Path::new(&path).exists() {
         return Err(format!("File not found: {}", path));
     }
@@ -2541,6 +2547,12 @@ fn read_clipboard_image_png(app: tauri::AppHandle) -> Result<tauri::ipc::Respons
 fn set_prtscn_hotkey(app: tauri::AppHandle, enabled: bool) -> Result<(), String> {
     use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Shortcut};
 
+    // Een headless testinstantie neemt de PrtScn-toets van de gebruiker niet over.
+    if enabled && headless::actief() {
+        headless::meld("PrtScn hotkey registration");
+        return Ok(());
+    }
+
     let shortcut = Shortcut::new(None, Code::PrintScreen);
     let gs = app.global_shortcut();
     let is_registered = gs.is_registered(shortcut);
@@ -2605,6 +2617,16 @@ pub fn run(opts: StartupOpts) {
             _ => {}
         }
     }
+
+    // Headless testinstantie (OPDS_HEADLESS=1, zie headless.rs): vaststellen en
+    // de WebView2-argumenten zetten vóór er een draad of venster bestaat.
+    let headless_browser_args = if headless::init(mcp_enabled) {
+        let browser_args = headless::bereid_omgeving_voor();
+        eprintln!("[startup] headless: window off-screen, no focus; WebView2 args: {browser_args}");
+        Some(browser_args)
+    } else {
+        None
+    };
 
     // Collect any PDF file paths passed on the command line (for file associations)
     let opened_files: Vec<String> = args.iter()
@@ -2678,8 +2700,14 @@ pub fn run(opts: StartupOpts) {
         .manage(pool.clone())
         .manage(mcp_app_bridge::McpAppBridge::new())
         .manage(mcp_extensie_tools::ExtensieTools::default())
-        .plugin(tauri_plugin_fs::init())
-        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_fs::init());
+    // Headless: dezelfde plugin-naam en commando's, maar zonder native vensters.
+    builder = if headless::actief() {
+        builder.plugin(headless::dialoog_plugin())
+    } else {
+        builder.plugin(tauri_plugin_dialog::init())
+    };
+    builder = builder
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_process::init())
@@ -2699,7 +2727,8 @@ pub fn run(opts: StartupOpts) {
     // window_mgmt::spawn_window_with_pdf). Such a process must NOT register
     // single-instance — otherwise it would forward its PDF arg to the primary
     // instance and exit. `OPDS_DETACHED=1` also skips it (test instances next
-    // to the installed app).
+    // to the installed app); add `OPDS_HEADLESS=1` to keep such a test
+    // instance off-screen and out of focus (headless.rs).
     #[cfg(not(target_os = "android"))]
     {
         let skip_single_instance = instantie::slaat_single_instance_over(
@@ -2709,7 +2738,9 @@ pub fn run(opts: StartupOpts) {
         if !skip_single_instance {
             builder = builder
                 .plugin(tauri_plugin_single_instance::init(|app: &tauri::AppHandle, argv: Vec<String>, _cwd: String| {
-                    if let Some(window) = app.get_webview_window("main") {
+                    if headless::actief() {
+                        headless::meld("single-instance focus");
+                    } else if let Some(window) = app.get_webview_window("main") {
                         let _ = window.unminimize();
                         let _ = window.set_focus();
                     }
@@ -2742,7 +2773,9 @@ pub fn run(opts: StartupOpts) {
             tauri_plugin_global_shortcut::Builder::new()
                 .with_handler(|app, _shortcut, event| {
                     if event.state() == ShortcutState::Pressed {
-                        if let Some(window) = app.get_webview_window("main") {
+                        if headless::actief() {
+                            headless::meld("PrtScn show/focus");
+                        } else if let Some(window) = app.get_webview_window("main") {
                             let _ = window.unminimize();
                             let _ = window.show();
                             let _ = window.set_focus();
@@ -2752,6 +2785,16 @@ pub fn run(opts: StartupOpts) {
                 })
                 .build(),
         );
+    }
+
+    // Headless: vensters buiten beeld parkeren en zonder activeren tonen.
+    if headless::actief() {
+        builder = builder.plugin(headless::plugin());
+    }
+
+    let mut context = tauri::generate_context!();
+    if let Some(browser_args) = &headless_browser_args {
+        headless::pas_context_aan(&mut context, browser_args);
     }
 
     builder
@@ -3050,7 +3093,7 @@ pub fn run(opts: StartupOpts) {
             read_clipboard_image_png,
             set_prtscn_hotkey,
         ])
-        .build(tauri::generate_context!())
+        .build(context)
         .expect("error while building tauri application")
         .run(|_app, _event| {
             // Bij afsluiten de ontsleutelde werkkopieën van deze instantie
@@ -3106,7 +3149,9 @@ pub fn run(opts: StartupOpts) {
                     }
                     let _ = _app.emit("open-files", &files);
                     #[cfg(desktop)]
-                    if let Some(window) = _app.get_webview_window("main") {
+                    if headless::actief() {
+                        headless::meld("file-open activation");
+                    } else if let Some(window) = _app.get_webview_window("main") {
                         let _ = window.unminimize();
                         let _ = window.set_focus();
                     }

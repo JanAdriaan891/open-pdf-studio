@@ -15,6 +15,10 @@
 //! ook uitschakelen (testinstanties naast de geïnstalleerde app), maar maakt
 //! van een proces GEEN tweede instantie: alleen de vlag doet dat.
 //!
+//! Met daarnaast `OPDS_HEADLESS=1` start een testinstantie headless: venster
+//! buiten beeld, geen taakbalkknop, nooit focus, geen native dialogen (zie
+//! headless.rs). Een tweede instantie erft die omgeving en dus ook headless.
+//!
 //! WebView2: beide processen gebruiken dezelfde gebruikersdatamap. WebView2
 //! ondersteunt dat zolang de omgevingsopties gelijk zijn; ze delen dan één
 //! browserproces. Het nieuwe proces erft daarom de omgeving van de ouder

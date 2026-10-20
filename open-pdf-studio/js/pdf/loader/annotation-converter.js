@@ -252,7 +252,7 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         const sqGeometrie = stempelGeometrie({
           rect, paginaRotatie: viewport.rotation || 0, ap: extraColors.stempelAp, soort: 'beeld',
         });
-        const sqWeergave = kiesStempelWeergave({ geometrie: sqGeometrie, paginaRotatie: viewport.rotation || 0 });
+        const sqWeergave = kiesStempelWeergave({ geometrie: sqGeometrie, paginaRotatie: viewport.rotation || 0, rect });
         let sqRotatie = 0;
         let sqRuimte = squareImgEntry.space;
         if (sqWeergave) {
@@ -1567,8 +1567,8 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
 
       // Vak en draaiing (stempel-geometrie.js): stempelGeometrie leest hoe
       // elke lezer de stempel tekent, kiesStempelWeergave wat de app daarvan
-      // toont (een appearance van de eigen saver precies zo; oudere en andere
-      // bestanden zoals altijd, met /OPS_Rotation als oude bron). Een
+      // toont (zoals getekend, behalve een oude /OPS_Rotation en oude
+      // schermafdrukken op een gedraaid blad). Een
       // uitsnede van de weergave (source 'render') ligt al zoals op het
       // scherm en vult de /Rect; alleen een oude /OPS_Rotation draait hem nog.
       const opsRotatie = Number.isFinite(extraColors.rotation) ? extraColors.rotation : undefined;
@@ -1587,7 +1587,7 @@ async function converteerPdfAnnotatie(annot, pageNum, viewport, stampImageMap, a
         });
         stWeergave = kiesStempelWeergave({
           geometrie: stGeometrie, paginaRotatie: viewport.rotation || 0,
-          opsRotation: opsRotatie, matrixHoek: extraColors.matrixAngle,
+          opsRotation: opsRotatie, matrixHoek: extraColors.matrixAngle, rect: annot.rect,
         });
       }
 

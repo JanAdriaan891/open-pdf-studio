@@ -2,6 +2,7 @@ import { leesOpslag, verwijderOpslag } from './opslag.js';
 import { bestandsnaamUitPad } from './bestandsnaam.js';
 import { gastObject } from './gehost.js';
 import { rustRenderPadBeschikbaar } from '../pdf/render-route.js';
+import { slaOverInHeadless } from './headless.js';
 
 /**
  * Tauri API wrapper module
@@ -177,6 +178,8 @@ function getTauriCore() {
 // Window controls
 export async function minimizeWindow() {
   if (!isTauri()) return;
+  // Headless (testinstantie): een geminimaliseerd venster rendert niet meer.
+  if (slaOverInHeadless('minimize')) return;
   const win = getTauriWindow();
   if (win) {
     const currentWindow = win.getCurrentWindow();
@@ -186,6 +189,8 @@ export async function minimizeWindow() {
 
 export async function maximizeWindow() {
   if (!isTauri()) return;
+  // Headless: maximaliseren zet het venster op een monitor.
+  if (slaOverInHeadless('maximize')) return;
   const win = getTauriWindow();
   if (win) {
     const currentWindow = win.getCurrentWindow();
@@ -228,6 +233,8 @@ export async function setWindowFullscreen(enabled) {
     }
     return;
   }
+  // Headless: volledig scherm zet het venster op een monitor.
+  if (slaOverInHeadless('fullscreen')) return;
   const win = getTauriWindow();
   if (!win) return;
   try {
@@ -472,6 +479,8 @@ export async function openExternal(url) {
     window.open(url, '_blank');
     return;
   }
+  // Headless: geen browser van de gebruiker naar voren halen.
+  if (slaOverInHeadless(`open external ${url}`)) return;
 
   // Try using the shell plugin
   if (window.__TAURI__.shell) {

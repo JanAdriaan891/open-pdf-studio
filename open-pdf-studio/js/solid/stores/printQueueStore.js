@@ -10,6 +10,7 @@
 
 import { createSignal } from 'solid-js';
 import { isTauri } from '../../core/platform.js';
+import { headlessVensterOpties, toonEnFocus } from '../../core/headless.js';
 
 const [jobs, setJobs] = createSignal([]);
 const [busy, setBusy] = createSignal(false);
@@ -53,10 +54,12 @@ export async function openPrintQueueWindow() {
   // Reuse an already-open window: just show + focus it.
   try {
     const existing = await W.getByLabel(label);
-    if (existing) { try { await existing.show(); await existing.setFocus(); } catch (_) {} return; }
+    if (existing) { try { await toonEnFocus(existing); } catch (_) {} return; }
   } catch (_) {}
   try {
-    const win = new W(label, {
+    // Headless (testinstantie): onzichtbaar en zonder focus aanmaken; de
+    // Rust-kant parkeert het venster buiten beeld.
+    const win = new W(label, headlessVensterOpties({
       url: 'index.html?view=printqueue',
       title: 'Open PDF Printer',
       width: 920,
@@ -65,7 +68,7 @@ export async function openPrintQueueWindow() {
       minHeight: 400,
       resizable: true,
       decorations: true,
-    });
+    }));
     win.once('tauri://error', (e) => console.warn('[printqueue] window error:', e));
   } catch (e) {
     console.warn('[printqueue] could not open window:', e);
@@ -112,7 +115,7 @@ export async function listenForPrinterSettingsRequests() {
   const current = window.__TAURI__?.webviewWindow?.getCurrentWebviewWindow?.();
   if (!ev?.listen || (current && current.label !== 'main')) return;
   await ev.listen(SETTINGS_EVENT, async () => {
-    try { await current?.show(); await current?.setFocus(); } catch (_) {}
+    try { await toonEnFocus(current); } catch (_) {}
     const { showPreferencesDialog } = await import('../../core/preferences.js');
     showPreferencesDialog('vprinter');
   });
