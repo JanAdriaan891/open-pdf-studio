@@ -17,6 +17,7 @@ js/pdf/saver/correction-dicts.test.mjs
 js/pdf/loader/correction-load.test.mjs
 js/pdf/loader/correction-extras.test.mjs
 js/pdf/saver/bestaande-markeringen.test.mjs
+js/pdf/saver/objecten-opruimen.test.mjs
 js/pdf/correction-wiring.test.mjs
 js/pdf/correction-roundtrip.test.mjs
 js/annotations/rendering/caret.test.mjs
@@ -395,6 +396,7 @@ js/tools/callout-plaatsing.test.mjs
 js/tools/voorbeeld-doorlopend.test.mjs
 js/pdf/flatten-bytes.test.mjs
 js/pdf/flatten-rondgang.test.mjs
+js/pdf/opslaan-objecten-stabiel.test.mjs
 js/annotations/blend-modes.test.mjs
 js/annotations/rendering/mengen-tegen-pagina.test.mjs
 js/pdf/saver/blend-mode-ap.test.mjs

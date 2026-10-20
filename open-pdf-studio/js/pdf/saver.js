@@ -13,6 +13,7 @@ import { PDFDocument, PDFString, PDFHexString, PDFName, PDFArray, PDFStream, deg
   PDFTextField, PDFCheckBox, PDFDropdown, PDFRadioGroup, PDFOptionList } from 'pdf-lib';
 import { kopNaarLE, koppenSleutel, koppenVan, calloutKoppenNaarBestand } from './lijnkoppen.js';
 import { bouwKnipselAppearance, tekenKnipselInPagina, alInBasis, markeerGebakken, ruimKnipselRestenOp, CATALOGUS_SLEUTEL as KNIPSEL_CATALOGUS } from './saver/vector-snippet.js';
+import { ruimOngebruikteObjectenOp } from './saver/objecten-opruimen.js';
 import { schrijfHatchMeta } from './saver/hatch-meta.js';
 import { schrijfWandJoinMeta } from './saver/wand-join-meta.js';
 import { schrijfPlattegrondMeta } from './saver/plattegrond-meta.js';
@@ -3133,8 +3134,17 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false } = 
     // zonder het weg te schrijven.
     if (alleenAnnotaties) return { pdfDocLib, eersteNieuwObject };
 
+    // De vervangen annotaties, hun appearances en wat er verder onbereikbaar
+    // is niet meeschrijven, en wat deze save aanmaakte op de vrijgekomen
+    // nummers: anders groeit het bestand bij elke save (saver/objecten-
+    // opruimen.js). Eerst alles laten aanmaken wat pdf-lib anders pas bij
+    // save() aanmaakt.
+    pdfDocLib.formCache.getValue()?.updateFieldAppearances();
+    await pdfDocLib.flush();
+    ruimOngebruikteObjectenOp(pdfDocLib, { nieuwVanaf: eersteNieuwObject });
+
     // Save the PDF
-    const pdfBytes = await pdfDocLib.save();
+    const pdfBytes = await pdfDocLib.save({ updateFieldAppearances: false });
     const outputPath = saveAsPath || activeDoc?.saveTargetPath || currentPath;
     const savedBytes = new Uint8Array(pdfBytes);
     // Structural edits replace the PDF and often move its working path. A
