@@ -377,3 +377,54 @@ In de app is het verschil tussen de engines binnen de meetruis:
 - De eerste inkt is een voorvertoning op lage resolutie, waarin vooral de app-pijplijn de tijd bepaalt.
 - Het voordeel van Hayro op zware tekeningen (2,6× in de engine-vergelijking) zie je pas bij het scherp worden en bij tegels op hoge zoom. Die momenten meet deze poort niet.
 - De zoommeting op NKD1a lukt bij beide engines niet; dat was al zo.
+
+## 10. Vervolgonderzoek: meer naar Rust, en sneller opstarten (20-10-2026)
+
+Gevonden door code te lezen en de bestaande opstartlog te analyseren. Niets is nog gebouwd. De milliseconden zijn schattingen, tenzij anders vermeld.
+
+### 10.1 Opstarten
+
+Opstartlog (`startup-diagnostics.jsonl`, laatste 8 starts):
+- van het Rust-setupmoment tot `frontend-boot-start`: 540–970 ms;
+- van `frontend-boot-start` tot `frontend-rendered`: 140–280 ms.
+
+Het grootste deel zit dus vóór `main.js`: het opstarten van WebView2 en het laden en evalueren van de **5,17 MB grote hoofdchunk**. De Rust-setup zelf is goedkoop.
+
+| # | Maatregel | Geschatte winst | Moeite / risico |
+|---|---|---|---|
+| 1 | Eerst splitsen: een meetpunt in `opds-vooraf.js` en aan het begin van `main()`, om WebView2-tijd en bundeltijd te scheiden | bepaalt de rest | triviaal |
+| 2 | De ±55 dialogen in `DialogHost.jsx`, plus `CompareView`, `SchedulePanel`, `SymbolTypeEditor`, `AssistantPanel` en `MobileApp`, lazy laden (`lazy()`) | 60–150 ms, > 1 MB | laag–midden |
+| 3 | fontkit (±750 KB) dynamisch laden; het komt nu binnen via AppMenu → saver → text-edits → mcp-text-font | 20–50 ms | zeer laag |
+| 4 | pdf-lib en pdf.js uit het opstartpad: dynamische import in loader/saver | 30–80 ms, ±1 MB | midden |
+| 5 | De worker-pool pas na de eerste render starten, en de 4 workers parallel in plaats van na elkaar | 10–50 ms; 100+ ms op trage of virusscanner-zware machines | laag |
+| 6 | i18n: Engels en de gekozen taal parallel laden (nu twee opeenvolgende batches met top-level await) | 5–30 ms | laag |
+| 7 | De drie IPC-aanroepen vóór `render()` parallel uitvoeren | 5–15 ms | laag |
+| 8 | `init_pdfium` op een achtergrondthread, en het overbodige decoderen van het venster-icoon weg | 15–40 ms | midden / laag |
+
+Daarnaast:
+- de MCP-bridge registreert 84 listeners, ook als MCP uit staat;
+- donkere thema's zien bij de start een lichte flits.
+
+### 10.2 Meer naar Rust (naast de annotatie-mijlpalen M2–M11)
+
+| # | Onderdeel | Nu | Rust-route | Winst | Moeite |
+|---|---|---|---|---|---|
+| 1 | **MuPDF-WASM verwijderen** | dode code: 10 MB `.wasm` in de bundel, en de licentie is **AGPL-3.0** | niets nodig, alleen verwijderen | 10 MB kleiner, licentieprobleem weg | triviaal |
+| 2 | Binaire IPC | `extract_draw_commands` en `write_temp_pdf` sturen bytes nog als JSON-getallen; miniaturen als base64 | `ipc::Response` / ruwe body (patroon bestaat al) | MB's minder parsen per vectorpagina en printopdracht | klein |
+| 3 | Quick wins uit #463 (JS) | `findAnnotationAt` scant alles; `searchPage` filtert per treffer | spatial index aansluiten; binair zoeken | ms → µs bij duizenden markups | klein |
+| 4 | Printen naar printer | rastert elke pagina met pdf.js naar JPEG | de vectorroute die printen-naar-PDF al gebruikt | sneller, scherper, minder geheugen | klein–midden |
+| 5 | Comprimeren | rastert alles naar JPEG (tekst en vectoren gaan verloren) | alleen beeld-XObjects herschalen met lopdf, `image` en turbojpeg | echte compressie, veel sneller | midden |
+| 6 | Tekstlaag en zoeken | pdf.js `getTextContent` naast een tweede Rust-pad zonder fontinfo | PDFium-tekst-API (al gelinkt, nog ongebruikt); `search_document` parallel met rayon | snel zoeken in het hele document, één tekstmodel | midden–groot |
+| 7 | Snap-geometrie | pdf.js `getOperatorList` (decodeert ook beelden, breekt bij pdf.js-updates) | interpreter van open-pdf-render | seconden op zware CAD-pagina's | midden |
+| 8 | Pagina-bewerkingen, splitsen, samenvoegen | pdf-lib laden + opslaan per bewerking; undo bewaart twee volledige PDF-kopieën | PDFium-pagina-API of lopdf | seconden en veel geheugen | midden |
+| 9 | Pagina's vergelijken | eigen pdf.js-documenten en `getImageData` | worker-pool-render + diff in Rust | geen tweede parse, parallel | midden |
+| 10 | Beelden decoderen | handgeschreven JS-decoder | Hayro of PDFium (JPX, JBIG2, CCITT, ICC) | vooral correctheid | midden |
+| 11 | Fonts subsetten (fontkit weg) | fontkit plus runtime-patch van de CFF-subsetter | ttf-parser / hayro-font + `subsetter`-crate | afhankelijkheid en patch weg | midden, samen met M10 |
+
+**pdf.js helemaal weg op desktop** kan nog niet:
+- formulieren (de HTML-widgets van `AnnotationLayer`) zijn de lastigste blokkade;
+- tekstbewerking gebruikt pdf.js-fonts.
+
+Als tussenstap kan pdf.js lui geladen worden, alleen bij formulieren of tekstbewerking. Dat kan zodra #6, #7 en M7 er zijn, en scheelt de parse van de 2,4 MB pdf.js-worker en een extra volledige kopie van elke PDF in het geheugen.
+
+Wat door Rust gaat, is alleen voor desktop. Web en Android houden de pdf.js-route, tenzij de kernel naar WASM gaat (§6). Uitzondering: #1 en #3 helpen alle builds.
