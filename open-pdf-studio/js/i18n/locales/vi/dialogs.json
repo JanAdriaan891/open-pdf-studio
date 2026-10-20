@@ -1119,5 +1119,30 @@
     "documentChanged": "Tài liệu đã thay đổi. Hãy chụp lại.",
     "pngFiles": "Ảnh PNG",
     "jpegFiles": "Ảnh JPEG"
+  },
+  "recovery": {
+    "title": "Khôi phục công việc chưa lưu",
+    "intro": "Lần trước Open PDF Studio không được đóng bình thường. Công việc chưa lưu của các tài liệu này đã được giữ lại:",
+    "savedAt": "Giữ lại lúc {{time}}",
+    "pages": "Số trang: {{count}}",
+    "untitled": "Tài liệu không tên",
+    "neverSaved": "Chưa từng được lưu",
+    "originalChanged": "Tệp gốc đã thay đổi kể từ đó.",
+    "open": "Mở",
+    "saveAs": "Lưu thành...",
+    "delete": "Xóa",
+    "deleteAll": "Xóa tất cả",
+    "later": "Để sau",
+    "keepNote": "Những gì bạn chưa xử lý bây giờ sẽ được giữ 14 ngày và được đề xuất lại ở lần khởi động tiếp theo.",
+    "confirmDelete": "Xóa vĩnh viễn công việc này?",
+    "confirmDeleteAll": "Xóa vĩnh viễn toàn bộ công việc này?",
+    "yesDelete": "Có, xóa",
+    "cancel": "Hủy",
+    "openFailed": "Không thể mở tài liệu đã khôi phục: {{error}}",
+    "saveFailed": "Không thể lưu tài liệu đã khôi phục: {{error}}",
+    "deleteFailed": "Xóa không thành công: {{error}}",
+    "tabLabel": "đã khôi phục",
+    "tabTip": "Đã khôi phục sau khi đóng bất ngờ. Lưu sẽ ghi vào tệp gốc.",
+    "reloadStopped": "Cửa sổ Open PDF Studio đã ngừng hoạt động nhiều lần liên tiếp và sẽ không còn được tải lại tự động. Hãy lưu công việc và khởi động lại ứng dụng."
   }
 }

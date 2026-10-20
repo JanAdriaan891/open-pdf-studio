@@ -84,6 +84,16 @@
   margin-right: 4px;
 }
 
+/* Hersteld na een onverwachte afsluiting (js/herstel/herstel.js). */
+.document-tab-recovered {
+  font-size: 10px;
+  padding: 0 4px;
+  margin-right: 4px;
+  border: 1px solid var(--theme-active, #0078d7);
+  color: var(--theme-active, #0078d7);
+  white-space: nowrap;
+}
+
 .document-tab-rename-input {
   flex: 1;
   font-size: 12px;

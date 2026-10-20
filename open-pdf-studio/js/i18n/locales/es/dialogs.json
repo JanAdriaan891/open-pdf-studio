@@ -1119,5 +1119,30 @@
     "documentChanged": "El documento ha cambiado. Vuelva a hacer la captura.",
     "pngFiles": "Imagen PNG",
     "jpegFiles": "Imagen JPEG"
+  },
+  "recovery": {
+    "title": "Recuperar trabajo no guardado",
+    "intro": "Open PDF Studio no se cerró correctamente la última vez. Se conservó el trabajo no guardado de estos documentos:",
+    "savedAt": "Conservado el {{time}}",
+    "pages": "Páginas: {{count}}",
+    "untitled": "Documento sin título",
+    "neverSaved": "Nunca guardado",
+    "originalChanged": "El archivo original ha cambiado desde entonces.",
+    "open": "Abrir",
+    "saveAs": "Guardar como...",
+    "delete": "Eliminar",
+    "deleteAll": "Eliminar todo",
+    "later": "Más tarde",
+    "keepNote": "Lo que no gestione ahora se conserva 14 días y se le ofrecerá de nuevo en el próximo inicio.",
+    "confirmDelete": "¿Eliminar este trabajo definitivamente?",
+    "confirmDeleteAll": "¿Eliminar todo este trabajo definitivamente?",
+    "yesDelete": "Sí, eliminar",
+    "cancel": "Cancelar",
+    "openFailed": "No se pudo abrir el documento recuperado: {{error}}",
+    "saveFailed": "No se pudo guardar el documento recuperado: {{error}}",
+    "deleteFailed": "No se pudo eliminar: {{error}}",
+    "tabLabel": "recuperado",
+    "tabTip": "Recuperado tras un cierre inesperado. Al guardar se escribe en el archivo original.",
+    "reloadStopped": "La ventana de Open PDF Studio dejó de funcionar varias veces seguidas y ya no se recarga automáticamente. Guarde su trabajo y reinicie la aplicación."
   }
 }

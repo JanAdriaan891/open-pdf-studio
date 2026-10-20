@@ -1119,5 +1119,30 @@
     "documentChanged": "Dokumentet er endret. Ta skjermbildet på nytt.",
     "pngFiles": "PNG-bilde",
     "jpegFiles": "JPEG-bilde"
+  },
+  "recovery": {
+    "title": "Gjenopprett ulagret arbeid",
+    "intro": "Open PDF Studio ble ikke avsluttet normalt forrige gang. Ulagret arbeid er tatt vare på for disse dokumentene:",
+    "savedAt": "Tatt vare på {{time}}",
+    "pages": "Sider: {{count}}",
+    "untitled": "Dokument uten navn",
+    "neverSaved": "Aldri lagret",
+    "originalChanged": "Originalfilen er endret siden.",
+    "open": "Åpne",
+    "saveAs": "Lagre som...",
+    "delete": "Slett",
+    "deleteAll": "Slett alle",
+    "later": "Senere",
+    "keepNote": "Det du ikke håndterer nå, blir tatt vare på i 14 dager og tilbudt på nytt ved neste oppstart.",
+    "confirmDelete": "Slette dette arbeidet permanent?",
+    "confirmDeleteAll": "Slette alt dette arbeidet permanent?",
+    "yesDelete": "Ja, slett",
+    "cancel": "Avbryt",
+    "openFailed": "Kunne ikke åpne det gjenopprettede dokumentet: {{error}}",
+    "saveFailed": "Kunne ikke lagre det gjenopprettede dokumentet: {{error}}",
+    "deleteFailed": "Sletting mislyktes: {{error}}",
+    "tabLabel": "gjenopprettet",
+    "tabTip": "Gjenopprettet etter en uventet avslutning. Lagring skriver til originalfilen.",
+    "reloadStopped": "Open PDF Studio-vinduet sluttet å fungere flere ganger på rad og lastes ikke lenger inn på nytt automatisk. Lagre arbeidet ditt og start appen på nytt."
   }
 }

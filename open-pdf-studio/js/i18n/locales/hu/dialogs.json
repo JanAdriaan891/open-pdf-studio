@@ -1119,5 +1119,30 @@
     "documentChanged": "A dokumentum megváltozott. Készítse el újra a képernyőképet.",
     "pngFiles": "PNG-kép",
     "jpegFiles": "JPEG-kép"
+  },
+  "recovery": {
+    "title": "Nem mentett munka helyreállítása",
+    "intro": "Az Open PDF Studio legutóbb nem állt le szabályosan. Ezeknek a dokumentumoknak a nem mentett munkája megmaradt:",
+    "savedAt": "Megőrizve: {{time}}",
+    "pages": "Oldalak: {{count}}",
+    "untitled": "Névtelen dokumentum",
+    "neverSaved": "Soha nem volt mentve",
+    "originalChanged": "Az eredeti fájl azóta megváltozott.",
+    "open": "Megnyitás",
+    "saveAs": "Mentés másként...",
+    "delete": "Törlés",
+    "deleteAll": "Összes törlése",
+    "later": "Később",
+    "keepNote": "Amit most nem intéz el, 14 napig megmarad, és a következő indításkor újra felajánljuk.",
+    "confirmDelete": "Véglegesen törli ezt a munkát?",
+    "confirmDeleteAll": "Véglegesen törli ezt a teljes munkát?",
+    "yesDelete": "Igen, törlés",
+    "cancel": "Mégse",
+    "openFailed": "A helyreállított dokumentumot nem sikerült megnyitni: {{error}}",
+    "saveFailed": "A helyreállított dokumentumot nem sikerült menteni: {{error}}",
+    "deleteFailed": "A törlés nem sikerült: {{error}}",
+    "tabLabel": "helyreállítva",
+    "tabTip": "Váratlan leállás után helyreállítva. A mentés az eredeti fájlba ír.",
+    "reloadStopped": "Az Open PDF Studio ablaka többször egymás után leállt, ezért már nem töltődik újra automatikusan. Mentse a munkáját, és indítsa újra az alkalmazást."
   }
 }

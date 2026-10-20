@@ -93,6 +93,7 @@ import { addRecentFile } from './mobile/recent-files.js';
 // Tauri API
 import { isTauri, isMobile, isDevMode, getOpenedFiles, loadSession, saveSession, fileExists, isDefaultPdfApp, openDefaultAppsSettings, extractFileName, invoke } from './core/platform.js';
 import { instantieRol, taakToegestaan } from './core/instantie-rol.js';
+import { meldSchoonAfsluiten } from './herstel/haken.js';
 import { sessieHerstelBeleid } from './core/sessie-herstel.js';
 import { sessieBestanden, bronPad } from './pdf/wachtwoord-pdf.js';
 
@@ -391,6 +392,15 @@ async function init() {
     if (taakToegestaan('sessie-herstellen', rol)) restoreLastSession();
   }
 
+  // Herstel van niet-opgeslagen werk (js/herstel/): momentopnamen in elke
+  // instantie, het aanbod na een onverwachte afsluiting alleen in de
+  // hoofdinstantie (een losgemaakt tabblad toont het niet nog eens).
+  if (isTauri()) {
+    import('./herstel/herstel.js')
+      .then((m) => m.startHerstel({ hoofd: taakToegestaan('herstel-aanbieden', rol) }))
+      .catch((e) => console.warn('[herstel] start failed:', e));
+  }
+
   // Dev convenience: ALWAYS have Desktop\test.pdf open on boot — the standing
   // test document, so every reload/restart drops you straight back into it.
   // Dev-only; skipped silently when the file doesn't exist.
@@ -470,6 +480,9 @@ function setupSessionSaveOnClose() {
               return;
             }
           }
+          // Alles opgeslagen of bewust verworpen: een nette afsluiting, de
+          // herstelmomentopnamen en de markering "draait" mogen weg.
+          await meldSchoonAfsluiten();
           await saveSessionData();
         });
       }

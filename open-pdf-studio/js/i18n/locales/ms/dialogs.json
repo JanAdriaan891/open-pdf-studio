@@ -1119,5 +1119,30 @@
     "documentChanged": "Dokumen telah berubah. Ambil tangkapan skrin semula.",
     "pngFiles": "Imej PNG",
     "jpegFiles": "Imej JPEG"
+  },
+  "recovery": {
+    "title": "Pulihkan kerja yang belum disimpan",
+    "intro": "Open PDF Studio tidak ditutup secara normal kali terakhir. Kerja yang belum disimpan daripada dokumen ini telah disimpan sementara:",
+    "savedAt": "Disimpan sementara pada {{time}}",
+    "pages": "Halaman: {{count}}",
+    "untitled": "Dokumen tanpa tajuk",
+    "neverSaved": "Tidak pernah disimpan",
+    "originalChanged": "Fail asal telah berubah sejak itu.",
+    "open": "Buka",
+    "saveAs": "Simpan sebagai...",
+    "delete": "Padam",
+    "deleteAll": "Padam semua",
+    "later": "Kemudian",
+    "keepNote": "Apa yang anda tidak uruskan sekarang disimpan selama 14 hari dan ditawarkan semula pada permulaan seterusnya.",
+    "confirmDelete": "Padam kerja ini secara kekal?",
+    "confirmDeleteAll": "Padam semua kerja ini secara kekal?",
+    "yesDelete": "Ya, padam",
+    "cancel": "Batal",
+    "openFailed": "Dokumen yang dipulihkan tidak dapat dibuka: {{error}}",
+    "saveFailed": "Dokumen yang dipulihkan tidak dapat disimpan: {{error}}",
+    "deleteFailed": "Pemadaman gagal: {{error}}",
+    "tabLabel": "dipulihkan",
+    "tabTip": "Dipulihkan selepas penutupan yang tidak dijangka. Menyimpan menulis ke fail asal.",
+    "reloadStopped": "Tetingkap Open PDF Studio berhenti berfungsi beberapa kali berturut-turut dan tidak lagi dimuat semula secara automatik. Simpan kerja anda dan mulakan semula aplikasi."
   }
 }

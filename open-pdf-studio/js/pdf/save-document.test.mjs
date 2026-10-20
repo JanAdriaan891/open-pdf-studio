@@ -18,13 +18,15 @@ function harness() {
   const a = { id: 'a', pdfDoc: {}, filePath: 'a.pdf', annotations: [], modified: true, undoStack: [] };
   const b = { id: 'b', pdfDoc: {}, filePath: 'b.pdf', annotations: [], modified: true, undoStack: [] };
   let active = a;
-  const writes = [], owners = [], attachmentEdits = [];
+  const writes = [], owners = [], attachmentEdits = [], opgeslagenGemeld = [];
   const deps = {
     state: { documents: [a, b] }, getActiveDocument: () => active,
     showLoading() {}, hideLoading() {}, updateTabBar() {}, updateWindowTitle() {},
     getCachedPdfBytes: path => new TextEncoder().encode(path), setCachedPdfBytes() {},
     verzamelSchaalBronnen: () => ({}),
-    PDFDocument: { load: async bytes => ({ context: { largestObjectNumber: 1 }, getPages: () => [], catalog: { get: () => null }, save: async () => bytes }) },
+    PDFDocument: { load: async bytes => ({ context: { largestObjectNumber: 1 }, getPages: () => [], catalog: { get: () => null },
+      formCache: { getValue: () => undefined }, flush: async () => {}, save: async () => bytes }) },
+    ruimOngebruikteObjectenOp() {},
     PDFName: { of: x => x }, KNIPSEL_CATALOGUS: 'snippets',
     getAnnotationStorage: doc => { owners.push(doc); return null; },
     getAnnotIdToFieldName: doc => { owners.push(doc); return new Map(); },
@@ -42,6 +44,8 @@ function harness() {
     opslaanGeweigerd,
     // Leesbare naam, ook voor een content://-URI van Android (#596).
     bestandsnaamUitPad,
+    // Herstelmomentopname weg na opslaan (js/herstel/haken.js).
+    meldOpgeslagen: doc => opgeslagenGemeld.push(doc),
     console: { error() {}, warn() {} },
     saveFileDialog: async () => 'copy.pdf',
     // Het slot tegen een extensiewissel (#550): standaard loopt er geen.
@@ -55,8 +59,8 @@ function harness() {
     },
   };
   // A with scope keeps the injected dependencies mutable across awaits.
-  const api = new Function('deps', `with (deps) { ${saved}\n${functions}\n return {savePDF, savePDFAs}; }`)(deps);
-  return { a, b, deps, api, writes, owners, attachmentEdits, switchToB: () => { active = b; } };
+  const api = new Function('deps', `with (deps) { ${saved}\n${functions}\n return {savePDF, savePDFAs, bouwMomentopname}; }`)(deps);
+  return { a, b, deps, api, writes, owners, attachmentEdits, opgeslagenGemeld, switchToB: () => { active = b; } };
 }
 
 test('tab switch during signature verification still saves A to the requested path', async () => {
@@ -295,4 +299,63 @@ test('a save writes the attachment changes of the document being saved (#376)', 
   h.b.bijlagenWijzigingen = { toegevoegd: [], verwijderd: ['b-only.txt'] };
   assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), true);
   assert.deepEqual(h.attachmentEdits, [edits]);
+});
+
+// Herstelmomentopname (js/herstel/): dezelfde bytes als opslaan, maar niets
+// wegschrijven, niets als opgeslagen markeren en geen melding.
+test('a recovery snapshot returns the bytes without writing or marking the document saved', async () => {
+  const h = harness();
+  let laden = 0;
+  h.deps.showLoading = () => { laden++; };
+  const bytes = await h.api.bouwMomentopname(h.a);
+  assert.equal(new TextDecoder().decode(bytes), 'a.pdf');
+  assert.deepEqual(h.writes, []);
+  assert.equal(h.a.modified, true, 'still unsaved');
+  assert.equal(laden, 0, 'no loading overlay');
+  assert.deepEqual(h.opgeslagenGemeld, []);
+  assert.ok(h.owners.every(doc => doc === h.a));
+});
+
+test('a recovery snapshot is never made of a password-protected document', async () => {
+  const h = harness();
+  h.a.filePath = 'C:/Temp/opds-beveiligd/1-0123456789abcdef.pdf';
+  markeerBeveiligd(h.a, 'D:/Projecten/contract.pdf');
+  await assert.rejects(h.api.bouwMomentopname(h.a), /password-protected/);
+  assert.deepEqual(h.writes, []);
+});
+
+test('a failing recovery snapshot throws to the caller and shows no message', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  h.deps.PDFDocument = { load: async () => { throw new Error('broken'); } };
+  await assert.rejects(h.api.bouwMomentopname(h.a), /broken/);
+  assert.deepEqual(meldingen, []);
+});
+
+test('a save waits for a running recovery snapshot, then reports the save', async () => {
+  const h = harness(), gate = deferred(), entered = deferred();
+  let aanroep = 0;
+  h.deps.metOpslagSlot = async fn => {
+    aanroep++;
+    if (aanroep === 1) { entered.resolve(); await gate.promise; }
+    return fn();
+  };
+  const snapshot = h.api.bouwMomentopname(h.a);
+  await entered.promise;
+  const saving = h.api.savePDF(null, { zonderHandtekeningVraag: true });
+  await new Promise(r => setTimeout(r, 0));
+  assert.deepEqual(h.writes, [], 'the save has not started yet');
+  gate.resolve();
+  await snapshot;
+  assert.equal(await saving, true);
+  assert.deepEqual(h.writes, [{ path: 'a.pdf', source: 'a.pdf' }]);
+  assert.deepEqual(h.opgeslagenGemeld, [h.a]);
+});
+
+test('a failed save does not report the document as saved', async () => {
+  const h = harness();
+  h.deps.writeBinaryFileAtomic = async () => { throw new Error('disk full'); };
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.deepEqual(h.opgeslagenGemeld, []);
 });
