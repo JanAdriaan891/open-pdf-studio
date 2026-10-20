@@ -17,7 +17,7 @@ import {
   textAnnotIcon, textboxIcon, noteIcon, calloutIcon,
   stampIcon, signatureIcon,
   redactionIcon, applyRedactionsIcon,
-  clearPageIcon, clearAllIcon,
+  clearPageIcon, clearAllIcon, flattenAllIcon, unflattenAllIcon,
   measureDistanceIcon, measureAreaIcon, measurePerimeterIcon, measureAngleIcon, calibrateIcon
 } from '../../data/ribbonIcons.js';
 
@@ -138,6 +138,17 @@ export function CommentGroups() {
                   hideProperties();
                   if (getActiveDocument()?.viewMode === 'continuous') { redrawContinuous(); } else { redrawAnnotations(); }
                 }
+              }} />
+          </RibbonButtonStack>
+          {/* Alles vlakken / terughalen (#615): in het geopende document, ongedaan te maken. */}
+          <RibbonButtonStack>
+            <RibbonButton size="small" id="ribbon-flatten-all" title={t('comment.flattenAllTooltip')} icon={flattenAllIcon} label={t('comment.flattenAll')}
+              disabled={noPdf() || isPdfAReadOnly()} onClick={() => {
+                import('../../../pdf/flatten-all.js').then((m) => m.flattenAllMarkups());
+              }} />
+            <RibbonButton size="small" id="ribbon-unflatten-all" title={t('comment.unflattenAllTooltip')} icon={unflattenAllIcon} label={t('comment.unflattenAll')}
+              disabled={noPdf() || isPdfAReadOnly()} onClick={() => {
+                import('../../../pdf/flatten-all.js').then((m) => m.unflattenAllMarkups());
               }} />
           </RibbonButtonStack>
         </RibbonGroup>

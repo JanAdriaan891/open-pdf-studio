@@ -64,6 +64,9 @@
     "screenshot": "Kuvakaappaus",
     "captureFullPage": "Kaappaa koko sivu",
     "screenshotOptions": "Kuvakaappausasetukset",
+    "captureRegionTitle": "Kuvakaappaus: valitse alue ja kopioi se tai tallenna se kuvana",
+    "quickCopy": "Kopioi alue näytön tarkkuudella",
+    "quickCopyTitle": "Valitse alue ja kopioi se heti leikepöydälle näytön tarkkuudella",
     "fullPage": "Koko sivu",
     "region": "Alue",
     "placeAsOverlay": "Sijoita peittokuvaksi",
@@ -161,7 +164,11 @@
     "snapActive": "Kiinnitys päällä",
     "loading": "Ladataan...",
     "northArrow": "Pohjoisnuoli",
-    "parametricSymbol": "Parametrinen symboli"
+    "parametricSymbol": "Parametrinen symboli",
+    "flattenAll": "Litistä kaikki",
+    "flattenAllTooltip": "Litistä kaikki merkinnät sivun sisällöksi",
+    "unflattenAll": "Kumoa litistys",
+    "unflattenAllTooltip": "Palauta merkinnät, jotka litistettiin palautus sallittuna"
   },
   "view": {
     "pageDisplay": "Sivun näyttö",
@@ -372,6 +379,25 @@
     "blendMode": "Sekoitustila",
     "normal": "Normaali",
     "multiply": "Kerro",
+    "blend": {
+      "normal": "Normaali",
+      "multiply": "Kerro",
+      "screen": "Rasteri",
+      "overlay": "Sulautus",
+      "darken": "Tummenna",
+      "lighten": "Vaalenna",
+      "colorDodge": "Värilisävarjostus",
+      "colorBurn": "Värivarjostus",
+      "hardLight": "Kova valo",
+      "softLight": "Pehmeä valo",
+      "difference": "Erotus",
+      "exclusion": "Poisto",
+      "hue": "Sävy",
+      "saturation": "Kylläisyys",
+      "color": "Väri",
+      "luminosity": "Kirkkaus"
+    },
+    "blendHint": "Miten merkintä yhdistyy alla olevaan sivuun. Täyttö ja viiva antavat sille värin; sekoitustila ratkaisee vain, miten väri sekoittuu sivuun.",
     "startLabel": "Alku:",
     "startArrow": "Alkuun nuoli",
     "endLabel": "Loppu:",
@@ -579,6 +605,8 @@
     "enlarge": "Suurenna",
     "dimHint": "napsauta ja kirjoita sitten esim. 500,300 + Enter",
     "dimInputHint": "Kirjoita mitat (esim. 500,300 tai yksi koko) ja paina Enter — tai piirrä vetämällä",
+    "calloutStep2": "Napsauta kohtaa, johon huomautus tulee — Esc peruuttaa",
+    "polygonHint": "Napsauta jokaista kulmaa — lopeta kaksoisnapsautuksella, Enterillä tai napsauttamalla ensimmäistä kulmaa; Askelpalautin poistaa viimeisen kulman, Esc peruuttaa. Vedä, niin saat säännöllisen kuusikulmion.",
     "offsetPick": "Rinnakkaissiirto: napsauta siirrettävää kohdetta",
     "offsetDistance": "Rinnakkaissiirto: kirjoita etäisyys ja paina Enter (esim. 100)",
     "offsetDistanceInvalid": "Rinnakkaissiirto: anna positiivinen etäisyys, esim. 100",
@@ -635,5 +663,28 @@
     "noCorrections": "Korjauksia ei ole vielä.",
     "insertPlaceholder": "Lisättävä teksti",
     "replacePlaceholder": "Korvaava teksti"
+  },
+  "flattenAll": {
+    "title": "Litistä kaikki merkinnät",
+    "message": "Tämän asiakirjan merkinnät ({{count}}) muuttuvat osaksi sivun sisältöä. Kaikki PDF-katseluohjelmat näyttävät ne, mutta niitä ei voi enää valita tai muokata merkintöinä.",
+    "allowUnflatten": "Salli palautus",
+    "allowUnflattenHint": "Merkinnöistä säilytetään kopio tiedostossa, joten Kumoa litistys voi palauttaa ne myöhemmin, myös tallennuksen ja uudelleenavaamisen jälkeen.",
+    "noUnflattenHint": "Kopiota ei säilytetä: tallennuksen jälkeen merkinnät ovat pysyvästi osa sivua.",
+    "saveNote": "Huomautukset ja muut merkinnät, joilla ei ole ulkoasua sivulla, pysyvät merkintöinä. Tiedosto muuttuu vasta tallennettaessa; siihen asti Kumoa peruu tämän vaiheen.",
+    "ok": "Litistä",
+    "busy": "Litistetään merkintöjä...",
+    "nothing": "Tässä asiakirjassa ei ole litistettäviä merkintöjä.",
+    "nothingBaked": "Millään merkinnällä ei ole ulkoasua sivulla, joten mitään ei litistetty.",
+    "notLoaded": "Asiakirjan merkintöjä ladataan vielä. Yritä hetken kuluttua uudelleen.",
+    "done": "Litistetyt merkinnät: {{count}}.",
+    "kept": "Säilytetty merkintöinä (ei ulkoasua sivulla): {{count}}.",
+    "failed": "Litistys epäonnistui: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "Palautetaan merkintöjä...",
+    "nothing": "Tässä asiakirjassa ei ole palautettavia litistettyjä merkintöjä.",
+    "noRecovery": "Tämän asiakirjan merkinnät litistettiin sallimatta palautusta. Ne ovat osa sivun sisältöä eikä niitä voi palauttaa.",
+    "done": "Palautetut merkinnät: {{count}}.",
+    "failed": "Palautus epäonnistui: {{error}}"
   }
 }

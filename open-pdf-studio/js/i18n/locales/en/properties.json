@@ -43,6 +43,7 @@
     "strokeColor": "Stroke Color",
     "color": "Color",
     "opacity": "Opacity",
+    "fillOpacity": "Fill Opacity",
     "lineWidth": "Line Width",
     "borderWidth": "Border Width",
     "borderStyle": "Border Style",

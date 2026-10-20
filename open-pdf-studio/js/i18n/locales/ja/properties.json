@@ -63,6 +63,7 @@
     "strokeColor": "線の色",
     "color": "色",
     "opacity": "不透明度",
+    "fillOpacity": "塗りつぶしの不透明度",
     "lineWidth": "線の幅",
     "borderWidth": "枠線の幅",
     "borderStyle": "枠線スタイル",

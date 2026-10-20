@@ -9,6 +9,7 @@ import { eraserTool } from './eraser-tool.js';
 import { shapeTool } from './shape-tool.js';
 import { lineTool } from './line-tool.js';
 import { polylineTool, cloudPolylineTool } from './polyline-tool.js';
+import { polygonTool } from './polygon-tool.js';
 import { arcTool } from './arc-tool.js';
 import { splineTool } from './spline-tool.js';
 import { splineArrowTool } from './spline-arrow-tool.js';
@@ -59,7 +60,6 @@ export function registerAllTools() {
   registerTool('ellipse', shapeTool);
   registerTool('highlight', shapeTool);
   registerTool('cloud', shapeTool);
-  registerTool('polygon', shapeTool);
   registerTool('redaction', shapeTool);
   registerTool('textbox', shapeTool);
   registerTool('callout', shapeTool);
@@ -88,6 +88,9 @@ export function registerAllTools() {
 
   // Multi-click tools
   registerTool('polyline', polylineTool);
+  // Veelhoek: hoek voor hoek, zoals de polylijn maar gesloten (#622); een
+  // sleep vóór het eerste hoekpunt tekent de regelmatige zeshoek.
+  registerTool('polygon', polygonTool);
   registerTool('cloudPolyline', cloudPolylineTool);
 
   // Measurements

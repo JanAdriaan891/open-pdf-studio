@@ -63,6 +63,7 @@
     "strokeColor": "Konturfarbe",
     "color": "Farbe",
     "opacity": "Deckkraft",
+    "fillOpacity": "Deckkraft der Füllung",
     "borderStyle": "Rahmenstil",
     "cross": "Kreuz",
     "crossHint": "Zeichnet ein Kreuz in das Rechteck, den Kreis oder die Ellipse (z.B. eine Aussparung)",

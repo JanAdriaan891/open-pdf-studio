@@ -46,6 +46,7 @@ import {
   isGripLengteStartToets,
 } from './grip-lengte.js';
 import { greepOorsprong, strekBasispunt, strekLengteTekst } from './greep-strek.js';
+import { isBewerkbareVeelhoek, veelhoekPuntenOpScherm, veelhoekDeelBij, voegVeelhoekHoekpuntIn } from '../annotations/veelhoek-punten.js';
 import {
   isStramien, startMeeslepen, sleepMee, meesleepWijzigingen, herstelMeeslepen,
 } from '../annotations/stramien-koppeling.js';
@@ -549,6 +550,20 @@ export function handleDblClick(e) {
           module.startParametricSymbolInput(clicked, coords.x, coords.y))
         .catch((error) =>
           console.error('[dispatcher] parametric label input error', error));
+    } else if (state.currentTool === 'select' && isBewerkbareVeelhoek(clicked)
+        && (dblDoc?.selectedAnnotations || []).includes(clicked) && !clicked.locked) {
+      // Dubbelklik op een zijde van een geselecteerde veelhoek (#622): daar
+      // een hoekpunt bij. Op een hoekpunt of midden in de vorm gebeurt niets.
+      const deel = veelhoekDeelBij(clicked, coords.x, coords.y, 6 / (getEffectiveScale() || 1));
+      const nieuw = deel?.kind === 'edge' ? voegVeelhoekHoekpuntIn(clicked, deel.edgeIndex, deel.punt) : null;
+      if (nieuw) {
+        const voor = cloneAnnotation(clicked);
+        Object.assign(clicked, nieuw);
+        clicked.modifiedAt = new Date().toISOString();
+        recordModify(clicked.id, voor, cloneAnnotation(clicked));
+        showProperties(clicked);
+        redraw();
+      }
     } else if (clicked.type === 'comment') {
       state.isDrawing = false;
       if (dblDoc) { dblDoc.selectedAnnotations = [clicked]; dblDoc.selectedAnnotation = clicked; }
@@ -764,7 +779,10 @@ function _handleResize(ctx, e, coords) {
     if (!isNaN(nodeIdx) && nodeIdx < ann.points.length) {
       canvasCtx.save();
       applyToolTransform(canvasCtx);
-      drawAlignmentGuides(canvasCtx, ann, nodeIdx, resizeScale);
+      // Een veelhoek (#622) op zijn hoekpunten zoals het scherm ze toont
+      // (door het vak, gedraaid).
+      const gidsVorm = isBewerkbareVeelhoek(ann) ? { points: veelhoekPuntenOpScherm(ann) } : ann;
+      drawAlignmentGuides(canvasCtx, gidsVorm, nodeIdx, resizeScale);
       canvasCtx.restore();
     }
   }

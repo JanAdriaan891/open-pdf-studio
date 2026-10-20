@@ -15,7 +15,7 @@ import {
 } from './print-plaatsing.js';
 import { bouwVectorPrintPdf, maakTegelRaster, vakkenUitRaster, vakOpVel } from './print-vector.js';
 import { markeringenVoorInhoud } from '../solid/stores/print-instellingen.js';
-import { maakMeerPerBlad, isMeerPerBlad, schaalVoorMeerPerBlad } from './print-meerperblad.js';
+import { maakMeerPerBlad, isMeerPerBlad, bronKeuzes } from './print-meerperblad.js';
 import { maakPoster } from './print-poster.js';
 import { maakBoekje } from './print-boekje.js';
 import {
@@ -161,7 +161,7 @@ async function bronBytesVan(doc) {
  *           orientatie?:'auto'|'portrait'|'landscape',
  *           vel?: {breedteMm:number, hoogteMm:number}|'pagina'|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
- *           poster?: object|null, boekje?: boolean|{katern:number},
+ *           poster?: object|null, boekje?: boolean|{katern?:number, binding?:string, kanten?:string, omgekeerd?:boolean, draaiAchter?:boolean, kruipMm?:number},
  *           openen?: ((pad:string) => void)|null,
  *           afgebroken?: () => boolean }} opts
  *   vel 'pagina' = elke pagina haar eigen vel, in de gekozen stand
@@ -180,9 +180,14 @@ export async function slaPrintOpAlsPdf({
   centreren: centrerenKeuze = true, meerPerBlad: meerPerBladKeuze = null, poster = null, boekje = false,
   inhoud = 'doc-and-markups', openen = null, afgebroken = () => false,
 }) {
+  // `orientatie` is de stand van het vel; de printpagina's krijgen bij
+  // pagina's per vel en een boekje hun eigen stand (bronOrientatie, #623).
   const {
-    vel: bronVel, meerPerBlad, schaling, zoom, centreren,
-  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze, boekje);
+    vel: bronVel, meerPerBlad, schaling, zoom, centreren, orientatie: bronOrientatie,
+  } = bronKeuzes({
+    poster, vel, meerPerBlad: meerPerBladKeuze, schaling: schalingKeuze, zoom: zoomKeuze,
+    centreren: centrerenKeuze, boekje, orientatie,
+  });
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -200,7 +205,7 @@ export async function slaPrintOpAlsPdf({
       ({ pdf } = await bouwVectorPrintPdf({
         bronBytes: await bronBytesVan(doc),
         paginas: pages.map((pageNum) => ({ index: pageNum - 1, extraRotatie: getPageRotation(pageNum) })),
-        keuzes: { papier: bronVel, orientatie, schaling, zoom, centreren },
+        keuzes: { papier: bronVel, orientatie: bronOrientatie, schaling, zoom, centreren },
         beelden: ({ index, plaatsing }) => markeringBeelden(index + 1, plaatsing, markeringen),
         voortgang: (i, index) => voortgang(i, index + 1),
       }));
@@ -208,7 +213,7 @@ export async function slaPrintOpAlsPdf({
       console.warn('[print] vector print PDF failed; falling back to page images:', e);
       gerasterd = true;
       ({ pdf } = await bouwPrintPdf({
-        doc, pages, orientatie, vel: bronVel, schaling, zoom, centreren, inhoud, voortgang,
+        doc, pages, orientatie: bronOrientatie, vel: bronVel, schaling, zoom, centreren, inhoud, voortgang,
       }));
     }
 
@@ -256,27 +261,22 @@ async function metMeerPerBlad(pdf, meerPerBlad, vel, orientatie) {
 /**
  * Boekje (print-boekje.js): de print-PDF (één pagina per bronpagina, in
  * printvolgorde) naar liggende vellen met twee pagina's per zijde in
- * genietvolgorde, aangevuld tot een viervoud. `boekje` is true of
- * { katern } (vellen per katern, #607; 0 = één boekje).
+ * genietvolgorde, aangevuld tot een viervoud. `boekje` is true of een object
+ * met de boekje-opties (#607): { katern, binding, kanten, omgekeerd,
+ * draaiAchter, kruipMm } (zie maakBoekje).
  */
 async function metBoekje(pdf, boekje, vel) {
   if (!boekje) return pdf;
-  const katern = typeof boekje === 'object' ? boekje.katern || 0 : 0;
-  return maakBoekje(pdf, { papier: vel && typeof vel === 'object' ? vel : null, katern });
-}
-
-/**
- * Posterafdruk (print-poster.js): de bronpagina's eerst elk op hun eigen maat
- * (papier null, passend = 1:1), daarna in tegels over de vellen. De
- * schaalkeuze en het aantal per vel tellen dan niet: de tegelschaal vervangt
- * ze. Een boekje telt net als meerdere pagina's per vel: elke pagina passend
- * en gecentreerd op haar printpagina, geen raster ernaast. Anders: de keuzes
- * zoals ze zijn.
- */
-function bronKeuzes(poster, vel, meerPerBlad, schaling, zoom, centreren, boekje = false) {
-  if (poster) return { vel: null, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
-  if (boekje) return { vel, meerPerBlad: null, schaling: 'fit', zoom: 100, centreren: true };
-  return { vel, meerPerBlad, ...schaalVoorMeerPerBlad(meerPerBlad, schaling, zoom, centreren) };
+  const opties = typeof boekje === 'object' ? boekje : {};
+  return maakBoekje(pdf, {
+    papier: vel && typeof vel === 'object' ? vel : null,
+    katern: opties.katern || 0,
+    binding: opties.binding,
+    kanten: opties.kanten,
+    omgekeerd: !!opties.omgekeerd,
+    draaiAchter: !!opties.draaiAchter,
+    kruipMm: opties.kruipMm || 0,
+  });
 }
 
 /** Het label van een tegel in de taal van de app (print-poster.js, posterLabel). */
@@ -308,7 +308,7 @@ async function metPoster(pdf, poster, { vel, orientatie, pages, doc }) {
  *           orientatie?:'auto'|'portrait'|'landscape', papier?:string,
  *           vel?: {breedteMm:number, hoogteMm:number}|null,
  *           schaling?: string, zoom?: number, centreren?: boolean, inhoud?: string,
- *           poster?: object|null, boekje?: boolean|{katern:number},
+ *           poster?: object|null, boekje?: boolean|{katern?:number, binding?:string, kanten?:string, omgekeerd?:boolean, draaiAchter?:boolean, kruipMm?:number},
  *           afgebroken?: () => boolean }} opts
  *   boekje: een geniet boekje (print-boekje.js), twee pagina's per liggend vel.
  *   poster: de tegelkeuzes van de posterafdruk (print-poster.js) of null; de
@@ -324,9 +324,15 @@ export async function runPrintJob({
   meerPerBlad: meerPerBladKeuze = null, poster = null, boekje = false, inhoud = 'doc-and-markups',
   afgebroken = () => false,
 }) {
+  // `orientatie` is de stand van het vel (en gaat zo naar print_pdf); de
+  // printpagina's krijgen bij pagina's per vel en een boekje hun eigen stand
+  // (bronOrientatie, #623).
   const {
-    vel: bronVel, meerPerBlad, schaling, zoom, centreren,
-  } = bronKeuzes(poster, vel, meerPerBladKeuze, schalingKeuze, zoomKeuze, centrerenKeuze, boekje);
+    vel: bronVel, meerPerBlad, schaling, zoom, centreren, orientatie: bronOrientatie,
+  } = bronKeuzes({
+    poster, vel, meerPerBlad: meerPerBladKeuze, schaling: schalingKeuze, zoom: zoomKeuze,
+    centreren: centrerenKeuze, boekje, orientatie,
+  });
   startPrintProgress(i18next.t('dialogs:print.progress.preparing'));
   try {
     const doc = getActiveDocument();
@@ -334,7 +340,7 @@ export async function runPrintJob({
     // Reserve the last slice of the bar for the spool step.
     const total = pages.length + 1;
     const { pdf: pagePdf, opVel: paginasOpVel } = await bouwPrintPdf({
-      doc, pages, orientatie, vel: bronVel, schaling, zoom, centreren, inhoud,
+      doc, pages, orientatie: bronOrientatie, vel: bronVel, schaling, zoom, centreren, inhoud,
       voortgang: (i, pageNum) => updatePrintProgress(
         i18next.t('dialogs:print.progress.renderingPage', { page: pageNum, current: i + 1, total: pages.length }),
         i / total,

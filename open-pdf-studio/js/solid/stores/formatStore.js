@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js';
 import { state, getActiveDocument } from '../../core/state.js';
 import { recordPropertyChange, recordBulkModify } from '../../core/undo-manager.js';
 import { cloneAnnotation } from '../../annotations/factory.js';
+import { lintZetLijnkoppen, koppenVan } from '../../pdf/lijnkoppen.js';
 import { redrawAnnotations, redrawContinuous } from '../../annotations/rendering.js';
 import { showProperties, showMultiSelectionProperties } from '../../ui/panels/properties-panel.js';
 import { applyStampLineWidth, applyStampColor } from '../../annotations/stamp-line-width.js';
@@ -162,9 +163,11 @@ export function syncFormatStore(selectedAnnotations) {
   setBorderStyle(ann.borderStyle || 'solid');
   setBlendMode(ann.blendMode || 'normal');
 
-  if (ann.type === 'arrow') {
-    setArrowStart(ann.startHead || 'none');
-    setArrowEnd(ann.endHead || 'open');
+  // Pijl, gebogen pijl en callout (#612): de koppen zoals het scherm ze tekent.
+  if (lintZetLijnkoppen(ann.type)) {
+    const koppen = koppenVan(ann);
+    setArrowStart(koppen.startHead);
+    setArrowEnd(koppen.endHead);
   }
 }
 

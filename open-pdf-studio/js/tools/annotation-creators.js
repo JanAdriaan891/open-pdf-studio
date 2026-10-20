@@ -24,6 +24,36 @@ import { randkleurenUitVoorkeur } from '../annotations/fill-utils.js';
 import { rechtopRotatie } from '../pdf/weergave-ruimte.js';
 import { rechtopVak, nieuweMaatHoekVast } from '../pdf/weergave-rotatie.js';
 import { documentHeeftSchaal } from '../annotations/schaal-op-punt.js';
+import { veelhoekUitPunten, regelmatigeVeelhoekPunten } from '../annotations/veelhoek-punten.js';
+
+/**
+ * Opmaak van een nieuwe veelhoek uit de voorkeuren (rand, vulling,
+ * lijndikte, lijnstijl, dekking): dezelfde voor een sleep en voor een
+ * veelhoek die hoek voor hoek getekend is (#622).
+ */
+export function veelhoekOpmaak(prefs = state.preferences || {}) {
+  return {
+    ...randkleurenUitVoorkeur(prefs, 'polygon', 'polygon', getColorPickerValue()),
+    fillColor: prefs.polygonFillNone ? null : (prefs.polygonFillColor || null),
+    lineWidth: prefs.polygonLineWidth || getLineWidthValue(),
+    borderStyle: prefs.polygonBorderStyle || 'solid',
+    opacity: (prefs.polygonOpacity || 100) / 100,
+  };
+}
+
+/**
+ * De velden van een veelhoek met deze hoekpunten, zoals de veelhoek-tool hem
+ * na het laatste hoekpunt aanmaakt (#622). Nog zonder createAnnotation().
+ */
+export function buildPolygonFromPoints(points, page = getActiveDocument()?.currentPage || 1) {
+  return {
+    type: 'polygon',
+    page,
+    ...veelhoekUitPunten(points),
+    ...veelhoekOpmaak(),
+    ...(state.toolOverrides || {}),
+  };
+}
 
 /**
  * Build raw annotation properties from tool + coordinates.
@@ -257,16 +287,18 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
     }
 
     case 'polygon':
+      // Een sleep met de veelhoek-tool: de regelmatige zeshoek in het
+      // gesleepte vak, met zijn hoekpunten in het model zodat ze daarna net
+      // zo verschuifbaar zijn als die van een hoek voor hoek getekende
+      // veelhoek (#622). Het vak is de omhullende van die hoekpunten, zoals
+      // de lader het na heropenen ook maakt. Genormaliseerd: naar links/boven
+      // slepen gaf een negatieve maat.
       return {
         type: 'polygon',
         page: getActiveDocument()?.currentPage || 1,
-        // Genormaliseerd: naar links/boven slepen gaf een negatieve maat, en
-        // daar kunnen raaktest, ruimtelijke index en opslaan niet mee overweg.
-        ...bbox(startX, startY, endX, endY),
-        sides: 6,
-        ...randkleurenUitVoorkeur(prefs, 'polygon', 'polygon', getColorPickerValue()),
-        lineWidth: prefs.polygonLineWidth || getLineWidthValue(),
-        opacity: (prefs.polygonOpacity || 100) / 100
+        ...veelhoekUitPunten(regelmatigeVeelhoekPunten(bbox(startX, startY, endX, endY), 6)),
+        ...veelhoekOpmaak(),
+        ...o
       };
 
     case 'lshape': {

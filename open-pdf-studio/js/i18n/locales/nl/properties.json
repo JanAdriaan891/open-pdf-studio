@@ -43,6 +43,7 @@
     "strokeColor": "Lijnkleur",
     "color": "Kleur",
     "opacity": "Dekking",
+    "fillOpacity": "Vuldekking",
     "borderStyle": "Randstijl",
     "cross": "Kruis",
     "crossHint": "Tekent een kruis in de rechthoek, cirkel of ellips (bijv. een sparing)",

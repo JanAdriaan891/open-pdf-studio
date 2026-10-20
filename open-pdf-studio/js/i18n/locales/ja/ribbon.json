@@ -64,6 +64,9 @@
     "screenshot": "スクリーンショット",
     "captureFullPage": "ページ全体をキャプチャ",
     "screenshotOptions": "スクリーンショットオプション",
+    "captureRegionTitle": "スクリーンショット: 範囲を選択してコピーするか画像として保存します",
+    "quickCopy": "画面解像度で範囲をコピー",
+    "quickCopyTitle": "範囲を選択し、画面の解像度ですぐにクリップボードへコピーします",
     "fullPage": "ページ全体",
     "region": "領域",
     "placeAsOverlay": "オーバーレイとして配置",
@@ -161,7 +164,11 @@
     "snapActive": "スナップ オン",
     "loading": "読み込み中...",
     "northArrow": "方位記号",
-    "parametricSymbol": "パラメトリックシンボル"
+    "parametricSymbol": "パラメトリックシンボル",
+    "flattenAll": "すべてフラット化",
+    "flattenAllTooltip": "すべてのマークアップをページの内容にフラット化",
+    "unflattenAll": "フラット化を元に戻す",
+    "unflattenAllTooltip": "復元を許可してフラット化したマークアップを復元"
   },
   "view": {
     "pageDisplay": "ページ表示",
@@ -372,6 +379,25 @@
     "blendMode": "ブレンドモード",
     "normal": "通常",
     "multiply": "乗算",
+    "blend": {
+      "normal": "通常",
+      "multiply": "乗算",
+      "screen": "スクリーン",
+      "overlay": "オーバーレイ",
+      "darken": "比較（暗）",
+      "lighten": "比較（明）",
+      "colorDodge": "覆い焼きカラー",
+      "colorBurn": "焼き込みカラー",
+      "hardLight": "ハードライト",
+      "softLight": "ソフトライト",
+      "difference": "差の絶対値",
+      "exclusion": "除外",
+      "hue": "色相",
+      "saturation": "彩度",
+      "color": "カラー",
+      "luminosity": "輝度"
+    },
+    "blendHint": "マークアップと下のページの混ざり方です。塗りと線が色を決め、ブレンドモードはその色がページとどう混ざるかだけを決めます。",
     "startLabel": "始点：",
     "startArrow": "始点の矢印",
     "endLabel": "終点：",
@@ -579,6 +605,8 @@
     "enlarge": "拡大",
     "dimHint": "クリックして、例: 500,300 と入力 + Enter",
     "dimInputHint": "寸法を入力（例: 500,300 または単一のサイズ）して Enter を押すか、ドラッグして描画します",
+    "calloutStep2": "メモを置く位置をクリック — Esc でキャンセル",
+    "polygonHint": "各頂点をクリック — ダブルクリック、Enter、または最初の頂点をクリックして完了。Backspace で最後の頂点を削除、Esc でキャンセル。ドラッグすると正六角形になります。",
     "offsetPick": "オフセット：オフセットするオブジェクトをクリックしてください",
     "offsetDistance": "オフセット：距離を入力して Enter を押してください（例: 100）",
     "offsetDistanceInvalid": "オフセット：正の距離を入力してください。例: 100",
@@ -635,5 +663,28 @@
     "noCorrections": "まだ修正はありません。",
     "insertPlaceholder": "挿入するテキスト",
     "replacePlaceholder": "置換後のテキスト"
+  },
+  "flattenAll": {
+    "title": "すべてのマークアップをフラット化",
+    "message": "この文書のマークアップ ({{count}}) はページの内容の一部になります。どの PDF ビューアーでも表示されますが、マークアップとして選択や編集はできなくなります。",
+    "allowUnflatten": "復元を許可する",
+    "allowUnflattenHint": "マークアップのコピーをファイル内に保持するため、「フラット化を元に戻す」で後から復元できます。保存して開き直した後でも復元できます。",
+    "noUnflattenHint": "コピーは保持されません。保存後、マークアップは完全にページの一部になります。",
+    "saveNote": "メモなど、ページ上に外観のないマークアップはマークアップのまま残ります。ファイルは保存したときにのみ変更され、それまでは元に戻すでこの操作を取り消せます。",
+    "ok": "フラット化",
+    "busy": "マークアップをフラット化しています...",
+    "nothing": "この文書にはフラット化するマークアップがありません。",
+    "nothingBaked": "ページ上に外観を持つマークアップがないため、何もフラット化されませんでした。",
+    "notLoaded": "この文書のマークアップはまだ読み込み中です。しばらくしてからもう一度お試しください。",
+    "done": "フラット化したマークアップ: {{count}}",
+    "kept": "マークアップのまま保持 (ページ上の外観なし): {{count}}",
+    "failed": "フラット化に失敗しました: {{error}}"
+  },
+  "unflattenAll": {
+    "busy": "マークアップを復元しています...",
+    "nothing": "この文書には復元できるフラット化されたマークアップがありません。",
+    "noRecovery": "この文書のマークアップは復元を許可せずにフラット化されました。ページの内容の一部であり、復元できません。",
+    "done": "復元したマークアップ: {{count}}",
+    "failed": "復元に失敗しました: {{error}}"
   }
 }

@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "open-pdf-studio",
   "display_name": "Open PDF Studio",
-  "version": "2026.42.11",
+  "version": "2026.43.0",
   "description": "Open, measure, annotate and save PDF drawings in Open PDF Studio, the free open-source PDF editor for the construction industry.",
   "long_description": "Connects Claude to Open PDF Studio running on your computer. Claude can open PDF drawings, read and navigate pages, place scale regions, measure areas and lengths, create and edit annotations, cut vector snippets from one drawing into another, fill title blocks, place a quantity schedule on the sheet and save the result.\n\nEverything runs locally: the extension talks to the app on 127.0.0.1 and the PDF file itself is never sent to an external service. Claude only sees what it asks for, such as a picture of the current page view.\n\n**Before you start:** install Open PDF Studio (free, from open-aec.com). The AI link is on by default; check it under **Settings > General > AI link (MCP)**. Tools that change a document always ask for your permission.",
   "author": {
@@ -50,6 +50,10 @@
     {
       "name": "app_screenshot_view",
       "description": "Capture the LIVE app as a base64 PNG."
+    },
+    {
+      "name": "app_capture_region",
+      "description": "Render an area of a page (or the whole page) of the active document as an image at a chosen resolution, the way Home > Screenshot does: the page is rendered again at `dpi` (not the screen pixels enlarged), with the annotations as printed (no selection frames), in the view rotation the user sees."
     },
     {
       "name": "app_mouse_move",

@@ -751,6 +751,25 @@ fn handle_tools_list() -> Value {
                 }
             },
             {
+                "name": "app_capture_region",
+                "description": "Render an area of a page (or the whole page) of the active document as an image at a chosen resolution, the way Home > Screenshot does: the page is rendered again at `dpi` (not the screen pixels enlarged), with the annotations as printed (no selection frames), in the view rotation the user sees. Coordinates are app points (page space, top-left origin, 100% zoom); leave x, y, width and height out for the whole page. Very large images are scaled down to at most 16384 px per side and 64 megapixels (`limited` is then true and `dpi` the resolution used). Returns { page, rect, width, height, dpi, limited, mime } plus image_base64, or with `path` the image is written to that file and { path, bytes } is returned instead of the base64. Nothing is put on the clipboard.",
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "page":    { "type": "integer", "minimum": 1, "description": "Page number (default: the current page)." },
+                        "x":       { "type": "number", "description": "Left edge in app points." },
+                        "y":       { "type": "number", "description": "Top edge in app points." },
+                        "width":   { "type": "number", "description": "Width in app points." },
+                        "height":  { "type": "number", "description": "Height in app points." },
+                        "dpi":     { "type": "number", "minimum": 10, "maximum": 2400, "default": 150, "description": "Resolution in pixels per inch of paper." },
+                        "format":  { "type": "string", "enum": ["png", "jpeg"], "default": "png" },
+                        "quality": { "type": "integer", "minimum": 1, "maximum": 100, "default": 90, "description": "JPEG quality." },
+                        "path":    { "type": "string", "description": "Absolute file path to write the image to, instead of returning it as base64." }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            {
                 "name": "app_mouse_move",
                 "description": "Dispatch a synthetic mousemove at viewport CSS coordinates (x, y) inside the LIVE WebView. Returns the element under the cursor.",
                 "inputSchema": {
@@ -1055,7 +1074,7 @@ fn handle_tools_list() -> Value {
             agent_task_result_tool(),
             {
                 "name": "app_create_annotation",
-                "description": "Create an annotation on the LIVE app's active document WITHOUT synthetic mouse input. Builds the same object the interactive tool would, pushes it onto the document, records an undo step and redraws. Geometry goes in `props` (page coordinates at 100% zoom): line/arrow/measureDistance need startX/startY/endX/endY; box/circle/highlight/cloud/polygon/textbox/callout/scaleRegion need x/y/width/height; polyline/filledArea/measureArea/measurePerimeter need points:[{x,y},...]; spline needs controlPoints; draw needs path; comment needs x/y. Optional style props (color, strokeColor, fillColor, lineWidth, opacity, text, fontSize, scaleString, units, leaderStartX/Y, leaderEndX/Y, dimShowUnit (measureDistance: false shows the number only), dimLineOvershootMm / dimExtGapMm / dimExtOvershootMm (measureDistance: overshoot of the dimension line, gap and overshoot of the extension lines, in paper mm), measureShowLabel (measureArea: false hides its own label), ...) override the tool defaults. measure* annotations get measureText computed from the document scale automatically. Returns the new annotation id.",
+                "description": "Create an annotation on the LIVE app's active document WITHOUT synthetic mouse input. Builds the same object the interactive tool would, pushes it onto the document, records an undo step and redraws. Geometry goes in `props` (page coordinates at 100% zoom): line/arrow/measureDistance need startX/startY/endX/endY; box/circle/highlight/cloud/textbox/callout/scaleRegion need x/y/width/height; polygon takes its corners as points:[{x,y},...] (>= 3), or x/y/width/height (+ optional sides, default 6) for a regular polygon in that box; polyline/filledArea/measureArea/measurePerimeter need points:[{x,y},...]; spline needs controlPoints; draw needs path; comment needs x/y. Optional style props (color, strokeColor, fillColor, lineWidth, opacity, text, fontSize, scaleString, units, leaderStartX/Y, leaderEndX/Y, dimShowUnit (measureDistance: false shows the number only), dimLineOvershootMm / dimExtGapMm / dimExtOvershootMm (measureDistance: overshoot of the dimension line, gap and overshoot of the extension lines, in paper mm), measureShowLabel (measureArea: false hides its own label), ...) override the tool defaults. measure* annotations get measureText computed from the document scale automatically. Returns the new annotation id.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
@@ -1597,6 +1616,8 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_zoom_in" => tool_app_request(state, "mcp:zoom-in", &arguments, Duration::from_secs(15)).await,
         "app_zoom_out" => tool_app_request(state, "mcp:zoom-out", &arguments, Duration::from_secs(15)).await,
         "app_screenshot_view" => tool_app_request(state, "mcp:screenshot-view", &arguments, Duration::from_secs(30)).await,
+        // A page at a high dpi can take a while to render.
+        "app_capture_region"  => tool_app_request(state, "mcp:capture-region",  &arguments, Duration::from_secs(120)).await,
         "app_mouse_move"  => tool_app_request(state, "mcp:mouse-move",  &arguments, Duration::from_secs(10)).await,
         "app_mouse_click" => tool_app_request(state, "mcp:mouse-click", &arguments, Duration::from_secs(10)).await,
         "app_mouse_drag"  => tool_app_request(state, "mcp:mouse-drag",  &arguments, Duration::from_secs(30)).await,
@@ -2370,7 +2391,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 75);
+        assert_eq!(arr.len(), 76);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

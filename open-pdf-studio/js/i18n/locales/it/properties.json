@@ -63,6 +63,7 @@
     "strokeColor": "Colore del tratto",
     "color": "Colore",
     "opacity": "Opacità",
+    "fillOpacity": "Opacità del riempimento",
     "borderStyle": "Stile bordo",
     "cross": "Croce",
     "crossHint": "Disegna una croce all'interno del rettangolo, del cerchio o dell'ellisse (es. un'apertura)",

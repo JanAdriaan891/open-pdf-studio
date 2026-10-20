@@ -137,7 +137,13 @@ async function compositeCurrentView(maxWidth = 2000) {
   ctx.fillRect(0, 0, outW, outH);
   ctx.drawImage(pdfCanvas, 0, 0, outW, outH);
   if (hlCanvas && hlCanvas.width > 0 && hlCanvas.height > 0) {
+    // Zoals het scherm: de markeerlaag vermenigvuldigt met de pagina (CSS
+    // mix-blend-mode). Met source-over zag een controle hier een andere
+    // pagina dan de gebruiker (#614). Gemengde annotaties staan al gemengd
+    // op de annotatielaag (rendering/mengen-tegen-pagina.js).
+    ctx.globalCompositeOperation = 'multiply';
     ctx.drawImage(hlCanvas, 0, 0, outW, outH);
+    ctx.globalCompositeOperation = 'source-over';
   }
   if (annCanvas && annCanvas.width > 0 && annCanvas.height > 0) {
     ctx.drawImage(annCanvas, 0, 0, outW, outH);
@@ -304,6 +310,51 @@ async function handleZoomOut() {
   const vp = window.__pdfViewport;
   const actual = vp?.active ? vp.zoom : (stateMod.getActiveDocument()?.scale ?? null);
   return { ok: true, actual };
+}
+
+/** app_capture_region: a page area (or the whole page) as an image file,
+ *  rendered again from the page at the requested dpi with the annotations —
+ *  the same route as Home → Screenshot (tools/screenshot.js). Returned as
+ *  base64, or written to `path`. */
+async function handleCaptureRegion(params) {
+  const { getActiveDocument } = await import('./core/state.js');
+  const doc = getActiveDocument();
+  const { leesOpnameArgumenten, snijRechthoeken, mimeType } = await import('./tools/screenshot-keuze.js');
+  const a = leesOpnameArgumenten(params, { aantalPaginas: doc?.pdfDoc?.numPages || 0, huidigePagina: doc?.currentPage || 1 });
+  if (a.error) return { ok: false, error: a.error };
+  const shot = await import('./tools/screenshot.js');
+  const gebied = shot.gebiedVanPagina(doc, a.page);
+  if (!gebied) return { ok: false, error: `size of page ${a.page} is unknown` };
+  if (a.rect) {
+    const s = snijRechthoeken(
+      { left: a.rect.x, top: a.rect.y, width: a.rect.width, height: a.rect.height },
+      { left: 0, top: 0, width: gebied.pageW, height: gebied.pageH });
+    if (!s) return { ok: false, error: 'the area is outside the page' };
+    gebied.rect = { x: s.left, y: s.top, width: s.width, height: s.height };
+  }
+  try {
+    const { canvas, maat } = await shot.renderSchermafbeelding(gebied, a.dpi);
+    const { canvasToBytes } = await import('./pdf/exporter.js');
+    const { imageWithDpi } = await import('./pdf/image-dpi.js');
+    const bytes = imageWithDpi(await canvasToBytes(canvas, a.formaat, a.kwaliteit / 100), a.formaat, Math.max(1, Math.min(65535, maat.dpi)));
+    const uit = {
+      ok: true, page: a.page, rect: gebied.rect, width: canvas.width, height: canvas.height,
+      dpi: maat.dpi, limited: maat.beperkt, mime: mimeType(a.formaat),
+    };
+    if (a.pad) {
+      const { writeBinaryFile } = await import('./core/platform.js');
+      await writeBinaryFile(a.pad, bytes);
+      uit.path = a.pad;
+      uit.bytes = bytes.length;
+    } else {
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      uit.image_base64 = btoa(bin);
+    }
+    return uit;
+  } catch (e) {
+    return { ok: false, error: `capture failed: ${e?.message ?? e}` };
+  }
 }
 
 async function handleScreenshotView(params) {
@@ -1233,7 +1284,6 @@ async function _buildCreateProps(type, page, props) {
     case 'circle':
     case 'highlight':
     case 'cloud':
-    case 'polygon':
     case 'textbox': {
       const lineLike = type === 'line' || type === 'arrow' || type === 'wall' || type === 'betonbalk';
       const bad = lineLike ? needLine() : needRect();
@@ -1244,6 +1294,25 @@ async function _buildCreateProps(type, page, props) {
         : creators.buildAnnotationProps(type, p.x, p.y, p.x + p.width, p.y + p.height, null);
       if (!base) return { error: `could not build '${type}' props` };
       return { base };
+    }
+
+    case 'polygon': {
+      // Veelhoek (#622): de hoekpunten zoals de tool ze hoek voor hoek
+      // plaatst (points, minstens drie), of een vak voor een regelmatige
+      // veelhoek (sides, standaard zes), zoals een sleep met de tool.
+      const creators = await import('./tools/annotation-creators.js');
+      const vh = await import('./annotations/veelhoek-punten.js');
+      if (p.points !== undefined) {
+        if (!_validPoints(p.points, 3)) {
+          return { error: "type 'polygon' requires props.points: [{x,y}, ...] (>= 3) or x, y, width > 0, height > 0" };
+        }
+        return { base: creators.buildPolygonFromPoints(p.points, page), veelhoekPunten: true };
+      }
+      const bad = needRect();
+      if (bad) return { error: "type 'polygon' requires props.points: [{x,y}, ...] (>= 3) or x, y, width > 0, height > 0" };
+      const zijden = _isNum(p.sides) ? Math.max(3, Math.min(64, Math.round(p.sides))) : 6;
+      const punten = vh.regelmatigeVeelhoekPunten({ x: p.x, y: p.y, width: p.width, height: p.height }, zijden);
+      return { base: creators.buildPolygonFromPoints(punten, page), veelhoekPunten: true };
     }
 
     case 'polyline': {
@@ -1584,6 +1653,11 @@ async function handleCreateAnnotation(params) {
 
   // Caller props win over tool defaults; type and the page param are pinned.
   const merged = { ...built.base, ...props, type, page };
+  // Veelhoek: de geometrie (punten, vak, zijden) komt uit de bouwer — een
+  // meegegeven vak of zijdenaantal beschreef alleen waar de punten liggen.
+  if (built.veelhoekPunten) {
+    for (const k of ['points', 'x', 'y', 'width', 'height', 'sides']) merged[k] = built.base[k];
+  }
   // parametricSymbol without an explicit rect: (x,y) was an INSERT POINT —
   // the builder centred a real-size bbox on it. Keep that computed bbox
   // instead of letting the raw x/y overwrite it as a top-left corner.
@@ -1793,6 +1867,15 @@ async function handleUpdateAnnotation(params) {
   // koppeling van de uiteinden blijft staan tenzij de patch haar zelf noemt.
   if (koppelMod.isStramien(ann) && patch.params && typeof patch.params === 'object') {
     patch = { ...patch, params: koppelMod.bewaarKoppeling(ann.params, patch.params) };
+  }
+  // Nieuwe hoekpunten van een veelhoek (#622): het vak en het aantal zijden
+  // volgen eruit, anders tekent het scherm ze in het oude vak.
+  if (ann.type === 'polygon' && 'points' in patch) {
+    if (!_validPoints(patch.points, 3)) {
+      return { ok: false, error: "polygon points must be [{x,y}, ...] with at least 3 corners" };
+    }
+    const vh = await import('./annotations/veelhoek-punten.js');
+    patch = { ...patch, ...vh.veelhoekUitPunten(patch.points) };
   }
   const andereDikte = 'lineWidth' in patch && patch.lineWidth !== ann.lineWidth;
   Object.assign(ann, patch);
@@ -2551,6 +2634,10 @@ async function handleStructuralLayout(params) {
       merged.y = built.base.y;
       merged.width = built.base.width;
       merged.height = built.base.height;
+    }
+    // Veelhoek (#622): de geometrie komt uit de bouwer (punten en vak samen).
+    if (built.veelhoekPunten) {
+      for (const k of ['points', 'x', 'y', 'width', 'height', 'sides']) merged[k] = built.base[k];
     }
     klaar.push({ opgave, merged });
   }
@@ -3649,6 +3736,7 @@ const HANDLERS = {
   'mcp:zoom-in':            handleZoomIn,
   'mcp:zoom-out':           handleZoomOut,
   'mcp:screenshot-view':    handleScreenshotView,
+  'mcp:capture-region':     handleCaptureRegion,
   'mcp:mouse-move':         handleMouseMove,
   'mcp:mouse-click':        handleMouseClick,
   'mcp:mouse-drag':         handleMouseDrag,

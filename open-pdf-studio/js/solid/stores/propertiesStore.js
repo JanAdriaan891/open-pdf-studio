@@ -11,6 +11,7 @@ import {
   endUndoTransaction,
 } from '../../core/undo-manager.js';
 import { cloneAnnotation } from '../../annotations/factory.js';
+import { lintZetLijnkoppen, koppenVan } from '../../pdf/lijnkoppen.js';
 import { ondersteuntKruis, kruisZichtbaarVoorSelectie } from '../../annotations/kruis-geometrie.js';
 import { redrawAnnotations, redrawContinuous } from '../../annotations/rendering.js';
 import { computeTextboxContentHeight } from '../../annotations/rendering/shapes.js';
@@ -50,6 +51,7 @@ import { klemMaat, toonMaat, veiligeVerhouding, RECHTHOEK_VORMEN } from '../../a
 import { nieuweAfbeeldingsMaat } from '../../annotations/papiermaat-eenheid.js';
 import { papierEenheid } from './papierEenheidStore.js';
 import { kanZonderRand } from '../../annotations/fill-utils.js';
+import { schaalgebiedStijl } from '../../annotations/scale-region-style.js';
 
 // Types whose single 'color' control IS their stroke colour and which render
 // via `strokeColor || color`. For these, the 'color' control must mirror onto
@@ -104,6 +106,7 @@ const [annotProps, setAnnotProps] = createStore({
   textColor: '#000000',
   lineWidth: 3,
   opacity: 100,
+  fillOpacity: 100,
   icon: 'comment',
   borderStyle: 'solid',
   cross: false,
@@ -186,6 +189,7 @@ const [sectionVis, setSectionVis] = createStore({
   // Sub-group visibility
   iconGroup: false,
   fillColorGroup: false,
+  fillNoneAllowed: true,
   strokeColorGroup: false,
   strokeNoneAllowed: false,
   colorGroup: false,
@@ -194,6 +198,7 @@ const [sectionVis, setSectionVis] = createStore({
   textGroup: false,
   fontSizeGroup: false,
   opacityGroup: true,
+  fillOpacityGroup: false,
   rotationGroup: false,
 });
 
@@ -244,11 +249,14 @@ function computeSectionVisibility(type) {
   // Een invoegteken (#508) heeft de ingevoegde tekst als inhoud.
   const isTextContent = type === 'text' || type === 'comment' || type === 'caret';
   const isImage = type === 'image';
-  const isArrow = type === 'arrow';
   const isLineOrArrow = type === 'arrow' || type === 'line';
   const isTextMarkup = isTextAnchored({ type });
   const hideLineWidth = ['highlight', 'comment', 'image', 'textHighlight', 'caret'].includes(type);
-  const hasFillColor = ['highlight', 'box', 'circle', 'polygon', 'cloud', 'textbox', 'callout', 'arrow', 'line', 'measureArea', 'filledArea'].includes(type);
+  // Schaalgebied (#611): eigen vulkleur en vul-doorzichtigheid; "geen" vulling
+  // is daar vul-doorzichtigheid 0, want zonder vulkleur volgt de vulling de
+  // randkleur (het oude uiterlijk).
+  const isScaleRegion = type === 'scaleRegion';
+  const hasFillColor = ['highlight', 'box', 'circle', 'polygon', 'cloud', 'textbox', 'callout', 'arrow', 'line', 'measureArea', 'filledArea', 'scaleRegion'].includes(type);
   const hideColor = ['line', 'arrow', 'box', 'circle', 'draw', 'highlight', 'image', 'textbox', 'callout', 'polygon', 'cloud', 'measureDistance', 'measureArea', 'measurePerimeter', 'filledArea'].includes(type);
   const hasBorderStyle = ['textbox', 'callout', 'arrow', 'line', 'box', 'circle', 'polygon', 'cloud', 'draw', 'polyline', 'splineArrow', 'measureDistance', 'measureArea', 'measurePerimeter', 'filledArea'].includes(type);
   const hasHatchPattern = ['box', 'circle', 'polygon', 'cloud', 'measureArea', 'filledArea'].includes(type);
@@ -267,7 +275,7 @@ function computeSectionVisibility(type) {
     general: true,
     replies: !isScaleBar,
     appearance: !isScaleBar,
-    lineEndings: isArrow || type === 'splineArrow' || type === 'measureDistance' || type === 'measurePerimeter',
+    lineEndings: lintZetLijnkoppen(type) || type === 'measureDistance' || type === 'measurePerimeter',
     dimensions: isLineOrArrow,
     measurement: isMeasurement,
     scaleBar: isScaleBar,
@@ -279,6 +287,7 @@ function computeSectionVisibility(type) {
     customFields: hasCustomFields,
     iconGroup: type === 'comment',
     fillColorGroup: hasFillColor,
+    fillNoneAllowed: !isScaleRegion,
     strokeColorGroup: isShape || type === 'measureDistance' || type === 'measureArea' || type === 'measurePerimeter' || type === 'filledArea',
     strokeNoneAllowed: kanZonderRand(type),
     colorGroup: !hideColor || isTextMarkup,
@@ -289,6 +298,7 @@ function computeSectionVisibility(type) {
     textGroup: isTextContent,
     fontSizeGroup: type === 'text',
     opacityGroup: !isScaleBar,
+    fillOpacityGroup: isScaleRegion,
     rotationGroup: hasRotation,
   });
 }
@@ -384,7 +394,9 @@ export function storeShowProperties(annotation) {
     statusAt: annotation.statusAt ? formatDate(annotation.statusAt) : '',
     ifcCategory: annotation.ifcCategory || '',
     color: annotation.color || '#000000',
-    fillColor: annotation.fillColor || null,
+    fillColor: annotation.type === 'scaleRegion'
+      ? schaalgebiedStijl(annotation).vulKleur : (annotation.fillColor || null),
+    fillOpacity: _vulDoorzichtigheidPct(annotation),
     strokeColor: annotation.strokeColor || annotation.color || '#000000',
     textColor: annotation.textColor || annotation.color || '#000000',
     // NL-tekenwerkcomponenten zonder eigen lineWidth tonen hun GEËRFDE
@@ -427,9 +439,12 @@ export function storeShowProperties(annotation) {
     cropTop: annotation.type === 'image' ? Math.round((annotation.cropTop || 0) * 100) : 0,
     cropRight: annotation.type === 'image' ? Math.round((annotation.cropRight || 0) * 100) : 0,
     cropBottom: annotation.type === 'image' ? Math.round((annotation.cropBottom || 0) * 100) : 0,
-    startHead: annotation.startHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'none'),
-    endHead: annotation.endHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'open'),
-    headSize: annotation.headSize || 12,
+    // Pijl, gebogen pijl en callout: de koppen zoals het scherm ze tekent (#612).
+    ...(lintZetLijnkoppen(annotation.type) ? koppenVan(annotation) : {
+      startHead: annotation.startHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'none'),
+      endHead: annotation.endHead || (annotation.type === 'measureDistance' ? 'openCircle' : 'open'),
+      headSize: annotation.headSize || 12,
+    }),
     arrowLength: (annotation.type === 'arrow' || annotation.type === 'line')
       ? (() => {
           // Show the length in measured units (mm etc.), resolved at the
@@ -603,6 +618,7 @@ export function storeHideProperties() {
     actions: false,
     iconGroup: false,
     fillColorGroup: false,
+    fillNoneAllowed: true,
     strokeColorGroup: false,
   strokeNoneAllowed: false,
     colorGroup: false,
@@ -611,6 +627,7 @@ export function storeHideProperties() {
     textGroup: false,
     fontSizeGroup: false,
     opacityGroup: false,
+    fillOpacityGroup: false,
     rotationGroup: false,
   });
 
@@ -652,7 +669,9 @@ export function storeShowMultiSelection(selected) {
     return allMarked ? true : noneMarked ? false : 'mixed';
   })();
   const sharedColor = sharedValue(selected, a => a.color || '#000000', 'mixed');
-  const sharedFillColor = sharedValue(selected, a => a.fillColor || null, 'mixed');
+  const sharedFillColor = sharedValue(selected, a => a.type === 'scaleRegion'
+    ? schaalgebiedStijl(a).vulKleur : (a.fillColor || null), 'mixed');
+  const sharedFillOpacity = sharedValue(selected, a => _vulDoorzichtigheidPct(a), 'mixed');
   const sharedStrokeColor = sharedValue(selected, a => a.strokeColor || a.color || '#000000', 'mixed');
   const sharedTextColor = sharedValue(selected, a => a.textColor || a.color || '#000000', 'mixed');
   const sharedLineWidth = sharedValue(selected, a => a.lineWidth !== undefined ? a.lineWidth
@@ -698,6 +717,7 @@ export function storeShowMultiSelection(selected) {
     textColor: sharedTextColor,
     lineWidth: sharedLineWidth,
     opacity: sharedOpacity,
+    fillOpacity: sharedFillOpacity,
     icon: sharedValue(selected, a => a.icon || 'comment', 'mixed'),
     borderStyle: sharedBorderStyle,
     cross: sharedValue(selected, a => a.cross === true, 'mixed'),
@@ -725,9 +745,9 @@ export function storeShowMultiSelection(selected) {
     cropTop: 0,
     cropRight: 0,
     cropBottom: 0,
-    startHead: sharedValue(selected, a => a.startHead || 'none', 'mixed'),
-    endHead: sharedValue(selected, a => a.endHead || 'open', 'mixed'),
-    headSize: sharedValue(selected, a => a.headSize || 12, 'mixed'),
+    startHead: sharedValue(selected, a => koppenVan(a).startHead, 'mixed'),
+    endHead: sharedValue(selected, a => koppenVan(a).endHead, 'mixed'),
+    headSize: sharedValue(selected, a => koppenVan(a).headSize, 'mixed'),
     arrowLength: '',
     replies: [],
     multiCount: selected.length,
@@ -736,7 +756,7 @@ export function storeShowMultiSelection(selected) {
   // Helper: check if ALL selected annotations satisfy a predicate on their type
   const allMatch = (predicate) => selected.every(a => predicate(a.type));
 
-  const fillColorTypes = new Set(['highlight', 'box', 'circle', 'polygon', 'cloud', 'textbox', 'callout', 'arrow', 'line']);
+  const fillColorTypes = new Set(['highlight', 'box', 'circle', 'polygon', 'cloud', 'textbox', 'callout', 'arrow', 'line', 'scaleRegion']);
   const strokeColorTypes = new Set(['line', 'arrow', 'box', 'circle', 'draw', 'textbox', 'callout', 'polygon', 'cloud']);
   const hideColorTypes = new Set(['line', 'arrow', 'box', 'circle', 'draw', 'highlight', 'image', 'textbox', 'callout', 'polygon', 'cloud']);
   const hideLineWidthTypes = new Set(['highlight', 'comment', 'image', 'textHighlight', 'caret']);
@@ -751,7 +771,7 @@ export function storeShowMultiSelection(selected) {
     general: true,
     replies: false,
     appearance: true,
-    lineEndings: allSameType && (sharedType === 'arrow' || sharedType === 'splineArrow'),
+    lineEndings: allSameType && lintZetLijnkoppen(sharedType),
     dimensions: false,
     measurement: false,
     textFormat: allMatch(t => textboxTypes.has(t)),
@@ -761,6 +781,7 @@ export function storeShowMultiSelection(selected) {
     actions: true,
     iconGroup: allSameType && sharedType === 'comment',
     fillColorGroup: allMatch(t => fillColorTypes.has(t)),
+    fillNoneAllowed: !selected.some(a => a.type === 'scaleRegion'),
     strokeColorGroup: allMatch(t => strokeColorTypes.has(t)),
     strokeNoneAllowed: allMatch(t => kanZonderRand(t)),
     colorGroup: allMatch(t => !hideColorTypes.has(t) || isTextAnchored({ type: t })),
@@ -771,6 +792,7 @@ export function storeShowMultiSelection(selected) {
     textGroup: allSameType && (sharedType === 'text' || sharedType === 'comment'),
     fontSizeGroup: allSameType && sharedType === 'text',
     opacityGroup: true,
+    fillOpacityGroup: allMatch(t => t === 'scaleRegion'),
     rotationGroup: allMatch(t => rotationTypes.has(t)),
   });
 
@@ -861,6 +883,7 @@ export function storeShowTextEditProperties(info) {
     actions: false,
     iconGroup: false,
     fillColorGroup: false,
+    fillNoneAllowed: true,
     strokeColorGroup: false,
   strokeNoneAllowed: false,
     colorGroup: false,
@@ -869,6 +892,7 @@ export function storeShowTextEditProperties(info) {
     textGroup: false,
     fontSizeGroup: false,
     opacityGroup: false,
+    fillOpacityGroup: false,
     rotationGroup: false,
   });
 
@@ -1105,6 +1129,7 @@ function applyPropToAnnotation(ann, key, value) {
       if (ann.type === 'stamp') applyStampColor(ann);
       break;
     case 'fillColor': ann.fillColor = value; break;
+    case 'fillOpacity': ann.fillOpacity = _vulDoorzichtigheidUitPct(value); break;
     case 'strokeColor': ann.strokeColor = value; break;
     case 'lineWidth':
       zetRanddikte(ann, parseFloat(value));
@@ -1356,8 +1381,10 @@ function applyAnnotProp(key, value) {
     recordBulkModify(selected, originals);
     setAnnotProps(key, value);
 
-    // After toggling lock, refresh the panel to update locked state
-    if (key === 'locked') {
+    // After toggling lock, refresh the panel to update locked state. Bij
+    // schaalgebieden volgt de getoonde vulling de kleur/doorzichtigheid (#611).
+    if (key === 'locked'
+        || (_SCHAALGEBIED_VULSLEUTELS.has(key) && selected.some(a => a.type === 'scaleRegion'))) {
       storeShowMultiSelection(selected);
     }
 
@@ -1506,6 +1533,7 @@ function applyAnnotProp(key, value) {
       if (currentAnnotation.type === 'stamp') applyStampColor(currentAnnotation);
       break;
     case 'fillColor': currentAnnotation.fillColor = value; break;
+    case 'fillOpacity': currentAnnotation.fillOpacity = _vulDoorzichtigheidUitPct(value); break;
     case 'strokeColor':
       currentAnnotation.strokeColor = value;
       if (currentAnnotation.type === 'parametricSymbol') currentAnnotation.color = value;
@@ -1821,8 +1849,32 @@ function applyAnnotProp(key, value) {
   if (!key.startsWith('tb') && !key.includes('.') && !_EIGEN_STORE_SLEUTELS.has(key)) {
     setAnnotProps(key, value);
   }
+  // Schaalgebied (#611): zonder eigen vulkleur of vul-doorzichtigheid volgt de
+  // vulling de kleur en de doorzichtigheid; het paneel toont wat er staat.
+  if (currentAnnotation.type === 'scaleRegion' && _SCHAALGEBIED_VULSLEUTELS.has(key)) {
+    setAnnotProps({
+      fillColor: schaalgebiedStijl(currentAnnotation).vulKleur,
+      fillOpacity: _vulDoorzichtigheidPct(currentAnnotation),
+    });
+  }
 
   redraw();
+}
+
+const _SCHAALGEBIED_VULSLEUTELS = new Set(['color', 'opacity', 'fillColor', 'fillOpacity']);
+
+// Vul-doorzichtigheid in procenten voor het paneel. Een schaalgebied zonder
+// eigen waarde toont wat er getekend wordt (10 % van de doorzichtigheid); een
+// andere soort zonder eigen waarde vult op zijn doorzichtigheid.
+function _vulDoorzichtigheidPct(a) {
+  if (a?.type === 'scaleRegion') return Math.round(schaalgebiedStijl(a).vulAlfa * 100);
+  const v = a?.fillOpacity ?? a?.opacity ?? 1;
+  return Math.round(v * 100);
+}
+
+function _vulDoorzichtigheidUitPct(value) {
+  const n = parseInt(value);
+  return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) / 100 : undefined;
 }
 
 // Sleutels waarvan de case hierboven zelf de store bijwerkt (in paginapunten)
