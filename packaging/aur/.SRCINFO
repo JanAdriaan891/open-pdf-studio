@@ -1,6 +1,6 @@
 pkgbase = open-pdf-studio-bin
 	pkgdesc = Free, open-source PDF editor and annotator for drawings and documents
-	pkgver = 2026.42.12
+	pkgver = 2026.43.3
 	pkgrel = 1
 	url = https://github.com/OpenAEC-Foundation/open-pdf-studio
 	arch = x86_64
@@ -21,10 +21,10 @@ pkgbase = open-pdf-studio-bin
 	optdepends = cups: printing (lp and lpstat)
 	provides = open-pdf-studio
 	conflicts = open-pdf-studio
-	noextract = open-pdf-studio-2026.42.12.deb
+	noextract = open-pdf-studio-2026.43.3.deb
 	options = !strip
 	options = !debug
-	source = open-pdf-studio-2026.42.12.deb::https://github.com/OpenAEC-Foundation/open-pdf-studio/releases/download/v2026.42.12/Open.PDF.Studio_2026.42.12_amd64.deb
-	sha256sums = 3c793c0d69ef32ae0d9adc6eec41ecf92449a342d853dc61712cb5d3ca10661e
+	source = open-pdf-studio-2026.43.3.deb::https://github.com/OpenAEC-Foundation/open-pdf-studio/releases/download/v2026.43.3/Open.PDF.Studio_2026.43.3_amd64.deb
+	sha256sums = c03b91ec5bd0a0160a1f733c7ced2a3e761e3602905d526a52eb940e6c92bda2
 
 pkgname = open-pdf-studio-bin
