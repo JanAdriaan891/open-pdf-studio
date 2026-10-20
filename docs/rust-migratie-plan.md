@@ -428,3 +428,24 @@ Daarnaast:
 Als tussenstap kan pdf.js lui geladen worden, alleen bij formulieren of tekstbewerking. Dat kan zodra #6, #7 en M7 er zijn, en scheelt de parse van de 2,4 MB pdf.js-worker en een extra volledige kopie van elke PDF in het geheugen.
 
 Wat door Rust gaat, is alleen voor desktop. Web en Android houden de pdf.js-route, tenzij de kernel naar WASM gaat (§6). Uitzondering: #1 en #3 helpen alle builds.
+
+### Stand Automatisch (standaard sinds 20-10-2026)
+
+Voorkeur "Paginarender-engine": **Automatisch** (standaard), PDFium of Hayro.
+
+Regel voor Automatisch, per pagina:
+1. Het **paginagewicht** wordt gemeten met `page_render_weight`: de ruwe (gecomprimeerde) bytes van de content-streams plus alle form-XObjects die de pagina tekent, recursief en elk één keer. Beelden tellen niet mee.
+2. Een pagina met **meer dan 6 MB gecomprimeerde content** blijft op PDFium. Die gaat bij tegels naar de scene-engine, die de pagina één keer voorbereidt (bijvoorbeeld MV-03). Reden in de log: `auto-scene`.
+3. Bij een **gewicht vanaf 100 KB** tekent Hayro de paginabitmap (`auto-heavy`). Op de verificatieset waren dat 36 pagina's, en Hayro was op alle 36 sneller (0,21–0,63× de tijd van PDFium).
+4. Daaronder blijft het PDFium (`auto-light`).
+5. **Tegels bij inzoomen** gaan in Automatisch altijd over de PDFium-route. Hayro interpreteert per tegel de hele pagina, terwijl PDFium een zware pagina geparst openhoudt. Gemeten op NKD1a p2: scherp bij 400 % na 4,2 s met Hayro-tegels, tegen 0,7 s.
+6. De geheugenwacht blijft: een pagina die Hayro weigert (`hayro-refused`) gaat naar PDFium.
+
+Waarom NKD1a "met PDFium opende": pagina 1 is vrijwel leeg (0 bytes content; PDFium 9 ms, Hayro 35 ms) en gaat dus terecht naar PDFium. De pagina's 2–7 (1,0–1,9 MB) gaan naar Hayro. Daarnaast vergeleek de eerste regel gecomprimeerde bytes met een drempel die op gedecomprimeerde bytes was gekalibreerd; dat is hersteld.
+
+Logging per pagina:
+- in de console: `[render-engine] <bestand> p<n>: hayro (auto-heavy, weight 1792 KB, threshold 100 KB, 4 threads; tiles pdfium)`;
+- in de MCP-status: `app_get_viewport_state.pageEngine` = `{ mode, engine, tiles, reason, weightKB, threads }`;
+- in `verify-mupdf-compare` en `verify-prestaties` per pagina of bestand.
+
+**Vervolgstap — tegel-cache voor Hayro:** de voorbereide scène per zoomniveau één keer opbouwen en tegels daaruit rasteren (vello_cpu `render_with` met een offset). Dan kunnen ook tegels naar Hayro.
