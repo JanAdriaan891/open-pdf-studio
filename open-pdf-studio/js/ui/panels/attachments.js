@@ -2,6 +2,7 @@ import { pdfjsRecord } from '../../pdf/pdfjs-record.js';
 import i18next from '../../i18n/config.js';
 import { getActiveDocument } from '../../core/state.js';
 import { isTauri, writeBinaryFile, readBinaryFile } from '../../core/platform.js';
+import { slaOverInHeadless } from '../../core/headless.js';
 import { markDocumentModified } from '../chrome/tabs.js';
 import { wijzigingenVan, vrijeNaam, metToegevoegd, metVerwijderd, zichtbareBijlagen } from '../../pdf/bijlagen.js';
 import {
@@ -105,6 +106,8 @@ async function saveAttachmentToDisk(filename, content) {
 
 // Open attachment in default application
 async function openAttachmentExternal(filename, content) {
+  // Headless (testinstantie): geen ander programma naar voren halen.
+  if (slaOverInHeadless(`open attachment ${filename}`)) return;
   if (isTauri() && window.__TAURI__?.fs && window.__TAURI__?.path && window.__TAURI__?.shell) {
     try {
       const tempDir = await window.__TAURI__.path.tempDir();
