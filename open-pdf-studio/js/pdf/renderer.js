@@ -8,7 +8,7 @@ import { hideLoading } from '../ui/chrome/dialogs.js';
 // Always-fresh DOM refs (never stale regardless of init timing or bundler behavior)
 function getPdfCanvas() { return document.getElementById('pdf-canvas'); }
 function getAnnotationCanvas() { return document.getElementById('annotation-canvas'); }
-import { redrawAnnotations, renderAnnotationsForPage, updateContinuousSharpOverlay, updateAllContinuousSharpOverlays } from '../annotations/rendering.js';
+import { redrawAnnotations, renderAnnotationsForPage, updateContinuousSharpOverlay, updateAllContinuousSharpOverlays, tekenTekstBewerkingenOpPagina } from '../annotations/rendering.js';
 import { ensureAnnotationsForPage, hidePdfABar } from './loader.js';
 import { updateAllStatus } from '../ui/chrome/status-bar.js';
 import { hideProperties } from '../ui/panels/properties-panel.js';
@@ -440,7 +440,7 @@ async function _renderPageImpl(pageNum) {
           // annotations one frame behind the PDF during zoom/pan). Use the
           // lightweight=true path so per-frame zoom skips the heavy SolidJS
           // status-bar / list / ribbon updates that would stall the frame.
-          initViewport(pdfCanvas, () => redrawAnnotations(true));
+          initViewport(pdfCanvas, () => redrawAnnotations(true), tekenTekstBewerkingenOpPagina);
           if (!pdfCanvas._vpEventsWired) {
             wireEvents(pdfCanvas);
             pdfCanvas._vpEventsWired = true;
@@ -497,7 +497,7 @@ async function _renderPageImpl(pageNum) {
         if (_isStaleDoc(doc)) { resumeThumbnails(); return; }
 
         // Init viewport on the main PDF canvas if not already running.
-        initViewport(pdfCanvas, () => redrawAnnotations(true));
+        initViewport(pdfCanvas, () => redrawAnnotations(true), tekenTekstBewerkingenOpPagina);
         if (!pdfCanvas._vpEventsWired) {
           wireEvents(pdfCanvas);
           pdfCanvas._vpEventsWired = true;

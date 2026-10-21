@@ -95,16 +95,22 @@ function _meldVolgers() {
 let _canvas = null;
 let _ctx = null;
 let _annotationRedraw = null; // callback for annotation overlay
+// Tekent na de pagina nog iets op het paginacanvas zelf, op devicepixels:
+// (ctx, pageNum) met ctx in de paginaruimte. Voor de tekstbewerkingen
+// (#669): de annotatie-overlay heeft de maat in CSS-pixels en rekt op een
+// scherm met devicePixelRatio > 1, waardoor nieuwe tekst daar wazig werd.
+let _paginaSchilder = null;
 let _resizeObserver = null;
 
 // ─── Init / Teardown ────────────────────────────────────────────────────────
 
-export function initViewport(canvas, annotationRedrawFn) {
+export function initViewport(canvas, annotationRedrawFn, paginaSchilderFn = null) {
   // Stop previous loop if re-initializing
   _lus.stop();
   _canvas = canvas;
   _ctx = canvas.getContext('2d');
   _annotationRedraw = annotationRedrawFn || null;
+  _paginaSchilder = typeof paginaSchilderFn === 'function' ? paginaSchilderFn : null;
   _resizeCanvas();
   window.removeEventListener('resize', _resizeCanvas);
   window.addEventListener('resize', _resizeCanvas);
@@ -927,6 +933,20 @@ function _tekenViewport() {
       e: paginaNaarDevice[4],
       f: paginaNaarDevice[5],
     }, viewport.rotation);
+    _ctx.restore();
+  }
+
+  // Op de pagina getekende lagen (tekstbewerkingen): dezelfde device-
+  // pixeltransform als de bitmap, met de oorsprong op een hele pixel.
+  if (_paginaSchilder) {
+    _ctx.save();
+    zetPaginaPixelTransform();
+    _ctx.scale(pxPerPt, pxPerPt);
+    try {
+      _paginaSchilder(_ctx, viewport.pageNum);
+    } catch (e) {
+      console.warn('[viewport] paginaschilder faalde:', e);
+    }
     _ctx.restore();
   }
 
