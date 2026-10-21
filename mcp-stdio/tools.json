@@ -1114,6 +1114,71 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_print_preflight",
+    "description": "Inspect the saved active PDF against a reusable print profile. Reports page/object, severity, expected and observed values for fonts, image DPI, color, transparency, page boxes and output intent. Not a PDF/X or PDF/A certificate. fixTrimBoxes explicitly writes a NEW copy and report and rechecks; existing files are refused. Save pending edits first.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "inspect",
+            "fixTrimBoxes"
+          ]
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "integer",
+              "enum": [
+                1
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "minDpi": {
+              "type": "number",
+              "minimum": 36,
+              "maximum": 2400
+            },
+            "embeddedFonts": {
+              "type": "boolean"
+            },
+            "allowRgb": {
+              "type": "boolean"
+            },
+            "allowTransparency": {
+              "type": "boolean"
+            },
+            "outputIntent": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "documentId"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Inspect print readiness",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

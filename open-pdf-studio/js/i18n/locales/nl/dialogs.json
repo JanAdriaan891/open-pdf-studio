@@ -1145,5 +1145,26 @@
     "tabLabel": "hersteld",
     "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
     "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
+  },
+  "preflight": {
+    "title": "Afdrukcontrole",
+    "scope": "Inspecteer de opgeslagen PDF. Sla wijzigingen eerst op. Bevindingen verwijzen naar pagina’s en objectpaden; profielen worden op dit apparaat bewaard.",
+    "profiles": "Opgeslagen profielen",
+    "name": "Profielnaam",
+    "dpi": "Minimale afbeeldings-DPI",
+    "embeddedFonts": "Ingesloten lettertypen vereisen",
+    "allowRgb": "RGB toestaan",
+    "allowTransparency": "Transparantie toestaan",
+    "outputIntent": "Ingesloten uitvoerprofiel vereisen",
+    "saveProfile": "Profiel opslaan",
+    "inspect": "Inspecteren",
+    "cancel": "Annuleren",
+    "notCertified": "Profielbevindingen; geen PDF/X- of PDF/A-certificaat. Inline-afbeeldingen, annotatieweergaven, complexe kleurruimten, patronen en verlopen vereisen externe validatie.",
+    "page": "Pagina",
+    "report": "Rapport downloaden",
+    "fixEffect": "Zet elke TrimBox op de CropBox, begrensd door de MediaBox, in een nieuwe kopie en controleer opnieuw. Andere bevindingen blijven bestaan. Herschrijven maakt bestaande digitale handtekeningen ongeldig.",
+    "fix": "Kopie met gecorrigeerde snijvakken opslaan",
+    "error": "Niet voltooid. Controleer het profiel, sla wijzigingen op en kies een nieuwe bestandsnaam.",
+    "stale": "Het document is gewijzigd. Inspecteer het opnieuw."
   }
 }

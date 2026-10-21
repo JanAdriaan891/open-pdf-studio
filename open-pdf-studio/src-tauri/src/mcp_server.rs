@@ -1279,6 +1279,65 @@ fn handle_tools_list() -> Value {
                 }
             },
             {
+    "name": "app_print_preflight",
+    "description": "Inspect the saved active PDF against a reusable print profile. Reports page/object, severity, expected and observed values for fonts, image DPI, color, transparency, page boxes and output intent. Not a PDF/X or PDF/A certificate. fixTrimBoxes explicitly writes a NEW copy and report and rechecks; existing files are refused. Save pending edits first.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "inspect",
+                    "fixTrimBoxes"
+                ]
+            },
+            "documentId": {
+                "type": "string"
+            },
+            "profile": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "integer",
+                        "enum": [
+                            1
+                        ]
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "minDpi": {
+                        "type": "number",
+                        "minimum": 36,
+                        "maximum": 2400
+                    },
+                    "embeddedFonts": {
+                        "type": "boolean"
+                    },
+                    "allowRgb": {
+                        "type": "boolean"
+                    },
+                    "allowTransparency": {
+                        "type": "boolean"
+                    },
+                    "outputIntent": {
+                        "type": "boolean"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "outputPath": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "action",
+            "documentId"
+        ],
+        "additionalProperties": false
+    }
+},
+            {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
                 "inputSchema": {
@@ -1664,6 +1723,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_print_preflight"    => tool_app_request(state, "mcp:print-preflight", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2451,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

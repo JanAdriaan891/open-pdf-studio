@@ -1145,5 +1145,26 @@
     "tabLabel": "மீட்டெடுக்கப்பட்டது",
     "tabTip": "எதிர்பாராத மூடலுக்குப் பிறகு மீட்டெடுக்கப்பட்டது. சேமித்தல் அசல் கோப்பில் எழுதும்.",
     "reloadStopped": "Open PDF Studio சாளரம் தொடர்ந்து பலமுறை செயல்படுவதை நிறுத்தியது, இனி தானாக மீண்டும் ஏற்றப்படாது. உங்கள் வேலையைச் சேமித்து பயன்பாட்டை மீண்டும் தொடங்கவும்."
+  },
+  "preflight": {
+    "title": "Print preflight",
+    "scope": "Inspect the saved PDF. Save pending changes first. Findings identify pages and resource paths; profiles are stored on this device.",
+    "profiles": "Saved profiles",
+    "name": "Profile name",
+    "dpi": "Minimum image DPI",
+    "embeddedFonts": "Require embedded fonts",
+    "allowRgb": "Allow RGB",
+    "allowTransparency": "Allow transparency",
+    "outputIntent": "Require embedded output intent",
+    "saveProfile": "Save profile",
+    "inspect": "Inspect",
+    "cancel": "Cancel",
+    "notCertified": "Profile findings; not a PDF/X or PDF/A certificate. Inline images, annotation appearances, complex color spaces, patterns and shadings require external validation.",
+    "page": "Page",
+    "report": "Download report",
+    "fixEffect": "Set every TrimBox to the CropBox clipped to the MediaBox in a new copy, then recheck. Other findings remain. Rewriting invalidates existing digital signatures.",
+    "fix": "Save copy with corrected trim boxes",
+    "error": "Could not complete. Check the profile, save changes and choose a new filename.",
+    "stale": "The document changed. Inspect it again."
   }
 }

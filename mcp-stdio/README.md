@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,22 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Print preflight
+
+app_print_preflight and api.printPreflight(request, {signal}) accept action
+"inspect", documentId and an optional profile. Profile fields: version=1, name,
+minDpi (36–2400), embeddedFonts, allowRgb, allowTransparency and outputIntent.
+The Properties dialog stores named profiles on this device and offers navigation
+to affected pages and JSON report export. Save pending edits before inspection.
+
+Action "fixTrimBoxes" additionally takes a new outputPath. It sets every TrimBox
+to the CropBox clipped to the MediaBox, writes a separate PDF and adjacent JSON
+report and rechecks the copy. Existing files are refused. Rewriting invalidates
+existing digital signatures.
+
+Findings are structural and profile-specific. Fonts/resources may be unused;
+effective image DPI is measured per placement before clipping, including nested
+Form transforms. Inline images, annotation appearances, complex color spaces,
+patterns and shading internals require external validation. No PDF/X or PDF/A
+compliance is certified by this tool or by the presence of output-intent metadata.

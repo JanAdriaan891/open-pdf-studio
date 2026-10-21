@@ -3719,6 +3719,14 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:print-preflight': async (p) => {
+    try {
+      const service = await import('./pdf/print-preflight-service.js');
+      if (p.action === 'inspect') return { ok: true, ...(await service.preflightCurrent(p.documentId, p.profile)) };
+      if (p.action === 'fixTrimBoxes') return { ok: true, ...(await service.exportTrimCopy(p.documentId, p.profile, p.outputPath)) };
+      return { ok: false, error: 'INVALID_ACTION' };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

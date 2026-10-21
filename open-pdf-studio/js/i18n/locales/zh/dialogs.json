@@ -1145,5 +1145,26 @@
     "tabLabel": "已恢复",
     "tabTip": "在意外关闭后恢复。保存时将写入原始文件。",
     "reloadStopped": "Open PDF Studio 窗口连续多次停止工作，将不再自动重新加载。请保存您的工作并重新启动应用。"
+  },
+  "preflight": {
+    "title": "Print preflight",
+    "scope": "Inspect the saved PDF. Save pending changes first. Findings identify pages and resource paths; profiles are stored on this device.",
+    "profiles": "Saved profiles",
+    "name": "Profile name",
+    "dpi": "Minimum image DPI",
+    "embeddedFonts": "Require embedded fonts",
+    "allowRgb": "Allow RGB",
+    "allowTransparency": "Allow transparency",
+    "outputIntent": "Require embedded output intent",
+    "saveProfile": "Save profile",
+    "inspect": "Inspect",
+    "cancel": "Cancel",
+    "notCertified": "Profile findings; not a PDF/X or PDF/A certificate. Inline images, annotation appearances, complex color spaces, patterns and shadings require external validation.",
+    "page": "Page",
+    "report": "Download report",
+    "fixEffect": "Set every TrimBox to the CropBox clipped to the MediaBox in a new copy, then recheck. Other findings remain. Rewriting invalidates existing digital signatures.",
+    "fix": "Save copy with corrected trim boxes",
+    "error": "Could not complete. Check the profile, save changes and choose a new filename.",
+    "stale": "The document changed. Inspect it again."
   }
 }

@@ -283,6 +283,7 @@ export function createPluginApi(pluginId) {
       pluginDocumentEvents: true,
       systemTypes: true,
       viewNavigation: true,
+      printPreflight: true,
       ribbonTabs: true,
       structuredCommands: true,
       systemInstanceLinks: true,
@@ -570,6 +571,15 @@ export function createPluginApi(pluginId) {
     // the document is checked again after every wait, so a tab switch or
     // close while a call is pending never selects in another document. A
     // newer call from the same plugin supersedes an older pending one.
+    async printPreflight(request, options = {}) {
+      scope.eisActief('printPreflight', pluginId);
+      const service = await import('../pdf/print-preflight-service.js');
+      scope.eisActief('printPreflight', pluginId);
+      if (request.action === 'inspect') return service.preflightCurrent(request.documentId, request.profile, { signal: options.signal });
+      if (request.action === 'fixTrimBoxes') return service.exportTrimCopy(request.documentId, request.profile, request.outputPath);
+      throw new Error('INVALID_ACTION');
+    },
+
     navigateToPage(request) {
       return navigation().navigateToPage(request);
     },

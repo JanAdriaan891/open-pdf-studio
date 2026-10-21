@@ -200,6 +200,10 @@
       "description": "Return the active document's page count and current page."
     },
     {
+      "name": "app_print_preflight",
+      "description": "Inspect the saved active PDF against a reusable print profile. Reports page/object, severity, expected and observed values for fonts, image DPI, color, transparency, page boxes and output intent. Not a PDF/X or PDF/A certificate. fixTrimBoxes explicitly writes a NEW copy and report and rechecks; existing files are refused. Save pending edits first."
+    },
+    {
       "name": "app_get_page_text",
       "description": "Read existing PDF page text without mouse automation."
     },

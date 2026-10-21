@@ -1145,5 +1145,26 @@
     "tabLabel": "gendannet",
     "tabTip": "Gendannet efter en uventet lukning. Gem skriver til den oprindelige fil.",
     "reloadStopped": "Open PDF Studio-vinduet holdt op med at fungere flere gange i træk og genindlæses ikke længere automatisk. Gem dit arbejde, og genstart appen."
+  },
+  "preflight": {
+    "title": "Print preflight",
+    "scope": "Inspect the saved PDF. Save pending changes first. Findings identify pages and resource paths; profiles are stored on this device.",
+    "profiles": "Saved profiles",
+    "name": "Profile name",
+    "dpi": "Minimum image DPI",
+    "embeddedFonts": "Require embedded fonts",
+    "allowRgb": "Allow RGB",
+    "allowTransparency": "Allow transparency",
+    "outputIntent": "Require embedded output intent",
+    "saveProfile": "Save profile",
+    "inspect": "Inspect",
+    "cancel": "Cancel",
+    "notCertified": "Profile findings; not a PDF/X or PDF/A certificate. Inline images, annotation appearances, complex color spaces, patterns and shadings require external validation.",
+    "page": "Page",
+    "report": "Download report",
+    "fixEffect": "Set every TrimBox to the CropBox clipped to the MediaBox in a new copy, then recheck. Other findings remain. Rewriting invalidates existing digital signatures.",
+    "fix": "Save copy with corrected trim boxes",
+    "error": "Could not complete. Check the profile, save changes and choose a new filename.",
+    "stale": "The document changed. Inspect it again."
   }
 }
