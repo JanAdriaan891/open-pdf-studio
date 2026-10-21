@@ -440,6 +440,7 @@ js/ui/getal-veld.test.mjs
 js/getal-velden-bron.test.mjs
 
 js/search/document-search.test.mjs
+js/search/find-navigation.test.mjs
 
 js/annotations/spatial-zones.test.mjs
 js/pdf/spatial-zone-relink.test.mjs
