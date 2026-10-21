@@ -97,7 +97,7 @@ export async function changePortfolio(bytes, changes = {}) {
     const old = parent.node.get(n('Child')); if (old) child.set(n('Next'),old);
     parent.node.set(n('Child'),pdf.context.register(child)); tree.push({id,parentId:parent.id,name,node:child});
   }
-  // Folder dictionaries require PDF 1.7 Adobe extension level 3 (or PDF 2.0).
+  // Folder dictionaries require PDF 1.7 developer extension level 3 or PDF 2.0.
   if (tree.length && String(pdf.catalog.lookup(n('Version')) || '') !== '/2.0') {
     pdf.catalog.set(n('Version'),n('1.7'));
     let ext = dict(pdf.catalog,'Extensions'); if (!ext) { ext=pdf.context.obj({}); pdf.catalog.set(n('Extensions'),ext); }
