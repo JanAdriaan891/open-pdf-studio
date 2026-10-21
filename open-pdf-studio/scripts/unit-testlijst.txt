@@ -451,6 +451,7 @@ js/pdf/print-preflight.test.mjs
 js/pdf/ocr-review.test.mjs
 
 js/pdf/portfolio.test.mjs
+js/pdf/portfolio-preview.test.mjs
 
 js/pdf/form-recognition.test.mjs
 
