@@ -447,6 +447,7 @@ js/pdf/hidden-information.test.mjs
 js/pdf/hidden-information-private.test.mjs
 
 js/pdf/print-preflight.test.mjs
+js/pdf/print-preflight-budget.test.mjs
 
 js/pdf/ocr-review.test.mjs
 
