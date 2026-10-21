@@ -1882,7 +1882,7 @@ fn handle_tools_list() -> Value {
 },
 {
     "name": "app_approval_routing",
-    "description": "Local-file-v1 electronic approval routing, no network sending or certificate signing. Explicit configure adapter/enabled:true first. draft captures the active saved PDF hash with title/revision, sequential|parallel mode, nullable expiresAt, recipients [{id,name,email}], fields [{id,recipientId,page,x,y,width,height,label}]. list shows immutable document identity, state and audit. submit requires id and confirmedHash after exact-source review; it releases for manual handoff only. receipt imports a self-reported decision bound to request/document/recipient. cancel and supersede track distinct states. verify checks an exported record hash chain, not identity authenticity. export writes original PDF plus audit/request JSON into a new desktop ZIP outputPath; no permanent login.",
+    "description": "Local-file-v1 electronic approval routing, no network sending or certificate signing. Explicit configure adapter/enabled:true first. draft captures the active saved PDF hash with title/revision, sequential|parallel mode, nullable expiresAt, recipients [{id,name,email}], fields [{id,recipientId,page,x,y,width,height,label}]. list shows immutable document identity, state and audit. submit requires id and confirmedHash after exact-source review; it releases for manual handoff only. receipt imports a self-reported decision bound to request/document/recipient. cancel and supersede track distinct states. createReceipt requires confirmed:true, the explicit confirmation the dialog asks for; events created over MCP record MCP as the actor. verify checks an exported record hash chain, not identity authenticity. export writes original PDF plus audit/request JSON into a new desktop ZIP outputPath; no permanent login.",
     "inputSchema": {
         "type": "object",
         "properties": {
@@ -1968,6 +1968,9 @@ fn handle_tools_list() -> Value {
             },
             "comment": {
                 "type": "string"
+            },
+            "confirmed": {
+                "type": "boolean"
             }
         },
         "required": [

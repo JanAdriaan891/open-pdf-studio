@@ -45,9 +45,9 @@ export async function appendEvent(input,kind,payload={},actor='Local operator',n
  const state=await verifyRequest(input,now),record=copy(input);if(state.status==='expired'&&kind!=='expire'&&kind!=='supersede')fail('REQUEST_EXPIRED');
  const event={seq:record.events.length,at:now,kind,actor,payload:copy(payload),previous:state.head};event.hash=await hash(event);record.events.push(event);await verifyRequest(record,now);return record;
 }
-export async function recordReceipt(input,receipt,now=new Date().toISOString()){
+export async function recordReceipt(input,receipt,now=new Date().toISOString(),actor='Local operator (reported receipt)'){
  receiptCheck(input,receipt);await verifyRequest(input,now);const existing=input.events.find(e=>e.kind==='receipt'&&e.payload.receipt.id===receipt.id);if(existing){if(JSON.stringify(existing.payload.receipt)!==JSON.stringify(receipt))fail('RECEIPT_ID_CONFLICT');return copy(input);}
- return appendEvent(input,'receipt',{receipt},'Local operator (reported receipt)',now);
+ return appendEvent(input,'receipt',{receipt},actor,now);
 }
 export async function makeReceipt(record,bytes,recipientId,decision,comment='',now=new Date().toISOString()){
  const state=await verifyRequest(record,now);if(!['submitted','in_progress'].includes(state.status))fail('REQUEST_CLOSED');if(await digest(bytes)!==record.config.source.hash)fail('DOCUMENT_HASH_MISMATCH');

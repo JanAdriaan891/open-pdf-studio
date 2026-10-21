@@ -71,10 +71,13 @@ pub const TOOLS: &[ToolMeta] = &[
     voegt_toe("app_recognize_form", "Recognize form fields"),
     voegt_toe("app_search_symbols", "Find repeated symbols"),
     wijzigt("app_workbook_bindings", "Refresh spreadsheet quantities"),
-    voegt_toe("app_document_workflows", "Run document workflows"),
-    voegt_toe("app_drawing_sets", "Drawing sets"),
+    // watch starts background automation on a folder; remove deletes saved workflows.
+    wijzigt("app_document_workflows", "Run document workflows"),
+    // import replaces the current set manifest, including its history.
+    wijzigt("app_drawing_sets", "Drawing sets"),
     voegt_toe("app_sheet_links", "Cross-sheet links"),
-    voegt_toe("app_approval_routing", "Approval routing"),
+    // receipt, cancel and supersede are irreversible audit events.
+    wijzigt("app_approval_routing", "Approval routing"),
     lees("app_get_page_text", "Read existing page text"),
     lees("app_get_takeoff", "Get quantity take-off"),
     lees("app_list_commands", "List app commands"),

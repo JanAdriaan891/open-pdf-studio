@@ -677,7 +677,7 @@ export function createPluginApi(pluginId) {
       scope.eisActief('approvalRouting', pluginId);
       const { approvalRequest } = await import('../approval-routing/service.js');
       scope.eisActief('approvalRouting', pluginId);
-      return approvalRequest(request);
+      return approvalRequest(request, { origin: 'plugin' });
     },
 
     navigateToPage(request) {

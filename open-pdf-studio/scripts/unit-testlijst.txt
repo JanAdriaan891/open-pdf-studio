@@ -469,3 +469,4 @@ js/drawing-sets/model.test.mjs
 js/sheet-links/model.test.mjs
 
 js/approval-routing/model.test.mjs
+js/approval-routing/origin.test.mjs

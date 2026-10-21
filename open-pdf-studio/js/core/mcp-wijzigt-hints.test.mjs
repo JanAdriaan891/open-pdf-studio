@@ -19,3 +19,13 @@ function assertModifying(name) {
 test('app_portfolio writes component files and reads local files: modifying', () => {
   assertModifying('app_portfolio');
 });
+
+test('workflows (background watch, remove), drawing-set import and approval audit events: modifying', () => {
+  for (const name of ['app_document_workflows', 'app_drawing_sets', 'app_approval_routing']) assertModifying(name);
+});
+
+test('createReceipt over MCP takes an explicit confirmed flag', () => {
+  const tool = tools.find((t) => t.name === 'app_approval_routing');
+  assert.deepEqual(tool.inputSchema.properties.confirmed, { type: 'boolean' });
+  assert.match(tool.description, /createReceipt requires confirmed:true/);
+});
