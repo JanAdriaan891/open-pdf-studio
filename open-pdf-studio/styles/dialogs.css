@@ -5546,3 +5546,12 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.hidden-information { font-size: 12px; color: var(--theme-text); }
+.hidden-information p { overflow-wrap: anywhere; }
+.hidden-information button {
+  font: inherit; color: var(--theme-text); background: var(--theme-surface);
+  border: 1px solid var(--theme-border); border-radius: 0; padding: 5px 8px;
+  margin: 4px 0; white-space: normal;
+}
+.hidden-information button:disabled { opacity: .5; }

@@ -3719,6 +3719,14 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:hidden-information': async (p) => {
+    try {
+      const service = await import('./pdf/hidden-information-service.js');
+      if (p.action === 'inspect') return { ok: true, ...(await service.inspectCurrentHiddenInformation(p.documentId)) };
+      if (p.action === 'export') return { ok: true, ...(await service.exportHiddenCopy(p.documentId, p.categories, p.outputPath)) };
+      return { ok: false, error: 'INVALID_ACTION' };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

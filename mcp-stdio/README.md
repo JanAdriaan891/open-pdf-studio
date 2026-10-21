@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,22 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Inspect hidden information and export a separate copy
+
+app_hidden_information and api.hiddenInformation(request) accept action "inspect"
+with the active documentId. The saved loaded PDF is inspected; save pending edits
+first. The Document Properties dialog offers the same workflow.
+
+Action "export" additionally requires categories (metadata, comments, attachments,
+actions) and a new outputPath ending in .pdf. Both the PDF and adjacent
+.pdf.report.json must not already exist. The source document is unchanged.
+The output is fully rewritten, unreachable indirect objects are removed, and
+the rewritten bytes are reopened to inspect the reachable object graph.
+
+This is selective structural cleanup. Optional-content layers, invisible or
+covered text, image pixels and arbitrary private content are not removed.
+Comments includes non-widget annotations and visible markups/links. Actions
+includes navigation and form actions. Existing digital signatures cannot remain
+valid after rewriting; PDF/A and PDF/X conformance require independent validation.
+The report distinguishes supported removals and remaining/unsupported findings.

@@ -1114,6 +1114,51 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_hidden_information",
+    "description": "Inspect structural metadata, comments, embedded files, actions and optional-content indicators in the saved active PDF. Export selected removable categories to a NEW PDF and JSON report; existing files are never overwritten. Pending changes must be saved first. Hidden/covered text, image pixels and optional-content layers are not removed; existing signatures cannot survive rewriting.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "inspect",
+            "export"
+          ]
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "metadata",
+              "comments",
+              "attachments",
+              "actions"
+            ]
+          }
+        },
+        "outputPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "documentId"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Inspect and export cleaned copy",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

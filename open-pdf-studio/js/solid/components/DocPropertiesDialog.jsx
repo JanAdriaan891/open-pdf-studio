@@ -1,3 +1,4 @@
+import HiddenInformation from './HiddenInformation.jsx';
 import { For } from 'solid-js';
 import Dialog from './Dialog.jsx';
 import { closeDialog } from '../stores/dialogStore.js';
@@ -53,6 +54,7 @@ export default function DocPropertiesDialog(props) {
         <PropRow label={t('docProperties.creationDate')} value={d.created} />
         <PropRow label={t('docProperties.modifiedDate')} value={d.modified} />
       </div>
+      <HiddenInformation />
     </Dialog>
   );
 }

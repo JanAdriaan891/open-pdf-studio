@@ -1145,5 +1145,25 @@
     "tabLabel": "obnovené",
     "tabTip": "Obnovené po neočakávanom ukončení. Uloženie zapisuje do pôvodného súboru.",
     "reloadStopped": "Okno Open PDF Studio niekoľkokrát po sebe prestalo fungovať a už sa automaticky znova nenačíta. Uložte svoju prácu a aplikáciu reštartujte."
+  },
+  "hiddenInformation": {
+    "title": "Inspect hidden information",
+    "scope": "Inspect the loaded, saved PDF. Save pending changes first. Export always creates a new file.",
+    "inspect": "Inspect",
+    "metadata": "Metadata",
+    "comments": "Comments and markups",
+    "attachments": "Embedded files",
+    "actions": "Actions and scripts",
+    "hiddenContent": "Optional/hidden content (not removed)",
+    "signatures": "Digital signatures",
+    "conformance": "Conformance indicators",
+    "effects": "Removing comments deletes non-widget annotations, including visible markups and links. Removing actions disables navigation and form actions. Every copy is rewritten; existing signatures will no longer validate.",
+    "findings": "Affected objects",
+    "unreachable": "Unreferenced objects removed during rewrite",
+    "limits": "Hidden layers, invisible or covered text, image pixels and unknown private content are not removed. This is selective structural cleanup, not a guarantee that all confidential content is gone. PDF/A and PDF/X require independent validation.",
+    "save": "Save new cleaned copy",
+    "done": "Copy verified by reopening and inspecting its object graph.",
+    "report": "Download removal report",
+    "error": "Could not complete. Save pending changes and choose a new output filename."
   }
 }

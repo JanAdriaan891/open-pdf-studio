@@ -1145,5 +1145,25 @@
     "tabLabel": "hersteld",
     "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
     "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
+  },
+  "hiddenInformation": {
+    "title": "Verborgen informatie inspecteren",
+    "scope": "Inspecteer de geladen, opgeslagen PDF. Sla wijzigingen eerst op. Export maakt altijd een nieuw bestand.",
+    "inspect": "Inspecteren",
+    "metadata": "Metadata",
+    "comments": "Opmerkingen en markeringen",
+    "attachments": "Ingesloten bestanden",
+    "actions": "Acties en scripts",
+    "hiddenContent": "Optionele/verborgen inhoud (blijft behouden)",
+    "signatures": "Digitale handtekeningen",
+    "conformance": "Conformiteitskenmerken",
+    "effects": "Opmerkingen verwijderen wist annotaties behalve formuliervelden, inclusief zichtbare markeringen en links. Acties verwijderen schakelt navigatie en formulieracties uit. Elke kopie wordt herschreven; bestaande handtekeningen zijn daarna ongeldig.",
+    "findings": "Betrokken objecten",
+    "unreachable": "Losse objecten die bij herschrijven worden verwijderd",
+    "limits": "Verborgen lagen, onzichtbare of afgedekte tekst, beeldpixels en onbekende privé-inhoud worden niet verwijderd. Dit is selectief structureel opschonen, geen garantie dat alle vertrouwelijke inhoud weg is. PDF/A en PDF/X vereisen onafhankelijke validatie.",
+    "save": "Nieuwe opgeschoonde kopie opslaan",
+    "done": "Kopie heropend en objectstructuur gecontroleerd.",
+    "report": "Verwijderrapport downloaden",
+    "error": "Niet voltooid. Sla wijzigingen op en kies een nieuwe uitvoerbestandsnaam."
   }
 }

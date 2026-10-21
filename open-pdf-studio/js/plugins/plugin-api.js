@@ -283,6 +283,7 @@ export function createPluginApi(pluginId) {
       pluginDocumentEvents: true,
       systemTypes: true,
       viewNavigation: true,
+      hiddenInformation: true,
       ribbonTabs: true,
       structuredCommands: true,
       systemInstanceLinks: true,
@@ -570,6 +571,15 @@ export function createPluginApi(pluginId) {
     // the document is checked again after every wait, so a tab switch or
     // close while a call is pending never selects in another document. A
     // newer call from the same plugin supersedes an older pending one.
+    async hiddenInformation(request) {
+      scope.eisActief('hiddenInformation', pluginId);
+      const service = await import('../pdf/hidden-information-service.js');
+      scope.eisActief('hiddenInformation', pluginId);
+      if (request.action === 'inspect') return service.inspectCurrentHiddenInformation(request.documentId);
+      if (request.action === 'export') return service.exportHiddenCopy(request.documentId, request.categories, request.outputPath);
+      throw new Error('INVALID_ACTION');
+    },
+
     navigateToPage(request) {
       return navigation().navigateToPage(request);
     },

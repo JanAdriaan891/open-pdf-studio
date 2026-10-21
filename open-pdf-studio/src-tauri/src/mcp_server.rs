@@ -1279,6 +1279,45 @@ fn handle_tools_list() -> Value {
                 }
             },
             {
+    "name": "app_hidden_information",
+    "description": "Inspect structural metadata, comments, embedded files, actions and optional-content indicators in the saved active PDF. Export selected removable categories to a NEW PDF and JSON report; existing files are never overwritten. Pending changes must be saved first. Hidden/covered text, image pixels and optional-content layers are not removed; existing signatures cannot survive rewriting.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "inspect",
+                    "export"
+                ]
+            },
+            "documentId": {
+                "type": "string"
+            },
+            "categories": {
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "metadata",
+                        "comments",
+                        "attachments",
+                        "actions"
+                    ]
+                }
+            },
+            "outputPath": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "action",
+            "documentId"
+        ],
+        "additionalProperties": false
+    }
+},
+            {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
                 "inputSchema": {
@@ -1664,6 +1703,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_hidden_information" => tool_app_request(state, "mcp:hidden-information", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2431,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
