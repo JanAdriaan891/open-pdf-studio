@@ -980,13 +980,14 @@ function _tekenViewport() {
     // The tool manager sets pointer-events based on active tool (text select = auto, other = none)
     textLayer.style.opacity = '1';
 
-    // Set up selection highlight styles (once)
+    // Spans altijd onzichtbaar (eenmalig). De selectiekleur komt alleen uit
+    // styles/text-layer.css (#506): een tweede regel hier liep er eerder mee
+    // uiteen en tekende de geselecteerde tekst in een vervangend lettertype.
     if (!textLayer._selectionStyled) {
       textLayer._selectionStyled = true;
       const style = document.createElement('style');
       style.textContent = `
         .textLayer span { color: transparent !important; }
-        .textLayer ::selection { background: #b8d8ff !important; color: #171c25 !important; }
       `;
       textLayer.prepend(style);
     }
