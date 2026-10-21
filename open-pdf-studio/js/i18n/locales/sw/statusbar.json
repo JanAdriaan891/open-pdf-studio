@@ -109,5 +109,6 @@
   "searchResultPage": "Ukurasa {{page}}",
   "searchHitsOne": "Tokeo 1",
   "searchHitsMany": "Matokeo {{count}}",
-  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu."
+  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu.",
+  "symbolSearch": "Find symbols"
 }

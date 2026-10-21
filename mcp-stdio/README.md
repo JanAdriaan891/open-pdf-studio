@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,11 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Visual symbol matching
+
+`app_search_symbols` / `api.searchSymbols(request, {signal, onProgress})` supports `search`, `accept` and `navigate`. Search takes documentId, templatePage, a rect in current page-view coordinates at scale 1, and up to 20 pages. Optional threshold is 0.5–1, rotations are quarter turns, scales range 0.5–2 (at most three). Pages use a common bounded resolution; templates must cover 6–160 search pixels. The score is binary foreground overlap, not a calibrated recognition probability. Dense, faint or very small symbols may be missed; review is mandatory.
+
+Search returns queryId, available count categories and matches with IDs, page, bounds, score and transform. Accept takes queryId, selected IDs and an existing returned count category `{id}`; matching same-category counts within 3 page-view units are skipped. Counts use normal save/quantity/undo paths. Navigate takes queryId and one ID. Results expire after 20 minutes, after document changes, or when displaced from the four-query cache. The Find bar exposes the same workflow with pointer/coordinate template selection and per-result previews.
+
+Reproducible fixtures: `js/search/symbol-matcher.test.mjs` uses four asymmetric symbols, quarter-turn/scale variants, missing/extra scan pixels and a solid distractor (4/4 true positives, no false positives at 0.75). With Vite running, `node scripts/check-symbol-search.mjs` generates a two-page vector/raster PDF with three symbols (3/3 at 0.85), then verifies count creation, deduplication, undo, quantity totals and PDF save/reopen. These small synthetic sets do not establish accuracy on arbitrary construction drawings.

@@ -1,5 +1,6 @@
 import { For } from 'solid-js';
 import { getDialogs } from '../stores/dialogStore.js';
+import SymbolSearchDialog from './dialogs/SymbolSearchDialog.jsx';
 import DocPropertiesDialog from './DocPropertiesDialog.jsx';
 import PreferencesDialog from './preferences/PreferencesDialog.jsx';
 import NewDocDialog from './dialogs/NewDocDialog.jsx';
@@ -63,6 +64,7 @@ import SysteemPaneelComponentDialog from './dialogs/SysteemPaneelComponentDialog
 import PrintProgressToast from './PrintProgressToast.jsx';
 
 const DIALOG_MAP = {
+  'symbol-search': SymbolSearchDialog,
   'doc-properties': DocPropertiesDialog,
   'preferences': PreferencesDialog,
   'new-doc': NewDocDialog,

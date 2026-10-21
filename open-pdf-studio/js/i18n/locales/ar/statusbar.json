@@ -109,5 +109,6 @@
   "searchResultPage": "صفحة {{page}}",
   "searchHitsOne": "نتيجة واحدة",
   "searchHitsMany": "{{count}} نتائج",
-  "passwordProtectedBar": "محمي بكلمة مرور: تم الفتح للقراءة فقط."
+  "passwordProtectedBar": "محمي بكلمة مرور: تم الفتح للقراءة فقط.",
+  "symbolSearch": "Find symbols"
 }

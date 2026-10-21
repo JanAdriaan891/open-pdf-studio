@@ -109,5 +109,6 @@
   "searchResultPage": "Page {{page}}",
   "searchHitsOne": "1 correspondance",
   "searchHitsMany": "{{count}} correspondances",
-  "passwordProtectedBar": "Protégé par un mot de passe : ouvert en lecture seule."
+  "passwordProtectedBar": "Protégé par un mot de passe : ouvert en lecture seule.",
+  "symbolSearch": "Find symbols"
 }

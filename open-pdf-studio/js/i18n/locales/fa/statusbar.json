@@ -109,5 +109,6 @@
   "searchResultPage": "صفحه {{page}}",
   "searchHitsOne": "1 مورد",
   "searchHitsMany": "{{count}} مورد",
-  "passwordProtectedBar": "محافظت‌شده با رمز عبور: به‌صورت فقط‌خواندنی باز شد."
+  "passwordProtectedBar": "محافظت‌شده با رمز عبور: به‌صورت فقط‌خواندنی باز شد.",
+  "symbolSearch": "Find symbols"
 }

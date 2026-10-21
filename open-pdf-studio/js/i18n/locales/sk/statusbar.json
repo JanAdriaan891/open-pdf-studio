@@ -109,5 +109,6 @@
   "searchResultPage": "Strana {{page}}",
   "searchHitsOne": "1 zhoda",
   "searchHitsMany": "Zhôd: {{count}}",
-  "passwordProtectedBar": "Chránené heslom: otvorené iba na čítanie."
+  "passwordProtectedBar": "Chránené heslom: otvorené iba na čítanie.",
+  "symbolSearch": "Find symbols"
 }

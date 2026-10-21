@@ -109,5 +109,6 @@
   "searchResultPage": "第 {{page}} 页",
   "searchHitsOne": "1 处匹配",
   "searchHitsMany": "{{count}} 处匹配",
-  "passwordProtectedBar": "受密码保护：已以只读方式打开。"
+  "passwordProtectedBar": "受密码保护：已以只读方式打开。",
+  "symbolSearch": "Find symbols"
 }

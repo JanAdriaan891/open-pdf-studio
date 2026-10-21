@@ -1145,5 +1145,43 @@
     "tabLabel": "hersteld",
     "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
     "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
+  },
+  "symbolSearch": {
+    "title": "Herhaalde symbolen zoeken",
+    "info": "Sleep een rechthoek rond een symbool in het voorbeeld, kies pagina’s en beoordeel treffers. Het zoeken gebruikt pagina-inhoud zonder markeringen, tot 1.200 pixels per paginarand. Het voorbeeld moet 6–160 zoekpixels omvatten. Scores geven visuele gelijkenis aan, geen zekerheid. Alleen geaccepteerde treffers worden telmarkeringen.",
+    "create": "Geaccepteerde tellingen maken",
+    "close": "Sluiten",
+    "templatePage": "Voorbeeldpagina",
+    "pages": "Pagina’s (maximaal 20)",
+    "threshold": "Gelijkenis (0,5–1)",
+    "rotate": "Ook 90°, 180°, 270°",
+    "scale": "Ook 80% en 120% grootte",
+    "search": "Treffers zoeken",
+    "cancel": "Zoeken annuleren",
+    "x": "Voorbeeld X",
+    "y": "Voorbeeld Y",
+    "width": "Breedte",
+    "height": "Hoogte",
+    "template": "Voorbeeldrechthoek wijzigen",
+    "category": "Telcategorie",
+    "results": "Voorgestelde treffers",
+    "result": "Pagina {{page}} · {{score}}%",
+    "accept": "Deze treffer accepteren",
+    "navigate": "Naar bronlocatie",
+    "page": "Pagina {{page}}",
+    "canvas": "Paginavoorbeeld; sleep om een zoekvoorbeeld te kiezen",
+    "found": "{{count}} voorstellen gevonden",
+    "created": "{{count}} tellingen gemaakt; {{skipped}} bestonden al",
+    "truncated": "Resultaatlimiet bereikt. Zoek op minder pagina’s of verhoog de gelijkenis.",
+    "errors": {
+      "DOCUMENT_CHANGED": "Het document is gewijzigd. Sluit en heropen symboolzoeken.",
+      "INVALID_PAGES": "Kies 1–20 geldige pagina’s.",
+      "TEMPLATE_BOUNDS": "Kies een rechthoek binnen de pagina van 6–160 pixels op de zoekresolutie.",
+      "TEMPLATE_NEEDS_CONTRAST": "Kies een symbool met details op een achtergrond.",
+      "INVALID_TOLERANCE": "Gelijkenis moet 0,5–1 zijn; schaal 0,5–2 en rotatie een kwartslag.",
+      "READ_ONLY": "Dit document of deze markeerlaag is alleen-lezen.",
+      "SEARCH_EXPIRED": "De zoekresultaten zijn verlopen. Zoek opnieuw.",
+      "CATEGORY_REQUIRED": "Kies een telcategorie."
+    }
   }
 }

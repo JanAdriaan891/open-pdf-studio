@@ -1145,5 +1145,43 @@
     "tabLabel": "שוחזר",
     "tabTip": "שוחזר לאחר סגירה בלתי צפויה. השמירה כותבת לקובץ המקורי.",
     "reloadStopped": "החלון של Open PDF Studio הפסיק לפעול כמה פעמים ברציפות ואינו נטען עוד מחדש באופן אוטומטי. שמור את עבודתך והפעל מחדש את היישום."
+  },
+  "symbolSearch": {
+    "title": "Find repeated symbols",
+    "info": "Drag a rectangle around a symbol in the preview, choose pages and review matches. Matching uses page artwork without markups, up to 1,200 pixels per page edge. Templates must span 6–160 search pixels. Scores are visual similarity, not certainty. Counts are created only for accepted matches.",
+    "create": "Create accepted counts",
+    "close": "Close",
+    "templatePage": "Template page",
+    "pages": "Pages (up to 20)",
+    "threshold": "Similarity (0.5–1)",
+    "rotate": "Include 90°, 180°, 270°",
+    "scale": "Include 80% and 120% size",
+    "search": "Find matches",
+    "cancel": "Cancel search",
+    "x": "Template X",
+    "y": "Template Y",
+    "width": "Width",
+    "height": "Height",
+    "template": "Edit template rectangle",
+    "category": "Count category",
+    "results": "Candidate matches",
+    "result": "Page {{page}} · {{score}}%",
+    "accept": "Accept this match",
+    "navigate": "Go to source location",
+    "page": "Page {{page}}",
+    "canvas": "Page preview; drag to select a template",
+    "found": "{{count}} candidates found",
+    "created": "{{count}} counts created; {{skipped}} already present",
+    "truncated": "Result limit reached. Search fewer pages or increase similarity.",
+    "errors": {
+      "DOCUMENT_CHANGED": "The document changed. Close and reopen symbol search.",
+      "INVALID_PAGES": "Choose 1–20 valid pages.",
+      "TEMPLATE_BOUNDS": "Choose a rectangle inside the page, spanning 6–160 pixels at search resolution.",
+      "TEMPLATE_NEEDS_CONTRAST": "Choose a symbol with foreground and background detail.",
+      "INVALID_TOLERANCE": "Similarity must be 0.5–1; scale 0.5–2 and rotation a quarter turn.",
+      "READ_ONLY": "This document or markup layer is read-only.",
+      "SEARCH_EXPIRED": "Search results expired. Search again.",
+      "CATEGORY_REQUIRED": "Choose a count category."
+    }
   }
 }

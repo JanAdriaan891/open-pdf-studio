@@ -109,5 +109,6 @@
   "searchResultPage": "Sida {{page}}",
   "searchHitsOne": "1 träff",
   "searchHitsMany": "{{count}} träffar",
-  "passwordProtectedBar": "Skyddad med lösenord: öppnad skrivskyddad."
+  "passwordProtectedBar": "Skyddad med lösenord: öppnad skrivskyddad.",
+  "symbolSearch": "Find symbols"
 }

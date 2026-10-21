@@ -200,6 +200,10 @@
       "description": "Return the active document's page count and current page."
     },
     {
+      "name": "app_search_symbols",
+      "description": "Search page artwork for a selected symbol rectangle in current page-view coordinates at scale 1. Review candidates before accept, which creates undoable standard count annotations without duplicating same-category counts at the same location. Search bounded to 20 pages, 1200 pixels per edge and 1000 results. Similarity is not certainty. Results expire after 20 minutes or source changes. navigate reveals a result."
+    },
+    {
       "name": "app_get_page_text",
       "description": "Read existing PDF page text without mouse automation."
     },

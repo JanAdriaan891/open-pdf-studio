@@ -3719,6 +3719,10 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:search-symbols': async (p) => {
+    try { const { symbolSearchRequest } = await import('./search/symbol-search-service.js'); return { ok: true, ...(await symbolSearchRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

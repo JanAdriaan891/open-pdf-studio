@@ -1278,6 +1278,132 @@ fn handle_tools_list() -> Value {
                     "additionalProperties": false
                 }
             },
+{
+    "name": "app_search_symbols",
+    "description": "Search page artwork for a selected symbol rectangle in current page-view coordinates at scale 1. Review candidates before accept, which creates undoable standard count annotations without duplicating same-category counts at the same location. Search bounded to 20 pages, 1200 pixels per edge and 1000 results. Similarity is not certainty. Results expire after 20 minutes or source changes. navigate reveals a result.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "search",
+                    "accept",
+                    "navigate"
+                ]
+            },
+            "documentId": {
+                "type": "string"
+            },
+            "templatePage": {
+                "type": "integer",
+                "minimum": 1
+            },
+            "rect": {
+                "type": "object",
+                "properties": {
+                    "x": {
+                        "type": "number"
+                    },
+                    "y": {
+                        "type": "number"
+                    },
+                    "width": {
+                        "type": "number"
+                    },
+                    "height": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "x",
+                    "y",
+                    "width",
+                    "height"
+                ],
+                "additionalProperties": false
+            },
+            "pages": {
+                "type": "array",
+                "items": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "maxItems": 20
+            },
+            "threshold": {
+                "type": "number",
+                "minimum": 0.5,
+                "maximum": 1
+            },
+            "rotations": {
+                "type": "array",
+                "items": {
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        90,
+                        180,
+                        270
+                    ]
+                },
+                "maxItems": 4
+            },
+            "scales": {
+                "type": "array",
+                "items": {
+                    "type": "number",
+                    "minimum": 0.5,
+                    "maximum": 2
+                },
+                "maxItems": 3
+            },
+            "queryId": {
+                "type": "string"
+            },
+            "id": {
+                "type": "string"
+            },
+            "ids": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "maxItems": 1000
+            },
+            "category": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                    },
+                    "markerStyle": {
+                        "type": "string",
+                        "enum": [
+                            "dot"
+                        ]
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "additionalProperties": false
+            }
+        },
+        "required": [
+            "action",
+            "documentId"
+        ],
+        "additionalProperties": false
+    }
+},
             {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
@@ -1664,6 +1790,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_search_symbols"     => tool_app_request(state, "mcp:search-symbols", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2518,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

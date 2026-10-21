@@ -109,5 +109,6 @@
   "searchResultPage": "Pagina {{page}}",
   "searchHitsOne": "1 treffer",
   "searchHitsMany": "{{count}} treffers",
-  "passwordProtectedBar": "Beveiligd met een wachtwoord: alleen-lezen geopend."
+  "passwordProtectedBar": "Beveiligd met een wachtwoord: alleen-lezen geopend.",
+  "symbolSearch": "Symbolen zoeken"
 }

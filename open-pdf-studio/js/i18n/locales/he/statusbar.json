@@ -109,5 +109,6 @@
   "searchResultPage": "עמוד {{page}}",
   "searchHitsOne": "תוצאה אחת",
   "searchHitsMany": "{{count}} תוצאות",
-  "passwordProtectedBar": "מוגן בסיסמה: נפתח לקריאה בלבד."
+  "passwordProtectedBar": "מוגן בסיסמה: נפתח לקריאה בלבד.",
+  "symbolSearch": "Find symbols"
 }

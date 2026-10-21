@@ -109,5 +109,6 @@
   "searchResultPage": "{{page}} ページ",
   "searchHitsOne": "1 件",
   "searchHitsMany": "{{count}} 件",
-  "passwordProtectedBar": "パスワードで保護されています: 読み取り専用で開きました。"
+  "passwordProtectedBar": "パスワードで保護されています: 読み取り専用で開きました。",
+  "symbolSearch": "Find symbols"
 }

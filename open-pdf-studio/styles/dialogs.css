@@ -5546,3 +5546,13 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.symbol-search-dialog { width: min(1050px, 96vw); max-height: 92vh; color: var(--theme-text, #333); font-size: 13px; }
+.symbol-search-dialog .modal-body { overflow: auto; }
+.symbol-search-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin-block: 10px; }
+.symbol-search-controls label { display: flex; flex-direction: column; gap: 3px; max-width: 160px; }
+.symbol-search-dialog input, .symbol-search-dialog select { color: var(--theme-text, #333); background: var(--theme-bg, #fff); border: 1px solid var(--theme-border, #888); padding: 5px; max-width: 100%; box-sizing: border-box; }
+.symbol-search-grid { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(250px, 3fr); gap: 12px; }
+.symbol-search-grid select { width: 100%; }
+.symbol-search-grid canvas { max-width: 100%; height: auto; touch-action: none; }
+@media (max-width: 600px) { .symbol-search-grid { grid-template-columns: 1fr; } }

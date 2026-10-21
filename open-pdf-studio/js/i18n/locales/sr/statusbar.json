@@ -109,5 +109,6 @@
   "searchResultPage": "Страница {{page}}",
   "searchHitsOne": "1 подударање",
   "searchHitsMany": "Подударања: {{count}}",
-  "passwordProtectedBar": "Заштићено лозинком: отворено само за читање."
+  "passwordProtectedBar": "Заштићено лозинком: отворено само за читање.",
+  "symbolSearch": "Find symbols"
 }

@@ -109,5 +109,6 @@
   "searchResultPage": "Halaman {{page}}",
   "searchHitsOne": "1 padanan",
   "searchHitsMany": "{{count}} padanan",
-  "passwordProtectedBar": "Dilindungi dengan kata laluan: dibuka dalam mod baca sahaja."
+  "passwordProtectedBar": "Dilindungi dengan kata laluan: dibuka dalam mod baca sahaja.",
+  "symbolSearch": "Find symbols"
 }

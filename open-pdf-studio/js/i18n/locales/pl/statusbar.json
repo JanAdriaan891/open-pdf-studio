@@ -109,5 +109,6 @@
   "searchResultPage": "Strona {{page}}",
   "searchHitsOne": "1 dopasowanie",
   "searchHitsMany": "Dopasowania: {{count}}",
-  "passwordProtectedBar": "Chroniony hasłem: otwarty tylko do odczytu."
+  "passwordProtectedBar": "Chroniony hasłem: otwarty tylko do odczytu.",
+  "symbolSearch": "Find symbols"
 }

@@ -109,5 +109,6 @@
   "searchResultPage": "Seite {{page}}",
   "searchHitsOne": "1 Treffer",
   "searchHitsMany": "{{count}} Treffer",
-  "passwordProtectedBar": "Mit Kennwort geschützt: schreibgeschützt geöffnet."
+  "passwordProtectedBar": "Mit Kennwort geschützt: schreibgeschützt geöffnet.",
+  "symbolSearch": "Find symbols"
 }

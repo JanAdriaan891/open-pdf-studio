@@ -109,5 +109,6 @@
   "searchResultPage": "Сторінка {{page}}",
   "searchHitsOne": "1 збіг",
   "searchHitsMany": "Збігів: {{count}}",
-  "passwordProtectedBar": "Захищено паролем: відкрито лише для читання."
+  "passwordProtectedBar": "Захищено паролем: відкрито лише для читання.",
+  "symbolSearch": "Find symbols"
 }
