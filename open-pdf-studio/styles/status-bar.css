@@ -191,6 +191,17 @@
   stroke: var(--theme-status-nav-text);
 }
 
+/* Mapbewaking van documentworkflows: zichtbaar zolang ze loopt, ook na het
+   sluiten van het venster; een klik stopt het bewaken. */
+.status-watch {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+.status-watch-error {
+  color: #a4262c;
+}
+
 .status-zoom-level {
   font-size: 12px;
   color: var(--theme-status-text-value);

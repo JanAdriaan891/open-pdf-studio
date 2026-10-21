@@ -139,5 +139,8 @@
     "failed": "Zoeken mislukt. Controleer de zoekterm en map en probeer opnieuw.",
     "prepareOcr": "Openen voor OCR…"
   },
-  "symbolSearch": "Symbolen zoeken"
+  "symbolSearch": "Symbolen zoeken",
+  "watchActive": "Bewaakt {{folder}}",
+  "watchFailed": "Bewaakfout: {{folder}}",
+  "watchTitle": "Documentworkflow bewaakt {{input}} en schrijft naar {{output}}. Klik om het bewaken te stoppen."
 }

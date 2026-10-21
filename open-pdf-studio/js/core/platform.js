@@ -455,15 +455,36 @@ export async function writeBinaryFileAtomic(path, data) {
   return true;
 }
 
-// Workflows must fail on collisions, including races after the existence check.
-export async function writeBinaryFileNew(path, data) {
-  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+// An existing destination surfaces as CHOOSE_NEW_FILE (os error 17 on Unix,
+// 80/183 on Windows).
+async function invokeNew(command, path, data, headers = {}) {
   const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
   const mobile = window.__TAURI__?.os?.type?.() === 'android';
-  await getTauriCore().invoke('write_file_new', mobile ? { data: Array.from(bytes) } : bytes, {
-    headers: { 'x-opds-path': encodeURIComponent(path) },
-  });
+  try {
+    await getTauriCore().invoke(command, mobile ? { data: Array.from(bytes) } : bytes, {
+      headers: { 'x-opds-path': encodeURIComponent(path), ...headers },
+    });
+  } catch (e) {
+    const message = String(e?.message ?? e);
+    if (/already exists|file exists|os error (17|80|183)\b/i.test(message)) throw new Error('CHOOSE_NEW_FILE');
+    throw e instanceof Error ? e : new Error(message);
+  }
   return true;
+}
+
+// Workflows and new-copy exports must fail on collisions, including races
+// after an existence check.
+export async function writeBinaryFileNew(path, data) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  return invokeNew('write_file_new', path, data);
+}
+
+// Untrusted bytes (a component of a PDF collection): never replaces a file,
+// refuses autostart folders and, when `restrict` is set, programs and scripts;
+// marked as downloaded content on Windows (src-tauri/src/export_policy.rs).
+export async function writeDownloadedFileNew(path, data, { restrict = true } = {}) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  return invokeNew('write_downloaded_file_new', path, data, { 'x-opds-restrict': restrict ? '1' : '0' });
 }
 
 export async function fileExists(path) {
@@ -778,6 +799,11 @@ export async function downloadPdfFromUrl(url) {
 // List PDF files in a directory
 export async function listPdfFiles(dir) {
   return await invoke('list_pdf_files', { dir });
+}
+
+/** PDF files directly in `dir` as [{path, size, mtimeMs}]. */
+export async function listPdfFileStats(dir) {
+  return await invoke('list_pdf_file_stats', { dir });
 }
 
 // File locking - prevent other apps from writing to an open file

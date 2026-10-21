@@ -33,6 +33,7 @@ import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
 import { opslaanGeweigerd } from './wachtwoord-pdf.js';
 import { meldOpgeslagen } from '../herstel/haken.js';
+import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 
 // Sub-modules
 import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
@@ -254,7 +255,7 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // `filePath` (so they render via the real pipeline), so we ALSO check the
   // `isUntitled` flag — otherwise "Save" would silently overwrite the temp
   // file and the user would never be asked where to keep their document.
-  if ((!currentPath || activeDoc?.isUntitled) && !saveAsPath) {
+  if (opslaanVraagtOpslaanAls(activeDoc) && !saveAsPath) {
     return await savePDFAs(activeDoc);
   }
 

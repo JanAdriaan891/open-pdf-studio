@@ -1,4 +1,4 @@
-import {PDFDocument,PDFName,PDFDict,PDFArray,PDFRawStream,decodePDFRawStream} from 'pdf-lib';
+import {PDFDocument,PDFName,PDFDict,PDFArray,PDFRawStream,PDFRef,decodePDFRawStream} from 'pdf-lib';
 import {interpretContentStreams,tokenizeContentStream,xobjectBBox} from '../text/content-stream-text.js';
 const N=PDFName.of;
 const ID=[1,0,0,1,0,0];
@@ -51,19 +51,47 @@ export async function inspectPrint(bytes,rawProfile={}, {signal,onProgress=()=>{
   }
   if(['Pattern','Shading'].some(k=>get(resources,k) instanceof PDFDict && get(resources,k).keys().length))add(page,path,'coverage','info','Complete resource analysis','Pattern/shading internals require external validation');
  };
- const visit=(streams,resources,parent,page,path,ancestors,userUnit)=>{
-  resourceCheck(resources,page,path);
-  let src;
-  try{src=streams.map(decode);}catch{add(page,path,'coverage','warning','Readable content streams','Unsupported compression or invalid stream');return;}
-  const tokens=src.flatMap(tokenizeContentStream);
-  if(tokens.some(t=>t.t==='op'&&t.v==='BI..EI'))add(page,path,'coverage','warning','Measured image resolution','Inline-image resolution not evaluated');
-  if(!profile.allowRgb&&tokens.some(t=>t.t==='op'&&(t.v==='rg'||t.v==='RG')))add(page,path,'rgb','warning','No device RGB painting','RGB painting operator');
-  const uses=interpretContentStreams(src).xobjects;
+ // Nested forms form a DAG: one form can place another many times. Each
+ // (XObject, placement transform, page) is inspected once, every page has a
+ // placement budget, and the walk yields to the event loop as it goes.
+ const VISIT_BUDGET=10000,YIELD_EVERY=200;
+ const parsed=new Map();
+ let seen,visits,budgetReported;
+ const ctmKey=m=>m.map(v=>Math.round(v*1e6)/1e6).join(',');
+ const pause=async()=>{await new Promise(r=>setTimeout(r,0));if(signal?.aborted)throw new Error('CANCELLED');};
+ // Decoding and interpreting a form stream does not depend on where it is placed.
+ const analyse=(streams,identity)=>{
+  if(identity&&parsed.has(identity))return parsed.get(identity);
+  let result;
+  try{
+   const src=streams.map(decode),tokens=src.flatMap(tokenizeContentStream);
+   result={inline:tokens.some(t=>t.t==='op'&&t.v==='BI..EI'),rgb:tokens.some(t=>t.t==='op'&&(t.v==='rg'||t.v==='RG')),uses:interpretContentStreams(src).xobjects};
+  }catch{result=null;}
+  if(identity)parsed.set(identity,result);
+  return result;
+ };
+ const visit=async(streams,resources,parent,page,path,ancestors,userUnit,identity=null)=>{
+  // Resource and stream findings depend on the object only, not on its placement.
+  const once=!identity||!seen.has('stream|'+identity);
+  if(identity)seen.add('stream|'+identity);
+  if(once)resourceCheck(resources,page,path);
+  const a=analyse(streams,identity);
+  if(!a){if(once)add(page,path,'coverage','warning','Readable content streams','Unsupported compression or invalid stream');return;}
+  if(once&&a.inline)add(page,path,'coverage','warning','Measured image resolution','Inline-image resolution not evaluated');
+  if(once&&!profile.allowRgb&&a.rgb)add(page,path,'rgb','warning','No device RGB painting','RGB painting operator');
+  const uses=a.uses;
   const xobjects=get(resources,'XObject');
   for(let i=0;i<uses.length;i++){
+   if(visits>=VISIT_BUDGET){
+    if(!budgetReported){budgetReported=true;add(page,path,'coverage','warning','Complete XObject analysis','Coverage incomplete: placement budget of '+VISIT_BUDGET+' reached; remaining placements not inspected');}
+    return;
+   }
+   if(++visits%YIELD_EVERY===0)await pause();
    const use=uses[i];const raw=xobjects?.get?.(N(use.name));const obj=pdf.context.lookup(raw);
    if(!(obj instanceof PDFRawStream)){add(page,path+'/'+use.name,'coverage','warning','Resolvable XObject','Missing/unreadable XObject');continue;}
    const ctm=multiply(parent,use.ctm),objectPath=path+'/'+use.name+'@'+i;
+   const ref=raw instanceof PDFRef?raw.toString():null;
+   if(ref){const key=ref+'|'+ctmKey(ctm);if(seen.has(key))continue;seen.add(key);}
    if(nm(get(obj.dict,'Subtype'))==='Image'){
     const w=n(get(obj.dict,'Width')),h=n(get(obj.dict,'Height'));
     const width=Math.hypot(ctm[0],ctm[1])*userUnit,height=Math.hypot(ctm[2],ctm[3])*userUnit;
@@ -73,12 +101,12 @@ export async function inspectPrint(bytes,rawProfile={}, {signal,onProgress=()=>{
     if(!profile.allowRgb&&nm(get(obj.dict,'ColorSpace'))==='DeviceRGB')add(page,objectPath,'rgb','warning','Non-RGB image','DeviceRGB',xobjectBBox(ctm));
     if(!profile.allowTransparency&&get(obj.dict,'SMask'))add(page,objectPath,'transparency','warning','No soft mask','Image soft mask',xobjectBBox(ctm));
    }else if(nm(get(obj.dict,'Subtype'))==='Form'){
-    const identity=raw?.toString();
+    const identity=ref||objectPath;
     if(ancestors.includes(identity)||ancestors.length>=16){add(page,objectPath,'coverage','warning','Acyclic form tree','Cycle/depth limit');continue;}
     const matrix=arr(get(obj.dict,'Matrix'))||ID;
     if(matrix.length!==6||!matrix.every(Number.isFinite)){add(page,objectPath,'coverage','warning','Valid form matrix','Invalid matrix');continue;}
-    if(!profile.allowTransparency&&nm(get(get(obj.dict,'Group'),'S'))==='Transparency')add(page,objectPath,'transparency','warning','No transparency group','Transparency group');
-    visit([obj],get(obj.dict,'Resources')||resources,multiply(ctm,matrix),page,objectPath,[...ancestors,identity],userUnit);
+    if(!profile.allowTransparency&&nm(get(get(obj.dict,'Group'),'S'))==='Transparency'&&!seen.has('group|'+identity)){seen.add('group|'+identity);add(page,objectPath,'transparency','warning','No transparency group','Transparency group');}
+    await visit([obj],get(obj.dict,'Resources')||resources,multiply(ctm,matrix),page,objectPath,[...ancestors,identity],userUnit,ref);
    }
   }
  };
@@ -94,13 +122,14 @@ export async function inspectPrint(bytes,rawProfile={}, {signal,onProgress=()=>{
   const value=get(page.node,'Contents');
   const streams=value instanceof PDFArray?value.asArray().map(v=>pdf.context.lookup(v)):value?[value]:[];
   if(streams.some(v=>!(v instanceof PDFRawStream)))add(num,'Page/Contents','coverage','warning','Readable streams','Unsupported content object');
-  else visit(streams,page.node.Resources(),ID,num,'Page',[],n(get(page.node,'UserUnit'))||1);
+  else{seen=new Set();visits=0;budgetReported=false;await visit(streams,page.node.Resources(),ID,num,'Page',[],n(get(page.node,'UserUnit'))||1);}
   if(get(page.node,'Annots') instanceof PDFArray && get(page.node,'Annots').size())add(num,'Page/Annots','coverage','info','Appearance/form validation','Annotation appearances are not preflighted');
   onProgress({page:num,pages:pdf.getPageCount()});await new Promise(r=>setTimeout(r,0));
  }
  return {profile,pages:pdf.getPageCount(),findings,conformanceCertified:false,limitations:[
   'Checks are structural and profile-specific, not a PDF/X or PDF/A certification.',
   'Fonts/resources may be unused; image DPI uses each placement transform before clipping.',
+  'Each page inspects at most 10000 XObject placements; identical placements of the same object are inspected once.',
   'Inline images, annotation appearances, complex color spaces, patterns and shading internals need external validation.',
  ]};
 }

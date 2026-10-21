@@ -3782,7 +3782,7 @@ const HANDLERS = {
     catch (e) { return { ok: false, error: e.message }; }
   },
   'mcp:approval-routing': async (p) => {
-    try { const { approvalRequest } = await import('./approval-routing/service.js'); return { ok: true, ...(await approvalRequest(p)) }; }
+    try { const { approvalRequest } = await import('./approval-routing/service.js'); return { ok: true, ...(await approvalRequest(p, { origin: 'mcp' })) }; }
     catch (e) { return { ok: false, error: e.message }; }
   },
   'mcp:open-pdf':           handleOpenPdf,

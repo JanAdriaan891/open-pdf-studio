@@ -1,7 +1,8 @@
 import {state} from '../core/state.js';
 import {savePreferences} from '../core/preferences.js';
-import {isTauri,readBinaryFile,writeBinaryFileNew,fileExists,listPdfFiles} from '../core/platform.js';
+import {isTauri,readBinaryFile,writeBinaryFileNew,fileExists,listPdfFileStats} from '../core/platform.js';
 import {validateWorkflow,runWorkflow,watchCandidates} from './document-workflow.js';
+import {setWatchState} from './watch-status.js';
 let controller=null,timer=null,watch=null,polling=false;
 const read=async path=>new Uint8Array(await readBinaryFile(path));
 const preferences=()=>state.preferences.documentWorkflows||{saved:[],results:[]};
@@ -14,19 +15,20 @@ export async function executeWorkflow(paths,workflow,output){
  if(typeof output!=='string'||!output.trim())throw new Error('OUTPUT_REQUIRED');workflow=validateWorkflow(workflow);
  controller=new AbortController();try{return await runWorkflow(paths,workflow,{read,exists:fileExists,publish:writeBinaryFileNew,destination:name=>output.replace(/[\\/]+$/,'')+'/'+name},{signal:controller.signal,onResult:remember});}finally{controller=null;}
 }
-export function stopWorkflow(){if(timer)clearInterval(timer);timer=null;watch=null;controller?.abort();return workflowStatus();}
+export function stopWorkflow(){if(timer)clearInterval(timer);timer=null;watch=null;setWatchState(null);controller?.abort();return workflowStatus();}
 export async function startWorkflowWatch(input,output,workflow){
  if(!isTauri())throw new Error('DESKTOP_REQUIRED');if(controller||watch)throw new Error('WORKFLOW_BUSY');
  if(typeof input!=='string'||!input||typeof output!=='string'||!output||input.replace(/[\\/]+$/,'').toLowerCase()===output.replace(/[\\/]+$/,'').toLowerCase())throw new Error('SEPARATE_FOLDERS_REQUIRED');
- workflow=validateWorkflow(workflow);const session={input,output,workflow,previous:new Map(),completed:new Map(),error:null};watch=session;
+ workflow=validateWorkflow(workflow);const session={input,output,workflow,previous:new Map(),completed:new Map(),error:null};watch=session;setWatchState(session);
  const poll=async()=>{
   if(polling||controller||watch!==session)return;polling=true;
-  try{const {next,ready}=await watchCandidates(await listPdfFiles(input),read,session.previous);session.previous=next;
+  // Size and modification time first: only new or changed files are read and hashed.
+  try{const {next,ready}=await watchCandidates(await listPdfFileStats(input),read,session.previous);session.previous=next;
    if(watch!==session)return;
-   const pending=ready.filter(path=>session.completed.get(path)!==next.get(path));
-   if(pending.length){const results=await executeWorkflow(pending,workflow,output);for(const r of results)if(r.status==='completed'||r.status==='skipped')session.completed.set(r.path,next.get(r.path));}
+   const pending=ready.filter(path=>session.completed.get(path)!==next.get(path).hash);
+   if(pending.length){const results=await executeWorkflow(pending,workflow,output);for(const r of results)if(r.status==='completed'||r.status==='skipped')session.completed.set(r.path,next.get(r.path).hash);}
    session.error=null;
-  }catch{session.error='WATCH_FAILED';}finally{polling=false;}
+  }catch{session.error='WATCH_FAILED';}finally{polling=false;if(watch===session)setWatchState(session);}
  };
  timer=setInterval(poll,5000);await poll();return workflowStatus();
 }

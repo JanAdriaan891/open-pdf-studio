@@ -1,4 +1,5 @@
-import { Show } from 'solid-js';
+import { Show, createSignal, onCleanup } from 'solid-js';
+import { watchState, onWatchState } from '../../workflows/watch-status.js';
 import { state, getActiveDocument } from '../../core/state.js';
 import { labelVan, heeftEigenLabel } from '../../pdf/pagina-labels.js';
 import { useTranslation, localizeNumber, language } from '../../i18n/useTranslation.js';
@@ -123,8 +124,17 @@ import { engineFor } from '../stores/engineStatusStore.js';
 import { scaleToPercent, percentToScale, leesZoomInvoer } from '../../core/zoom-display.js';
 import { toonGetal } from '../../core/getal-invoer.js';
 
+// Stops the document-workflow folder watch (it keeps running after its dialog closes).
+async function stopFolderWatch() {
+  const { stopWorkflow } = await import('../../workflows/workflow-service.js');
+  stopWorkflow();
+}
+
 export default function StatusBar() {
   const { t } = useTranslation('statusbar');
+  const [watching, setWatching] = createSignal(watchState());
+  onCleanup(onWatchState(setWatching));
+  const watchFolder = () => String(watching()?.input || '').replace(/[\\/]+$/, '').split(/[\\/]/).pop();
 
   const toolName = () => {
     const key = `tools.${state.currentTool}`;
@@ -286,6 +296,16 @@ export default function StatusBar() {
       </Show>
 
       <div class="status-bar-right">
+        <Show when={watching()}>
+          <button class="status-view-rotation status-watch" classList={{ 'status-watch-error': !!watching()?.error }} tabIndex={-1}
+            title={t('watchTitle', { input: watching()?.input, output: watching()?.output })}
+            onClick={stopFolderWatch}>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="6" y="6" width="12" height="12" stroke-width="2"/>
+            </svg>
+            <span>{watching()?.error ? t('watchFailed', { folder: watchFolder() }) : t('watchActive', { folder: watchFolder() })}</span>
+          </button>
+        </Show>
         <div class="status-item">
           <Show when={state.statusMessageVisible}>
             {state.statusMessage}

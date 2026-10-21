@@ -1,6 +1,7 @@
 // ECMA-376 SpreadsheetML adapter. Patch only mapped numeric cells and the
 // workbook recalculation flag; retain all other ZIP member bytes unchanged.
-import {zipStore} from '../bcf/bcf-zip.js';
+// Members are written deflated, as spreadsheet applications write them.
+import {zipDeflate} from '../bcf/bcf-zip.js';
 import {parseXml,child,children,localName} from '../bcf/bcf-xml.js';
 const decode=b=>new TextDecoder().decode(b),encode=s=>new TextEncoder().encode(s);
 const tagAttrs=`(?:[^>"'/]|"[^"]*"|'[^']*')*`;
@@ -54,5 +55,26 @@ export async function refreshWorkbook(bytes,mappings){
  for(const m of mappings){if(!sheets.some(s=>s.name===m.sheet))throw new Error('SHEET_NOT_FOUND');const key=m.sheet;const cells=bySheet.get(key)||{};if(Object.hasOwn(cells,m.cell))throw new Error('DUPLICATE_TARGET');cells[m.cell]=m.value;bySheet.set(key,cells);}
  for(const [sheet,updates] of bySheet){const path=sheets.find(s=>s.name===sheet).path;entries.set(path,encode(patchWorksheet(decode(entries.get(path)),updates)));}
  let workbook=decode(entries.get('xl/workbook.xml'));const calc=element('calcPr').exec(workbook),root=xml(workbook),prefix=root.name.includes(':')?root.name.split(':')[0]+':':'',tag=calc?`<${calc[1]}${calc[2].replace(/\/\s*$/,'')}/>`:`<${prefix}calcPr/>`;let replacement=attr(attr(attr(tag,'fullCalcOnLoad','1'),'forceFullCalc','1'),'calcMode','auto').replace(/>$/,'/>');if(calc)workbook=workbook.slice(0,calc.index)+replacement+workbook.slice(calc.index+calc[0].length);else workbook=workbook.replace(/<\/(?:[\w.-]+:)?workbook\s*>/,replacement+'$&');entries.set('xl/workbook.xml',encode(workbook));
- return zipStore([...entries].map(([name,data])=>({name,data})));
+ return zipDeflate([...entries].map(([name,data])=>({name,data})));
+}
+const pad=n=>String(n).padStart(2,'0');
+/** Backup next to the workbook: `<file>.<yyyymmdd-hhmmss>.bak` (UTC), `-n` added on a clash. */
+export function backupPathFor(path,now=new Date(),attempt=0){
+ const stamp=`${now.getUTCFullYear()}${pad(now.getUTCMonth()+1)}${pad(now.getUTCDate())}-${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}`;
+ return `${path}.${stamp}${attempt?'-'+attempt:''}.bak`;
+}
+/**
+ * Replace the source workbook only after its previous bytes are safe in a new
+ * backup file. io: {writeNew(path,bytes) refusing existing files with
+ * CHOOSE_NEW_FILE, writeAtomic(path,bytes)}.
+ */
+export async function commitWorkbookRefresh(path,previous,output,io,now=new Date()){
+ let backupPath=null;
+ for(let attempt=0;!backupPath;attempt++){
+  const candidate=backupPathFor(path,now,attempt);
+  try{await io.writeNew(candidate,previous);backupPath=candidate;}
+  catch(e){if(e?.message!=='CHOOSE_NEW_FILE'||attempt>=20)throw e;}
+ }
+ await io.writeAtomic(path,output);
+ return {path,backupPath};
 }

@@ -1,8 +1,8 @@
 import {state,getActiveDocument} from '../core/state.js';
 import {savePreferences} from '../core/preferences.js';
-import {readBinaryFile,writeBinaryFileAtomic,fileExists,isTauri} from '../core/platform.js';
+import {readBinaryFile,writeBinaryFileAtomic,writeBinaryFileNew,fileExists,isTauri} from '../core/platform.js';
 import {getScheduleById,buildResultForSchedule} from '../solid/stores/schedulesStore.js';
-import {inspectWorkbook,refreshWorkbook} from './workbook-adapter.js';
+import {inspectWorkbook,refreshWorkbook,commitWorkbookRefresh} from './workbook-adapter.js';
 import {validateBinding,bindingValues,bindingStatus,configSignature,bindingCsv} from './workbook-bindings.js';
 const hash=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
 const sourcePathOf=doc=>doc?.saveTargetPath||doc?.filePath;
@@ -46,7 +46,10 @@ export async function refreshBinding(id){
  if(!isTauri())throw new Error('DESKTOP_REFRESH_REQUIRED');const binding=list().find(b=>b.id===id);if(!binding)throw new Error('BINDING_NOT_FOUND');if(!/\.xlsx$/i.test(binding.workbookPath))throw new Error('XLSX_REQUIRED');
  if(!await fileExists(binding.sourcePath))throw new Error('SOURCE_FILE_MISSING');const bytes=new Uint8Array(await readBinaryFile(binding.workbookPath)),result=await prepareWorkbookBinding(binding,bytes);
  if(await hash(new Uint8Array(await readBinaryFile(binding.sourcePath)))!==result.last.sourceHash)throw new Error('SOURCE_FILE_CHANGED');
- if(await hash(new Uint8Array(await readBinaryFile(binding.workbookPath)))!==result.workbookHash)throw new Error('WORKBOOK_CHANGED');result.check();if(!list().some(b=>b.id===binding.id&&JSON.stringify(b)===JSON.stringify(binding)))throw new Error('BINDING_CHANGED');await writeBinaryFileAtomic(binding.workbookPath,result.bytes);persist(list().map(b=>b.id===id?{...b,last:result.last}:b));return {id,path:binding.workbookPath,values:result.values,last:result.last};
+ if(await hash(new Uint8Array(await readBinaryFile(binding.workbookPath)))!==result.workbookHash)throw new Error('WORKBOOK_CHANGED');result.check();if(!list().some(b=>b.id===binding.id&&JSON.stringify(b)===JSON.stringify(binding)))throw new Error('BINDING_CHANGED');
+ // The previous workbook goes to a new backup file before it is replaced.
+ const {backupPath}=await commitWorkbookRefresh(binding.workbookPath,bytes,result.bytes,{writeNew:writeBinaryFileNew,writeAtomic:writeBinaryFileAtomic});
+ const last={...result.last,backupPath};persist(list().map(b=>b.id===id?{...b,last}:b));return {id,path:binding.workbookPath,backupPath,values:result.values,last};
 }
 export async function workbookBindingRequest(request){
  if(request.action==='list')return {bindings:await inspectBindings()};
