@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,13 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Local approval routing
+
+`app_approval_routing` / `api.approvalRouting` implements the documented `local-file-v1` adapter. Explicit configure enables it. Draft captures the active saved PDF version (SHA-256, name, page count and revision label), recipients, sequential/parallel order, optional expiry and page regions. It performs no network send/upload. Submit requires the exact document hash and releases a handoff package; it does not claim delivery. Export includes the byte-identical PDF, request.json, audit-summary.json and instructions. Forward it manually; sequential routing requires the updated package after recording each recipient's receipt.
+
+A recipient imports request.json and the PDF through the receipt form. The PDF hash is verified, recipient/decision selected and a self-reported receipt JSON downloaded. `createReceipt` can also produce the receipt from the active saved PDF, an exported record, recipientId, decision and comment. The owner imports that receipt; wrong document/request/recipient, duplicate decisions, out-of-order sequential approvals and closed/expired requests are refused. Identical receipt IDs/data are idempotent. Statuses distinguish draft, released, partial, completed, rejected, expired, cancelled and superseded. Completed export includes the original approved PDF and audit without an account/login; it does not synthesize a signed PDF. Superseding points to another locally stored request.
+
+The version-1 record contains immutable configuration and a SHA-256 event chain anchored to its header. Verify recomputes the root, each event and the state transitions. This checks internal consistency, not identity, delivery, trusted timestamps or authenticity against a fully rewritten chain. Identities and decisions are self-reported. This is distinct from drawn signature annotations and certificate signing/validation; no legal-validity claim is made. The adapter is intentionally local and does not implement a hosted signature provider.
+
+Records persist in preferences; PDF bytes are not embedded there. The three most recent source PDFs are cached only in memory. After restart, reopen the exact source version or keep its original file accessible on desktop. Changed sources are refused. Limits: 100 requests, 50 recipients, 500 approval regions, 200 events per request, 50 MB source. Regions are viewport coordinates in points and review instructions, not AcroForm signature fields. API export requires a new desktop .zip path; browser UI downloads packages. Native desktop/MCP file export requires separate validation.

@@ -5546,3 +5546,12 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.approval-routing-dialog { width: min(1050px, 95vw); max-height: 92vh; color: var(--theme-text); font-size: 13px; }
+.approval-routing-dialog .crop-margins-content { overflow: auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.approval-routing-dialog p { margin: 0; line-height: 1.5; overflow-wrap: anywhere; }
+.approval-routing-dialog label { display: inline-flex; align-items: center; gap: 6px; }
+.approval-routing-dialog input, .approval-routing-dialog select, .approval-routing-dialog textarea { background: var(--theme-bg); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 5px; max-width: 100%; }
+.approval-recipient, .approval-field { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.approval-field input { width: 65px; }
+.approval-routing-dialog canvas { max-width: 100%; align-self: flex-start; flex-shrink: 0; }

@@ -1278,6 +1278,102 @@ fn handle_tools_list() -> Value {
                     "additionalProperties": false
                 }
             },
+{
+    "name": "app_approval_routing",
+    "description": "Local-file-v1 electronic approval routing, no network sending or certificate signing. Explicit configure adapter/enabled:true first. draft captures the active saved PDF hash with title/revision, sequential|parallel mode, nullable expiresAt, recipients [{id,name,email}], fields [{id,recipientId,page,x,y,width,height,label}]. list shows immutable document identity, state and audit. submit requires id and confirmedHash after exact-source review; it releases for manual handoff only. receipt imports a self-reported decision bound to request/document/recipient. cancel and supersede track distinct states. verify checks an exported record hash chain, not identity authenticity. export writes original PDF plus audit/request JSON into a new desktop ZIP outputPath; no permanent login.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "configure",
+                    "draft",
+                    "list",
+                    "submit",
+                    "receipt",
+                    "cancel",
+                    "supersede",
+                    "verify",
+                    "export",
+                    "createReceipt"
+                ]
+            },
+            "adapter": {
+                "type": "string"
+            },
+            "enabled": {
+                "type": "boolean"
+            },
+            "title": {
+                "type": "string"
+            },
+            "revision": {
+                "type": "string"
+            },
+            "mode": {
+                "type": "string",
+                "enum": [
+                    "sequential",
+                    "parallel"
+                ]
+            },
+            "expiresAt": {
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "recipients": {
+                "type": "array",
+                "items": {
+                    "type": "object"
+                }
+            },
+            "fields": {
+                "type": "array",
+                "items": {
+                    "type": "object"
+                }
+            },
+            "id": {
+                "type": "string"
+            },
+            "confirmedHash": {
+                "type": "string"
+            },
+            "receipt": {
+                "type": "object"
+            },
+            "replacementId": {
+                "type": "string"
+            },
+            "record": {
+                "type": "object"
+            },
+            "outputPath": {
+                "type": "string"
+            },
+            "recipientId": {
+                "type": "string"
+            },
+            "decision": {
+                "type": "string",
+                "enum": [
+                    "approved",
+                    "rejected"
+                ]
+            },
+            "comment": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "action"
+        ],
+        "additionalProperties": false
+    }
+},
             {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
@@ -1664,6 +1760,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_approval_routing" => tool_app_request(state, "mcp:approval-routing", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2488,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

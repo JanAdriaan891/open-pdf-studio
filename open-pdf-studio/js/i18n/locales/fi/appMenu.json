@@ -211,5 +211,6 @@
     "activationFailed": "Ei käytössä: {{error}}",
     "viaMcp": "Tekoälyyhteyden kautta"
   },
-  "annotateScreenshot": "Merkitse leikepöydän kuvakaappaus"
+  "annotateScreenshot": "Merkitse leikepöydän kuvakaappaus",
+  "approvalRouting": "Approval routing"
 }

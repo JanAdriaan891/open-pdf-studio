@@ -1,3 +1,4 @@
+import ApprovalRoutingDialog from './dialogs/ApprovalRoutingDialog.jsx';
 import { For } from 'solid-js';
 import { getDialogs } from '../stores/dialogStore.js';
 import DocPropertiesDialog from './DocPropertiesDialog.jsx';
@@ -63,6 +64,7 @@ import SysteemPaneelComponentDialog from './dialogs/SysteemPaneelComponentDialog
 import PrintProgressToast from './PrintProgressToast.jsx';
 
 const DIALOG_MAP = {
+  'approval-routing': ApprovalRoutingDialog,
   'doc-properties': DocPropertiesDialog,
   'preferences': PreferencesDialog,
   'new-doc': NewDocDialog,

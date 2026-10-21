@@ -211,5 +211,6 @@
     "activationFailed": "Nem aktív: {{error}}",
     "viaMcp": "Az MI-kapcsolaton keresztül"
   },
-  "annotateScreenshot": "Vágólapon lévő képernyőkép jegyzetelése"
+  "annotateScreenshot": "Vágólapon lévő képernyőkép jegyzetelése",
+  "approvalRouting": "Approval routing"
 }

@@ -211,5 +211,6 @@
     "activationFailed": "Ikke aktiv: {{error}}",
     "viaMcp": "Via AI-forbindelsen"
   },
-  "annotateScreenshot": "Annotér skærmbillede fra udklipsholderen"
+  "annotateScreenshot": "Annotér skærmbillede fra udklipsholderen",
+  "approvalRouting": "Approval routing"
 }

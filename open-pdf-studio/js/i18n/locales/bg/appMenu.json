@@ -211,5 +211,6 @@
     "activationFailed": "Неактивно: {{error}}",
     "viaMcp": "Чрез връзката с ИИ"
   },
-  "annotateScreenshot": "Анотиране на екранна снимка от клипборда"
+  "annotateScreenshot": "Анотиране на екранна снимка от клипборда",
+  "approvalRouting": "Approval routing"
 }
