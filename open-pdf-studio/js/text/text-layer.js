@@ -2,6 +2,7 @@ import { state, getActiveDocument, getPageRotation } from '../core/state.js';
 import { isTauri, invoke } from '../core/platform.js';
 import * as pdfjsLib from 'pdfjs-dist';
 import { resolveTextEditPageGeometry } from './text-edit-appearance.js';
+import { meetViewportVoorTekstlaag } from './tekstlaag-meetschaal.js';
 
 /**
  * Text Layer Management Module
@@ -278,12 +279,15 @@ export async function createTextLayer(page, viewport, container, pageNum) {
   container.appendChild(textLayerDiv);
 
   // Use PDF.js built-in TextLayer for accurate positioning
+  // De schaal is voor PDF.js alleen de meetgrootte van --scale-x; meet nooit
+  // op een ontaarde schaal (zie tekstlaag-meetschaal.js), anders worden de
+  // spans te breed en overlappen de selectievlakken.
   let textLayer;
   try {
     textLayer = new pdfjsLib.TextLayer({
       textContentSource: textContent,
       container: textLayerDiv,
-      viewport
+      viewport: meetViewportVoorTekstlaag(viewport),
     });
     await textLayer.render();
   } catch (err) {

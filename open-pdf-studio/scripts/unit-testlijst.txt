@@ -442,3 +442,4 @@ js/ui/getal-veld.test.mjs
 js/getal-velden-bron.test.mjs
 scripts/versievelden.test.mjs
 js/tools/gereedschap-opmaak.test.mjs
+js/text/tekstselectie-markering.test.mjs
