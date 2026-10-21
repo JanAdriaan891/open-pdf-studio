@@ -448,6 +448,8 @@ js/pdf/hidden-information.test.mjs
 js/pdf/print-preflight.test.mjs
 
 js/pdf/ocr-review.test.mjs
+js/pdf/ocr-review-service.test.mjs
+js/pdf/ocr-opslaan.test.mjs
 
 js/pdf/portfolio.test.mjs
 

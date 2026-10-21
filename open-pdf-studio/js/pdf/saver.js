@@ -41,7 +41,7 @@ import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
 import { saveTextEditsToPages } from './saver/text-edits.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
-import { writeOcrTextLayer, embedOcrFont, loadDefaultOcrFontBytes } from './saver/ocr-text-layer.js';
+import { writeOcrLayers } from './saver/ocr-text-layer.js';
 import { maakCjkFontKeten } from './saver/cjk-fonts.js';
 import { saveBookmarksToOutline } from './saver/bookmarks.js';
 import { saveStylePresetsToCatalog } from './saver/style-presets.js';
@@ -3124,31 +3124,16 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // watermerken, bladwijzers, stijlen, paginalabels en bijlagen blijven in
     // het model en gaan pas bij het echte opslaan het bestand in.
     let watermerkUitkomst = null;
-    let ocrWritten = false;
+    let ocrUitkomst = null;
     if (!alleenAnnotaties) {
       // Burn text edits into the PDF (cover-and-replace)
       await saveTextEditsToPages(pdfDocLib, pages, activeDoc);
 
-      // Write out any OCR results as an invisible searchable text layer
-      if (activeDoc && activeDoc.ocrResults && Object.keys(activeDoc.ocrResults).length > 0) {
-        // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
-        // geslaagde opslag; de herkende tekst blijft in het document staan.
-        let ocrFont = null;
-        try {
-          ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes());
-        } catch (err) {
-          if (Object.values(activeDoc.ocrResults).some(words => words.some(word => word.review))) throw err;
-          console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);
-        }
-        for (const [pageNumStr, words] of Object.entries(ocrFont ? activeDoc.ocrResults : {})) {
-          const pageIndex = parseInt(pageNumStr, 10) - 1;
-          const page = pages[pageIndex];
-          if (page && words && words.length > 0) {
-            writeOcrTextLayer(page, words, ocrFont);
-            ocrWritten = true;
-          }
-        }
-      }
+      // Write out any OCR results as an invisible searchable text layer.
+      // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
+      // geslaagde opslag; de herkende tekst blijft in het document staan.
+      // Ongeldige woorden worden overgeslagen, nooit de hele opslag.
+      ocrUitkomst = await writeOcrLayers(pdfDocLib, pages, activeDoc);
 
       // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
       // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.
@@ -3293,7 +3278,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // gebakken text-edit-records zijn daarna overbodig — pixels én tekst
     // zitten in het bestand — en de tekstlaag toont de nieuwe tekst als
     // gewone paginatekst, direct opnieuw bewerkbaar.
-    if ((textEditsGebakken || ocrWritten) && activeDoc) {
+    // Een OCR-laag hoeft de weergave alleen te verversen als ze sinds de
+    // vorige save is veranderd; anders staat ze al in de geladen werkkopie.
+    const ocrLaagGewijzigd = !!ocrUitkomst && ocrUitkomst.signature !== activeDoc?.ocrLayerSignature;
+    if (ocrUitkomst && activeDoc) activeDoc.ocrLayerPages = ocrUitkomst.layerPages;
+    if ((textEditsGebakken || ocrLaagGewijzigd) && activeDoc) {
       try {
         if (saveAsPath) activeDoc.saveTargetPath = saveAsPath;
         const { reloadFromBytes } = await import('./page-manager.js');
@@ -3324,6 +3313,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         );
       }
     }
+    if (ocrUitkomst && activeDoc) activeDoc.ocrLayerSignature = ocrUitkomst.signature;
 
     // Opgeslagen in het bestand dat ook de weergave is: daar staan de
     // kop-/voetteksten nu in, en het scherm tekent ze zelf. Herladen zonder
