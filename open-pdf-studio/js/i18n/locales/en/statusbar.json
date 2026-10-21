@@ -139,5 +139,6 @@
     "failed": "Search failed. Check the query and folder, then try again.",
     "prepareOcr": "Open for OCR…"
   },
-  "symbolSearch": "Find symbols"
+  "symbolSearch": "Find symbols",
+  "findMoreOptions": "More search options"
 }
