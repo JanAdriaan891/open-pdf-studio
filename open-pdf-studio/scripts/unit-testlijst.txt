@@ -438,3 +438,6 @@ js/core/getal-invoer.test.mjs
 js/core/getal-invoer-velden.test.mjs
 js/ui/getal-veld.test.mjs
 js/getal-velden-bron.test.mjs
+js/text/text-edit-afdekking.test.mjs
+js/pdf/saver/text-edit-tabelranden.test.mjs
+js/pdf/pdf-viewport-paginaschilder.test.mjs

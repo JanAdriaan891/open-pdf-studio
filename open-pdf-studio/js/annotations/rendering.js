@@ -64,7 +64,12 @@ import {
   getPageRotationMatrix,
   resolveTextEditLineStyle,
   textEditLineAnchor,
+  textEditCoverRects,
+  coverRectsFrameBounds,
 } from '../text/text-edit-appearance.js';
+import {
+  afdekUitsnede, afdekSleutel, houdAfdekkingen, zetAfdekkingHerteken,
+} from '../text/text-edit-afdekking.js';
 import { viewportGeometrie, rectNaarPagina } from '../pdf/weergave-rotatie.js';
 import { paginaMaat, paginaNaarWeergave, weergaveTransform, weergaveRectNaarPagina, zetRechtopRond } from '../pdf/weergave-ruimte.js';
 import { schaalgebiedStijl } from './scale-region-style.js';
@@ -2633,11 +2638,11 @@ function drawTextEdits(ctx, pageNum) {
 
   ctx.save();
   ctx.transform(...getPageRotationMatrix(pageWidth, pageHeight, totalRotation));
+  const afdekSleutels = [];
 
   for (const edit of pageEdits) {
     const fontSize = edit.fontSize;
     const ls = edit.lineSpacing || fontSize * 1.2;
-    const numOrig = edit.numOriginalLines || 1;
     // Richting van de originele run (graden CCW in PDF-ruimte). Canvas heeft
     // y-omlaag, dus een CCW-PDF-hoek is -angle op de context.
     const angle = Number(edit.textAngle) || 0;
@@ -2646,32 +2651,11 @@ function drawTextEdits(ctx, pageNum) {
     // First line baseline in canvas coordinates
     const firstBaseY = (offYPt + pageHeight) - edit.pdfY;
 
-    // Cover rectangle: extends from above first baseline to below last baseline
-    // Skip cover rect for newly added text (no original text to cover)
+    // Afdekking van de oude tekst (nieuw toegevoegde tekst heeft er geen):
+    // strakke vlakken per originele run met daarin de pagina zonder tekst.
     ctx.save();
     if (edit.originalText) {
-      const coverHeight = (numOrig - 1) * ls + fontSize * 1.3;
-      const origLines = edit.originalText.split('\n');
-      const maxOrigLen = Math.max(...origLines.map(l => l.length));
-      // Kolom-segmenten meenemen in de dekbreedte (zelfde regel als de
-      // saver): de tekenaantal-schatting telt kolom-gaten niet mee.
-      const segExtent = Math.max(0, ...((Array.isArray(edit.lineSegments) ? edit.lineSegments : [])
-        .flatMap(segs => (Array.isArray(segs) ? segs : []).map(sg =>
-          (Number(sg.dx) || 0) + String(sg.text ?? '').length * fontSize * 0.6))));
-      const coverWidth = Math.max(edit.pdfWidth, fontSize * 0.6 * maxOrigLen, segExtent) + fontSize * 0.5;
-
-      // Anker van het afdekvlak = de ORIGINELE tekstpositie (bij een
-      // verplaatst blok wijkt die af van het tekst-anker pdfX/pdfY).
-      const orig0 = (Array.isArray(edit.inplaceBaked?.lines) && edit.inplaceBaked.lines[0])
-        || (Array.isArray(edit.originalLineInfo) && edit.originalLineInfo[0]) || null;
-      const coverX = orig0 && Number.isFinite(Number(orig0.x)) ? Number(orig0.x) : edit.pdfX;
-      const coverY = orig0 && Number.isFinite(Number(orig0.y)) ? Number(orig0.y) : edit.pdfY;
-      ctx.save();
-      ctx.translate(coverX - offXPt, (offYPt + pageHeight) - coverY);
-      if (angle) ctx.rotate(-angleRad);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, -fontSize, coverWidth, coverHeight);
-      ctx.restore();
+      tekenTekstAfdekking(ctx, doc, pageNum, edit, offXPt, offYPt + pageHeight, afdekSleutels);
     }
 
     ctx.textBaseline = 'alphabetic';
@@ -2768,7 +2752,103 @@ function drawTextEdits(ctx, pageNum) {
     ctx.restore();
   }
   ctx.restore();
+  houdAfdekkingen(doc, pageNum, afdekSleutels);
 }
+
+// Afdekking van de oude tekst van één bewerking (#669). Het afdekgebied is
+// per originele run een strak vlak (textEditCoverRects): lijnen tussen en
+// rond de runs, zoals tabelranden, liggen er buiten. Binnen die vlakken komt
+// een uitsnede van de pagina zonder tekst (text-edit-afdekking.js), zodat ook
+// lijnen die de oude tekst raken of kruisen blijven staan. Zolang die
+// uitsnede er niet is, of in een afdruk/export waarvoor er nog geen klaarligt:
+// wit. ctx staat in het tekenkader (x vanaf de linkerrand van de pagina-box,
+// y omlaag vanaf `top`, in punten).
+function tekenTekstAfdekking(ctx, doc, pageNum, edit, offX, top, sleutels) {
+  const rects = textEditCoverRects(edit);
+  const omhullende = coverRectsFrameBounds(rects, offX, top);
+  if (!omhullende) return;
+  const vlakken = new Path2D();
+  for (const r of rects) {
+    const rad = (Number(r.angle) || 0) * Math.PI / 180;
+    const lx = Math.cos(rad); const ly = Math.sin(rad);
+    const ox = -Math.sin(rad); const oy = Math.cos(rad);
+    const hoeken = [
+      [r.x, r.y],
+      [r.x + lx * r.width, r.y + ly * r.width],
+      [r.x + lx * r.width + ox * r.height, r.y + ly * r.width + oy * r.height],
+      [r.x + ox * r.height, r.y + oy * r.height],
+    ];
+    hoeken.forEach(([ux, uy], k) => {
+      if (k === 0) vlakken.moveTo(ux - offX, top - uy);
+      else vlakken.lineTo(ux - offX, top - uy);
+    });
+    vlakken.closePath();
+  }
+  const m = ctx.getTransform();
+  const pxPerPt = Math.hypot(m.a, m.b) || 1;
+  const sleutel = afdekSleutel(pageNum, edit.id);
+  sleutels.push(sleutel);
+  // Een afdruk of export tekent synchroon: alleen een uitsnede die al klaar
+  // ligt, geen nieuwe plannen die pas na de uitvoer binnenkomt.
+  const uitvoer = !!_lagen && !_lagen.bewerkhulp;
+  const uitsnede = afdekUitsnede(doc, pageNum, sleutel, omhullende, pxPerPt, { plannen: !uitvoer });
+  ctx.save();
+  ctx.clip(vlakken);
+  if (uitsnede) {
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(
+      uitsnede.canvas,
+      uitsnede.kader.x, uitsnede.kader.y,
+      uitsnede.canvas.width / uitsnede.px, uitsnede.canvas.height / uitsnede.px,
+    );
+  } else {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(omhullende.x, omhullende.y, omhullende.width, omhullende.height);
+  }
+  ctx.restore();
+}
+
+// ── Tekstbewerkingen op het paginacanvas (viewport-weergave, #669) ──
+// De viewport tekent de pagina op devicepixels; met dezelfde transform
+// tekent hij daarna de tekstbewerkingen (pdf-viewport.js, paginaschilder).
+// Zo is de nieuwe tekst op elke zoom even scherp als de tekst eromheen.
+let _getekendeTekstBewerkingen = null;
+
+function tekstBewerkingenHandtekening(doc, pageNum) {
+  if (!doc) return '';
+  const opPagina = (doc.textEdits || []).filter(e => e && e.page === pageNum);
+  return `${doc.id ?? ''}|${doc.filePath ?? ''}|${pageNum}|${JSON.stringify(opPagina.map(e => [
+    e.id, e.newText, e.originalText, e.pdfX, e.pdfY, e.fontSize, e.lineSpacing, e.color,
+    e.fontFamily, e.loadedFontName, e.textAngle, e.fontUnderline, e.fontStrikethrough,
+    e.lineStyles, e.lineSegments, e.lineJustifyTw, e.originalLineInfo,
+  ]))}`;
+}
+
+/**
+ * Tekent de tekstbewerkingen van een pagina op het paginacanvas van de
+ * viewport. ctx staat in de paginaruimte (punten, y omlaag) met de
+ * device-pixeltransform van de viewport.
+ */
+export function tekenTekstBewerkingenOpPagina(ctx, pageNum) {
+  const doc = state.documents[state.activeDocumentIndex];
+  _getekendeTekstBewerkingen = tekstBewerkingenHandtekening(doc, pageNum);
+  drawTextEdits(ctx, pageNum);
+}
+
+function vraagTekstBewerkingenOpPagina(vp, pageNum) {
+  const doc = state.documents[state.activeDocumentIndex];
+  if (tekstBewerkingenHandtekening(doc, pageNum) !== _getekendeTekstBewerkingen) vp.dirty = true;
+}
+
+// Een uitsnede zonder tekst is klaar: dezelfde hertekening als na een
+// wijziging aan de bewerking (doorlopend, viewport of enkele pagina).
+zetAfdekkingHerteken(() => {
+  const doc = state.documents[state.activeDocumentIndex];
+  const vp = window.__pdfViewport;
+  if (doc?.viewMode === 'continuous') redrawContinuous();
+  else if (vp?.active && doc?.filePath) vp.dirty = true;
+  else redrawAnnotations();
+});
 
 // Redraw all annotations (single page mode)
 // Pass lightweight=true during drag/resize to skip expensive DOM updates
@@ -2956,8 +3036,15 @@ export function redrawAnnotations(lightweight = false) {
   // Draw watermarks behind content
   renderWatermarksBehind(annotationCtx, curPage, wmMaat.w, wmMaat.h);
 
-  // Draw text edits (cover-and-replace) before annotations
-  drawTextEdits(annotationCtx, curPage);
+  // Tekstbewerkingen (cover-and-replace), vóór de annotaties. In de
+  // viewport-weergave heeft deze overlay de viewportmaat in CSS-pixels
+  // (overlay-canvas-size.js): bij een devicePixelRatio boven 1 rekt de
+  // browser hem op en werd de nieuwe tekst wazig (#669). Daar tekent de
+  // viewport ze op het paginacanvas, op devicepixels
+  // (tekenTekstBewerkingenOpPagina); hier alleen een nieuwe frame vragen
+  // als ze sinds de laatste keer veranderd zijn.
+  if (useViewport) vraagTekstBewerkingenOpPagina(vp, curPage);
+  else drawTextEdits(annotationCtx, curPage);
 
   // Viewport culling: skip annotations outside the visible area for performance
   let vpX = 0, vpY = 0, vpW, vpH;
