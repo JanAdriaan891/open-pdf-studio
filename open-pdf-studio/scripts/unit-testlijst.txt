@@ -442,6 +442,7 @@ js/getal-velden-bron.test.mjs
 js/search/document-search.test.mjs
 
 js/annotations/spatial-zones.test.mjs
+js/pdf/spatial-zone-relink.test.mjs
 
 js/pdf/hidden-information.test.mjs
 

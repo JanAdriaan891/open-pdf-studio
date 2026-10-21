@@ -24,6 +24,7 @@ import { nieuwMergeVerslag, REDEN_VOORBEELD, REDEN_GEEN_PAGINAS } from './merge-
 import { pdfjsBronnen } from '../core/basis-url.js';
 import { zonderKopVoetStromen } from './saver/kopvoet.js';
 import { labelsNaHerladen } from './pagina-labels-app.js';
+import { relinkZonesInPages, zoneIdsInPages, zoneIdsInAnnotations } from './spatial-zone-relink.js';
 
 // Page clipboard for cut/copy/paste
 let pageClipboard = null; // { bytes: Uint8Array, cut: boolean, sourcePageNum: number }
@@ -138,6 +139,7 @@ export async function pastePage(afterPageNum) {
     for (let i = 0; i < copiedPages.length; i++) {
       destDoc.insertPage(insertIdx + i, copiedPages[i]);
     }
+    relinkCopiedPageZones(destDoc, copiedPages, doc);
 
     // Build page mapping
     const pageMapping = {};
@@ -161,6 +163,18 @@ export async function pastePage(afterPageNum) {
   } finally {
     hideLoading();
   }
+}
+
+// Copied pages keep the spatial zone ids of their original; an id that the
+// document already uses gets a fresh one, or both zones become invalid.
+function relinkCopiedPageZones(destDoc, copiedPages, doc) {
+  const copies = new Set(copiedPages.map((page) => page.ref));
+  const others = destDoc.getPages().filter((page) => !copies.has(page.ref));
+  const taken = new Set([
+    ...zoneIdsInAnnotations(doc?.annotations),
+    ...zoneIdsInPages(destDoc.context, others),
+  ]);
+  relinkZonesInPages(destDoc.context, copiedPages, taken);
 }
 
 // Get the cache key for the current document's bytes
@@ -609,6 +623,7 @@ export async function insertPagesFromFile(refPage, position, sourcePath = null, 
     for (let i = 0; i < copiedPages.length; i++) {
       destDoc.insertPage(insertIdx + i, copiedPages[i]);
     }
+    relinkCopiedPageZones(destDoc, copiedPages, doc);
     // PDF-lagen (OCG's) van de ingevoegde pagina's horen ook in de lagenlijst
     // van de catalogus; copyPages neemt alleen de verwijzingen in de inhoud
     // mee (#400).
@@ -920,6 +935,7 @@ export async function replacePages(pageNumber) {
     for (let i = 0; i < copiedPages.length; i++) {
       destDoc.insertPage(pageNumber - 1 + i, copiedPages[i]);
     }
+    relinkCopiedPageZones(destDoc, copiedPages, doc);
 
     // Build page mapping
     // Pages before the replaced page: unchanged
@@ -1076,7 +1092,7 @@ export async function mergeFiles(filePaths, position) {
 
     const { voegPdfsSamen } = await import('./samenvoegen.js');
     const samen = await voegPdfsSamen(destDoc, bronnen.map(({ doc: d, naam }) => ({ doc: d, naam })), {
-      invoegIndex: insertIdx, positie: position,
+      invoegIndex: insertIdx, positie: position, zoneIds: zoneIdsInAnnotations(doc?.annotations),
     });
     const totalInserted = samen.paginasIngevoegd;
     for (const b of bronnen) verslag.merged.push(b.pad);
