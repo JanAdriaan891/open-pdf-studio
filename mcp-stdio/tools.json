@@ -1114,6 +1114,61 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_search_documents",
+    "description": "Search text and optional comments in the active PDF, all open PDFs, or PDF files directly in a desktop folder. Reads open unsaved documents in memory; never saves or uploads. Returns grouped file statuses and bounded matches with page labels, snippets and coordinates. Encrypted, unreadable and textless pages are reported separately. No persistent index. Refine the query when truncated.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "active",
+            "open",
+            "folder"
+          ],
+          "default": "open"
+        },
+        "folder": {
+          "type": "string",
+          "description": "Required for folder scope; desktop only, non-recursive."
+        },
+        "annotations": {
+          "type": "boolean",
+          "default": true
+        },
+        "matchCase": {
+          "type": "boolean",
+          "default": false
+        },
+        "wholeWord": {
+          "type": "boolean",
+          "default": false
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000,
+          "default": 500
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search documents",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

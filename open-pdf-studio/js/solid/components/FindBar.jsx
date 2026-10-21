@@ -1,3 +1,4 @@
+import DocumentSearch from './DocumentSearch.jsx';
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import {
   visible, resultsText, messageText, notFound, navDisabled, searching,
@@ -97,6 +98,7 @@ export default function FindBar() {
   return (
     <div class="find-bar" classList={{ visible: visible() }}>
       <div class="find-rows">
+        <DocumentSearch />
         {/* Row 1: Find */}
         <div class="find-row">
           {/* Search input with inline count */}

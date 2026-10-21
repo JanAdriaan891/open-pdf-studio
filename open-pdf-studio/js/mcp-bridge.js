@@ -3719,6 +3719,10 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:search-documents': async (p) => {
+    try { return { ok: true, ...(await (await import('./search/document-search-service.js')).searchWorkspace(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

@@ -391,7 +391,7 @@ async function navigateToResult(result) {
 
   // Scroll to the match after a short delay to ensure rendering is complete
   setTimeout(() => {
-    scrollToMatch(result);
+    if (getActiveDocument() === doc && doc?.currentPage === result.pageNum) scrollToMatch(result);
   }, 100);
 }
 
@@ -539,7 +539,7 @@ function highlightMatch(result, isCurrent) {
   // niet in de tekstlaag, dus er is geen letterpositie om op te mikken.
   if (result.bron === BRON_ANNOTATIE) {
     const ann = doc?.annotations?.find(a => a.id === result.annotationId);
-    const doos = ann ? annotationBounds(ann) : null;
+    const doos = ann ? annotationBounds(ann) : result.annotationBox;
     if (!doos) return;
     const el = maakMarkering(result, isCurrent);
     el.classList.add('search-highlight-annotation');
@@ -717,4 +717,21 @@ function publiceerResultatenlijst() {
   setResultGroups(groepeerPerPagina(results));
   const huidig = results[currentIndex];
   setCurrentResultPage(huidig ? huidig.pageNum : 0);
+}
+
+/** Publish a verified match from the multi-document search after tab switching. */
+export async function showWorkspaceMatch(match) {
+  const doc = getActiveDocument();
+  cancelProgressiveSearch?.();
+  if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+  state.search.results = [{ ...match, index: 0 }];
+  state.search.currentIndex = 0;
+  state.search.totalMatches = 1;
+  state.search.query = match.matchText;
+  setVisible(true);
+  state.search.isOpen = true;
+  await navigateToResult(state.search.results[0]);
+  if (getActiveDocument() !== doc) return;
+  updateUI();
+  highlightResults();
 }

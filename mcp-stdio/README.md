@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,19 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Search a document package
+
+`app_search_documents` searches the active PDF, all open PDFs, or the PDFs
+directly inside a desktop folder. For example:
+`{"query":"water","scope":"open","annotations":true,"limit":500}`.
+Use `scope:"folder"` with `folder` for a directory (not recursive).
+Results include document identity, page labels, text snippets and location
+anchors; per-file statuses distinguish encrypted, unreadable and textless PDFs.
+Textless pages are candidates for explicit local OCR, not evidence of zero hits.
+Search does not write files or create a persistent index.
+
+Extensions can call `api.searchDocuments(request, { signal })` with the same
+request and an optional AbortSignal. The find bar exposes grouped results,
+cancellation, navigation and an explicit OCR language dialog for scanned files.
+Changed documents must be searched again before navigation.
