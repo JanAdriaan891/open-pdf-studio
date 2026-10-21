@@ -211,5 +211,6 @@
     "activationFailed": "No activa: {{error}}",
     "viaMcp": "Mediante la conexión de IA"
   },
-  "annotateScreenshot": "Anotar captura de pantalla del portapapeles"
+  "annotateScreenshot": "Anotar captura de pantalla del portapapeles",
+  "workflows": "Document workflows"
 }

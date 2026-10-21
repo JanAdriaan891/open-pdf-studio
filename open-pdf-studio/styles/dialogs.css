@@ -5546,3 +5546,29 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.document-workflows-dialog {
+  width: min(820px, 94vw);
+  max-height: 92vh;
+  color: var(--theme-text);
+  font-size: 13px;
+}
+.document-workflows-dialog .crop-margins-content {
+  overflow: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.document-workflows-dialog p { margin: 0; line-height: 1.5; }
+.document-workflows-dialog fieldset { padding: 10px; border: 1px solid var(--theme-border); }
+.document-workflows-dialog label { display: inline-flex; flex-direction: column; gap: 4px; margin-inline-end: 8px; margin-bottom: 6px; }
+.document-workflows-dialog input, .document-workflows-dialog select {
+  color: var(--theme-text);
+  background: var(--theme-bg);
+  border: 1px solid var(--theme-border);
+  padding: 5px;
+  max-width: 100%;
+}
+.document-workflows-dialog fieldset input { width: 140px; }
+.document-workflows-dialog ul { overflow-wrap: anywhere; }

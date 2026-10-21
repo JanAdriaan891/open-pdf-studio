@@ -211,5 +211,6 @@
     "activationFailed": "Non attiva: {{error}}",
     "viaMcp": "Tramite la connessione IA"
   },
-  "annotateScreenshot": "Annota screenshot dagli appunti"
+  "annotateScreenshot": "Annota screenshot dagli appunti",
+  "workflows": "Document workflows"
 }

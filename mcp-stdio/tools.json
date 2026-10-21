@@ -1114,6 +1114,55 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_document_workflows",
+    "description": "Save/export (list) named version-1 document workflows, remove by name, run selected PDF paths into a separate output folder, start explicit watched input/output folders, or stop/cancel. Supported ordered steps: rotate {angle:0|90|180|270}, cropMargins {left,right,top,bottom} in unrotated PDF points, metadata {title,author,subject}. Workflow has version:1,name,suffix (letters/digits/_/-),steps. New outputs only, deterministic names and retry detection; no uploads. Watch requires the desktop app to stay open and does not resume automatically.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "list",
+            "save",
+            "remove",
+            "run",
+            "watch",
+            "stop"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "workflow": {
+          "type": "object"
+        },
+        "paths": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "string"
+          }
+        },
+        "input": {
+          "type": "string"
+        },
+        "output": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Run document workflows",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

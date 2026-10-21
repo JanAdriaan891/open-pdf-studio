@@ -211,5 +211,6 @@
     "activationFailed": "Nieaktywne: {{error}}",
     "viaMcp": "Przez połączenie AI"
   },
-  "annotateScreenshot": "Dodaj adnotacje do zrzutu ekranu ze schowka"
+  "annotateScreenshot": "Dodaj adnotacje do zrzutu ekranu ze schowka",
+  "workflows": "Document workflows"
 }

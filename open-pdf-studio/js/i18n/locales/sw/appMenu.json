@@ -211,5 +211,6 @@
     "activationFailed": "Haitumiki: {{error}}",
     "viaMcp": "Kupitia muunganisho wa AI"
   },
-  "annotateScreenshot": "Weka Maelezo kwenye Picha ya Skrini ya Ubao wa Kunakili"
+  "annotateScreenshot": "Weka Maelezo kwenye Picha ya Skrini ya Ubao wa Kunakili",
+  "workflows": "Document workflows"
 }

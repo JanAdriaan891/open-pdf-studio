@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,11 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Document workflows
+
+`app_document_workflows` / `api.documentWorkflows(request)` supports list, save, remove, run, watch, stop. The application menu opens an ordered step editor with saved workflows, import/export and sample download. `list` returns saved definitions and the last 500 per-file results. A definition has version:1, name, suffix and ordered steps: rotate {angle}, cropMargins {left,right,top,bottom} in PDF points in unrotated coordinates, metadata {title,author,subject}. Empty metadata strings explicitly clear those fields. This is not a metadata sanitization/redaction tool. Signed documents should not be rewritten; certified/encrypted inputs are refused. Files are bounded to 100 MB, batches to 1000 paths and workflows to 30 steps.
+
+Run accepts paths, workflow, output. Source bytes are rechecked before publishing. Outputs use the input/settings SHA-256 and identical results are skipped on retry, including after restart; unrelated collisions fail. Publishing stages, syncs and exclusively hard-links beside the destination, then removes the temporary link. Existing destinations are never overwritten, even in a race. Filesystems without hard links fail safely. A power loss can leave a hidden .tmp staging file but never a partially published PDF. Input files are not changed. Logs contain paths, hashes, statuses and step numbers, never PDF text/parser messages.
+
+Watch accepts input/output directories and a workflow. It is nonrecursive, requires separate folders, polls every five seconds and requires two unchanged content hashes plus a final EOF marker. Generated output names are ignored. This mitigates normal copy-in-progress files but cannot promise that another process will never modify a file later. Changing input is rechecked before publication. Watch stops on app exit; restart it explicitly. Stop aborts at step/file boundaries; an already publishing complete file may finish and is detected on retry. The dialog can be closed while watching continues; reopen to stop. Preview and JSON management work in the browser; batch/watch publishing requires Tauri. No service, account or upload is involved.

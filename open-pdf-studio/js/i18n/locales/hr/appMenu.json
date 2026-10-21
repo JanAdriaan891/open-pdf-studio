@@ -211,5 +211,6 @@
     "activationFailed": "Nije aktivno: {{error}}",
     "viaMcp": "Putem AI veze"
   },
-  "annotateScreenshot": "Označi snimku zaslona iz međuspremnika"
+  "annotateScreenshot": "Označi snimku zaslona iz međuspremnika",
+  "workflows": "Document workflows"
 }

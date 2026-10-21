@@ -211,5 +211,6 @@
     "activationFailed": "Ikke aktiv: {{error}}",
     "viaMcp": "Via AI-tilkoblingen"
   },
-  "annotateScreenshot": "Lag merknad på skjermbilde fra utklippstavlen"
+  "annotateScreenshot": "Lag merknad på skjermbilde fra utklippstavlen",
+  "workflows": "Document workflows"
 }

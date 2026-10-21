@@ -211,5 +211,6 @@
     "activationFailed": "Neaktivní: {{error}}",
     "viaMcp": "Přes připojení AI"
   },
-  "annotateScreenshot": "Anotovat snímek obrazovky ze schránky"
+  "annotateScreenshot": "Anotovat snímek obrazovky ze schránky",
+  "workflows": "Document workflows"
 }

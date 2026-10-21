@@ -211,5 +211,6 @@
     "activationFailed": "Inativa: {{error}}",
     "viaMcp": "Pela conexão de IA"
   },
-  "annotateScreenshot": "Anotar captura de tela da área de transferência"
+  "annotateScreenshot": "Anotar captura de tela da área de transferência",
+  "workflows": "Document workflows"
 }

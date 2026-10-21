@@ -211,5 +211,6 @@
     "activationFailed": "Inactive : {{error}}",
     "viaMcp": "Via la connexion IA"
   },
-  "annotateScreenshot": "Annoter une capture d'écran du presse-papiers"
+  "annotateScreenshot": "Annoter une capture d'écran du presse-papiers",
+  "workflows": "Document workflows"
 }

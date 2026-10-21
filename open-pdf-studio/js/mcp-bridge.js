@@ -3719,6 +3719,10 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:document-workflows': async (p) => {
+    try { const { workflowRequest } = await import('./workflows/workflow-service.js'); return { ok: true, ...(await workflowRequest(p)) }; }
+    catch { return { ok: false, error: 'WORKFLOW_REQUEST_FAILED' }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

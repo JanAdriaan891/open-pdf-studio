@@ -1278,6 +1278,49 @@ fn handle_tools_list() -> Value {
                     "additionalProperties": false
                 }
             },
+{
+    "name": "app_document_workflows",
+    "description": "Save/export (list) named version-1 document workflows, remove by name, run selected PDF paths into a separate output folder, start explicit watched input/output folders, or stop/cancel. Supported ordered steps: rotate {angle:0|90|180|270}, cropMargins {left,right,top,bottom} in unrotated PDF points, metadata {title,author,subject}. Workflow has version:1,name,suffix (letters/digits/_/-),steps. New outputs only, deterministic names and retry detection; no uploads. Watch requires the desktop app to stay open and does not resume automatically.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "list",
+                    "save",
+                    "remove",
+                    "run",
+                    "watch",
+                    "stop"
+                ]
+            },
+            "name": {
+                "type": "string"
+            },
+            "workflow": {
+                "type": "object"
+            },
+            "paths": {
+                "type": "array",
+                "maxItems": 1000,
+                "items": {
+                    "type": "string"
+                }
+            },
+            "input": {
+                "type": "string"
+            },
+            "output": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "action"
+        ],
+        "additionalProperties": false
+    }
+},
             {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
@@ -1664,6 +1707,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_document_workflows" => tool_app_request(state, "mcp:document-workflows", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2435,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);
