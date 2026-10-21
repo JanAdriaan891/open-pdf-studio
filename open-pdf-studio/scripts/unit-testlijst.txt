@@ -463,6 +463,7 @@ js/search/symbol-matcher.test.mjs
 js/quantities/workbook-bindings.test.mjs
 
 js/workflows/document-workflow.test.mjs
+js/workflows/watch-poll.test.mjs
 
 js/drawing-sets/model.test.mjs
 

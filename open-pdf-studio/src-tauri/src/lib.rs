@@ -1566,6 +1566,36 @@ fn list_pdf_files(dir: String) -> Result<Vec<String>, String> {
     Ok(pdf_files)
 }
 
+/// PDF files directly in `dir` with size and modification time, so a folder
+/// watch can skip unchanged files without reading them.
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct PdfFileStat {
+    path: String,
+    size: u64,
+    mtime_ms: f64,
+}
+
+#[tauri::command]
+fn list_pdf_file_stats(dir: String) -> Result<Vec<PdfFileStat>, String> {
+    let entries = fs::read_dir(&dir).map_err(|e| format!("Failed to read directory: {}", e))?;
+    let mut files: Vec<PdfFileStat> = Vec::new();
+    for entry in entries.flatten() {
+        let path = entry.path();
+        let is_pdf = path.extension().map_or(false, |e| e.to_string_lossy().eq_ignore_ascii_case("pdf"));
+        let Ok(meta) = fs::metadata(&path) else { continue };
+        if !is_pdf || !meta.is_file() {
+            continue;
+        }
+        let mtime_ms = meta.modified().ok()
+            .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
+            .map_or(0.0, |d| d.as_secs_f64() * 1000.0);
+        files.push(PdfFileStat { path: path.to_string_lossy().to_string(), size: meta.len(), mtime_ms });
+    }
+    files.sort_by(|a, b| a.path.cmp(&b.path));
+    Ok(files)
+}
+
 #[tauri::command]
 fn play_alert_sound() {
     #[cfg(target_os = "windows")]
@@ -3073,6 +3103,7 @@ pub fn run(opts: StartupOpts) {
             discard_spool_pdf,
             download_pdf_from_url,
             list_pdf_files,
+            list_pdf_file_stats,
             save_preferences,
             load_preferences,
             save_catalog,

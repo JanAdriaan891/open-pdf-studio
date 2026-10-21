@@ -801,6 +801,11 @@ export async function listPdfFiles(dir) {
   return await invoke('list_pdf_files', { dir });
 }
 
+/** PDF files directly in `dir` as [{path, size, mtimeMs}]. */
+export async function listPdfFileStats(dir) {
+  return await invoke('list_pdf_file_stats', { dir });
+}
+
 // File locking - prevent other apps from writing to an open file
 export async function lockFile(path) {
   try {
