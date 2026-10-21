@@ -149,6 +149,7 @@
     "properties": "Propriedades",
     "color": "Cor",
     "width": "Largura",
+    "propertiesHint": "Aplica-se à anotação selecionada ou à próxima anotação que desenhar com a ferramenta ativa",
     "edit": "Editar",
     "undo": "Desfazer",
     "clearPageAnnotations": "Limpar anotações da página",

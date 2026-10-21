@@ -149,6 +149,7 @@
     "properties": "属性",
     "color": "颜色",
     "width": "宽度",
+    "propertiesHint": "应用于所选批注，或应用于您用当前工具绘制的下一个批注",
     "edit": "编辑",
     "undo": "撤销",
     "clearPageAnnotations": "清除页面批注",

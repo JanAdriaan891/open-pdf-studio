@@ -149,6 +149,7 @@
     "properties": "Właściwości",
     "color": "Kolor",
     "width": "Szerokość",
+    "propertiesHint": "Dotyczy zaznaczonej adnotacji lub następnej adnotacji narysowanej aktywnym narzędziem",
     "edit": "Edycja",
     "undo": "Cofnij",
     "clearPageAnnotations": "Wyczyść adnotacje na stronie",

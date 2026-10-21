@@ -149,6 +149,7 @@
     "properties": "Egenskaper",
     "color": "Färg",
     "width": "Bredd",
+    "propertiesHint": "Gäller den markerade anteckningen eller nästa anteckning som du ritar med det aktiva verktyget",
     "edit": "Redigera",
     "undo": "Ångra",
     "clearPageAnnotations": "Rensa sidans anteckningar",
