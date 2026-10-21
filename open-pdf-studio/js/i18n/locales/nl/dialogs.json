@@ -1145,5 +1145,27 @@
     "tabLabel": "hersteld",
     "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
     "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
+  },
+  "ocrReview": {
+    "title": "OCR verifiëren",
+    "instructions": "Controleer onzekere woorden aan de hand van de bronuitsnede. Alt+Links/Rechts navigeert; Enter accepteert of corrigeert de tekst. Sla op om doorzoekbare/kopieerbare tekst bij te werken. De scan wordt niet overschilderd.",
+    "threshold": "Toon betrouwbaarheid onder",
+    "reviewed": "gecontroleerd",
+    "page": "Pagina",
+    "confidence": "Betrouwbaarheid",
+    "unknown": "Niet beschikbaar",
+    "pending": "Te controleren",
+    "crop": "Uitsnede van de bronafbeelding",
+    "text": "Herkende tekst",
+    "previous": "Vorige",
+    "accept": "Accepteren",
+    "correct": "Corrigeren",
+    "next": "Volgende",
+    "refresh": "Vernieuwen",
+    "close": "Sluiten",
+    "empty": "Geen kandidaten. Voer eerst OCR uit of verhoog de grens. Oudere PDF’s zonder verificatiegegevens hebben opnieuw OCR nodig.",
+    "error": "Verificatie kon niet worden bijgewerkt. Vernieuw de lijst als het document is gewijzigd.",
+    "accepted": "Geaccepteerd",
+    "corrected": "Gecorrigeerd"
   }
 }

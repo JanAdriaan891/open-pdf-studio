@@ -1145,5 +1145,27 @@
     "tabLabel": "đã khôi phục",
     "tabTip": "Đã khôi phục sau khi đóng bất ngờ. Lưu sẽ ghi vào tệp gốc.",
     "reloadStopped": "Cửa sổ Open PDF Studio đã ngừng hoạt động nhiều lần liên tiếp và sẽ không còn được tải lại tự động. Hãy lưu công việc và khởi động lại ứng dụng."
+  },
+  "ocrReview": {
+    "title": "Verify OCR",
+    "instructions": "Review uncertain words against the source crop. Alt+Left/Right navigates; Enter accepts or corrects the text. Save to update searchable/copied text. The scan is never painted over.",
+    "threshold": "Show confidence below",
+    "reviewed": "reviewed",
+    "page": "Page",
+    "confidence": "Confidence",
+    "unknown": "Unavailable",
+    "pending": "Pending",
+    "crop": "Source image crop",
+    "text": "Recognized text",
+    "previous": "Previous",
+    "accept": "Accept",
+    "correct": "Correct",
+    "next": "Next",
+    "refresh": "Refresh",
+    "close": "Close",
+    "empty": "No review candidates. Run OCR first, or raise the threshold. Older PDFs without review metadata need OCR again.",
+    "error": "Could not update verification. Refresh the queue if the document changed.",
+    "accepted": "Accepted",
+    "corrected": "Corrected"
   }
 }

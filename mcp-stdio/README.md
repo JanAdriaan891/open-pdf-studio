@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,23 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Verify uncertain OCR
+
+Open the OCR language dialog and choose Verify OCR. The queue orders unknown and
+low-confidence words first, shows a source crop and supports Alt+Left/Right plus
+Enter to accept or correct. Confidence is preserved; missing/invalid confidence
+is explicitly unavailable. Save to update searchable/copied text.
+
+app_review_ocr and api.reviewOcr(request) accept action "list", documentId,
+threshold (default 80), offset and limit (default 100, maximum 1000).
+Accept/correct additionally require page, index, revision and expectedText from
+the queue; correct also takes text. Mutations reject stale document revisions and
+participate in undo. New OCR runs have their own page-level undo records.
+
+Each page stores /OPS_OCRReview as a PDF text string containing version=1 and
+validated words with coordinates, confidence and optional review status/original
+text. The app's invisible text stream is marked /OPS_OCRLayer true and replaced
+on subsequent saves; artwork and unowned streams are retained. Older OCR without
+this metadata needs recognition again to create a verification queue. Unsupported
+glyphs in reviewed text fail saving rather than silently losing the correction.

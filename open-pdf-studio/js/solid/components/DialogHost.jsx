@@ -1,3 +1,4 @@
+import OcrReviewDialog from './dialogs/OcrReviewDialog.jsx';
 import { For } from 'solid-js';
 import { getDialogs } from '../stores/dialogStore.js';
 import DocPropertiesDialog from './DocPropertiesDialog.jsx';
@@ -94,6 +95,7 @@ const DIALOG_MAP = {
   'straighten-page': StraightenDialog,
   'shift-page': ShiftPageDialog,
   'ocr-language': OcrLanguageDialog,
+  'ocr-review': OcrReviewDialog,
   'resize-pages': ResizePagesDialog,
   'compress': CompressDialog,
   'screenshot': ScreenshotDialog,

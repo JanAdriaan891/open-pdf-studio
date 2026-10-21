@@ -1145,5 +1145,27 @@
     "tabLabel": "gendannet",
     "tabTip": "Gendannet efter en uventet lukning. Gem skriver til den oprindelige fil.",
     "reloadStopped": "Open PDF Studio-vinduet holdt op med at fungere flere gange i træk og genindlæses ikke længere automatisk. Gem dit arbejde, og genstart appen."
+  },
+  "ocrReview": {
+    "title": "Verify OCR",
+    "instructions": "Review uncertain words against the source crop. Alt+Left/Right navigates; Enter accepts or corrects the text. Save to update searchable/copied text. The scan is never painted over.",
+    "threshold": "Show confidence below",
+    "reviewed": "reviewed",
+    "page": "Page",
+    "confidence": "Confidence",
+    "unknown": "Unavailable",
+    "pending": "Pending",
+    "crop": "Source image crop",
+    "text": "Recognized text",
+    "previous": "Previous",
+    "accept": "Accept",
+    "correct": "Correct",
+    "next": "Next",
+    "refresh": "Refresh",
+    "close": "Close",
+    "empty": "No review candidates. Run OCR first, or raise the threshold. Older PDFs without review metadata need OCR again.",
+    "error": "Could not update verification. Refresh the queue if the document changed.",
+    "accepted": "Accepted",
+    "corrected": "Corrected"
   }
 }

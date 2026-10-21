@@ -5546,3 +5546,9 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.ocr-review { font-size: 12px; color: var(--theme-text); }
+.ocr-review canvas { display: block; margin: 8px 0; }
+.ocr-review input, .ocr-review button { font: inherit; color: var(--theme-text); background: var(--theme-surface); border: 1px solid var(--theme-border); border-radius: 0; padding: 4px; max-width: 100%; box-sizing: border-box; }
+.ocr-review button { margin: 4px; }
+.ocr-review button:disabled { opacity: .5; }

@@ -1145,5 +1145,27 @@
     "tabLabel": "மீட்டெடுக்கப்பட்டது",
     "tabTip": "எதிர்பாராத மூடலுக்குப் பிறகு மீட்டெடுக்கப்பட்டது. சேமித்தல் அசல் கோப்பில் எழுதும்.",
     "reloadStopped": "Open PDF Studio சாளரம் தொடர்ந்து பலமுறை செயல்படுவதை நிறுத்தியது, இனி தானாக மீண்டும் ஏற்றப்படாது. உங்கள் வேலையைச் சேமித்து பயன்பாட்டை மீண்டும் தொடங்கவும்."
+  },
+  "ocrReview": {
+    "title": "Verify OCR",
+    "instructions": "Review uncertain words against the source crop. Alt+Left/Right navigates; Enter accepts or corrects the text. Save to update searchable/copied text. The scan is never painted over.",
+    "threshold": "Show confidence below",
+    "reviewed": "reviewed",
+    "page": "Page",
+    "confidence": "Confidence",
+    "unknown": "Unavailable",
+    "pending": "Pending",
+    "crop": "Source image crop",
+    "text": "Recognized text",
+    "previous": "Previous",
+    "accept": "Accept",
+    "correct": "Correct",
+    "next": "Next",
+    "refresh": "Refresh",
+    "close": "Close",
+    "empty": "No review candidates. Run OCR first, or raise the threshold. Older PDFs without review metadata need OCR again.",
+    "error": "Could not update verification. Refresh the queue if the document changed.",
+    "accepted": "Accepted",
+    "corrected": "Corrected"
   }
 }

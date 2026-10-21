@@ -1114,6 +1114,69 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_review_ocr",
+    "description": "List low/unknown-confidence OCR words with page coordinates and review state, or accept/correct one word. Requires documentId; mutations also require revision and expectedText from the list to reject stale edits. Save afterward to replace the invisible OCR text layer. Never paints over the scan. Results are paginated.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "list",
+            "accept",
+            "correct"
+          ]
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expectedText": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "action",
+        "documentId"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Verify OCR text",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

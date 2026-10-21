@@ -3719,6 +3719,14 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:review-ocr': async (p) => {
+    try {
+      const service = await import('./pdf/ocr-review-service.js');
+      return { ok: true, ...(await (p.action === 'list'
+        ? service.listOcrReview(p.documentId, p.threshold ?? 80, p)
+        : service.updateOcrReview(p))) };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

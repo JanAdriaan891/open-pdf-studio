@@ -1279,6 +1279,63 @@ fn handle_tools_list() -> Value {
                 }
             },
             {
+    "name": "app_review_ocr",
+    "description": "List low/unknown-confidence OCR words with page coordinates and review state, or accept/correct one word. Requires documentId; mutations also require revision and expectedText from the list to reject stale edits. Save afterward to replace the invisible OCR text layer. Never paints over the scan. Results are paginated.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "list",
+                    "accept",
+                    "correct"
+                ]
+            },
+            "documentId": {
+                "type": "string"
+            },
+            "threshold": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+            },
+            "offset": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "limit": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+            },
+            "revision": {
+                "type": "integer"
+            },
+            "page": {
+                "type": "integer",
+                "minimum": 1
+            },
+            "index": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "expectedText": {
+                "type": "string"
+            },
+            "text": {
+                "type": "string",
+                "maxLength": 2000
+            }
+        },
+        "required": [
+            "action",
+            "documentId"
+        ],
+        "additionalProperties": false
+    }
+},
+            {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
                 "inputSchema": {
@@ -1664,6 +1721,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_review_ocr"         => tool_app_request(state, "mcp:review-ocr", &arguments, Duration::from_secs(60)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2449,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

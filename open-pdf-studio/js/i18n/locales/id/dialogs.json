@@ -1145,5 +1145,27 @@
     "tabLabel": "dipulihkan",
     "tabTip": "Dipulihkan setelah penutupan yang tidak terduga. Menyimpan akan menulis ke file asli.",
     "reloadStopped": "Jendela Open PDF Studio berhenti berfungsi beberapa kali berturut-turut dan tidak lagi dimuat ulang secara otomatis. Simpan pekerjaan Anda dan mulai ulang aplikasi."
+  },
+  "ocrReview": {
+    "title": "Verify OCR",
+    "instructions": "Review uncertain words against the source crop. Alt+Left/Right navigates; Enter accepts or corrects the text. Save to update searchable/copied text. The scan is never painted over.",
+    "threshold": "Show confidence below",
+    "reviewed": "reviewed",
+    "page": "Page",
+    "confidence": "Confidence",
+    "unknown": "Unavailable",
+    "pending": "Pending",
+    "crop": "Source image crop",
+    "text": "Recognized text",
+    "previous": "Previous",
+    "accept": "Accept",
+    "correct": "Correct",
+    "next": "Next",
+    "refresh": "Refresh",
+    "close": "Close",
+    "empty": "No review candidates. Run OCR first, or raise the threshold. Older PDFs without review metadata need OCR again.",
+    "error": "Could not update verification. Refresh the queue if the document changed.",
+    "accepted": "Accepted",
+    "corrected": "Corrected"
   }
 }
