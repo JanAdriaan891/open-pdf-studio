@@ -78,7 +78,14 @@ jobs:
       - name: Prepare OCR runtime
         run: npm run prepare:ocr-runtime
 
+      - name: Provision Unicode test fonts
+        env:
+          OPS_UNICODE_FONT_DIR: ${{ runner.temp }}/ops-unicode-fonts
+        run: node scripts/prepare-unicode-fonts.mjs
+
       - name: Run unit tests
+        env:
+          OPS_UNICODE_FONT_DIR: ${{ runner.temp }}/ops-unicode-fonts
         run: npm run test:unit
 
       - name: Run Linux release regression tests
