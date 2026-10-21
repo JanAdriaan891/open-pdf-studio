@@ -1,3 +1,4 @@
+import { isObservedRenderCommand, observeNativeRender } from '../pdf/render-diagnostics.js';
 import { leesOpslag, verwijderOpslag } from './opslag.js';
 import { bestandsnaamUitPad } from './bestandsnaam.js';
 import { gastObject } from './gehost.js';
@@ -525,8 +526,8 @@ export function isNietInBrowser(fout) {
 export async function invoke(cmd, args = {}, options = undefined) {
   const core = getTauriCore();
   if (!core) throw new NietInBrowserError(cmd);
-  if (options === undefined) return await core.invoke(cmd, args);
-  return await core.invoke(cmd, args, options);
+  const run = () => options === undefined ? core.invoke(cmd, args) : core.invoke(cmd, args, options);
+  return isObservedRenderCommand(cmd) ? observeNativeRender(cmd, args, run) : run();
 }
 
 // App-datamap (kaders, onderhoeken). Gaat via Rust zodat een testinstantie

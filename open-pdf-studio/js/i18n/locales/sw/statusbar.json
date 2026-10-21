@@ -109,5 +109,10 @@
   "searchResultPage": "Ukurasa {{page}}",
   "searchHitsOne": "Tokeo 1",
   "searchHitsMany": "Matokeo {{count}}",
-  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu."
+  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

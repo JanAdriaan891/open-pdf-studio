@@ -109,5 +109,10 @@
   "searchResultPage": "第 {{page}} 页",
   "searchHitsOne": "1 处匹配",
   "searchHitsMany": "{{count}} 处匹配",
-  "passwordProtectedBar": "受密码保护：已以只读方式打开。"
+  "passwordProtectedBar": "受密码保护：已以只读方式打开。",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

@@ -1,3 +1,4 @@
+import { invalidateRenderDiagnostics } from './render-diagnostics.js';
 /**
  * High-res page bitmap cache for sharp rendering at high zoom levels.
  *
@@ -231,6 +232,7 @@ function _ensureBitmapAtScale(filePath, pageNum, rotation, cacheBucket, renderSc
 /// Drop ALL bitmap entries for a specific (filePath, pageNum). Use when page
 /// content changes (e.g. annotations saved into the PDF stream).
 export function invalidatePageBitmaps(filePath, pageNum) {
+  invalidateRenderDiagnostics(filePath, pageNum);
   const prefix = `${filePath}:${pageNum}:`;
   for (const k of Array.from(_cache.keys())) {
     if (k.startsWith(prefix)) {
@@ -243,6 +245,7 @@ export function invalidatePageBitmaps(filePath, pageNum) {
 
 /// Alle bitmaps van één document weg (tabblad gesloten).
 export function invalidateDocumentBitmaps(filePath) {
+  invalidateRenderDiagnostics(filePath);
   const prefix = `${filePath}:`;
   for (const k of Array.from(_cache.keys())) {
     if (k.startsWith(prefix)) {
@@ -254,6 +257,7 @@ export function invalidateDocumentBitmaps(filePath) {
 }
 
 export function clearAllBitmaps() {
+  invalidateRenderDiagnostics();
   for (const e of _cache.values()) {
     try { e.bitmap.close && e.bitmap.close(); } catch {}
   }

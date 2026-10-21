@@ -1,4 +1,5 @@
-import { Show } from 'solid-js';
+import { readRenderDiagnostics, subscribeRenderDiagnostics } from '../../pdf/render-diagnostics.js';
+import { Show, createSignal, onCleanup } from 'solid-js';
 import { state, getActiveDocument } from '../../core/state.js';
 import { labelVan, heeftEigenLabel } from '../../pdf/pagina-labels.js';
 import { useTranslation, localizeNumber, language } from '../../i18n/useTranslation.js';
@@ -125,6 +126,25 @@ import { toonGetal } from '../../core/getal-invoer.js';
 
 export default function StatusBar() {
   const { t } = useTranslation('statusbar');
+  const [diagnosticTick, setDiagnosticTick] = createSignal(0);
+  onCleanup(subscribeRenderDiagnostics(() => setDiagnosticTick(n => n + 1)));
+  const findings = () => {
+    diagnosticTick();
+    return readRenderDiagnostics(getActiveDocument()?.filePath).pages.flatMap(p => p.findings);
+  };
+  let nextFinding = 0;
+  const showFinding = async () => {
+    const list = findings();
+    if (!list.length) return;
+    const doc = getActiveDocument();
+    const item = list[nextFinding++ % list.length];
+    const { goToPage } = await import('../../pdf/renderer.js');
+    if (getActiveDocument() !== doc) return;
+    await goToPage(item.page);
+    if (getActiveDocument() !== doc) return;
+    const { showMessage } = await import('../stores/dialogStore.js');
+    showMessage(t('renderDiagnostics.detail', { page: item.page, code: item.code }));
+  };
 
   const toolName = () => {
     const key = `tools.${state.currentTool}`;
@@ -286,6 +306,11 @@ export default function StatusBar() {
       </Show>
 
       <div class="status-bar-right">
+        <Show when={findings().length > 0}>
+          <button class="status-item" onClick={showFinding} title={t('renderDiagnostics.title')}>
+            {t('renderDiagnostics.count', { count: findings().length })}
+          </button>
+        </Show>
         <div class="status-item">
           <Show when={state.statusMessageVisible}>
             {state.statusMessage}

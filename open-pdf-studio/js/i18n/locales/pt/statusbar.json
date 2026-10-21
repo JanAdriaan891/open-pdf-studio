@@ -109,5 +109,10 @@
   "searchResultPage": "Página {{page}}",
   "searchHitsOne": "1 correspondência",
   "searchHitsMany": "{{count}} correspondências",
-  "passwordProtectedBar": "Protegido por senha: aberto somente para leitura."
+  "passwordProtectedBar": "Protegido por senha: aberto somente para leitura.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

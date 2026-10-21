@@ -109,5 +109,10 @@
   "searchResultPage": "Pàgina {{page}}",
   "searchHitsOne": "1 coincidència",
   "searchHitsMany": "{{count}} coincidències",
-  "passwordProtectedBar": "Protegit amb contrasenya: obert només de lectura."
+  "passwordProtectedBar": "Protegit amb contrasenya: obert només de lectura.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

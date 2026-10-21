@@ -109,5 +109,10 @@
   "searchResultPage": "Страница {{page}}",
   "searchHitsOne": "1 совпадение",
   "searchHitsMany": "Совпадений: {{count}}",
-  "passwordProtectedBar": "Защищён паролем: открыт только для чтения."
+  "passwordProtectedBar": "Защищён паролем: открыт только для чтения.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

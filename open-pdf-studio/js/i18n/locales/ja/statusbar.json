@@ -109,5 +109,10 @@
   "searchResultPage": "{{page}} ページ",
   "searchHitsOne": "1 件",
   "searchHitsMany": "{{count}} 件",
-  "passwordProtectedBar": "パスワードで保護されています: 読み取り専用で開きました。"
+  "passwordProtectedBar": "パスワードで保護されています: 読み取り専用で開きました。",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

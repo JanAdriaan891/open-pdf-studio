@@ -109,5 +109,10 @@
   "searchResultPage": "Stranica {{page}}",
   "searchHitsOne": "1 podudaranje",
   "searchHitsMany": "Podudaranja: {{count}}",
-  "passwordProtectedBar": "Zaštićeno lozinkom: otvoreno samo za čitanje."
+  "passwordProtectedBar": "Zaštićeno lozinkom: otvoreno samo za čitanje.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

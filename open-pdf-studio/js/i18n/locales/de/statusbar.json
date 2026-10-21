@@ -109,5 +109,10 @@
   "searchResultPage": "Seite {{page}}",
   "searchHitsOne": "1 Treffer",
   "searchHitsMany": "{{count}} Treffer",
-  "passwordProtectedBar": "Mit Kennwort geschützt: schreibgeschützt geöffnet."
+  "passwordProtectedBar": "Mit Kennwort geschützt: schreibgeschützt geöffnet.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }
