@@ -1,3 +1,4 @@
+import {openDialog} from '../../../stores/dialogStore.js';
 import { For, Show, onMount, createSignal, createMemo } from 'solid-js';
 import { activeTab } from '../../../stores/leftPanelStore.js';
 import { useTranslation } from '../../../../i18n/useTranslation.js';
@@ -72,6 +73,7 @@ export default function SchedulesPanel() {
     <div class={`left-panel-content${activeTab() === 'schedules' ? ' active' : ''}`} id="panel-schedules">
       <div class="left-panel-header">
         <span>{t('schedules.title')}</span>
+        <button onClick={() => openDialog('workbook-bindings')}>{t('schedules.workbookBindings')}</button>
       </div>
 
       {/* Toevoegen vanaf standaard-sjabloon + nieuwe (blanco) wizard */}

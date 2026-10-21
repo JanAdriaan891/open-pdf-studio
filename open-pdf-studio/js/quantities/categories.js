@@ -259,6 +259,8 @@ const COMMON = [
   // meet-vlak geeft ("Woonkamer"). Die stond nergens in de staat, waardoor de
   // Label-kolom voor oppervlaktes altijd leeg bleef.
   F('label', 'Label', 'text', el => el.label || el.measureName || el.subject || ''),
+  F('location', 'Location', 'text', el => el.__location?.path || ''),
+  F('locationSource', 'Location source', 'text', el => el.__location?.source || 'none'),
   F('color', 'Color', 'text', el => el.color || el.strokeColor || el.fillColor || ''),
   F('ifcCategory', 'IFC category', 'text', el => el.ifcCategory || ''),
   F('count', 'Count', 'number', () => 1, '', 0),

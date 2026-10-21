@@ -20,6 +20,10 @@ export interface Point {
 }
 
 export interface AnnotationBase {
+  /** Named spatial zone on an existing polygon/box; coordinates remain in page space. */
+  spatialZone?: { version: 1; id: string; name: string; parentId: string };
+  /** Absent means computed; an empty string is an explicit empty override. */
+  locationOverride?: string;
   id: string;
   type: AnnotationType;
   page: number;

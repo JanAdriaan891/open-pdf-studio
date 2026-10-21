@@ -440,3 +440,27 @@ js/ui/getal-veld.test.mjs
 js/getal-velden-bron.test.mjs
 
 js/search/document-search.test.mjs
+
+js/annotations/spatial-zones.test.mjs
+
+js/pdf/hidden-information.test.mjs
+
+js/pdf/print-preflight.test.mjs
+
+js/pdf/ocr-review.test.mjs
+
+js/pdf/portfolio.test.mjs
+
+js/pdf/form-recognition.test.mjs
+
+js/search/symbol-matcher.test.mjs
+
+js/quantities/workbook-bindings.test.mjs
+
+js/workflows/document-workflow.test.mjs
+
+js/drawing-sets/model.test.mjs
+
+js/sheet-links/model.test.mjs
+
+js/approval-routing/model.test.mjs

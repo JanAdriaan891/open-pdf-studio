@@ -211,5 +211,9 @@
     "activationFailed": "Неактивно: {{error}}",
     "viaMcp": "Чрез връзката с ИИ"
   },
-  "annotateScreenshot": "Анотиране на екранна снимка от клипборда"
+  "annotateScreenshot": "Анотиране на екранна снимка от клипборда",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

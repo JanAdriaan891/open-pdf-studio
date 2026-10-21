@@ -138,5 +138,6 @@
     },
     "failed": "Zoeken mislukt. Controleer de zoekterm en map en probeer opnieuw.",
     "prepareOcr": "Openen voor OCR…"
-  }
+  },
+  "symbolSearch": "Symbolen zoeken"
 }

@@ -455,6 +455,17 @@ export async function writeBinaryFileAtomic(path, data) {
   return true;
 }
 
+// Workflows must fail on collisions, including races after the existence check.
+export async function writeBinaryFileNew(path, data) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+  const mobile = window.__TAURI__?.os?.type?.() === 'android';
+  await getTauriCore().invoke('write_file_new', mobile ? { data: Array.from(bytes) } : bytes, {
+    headers: { 'x-opds-path': encodeURIComponent(path) },
+  });
+  return true;
+}
+
 export async function fileExists(path) {
   if (leesHostPad(path)) return hostOpslag() !== null;
   if (!isTauri()) return false;

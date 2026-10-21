@@ -211,5 +211,9 @@
     "activationFailed": "Inte aktiv: {{error}}",
     "viaMcp": "Via AI-anslutningen"
   },
-  "annotateScreenshot": "Kommentera skärmbild från Urklipp"
+  "annotateScreenshot": "Kommentera skärmbild från Urklipp",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

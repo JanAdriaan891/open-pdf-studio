@@ -211,5 +211,9 @@
     "activationFailed": "Tidak aktif: {{error}}",
     "viaMcp": "Melalui sambungan AI"
   },
-  "annotateScreenshot": "Anotasi Tangkapan Skrin Papan Keratan"
+  "annotateScreenshot": "Anotasi Tangkapan Skrin Papan Keratan",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

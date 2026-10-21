@@ -367,7 +367,9 @@
     "csvLayer": "پرت",
     "schedules": "شیڈولز",
     "addPage": "صفحہ شامل کریں",
-    "pageLabels": "صفحہ لیبلز (نام ساز)"
+    "pageLabels": "صفحہ لیبلز (نام ساز)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "اسکیل بار",
@@ -419,7 +421,8 @@
       "image": "تصاویر اور مہریں"
     },
     "preview": "پیش منظر",
-    "exportCsv": "CSV برآمد کریں"
+    "exportCsv": "CSV برآمد کریں",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "شیڈول وزرڈ",
@@ -601,7 +604,9 @@
       "symbolId": "علامت",
       "imageName": "فائل کا نام",
       "width": "چوڑائی",
-      "height": "اونچائی"
+      "height": "اونچائی",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "لکیر",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "یہ آبجیکٹ کسی اور جگہ تبدیل کیا گیا ہے۔ فارم موجودہ قدریں دکھاتا ہے؛ آپ کی تبدیلیاں لاگو نہیں ہوئیں۔",
     "failed": "تبدیلیاں لاگو نہیں کی جا سکیں: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

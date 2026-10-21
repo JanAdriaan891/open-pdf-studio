@@ -6,6 +6,7 @@ import { useTranslation } from '../../../i18n/useTranslation.js';
 import PanelHeader from './PanelHeader.jsx';
 import DocInfoView from './DocInfoView.jsx';
 import DimensionTypeSection from './DimensionTypeSection.jsx';
+import LocationSection from './LocationSection.jsx';
 import GeneralSection from './GeneralSection.jsx';
 import RepliesSection from './RepliesSection.jsx';
 import AppearanceSection from './AppearanceSection.jsx';
@@ -78,6 +79,7 @@ export default function PropertiesPanel() {
             {/* Dimension type selector pinned at the very top for maatlijnen */}
             <DimensionTypeSection />
             <GeneralSection />
+            <LocationSection />
             <RepliesSection />
             <AppearanceSection />
             <HatchPatternSection />

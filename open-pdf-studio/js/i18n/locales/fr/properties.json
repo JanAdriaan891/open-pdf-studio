@@ -367,7 +367,9 @@
     "csvLayer": "Calque",
     "schedules": "Nomenclatures",
     "addPage": "Ajouter une page",
-    "pageLabels": "Étiquettes de page (générateur de noms)"
+    "pageLabels": "Étiquettes de page (générateur de noms)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Barre d'échelle",
@@ -419,7 +421,8 @@
       "image": "Images et tampons"
     },
     "preview": "Aperçu",
-    "exportCsv": "Exporter en CSV"
+    "exportCsv": "Exporter en CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Assistant de nomenclature",
@@ -601,7 +604,9 @@
       "symbolId": "Symbole",
       "imageName": "Nom du fichier",
       "width": "Largeur",
-      "height": "Hauteur"
+      "height": "Hauteur",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Ligne",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Cet objet a été modifié ailleurs. Le formulaire affiche les valeurs actuelles ; vos modifications n'ont pas été appliquées.",
     "failed": "Impossible d'appliquer les modifications : {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

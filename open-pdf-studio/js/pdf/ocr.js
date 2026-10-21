@@ -1,3 +1,4 @@
+import {recordOcrPage} from '../core/undo-manager.js';
 // OCR (Optical Character Recognition) orchestration: runs the ocr_pdf_page
 // Tauri command across a document's pages and stores the results on the
 // document so saver.js can write them out as an invisible, searchable text
@@ -34,7 +35,9 @@ export async function ocrCurrentPage(lang = 'auto') {
       sluitPrintProgress();
       return;
     }
+    const oldWords = JSON.parse(JSON.stringify(doc.ocrResults[pageIndex + 1] || []));
     doc.ocrResults[pageIndex + 1] = words;
+    recordOcrPage(doc,pageIndex+1,oldWords,words);
     markDocumentModified(doc);
     finishPrintProgress(i18next.t('ocr.progress.done', { ns: 'statusbar', count: words.length }) || `Recognized ${words.length} words`);
   } catch (e) {
@@ -67,7 +70,9 @@ export async function ocrAllPages(lang = 'auto') {
         sluitPrintProgress();
         return;
       }
+      const oldWords = JSON.parse(JSON.stringify(doc.ocrResults[pageNum] || []));
       doc.ocrResults[pageNum] = words;
+      recordOcrPage(doc,pageNum,oldWords,words);
       // Keep successful pages dirty even if a later page fails.
       markDocumentModified(doc);
       totalWords += words.length;

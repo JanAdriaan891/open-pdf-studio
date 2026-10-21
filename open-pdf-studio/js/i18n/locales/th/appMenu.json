@@ -211,5 +211,9 @@
     "activationFailed": "ไม่ได้ใช้งาน: {{error}}",
     "viaMcp": "ผ่านการเชื่อมต่อ AI"
   },
-  "annotateScreenshot": "ใส่คำอธิบายประกอบภาพหน้าจอจากคลิปบอร์ด"
+  "annotateScreenshot": "ใส่คำอธิบายประกอบภาพหน้าจอจากคลิปบอร์ด",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

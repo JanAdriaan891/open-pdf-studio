@@ -211,5 +211,9 @@
     "activationFailed": "無効: {{error}}",
     "viaMcp": "AI 接続経由"
   },
-  "annotateScreenshot": "クリップボードのスクリーンショットに注釈を付ける"
+  "annotateScreenshot": "クリップボードのスクリーンショットに注釈を付ける",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

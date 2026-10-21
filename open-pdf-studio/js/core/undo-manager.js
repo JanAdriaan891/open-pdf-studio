@@ -120,6 +120,7 @@ function pagesForCommand(cmd) {
   // Watermark/bookmark commands don't carry a page and don't affect the page
   // thumbnail composite — skip them entirely (empty set = no refresh).
   const skipTypes = new Set([
+    'ocrWord', 'ocrPage',
     'addWatermark', 'removeWatermark', 'modifyWatermark',
     'addBookmark', 'removeBookmark', 'modifyBookmark',
     // pageStructure (insert/delete/reorder pages) shifts page numbers and is
@@ -446,6 +447,8 @@ function applyUndo(cmd, lookup) {
   if (!lookup) lookup = annotationsById(doc);
 
   switch (cmd.type) {
+    case 'ocrWord': doc.ocrResults[cmd.page][cmd.index] = clonePlainValue(cmd.oldWord); break;
+    case 'ocrPage': doc.ocrResults[cmd.page] = clonePlainValue(cmd.oldWords); break;
     case 'addAnnotation': {
       const idx = doc.annotations.findIndex(a => a.id === cmd.annotation.id);
       if (idx !== -1) doc.annotations.splice(idx, 1);
@@ -634,6 +637,8 @@ function applyRedo(cmd, lookup) {
   if (!lookup) lookup = annotationsById(doc);
 
   switch (cmd.type) {
+    case 'ocrWord': doc.ocrResults[cmd.page][cmd.index] = clonePlainValue(cmd.newWord); break;
+    case 'ocrPage': doc.ocrResults[cmd.page] = clonePlainValue(cmd.newWords); break;
     case 'addAnnotation': {
       doc.annotations.push(cloneAnnotation(cmd.annotation));
       lookup.reset();
@@ -1060,4 +1065,16 @@ export function recordPageStructure(oldBytes, oldAnnotations, oldRotations, oldP
       new: extra.bookmarks.new.map((b) => ({ ...b })),
     } } : {}),
   });
+}
+
+
+// OCR can finish in a background tab. Never push its command onto the active tab.
+export function recordOcrPage(doc,page,oldWords,newWords) {
+  const cmd={type:'ocrPage',page,oldWords:clonePlainValue(oldWords),newWords:clonePlainValue(newWords)};
+  if (getActiveDocument() === doc) { execute(cmd); return; }
+  doc.undoStack.push(cmd);
+  if (doc.undoStack.length > MAX_UNDO_STACK) doc.undoStack.shift();
+  doc.redoStack=[];
+  doc.savedUndoStackLength=-1;
+  verhoogInhoudRevisie(doc);
 }

@@ -1,4 +1,5 @@
 import DocumentSearch from './DocumentSearch.jsx';
+import {openDialog} from '../stores/dialogStore.js';
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import {
   visible, resultsText, messageText, notFound, navDisabled, searching,
@@ -97,6 +98,7 @@ export default function FindBar() {
 
   return (
     <div class="find-bar" classList={{ visible: visible() }}>
+      <button onClick={() => openDialog('symbol-search')}>{t('symbolSearch')}</button>
       <div class="find-rows">
         <DocumentSearch />
         {/* Row 1: Find */}

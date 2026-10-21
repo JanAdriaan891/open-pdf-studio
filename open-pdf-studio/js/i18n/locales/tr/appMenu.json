@@ -211,5 +211,9 @@
     "activationFailed": "Etkin değil: {{error}}",
     "viaMcp": "Yapay zekâ bağlantısı üzerinden"
   },
-  "annotateScreenshot": "Panodaki Ekran Görüntüsüne Açıklama Ekle"
+  "annotateScreenshot": "Panodaki Ekran Görüntüsüne Açıklama Ekle",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

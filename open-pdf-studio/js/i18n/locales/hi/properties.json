@@ -367,7 +367,9 @@
     "csvLayer": "परत",
     "schedules": "शेड्यूल",
     "addPage": "पृष्ठ जोड़ें",
-    "pageLabels": "पृष्ठ लेबल (नाम निर्माता)"
+    "pageLabels": "पृष्ठ लेबल (नाम निर्माता)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "स्केल बार",
@@ -419,7 +421,8 @@
       "image": "छवियां और स्टैम्प"
     },
     "preview": "पूर्वावलोकन",
-    "exportCsv": "CSV निर्यात करें"
+    "exportCsv": "CSV निर्यात करें",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "शेड्यूल विज़ार्ड",
@@ -601,7 +604,9 @@
       "symbolId": "प्रतीक",
       "imageName": "फ़ाइल नाम",
       "width": "चौड़ाई",
-      "height": "ऊंचाई"
+      "height": "ऊंचाई",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "रेखा",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "यह ऑब्जेक्ट कहीं और बदला गया है। फ़ॉर्म वर्तमान मान दिखाता है; आपके परिवर्तन लागू नहीं किए गए।",
     "failed": "परिवर्तन लागू नहीं किए जा सके: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }
