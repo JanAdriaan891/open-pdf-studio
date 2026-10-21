@@ -211,5 +211,6 @@
     "activationFailed": "לא פעיל: {{error}}",
     "viaMcp": "דרך חיבור הבינה המלאכותית"
   },
-  "annotateScreenshot": "הוספת הערות לצילום מסך מהלוח"
+  "annotateScreenshot": "הוספת הערות לצילום מסך מהלוח",
+  "sheetLinks": "Cross-sheet links"
 }

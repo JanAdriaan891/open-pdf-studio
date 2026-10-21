@@ -211,5 +211,6 @@
     "activationFailed": "Không hoạt động: {{error}}",
     "viaMcp": "Qua kết nối AI"
   },
-  "annotateScreenshot": "Chú thích ảnh chụp màn hình từ bảng tạm"
+  "annotateScreenshot": "Chú thích ảnh chụp màn hình từ bảng tạm",
+  "sheetLinks": "Cross-sheet links"
 }

@@ -211,5 +211,6 @@
     "activationFailed": "সক্রিয় নয়: {{error}}",
     "viaMcp": "AI সংযোগের মাধ্যমে"
   },
-  "annotateScreenshot": "ক্লিপবোর্ডের স্ক্রিনশটে টীকা যোগ করুন"
+  "annotateScreenshot": "ক্লিপবোর্ডের স্ক্রিনশটে টীকা যোগ করুন",
+  "sheetLinks": "Cross-sheet links"
 }

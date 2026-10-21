@@ -211,5 +211,6 @@
     "activationFailed": "செயலில் இல்லை: {{error}}",
     "viaMcp": "AI இணைப்பு வழியாக"
   },
-  "annotateScreenshot": "கிளிப்போர்டு திரைப்பிடிப்பில் குறிப்புரை சேர்"
+  "annotateScreenshot": "கிளிப்போர்டு திரைப்பிடிப்பில் குறிப்புரை சேர்",
+  "sheetLinks": "Cross-sheet links"
 }

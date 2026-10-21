@@ -1145,5 +1145,34 @@
     "tabLabel": "hersteld",
     "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
     "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
+  },
+  "sheetLinks": {
+    "title": "Verwijzingen tussen bladen",
+    "close": "Sluiten",
+    "help": "Neem geopende, opgeslagen PDF’s op in een pakket, kies bronnen en bewerk doellabels. Zoek tekstverwijzingen, controleer bron en doel en selecteer links voor export. De ZIP houdt PDF-namen en relatieve links bijeen; originelen blijven ongewijzigd.",
+    "limits": "Tekst-PDF’s en bestaande OCR-tekstlagen worden ondersteund. Voer eerst OCR uit bij scans. Grenzen van tekstfragmenten zijn benaderingen; controleer ze visueel. Een letterlijk voorvoegsel vindt ook ontbrekende doellabels. Optionele detailgebieden gebruiken ongedraaide PDF-coördinaten: links, onder, rechts, boven. Sla wijzigingen eerst op. Herschrijven kan digitale handtekeningen ongeldig maken.",
+    "capture": "Geopende PDF’s opnemen",
+    "unsaved": "(wijzigingen eerst opslaan)",
+    "prefix": "Voorvoegsel verwijzing (optioneel, bijvoorbeeld BLAD )",
+    "caseSensitive": "Hoofdlettergevoelige labels",
+    "page": "Doelpagina",
+    "label": "Blad- / detaillabel",
+    "region": "Optionele detailrechthoek (PDF-punten)",
+    "detail": "Detailgebied",
+    "scan": "Verwijzingen zoeken",
+    "cancel": "Zoeken annuleren",
+    "found": "verwijzingen gevonden",
+    "accept": "Selecteren",
+    "states": {
+      "resolved": "Uniek doel",
+      "ambiguous": "Dubbelzinnig doel",
+      "missing": "Doel ontbreekt"
+    },
+    "existing": "(overlapt bestaande link)",
+    "approximate": "(benaderde tekstgrenzen)",
+    "preview": "Bron / doel bekijken",
+    "replace": "Bestaande links op geselecteerde verwijzingen vervangen",
+    "export": "Geselecteerde links en PDF’s als ZIP exporteren",
+    "result": "{{added}} toegevoegd, {{skipped}} overgeslagen, {{replaced}} vervangen"
   }
 }

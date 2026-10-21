@@ -211,5 +211,6 @@
     "activationFailed": "Tidak aktif: {{error}}",
     "viaMcp": "Melalui koneksi AI"
   },
-  "annotateScreenshot": "Anotasi Tangkapan Layar dari Papan Klip"
+  "annotateScreenshot": "Anotasi Tangkapan Layar dari Papan Klip",
+  "sheetLinks": "Cross-sheet links"
 }

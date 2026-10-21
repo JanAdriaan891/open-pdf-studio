@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,11 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Cross-sheet links
+
+`app_sheet_links` / `api.sheetLinks` supports index, scan, cancel and export. Index captures open saved PDFs, filenames and editable page labels. Scan takes selected files [{documentId,path}] and index [{id,path,page,label,region}], with an optional literal prefix and caseSensitive flag. Paths must be safe relative PDF paths, unique ignoring case. Region is null for the whole page or [left,bottom,right,top] in unrotated PDF coordinates; bounds are checked. Repeated labels yield ambiguous hits, never an inferred target. Prefix scanning reports unknown labels as missing. Text and existing OCR layers are searched; there is no automatic OCR. References split across separate text items are not joined. Substring bounds are proportional approximations and marked for visual review.
+
+The File-menu dialog displays source/target previews, including rotated pages, and leaves every hit unselected until reviewed. It preserves existing link annotations by default; replacement is explicit and restricted to overlaps with selected hits. Export creates a ZIP of all package PDFs, with standard GoTo/GoToR actions, relative file specifications and page/FitR destinations, plus a report. This keeps the package portable after moving/extracting it. A stable annotation name avoids duplicates on repeat processing even after reopening. Unrelated annotations remain. All destinations are verified against the included package; changed/closed/unsaved sources invalidate scans. Limits: 50 files, 100 source pages, 500 destinations, 250 MB source bytes, 2000 hits, 20-minute preview lifetime.
+
+The browser downloads the archive. API/MCP export uses a new desktop outputPath ending .zip and refuses a pre-existing path; source PDFs never change. Reader settings may require confirmation before opening a remote PDF. Signed PDF copies can lose signature validity after rewriting; this is not a signature-preserving export. Native MCP execution and desktop reader navigation require separate verification.

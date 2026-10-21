@@ -211,5 +211,6 @@
     "activationFailed": "Not active: {{error}}",
     "viaMcp": "Via the AI connection"
   },
-  "annotateScreenshot": "Annotate Clipboard Screenshot"
+  "annotateScreenshot": "Annotate Clipboard Screenshot",
+  "sheetLinks": "Cross-sheet links"
 }

@@ -5546,3 +5546,17 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.sheet-links-dialog { width: min(1100px, 95vw); max-height: 92vh; color: var(--theme-text); font-size: 13px; }
+.sheet-links-dialog .crop-margins-content { overflow: auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.sheet-links-dialog p { margin: 0; line-height: 1.5; }
+.sheet-links-dialog label { display: inline-flex; gap: 6px; align-items: center; }
+.sheet-links-dialog input, .sheet-links-dialog select { background: var(--theme-bg); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 5px; max-width: 100%; }
+.sheet-links-table { overflow: auto; }
+.sheet-links-table input[type=text] { width: 100px; }
+.sheet-links-dialog th { text-align: start; }
+.sheet-links-hit { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.sheet-links-hit span { flex: 1; }
+.sheet-links-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sheet-links-preview canvas { max-width: 100%; background: white; }
+.sheet-links-table { flex-shrink: 0; max-height: 280px; }

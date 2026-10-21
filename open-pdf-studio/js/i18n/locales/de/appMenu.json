@@ -211,5 +211,6 @@
     "activationFailed": "Nicht aktiv: {{error}}",
     "viaMcp": "Über die KI-Verbindung"
   },
-  "annotateScreenshot": "Screenshot aus Zwischenablage kommentieren"
+  "annotateScreenshot": "Screenshot aus Zwischenablage kommentieren",
+  "sheetLinks": "Cross-sheet links"
 }

@@ -1145,5 +1145,34 @@
     "tabLabel": "已恢复",
     "tabTip": "在意外关闭后恢复。保存时将写入原始文件。",
     "reloadStopped": "Open PDF Studio 窗口连续多次停止工作，将不再自动重新加载。请保存您的工作并重新启动应用。"
+  },
+  "sheetLinks": {
+    "title": "Cross-sheet links",
+    "close": "Close",
+    "help": "Capture the open saved PDFs as a package, select sources and edit their destination labels. Scan text references, review each source and target, then select links to export. The ZIP keeps PDF filenames and relative links together; originals stay unchanged.",
+    "limits": "Text-based PDFs and existing OCR text layers are supported. Run OCR first for scans. Substring bounds are approximate and need visual review. A literal prefix also finds missing target labels. Optional detail regions use unrotated PDF coordinates: left, bottom, right, top. Unsaved edits must be saved first. Rewriting signed PDFs can invalidate signatures.",
+    "capture": "Capture open PDFs",
+    "unsaved": "(save changes first)",
+    "prefix": "Reference prefix (optional, e.g. SHEET )",
+    "caseSensitive": "Case-sensitive labels",
+    "page": "Destination page",
+    "label": "Sheet / detail label",
+    "region": "Optional detail rectangle (PDF points)",
+    "detail": "Detail region",
+    "scan": "Scan references",
+    "cancel": "Cancel scan",
+    "found": "references found",
+    "accept": "Select",
+    "states": {
+      "resolved": "Unique target",
+      "ambiguous": "Ambiguous target",
+      "missing": "Missing target"
+    },
+    "existing": "(overlaps an existing link)",
+    "approximate": "(approximate text bounds)",
+    "preview": "Preview source / target",
+    "replace": "Replace existing links overlapping selected references",
+    "export": "Export selected links and PDFs as ZIP",
+    "result": "{{added}} added, {{skipped}} skipped, {{replaced}} replaced"
   }
 }

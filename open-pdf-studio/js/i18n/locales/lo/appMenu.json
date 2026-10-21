@@ -211,5 +211,6 @@
     "activationFailed": "ບໍ່ໄດ້ເປີດໃຊ້: {{error}}",
     "viaMcp": "ຜ່ານການເຊື່ອມຕໍ່ AI"
   },
-  "annotateScreenshot": "ບັນທຶກໂນ້ດໃສ່ຮູບພາບໜ້າຈໍຈາກຄລິບບອດ"
+  "annotateScreenshot": "ບັນທຶກໂນ້ດໃສ່ຮູບພາບໜ້າຈໍຈາກຄລິບບອດ",
+  "sheetLinks": "Cross-sheet links"
 }

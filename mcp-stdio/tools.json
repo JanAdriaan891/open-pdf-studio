@@ -1114,6 +1114,67 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_sheet_links",
+    "description": "Build reviewed relative PDF links across a package. index lists open saved PDFs and editable page labels; scan accepts files [{documentId,path}] and index [{id,path,page,label,region:null|[left,bottom,right,top]}], optional literal prefix and caseSensitive. Existing OCR text layers are included. Returns immutable hit ids with resolved/ambiguous/missing targets and existing-link overlaps. export accepts scan id, selections [{hitId,targetId}], optional replaceExisting and a new desktop outputPath ending .zip; exports all source copies with relative GoTo/GoToR links and report, never edits originals. cancel stops scanning. Max 100 pages, 250 MB and 2000 hits.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "index",
+            "scan",
+            "cancel",
+            "export"
+          ]
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "index": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "caseSensitive": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "selections": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "replaceExisting": {
+          "type": "boolean"
+        },
+        "outputPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Cross-sheet links",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

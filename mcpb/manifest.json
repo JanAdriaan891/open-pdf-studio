@@ -200,6 +200,10 @@
       "description": "Return the active document's page count and current page."
     },
     {
+      "name": "app_sheet_links",
+      "description": "Build reviewed relative PDF links across a package. index lists open saved PDFs and editable page labels; scan accepts files [{documentId,path}] and index [{id,path,page,label,region:null|[left,bottom,right,top]}], optional literal prefix and caseSensitive. Existing OCR text layers are included. Returns immutable hit ids with resolved/ambiguous/missing targets and existing-link overlaps. export accepts scan id, selections [{hitId,targetId}], optional replaceExisting and a new desktop outputPath ending .zip; exports all source copies with relative GoTo/GoToR links and report, never edits originals. cancel stops scanning. Max 100 pages, 250 MB and 2000 hits."
+    },
+    {
       "name": "app_get_page_text",
       "description": "Read existing PDF page text without mouse automation."
     },

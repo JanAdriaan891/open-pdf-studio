@@ -3719,6 +3719,10 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:sheet-links': async (p) => {
+    try { const { sheetLinkRequest } = await import('./sheet-links/service.js'); return { ok: true, ...(await sheetLinkRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,
