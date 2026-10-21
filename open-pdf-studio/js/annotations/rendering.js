@@ -1502,7 +1502,7 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       // is ready, otherwise the stamp stays invisible until the next redraw.
       if (stampImg && !stampImg.complete && !stampImg._redrawOnLoad) {
         stampImg._redrawOnLoad = true;
-        stampImg.addEventListener('load', () => { try { redrawAnnotations(); } catch (_) {} }, { once: true });
+        stampImg.addEventListener('load', () => { try { hertekenActieveWeergave(); } catch (_) {} }, { once: true });
       }
       if (stampImg && stampImg.complete) {
         ctx.save();
@@ -2840,20 +2840,20 @@ export function rebuildSpatialIndex() {
   _lastIndexedCount = annotations.length;
 }
 
+// Hertekent wat er van het actieve document op het scherm staat: in de
+// doorlopende weergave alle zichtbare pagina's, anders de ene pagina.
+function hertekenActieveWeergave() {
+  const doc = state.documents[state.activeDocumentIndex];
+  if (doc?.viewMode === 'continuous') redrawContinuous();
+  else redrawAnnotations();
+}
+
 // Ná het async laden van een component-in-cel-symboolbeeld: hertekenen
 // zodat de placeholder door het echte symbool vervangen wordt.
 // Een net gerasterd vectorknipsel moet meteen zichtbaar worden.
-bijNieuweTegel(() => {
-  const doc = state.documents[state.activeDocumentIndex];
-  if (doc?.viewMode === 'continuous') redrawContinuous();
-  else redrawAnnotations();
-});
+bijNieuweTegel(hertekenActieveWeergave);
 
-registerSysteemSymbolRedraw(() => {
-  const doc = state.documents[state.activeDocumentIndex];
-  if (doc?.viewMode === 'continuous') redrawContinuous();
-  else redrawAnnotations();
-});
+registerSysteemSymbolRedraw(hertekenActieveWeergave);
 
 export function redrawAnnotations(lightweight = false) {
   if (!annotationCtx || !annotationCanvas) return;
