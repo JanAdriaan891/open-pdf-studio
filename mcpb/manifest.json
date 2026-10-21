@@ -200,26 +200,6 @@
       "description": "Return the active document's page count and current page."
     },
     {
-      "name": "app_search_documents",
-      "description": "Search text and optional comments in the active PDF, all open PDFs, or PDF files directly in a desktop folder. Reads open unsaved documents in memory; never saves or uploads. Returns grouped file statuses and bounded matches with page labels, snippets and coordinates. Encrypted, unreadable and textless pages are reported separately. No persistent index. Refine the query when truncated."
-    },
-    {
-      "name": "app_locations",
-      "description": "List computed markup locations or edit named spatial zones and explicit location overrides. Mutations require the active documentId and annotationId. Zones use existing straight polygons or unrotated boxes. Reuses undo and saves metadata with the PDF."
-    },
-    {
-      "name": "app_hidden_information",
-      "description": "Inspect structural metadata, comments, embedded files, actions and optional-content indicators in the saved active PDF. Export selected removable categories to a NEW PDF and JSON report; existing files are never overwritten. Pending changes must be saved first. Hidden/covered text, image pixels and optional-content layers are not removed; existing signatures cannot survive rewriting."
-    },
-    {
-      "name": "app_print_preflight",
-      "description": "Inspect the saved active PDF against a reusable print profile. Reports page/object, severity, expected and observed values for fonts, image DPI, color, transparency, page boxes and output intent. Not a PDF/X or PDF/A certificate. fixTrimBoxes explicitly writes a NEW copy and report and rechecks; existing files are refused. Save pending edits first."
-    },
-    {
-      "name": "app_review_ocr",
-      "description": "List low/unknown-confidence OCR words with page coordinates and review state, or accept/correct one word. Requires documentId; mutations also require revision and expectedText from the list to reject stale edits. Save afterward to replace the invisible OCR text layer. Never paints over the scan. Results are paginated."
-    },
-    {
       "name": "app_portfolio",
       "description": "Inspect or save a PDF Collection copy, preserving component bytes, folders, schema, sort and metadata. Save pending edits first. Added files come from local paths. Folders use numeric parentId (0 for a new root); new IDs increase from the current maximum. Unsupported components are exported, never executed. saveCopy/exportComponent require a new output path; existing files are refused. New collections get a fallback cover."
     },
@@ -250,6 +230,26 @@
     {
       "name": "app_approval_routing",
       "description": "Local-file-v1 electronic approval routing, no network sending or certificate signing. Explicit configure adapter/enabled:true first. draft captures the active saved PDF hash with title/revision, sequential|parallel mode, nullable expiresAt, recipients [{id,name,email}], fields [{id,recipientId,page,x,y,width,height,label}]. list shows immutable document identity, state and audit. submit requires id and confirmedHash after exact-source review; it releases for manual handoff only. receipt imports a self-reported decision bound to request/document/recipient. cancel and supersede track distinct states. verify checks an exported record hash chain, not identity authenticity. export writes original PDF plus audit/request JSON into a new desktop ZIP outputPath; no permanent login."
+    },
+    {
+      "name": "app_search_documents",
+      "description": "Search text and optional comments in the active PDF, all open PDFs, or PDF files directly in a desktop folder. Reads open unsaved documents in memory; never saves or uploads. Returns grouped file statuses and bounded matches with page labels, snippets and coordinates. Encrypted, unreadable and textless pages are reported separately. No persistent index. Refine the query when truncated."
+    },
+    {
+      "name": "app_locations",
+      "description": "List computed markup locations or edit named spatial zones and explicit location overrides. Mutations require the active documentId and annotationId. Zones use existing straight polygons or unrotated boxes. Reuses undo and saves metadata with the PDF."
+    },
+    {
+      "name": "app_hidden_information",
+      "description": "Inspect structural metadata, comments, embedded files, actions and optional-content indicators in the saved active PDF. Export selected removable categories to a NEW PDF and JSON report; existing files are never overwritten. Pending changes must be saved first. Hidden/covered text, image pixels and optional-content layers are not removed; existing signatures cannot survive rewriting."
+    },
+    {
+      "name": "app_print_preflight",
+      "description": "Inspect the saved active PDF against a reusable print profile. Reports page/object, severity, expected and observed values for fonts, image DPI, color, transparency, page boxes and output intent. Not a PDF/X or PDF/A certificate. fixTrimBoxes explicitly writes a NEW copy and report and rechecks; existing files are refused. Save pending edits first."
+    },
+    {
+      "name": "app_review_ocr",
+      "description": "List low/unknown-confidence OCR words with page coordinates and review state, or accept/correct one word. Requires documentId; mutations also require revision and expectedText from the list to reject stale edits. Save afterward to replace the invisible OCR text layer. Never paints over the scan. Results are paginated."
     },
     {
       "name": "app_get_page_text",

@@ -3340,6 +3340,14 @@ mod tests {
     }
 
     #[test]
+    fn publieke_catalogus_is_gelijk_aan_verpakte_tools() {
+        let publiek = tools_list_voor(Profiel::Publiek);
+        let verpakt: Value = serde_json::from_str(include_str!("../../../mcp-stdio/tools.json"))
+            .expect("valid packaged MCP catalog");
+        assert_eq!(publiek["tools"], verpakt, "native and stdio schemas/metadata/order must match");
+    }
+
+    #[test]
     fn publiek_profiel_laat_ontwikkelgereedschap_weg_en_annoteert_alles() {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
