@@ -461,6 +461,7 @@ js/pdf/form-recognition.test.mjs
 js/search/symbol-matcher.test.mjs
 
 js/quantities/workbook-bindings.test.mjs
+js/quantities/workbook-refresh.test.mjs
 
 js/workflows/document-workflow.test.mjs
 js/workflows/watch-poll.test.mjs

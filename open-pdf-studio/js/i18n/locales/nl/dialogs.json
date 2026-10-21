@@ -1340,6 +1340,7 @@
     "remove": "Ontkoppelen",
     "bound": "Koppeling opgeslagen; vernieuw expliciet om waarden te schrijven.",
     "refreshed": "Gekoppelde werkmapcellen vernieuwd.",
+    "refreshedWithBackup": "Gekoppelde werkmapcellen vernieuwd. De vorige werkmap staat in {{path}}.",
     "copyReady": "Bijgewerkte kopie gedownload. Het gekoppelde bestand is niet overschreven.",
     "states": {
       "workbook-missing": "Werkmap ontbreekt",

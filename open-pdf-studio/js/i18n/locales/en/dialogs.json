@@ -1339,6 +1339,7 @@
     "remove": "Disconnect",
     "bound": "Binding saved; refresh explicitly to write values.",
     "refreshed": "Mapped workbook cells refreshed.",
+    "refreshedWithBackup": "Mapped workbook cells refreshed. The previous workbook was kept as {{path}}.",
     "copyReady": "Refreshed copy downloaded. The bound file was not overwritten.",
     "states": {
       "workbook-missing": "Workbook missing",
