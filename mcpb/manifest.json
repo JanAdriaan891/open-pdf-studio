@@ -200,6 +200,10 @@
       "description": "Return the active document's page count and current page."
     },
     {
+      "name": "app_search_documents",
+      "description": "Search text and optional comments in the active PDF, all open PDFs, or PDF files directly in a desktop folder. Reads open unsaved documents in memory; never saves or uploads. Returns grouped file statuses and bounded matches with page labels, snippets and coordinates. Encrypted, unreadable and textless pages are reported separately. No persistent index. Refine the query when truncated."
+    },
+    {
       "name": "app_get_page_text",
       "description": "Read existing PDF page text without mouse automation."
     },

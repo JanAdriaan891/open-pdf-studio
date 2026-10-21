@@ -382,3 +382,21 @@
   background-color: rgba(255, 165, 0, 0.25);
   outline-color: #ff8c00;
 }
+
+/* Package search shares the find bar and wraps within narrow document panes. */
+.document-search { min-width: 0; max-width: 680px; color: var(--theme-text, #222); }
+.document-search .find-row { flex-wrap: wrap; gap: 6px; }
+.document-search section { padding: 6px 0; border-top: 1px solid var(--theme-border, #d4d4d4); }
+.document-search section button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: left; }
+.document-search p { margin: 4px 0; }
+
+.document-search button, .document-search select {
+  color: var(--theme-text, #222);
+  background: var(--theme-surface, #fff);
+  border: 1px solid var(--theme-border, #d4d4d4);
+  border-radius: 3px;
+  padding: 3px 6px;
+  font: inherit;
+}
+.document-search button:disabled { opacity: .5; }
+.document-search button:not(:disabled):hover { background: var(--theme-hover, #eee); }

@@ -109,5 +109,34 @@
   "searchResultPage": "{{page}} 페이지",
   "searchHitsOne": "1개 일치",
   "searchHitsMany": "{{count}}개 일치",
-  "passwordProtectedBar": "암호로 보호됨: 읽기 전용으로 열렸습니다."
+  "passwordProtectedBar": "암호로 보호됨: 읽기 전용으로 열렸습니다.",
+  "documentSearch": {
+    "title": "Search documents",
+    "query": "Search text",
+    "scope": "Search in",
+    "active": "Current document",
+    "open": "Open documents",
+    "folder": "Folder",
+    "choose": "Choose folder",
+    "annotations": "Include comments",
+    "search": "Search",
+    "cancel": "Cancel",
+    "stale": "The document has changed. Run the search again.",
+    "folderHint": "Searches PDF files directly in this folder, without opening tabs or changing files.",
+    "limited": "Result limit reached. Refine your search.",
+    "cancelled": "Search cancelled; results are incomplete.",
+    "ocrHint": "No searchable text on pages {{pages}}. Open the document and run OCR explicitly if needed.",
+    "status": {
+      "searching": "Searching",
+      "complete": "Complete",
+      "needs_ocr": "Contains pages without searchable text",
+      "encrypted": "Password required",
+      "unreadable": "Could not search",
+      "changed": "Document changed; search again",
+      "cancelled": "Cancelled",
+      "limited": "Result limit reached"
+    },
+    "failed": "Search failed. Check the query and folder, then try again.",
+    "prepareOcr": "Open for OCR…"
+  }
 }
