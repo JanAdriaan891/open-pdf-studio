@@ -367,7 +367,8 @@
     "csvLayer": "Слой",
     "schedules": "Спецификации",
     "addPage": "Добавить страницу",
-    "pageLabels": "Метки страниц (конструктор имён)"
+    "pageLabels": "Метки страниц (конструктор имён)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Масштабная линейка",

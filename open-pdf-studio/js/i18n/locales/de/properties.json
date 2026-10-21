@@ -367,7 +367,8 @@
     "csvLayer": "Ebene",
     "schedules": "Listen",
     "addPage": "Seite hinzufügen",
-    "pageLabels": "Seitenbeschriftungen (Namensgenerator)"
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",

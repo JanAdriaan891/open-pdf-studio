@@ -367,7 +367,8 @@
     "csvLayer": "Lag",
     "schedules": "Lister",
     "addPage": "Tilføj side",
-    "pageLabels": "Sideetiketter (navnegenerator)"
+    "pageLabels": "Sideetiketter (navnegenerator)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Skalabjælke",

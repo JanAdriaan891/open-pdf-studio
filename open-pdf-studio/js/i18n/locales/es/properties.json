@@ -367,7 +367,8 @@
     "csvLayer": "Capa",
     "schedules": "Listados",
     "addPage": "Añadir página",
-    "pageLabels": "Etiquetas de página (generador de nombres)"
+    "pageLabels": "Etiquetas de página (generador de nombres)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Barra de escala",

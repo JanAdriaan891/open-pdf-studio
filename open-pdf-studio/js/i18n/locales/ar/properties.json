@@ -367,7 +367,8 @@
     "csvLayer": "الطبقة",
     "schedules": "جداول الكميات",
     "addPage": "إضافة صفحة",
-    "pageLabels": "تسميات الصفحات (منشئ الأسماء)"
+    "pageLabels": "تسميات الصفحات (منشئ الأسماء)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "شريط المقياس",

@@ -1145,5 +1145,31 @@
     "tabLabel": "மீட்டெடுக்கப்பட்டது",
     "tabTip": "எதிர்பாராத மூடலுக்குப் பிறகு மீட்டெடுக்கப்பட்டது. சேமித்தல் அசல் கோப்பில் எழுதும்.",
     "reloadStopped": "Open PDF Studio சாளரம் தொடர்ந்து பலமுறை செயல்படுவதை நிறுத்தியது, இனி தானாக மீண்டும் ஏற்றப்படாது. உங்கள் வேலையைச் சேமித்து பயன்பாட்டை மீண்டும் தொடங்கவும்."
+  },
+  "portfolio": {
+    "title": "PDF collection portfolio",
+    "info": "Edit a copy of the saved PDF. Save pending document edits first. A new collection gets a fallback cover page. Existing schema, sorting and item metadata are retained. Saving a copy invalidates digital signatures; components are never executed.",
+    "save": "Save portfolio copy",
+    "close": "Close",
+    "folder": "Folder",
+    "root": "Root",
+    "newFolder": "New folder name",
+    "addFolder": "Add folder",
+    "add": "Add component files",
+    "name": "Component",
+    "description": "Description",
+    "update": "Update description",
+    "export": "Export component",
+    "preview": "Preview PDF",
+    "remove": "Remove component",
+    "schema": "Collection schema and sorting",
+    "errors": {
+      "DOCUMENT_CHANGED": "The source document changed. Close and reopen this dialog.",
+      "SAVE_CHANGES_FIRST": "Save pending edits before opening the portfolio.",
+      "CHOOSE_NEW_FILE": "Choose a new output file.",
+      "INVALID_NAME": "Enter a name without path separators.",
+      "DUPLICATE_COMPONENT": "A component with this name already exists in the folder.",
+      "PDF_PREVIEW_ONLY": "Only PDF files can be previewed. Export this component instead."
+    }
   }
 }

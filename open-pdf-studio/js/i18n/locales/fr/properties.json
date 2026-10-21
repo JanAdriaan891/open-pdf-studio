@@ -367,7 +367,8 @@
     "csvLayer": "Calque",
     "schedules": "Nomenclatures",
     "addPage": "Ajouter une page",
-    "pageLabels": "Étiquettes de page (générateur de noms)"
+    "pageLabels": "Étiquettes de page (générateur de noms)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Barre d'échelle",

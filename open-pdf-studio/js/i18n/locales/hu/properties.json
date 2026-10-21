@@ -367,7 +367,8 @@
     "csvLayer": "Réteg",
     "schedules": "Kimutatások",
     "addPage": "Oldal hozzáadása",
-    "pageLabels": "Oldalcímkék (névkészítő)"
+    "pageLabels": "Oldalcímkék (névkészítő)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Aránymérték",

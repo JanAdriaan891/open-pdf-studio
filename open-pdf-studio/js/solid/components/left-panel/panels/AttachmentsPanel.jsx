@@ -1,3 +1,4 @@
+import { openDialog } from '../../../stores/dialogStore.js';
 import { For, Show, createSignal } from 'solid-js';
 import { activeTab } from '../../../stores/leftPanelStore.js';
 import { items, countText, emptyMessage, selectedKey, toolbarDisabled } from '../../../stores/panels/attachmentsStore.js';
@@ -13,6 +14,7 @@ export default function AttachmentsPanel() {
       <div class="left-panel-header">
         <span>{t('leftPanel.attachments')}</span>
       </div>
+      <button disabled={disabled().add} onClick={() => openDialog('portfolio')}>{t('leftPanel.portfolio')}</button>
       <div class="attachments-toolbar">
         <button
           class="attachments-toolbar-btn"

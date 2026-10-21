@@ -367,7 +367,8 @@
     "csvLayer": "স্তর",
     "schedules": "শিডিউল",
     "addPage": "পৃষ্ঠা যোগ করুন",
-    "pageLabels": "পৃষ্ঠা লেবেল (নাম নির্মাতা)"
+    "pageLabels": "পৃষ্ঠা লেবেল (নাম নির্মাতা)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "স্কেল বার",

@@ -367,7 +367,8 @@
     "csvLayer": "Tabaka",
     "schedules": "Majedwali ya orodha",
     "addPage": "Ongeza ukurasa",
-    "pageLabels": "Lebo za kurasa (kiunda majina)"
+    "pageLabels": "Lebo za kurasa (kiunda majina)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Upau wa Kipimo",

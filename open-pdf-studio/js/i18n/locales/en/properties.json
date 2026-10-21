@@ -399,7 +399,8 @@
     "annotationsMenu": "Menu",
     "schedules": "Schedules",
     "addPage": "Add page",
-    "pageLabels": "Page labels (name builder)"
+    "pageLabels": "Page labels (name builder)",
+    "portfolio": "PDF portfolio"
   },
   "schedules": {
     "title": "Schedules",

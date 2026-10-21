@@ -367,7 +367,8 @@
     "csvLayer": "Слој",
     "schedules": "Спецификације",
     "addPage": "Додај страницу",
-    "pageLabels": "Ознаке страница (израда назива)"
+    "pageLabels": "Ознаке страница (израда назива)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Графичка размера",

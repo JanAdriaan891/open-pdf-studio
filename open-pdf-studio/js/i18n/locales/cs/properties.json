@@ -367,7 +367,8 @@
     "csvLayer": "Vrstva",
     "schedules": "Výkazy",
     "addPage": "Přidat stránku",
-    "pageLabels": "Popisky stránek (tvorba názvů)"
+    "pageLabels": "Popisky stránek (tvorba názvů)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Grafické měřítko",

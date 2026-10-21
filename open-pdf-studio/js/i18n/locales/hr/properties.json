@@ -367,7 +367,8 @@
     "csvLayer": "Sloj",
     "schedules": "Iskazi",
     "addPage": "Dodaj stranicu",
-    "pageLabels": "Oznake stranica (izrada naziva)"
+    "pageLabels": "Oznake stranica (izrada naziva)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Grafičko mjerilo",

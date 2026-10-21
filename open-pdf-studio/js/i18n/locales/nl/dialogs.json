@@ -1145,5 +1145,31 @@
     "tabLabel": "hersteld",
     "tabTip": "Hersteld na een onverwachte afsluiting. Opslaan schrijft naar het oorspronkelijke bestand.",
     "reloadStopped": "Het venster van Open PDF Studio is meerdere keren kort na elkaar vastgelopen en wordt niet meer automatisch opnieuw geladen. Sla uw werk op en start de app opnieuw."
+  },
+  "portfolio": {
+    "title": "PDF-collectieportfolio",
+    "info": "Bewerk een kopie van de opgeslagen PDF. Sla documentwijzigingen eerst op. Een nieuwe collectie krijgt een voorblad. Bestaand schema, sortering en metadata blijven behouden. Opslaan maakt digitale handtekeningen ongeldig; onderdelen worden nooit uitgevoerd.",
+    "save": "Portfoliokopie opslaan",
+    "close": "Sluiten",
+    "folder": "Map",
+    "root": "Hoofdmap",
+    "newFolder": "Nieuwe mapnaam",
+    "addFolder": "Map toevoegen",
+    "add": "Bestanden toevoegen",
+    "name": "Onderdeel",
+    "description": "Beschrijving",
+    "update": "Beschrijving bijwerken",
+    "export": "Onderdeel exporteren",
+    "preview": "PDF bekijken",
+    "remove": "Onderdeel verwijderen",
+    "schema": "Collectieschema en sortering",
+    "errors": {
+      "DOCUMENT_CHANGED": "Het brondocument is gewijzigd. Sluit en heropen dit venster.",
+      "SAVE_CHANGES_FIRST": "Sla documentwijzigingen eerst op.",
+      "CHOOSE_NEW_FILE": "Kies een nieuw uitvoerbestand.",
+      "INVALID_NAME": "Voer een naam zonder padscheidingstekens in.",
+      "DUPLICATE_COMPONENT": "In deze map bestaat al een onderdeel met deze naam.",
+      "PDF_PREVIEW_ONLY": "Alleen PDF-bestanden kunnen worden bekeken. Exporteer dit onderdeel."
+    }
   }
 }

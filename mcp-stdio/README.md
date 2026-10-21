@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,11 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### PDF collection portfolios
+
+`app_portfolio` and extension `api.portfolio(request)` use the saved active document, identified by `documentId`. Save pending edits first. `inspect` returns components, folder IDs, descriptions, item metadata, schema and sorting. `exportComponent` writes the selected `key` to a new `outputPath` without executing it.
+
+`saveCopy` accepts `add: [{path, name, folderId?, description?}]`, `remove: [key]`, `descriptions: [{key, description}]`, and `folders: [{name, parentId}]`. A new folder tree starts at root ID 0; subsequent folder IDs increase from the largest current ID. The output path must be a new PDF file. Existing collection schema, sort, item metadata and unchanged component bytes are preserved. New collections include a basic-reader cover page; existing collections retain their pages. Signed input is not kept cryptographically valid by a rewrite.
+
+The Attachments panel provides the same copy workflow with folder browsing, descriptions, PDF preview and safe component export. Other component types are not launched.

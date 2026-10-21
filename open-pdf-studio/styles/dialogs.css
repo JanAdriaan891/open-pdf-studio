@@ -5546,3 +5546,15 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.portfolio-dialog { color: var(--theme-text, #333); font-size: 13px; width: min(900px, 95vw); max-height: 90vh; overflow: auto; }
+.portfolio-controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.portfolio-controls label { display: flex; flex-direction: column; gap: 4px; }
+.portfolio-table { width: 100%; border-collapse: collapse; }
+.portfolio-table td, .portfolio-table th { text-align: start; padding: 6px; border-bottom: 1px solid var(--theme-border, #888); overflow-wrap: anywhere; }
+.portfolio-table tr[aria-selected="true"] { background: var(--theme-bg-hover, #666); }
+.portfolio-dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.portfolio-controls input, .portfolio-controls select { background: var(--theme-bg, #fff); color: var(--theme-text, #333); border: 1px solid var(--theme-border, #888); padding: 5px; }
+.portfolio-controls { align-items: end; }
+.portfolio-dialog .modal-body { overflow: auto; }

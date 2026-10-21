@@ -367,7 +367,8 @@
     "csvLayer": "שכבה",
     "schedules": "טבלאות כמויות",
     "addPage": "הוספת עמוד",
-    "pageLabels": "תוויות עמודים (בונה שמות)"
+    "pageLabels": "תוויות עמודים (בונה שמות)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "סרגל קנה מידה",

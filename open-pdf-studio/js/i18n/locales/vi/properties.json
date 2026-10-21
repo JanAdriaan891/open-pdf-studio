@@ -367,7 +367,8 @@
     "csvLayer": "Lớp",
     "schedules": "Bảng thống kê",
     "addPage": "Thêm trang",
-    "pageLabels": "Nhãn trang (trình tạo tên)"
+    "pageLabels": "Nhãn trang (trình tạo tên)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Thước tỷ lệ",

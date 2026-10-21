@@ -367,7 +367,8 @@
     "csvLayer": "Strat",
     "schedules": "Extrase",
     "addPage": "Adăugare pagină",
-    "pageLabels": "Etichete de pagină (generator de nume)"
+    "pageLabels": "Etichete de pagină (generator de nume)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Bară de scară",

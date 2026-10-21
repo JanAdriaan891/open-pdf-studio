@@ -367,7 +367,8 @@
     "csvLayer": "Livello",
     "schedules": "Abachi",
     "addPage": "Aggiungi pagina",
-    "pageLabels": "Etichette di pagina (generatore di nomi)"
+    "pageLabels": "Etichette di pagina (generatore di nomi)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Barra di scala",

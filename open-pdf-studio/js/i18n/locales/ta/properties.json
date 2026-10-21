@@ -367,7 +367,8 @@
     "csvLayer": "அடுக்கு",
     "schedules": "அட்டவணைகள்",
     "addPage": "பக்கத்தைச் சேர்",
-    "pageLabels": "பக்க லேபிள்கள் (பெயர் உருவாக்கி)"
+    "pageLabels": "பக்க லேபிள்கள் (பெயர் உருவாக்கி)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "அளவுகோல் பட்டை",

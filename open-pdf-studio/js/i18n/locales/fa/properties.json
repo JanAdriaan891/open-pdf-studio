@@ -367,7 +367,8 @@
     "csvLayer": "لایه",
     "schedules": "جدول‌های مقادیر",
     "addPage": "افزودن صفحه",
-    "pageLabels": "برچسب‌های صفحه (سازنده نام)"
+    "pageLabels": "برچسب‌های صفحه (سازنده نام)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "نوار مقیاس",

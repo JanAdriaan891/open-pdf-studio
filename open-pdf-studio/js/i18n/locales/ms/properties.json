@@ -367,7 +367,8 @@
     "csvLayer": "Lapisan",
     "schedules": "Jadual",
     "addPage": "Tambah halaman",
-    "pageLabels": "Label halaman (pembina nama)"
+    "pageLabels": "Label halaman (pembina nama)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Bar Skala",

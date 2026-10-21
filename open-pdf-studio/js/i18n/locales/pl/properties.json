@@ -367,7 +367,8 @@
     "csvLayer": "Warstwa",
     "schedules": "Zestawienia",
     "addPage": "Dodaj stronę",
-    "pageLabels": "Etykiety stron (kreator nazw)"
+    "pageLabels": "Etykiety stron (kreator nazw)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Podziałka liniowa",

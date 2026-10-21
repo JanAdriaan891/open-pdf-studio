@@ -367,7 +367,8 @@
     "csvLayer": "Vrstva",
     "schedules": "Výkazy",
     "addPage": "Pridať stranu",
-    "pageLabels": "Menovky strán (tvorba názvov)"
+    "pageLabels": "Menovky strán (tvorba názvov)",
+    "portfolio": "PDF portfolio"
   },
   "scaleBar": {
     "title": "Grafická mierka",
