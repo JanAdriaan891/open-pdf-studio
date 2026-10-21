@@ -1206,7 +1206,9 @@
     "empty": "No review candidates. Run OCR first, or raise the threshold. Older PDFs without review metadata need OCR again.",
     "error": "Could not update verification. Refresh the queue if the document changed.",
     "accepted": "Accepted",
-    "corrected": "Corrected"
+    "corrected": "Corrected",
+    "notEncodable": "The searchable OCR text cannot contain these characters: {{characters}}. Use other characters, or accept the recognized text.",
+    "archived": "Review stored in the file. Run OCR on this page again to change it."
   },
   "portfolio": {
     "title": "PDF collection portfolio",
