@@ -3,6 +3,7 @@ import { state, getActiveDocument } from '../core/state.js';
 import { resolvePointerCoords, buildToolContext, isModalOpen, applyToolTransform, getEffectiveScale } from './tool-context.js';
 import { zetRechtopRond } from '../pdf/weergave-ruimte.js';
 import { getTool } from './tool-registry.js';
+import { eindEventBijAfbreken } from './aanraak-gebaar.js';
 import { cloneAnnotation } from '../annotations/factory.js';
 import { applyResize, applyMove, applyRotation } from '../annotations/transforms.js';
 import { redrawAnnotations, redrawContinuous, snapToGrid } from '../annotations/rendering.js';
@@ -359,7 +360,11 @@ function flushWachtendeMove() {
   _verwerkWachtendeMove();
 }
 
+// De laatste echte beweging, om een afgebroken gebaar mee af te ronden.
+let _laatsteBeweging = null;
+
 export function handlePointerMove(e) {
+  _laatsteBeweging = e;
   if (state.isDragging || state.isResizing || state.isDrawing || state.isRubberBanding) {
     _wachtendeMove = e;
     if (!_moveRafId) _moveRafId = requestAnimationFrame(_verwerkWachtendeMove);
@@ -428,6 +433,13 @@ function _handlePointerMoveNu(e) {
 /**
  * Main pointer-up handler (replaces handleMouseUp + handleContinuousMouseUp)
  */
+// Een vinger, pen of systeemgebaar breekt de aanwijzer af (pointercancel,
+// #671): rond het lopende gebaar af zoals bij loslaten, op de laatste echte
+// beweging. Anders bleef een streek half getekend staan tot de volgende tik.
+export function handlePointerCancel(e) {
+  handlePointerUp(eindEventBijAfbreken(e, _laatsteBeweging));
+}
+
 export function handlePointerUp(e) {
   flushWachtendeMove();
   if (!getActiveDocument()?.pdfDoc) return;

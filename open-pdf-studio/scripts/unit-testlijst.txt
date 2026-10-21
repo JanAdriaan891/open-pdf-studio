@@ -83,6 +83,7 @@ js/utils/date-formatter.test.mjs
 js/pdf/loader/annotaties-toevoegen.test.mjs
 js/solid/components/dialogs/SignatureDialog.test.mjs
 js/annotations/signature-pad.test.mjs
+js/tools/aanraak-gebaar.test.mjs
 js/ui/panels/lagen-lijst.test.mjs
 js/tools/symbool-snappunten.test.mjs
 js/pdf/pagina-draaien.test.mjs

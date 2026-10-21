@@ -1909,11 +1909,13 @@ function setupContinuousPageEvents(canvas, pageNum) {
     return !!(t.classList && (t.classList.contains('pdf-canvas') || t.classList.contains('annotation-canvas')));
   };
   // Import event handlers dynamically to avoid circular dependencies
-  import('../tools/tool-dispatcher.js').then(({ handlePointerDown, handlePointerMove, handlePointerUp, handleDblClick }) => {
+  import('../tools/tool-dispatcher.js').then(({ handlePointerDown, handlePointerMove, handlePointerUp, handlePointerCancel, handleDblClick }) => {
     const wrap = (fn) => (e) => { if (magAfhandelen(e)) fn(e); };
     cc.addEventListener('pointerdown', wrap(handlePointerDown));
     cc.addEventListener('pointermove', wrap(handlePointerMove));
     cc.addEventListener('pointerup', wrap(handlePointerUp));
+    // Vinger of pen afgebroken (#671): het gebaar netjes afronden.
+    cc.addEventListener('pointercancel', wrap(handlePointerCancel));
     cc.addEventListener('dblclick', wrap(handleDblClick));
   });
 }
