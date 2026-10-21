@@ -1452,6 +1452,11 @@
   background: var(--theme-panel-tab-hover, #e8e8e8);
 }
 
+.schedules-add-btn svg {
+  display: block;
+  margin: 0 auto;
+}
+
 .schedules-hint {
   padding: 4px 10px;
   font-size: 10px;
