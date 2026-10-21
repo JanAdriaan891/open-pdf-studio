@@ -1498,6 +1498,12 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
         const raw = annotation._cachedImg;
         if (raw instanceof HTMLImageElement) stampImg = raw;
       }
+      // An image that is still decoding (just loaded from a PDF): redraw once it
+      // is ready, otherwise the stamp stays invisible until the next redraw.
+      if (stampImg && !stampImg.complete && !stampImg._redrawOnLoad) {
+        stampImg._redrawOnLoad = true;
+        stampImg.addEventListener('load', () => { try { redrawAnnotations(); } catch (_) {} }, { once: true });
+      }
       if (stampImg && stampImg.complete) {
         ctx.save();
         const cx = annotation.x + annotation.width / 2;
@@ -1519,7 +1525,11 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
         const color = annotation.stampColor || annotation.color || '#ef4444';
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
-        ctx.strokeRect(-annotation.width / 2, -annotation.height / 2, annotation.width, annotation.height);
+        // Rounded corners, like the appearance the saver writes.
+        ctx.beginPath();
+        ctx.roundRect(-annotation.width / 2, -annotation.height / 2, annotation.width, annotation.height,
+          Math.min(annotation.width, annotation.height) * 0.15);
+        ctx.stroke();
 
         ctx.fillStyle = color;
         ctx.font = `bold ${Math.min(annotation.height * 0.5, 24)}px Arial`;
