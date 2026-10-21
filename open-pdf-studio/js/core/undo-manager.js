@@ -120,7 +120,7 @@ function pagesForCommand(cmd) {
   // Watermark/bookmark commands don't carry a page and don't affect the page
   // thumbnail composite — skip them entirely (empty set = no refresh).
   const skipTypes = new Set([
-    'ocrWord', 'ocrPage',
+    'ocrWord', 'ocrPage', 'ocrPages',
     'addWatermark', 'removeWatermark', 'modifyWatermark',
     'addBookmark', 'removeBookmark', 'modifyBookmark',
     // pageStructure (insert/delete/reorder pages) shifts page numbers and is
@@ -441,14 +441,27 @@ function restoreSelectionByIds(doc, ids) {
 }
 
 // Apply undo for a command
+// OCR results per page. An empty list is kept (not deleted): the saver then
+// removes the OCR layer an earlier save of this session wrote on that page.
+function setOcrPage(doc, page, words) {
+  if (!doc.ocrResults) doc.ocrResults = {};
+  doc.ocrResults[page] = clonePlainValue(words) || [];
+}
+
+function setOcrWord(doc, page, index, word) {
+  const words = doc.ocrResults?.[page];
+  if (Array.isArray(words) && index >= 0 && index < words.length) words[index] = clonePlainValue(word);
+}
+
 function applyUndo(cmd, lookup) {
   const doc = getActiveDocument();
   if (!doc) return;
   if (!lookup) lookup = annotationsById(doc);
 
   switch (cmd.type) {
-    case 'ocrWord': doc.ocrResults[cmd.page][cmd.index] = clonePlainValue(cmd.oldWord); break;
-    case 'ocrPage': doc.ocrResults[cmd.page] = clonePlainValue(cmd.oldWords); break;
+    case 'ocrWord': setOcrWord(doc, cmd.page, cmd.index, cmd.oldWord); break;
+    case 'ocrPage': setOcrPage(doc, cmd.page, cmd.oldWords); break;
+    case 'ocrPages': cmd.pages.forEach((p) => setOcrPage(doc, p.page, p.oldWords)); break;
     case 'addAnnotation': {
       const idx = doc.annotations.findIndex(a => a.id === cmd.annotation.id);
       if (idx !== -1) doc.annotations.splice(idx, 1);
@@ -637,8 +650,9 @@ function applyRedo(cmd, lookup) {
   if (!lookup) lookup = annotationsById(doc);
 
   switch (cmd.type) {
-    case 'ocrWord': doc.ocrResults[cmd.page][cmd.index] = clonePlainValue(cmd.newWord); break;
-    case 'ocrPage': doc.ocrResults[cmd.page] = clonePlainValue(cmd.newWords); break;
+    case 'ocrWord': setOcrWord(doc, cmd.page, cmd.index, cmd.newWord); break;
+    case 'ocrPage': setOcrPage(doc, cmd.page, cmd.newWords); break;
+    case 'ocrPages': cmd.pages.forEach((p) => setOcrPage(doc, p.page, p.newWords)); break;
     case 'addAnnotation': {
       doc.annotations.push(cloneAnnotation(cmd.annotation));
       lookup.reset();
@@ -1069,12 +1083,24 @@ export function recordPageStructure(oldBytes, oldAnnotations, oldRotations, oldP
 
 
 // OCR can finish in a background tab. Never push its command onto the active tab.
-export function recordOcrPage(doc,page,oldWords,newWords) {
-  const cmd={type:'ocrPage',page,oldWords:clonePlainValue(oldWords),newWords:clonePlainValue(newWords)};
-  if (getActiveDocument() === doc) { execute(cmd); return; }
+export function recordOcrPage(doc, page, oldWords, newWords) {
+  recordOcrPages(doc, [{ page, oldWords, newWords }]);
+}
+
+// Several pages of one OCR run: a single undo step.
+export function recordOcrPages(doc, pages) {
+  if (!pages.length) return;
+  const changes = pages.map((p) => ({
+    page: p.page, oldWords: clonePlainValue(p.oldWords), newWords: clonePlainValue(p.newWords),
+  }));
+  const cmd = changes.length === 1 ? { type: 'ocrPage', ...changes[0] } : { type: 'ocrPages', pages: changes };
+  if (getActiveDocument() === doc) {
+    execute(cmd);
+    return;
+  }
   doc.undoStack.push(cmd);
   if (doc.undoStack.length > MAX_UNDO_STACK) doc.undoStack.shift();
-  doc.redoStack=[];
-  doc.savedUndoStackLength=-1;
+  doc.redoStack = [];
+  doc.savedUndoStackLength = -1;
   verhoogInhoudRevisie(doc);
 }
