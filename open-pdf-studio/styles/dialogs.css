@@ -5546,3 +5546,14 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.drawing-sets-dialog { width: min(1100px, 95vw); max-height: 92vh; color: var(--theme-text); font-size: 13px; }
+.drawing-sets-dialog .crop-margins-content { overflow: auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.drawing-sets-dialog p { margin: 0; line-height: 1.5; overflow-wrap: anywhere; }
+.drawing-sets-dialog label { display: inline-flex; gap: 5px; align-items: center; }
+.drawing-sets-dialog input, .drawing-sets-dialog select { background: var(--theme-bg); color: var(--theme-text); border: 1px solid var(--theme-border); padding: 5px; max-width: 100%; }
+.drawing-sets-dialog th { text-align: start; }
+.drawing-set-table { overflow: auto; }
+.drawing-set-table input { width: 120px; }
+.drawing-set-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.drawing-set-preview canvas { max-width: 100%; background: white; }

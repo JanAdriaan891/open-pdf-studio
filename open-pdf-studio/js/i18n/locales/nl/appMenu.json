@@ -211,5 +211,6 @@
     "activationFailed": "Niet actief: {{error}}",
     "viaMcp": "Via de AI-koppeling"
   },
-  "annotateScreenshot": "Klembord-schermafbeelding annoteren"
+  "annotateScreenshot": "Klembord-schermafbeelding annoteren",
+  "drawingSets": "Tekeningsets"
 }

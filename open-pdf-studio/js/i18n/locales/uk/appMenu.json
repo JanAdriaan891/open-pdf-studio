@@ -211,5 +211,6 @@
     "activationFailed": "Неактивне: {{error}}",
     "viaMcp": "Через підключення ШІ"
   },
-  "annotateScreenshot": "Анотувати знімок екрана з буфера обміну"
+  "annotateScreenshot": "Анотувати знімок екрана з буфера обміну",
+  "drawingSets": "Drawing sets"
 }

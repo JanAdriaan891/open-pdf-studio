@@ -1278,6 +1278,82 @@ fn handle_tools_list() -> Value {
                     "additionalProperties": false
                 }
             },
+{
+    "name": "app_drawing_sets",
+    "description": "Manage a portable version-1 multi-file drawing set. list returns manifest/root/report; capture stages active PDF pages; import validates a manifest; root selects local package root; preview returns matches/base; commit requires that base, sheets and one resolution per sheet (existing id/new/ignore). open accepts sheet id and version index. transferPreview requires source/target version records and optional dx/dy in points, both documents open and target active; transferApply requires preview id, selected source annotation ids and confirmed:true. No PDF writes; transferred markups are one undo step.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "list",
+                    "capture",
+                    "import",
+                    "root",
+                    "preview",
+                    "commit",
+                    "open",
+                    "transferPreview",
+                    "transferApply"
+                ]
+            },
+            "manifest": {
+                "type": "object"
+            },
+            "root": {
+                "type": "string"
+            },
+            "sheets": {
+                "type": "array",
+                "items": {
+                    "type": "object"
+                }
+            },
+            "resolutions": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "base": {
+                "type": "string"
+            },
+            "id": {
+                "type": "string"
+            },
+            "version": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "source": {
+                "type": "object"
+            },
+            "target": {
+                "type": "object"
+            },
+            "dx": {
+                "type": "number"
+            },
+            "dy": {
+                "type": "number"
+            },
+            "selected": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "confirmed": {
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "action"
+        ],
+        "additionalProperties": false
+    }
+},
             {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
@@ -1664,6 +1740,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_drawing_sets" => tool_app_request(state, "mcp:drawing-sets", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2468,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

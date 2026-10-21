@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,9 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Drawing sets
+
+`app_drawing_sets` / `api.drawingSets` manages one current set in preferences with portable JSON import/export. Version-1 manifests contain name and sheets [{id,present,versions}], each version storing number/title/discipline/revision/date, relative source, SHA-256, page and viewport width/height/rotation. Choose the package root to reopen relative files; hashes refuse silently changed sources. Earlier versions must remain available at their own relative paths. Capture uses the active saved PDF's pages; edit metadata before preview. Preview matches discipline/number case-insensitively and flags duplicates/ambiguity. Commit requires the unchanged base and explicit per-row resolutions; incoming packages represent complete issues. Omitted sheets remain in history but become absent. Reports distinguish added, removed, replaced, unmatched and unchanged sheets. No source bytes change.
+
+Transfer preview requires both exact PDF revisions open, target active, and annotations loaded. It maps source viewport coordinates through PDF crop boxes into target viewport coordinates, accounting for size and quarter-turn rotation; dx/dy provide explicit alignment adjustment. Rectangles, circles, straight lines/arrows, simple polygons and comments are supported; rotated custom shapes, measurements, text, stamps, ink and correction links are reported unsupported instead of guessed. Outside-page placements cannot be accepted. All selections require explicit confirmation; changed geometry is flagged. The preview shows target bounds, not a full appearance rendering. Source/revision checks invalidate stale previews. New deterministic annotation IDs prevent repeat transfer; nested replies are cloned with fresh coherent IDs. Application is one undo operation, leaving the PDF unsaved until the user saves. Import/export and transfer work with open documents in the browser; reopening files by relative path requires desktop access. No external service is used.

@@ -200,6 +200,10 @@
       "description": "Return the active document's page count and current page."
     },
     {
+      "name": "app_drawing_sets",
+      "description": "Manage a portable version-1 multi-file drawing set. list returns manifest/root/report; capture stages active PDF pages; import validates a manifest; root selects local package root; preview returns matches/base; commit requires that base, sheets and one resolution per sheet (existing id/new/ignore). open accepts sheet id and version index. transferPreview requires source/target version records and optional dx/dy in points, both documents open and target active; transferApply requires preview id, selected source annotation ids and confirmed:true. No PDF writes; transferred markups are one undo step."
+    },
+    {
       "name": "app_get_page_text",
       "description": "Read existing PDF page text without mouse automation."
     },

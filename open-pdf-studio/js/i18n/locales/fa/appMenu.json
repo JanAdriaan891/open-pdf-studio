@@ -211,5 +211,6 @@
     "activationFailed": "غیرفعال: {{error}}",
     "viaMcp": "از طریق اتصال هوش مصنوعی"
   },
-  "annotateScreenshot": "حاشیه‌نویسی روی تصویر صفحه از کلیپ‌بورد"
+  "annotateScreenshot": "حاشیه‌نویسی روی تصویر صفحه از کلیپ‌بورد",
+  "drawingSets": "Drawing sets"
 }

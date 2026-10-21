@@ -211,5 +211,6 @@
     "activationFailed": "Inte aktiv: {{error}}",
     "viaMcp": "Via AI-anslutningen"
   },
-  "annotateScreenshot": "Kommentera skärmbild från Urklipp"
+  "annotateScreenshot": "Kommentera skärmbild från Urklipp",
+  "drawingSets": "Drawing sets"
 }
