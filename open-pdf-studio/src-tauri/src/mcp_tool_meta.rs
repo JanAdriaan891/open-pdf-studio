@@ -65,7 +65,9 @@ pub const TOOLS: &[ToolMeta] = &[
     voegt_toe("app_hidden_information", "Inspect and export cleaned copy"),
     voegt_toe("app_print_preflight", "Inspect print readiness"),
     wijzigt("app_review_ocr", "Verify OCR text"),
-    voegt_toe("app_portfolio", "Manage PDF collections"),
+    // Writes collection components chosen by the client to disk and reads
+    // named local files into a copy.
+    wijzigt("app_portfolio", "Manage PDF collections"),
     voegt_toe("app_recognize_form", "Recognize form fields"),
     voegt_toe("app_search_symbols", "Find repeated symbols"),
     wijzigt("app_workbook_bindings", "Refresh spreadsheet quantities"),

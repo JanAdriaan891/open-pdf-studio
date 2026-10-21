@@ -11,6 +11,7 @@ pub mod cad_import;
 pub mod crashlog;
 pub mod datamap;
 mod email;
+pub mod export_policy;
 pub mod extensie_installatie;
 pub mod linux_runtime;
 pub mod logboek;
@@ -290,6 +291,32 @@ async fn write_file_new(request: tauri::ipc::Request<'_>) -> Result<(), String> 
     };
     tauri::async_runtime::spawn_blocking(move || {
         atomic_file::write_new(std::path::Path::new(&path), &bytes).map_err(|e| e.to_string())
+    }).await.map_err(|e| e.to_string())?
+}
+
+// A component extracted from a PDF collection: untrusted bytes. Never replaces
+// a file, refuses autostart folders (and, with x-opds-restrict, programs and
+// scripts) and marks the result as downloaded content on Windows.
+#[tauri::command]
+async fn write_downloaded_file_new(request: tauri::ipc::Request<'_>) -> Result<(), String> {
+    let header = request.headers().get("x-opds-path")
+        .ok_or("Missing destination path")?.to_str().map_err(|e| e.to_string())?;
+    let path = urlencoding::decode(header).map_err(|e| e.to_string())?.into_owned();
+    let restrict = request.headers().get("x-opds-restrict").map_or(true, |v| v.as_bytes() != b"0");
+    if let Some(code) = export_policy::problem(&path, restrict) {
+        return Err(code.to_string());
+    }
+    let bytes = match request.body() {
+        tauri::ipc::InvokeBody::Raw(bytes) => bytes.clone(),
+        tauri::ipc::InvokeBody::Json(value) => {
+            serde_json::from_value::<Vec<u8>>(value.get("data").cloned().ok_or("Missing file data")?)
+                .map_err(|e| e.to_string())?
+        }
+    };
+    tauri::async_runtime::spawn_blocking(move || {
+        let target = std::path::Path::new(&path);
+        atomic_file::write_new(target, &bytes).map_err(|e| e.to_string())?;
+        export_policy::mark_of_the_web(target).map_err(|e| e.to_string())
     }).await.map_err(|e| e.to_string())?
 }
 
@@ -3012,6 +3039,7 @@ pub fn run(opts: StartupOpts) {
             write_file,
             write_file_atomic,
             write_file_new,
+            write_downloaded_file_new,
             file_exists,
             open_url,
             is_dev_mode,

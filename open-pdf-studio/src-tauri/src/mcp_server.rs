@@ -1280,7 +1280,7 @@ fn handle_tools_list() -> Value {
             },
 {
     "name": "app_portfolio",
-    "description": "Inspect or save a PDF Collection copy, preserving component bytes, folders, schema, sort and metadata. Save pending edits first. Added files come from local paths. Folders use numeric parentId (0 for a new root); new IDs increase from the current maximum. Unsupported components are exported, never executed. saveCopy/exportComponent require a new output path; existing files are refused. New collections get a fallback cover.",
+    "description": "Inspect or save a PDF Collection copy, preserving component bytes, folders, schema, sort and metadata. Save pending edits first. add[].path reads each named file from an explicit absolute local path (document and data types only) and embeds it. Folders use numeric parentId (0 for a new root); new IDs increase from the current maximum. Unsupported components are exported, never executed. saveCopy/exportComponent require a new absolute output path; existing files are refused. exportComponent writes document and data types only (no programs, scripts or shortcuts), never into autostart folders, and marks the file as downloaded. New collections get a fallback cover.",
     "inputSchema": {
         "type": "object",
         "properties": {

@@ -1,7 +1,8 @@
 import { PDFDocument } from 'pdf-lib';
 import { getActiveDocument } from '../core/state.js';
-import { readBinaryFile, fileExists, writeBinaryFileAtomic, isTauri } from '../core/platform.js';
+import { readBinaryFile, writeBinaryFileNew, writeDownloadedFileNew, isTauri } from '../core/platform.js';
 import { inspectPortfolio, changePortfolio, extractComponent } from './portfolio.js';
+import { exportPathProblem, inputPathProblem } from './export-path-policy.js';
 export async function openPortfolioSession(documentId) {
   const doc = getActiveDocument();
   if (!doc?.pdfDoc || doc.id !== documentId) throw new Error('DOCUMENT_CHANGED');
@@ -21,9 +22,9 @@ export async function openPortfolioSession(documentId) {
 export async function writePortfolioCopy(session,path) {
   if (!isTauri()) throw new Error('DESKTOP_EXPORT_REQUIRED');
   if (typeof path !== 'string' || !path.toLowerCase().endsWith('.pdf')) throw new Error('PDF_PATH_REQUIRED');
-  if (await fileExists(path)) throw new Error('CHOOSE_NEW_FILE');
   const bytes=session.bytes();
-  await writeBinaryFileAtomic(path,bytes);
+  // Refuses an existing file, also when one appears after the dialog.
+  await writeBinaryFileNew(path,bytes);
   return {path,portfolio:session.inspect()};
 }
 export async function portfolioRequest(request) {
@@ -31,14 +32,22 @@ export async function portfolioRequest(request) {
   if (request.action === 'inspect') return {documentId:request.documentId,portfolio:session.inspect()};
   if (request.action === 'exportComponent') {
     if (!isTauri()) throw new Error('DESKTOP_EXPORT_REQUIRED');
-    if (typeof request.outputPath !== 'string' || !request.outputPath) throw new Error('OUTPUT_PATH_REQUIRED');
-    if (await fileExists(request.outputPath)) throw new Error('CHOOSE_NEW_FILE');
-    await writeBinaryFileAtomic(request.outputPath,session.extract(request.key));
+    // Automation clients choose both the bytes (via the collection) and the
+    // path: only document and data types, never autostart folders.
+    const problem = exportPathProblem(request.outputPath);
+    if (problem) throw new Error(problem);
+    await writeDownloadedFileNew(request.outputPath,session.extract(request.key),{restrict:true});
     return {path:request.outputPath};
   }
   if (request.action !== 'saveCopy') throw new Error('INVALID_ACTION');
   const add=[];
-  for (const file of request.add || []) { const bytes=await readBinaryFile(file.path); session.check(); add.push({...file,bytes:new Uint8Array(bytes)}); }
+  // Added files are read from explicit absolute local paths of document or
+  // data types; the tool is marked as modifying, so every call is confirmed.
+  for (const file of request.add || []) {
+    const problem = inputPathProblem(file?.path);
+    if (problem) throw new Error(problem);
+    const bytes=await readBinaryFile(file.path); session.check(); add.push({...file,bytes:new Uint8Array(bytes)});
+  }
   await session.change({folders:request.folders,add,remove:request.remove,descriptions:request.descriptions});
   return writePortfolioCopy(session,request.outputPath);
 }
