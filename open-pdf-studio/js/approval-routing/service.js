@@ -1,6 +1,6 @@
 import {state,getActiveDocument} from '../core/state.js';
 import {savePreferences} from '../core/preferences.js';
-import {isTauri,readBinaryFile,writeBinaryFileAtomic,fileExists} from '../core/platform.js';
+import {isTauri,readBinaryFile,writeBinaryFileNew,fileExists} from '../core/platform.js';
 import {documentRevisie} from '../core/undo-manager.js';
 import {createRequest,verifyRequest,appendEvent,recordReceipt,makeReceipt,digest} from './model.js';
 import {zipStore} from '../bcf/bcf-zip.js';
@@ -45,7 +45,7 @@ async function handle(request,origin){
  if(request.action==='receipt'){const e=entry(request.id),record=store(await recordReceipt(e.record,request.receipt,undefined,origin?actor:undefined));return {record:copy(record),state:await verifyRequest(record)};}
  if(request.action==='cancel'){const record=store(await appendEvent(entry(request.id).record,'cancel',{},actor));return {record:copy(record),state:await verifyRequest(record)};}
  if(request.action==='supersede'){entry(request.replacementId);const record=store(await appendEvent(entry(request.id).record,'supersede',{replacementId:request.replacementId},actor));return {record:copy(record),state:await verifyRequest(record)};}
- if(request.action==='export'){if(!isTauri()||typeof request.outputPath!=='string'||!request.outputPath.endsWith('.zip'))throw new Error('DESKTOP_ZIP_PATH_REQUIRED');if(await fileExists(request.outputPath))throw new Error('OUTPUT_EXISTS');const result=await approvalPackage(request.id);await writeBinaryFileAtomic(request.outputPath,result.bytes);return {path:request.outputPath,state:result.state};}
+ if(request.action==='export'){if(!isTauri()||typeof request.outputPath!=='string'||!request.outputPath.endsWith('.zip'))throw new Error('DESKTOP_ZIP_PATH_REQUIRED');if(await fileExists(request.outputPath))throw new Error('OUTPUT_EXISTS');const result=await approvalPackage(request.id);await writeBinaryFileNew(request.outputPath,result.bytes);return {path:request.outputPath,state:result.state};}
  throw new Error('INVALID_ACTION');
 }
 // origin: 'mcp' or 'plugin' for automation clients; the dialog passes none.

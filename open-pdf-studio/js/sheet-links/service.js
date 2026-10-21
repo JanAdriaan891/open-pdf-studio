@@ -52,6 +52,6 @@ export async function sheetLinkRequest(request){
  if(request.action==='index')return captureLinkIndex();
  if(request.action==='scan')return scanSheetLinks(request);
  if(request.action==='cancel'){scanController?.abort();return {cancelled:!!scanController};}
- if(request.action==='export'){const {isTauri,fileExists,writeBinaryFileAtomic}=await import('../core/platform.js');if(!isTauri()||typeof request.outputPath!=='string'||!request.outputPath.toLowerCase().endsWith('.zip'))throw new Error('DESKTOP_ZIP_PATH_REQUIRED');if(await fileExists(request.outputPath))throw new Error('OUTPUT_EXISTS');const {bytes,report}=await exportLinkedPackage(request);await writeBinaryFileAtomic(request.outputPath,bytes);return {path:request.outputPath,report};}
+ if(request.action==='export'){const {isTauri,fileExists,writeBinaryFileNew}=await import('../core/platform.js');if(!isTauri()||typeof request.outputPath!=='string'||!request.outputPath.toLowerCase().endsWith('.zip'))throw new Error('DESKTOP_ZIP_PATH_REQUIRED');if(await fileExists(request.outputPath))throw new Error('OUTPUT_EXISTS');const {bytes,report}=await exportLinkedPackage(request);await writeBinaryFileNew(request.outputPath,bytes);return {path:request.outputPath,report};}
  throw new Error('INVALID_ACTION');
 }

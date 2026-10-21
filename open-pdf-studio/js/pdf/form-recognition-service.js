@@ -1,5 +1,5 @@
 import { getActiveDocument } from '../core/state.js';
-import { isTauri, invoke, fileExists, writeBinaryFileAtomic } from '../core/platform.js';
+import { isTauri, invoke, fileExists, writeBinaryFileNew } from '../core/platform.js';
 import { detectFormShapes, labelCandidates, createRecognizedForm, overlap } from './form-recognition.js';
 export async function openFormRecognition(documentId) {
  const doc=getActiveDocument();if(!doc?.pdfDoc||doc.id!==documentId)throw new Error('DOCUMENT_CHANGED');if(doc.modified)throw new Error('SAVE_CHANGES_FIRST');
@@ -34,7 +34,7 @@ export async function openFormRecognition(documentId) {
 }
 export async function exportRecognizedForm(session,candidates,path){
  if(!isTauri())throw new Error('DESKTOP_EXPORT_REQUIRED');if(typeof path!=='string'||!path.toLowerCase().endsWith('.pdf'))throw new Error('PDF_PATH_REQUIRED');if(await fileExists(path))throw new Error('CHOOSE_NEW_FILE');
- const result=await session.prepare(candidates);if(await fileExists(path))throw new Error('CHOOSE_NEW_FILE');session.check();await writeBinaryFileAtomic(path,result.bytes);return {path,created:result.created,fields:result.fields};
+ const result=await session.prepare(candidates);session.check();await writeBinaryFileNew(path,result.bytes);return {path,created:result.created,fields:result.fields};
 }
 export async function formRecognitionRequest(request,options={}){
  const session=await openFormRecognition(request.documentId);

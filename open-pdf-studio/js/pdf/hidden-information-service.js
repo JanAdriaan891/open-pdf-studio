@@ -1,5 +1,5 @@
 import {getActiveDocument} from '../core/state.js';
-import {fileExists,writeBinaryFileAtomic,isTauri} from '../core/platform.js';
+import {fileExists,writeBinaryFileNew,isTauri} from '../core/platform.js';
 import {inspectHiddenInformation,removeHiddenInformation} from './hidden-information.js';
 async function source(documentId){
  const doc=getActiveDocument();
@@ -24,12 +24,13 @@ export async function exportHiddenCopy(documentId,categories,path){
  if(!isTauri())throw new Error('DESKTOP_EXPORT_REQUIRED');
  if(typeof path!=='string'||!path.toLowerCase().endsWith('.pdf'))throw new Error('PDF_PATH_REQUIRED');
  const reportPath=path+'.report.json';
- // Never replace existing files, including aliases to the source.
+ // Never replace existing files, including aliases to the source: fail early,
+ // and the writes themselves refuse a file that appeared in the meantime.
  if(await fileExists(path)||await fileExists(reportPath))throw new Error('CHOOSE_NEW_FILE');
  const result=await prepareHiddenCopy(documentId,categories);
- if(await fileExists(path)||await fileExists(reportPath))throw new Error('CHOOSE_NEW_FILE');
  result.check();
- await writeBinaryFileAtomic(reportPath,new TextEncoder().encode(JSON.stringify(result.report,null,2)));
- await writeBinaryFileAtomic(path,result.bytes);
+ // The PDF first: a failed PDF leaves no report behind.
+ await writeBinaryFileNew(path,result.bytes);
+ await writeBinaryFileNew(reportPath,new TextEncoder().encode(JSON.stringify(result.report,null,2)));
  return {documentId,path,reportPath,report:result.report};
 }

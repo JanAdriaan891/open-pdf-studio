@@ -455,6 +455,7 @@ js/pdf/portfolio.test.mjs
 js/pdf/portfolio-preview.test.mjs
 js/pdf/export-path-policy.test.mjs
 js/core/mcp-wijzigt-hints.test.mjs
+js/core/nieuwe-kopie-schrijven.test.mjs
 
 js/pdf/form-recognition.test.mjs
 
