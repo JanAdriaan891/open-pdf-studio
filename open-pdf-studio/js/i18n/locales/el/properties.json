@@ -367,7 +367,9 @@
     "csvLayer": "Επίπεδο",
     "schedules": "Πίνακες ποσοτήτων",
     "addPage": "Προσθήκη σελίδας",
-    "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)"
+    "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Γραμμή κλίμακας",
@@ -419,7 +421,8 @@
       "image": "Εικόνες & σφραγίδες"
     },
     "preview": "Προεπισκόπηση",
-    "exportCsv": "Εξαγωγή CSV"
+    "exportCsv": "Εξαγωγή CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Οδηγός πίνακα",
@@ -601,7 +604,9 @@
       "symbolId": "Σύμβολο",
       "imageName": "Όνομα αρχείου",
       "width": "Πλάτος",
-      "height": "Ύψος"
+      "height": "Ύψος",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Γραμμή",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Αυτό το αντικείμενο άλλαξε σε άλλο σημείο. Η φόρμα εμφανίζει τις τρέχουσες τιμές· οι αλλαγές σας δεν εφαρμόστηκαν.",
     "failed": "Δεν ήταν δυνατή η εφαρμογή των αλλαγών: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

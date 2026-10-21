@@ -1,5 +1,14 @@
+import OcrReviewDialog from './dialogs/OcrReviewDialog.jsx';
+import DocumentWorkflowsDialog from './dialogs/DocumentWorkflowsDialog.jsx';
+import DrawingSetsDialog from './dialogs/DrawingSetsDialog.jsx';
+import SheetLinksDialog from './dialogs/SheetLinksDialog.jsx';
+import ApprovalRoutingDialog from './dialogs/ApprovalRoutingDialog.jsx';
 import { For } from 'solid-js';
 import { getDialogs } from '../stores/dialogStore.js';
+import PortfolioDialog from './dialogs/PortfolioDialog.jsx';
+import FormRecognitionDialog from './dialogs/FormRecognitionDialog.jsx';
+import SymbolSearchDialog from './dialogs/SymbolSearchDialog.jsx';
+import WorkbookBindingsDialog from './dialogs/WorkbookBindingsDialog.jsx';
 import DocPropertiesDialog from './DocPropertiesDialog.jsx';
 import PreferencesDialog from './preferences/PreferencesDialog.jsx';
 import NewDocDialog from './dialogs/NewDocDialog.jsx';
@@ -63,6 +72,14 @@ import SysteemPaneelComponentDialog from './dialogs/SysteemPaneelComponentDialog
 import PrintProgressToast from './PrintProgressToast.jsx';
 
 const DIALOG_MAP = {
+  'portfolio': PortfolioDialog,
+  'form-recognition': FormRecognitionDialog,
+  'symbol-search': SymbolSearchDialog,
+  'workbook-bindings': WorkbookBindingsDialog,
+  'document-workflows': DocumentWorkflowsDialog,
+  'drawing-sets': DrawingSetsDialog,
+  'sheet-links': SheetLinksDialog,
+  'approval-routing': ApprovalRoutingDialog,
   'doc-properties': DocPropertiesDialog,
   'preferences': PreferencesDialog,
   'new-doc': NewDocDialog,
@@ -94,6 +111,7 @@ const DIALOG_MAP = {
   'straighten-page': StraightenDialog,
   'shift-page': ShiftPageDialog,
   'ocr-language': OcrLanguageDialog,
+  'ocr-review': OcrReviewDialog,
   'resize-pages': ResizePagesDialog,
   'compress': CompressDialog,
   'screenshot': ScreenshotDialog,

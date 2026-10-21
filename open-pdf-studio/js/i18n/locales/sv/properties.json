@@ -367,7 +367,9 @@
     "csvLayer": "Lager",
     "schedules": "Förteckningar",
     "addPage": "Lägg till sida",
-    "pageLabels": "Sidetiketter (namnbyggare)"
+    "pageLabels": "Sidetiketter (namnbyggare)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Skalstock",
@@ -419,7 +421,8 @@
       "image": "Bilder och stämplar"
     },
     "preview": "Förhandsvisning",
-    "exportCsv": "Exportera CSV"
+    "exportCsv": "Exportera CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Förteckningsguide",
@@ -601,7 +604,9 @@
       "symbolId": "Symbol",
       "imageName": "Filnamn",
       "width": "Bredd",
-      "height": "Höjd"
+      "height": "Höjd",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Linje",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Det här objektet har ändrats någon annanstans. Formuläret visar de aktuella värdena; dina ändringar tillämpades inte.",
     "failed": "Det gick inte att tillämpa ändringarna: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

@@ -118,6 +118,10 @@ export default function AppMenu() {
             <span>{t('file')}</span>
           </button>
           <div class="app-menu-items">
+            <MenuItem icon={ICONS.docProperties} label={t('workflows')} onClick={() => actionAndClose(() => openDialog('document-workflows'))} />
+            <MenuItem icon={ICONS.docProperties} label={t('drawingSets')} onClick={() => actionAndClose(() => openDialog('drawing-sets'))} />
+            <MenuItem icon={ICONS.docProperties} label={t('sheetLinks')} onClick={() => actionAndClose(() => openDialog('sheet-links'))} />
+            <MenuItem icon={ICONS.docProperties} label={t('approvalRouting')} onClick={() => actionAndClose(() => openDialog('approval-routing'))} />
             <MenuItem icon={ICONS.new} label={t('new')} shortcut="Ctrl+N" onClick={() => actionAndClose(showNewDocDialog)} />
             <MenuItem icon={ICONS.open} label={t('open')} shortcut="Ctrl+O" active={getActivePanel() === 'open'} onClick={() => setActivePanel('open')} />
             <MenuItem icon={ICONS.save} label={t('save')} shortcut="Ctrl+S" onClick={() => actionAndClose(savePDF)} />

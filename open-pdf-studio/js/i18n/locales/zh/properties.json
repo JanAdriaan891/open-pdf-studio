@@ -367,7 +367,9 @@
     "csvLayer": "图层",
     "schedules": "明细表",
     "addPage": "添加页面",
-    "pageLabels": "页面标签（名称生成器）"
+    "pageLabels": "页面标签（名称生成器）",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "比例尺",
@@ -419,7 +421,8 @@
       "image": "图像和图章"
     },
     "preview": "预览",
-    "exportCsv": "导出 CSV"
+    "exportCsv": "导出 CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "明细表向导",
@@ -601,7 +604,9 @@
       "symbolId": "符号",
       "imageName": "文件名",
       "width": "宽度",
-      "height": "高度"
+      "height": "高度",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "线条",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "此对象已在其他位置更改。表单显示当前值；您的更改未应用。",
     "failed": "无法应用更改：{{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

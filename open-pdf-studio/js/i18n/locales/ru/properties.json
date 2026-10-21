@@ -367,7 +367,9 @@
     "csvLayer": "Слой",
     "schedules": "Спецификации",
     "addPage": "Добавить страницу",
-    "pageLabels": "Метки страниц (конструктор имён)"
+    "pageLabels": "Метки страниц (конструктор имён)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Масштабная линейка",
@@ -419,7 +421,8 @@
       "image": "Изображения и штампы"
     },
     "preview": "Предпросмотр",
-    "exportCsv": "Экспорт в CSV"
+    "exportCsv": "Экспорт в CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Мастер спецификаций",
@@ -601,7 +604,9 @@
       "symbolId": "Символ",
       "imageName": "Имя файла",
       "width": "Ширина",
-      "height": "Высота"
+      "height": "Высота",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Линия",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Этот объект был изменён в другом месте. Форма показывает текущие значения; ваши изменения не применены.",
     "failed": "Не удалось применить изменения: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

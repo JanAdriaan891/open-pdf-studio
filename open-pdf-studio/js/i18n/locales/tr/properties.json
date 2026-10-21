@@ -367,7 +367,9 @@
     "csvLayer": "Katman",
     "schedules": "Çizelgeler",
     "addPage": "Sayfa ekle",
-    "pageLabels": "Sayfa etiketleri (ad oluşturucu)"
+    "pageLabels": "Sayfa etiketleri (ad oluşturucu)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Ölçek Çubuğu",
@@ -419,7 +421,8 @@
       "image": "Görüntüler ve damgalar"
     },
     "preview": "Önizleme",
-    "exportCsv": "CSV dışa aktar"
+    "exportCsv": "CSV dışa aktar",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Çizelge sihirbazı",
@@ -601,7 +604,9 @@
       "symbolId": "Sembol",
       "imageName": "Dosya adı",
       "width": "Genişlik",
-      "height": "Yükseklik"
+      "height": "Yükseklik",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Çizgi",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Bu nesne başka bir yerde değiştirildi. Form geçerli değerleri gösteriyor; değişiklikleriniz uygulanmadı.",
     "failed": "Değişiklikler uygulanamadı: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

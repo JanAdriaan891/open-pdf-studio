@@ -1,7 +1,7 @@
 // The MCP `tools/list` descriptor table in mcp_server.rs is one large
 // `serde_json::json!` literal; its recursive macro expansion exceeds the
-// default limit of 128 once the tool count grew past ~30.
-#![recursion_limit = "256"]
+// default limit of 128. The 89-tool public catalog requires a limit of 512.
+#![recursion_limit = "512"]
 
 mod accounts;
 mod atomic_file;
@@ -272,6 +272,24 @@ async fn write_file_atomic(request: tauri::ipc::Request<'_>) -> Result<(), Strin
     };
     tauri::async_runtime::spawn_blocking(move || {
         atomic_file::write(std::path::Path::new(&path), &bytes).map_err(|e| e.to_string())
+    }).await.map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn write_file_new(request: tauri::ipc::Request<'_>) -> Result<(), String> {
+    let header = request.headers().get("x-opds-path")
+        .ok_or("Missing destination path")?.to_str().map_err(|e| e.to_string())?;
+    let path = urlencoding::decode(header).map_err(|e| e.to_string())?.into_owned();
+    let bytes = match request.body() {
+        tauri::ipc::InvokeBody::Raw(bytes) => bytes.clone(),
+        // Android cannot transport a raw IPC body.
+        tauri::ipc::InvokeBody::Json(value) => {
+            serde_json::from_value::<Vec<u8>>(value.get("data").cloned().ok_or("Missing file data")?)
+                .map_err(|e| e.to_string())?
+        }
+    };
+    tauri::async_runtime::spawn_blocking(move || {
+        atomic_file::write_new(std::path::Path::new(&path), &bytes).map_err(|e| e.to_string())
     }).await.map_err(|e| e.to_string())?
 }
 
@@ -2993,6 +3011,7 @@ pub fn run(opts: StartupOpts) {
             read_file,
             write_file,
             write_file_atomic,
+            write_file_new,
             file_exists,
             open_url,
             is_dev_mode,

@@ -283,6 +283,19 @@ export function createPluginApi(pluginId) {
       pluginDocumentEvents: true,
       systemTypes: true,
       viewNavigation: true,
+      documentSearch: true,
+      spatialLocations: true,
+      hiddenInformation: true,
+      printPreflight: true,
+      ocrVerification: true,
+      portfolio: true,
+      recognizeForm: true,
+      searchSymbols: true,
+      workbookBindings: true,
+      documentWorkflows: true,
+      drawingSets: true,
+      sheetLinks: true,
+      approvalRouting: true,
       ribbonTabs: true,
       structuredCommands: true,
       systemInstanceLinks: true,
@@ -570,6 +583,103 @@ export function createPluginApi(pluginId) {
     // the document is checked again after every wait, so a tab switch or
     // close while a call is pending never selects in another document. A
     // newer call from the same plugin supersedes an older pending one.
+    async searchDocuments(request, options = {}) {
+      scope.eisActief('documentSearch', pluginId);
+      const { searchWorkspace } = await import('../search/document-search-service.js');
+      scope.eisActief('documentSearch', pluginId);
+      return searchWorkspace(request, { signal: options.signal });
+    },
+
+    async locations(request = { action: 'list' }) {
+      scope.eisActief('locations', pluginId);
+      const service = await import('../annotations/spatial-zones-service.js');
+      scope.eisActief('locations', pluginId);
+      return request.action === 'list' ? service.inspectLocations() : service.updateLocation(request);
+    },
+
+    async hiddenInformation(request) {
+      scope.eisActief('hiddenInformation', pluginId);
+      const service = await import('../pdf/hidden-information-service.js');
+      scope.eisActief('hiddenInformation', pluginId);
+      if (request.action === 'inspect') return service.inspectCurrentHiddenInformation(request.documentId);
+      if (request.action === 'export') return service.exportHiddenCopy(request.documentId, request.categories, request.outputPath);
+      throw new Error('INVALID_ACTION');
+    },
+
+    async printPreflight(request, options = {}) {
+      scope.eisActief('printPreflight', pluginId);
+      const service = await import('../pdf/print-preflight-service.js');
+      scope.eisActief('printPreflight', pluginId);
+      if (request.action === 'inspect') return service.preflightCurrent(request.documentId, request.profile, { signal: options.signal });
+      if (request.action === 'fixTrimBoxes') return service.exportTrimCopy(request.documentId, request.profile, request.outputPath);
+      throw new Error('INVALID_ACTION');
+    },
+
+    async reviewOcr(request) {
+      scope.eisActief('ocrVerification', pluginId);
+      const service = await import('../pdf/ocr-review-service.js');
+      scope.eisActief('ocrVerification', pluginId);
+      return request.action === 'list'
+        ? service.listOcrReview(request.documentId, request.threshold ?? 80, request)
+        : service.updateOcrReview(request);
+    },
+
+    async portfolio(request) {
+      scope.eisActief('portfolio', pluginId);
+      const { portfolioRequest } = await import('../pdf/portfolio-service.js');
+      scope.eisActief('portfolio', pluginId);
+      return portfolioRequest(request);
+    },
+
+    async recognizeForm(request, options = {}) {
+      scope.eisActief('recognizeForm', pluginId);
+      const { formRecognitionRequest } = await import('../pdf/form-recognition-service.js');
+      scope.eisActief('recognizeForm', pluginId);
+      return formRecognitionRequest(request, options);
+    },
+
+    async searchSymbols(request, options = {}) {
+      scope.eisActief('searchSymbols', pluginId);
+      const { symbolSearchRequest } = await import('../search/symbol-search-service.js');
+      scope.eisActief('searchSymbols', pluginId);
+      return symbolSearchRequest(request, options);
+    },
+
+    async workbookBindings(request) {
+      scope.eisActief('workbookBindings', pluginId);
+      const { workbookBindingRequest } = await import('../quantities/workbook-binding-service.js');
+      scope.eisActief('workbookBindings', pluginId);
+      return workbookBindingRequest(request);
+    },
+
+    async documentWorkflows(request) {
+      scope.eisActief('documentWorkflows', pluginId);
+      const { workflowRequest } = await import('../workflows/workflow-service.js');
+      scope.eisActief('documentWorkflows', pluginId);
+      return workflowRequest(request);
+    },
+
+    async drawingSets(request) {
+      scope.eisActief('drawingSets', pluginId);
+      const { drawingSetRequest } = await import('../drawing-sets/service.js');
+      scope.eisActief('drawingSets', pluginId);
+      return drawingSetRequest(request);
+    },
+
+    async sheetLinks(request) {
+      scope.eisActief('sheetLinks', pluginId);
+      const { sheetLinkRequest } = await import('../sheet-links/service.js');
+      scope.eisActief('sheetLinks', pluginId);
+      return sheetLinkRequest(request);
+    },
+
+    async approvalRouting(request) {
+      scope.eisActief('approvalRouting', pluginId);
+      const { approvalRequest } = await import('../approval-routing/service.js');
+      scope.eisActief('approvalRouting', pluginId);
+      return approvalRequest(request);
+    },
+
     navigateToPage(request) {
       return navigation().navigateToPage(request);
     },

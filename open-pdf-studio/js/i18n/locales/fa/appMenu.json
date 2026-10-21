@@ -211,5 +211,9 @@
     "activationFailed": "غیرفعال: {{error}}",
     "viaMcp": "از طریق اتصال هوش مصنوعی"
   },
-  "annotateScreenshot": "حاشیه‌نویسی روی تصویر صفحه از کلیپ‌بورد"
+  "annotateScreenshot": "حاشیه‌نویسی روی تصویر صفحه از کلیپ‌بورد",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

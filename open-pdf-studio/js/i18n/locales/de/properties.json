@@ -367,7 +367,9 @@
     "csvLayer": "Ebene",
     "schedules": "Listen",
     "addPage": "Seite hinzufügen",
-    "pageLabels": "Seitenbeschriftungen (Namensgenerator)"
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)",
+    "portfolio": "PDF portfolio",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",
@@ -419,7 +421,8 @@
       "image": "Bilder & Stempel"
     },
     "preview": "Vorschau",
-    "exportCsv": "CSV exportieren"
+    "exportCsv": "CSV exportieren",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Listen-Assistent",
@@ -601,7 +604,9 @@
       "symbolId": "Symbol",
       "imageName": "Dateiname",
       "width": "Breite",
-      "height": "Höhe"
+      "height": "Höhe",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Linie",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Dieses Objekt wurde an anderer Stelle geändert. Das Formular zeigt die aktuellen Werte; Ihre Änderungen wurden nicht übernommen.",
     "failed": "Die Änderungen konnten nicht übernommen werden: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

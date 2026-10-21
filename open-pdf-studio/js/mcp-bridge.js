@@ -3719,6 +3719,72 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:search-documents': async (p) => {
+    try { return { ok: true, ...(await (await import('./search/document-search-service.js')).searchWorkspace(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:locations': async (p) => {
+    try {
+      const service = await import('./annotations/spatial-zones-service.js');
+      return { ok: true, ...(p.action === 'list' ? service.inspectLocations() : service.updateLocation(p)) };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:hidden-information': async (p) => {
+    try {
+      const service = await import('./pdf/hidden-information-service.js');
+      if (p.action === 'inspect') return { ok: true, ...(await service.inspectCurrentHiddenInformation(p.documentId)) };
+      if (p.action === 'export') return { ok: true, ...(await service.exportHiddenCopy(p.documentId, p.categories, p.outputPath)) };
+      return { ok: false, error: 'INVALID_ACTION' };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:print-preflight': async (p) => {
+    try {
+      const service = await import('./pdf/print-preflight-service.js');
+      if (p.action === 'inspect') return { ok: true, ...(await service.preflightCurrent(p.documentId, p.profile)) };
+      if (p.action === 'fixTrimBoxes') return { ok: true, ...(await service.exportTrimCopy(p.documentId, p.profile, p.outputPath)) };
+      return { ok: false, error: 'INVALID_ACTION' };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:review-ocr': async (p) => {
+    try {
+      const service = await import('./pdf/ocr-review-service.js');
+      return { ok: true, ...(await (p.action === 'list'
+        ? service.listOcrReview(p.documentId, p.threshold ?? 80, p)
+        : service.updateOcrReview(p))) };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:portfolio': async (p) => {
+    try { const { portfolioRequest } = await import('./pdf/portfolio-service.js'); return { ok: true, ...(await portfolioRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:recognize-form': async (p) => {
+    try { const { formRecognitionRequest } = await import('./pdf/form-recognition-service.js'); return { ok: true, ...(await formRecognitionRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:search-symbols': async (p) => {
+    try { const { symbolSearchRequest } = await import('./search/symbol-search-service.js'); return { ok: true, ...(await symbolSearchRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:workbook-bindings': async (p) => {
+    try { const { workbookBindingRequest } = await import('./quantities/workbook-binding-service.js'); return { ok: true, ...(await workbookBindingRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:document-workflows': async (p) => {
+    try { const { workflowRequest } = await import('./workflows/workflow-service.js'); return { ok: true, ...(await workflowRequest(p)) }; }
+    catch { return { ok: false, error: 'WORKFLOW_REQUEST_FAILED' }; }
+  },
+  'mcp:drawing-sets': async (p) => {
+    try { const { drawingSetRequest } = await import('./drawing-sets/service.js'); return { ok: true, ...(await drawingSetRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:sheet-links': async (p) => {
+    try { const { sheetLinkRequest } = await import('./sheet-links/service.js'); return { ok: true, ...(await sheetLinkRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
+  'mcp:approval-routing': async (p) => {
+    try { const { approvalRequest } = await import('./approval-routing/service.js'); return { ok: true, ...(await approvalRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

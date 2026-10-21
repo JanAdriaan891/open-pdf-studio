@@ -211,5 +211,9 @@
     "activationFailed": "Ikke aktiv: {{error}}",
     "viaMcp": "Via AI-tilkoblingen"
   },
-  "annotateScreenshot": "Lag merknad på skjermbilde fra utklippstavlen"
+  "annotateScreenshot": "Lag merknad på skjermbilde fra utklippstavlen",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

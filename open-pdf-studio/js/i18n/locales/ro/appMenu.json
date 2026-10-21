@@ -211,5 +211,9 @@
     "activationFailed": "Inactivă: {{error}}",
     "viaMcp": "Prin conexiunea AI"
   },
-  "annotateScreenshot": "Adnotare captură de ecran din clipboard"
+  "annotateScreenshot": "Adnotare captură de ecran din clipboard",
+  "workflows": "Document workflows",
+  "drawingSets": "Drawing sets",
+  "sheetLinks": "Cross-sheet links",
+  "approvalRouting": "Approval routing"
 }

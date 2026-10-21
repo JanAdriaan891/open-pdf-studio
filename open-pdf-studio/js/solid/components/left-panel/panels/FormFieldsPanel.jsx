@@ -1,3 +1,4 @@
+import { openDialog } from '../../../stores/dialogStore.js';
 import { For, Show } from 'solid-js';
 import { activeTab } from '../../../stores/leftPanelStore.js';
 import { groups, countText, emptyMessage } from '../../../stores/panels/formFieldsStore.js';
@@ -20,6 +21,7 @@ export default function FormFieldsPanel() {
       <div class="left-panel-header">
         <span>{t('leftPanel.formFields')}</span>
       </div>
+      <button onClick={() => openDialog('form-recognition')}>{t('leftPanel.recognizeForm')}</button>
       <div class="form-fields-container">
         <Show when={emptyMessage()}>
           <div class="form-fields-empty">{emptyMessage()}</div>
