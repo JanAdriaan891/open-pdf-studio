@@ -373,7 +373,8 @@
     "annotationsMenu": "Menú",
     "schedules": "Llistats",
     "addPage": "Afegeix una pàgina",
-    "pageLabels": "Etiquetes de pàgina (generador de noms)"
+    "pageLabels": "Etiquetes de pàgina (generador de noms)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Barra d'escala",

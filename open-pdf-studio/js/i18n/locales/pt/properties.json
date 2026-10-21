@@ -367,7 +367,8 @@
     "csvLayer": "Camada",
     "schedules": "Quadros",
     "addPage": "Adicionar página",
-    "pageLabels": "Rótulos de página (gerador de nomes)"
+    "pageLabels": "Rótulos de página (gerador de nomes)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Barra de escala",

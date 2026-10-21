@@ -367,7 +367,8 @@
     "csvLayer": "Tabaka",
     "schedules": "Majedwali ya orodha",
     "addPage": "Ongeza ukurasa",
-    "pageLabels": "Lebo za kurasa (kiunda majina)"
+    "pageLabels": "Lebo za kurasa (kiunda majina)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Upau wa Kipimo",

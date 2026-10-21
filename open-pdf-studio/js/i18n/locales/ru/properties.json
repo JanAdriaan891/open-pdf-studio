@@ -367,7 +367,8 @@
     "csvLayer": "Слой",
     "schedules": "Спецификации",
     "addPage": "Добавить страницу",
-    "pageLabels": "Метки страниц (конструктор имён)"
+    "pageLabels": "Метки страниц (конструктор имён)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Масштабная линейка",

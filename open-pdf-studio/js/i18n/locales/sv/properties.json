@@ -367,7 +367,8 @@
     "csvLayer": "Lager",
     "schedules": "Förteckningar",
     "addPage": "Lägg till sida",
-    "pageLabels": "Sidetiketter (namnbyggare)"
+    "pageLabels": "Sidetiketter (namnbyggare)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Skalstock",

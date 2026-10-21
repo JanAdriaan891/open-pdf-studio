@@ -367,7 +367,8 @@
     "csvLayer": "レイヤー",
     "schedules": "集計表",
     "addPage": "ページを追加",
-    "pageLabels": "ページラベル (名前ビルダー)"
+    "pageLabels": "ページラベル (名前ビルダー)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "スケールバー",

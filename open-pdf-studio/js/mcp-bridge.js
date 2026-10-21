@@ -3719,6 +3719,10 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:recognize-form': async (p) => {
+    try { const { formRecognitionRequest } = await import('./pdf/form-recognition-service.js'); return { ok: true, ...(await formRecognitionRequest(p)) }; }
+    catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

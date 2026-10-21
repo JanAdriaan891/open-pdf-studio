@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,11 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Recognize flat forms
+
+`app_recognize_form` / `api.recognizeForm(request, {signal})` detects candidate empty outlines and writing lines on 1–50 saved PDF pages. Existing widgets are excluded. Optional `ocr: true` reads scan labels through local desktop OCR; otherwise labels come from PDF text. Detection is heuristic and returns unaccepted candidates, existing fields, warnings, `revision` and a SHA-256 `sourceId`.
+
+Review and edit candidates before calling `action: "saveCopy"` with the same document, revision, sourceId and a new PDF outputPath. Accepted candidates need page, type (`text`, `checkbox`, `radio`), name, accessible label, order and bounds `{x,y,width,height}` in unrotated PDF points. Radio buttons need a shared group, consistent groupLabel/required flag and unique option values. Existing fields and artwork remain; new widgets follow reviewed order. No embedded scripts are generated. Signed source validity does not survive rewriting.
+
+The Forms panel provides the review UI, including source-page preview and editable bounds. Native reader interoperability remains a release-validation requirement.

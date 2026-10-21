@@ -367,7 +367,8 @@
     "csvLayer": "레이어",
     "schedules": "일람표",
     "addPage": "페이지 추가",
-    "pageLabels": "페이지 레이블(이름 작성기)"
+    "pageLabels": "페이지 레이블(이름 작성기)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "축척 막대",

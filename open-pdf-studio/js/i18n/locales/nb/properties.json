@@ -367,7 +367,8 @@
     "csvLayer": "Lag",
     "schedules": "Lister",
     "addPage": "Legg til side",
-    "pageLabels": "Sideetiketter (navnebygger)"
+    "pageLabels": "Sideetiketter (navnebygger)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Målestokklinjal",

@@ -367,7 +367,8 @@
     "csvLayer": "Шар",
     "schedules": "Специфікації",
     "addPage": "Додати сторінку",
-    "pageLabels": "Мітки сторінок (конструктор назв)"
+    "pageLabels": "Мітки сторінок (конструктор назв)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Масштабна лінійка",

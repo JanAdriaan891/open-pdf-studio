@@ -367,7 +367,8 @@
     "csvLayer": "图层",
     "schedules": "明细表",
     "addPage": "添加页面",
-    "pageLabels": "页面标签（名称生成器）"
+    "pageLabels": "页面标签（名称生成器）",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "比例尺",

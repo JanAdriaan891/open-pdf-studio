@@ -367,7 +367,8 @@
     "csvLayer": "Слой",
     "schedules": "Спецификации",
     "addPage": "Добавяне на страница",
-    "pageLabels": "Етикети на страници (създаване на имена)"
+    "pageLabels": "Етикети на страници (създаване на имена)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Линеен мащаб",

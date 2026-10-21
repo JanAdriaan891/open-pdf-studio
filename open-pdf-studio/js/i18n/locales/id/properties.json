@@ -367,7 +367,8 @@
     "csvLayer": "Lapisan",
     "schedules": "Daftar",
     "addPage": "Tambah halaman",
-    "pageLabels": "Label halaman (pembuat nama)"
+    "pageLabels": "Label halaman (pembuat nama)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Batang Skala",

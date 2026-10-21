@@ -367,7 +367,8 @@
     "csvLayer": "เลเยอร์",
     "schedules": "ตารางรายการ",
     "addPage": "เพิ่มหน้า",
-    "pageLabels": "ป้ายชื่อหน้า (ตัวสร้างชื่อ)"
+    "pageLabels": "ป้ายชื่อหน้า (ตัวสร้างชื่อ)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "แถบมาตราส่วน",

@@ -367,7 +367,8 @@
     "csvLayer": "Ebene",
     "schedules": "Listen",
     "addPage": "Seite hinzufügen",
-    "pageLabels": "Seitenbeschriftungen (Namensgenerator)"
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",

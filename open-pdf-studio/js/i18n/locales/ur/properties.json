@@ -367,7 +367,8 @@
     "csvLayer": "پرت",
     "schedules": "شیڈولز",
     "addPage": "صفحہ شامل کریں",
-    "pageLabels": "صفحہ لیبلز (نام ساز)"
+    "pageLabels": "صفحہ لیبلز (نام ساز)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "اسکیل بار",

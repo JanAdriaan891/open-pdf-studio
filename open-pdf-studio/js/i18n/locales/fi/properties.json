@@ -367,7 +367,8 @@
     "csvLayer": "Taso",
     "schedules": "Luettelot",
     "addPage": "Lisää sivu",
-    "pageLabels": "Sivujen nimiöt (nimien muodostus)"
+    "pageLabels": "Sivujen nimiöt (nimien muodostus)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Mittakaavajana",

@@ -1278,6 +1278,133 @@ fn handle_tools_list() -> Value {
                     "additionalProperties": false
                 }
             },
+{
+    "name": "app_recognize_form",
+    "description": "Detect heuristic form-field candidates on selected saved PDF pages, excluding existing fields. Review/correct labels, type, bounds in unrotated PDF points, required flags, radio grouping and order before setting accepted=true. saveCopy requires the returned revision and sourceId plus a NEW PDF outputPath. Existing fields/artwork remain. OCR labels require desktop OCR; no fields are accepted automatically.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "detect",
+                    "saveCopy"
+                ]
+            },
+            "documentId": {
+                "type": "string"
+            },
+            "pages": {
+                "type": "array",
+                "items": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "minItems": 1,
+                "maxItems": 50
+            },
+            "ocr": {
+                "type": "boolean"
+            },
+            "lang": {
+                "type": "string"
+            },
+            "revision": {
+                "type": "integer"
+            },
+            "sourceId": {
+                "type": "string"
+            },
+            "outputPath": {
+                "type": "string"
+            },
+            "candidates": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "page": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "text",
+                                "checkbox",
+                                "radio"
+                            ]
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "label": {
+                            "type": "string"
+                        },
+                        "required": {
+                            "type": "boolean"
+                        },
+                        "accepted": {
+                            "type": "boolean"
+                        },
+                        "order": {
+                            "type": "number"
+                        },
+                        "group": {
+                            "type": "string"
+                        },
+                        "groupLabel": {
+                            "type": "string"
+                        },
+                        "option": {
+                            "type": "string"
+                        },
+                        "bounds": {
+                            "type": "object",
+                            "properties": {
+                                "x": {
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "type": "number"
+                                },
+                                "width": {
+                                    "type": "number"
+                                },
+                                "height": {
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "x",
+                                "y",
+                                "width",
+                                "height"
+                            ],
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": [
+                        "page",
+                        "type",
+                        "name",
+                        "label",
+                        "accepted",
+                        "order",
+                        "bounds"
+                    ],
+                    "additionalProperties": true
+                },
+                "maxItems": 1000
+            }
+        },
+        "required": [
+            "action",
+            "documentId"
+        ],
+        "additionalProperties": false
+    }
+},
             {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
@@ -1664,6 +1791,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_recognize_form"     => tool_app_request(state, "mcp:recognize-form", &arguments, Duration::from_secs(300)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2519,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

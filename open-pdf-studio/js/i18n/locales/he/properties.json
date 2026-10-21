@@ -367,7 +367,8 @@
     "csvLayer": "שכבה",
     "schedules": "טבלאות כמויות",
     "addPage": "הוספת עמוד",
-    "pageLabels": "תוויות עמודים (בונה שמות)"
+    "pageLabels": "תוויות עמודים (בונה שמות)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "סרגל קנה מידה",

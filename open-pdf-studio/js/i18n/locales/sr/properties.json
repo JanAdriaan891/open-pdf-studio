@@ -367,7 +367,8 @@
     "csvLayer": "Слој",
     "schedules": "Спецификације",
     "addPage": "Додај страницу",
-    "pageLabels": "Ознаке страница (израда назива)"
+    "pageLabels": "Ознаке страница (израда назива)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Графичка размера",

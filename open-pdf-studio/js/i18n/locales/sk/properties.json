@@ -367,7 +367,8 @@
     "csvLayer": "Vrstva",
     "schedules": "Výkazy",
     "addPage": "Pridať stranu",
-    "pageLabels": "Menovky strán (tvorba názvov)"
+    "pageLabels": "Menovky strán (tvorba názvov)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Grafická mierka",

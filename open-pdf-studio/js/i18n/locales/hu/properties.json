@@ -367,7 +367,8 @@
     "csvLayer": "Réteg",
     "schedules": "Kimutatások",
     "addPage": "Oldal hozzáadása",
-    "pageLabels": "Oldalcímkék (névkészítő)"
+    "pageLabels": "Oldalcímkék (névkészítő)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Aránymérték",

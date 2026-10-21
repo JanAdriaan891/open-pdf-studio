@@ -367,7 +367,8 @@
     "csvLayer": "परत",
     "schedules": "शेड्यूल",
     "addPage": "पृष्ठ जोड़ें",
-    "pageLabels": "पृष्ठ लेबल (नाम निर्माता)"
+    "pageLabels": "पृष्ठ लेबल (नाम निर्माता)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "स्केल बार",

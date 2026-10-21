@@ -5546,3 +5546,16 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.form-recognition-dialog { width: min(1000px, 96vw); max-height: 92vh; color: var(--theme-text, #333); font-size: 13px; }
+.form-recognition-dialog .modal-body { overflow: auto; }
+.form-recognition-controls { display: flex; align-items: end; flex-wrap: wrap; gap: 10px; margin-block: 10px; }
+.form-recognition-grid { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(260px, 2fr); gap: 16px; }
+.form-recognition-grid canvas { max-width: 100%; height: auto; }
+.form-recognition-editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin-block-start: 12px; }
+.form-recognition-dialog label { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 3px; }
+.form-recognition-dialog input, .form-recognition-dialog select { color: var(--theme-text, #333); background: var(--theme-bg, #fff); border: 1px solid var(--theme-border, #888); padding: 5px; min-width: 0; max-width: 100%; }
+.form-recognition-grid > div > select { width: 100%; }
+@media (max-width: 650px) { .form-recognition-grid { grid-template-columns: 1fr; } }
+
+.form-recognition-editor input:not([type="checkbox"]) { width: 100%; box-sizing: border-box; }

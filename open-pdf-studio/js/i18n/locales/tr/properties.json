@@ -367,7 +367,8 @@
     "csvLayer": "Katman",
     "schedules": "Çizelgeler",
     "addPage": "Sayfa ekle",
-    "pageLabels": "Sayfa etiketleri (ad oluşturucu)"
+    "pageLabels": "Sayfa etiketleri (ad oluşturucu)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Ölçek Çubuğu",

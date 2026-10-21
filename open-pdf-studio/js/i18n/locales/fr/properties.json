@@ -367,7 +367,8 @@
     "csvLayer": "Calque",
     "schedules": "Nomenclatures",
     "addPage": "Ajouter une page",
-    "pageLabels": "Étiquettes de page (générateur de noms)"
+    "pageLabels": "Étiquettes de page (générateur de noms)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Barre d'échelle",

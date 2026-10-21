@@ -367,7 +367,8 @@
     "csvLayer": "Vrstva",
     "schedules": "Výkazy",
     "addPage": "Přidat stránku",
-    "pageLabels": "Popisky stránek (tvorba názvů)"
+    "pageLabels": "Popisky stránek (tvorba názvů)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Grafické měřítko",

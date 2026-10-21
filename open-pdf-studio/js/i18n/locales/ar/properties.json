@@ -367,7 +367,8 @@
     "csvLayer": "الطبقة",
     "schedules": "جداول الكميات",
     "addPage": "إضافة صفحة",
-    "pageLabels": "تسميات الصفحات (منشئ الأسماء)"
+    "pageLabels": "تسميات الصفحات (منشئ الأسماء)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "شريط المقياس",

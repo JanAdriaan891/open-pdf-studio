@@ -367,7 +367,8 @@
     "csvLayer": "Lag",
     "schedules": "Lister",
     "addPage": "Tilføj side",
-    "pageLabels": "Sideetiketter (navnegenerator)"
+    "pageLabels": "Sideetiketter (navnegenerator)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Skalabjælke",

@@ -367,7 +367,8 @@
     "csvLayer": "Επίπεδο",
     "schedules": "Πίνακες ποσοτήτων",
     "addPage": "Προσθήκη σελίδας",
-    "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)"
+    "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)",
+    "recognizeForm": "Recognize form fields"
   },
   "scaleBar": {
     "title": "Γραμμή κλίμακας",
