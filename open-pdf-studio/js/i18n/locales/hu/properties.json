@@ -419,7 +419,8 @@
       "image": "Képek és bélyegzők"
     },
     "preview": "Előnézet",
-    "exportCsv": "CSV exportálása"
+    "exportCsv": "CSV exportálása",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Kimutatásvarázsló",

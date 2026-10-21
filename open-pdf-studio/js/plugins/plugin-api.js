@@ -283,6 +283,7 @@ export function createPluginApi(pluginId) {
       pluginDocumentEvents: true,
       systemTypes: true,
       viewNavigation: true,
+      workbookBindings: true,
       ribbonTabs: true,
       structuredCommands: true,
       systemInstanceLinks: true,
@@ -570,6 +571,13 @@ export function createPluginApi(pluginId) {
     // the document is checked again after every wait, so a tab switch or
     // close while a call is pending never selects in another document. A
     // newer call from the same plugin supersedes an older pending one.
+    async workbookBindings(request) {
+      scope.eisActief('workbookBindings', pluginId);
+      const { workbookBindingRequest } = await import('../quantities/workbook-binding-service.js');
+      scope.eisActief('workbookBindings', pluginId);
+      return workbookBindingRequest(request);
+    },
+
     navigateToPage(request) {
       return navigation().navigateToPage(request);
     },

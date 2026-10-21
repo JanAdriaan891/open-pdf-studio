@@ -419,7 +419,8 @@
       "image": "Images & stamps"
     },
     "preview": "Preview",
-    "exportCsv": "Export CSV"
+    "exportCsv": "Export CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Schedule wizard",

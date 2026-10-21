@@ -419,7 +419,8 @@
       "image": "Imágenes y sellos"
     },
     "preview": "Vista previa",
-    "exportCsv": "Exportar CSV"
+    "exportCsv": "Exportar CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Asistente de listados",

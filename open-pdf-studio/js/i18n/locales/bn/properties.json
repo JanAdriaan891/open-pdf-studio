@@ -419,7 +419,8 @@
       "image": "ছবি ও স্ট্যাম্প"
     },
     "preview": "প্রাকদর্শন",
-    "exportCsv": "CSV রপ্তানি করুন"
+    "exportCsv": "CSV রপ্তানি করুন",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "শিডিউল উইজার্ড",

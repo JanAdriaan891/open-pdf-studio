@@ -419,7 +419,8 @@
       "image": "Imagens e carimbos"
     },
     "preview": "Pré-visualização",
-    "exportCsv": "Exportar CSV"
+    "exportCsv": "Exportar CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Assistente de quadros",

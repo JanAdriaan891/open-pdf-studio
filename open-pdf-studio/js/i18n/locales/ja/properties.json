@@ -419,7 +419,8 @@
       "image": "画像とスタンプ"
     },
     "preview": "プレビュー",
-    "exportCsv": "CSV をエクスポート"
+    "exportCsv": "CSV をエクスポート",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "集計表ウィザード",

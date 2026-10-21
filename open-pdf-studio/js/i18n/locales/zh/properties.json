@@ -419,7 +419,8 @@
       "image": "图像和图章"
     },
     "preview": "预览",
-    "exportCsv": "导出 CSV"
+    "exportCsv": "导出 CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "明细表向导",

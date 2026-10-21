@@ -419,7 +419,8 @@
       "image": "Images et tampons"
     },
     "preview": "Aperçu",
-    "exportCsv": "Exporter en CSV"
+    "exportCsv": "Exporter en CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Assistant de nomenclature",

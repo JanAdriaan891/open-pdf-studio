@@ -419,7 +419,8 @@
       "image": "Billeder og stempler"
     },
     "preview": "Eksempel",
-    "exportCsv": "Eksportér CSV"
+    "exportCsv": "Eksportér CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Listeguide",

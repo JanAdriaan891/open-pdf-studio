@@ -425,7 +425,8 @@
       "image": "Imatges i segells"
     },
     "preview": "Previsualització",
-    "exportCsv": "Exporta CSV"
+    "exportCsv": "Exporta CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Assistent de llistats",

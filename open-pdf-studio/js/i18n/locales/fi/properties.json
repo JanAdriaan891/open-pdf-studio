@@ -419,7 +419,8 @@
       "image": "Kuvat ja leimat"
     },
     "preview": "Esikatselu",
-    "exportCsv": "Vie CSV"
+    "exportCsv": "Vie CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Ohjattu luettelon luonti",

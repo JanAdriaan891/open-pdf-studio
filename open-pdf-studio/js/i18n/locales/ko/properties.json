@@ -419,7 +419,8 @@
       "image": "이미지 및 스탬프"
     },
     "preview": "미리 보기",
-    "exportCsv": "CSV 내보내기"
+    "exportCsv": "CSV 내보내기",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "일람표 마법사",

@@ -419,7 +419,8 @@
       "image": "รูปภาพและตราประทับ"
     },
     "preview": "ตัวอย่าง",
-    "exportCsv": "ส่งออก CSV"
+    "exportCsv": "ส่งออก CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "ตัวช่วยสร้างตารางรายการ",

@@ -419,7 +419,8 @@
       "image": "Immagini e timbri"
     },
     "preview": "Anteprima",
-    "exportCsv": "Esporta CSV"
+    "exportCsv": "Esporta CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Procedura guidata abaco",

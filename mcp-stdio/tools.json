@@ -1114,6 +1114,82 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_workbook_bindings",
+    "description": "Persist mappings from a named schedule on a source PDF to numeric XLSX cells. list reports source/schedule/workbook status; bind creates or explicitly rebinds an id to the active source. preview returns fresh values, CSV and provenance without writing. refresh explicitly updates only mapped workbook cells (desktop, source must be active), preserving other formulas/formatting and requesting recalculation. Formula/merged/protected targets are refused. inspectWorkbook lists worksheets; export returns portable binding data; remove disconnects.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "list",
+            "bind",
+            "preview",
+            "refresh",
+            "inspectWorkbook",
+            "export",
+            "remove"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "scheduleId": {
+          "type": "string"
+        },
+        "workbookPath": {
+          "type": "string"
+        },
+        "sheet": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "mappings": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "cell": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "field",
+              "cell",
+              "unit"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Refresh spreadsheet quantities",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

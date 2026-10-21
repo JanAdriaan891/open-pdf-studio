@@ -419,7 +419,8 @@
       "image": "Afbeeldingen & stempels"
     },
     "preview": "Voorbeeld",
-    "exportCsv": "CSV exporteren"
+    "exportCsv": "CSV exporteren",
+    "workbookBindings": "Spreadsheetkoppelingen"
   },
   "wizard": {
     "title": "Staten-wizard",

@@ -419,7 +419,8 @@
       "image": "Görüntüler ve damgalar"
     },
     "preview": "Önizleme",
-    "exportCsv": "CSV dışa aktar"
+    "exportCsv": "CSV dışa aktar",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Çizelge sihirbazı",

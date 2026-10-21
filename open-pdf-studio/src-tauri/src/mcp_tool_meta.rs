@@ -60,6 +60,7 @@ pub const TOOLS: &[ToolMeta] = &[
     lees("app_get_annotation", "Get annotation"),
     lees("app_list_tabs", "List document tabs"),
     lees("app_get_page_count", "Get page count"),
+    wijzigt("app_workbook_bindings", "Refresh spreadsheet quantities"),
     lees("app_get_page_text", "Read existing page text"),
     lees("app_get_takeoff", "Get quantity take-off"),
     lees("app_list_commands", "List app commands"),

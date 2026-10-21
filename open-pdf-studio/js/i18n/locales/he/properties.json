@@ -419,7 +419,8 @@
       "image": "תמונות וחותמות"
     },
     "preview": "תצוגה מקדימה",
-    "exportCsv": "ייצוא CSV"
+    "exportCsv": "ייצוא CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "אשף טבלאות",

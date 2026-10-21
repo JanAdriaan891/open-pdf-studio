@@ -419,7 +419,8 @@
       "image": "ຮູບພາບ ແລະ ກາປະທັບ"
     },
     "preview": "ສະແດງຕົວຢ່າງ",
-    "exportCsv": "ສົ່ງອອກ CSV"
+    "exportCsv": "ສົ່ງອອກ CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "ຕົວຊ່ວຍສ້າງຕາຕະລາງ",

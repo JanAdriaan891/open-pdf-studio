@@ -419,7 +419,8 @@
       "image": "Зображення та штампи"
     },
     "preview": "Попередній перегляд",
-    "exportCsv": "Експорт CSV"
+    "exportCsv": "Експорт CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Майстер специфікацій",

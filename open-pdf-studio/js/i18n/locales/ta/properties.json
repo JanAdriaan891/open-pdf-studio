@@ -419,7 +419,8 @@
       "image": "படங்கள் & முத்திரைகள்"
     },
     "preview": "முன்னோட்டம்",
-    "exportCsv": "CSV ஏற்றுமதி"
+    "exportCsv": "CSV ஏற்றுமதி",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "அட்டவணை வழிகாட்டி",

@@ -419,7 +419,8 @@
       "image": "Изображения и печати"
     },
     "preview": "Преглед",
-    "exportCsv": "Експортиране в CSV"
+    "exportCsv": "Експортиране в CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Съветник за спецификация",

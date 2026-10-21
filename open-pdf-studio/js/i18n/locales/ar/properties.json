@@ -419,7 +419,8 @@
       "image": "الصور والأختام"
     },
     "preview": "معاينة",
-    "exportCsv": "تصدير CSV"
+    "exportCsv": "تصدير CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "معالج الجداول",

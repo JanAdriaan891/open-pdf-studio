@@ -419,7 +419,8 @@
       "image": "Obrazy i pieczątki"
     },
     "preview": "Podgląd",
-    "exportCsv": "Eksportuj CSV"
+    "exportCsv": "Eksportuj CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Kreator zestawień",

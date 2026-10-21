@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,11 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Persistent spreadsheet quantity bindings
+
+`app_workbook_bindings` / `api.workbookBindings(request)` exposes list, bind/rebind, preview, refresh, inspectWorkbook, export and remove. Bind the active source document and a scheduleId to workbookPath, sheet and mappings `[{field,cell,unit}]`. The schedule's name/configuration and explicit units are retained; changes require review/rebinding. Multiple sources can own disjoint cells in one workbook; refresh each source while it is active. All source annotations must be loaded. Zero totals remain numeric zero; mixed units are refused.
+
+Desktop refresh reads the current XLSX, patches mapped numeric cells, checks for concurrent workbook/source changes and writes atomically. Formulas elsewhere and unmapped worksheet XML are preserved, as are styles and other package parts. Formula/array/merged/protected targets and signed/macro workbooks are refused. Excel and LibreOffice support this open XLSX interchange format; no application automation, login or cloud service is required. Recalculation is requested for the next spreadsheet open; this adapter does not calculate formulas itself. Workbooks are limited to 50 MB compressed / 100 MB expanded, non-ZIP64 STORE/DEFLATE. Worksheet CDATA/comments are currently unsupported. Browser UI downloads a new copy, without claiming the bound file was refreshed.
+
+Preview exports fresh numeric CSV and provenance independently of XLSX; export returns portable binding JSON and the last refreshed CSV. Bindings live in application preferences. Status reports closed/moved sources, renamed/deleted/changed schedules, revision changes and (desktop) missing/externally changed files. Reopening a source is conservatively stale until refresh. Unsaved measurement edits are flagged in provenance. Disconnecting removes the binding without changing either source file.

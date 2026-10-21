@@ -419,7 +419,8 @@
       "image": "Εικόνες & σφραγίδες"
     },
     "preview": "Προεπισκόπηση",
-    "exportCsv": "Εξαγωγή CSV"
+    "exportCsv": "Εξαγωγή CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Οδηγός πίνακα",

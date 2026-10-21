@@ -419,7 +419,8 @@
       "image": "Bilder och stämplar"
     },
     "preview": "Förhandsvisning",
-    "exportCsv": "Exportera CSV"
+    "exportCsv": "Exportera CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Förteckningsguide",

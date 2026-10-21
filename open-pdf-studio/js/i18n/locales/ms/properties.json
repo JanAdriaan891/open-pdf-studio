@@ -419,7 +419,8 @@
       "image": "Imej & setem"
     },
     "preview": "Pratonton",
-    "exportCsv": "Eksport CSV"
+    "exportCsv": "Eksport CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Wizard jadual",

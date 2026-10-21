@@ -419,7 +419,8 @@
       "image": "تصاویر و مهرها"
     },
     "preview": "پیش‌نمایش",
-    "exportCsv": "صدور CSV"
+    "exportCsv": "صدور CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "راهنمای جدول",

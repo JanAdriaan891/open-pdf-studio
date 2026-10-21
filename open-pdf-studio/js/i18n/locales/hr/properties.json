@@ -419,7 +419,8 @@
       "image": "Slike i pečati"
     },
     "preview": "Pretpregled",
-    "exportCsv": "Izvezi CSV"
+    "exportCsv": "Izvezi CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Čarobnjak za iskaz",

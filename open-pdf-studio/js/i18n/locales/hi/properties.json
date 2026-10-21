@@ -419,7 +419,8 @@
       "image": "छवियां और स्टैम्प"
     },
     "preview": "पूर्वावलोकन",
-    "exportCsv": "CSV निर्यात करें"
+    "exportCsv": "CSV निर्यात करें",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "शेड्यूल विज़ार्ड",

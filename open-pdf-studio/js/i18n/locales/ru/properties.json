@@ -419,7 +419,8 @@
       "image": "Изображения и штампы"
     },
     "preview": "Предпросмотр",
-    "exportCsv": "Экспорт в CSV"
+    "exportCsv": "Экспорт в CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Мастер спецификаций",

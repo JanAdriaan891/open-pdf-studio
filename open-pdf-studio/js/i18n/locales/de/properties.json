@@ -419,7 +419,8 @@
       "image": "Bilder & Stempel"
     },
     "preview": "Vorschau",
-    "exportCsv": "CSV exportieren"
+    "exportCsv": "CSV exportieren",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Listen-Assistent",

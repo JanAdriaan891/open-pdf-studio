@@ -419,7 +419,8 @@
       "image": "Obrázky a pečiatky"
     },
     "preview": "Náhľad",
-    "exportCsv": "Exportovať CSV"
+    "exportCsv": "Exportovať CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Sprievodca výkazom",

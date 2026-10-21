@@ -419,7 +419,8 @@
       "image": "Imagini și ștampile"
     },
     "preview": "Previzualizare",
-    "exportCsv": "Exportă CSV"
+    "exportCsv": "Exportă CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Expert extrase",

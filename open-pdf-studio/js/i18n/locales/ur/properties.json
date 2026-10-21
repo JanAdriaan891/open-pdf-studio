@@ -419,7 +419,8 @@
       "image": "تصاویر اور مہریں"
     },
     "preview": "پیش منظر",
-    "exportCsv": "CSV برآمد کریں"
+    "exportCsv": "CSV برآمد کریں",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "شیڈول وزرڈ",

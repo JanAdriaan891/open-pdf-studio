@@ -5546,3 +5546,11 @@ select.ste-field { padding: 2px 4px; cursor: pointer; }
 .recovery-footer {
   align-items: center;
 }
+
+.workbook-bindings-dialog { width: min(1000px, 96vw); max-height: 90vh; color: var(--theme-text, #333); font-size: 13px; }
+.workbook-bindings-dialog .modal-body { overflow: auto; }
+.workbook-binding-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; margin-block: 12px; }
+.workbook-binding-controls label { display: flex; flex-direction: column; gap: 4px; max-width: 260px; }
+.workbook-binding-controls input, .workbook-binding-controls select { padding: 5px; color: var(--theme-text, #333); background: var(--theme-bg, #fff); border: 1px solid var(--theme-border, #888); max-width: 100%; }
+.workbook-binding-row { border-block-start: 1px solid var(--theme-border, #888); padding-block: 10px; margin-block-start: 12px; overflow-wrap: anywhere; }
+.workbook-binding-row button { margin: 3px; }

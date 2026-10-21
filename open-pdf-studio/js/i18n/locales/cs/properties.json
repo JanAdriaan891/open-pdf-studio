@@ -419,7 +419,8 @@
       "image": "Obrázky a razítka"
     },
     "preview": "Náhled",
-    "exportCsv": "Exportovat CSV"
+    "exportCsv": "Exportovat CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Průvodce výkazem",

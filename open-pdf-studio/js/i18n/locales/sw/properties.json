@@ -419,7 +419,8 @@
       "image": "Picha na mihuri"
     },
     "preview": "Hakikisho",
-    "exportCsv": "Hamisha CSV"
+    "exportCsv": "Hamisha CSV",
+    "workbookBindings": "Spreadsheet bindings"
   },
   "wizard": {
     "title": "Mchawi wa jedwali la orodha",
