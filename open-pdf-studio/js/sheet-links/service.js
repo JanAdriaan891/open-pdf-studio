@@ -39,7 +39,7 @@ function sessionFor(id){const session=sessions.get(id);if(!session||session.expi
 export async function renderLinkPreview(id,hitId,targetId,side,canvas){
  const s=sessionFor(id),hit=s.hits.find(h=>h.id===hitId),target=s.index.find(t=>t.id===targetId);if(!hit||side==='target'&&!target)throw new Error('TARGET_REQUIRED');
  const file=s.snapshots.find(f=>f.path===(side==='source'?hit.source:target.path)),page=await file.pdf.getPage(side==='source'?hit.page:target.page),base=page.getViewport({scale:1}),viewport=page.getViewport({scale:Math.min(1,900/Math.max(base.width,base.height))});canvas.width=viewport.width;canvas.height=viewport.height;const ctx=canvas.getContext('2d');await page.render({canvasContext:ctx,viewport}).promise;
- const rect=side==='source'?hit.rect:target.region;if(rect){const r=viewport.convertToViewportRectangle(rect);ctx.strokeStyle='#ef4444';ctx.lineWidth=2;ctx.strokeRect(Math.min(r[0],r[2]),Math.min(r[1],r[3]),Math.abs(r[2]-r[0]),Math.abs(r[3]-r[1]));}s.check();
+ const rect=side==='source'?hit.rect:target.region;if(rect){const r=[...viewport.convertToViewportPoint(rect[0],rect[1]),...viewport.convertToViewportPoint(rect[2],rect[3])];ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.strokeStyle='#ef4444';ctx.lineWidth=2;ctx.strokeRect(Math.min(r[0],r[2]),Math.min(r[1],r[3]),Math.abs(r[2]-r[0]),Math.abs(r[3]-r[1]));ctx.restore();}s.check();
 }
 export async function exportLinkedPackage({id,selections,replaceExisting=false}){
  const session=sessionFor(id);if(!Array.isArray(selections)||!selections.length||selections.length>2000)throw new Error('SELECT_LINKS');const used=new Set(),links=[];
