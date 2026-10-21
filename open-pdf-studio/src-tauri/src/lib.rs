@@ -1,7 +1,7 @@
 // The MCP `tools/list` descriptor table in mcp_server.rs is one large
 // `serde_json::json!` literal; its recursive macro expansion exceeds the
-// default limit of 128 once the tool count grew past ~30.
-#![recursion_limit = "256"]
+// default limit of 128. The 89-tool public catalog requires a limit of 512.
+#![recursion_limit = "512"]
 
 mod accounts;
 mod atomic_file;
