@@ -206,6 +206,20 @@ function koppelAgentTaken() {
   });
 }
 
+/** The code of a failed feature call: an error code, or OPERATION_FAILED. */
+function featureErrorCode(error) {
+  if (typeof error?.code === 'string' && error.code) return error.code;
+  if (error?.name === 'AbortError') return 'ABORTED';
+  const message = error?.message;
+  return typeof message === 'string' && /^[A-Z][A-Z0-9_]*$/.test(message) ? message : 'OPERATION_FAILED';
+}
+
+/** Load a feature service, after checking that the request names a known action. */
+function withAction(request, actions, load) {
+  if (!actions.includes(request?.action)) throw new Error('INVALID_ACTION');
+  return load();
+}
+
 export function createPluginApi(pluginId) {
   // System types (#567): registry, native tool, native editor and the
   // geometry of system instances as the host. See docs/plugin-systeemtypen.md
@@ -260,6 +274,23 @@ export function createPluginApi(pluginId) {
         previous = current;
       });
     });
+  }
+
+  // Document feature calls (searchDocuments … approvalRouting) follow the
+  // same contract as the view-navigation calls: they resolve to
+  // { ok: true, ... } or { ok: false, code, message } and never throw. The
+  // service is loaded on first use; the API must still be active afterwards.
+  async function featureCall(kind, load, call) {
+    try {
+      scope.eisActief(kind, pluginId);
+      const service = await load();
+      scope.eisActief(kind, pluginId);
+      const result = await call(service);
+      const fields = result && typeof result === 'object' && !Array.isArray(result) ? result : { result };
+      return { ...fields, ok: true };
+    } catch (error) {
+      return { ok: false, code: featureErrorCode(error), message: error?.message || String(error) };
+    }
   }
 
   function emit(type, event) {
@@ -577,109 +608,91 @@ export function createPluginApi(pluginId) {
       return typeof id === 'string' ? scope.verwijder('systemInstancePanel', id) : false;
     },
 
+    // --- Document features ---
+    // Search across documents, spatial locations, hidden information, print
+    // preflight, OCR verification, portfolios, form recognition, symbol
+    // search, workbook bindings, workflows, drawing sets, sheet links and
+    // approval routing. Each call resolves to { ok: true, ... } or
+    // { ok: false, code, message } (see featureCall).
+    searchDocuments(request, options = {}) {
+      return featureCall('documentSearch', () => import('../search/document-search-service.js'),
+        (service) => service.searchWorkspace(request, { signal: options.signal }));
+    },
+
+    locations(request = { action: 'list' }) {
+      return featureCall('locations', () => import('../annotations/spatial-zones-service.js'),
+        (service) => (request?.action === 'list' ? service.inspectLocations() : service.updateLocation(request)));
+    },
+
+    hiddenInformation(request) {
+      return featureCall('hiddenInformation',
+        () => withAction(request, ['inspect', 'export'], () => import('../pdf/hidden-information-service.js')),
+        (service) => (request.action === 'inspect'
+          ? service.inspectCurrentHiddenInformation(request.documentId)
+          : service.exportHiddenCopy(request.documentId, request.categories, request.outputPath)));
+    },
+
+    printPreflight(request, options = {}) {
+      return featureCall('printPreflight',
+        () => withAction(request, ['inspect', 'fixTrimBoxes'], () => import('../pdf/print-preflight-service.js')),
+        (service) => (request.action === 'inspect'
+          ? service.preflightCurrent(request.documentId, request.profile, { signal: options.signal })
+          : service.exportTrimCopy(request.documentId, request.profile, request.outputPath)));
+    },
+
+    reviewOcr(request) {
+      return featureCall('ocrVerification', () => import('../pdf/ocr-review-service.js'),
+        (service) => (request?.action === 'list'
+          ? service.listOcrReview(request.documentId, request.threshold ?? 80, request)
+          : service.updateOcrReview(request)));
+    },
+
+    portfolio(request) {
+      return featureCall('portfolio', () => import('../pdf/portfolio-service.js'),
+        (service) => service.portfolioRequest(request));
+    },
+
+    recognizeForm(request, options = {}) {
+      return featureCall('recognizeForm', () => import('../pdf/form-recognition-service.js'),
+        (service) => service.formRecognitionRequest(request, options));
+    },
+
+    searchSymbols(request, options = {}) {
+      return featureCall('searchSymbols', () => import('../search/symbol-search-service.js'),
+        (service) => service.symbolSearchRequest(request, options));
+    },
+
+    workbookBindings(request) {
+      return featureCall('workbookBindings', () => import('../quantities/workbook-binding-service.js'),
+        (service) => service.workbookBindingRequest(request));
+    },
+
+    documentWorkflows(request) {
+      return featureCall('documentWorkflows', () => import('../workflows/workflow-service.js'),
+        (service) => service.workflowRequest(request));
+    },
+
+    drawingSets(request) {
+      return featureCall('drawingSets', () => import('../drawing-sets/service.js'),
+        (service) => service.drawingSetRequest(request));
+    },
+
+    sheetLinks(request) {
+      return featureCall('sheetLinks', () => import('../sheet-links/service.js'),
+        (service) => service.sheetLinkRequest(request));
+    },
+
+    approvalRouting(request) {
+      return featureCall('approvalRouting', () => import('../approval-routing/service.js'),
+        (service) => service.approvalRequest(request));
+    },
+
     // --- View navigation and selection (#557) ---
     // Document-scoped: pass the id from getDocumentInfo(). Each call resolves
     // to { ok: true, ... } or { ok: false, code, message }; the identity of
     // the document is checked again after every wait, so a tab switch or
     // close while a call is pending never selects in another document. A
     // newer call from the same plugin supersedes an older pending one.
-    async searchDocuments(request, options = {}) {
-      scope.eisActief('documentSearch', pluginId);
-      const { searchWorkspace } = await import('../search/document-search-service.js');
-      scope.eisActief('documentSearch', pluginId);
-      return searchWorkspace(request, { signal: options.signal });
-    },
-
-    async locations(request = { action: 'list' }) {
-      scope.eisActief('locations', pluginId);
-      const service = await import('../annotations/spatial-zones-service.js');
-      scope.eisActief('locations', pluginId);
-      return request.action === 'list' ? service.inspectLocations() : service.updateLocation(request);
-    },
-
-    async hiddenInformation(request) {
-      scope.eisActief('hiddenInformation', pluginId);
-      const service = await import('../pdf/hidden-information-service.js');
-      scope.eisActief('hiddenInformation', pluginId);
-      if (request.action === 'inspect') return service.inspectCurrentHiddenInformation(request.documentId);
-      if (request.action === 'export') return service.exportHiddenCopy(request.documentId, request.categories, request.outputPath);
-      throw new Error('INVALID_ACTION');
-    },
-
-    async printPreflight(request, options = {}) {
-      scope.eisActief('printPreflight', pluginId);
-      const service = await import('../pdf/print-preflight-service.js');
-      scope.eisActief('printPreflight', pluginId);
-      if (request.action === 'inspect') return service.preflightCurrent(request.documentId, request.profile, { signal: options.signal });
-      if (request.action === 'fixTrimBoxes') return service.exportTrimCopy(request.documentId, request.profile, request.outputPath);
-      throw new Error('INVALID_ACTION');
-    },
-
-    async reviewOcr(request) {
-      scope.eisActief('ocrVerification', pluginId);
-      const service = await import('../pdf/ocr-review-service.js');
-      scope.eisActief('ocrVerification', pluginId);
-      return request.action === 'list'
-        ? service.listOcrReview(request.documentId, request.threshold ?? 80, request)
-        : service.updateOcrReview(request);
-    },
-
-    async portfolio(request) {
-      scope.eisActief('portfolio', pluginId);
-      const { portfolioRequest } = await import('../pdf/portfolio-service.js');
-      scope.eisActief('portfolio', pluginId);
-      return portfolioRequest(request);
-    },
-
-    async recognizeForm(request, options = {}) {
-      scope.eisActief('recognizeForm', pluginId);
-      const { formRecognitionRequest } = await import('../pdf/form-recognition-service.js');
-      scope.eisActief('recognizeForm', pluginId);
-      return formRecognitionRequest(request, options);
-    },
-
-    async searchSymbols(request, options = {}) {
-      scope.eisActief('searchSymbols', pluginId);
-      const { symbolSearchRequest } = await import('../search/symbol-search-service.js');
-      scope.eisActief('searchSymbols', pluginId);
-      return symbolSearchRequest(request, options);
-    },
-
-    async workbookBindings(request) {
-      scope.eisActief('workbookBindings', pluginId);
-      const { workbookBindingRequest } = await import('../quantities/workbook-binding-service.js');
-      scope.eisActief('workbookBindings', pluginId);
-      return workbookBindingRequest(request);
-    },
-
-    async documentWorkflows(request) {
-      scope.eisActief('documentWorkflows', pluginId);
-      const { workflowRequest } = await import('../workflows/workflow-service.js');
-      scope.eisActief('documentWorkflows', pluginId);
-      return workflowRequest(request);
-    },
-
-    async drawingSets(request) {
-      scope.eisActief('drawingSets', pluginId);
-      const { drawingSetRequest } = await import('../drawing-sets/service.js');
-      scope.eisActief('drawingSets', pluginId);
-      return drawingSetRequest(request);
-    },
-
-    async sheetLinks(request) {
-      scope.eisActief('sheetLinks', pluginId);
-      const { sheetLinkRequest } = await import('../sheet-links/service.js');
-      scope.eisActief('sheetLinks', pluginId);
-      return sheetLinkRequest(request);
-    },
-
-    async approvalRouting(request) {
-      scope.eisActief('approvalRouting', pluginId);
-      const { approvalRequest } = await import('../approval-routing/service.js');
-      scope.eisActief('approvalRouting', pluginId);
-      return approvalRequest(request);
-    },
-
     navigateToPage(request) {
       return navigation().navigateToPage(request);
     },
