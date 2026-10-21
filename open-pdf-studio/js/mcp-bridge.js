@@ -3719,6 +3719,12 @@ async function handleGetSystemGeometry(params) {
 }
 
 const HANDLERS = {
+  'mcp:locations': async (p) => {
+    try {
+      const service = await import('./annotations/spatial-zones-service.js');
+      return { ok: true, ...(p.action === 'list' ? service.inspectLocations() : service.updateLocation(p)) };
+    } catch (e) { return { ok: false, error: e.message }; }
+  },
   'mcp:open-pdf':           handleOpenPdf,
   'mcp:set-zoom':           handleSetZoom,
   'mcp:zoom-in':            handleZoomIn,

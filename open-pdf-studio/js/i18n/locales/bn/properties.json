@@ -601,7 +601,9 @@
       "symbolId": "প্রতীক",
       "imageName": "ফাইলের নাম",
       "width": "প্রস্থ",
-      "height": "উচ্চতা"
+      "height": "উচ্চতা",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "রেখা",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "এই অবজেক্টটি অন্য কোথাও পরিবর্তন করা হয়েছে। ফর্মটি বর্তমান মানগুলি দেখাচ্ছে; আপনার পরিবর্তনগুলি প্রয়োগ করা হয়নি।",
     "failed": "পরিবর্তনগুলি প্রয়োগ করা যায়নি: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

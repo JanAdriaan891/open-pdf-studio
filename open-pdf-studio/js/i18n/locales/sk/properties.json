@@ -601,7 +601,9 @@
       "symbolId": "Symbol",
       "imageName": "Názov súboru",
       "width": "Šírka",
-      "height": "Výška"
+      "height": "Výška",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Čiara",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "Tento objekt bol zmenený inde. Formulár zobrazuje aktuálne hodnoty; vaše zmeny neboli použité.",
     "failed": "Zmeny sa nepodarilo použiť: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

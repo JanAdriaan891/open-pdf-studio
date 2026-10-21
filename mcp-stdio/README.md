@@ -1,6 +1,6 @@
 # Open PDF Studio — MCP for Claude Desktop / Claude Code
 
-Open PDF Studio ships a **full MCP server inside the app** (76 public tools: open /
+Open PDF Studio ships a **full MCP server inside the app** (77 public tools: open /
 zoom / annotate / save PDFs, drive the assistant, call the OpenAEC AI, inspect
 viewport state, …). It is implemented in Rust (`src-tauri/src/mcp_server.rs`)
 and speaks **HTTP JSON-RPC** on `127.0.0.1:9223/mcp`.
@@ -49,7 +49,7 @@ and `[mcp-bridge] WebView ready, listening for: [...]`.
 
 ```bash
 node mcp-stdio/server.mjs --probe
-# → [open-pdf-studio mcp bridge] OK — 76 tools available at http://127.0.0.1:9223/mcp
+# → [open-pdf-studio mcp bridge] OK — 77 tools available at http://127.0.0.1:9223/mcp
 ```
 
 If you used a non-default port, set it first: `OPS_MCP_PORT=9300 node mcp-stdio/server.mjs --probe`.
@@ -200,3 +200,28 @@ both Claude Desktop and Claude Code and gives clearer "app not running" errors.
 - **Tools call but nothing happens in the UI** — `app_*` tools need the live
   WebView; make sure you launched the GUI app (not a headless build).
 - **Release build "refused to start"** — set `OPS_ENABLE_MCP=1`.
+
+### Spatial locations
+
+The app_locations MCP tool and extension API api.locations(request) use the same
+requests. Action "list" returns the active document ID, zones and per-annotation
+computed/manual locations. Mutations require that documentId and annotationId.
+Action "zone" sets name and optional parentId on an existing straight polygon or
+unrotated box; "removeZone" removes its zone definition (children must be
+reassigned first). Action "override" with a string value assigns a manual
+location, including an explicitly empty location. Action "automatic" removes the
+override. Edits participate in undo. The Properties panel exposes these operations.
+
+Assignment uses the centre of the annotation's bounding box, with edges included.
+Among containing zones on the same page, deepest hierarchy wins, then smallest
+area, then zone ID. Location and Location source are available as schedule fields
+for filtering, grouping and CSV export; measurement scales are unchanged.
+Missing parents, cycles and duplicate identities invalidate a zone. Copy/paste
+creates new IDs and preserves hierarchy within the copied selection.
+
+Persistence: each zone annotation stores /OPS_SpatialZone as a PDF text string
+containing JSON {version:1,id,name,parentId}. /OPS_LocationOverride is an optional
+PDF text string; absent means automatic, empty string means an explicit empty
+override. Geometry remains the normal annotation geometry in unrotated page
+coordinates. Unknown schema versions are ignored. Third-party editors may drop
+private keys. Locations update as background annotation loading completes.

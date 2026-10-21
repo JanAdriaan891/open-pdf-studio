@@ -601,7 +601,9 @@
       "symbolId": "シンボル",
       "imageName": "ファイル名",
       "width": "幅",
-      "height": "高さ"
+      "height": "高さ",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "線",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "このオブジェクトは別の場所で変更されました。フォームには現在の値が表示されています。変更は適用されていません。",
     "failed": "変更を適用できませんでした: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

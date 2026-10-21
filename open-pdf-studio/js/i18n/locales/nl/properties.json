@@ -601,7 +601,9 @@
       "symbolId": "Symbool",
       "imageName": "Bestandsnaam",
       "width": "Breedte",
-      "height": "Hoogte"
+      "height": "Hoogte",
+      "location": "Locatie",
+      "locationSource": "Locatiebron"
     },
     "type": {
       "line": "Lijn",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "Dit object is elders gewijzigd. Het formulier toont de huidige waarden; uw wijzigingen zijn niet toegepast.",
     "failed": "De wijzigingen konden niet worden toegepast: {{error}}"
+  },
+  "location": {
+    "title": "Locatie",
+    "none": "Niet toegewezen",
+    "manual": "Handmatig",
+    "computed": "Berekend",
+    "override": "Handmatige locatie (leeg wist locatie)",
+    "automatic": "Automatische locatie gebruiken",
+    "zoneName": "Deze vorm gebruiken als benoemde zone",
+    "parent": "Bovenliggende zone",
+    "removeZone": "Zonedefinitie verwijderen",
+    "invalid": "Locatie kon niet worden bijgewerkt",
+    "rules": "Toewijzing gebruikt het midden van de annotatie-omhullende, inclusief randen. De diepste zone wint, daarna het kleinste oppervlak, daarna het zone-ID. Gebruik rechte polygonen zonder gaten of ongedraaide rechthoeken. Ongeldige of dubbele zone-ID’s worden uitgesloten.",
+    "loading": "Annotaties laden: locaties kunnen nog veranderen."
   }
 }

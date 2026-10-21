@@ -601,7 +601,9 @@
       "symbolId": "Ký hiệu",
       "imageName": "Tên tệp",
       "width": "Chiều rộng",
-      "height": "Chiều cao"
+      "height": "Chiều cao",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Đường thẳng",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "Đối tượng này đã được thay đổi ở nơi khác. Biểu mẫu hiển thị các giá trị hiện tại; các thay đổi của bạn chưa được áp dụng.",
     "failed": "Không thể áp dụng các thay đổi: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

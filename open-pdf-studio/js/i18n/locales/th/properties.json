@@ -601,7 +601,9 @@
       "symbolId": "สัญลักษณ์",
       "imageName": "ชื่อไฟล์",
       "width": "ความกว้าง",
-      "height": "ความสูง"
+      "height": "ความสูง",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "เส้น",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "วัตถุนี้ถูกเปลี่ยนแปลงจากที่อื่น แบบฟอร์มแสดงค่าปัจจุบัน และการเปลี่ยนแปลงของคุณไม่ได้ถูกนำไปใช้",
     "failed": "ไม่สามารถนำการเปลี่ยนแปลงไปใช้ได้: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

@@ -1279,6 +1279,44 @@ fn handle_tools_list() -> Value {
                 }
             },
             {
+    "name": "app_locations",
+    "description": "List computed markup locations or edit named spatial zones and explicit location overrides. Mutations require the active documentId and annotationId. Zones use existing straight polygons or unrotated boxes. Reuses undo and saves metadata with the PDF.",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "action": {
+                "type": "string",
+                "enum": [
+                    "list",
+                    "zone",
+                    "removeZone",
+                    "override",
+                    "automatic"
+                ]
+            },
+            "documentId": {
+                "type": "string"
+            },
+            "annotationId": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string"
+            },
+            "parentId": {
+                "type": "string"
+            },
+            "value": {
+                "type": "string"
+            }
+        },
+        "required": [
+            "action"
+        ],
+        "additionalProperties": false
+    }
+},
+            {
                 "name": "app_get_page_text",
                 "description": "Read existing PDF page text without mouse automation. Returns document-bound span IDs, readable merged text, page-space bounding boxes, PDF anchors, font family/size, rotation and fill colour when recoverable. Pass a page number or omit it for the current page. Text is never sent outside the local MCP connection.",
                 "inputSchema": {
@@ -1664,6 +1702,7 @@ async fn handle_tools_call(state: &AppState, params: &Value) -> Result<Value, (i
         "app_fit_page"           => tool_app_request(state, "mcp:fit-page",           &arguments, Duration::from_secs(15)).await,
         "app_fit_width"          => tool_app_request(state, "mcp:fit-width",          &arguments, Duration::from_secs(15)).await,
         "app_get_page_count"     => tool_app_request(state, "mcp:get-page-count",     &arguments, Duration::from_secs(5)).await,
+        "app_locations"          => tool_app_request(state, "mcp:locations", &arguments, Duration::from_secs(30)).await,
         "app_get_page_text"      => tool_app_request(state, "mcp:get-page-text",      &arguments, Duration::from_secs(60)).await,
         "app_replace_text"       => tool_app_request(state, "mcp:replace-text",       &arguments, Duration::from_secs(120)).await,
         "app_translate_page"     => tool_app_request(state, "mcp:translate-page",     &arguments, Duration::from_secs(300)).await,
@@ -2391,7 +2430,7 @@ mod tests {
         use crate::mcp_tool_meta::Profiel;
         let publiek = tools_list_voor(Profiel::Publiek);
         let arr = publiek["tools"].as_array().unwrap();
-        assert_eq!(arr.len(), 76);
+        assert_eq!(arr.len(), 77);
         for t in arr {
             let a = &t["annotations"];
             assert!(a["title"].as_str().map_or(false, |s| !s.is_empty()), "{} zonder titel", t["name"]);

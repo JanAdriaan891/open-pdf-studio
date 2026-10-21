@@ -200,6 +200,10 @@
       "description": "Return the active document's page count and current page."
     },
     {
+      "name": "app_locations",
+      "description": "List computed markup locations or edit named spatial zones and explicit location overrides. Mutations require the active documentId and annotationId. Zones use existing straight polygons or unrotated boxes. Reuses undo and saves metadata with the PDF."
+    },
+    {
       "name": "app_get_page_text",
       "description": "Read existing PDF page text without mouse automation."
     },

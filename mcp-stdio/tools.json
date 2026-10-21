@@ -1114,6 +1114,50 @@
     "name": "app_get_page_count"
   },
   {
+    "name": "app_locations",
+    "description": "List computed markup locations or edit named spatial zones and explicit location overrides. Mutations require the active documentId and annotationId. Zones use existing straight polygons or unrotated boxes. Reuses undo and saves metadata with the PDF.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "list",
+            "zone",
+            "removeZone",
+            "override",
+            "automatic"
+          ]
+        },
+        "documentId": {
+          "type": "string"
+        },
+        "annotationId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Manage spatial locations",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "annotations": {
       "destructiveHint": false,
       "openWorldHint": false,

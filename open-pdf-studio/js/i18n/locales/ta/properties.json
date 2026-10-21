@@ -601,7 +601,9 @@
       "symbolId": "குறியீடு",
       "imageName": "கோப்புப் பெயர்",
       "width": "அகலம்",
-      "height": "உயரம்"
+      "height": "உயரம்",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "கோடு",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "இந்தப் பொருள் வேறு இடத்தில் மாற்றப்பட்டது. படிவம் தற்போதைய மதிப்புகளைக் காட்டுகிறது; உங்கள் மாற்றங்கள் பயன்படுத்தப்படவில்லை.",
     "failed": "மாற்றங்களைப் பயன்படுத்த முடியவில்லை: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }

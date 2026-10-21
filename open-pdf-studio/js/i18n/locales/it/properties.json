@@ -601,7 +601,9 @@
       "symbolId": "Simbolo",
       "imageName": "Nome file",
       "width": "Larghezza",
-      "height": "Altezza"
+      "height": "Altezza",
+      "location": "Location",
+      "locationSource": "Location source"
     },
     "type": {
       "line": "Linea",
@@ -700,5 +702,19 @@
   "scopedPanel": {
     "stale": "Questo oggetto è stato modificato altrove. Il modulo mostra i valori attuali; le modifiche non sono state applicate.",
     "failed": "Impossibile applicare le modifiche: {{error}}"
+  },
+  "location": {
+    "title": "Location",
+    "none": "Unassigned",
+    "manual": "Manual",
+    "computed": "Computed",
+    "override": "Manual override (empty clears location)",
+    "automatic": "Use automatic location",
+    "zoneName": "Use this shape as a named zone",
+    "parent": "Parent zone",
+    "removeZone": "Remove zone definition",
+    "invalid": "Location could not be updated",
+    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
+    "loading": "Annotations are loading: locations may still change."
   }
 }
