@@ -149,6 +149,7 @@
     "properties": "プロパティ",
     "color": "色",
     "width": "幅",
+    "propertiesHint": "選択した注釈、またはアクティブなツールで次に描く注釈に適用されます",
     "edit": "編集",
     "undo": "元に戻す",
     "clearPageAnnotations": "ページの注釈をクリア",

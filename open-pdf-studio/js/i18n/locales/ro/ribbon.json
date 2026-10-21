@@ -149,6 +149,7 @@
     "properties": "Proprietati",
     "color": "Culoare",
     "width": "Latime",
+    "propertiesHint": "Se aplica adnotarii selectate sau urmatoarei adnotari pe care o desenati cu instrumentul activ",
     "edit": "Editare",
     "undo": "Anulare",
     "clearPageAnnotations": "Stergere adnotari pagina",

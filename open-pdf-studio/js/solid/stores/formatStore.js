@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, createRoot, createEffect } from 'solid-js';
 import { state, getActiveDocument } from '../../core/state.js';
 import { recordPropertyChange, recordBulkModify } from '../../core/undo-manager.js';
 import { cloneAnnotation } from '../../annotations/factory.js';
@@ -8,8 +8,12 @@ import { showProperties, showMultiSelectionProperties } from '../../ui/panels/pr
 import { applyStampLineWidth, applyStampColor } from '../../annotations/stamp-line-width.js';
 import { stampAppearanceSnapshot, syncStampAppearance } from '../../annotations/stamp-appearance-sync.js';
 import {
-  symbolInsertActive, symbolInsertDisplay, setSymbolInsertFormat,
+  symbolInsertActive, symbolInsertDisplay, setSymbolInsertFormat, symbolInsertSupports,
 } from '../../symbols/symbol-insert-format-store.js';
+import {
+  gereedschapMetOpmaak, gereedschapOndersteunt, leesGereedschapOpmaak,
+  zetGereedschapOpmaak, stijlTypeVanGereedschap,
+} from '../../tools/gereedschap-opmaak.js';
 
 // Een symbool (SVG-stempel) wordt als raster getekend: kleur en lijndikte
 // moeten na de wijziging de SVG in, anders heeft de werkbalk geen effect (#398).
@@ -124,6 +128,135 @@ export function setSymbolInsertOption(patch) {
   syncFromSymbolInsert(getActiveDocument()?.selectedAnnotations || []);
 }
 
+// ── Opmaak van het actieve tekengereedschap (#668) ─────────────────────────
+// Zonder selectie en buiten de invoegmodus voor symbolen werkt de werkbalk
+// (en kleur/breedte in het lint) op de VOLGENDE annotatie van het actieve
+// tekengereedschap: de stijlvoorkeuren van dat gereedschap. Die blijven
+// staan voor het volgende object van hetzelfde gereedschap.
+
+/**
+ * Reactief: het tekengereedschap waarvan de werkbalk nu de opmaak instelt,
+ * of null (er is iets geselecteerd, er worden symbolen ingevoegd, of het
+ * gereedschap heeft geen instelbare stijl).
+ */
+export function gereedschapOpmaakDoel() {
+  if (symbolInsertActive()) return null;
+  const doc = getActiveDocument();
+  if (!doc) return null;
+  return gereedschapMetOpmaak(state.currentTool, doc.selectedAnnotations?.length || 0);
+}
+
+/**
+ * Reactief: waar de werkbalk nu op werkt: 'symbool' (de invoegsessie),
+ * 'selectie', 'gereedschap' (het volgende object van het actieve
+ * tekengereedschap) of null (nergens op).
+ */
+export function opmaakDoel() {
+  if (symbolInsertActive()) return 'symbool';
+  if ((getActiveDocument()?.selectedAnnotations?.length || 0) > 0) return 'selectie';
+  return gereedschapOpmaakDoel() ? 'gereedschap' : null;
+}
+
+/** Reactief: stelt de werkbalk de opmaak in van wat nog geplaatst wordt? */
+export function opmaakVoorNieuw() {
+  const doel = opmaakDoel();
+  return doel === 'symbool' || doel === 'gereedschap';
+}
+
+/** Reactief: kan de werkbalk deze optie nu instellen? */
+export function opmaakOndersteunt(key) {
+  switch (opmaakDoel()) {
+    case 'symbool': return symbolInsertSupports(key);
+    case 'gereedschap': return gereedschapOndersteunt(state.currentTool, key);
+    case 'selectie': return true;
+    default: return false;
+  }
+}
+
+function syncFromGereedschap(tool) {
+  const o = leesGereedschapOpmaak(state.preferences, tool);
+  if (!o) return;
+  setHasSelection(false);
+  setIsSingleSymbolStamp(false);
+  setIsLocked(false);
+  setAnnotationType(stijlTypeVanGereedschap(tool) || '');
+  setFillColor(o.fillColor || '#ffffff');
+  setHasFill(!!o.fillColor);
+  setStrokeColor(o.strokeColor);
+  setFmtLineWidth(o.lineWidth);
+  setOpacity(o.opacity);
+  setBorderStyle(o.borderStyle);
+  setBlendMode('normal');
+  setArrowStart(o.startHead);
+  setArrowEnd(o.endHead);
+}
+
+// Voorkeuren één keer bewaren na een reeks wijzigingen (een schuif of een
+// kleurkiezer geeft er veel achter elkaar); de waarde zelf geldt meteen.
+let _bewaarTimer = null;
+function bewaarVoorkeurenStraks() {
+  if (_bewaarTimer) clearTimeout(_bewaarTimer);
+  _bewaarTimer = setTimeout(() => {
+    _bewaarTimer = null;
+    import('../../core/preferences.js')
+      .then((m) => m.savePreferences())
+      .catch(() => { /* de waarde staat al in state.preferences */ });
+  }, 300);
+}
+
+// Het eigenschappenpaneel toont bij een actief gereedschap een kopie van zijn
+// standaardstijl ('__tool-defaults__') en schrijft die bij een wijziging
+// helemaal terug. Na een wijziging via de werkbalk moet die kopie dus mee,
+// anders zet de volgende paneelwijziging de oude waarde terug.
+function vernieuwPaneelStandaarden(tool) {
+  import('./propertiesStore.js').then((m) => {
+    if (m.getCurrentAnnotation?.()?.id !== '__tool-defaults__') return;
+    m.showToolDefaults(tool, {}, () => state.currentTool === tool);
+  }).catch(() => { /* paneel nog niet geladen */ });
+}
+
+function zetGereedschapOpmaakEnBewaar(tool, patch) {
+  if (!zetGereedschapOpmaak(state.preferences, tool, patch)) return;
+  syncFromGereedschap(tool);
+  bewaarVoorkeurenStraks();
+  vernieuwPaneelStandaarden(tool);
+}
+
+/**
+ * Eén optie van de werkbalk (of van kleur/breedte in het lint) instellen op
+ * wat er nu het doel is: de invoegsessie van symbolen, het volgende object
+ * van het actieve tekengereedschap, of de selectie (`applyFn`, met undo).
+ * `patch` gebruikt de namen van de werkbalk: strokeColor, lineWidth, opacity
+ * (0..1), blendMode, borderStyle, fillColor (null = geen), startHead, endHead.
+ */
+export function zetOpmaak(patch, applyFn) {
+  switch (opmaakDoel()) {
+    case 'symbool':
+      setSymbolInsertOption(patch);
+      return;
+    case 'gereedschap':
+      zetGereedschapOpmaakEnBewaar(state.currentTool, patch);
+      return;
+    case 'selectie':
+      applyToSelected(applyFn);
+      syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+      return;
+    default:
+      // Geen doel: niets geselecteerd en geen gereedschap met een stijl.
+      break;
+  }
+}
+
+// De werkbalk volgt de voorkeuren van het gereedschap ook als ze elders
+// veranderen (eigenschappenpaneel, voorkeurenvenster). Pas na het laden van
+// alle modules, zodat de import-kringloop via bridge.ts geen rol speelt.
+queueMicrotask(() => createRoot(() => {
+  createEffect(() => {
+    const tool = gereedschapOpmaakDoel();
+    if (tool) syncFromGereedschap(tool);
+  });
+}));
+
 // Sync format store from selected annotations
 export function syncFormatStore(selectedAnnotations) {
   if (symbolInsertActive()) {
@@ -131,6 +264,11 @@ export function syncFormatStore(selectedAnnotations) {
     return;
   }
   if (!selectedAnnotations || selectedAnnotations.length === 0) {
+    const tool = gereedschapOpmaakDoel();
+    if (tool) {
+      syncFromGereedschap(tool);
+      return;
+    }
     setHasSelection(false);
     setIsSingleSymbolStamp(false);
     return;
