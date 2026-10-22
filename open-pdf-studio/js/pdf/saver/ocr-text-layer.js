@@ -1,3 +1,4 @@
+import { withUnicodeLayoutGuard, UnicodeLayoutError } from './unicode-layout-guard.js';
 // Writes OCR'd words into a page's content stream as an INVISIBLE text
 // layer (PDF text-rendering-mode 3 — "add to path for clipping" is also
 // disabled, i.e. never painted) positioned over the scanned-image page, so
@@ -90,7 +91,7 @@ export async function embedOcrFont(pdfDocLib, fontBytes) {
   // fontkit hoort bij het PDFDocument, niet bij de module: registreer hem bij
   // elk document. Alleen het laden van de module wordt gedeeld; anders mislukt
   // elke volgende opslag in dezelfde sessie met "no fontkit instance was found".
-  pdfDocLib.registerFontkit(await laadFontkit());
+  pdfDocLib.registerFontkit(withUnicodeLayoutGuard(await laadFontkit()));
   return pdfDocLib.embedFont(fontBytes, { subset: true });
 }
 
@@ -135,7 +136,8 @@ export function writeOcrTextLayer(page, words, font) {
     let naturalWidth;
     try {
       naturalWidth = font.widthOfTextAtSize(text, fontSize);
-    } catch {
+    } catch (error) {
+      if (error instanceof UnicodeLayoutError) throw error;
       continue; // font can't encode this text (e.g. a stray glyph) — skip the word, keep the rest
     }
     if (!(naturalWidth > 0)) continue;
@@ -151,7 +153,8 @@ export function writeOcrTextLayer(page, words, font) {
     let hexText;
     try {
       hexText = font.encodeText(text);
-    } catch {
+    } catch (error) {
+      if (error instanceof UnicodeLayoutError) throw error;
       continue;
     }
 
