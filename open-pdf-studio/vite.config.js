@@ -3,15 +3,18 @@ import solidPlugin from 'vite-plugin-solid';
 import { pdfjsAssets } from './scripts/pdfjs-assets.mjs';
 import { readFileSync } from 'fs';
 import { pdfjsWorkerOudeWebview, voorafScriptPlugin } from './scripts/oude-webview.mjs';
+import { gehostHtmlPlugin } from './scripts/gehost-html.mjs';
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 // Het script vóór de app-boot (thema, opstartdiagnose) staat in een eigen
 // bestand, geen inline script: de Android-WebView weigert inline scripts
 // (#596). De PDF.js-worker wordt omgezet voor oudere WebViews. Zie
-// scripts/oude-webview.mjs.
+// scripts/oude-webview.mjs. In de gehoste bouw (--mode hosted) krijgt
+// index.html daarna SRI en geen inline code, voor een strikte CSP (#693,
+// scripts/gehost-html.mjs); de desktopbouw blijft gelijk.
 export default defineConfig({
-  plugins: [solidPlugin(), pdfjsAssets(), voorafScriptPlugin(), pdfjsWorkerOudeWebview()],
+  plugins: [solidPlugin(), pdfjsAssets(), voorafScriptPlugin(), pdfjsWorkerOudeWebview(), gehostHtmlPlugin()],
   resolve: {
     alias: [
       // PDF.js 6's modern build calls Map.prototype.getOrInsertComputed and

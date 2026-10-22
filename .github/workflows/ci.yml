@@ -208,3 +208,29 @@ jobs:
           APP_PATH="../target/universal-apple-darwin/release/bundle/macos/Open PDF Studio.app"
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
           bash scripts/macos-startup-smoke.sh "$APP_PATH"
+
+  # De gehoste bundel onder de strikte CSP van #693: openen, tekenen,
+  # annoteren en opslaan in headless Chromium, met nul overtredingen. Los van
+  # de desktop-builds; lokaal: npm run test:hosted-csp.
+  hosted-csp:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: open-pdf-studio
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Hosted bundle under a strict CSP
+        run: npm run test:hosted-csp
