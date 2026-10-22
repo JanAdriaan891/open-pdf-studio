@@ -109,5 +109,10 @@
   "searchResultPage": "Pagina {{page}}",
   "searchHitsOne": "1 potrivire",
   "searchHitsMany": "Potriviri: {{count}}",
-  "passwordProtectedBar": "Protejat cu parolă: deschis doar în citire."
+  "passwordProtectedBar": "Protejat cu parolă: deschis doar în citire.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

@@ -109,5 +109,10 @@
   "searchResultPage": "Σελίδα {{page}}",
   "searchHitsOne": "1 αποτέλεσμα",
   "searchHitsMany": "{{count}} αποτελέσματα",
-  "passwordProtectedBar": "Προστατεύεται με κωδικό πρόσβασης: άνοιξε μόνο για ανάγνωση."
+  "passwordProtectedBar": "Προστατεύεται με κωδικό πρόσβασης: άνοιξε μόνο για ανάγνωση.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

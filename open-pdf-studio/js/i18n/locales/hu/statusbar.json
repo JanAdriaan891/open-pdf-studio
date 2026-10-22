@@ -109,5 +109,10 @@
   "searchResultPage": "{{page}}. oldal",
   "searchHitsOne": "1 találat",
   "searchHitsMany": "{{count}} találat",
-  "passwordProtectedBar": "Jelszóval védett: csak olvasásra megnyitva."
+  "passwordProtectedBar": "Jelszóval védett: csak olvasásra megnyitva.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

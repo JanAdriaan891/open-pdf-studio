@@ -769,6 +769,7 @@ async function handleGetViewportState() {
     selectedCount,
     pageCount,
     statusMessage,
+    renderDiagnostics: (await import('./pdf/render-diagnostics.js')).readRenderDiagnostics(activeDocPath),
     // Engine + timing — what the user sees in the status-bar chip.
     engine: renderEngine,
     renderTiming,

@@ -109,5 +109,10 @@
   "searchResultPage": "Halaman {{page}}",
   "searchHitsOne": "1 padanan",
   "searchHitsMany": "{{count}} padanan",
-  "passwordProtectedBar": "Dilindungi dengan kata laluan: dibuka dalam mod baca sahaja."
+  "passwordProtectedBar": "Dilindungi dengan kata laluan: dibuka dalam mod baca sahaja.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

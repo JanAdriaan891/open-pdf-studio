@@ -109,5 +109,10 @@
   "searchResultPage": "صفحہ {{page}}",
   "searchHitsOne": "1 مماثلت",
   "searchHitsMany": "{{count}} مماثلتیں",
-  "passwordProtectedBar": "پاس ورڈ سے محفوظ: صرف پڑھنے کے لیے کھولا گیا۔"
+  "passwordProtectedBar": "پاس ورڈ سے محفوظ: صرف پڑھنے کے لیے کھولا گیا۔",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }
