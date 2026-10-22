@@ -61,6 +61,7 @@ export default function ProtectPdfDialog() {
       const r = await maakBeveiligdeKopie(invoer);
       if (r.ok) showMessage(t('protectPdf.saved', { path: r.pad }));
       else if (r.reden === 'doel-is-geopend') showMessage(t('print.targetIsOpenFile'));
+      else if (r.reden === 'beveiligd') showMessage(tCommon('protectedPdfReadOnly'));
       else if (r.reden === 'mislukt') showMessage(t('protectPdf.failed', { error: r.fout }));
     } catch (e) {
       console.warn('Protect PDF failed:', e?.message || e);

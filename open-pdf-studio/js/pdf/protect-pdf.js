@@ -6,7 +6,8 @@ import { getActiveDocument, state } from '../core/state.js';
 import { saveFileDialog, invoke } from '../core/platform.js';
 import i18next from '../i18n/config.js';
 import { standaardDoelPad, doelIsGeopend } from './print-doel.js';
-import { STANDAARD_RECHTEN, controleerWachtwoorden } from './protect-pdf-regels.js';
+import { STANDAARD_RECHTEN, controleerWachtwoorden, bronVoorBeveiliging } from './protect-pdf-regels.js';
+import { opslaanGeweigerd } from './wachtwoord-pdf.js';
 
 export const BEVEILIGD_ACHTERVOEGSEL = ' (protected)';
 
@@ -19,6 +20,9 @@ export { STANDAARD_RECHTEN, controleerWachtwoorden };
 export async function maakBeveiligdeKopie({ gebruiker, eigenaar, rechten }) {
   const doc = getActiveDocument();
   if (!doc?.pdfDoc) return { ok: false, reden: 'geen-document' };
+  // Met een wachtwoord geopend: alleen-lezen, ook geen beveiligde kopie
+  // (anders opent die kopie met alleen een rechtenwachtwoord zonder wachtwoord).
+  if (opslaanGeweigerd(doc)) return { ok: false, reden: 'beveiligd' };
 
   if (doc.modified || doc.isUntitled || !doc.filePath) {
     const { showConfirm } = await import('../ui/chrome/confirm-dialog.js');
@@ -30,7 +34,9 @@ export async function maakBeveiligdeKopie({ gebruiker, eigenaar, rechten }) {
     const { savePDF } = await import('./saver.js');
     if (!(await savePDF())) return { ok: false, reden: 'niet-opgeslagen' };
   }
-  if (!doc.filePath || doc.isUntitled) return { ok: false, reden: 'niet-opgeslagen' };
+  // Het opgeslagen bestand, niet een werkkopie van een paginabewerking.
+  const bron = bronVoorBeveiliging(doc);
+  if (!bron) return { ok: false, reden: 'niet-opgeslagen' };
 
   const doel = await saveFileDialog(standaardDoelPad(doc, null, BEVEILIGD_ACHTERVOEGSEL), [
     { name: 'PDF', extensions: ['pdf'] },
@@ -40,7 +46,7 @@ export async function maakBeveiligdeKopie({ gebruiker, eigenaar, rechten }) {
 
   try {
     await invoke('protect_pdf_file', {
-      bron: doc.filePath,
+      bron,
       doel,
       gebruikerswachtwoord: gebruiker || '',
       eigenaarwachtwoord: eigenaar || '',

@@ -7,6 +7,7 @@ import { useTranslation } from '../../../i18n/useTranslation.js';
 import { showMessage, openDialog } from '../../stores/dialogStore.js';
 import { isTauri, invoke, openFileDialog, isNietInBrowser } from '../../../core/platform.js';
 import { knopUitInBrowser, meldingTekst } from '../../../core/webfuncties.js';
+import { opslaanGeweigerd } from '../../../pdf/wachtwoord-pdf.js';
 import { savePreferences } from '../../../core/preferences.js';
 import {
   herstelPdfxInstellingen, listCmykProfiles, inspectCmykProfile, profileErrorMessage, INTENTS,
@@ -137,6 +138,12 @@ export default function ExportPanel() {
     const doc = getActiveDocument();
     if (!doc?.pdfDoc) {
       showMessage(tCommon('noDocumentOpen'));
+      return;
+    }
+    // Met een wachtwoord geopend: alleen-lezen, ook geen beveiligde kopie
+    // (wachtwoord-pdf.js). Meteen melden, vóór de gebruiker wachtwoorden typt.
+    if (opslaanGeweigerd(doc)) {
+      showMessage(tCommon('protectedPdfReadOnly'));
       return;
     }
     closeAppMenu();
