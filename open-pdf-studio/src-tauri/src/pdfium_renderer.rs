@@ -16,6 +16,8 @@ use pdfium_render::prelude::*;
 /// so the in-process fallback thins exactly what the workers thin.
 #[path = "../../../pdfium-worker/src/thin_lines.rs"]
 pub mod thin_lines;
+#[path = "../../../pdfium-worker/src/render_budget.rs"]
+mod render_budget;
 
 /// Global PDFium instance. Initialised once at app start by
 /// `init_pdfium`. Subsequent calls to `pdfium()` are zero-cost lookups.
@@ -265,8 +267,8 @@ pub fn render_page_to_rgba_opts(
     let width_pt = page.width().value;
     let height_pt = page.height().value;
 
-    let target_w = (width_pt * scale).ceil() as i32;
-    let target_h = (height_pt * scale).ceil() as i32;
+    let (target_w, target_h) = render_budget::dimensions(width_pt, height_pt, scale, render_budget::SCREEN_RGBA_BYTES)
+        .map_err(|e| e.to_string())?;
 
     let rot = match rotation.rem_euclid(360) {
         0 => PdfPageRenderRotation::None,
@@ -517,6 +519,13 @@ pub fn render_page_region_to_rgba(
         ));
     }
 
+    let (bitmap_w, bitmap_h) = render_budget::dimensions(region_w_pt, region_h_pt, scale, render_budget::SCREEN_RGBA_BYTES)
+        .map_err(|e| e.to_string())?;
+    if !region_x_pt.is_finite() || !region_y_pt.is_finite() ||
+        !(region_x_pt * scale).is_finite() || !(region_y_pt * scale).is_finite() {
+        return Err("PDF_INVALID_GEOMETRY: non-finite tile origin".into());
+    }
+
     // Serialise all in-proc PDFium work (see PDFIUM_INPROC_LOCK). Declared
     // first so the guard outlives `pages`/`page`, whose Drop also calls PDFium.
     let _guard = inproc_guard();
@@ -527,17 +536,6 @@ pub fn render_page_region_to_rgba(
     // Thin Lines (#595): fresh handle per call, see render_page_to_rgba_opts.
     if thin_lines {
         thin_lines::thin_strokes(&page);
-    }
-
-    // Output bitmap pixel dimensions.
-    let bitmap_w = (region_w_pt * scale).ceil() as i32;
-    let bitmap_h = (region_h_pt * scale).ceil() as i32;
-
-    if bitmap_w <= 0 || bitmap_h <= 0 {
-        return Err(format!(
-            "render_page_region_to_rgba: computed bitmap size {}x{} is invalid",
-            bitmap_w, bitmap_h
-        ));
     }
 
     // Build the affine matrix that maps the full page coordinate space to
