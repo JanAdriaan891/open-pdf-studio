@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { bouwUiBoom, leesUiArgumenten, rolVan, kort, UI_GRENZEN } from './mcp-ui-boom.js';
+import { bouwUiBoom, leesUiArgumenten, rolVan, kort, UI_GRENZEN, WACHTWOORD_MASKER } from './mcp-ui-boom.js';
 
 // ─── Een kleine nagebootste DOM ──────────────────────────────────────────────
 // Alleen wat de module leest: tagName, attributen, kinderen en een paar
@@ -348,4 +348,19 @@ test('een tabknop die een extensie zelf in de DOM zet, met alleen aria-controls,
     ['Inteco', 'inteco', 'ribbon-tab:inteco'],
     ['Eigen', '#eigen-tab', 'ribbon-tab:#eigen-tab'],
   ]);
+});
+
+test('een wachtwoordveld geeft nooit zijn inhoud prijs, alleen of het gevuld is', () => {
+  const gevuld = el('input', { 'aria-label': 'Wachtwoord' }, [], { type: 'password', value: 'Geheim-123\u00e9' });
+  const leeg = el('input', { 'aria-label': 'Herhalen' }, [], { type: 'password', value: '' });
+  // Alleen het attribuut, zonder type-eigenschap (zoals een nagebootste DOM).
+  const alleenAttribuut = el('input', { type: 'password', 'aria-label': 'Rechten' }, [], { value: 'Ander-geheim' });
+  const paneel = el('div', {}, [gevuld, leeg, alleenAttribuut]);
+  const uit = bouwUiBoom([{ region: 'dialoog', elements: [paneel] }], { actiefElement: gevuld });
+  const [a, b, c] = uit.regions[0].nodes[0].children;
+  assert.deepEqual(a, { role: 'textbox', name: 'Wachtwoord', value: WACHTWOORD_MASKER, state: { focused: true } });
+  assert.deepEqual(b, { role: 'textbox', name: 'Herhalen', value: '' });
+  assert.equal(c.value, WACHTWOORD_MASKER);
+  const json = JSON.stringify(uit);
+  assert.ok(!json.includes('Geheim') && !json.includes('geheim'), 'de inhoud van een wachtwoordveld staat in de boom');
 });
