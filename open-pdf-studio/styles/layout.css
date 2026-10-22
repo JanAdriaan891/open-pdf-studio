@@ -972,6 +972,16 @@
   will-change: transform;
 }
 
+/* Vingerinvoer (#671): met een teken- of plaatsgereedschap hoort een veeg op
+   de pagina bij het gereedschap. Zonder deze regel neemt de browser de veeg na
+   een paar millimeter over als scrollgebaar (pointercancel) en breekt de streek
+   af. Met selecteren en de hand blijft scrollen met de vinger werken
+   (cursor.js zet data-aanraak, js/tools/aanraak-gebaar.js beslist). */
+body[data-aanraak="tekenen"] #annotation-canvas,
+body[data-aanraak="tekenen"] .canvas-container-cont {
+  touch-action: none;
+}
+
 /* Text highlights live on a dedicated canvas with multiply blend so they
    tint the page yellow but leave the underlying text fully readable.
    Must sit between #pdf-canvas and #annotation-canvas in the DOM.

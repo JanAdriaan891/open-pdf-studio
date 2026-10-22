@@ -149,6 +149,7 @@
     "properties": "Thuộc tính",
     "color": "Màu sắc",
     "width": "Độ rộng",
+    "propertiesHint": "Áp dụng cho chú thích đã chọn, hoặc cho chú thích tiếp theo bạn vẽ bằng công cụ đang dùng",
     "edit": "Chỉnh sửa",
     "undo": "Hoàn tác",
     "clearPageAnnotations": "Xóa Chú thích trang",

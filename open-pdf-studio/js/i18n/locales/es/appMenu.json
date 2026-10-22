@@ -133,7 +133,9 @@
     "officePage": "Página",
     "officeTable": "Tabla",
     "officeText": "Texto",
-    "officeFailed": "Error al exportar el documento."
+    "officeFailed": "Error al exportar el documento.",
+    "protect": "Proteger con contraseña",
+    "protectDesc": "Guardar una copia protegida con contraseña (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Perfil de salida",

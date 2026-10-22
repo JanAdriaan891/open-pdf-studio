@@ -83,6 +83,7 @@ js/utils/date-formatter.test.mjs
 js/pdf/loader/annotaties-toevoegen.test.mjs
 js/solid/components/dialogs/SignatureDialog.test.mjs
 js/annotations/signature-pad.test.mjs
+js/tools/aanraak-gebaar.test.mjs
 js/ui/panels/lagen-lijst.test.mjs
 js/tools/symbool-snappunten.test.mjs
 js/pdf/pagina-draaien.test.mjs
@@ -269,6 +270,7 @@ js/pdf/saver/annotatie-lagen.test.mjs
 js/annotations/xfdf-laag.test.mjs
 js/annotations/annotatie-lagen-mcp.test.mjs
 js/annotations/vector-snippet-preview.test.mjs
+js/annotations/stempel-herteken.test.mjs
 js/pdf/pdfjs-record.test.mjs
 js/core/opstart-processen.test.mjs
 js/pdf/printerlijst-bron.test.mjs
@@ -438,3 +440,10 @@ js/core/getal-invoer.test.mjs
 js/core/getal-invoer-velden.test.mjs
 js/ui/getal-veld.test.mjs
 js/getal-velden-bron.test.mjs
+scripts/versievelden.test.mjs
+js/tools/gereedschap-opmaak.test.mjs
+js/text/tekstselectie-markering.test.mjs
+js/text/text-edit-afdekking.test.mjs
+js/pdf/saver/text-edit-tabelranden.test.mjs
+js/pdf/pdf-viewport-paginaschilder.test.mjs
+js/pdf/protect-pdf.test.mjs

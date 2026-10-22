@@ -149,6 +149,7 @@
     "properties": "Ominaisuudet",
     "color": "Väri",
     "width": "Leveys",
+    "propertiesHint": "Koskee valittua merkintää tai seuraavaa merkintää, jonka piirrät aktiivisella työkalulla",
     "edit": "Muokkaa",
     "undo": "Kumoa",
     "clearPageAnnotations": "Tyhjennä sivun merkinnät",

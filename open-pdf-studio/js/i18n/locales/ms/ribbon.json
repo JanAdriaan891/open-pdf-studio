@@ -149,6 +149,7 @@
     "properties": "Sifat",
     "color": "Warna",
     "width": "Lebar",
+    "propertiesHint": "Digunakan pada anotasi yang dipilih, atau pada anotasi seterusnya yang anda lukis dengan alat aktif",
     "edit": "Sunting",
     "undo": "Buat Asal",
     "clearPageAnnotations": "Kosongkan Anotasi Halaman",

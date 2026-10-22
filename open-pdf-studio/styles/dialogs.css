@@ -2021,6 +2021,40 @@
   gap: 6px;
 }
 
+/* Beveiligen met wachtwoord: compact, zelfde velden als de andere dialogen */
+.protect-pdf-dialog {
+  width: 440px;
+}
+
+.protect-pdf-dialog .pref-fieldset {
+  margin: 0;
+  padding: 6px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.protect-pdf-dialog .protect-pdf-label {
+  width: 110px;
+}
+
+.protect-pdf-hint {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--theme-text-secondary, #666);
+}
+
+.protect-pdf-rechten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+}
+
+.protect-pdf-fout {
+  font-size: 11px;
+  color: #e81123;
+}
+
 /* Crop Margins Dialog */
 .crop-margins-dialog {
   width: 400px;

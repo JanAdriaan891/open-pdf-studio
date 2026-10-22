@@ -149,6 +149,7 @@
     "properties": "Propietats",
     "color": "Color",
     "width": "Amplada",
+    "propertiesHint": "S'aplica a l'anotació seleccionada o a la següent anotació que dibuixeu amb l'eina activa",
     "edit": "Edita",
     "undo": "Desfés",
     "clearPageAnnotations": "Neteja les anotacions de la pàgina",

@@ -27,6 +27,9 @@ import {
   normalizeRuns,
   pdfDeltaFromScreenDelta,
   nieuwTekstblokRecord,
+  toStandardFontName,
+  cssFamilyForFontName,
+  originalLineRuns,
 } from '../text/text-edit-appearance.js';
 import { weergaveRotatie, paginaNaarClient, clientNaarPagina } from '../pdf/weergave-ruimte.js';
 import { normaliseerRotatie, naarWeergave, rectNaarPagina, weergaveMaat } from '../pdf/weergave-rotatie.js';
@@ -44,40 +47,43 @@ let blockGroupsCache = new Map(); // layer -> { strict: groups|null, loose: grou
 let spanToBlockByMode = { strict: new WeakMap(), loose: new WeakMap() };
 
 // ── Font mapping shared by the text-edit sessions ──
-// Map a display / actual font name + bold/italic flags to a pdf-lib StandardFont
-// name (the value stored on the text-edit record and used by the saver).
-function toStandardFontName(displayName, isBold, isItalic) {
-  const n = (displayName || '').toLowerCase();
-  if (n.includes('courier') || n.includes('consolas') || n.includes('mono')) {
-    return isBold && isItalic ? 'Courier-BoldOblique'
-      : isBold ? 'Courier-Bold'
-      : isItalic ? 'Courier-Oblique'
-      : 'Courier';
-  }
-  if (n.includes('times') || n.includes('garamond') || n.includes('georgia')
-      || n.includes('palatino') || n.includes('cambria') || n.includes('bookman') || n.includes('serif')) {
-    return isBold && isItalic ? 'TimesRoman-BoldItalic'
-      : isBold ? 'TimesRoman-Bold'
-      : isItalic ? 'TimesRoman-Italic'
-      : 'TimesRoman';
-  }
-  return isBold && isItalic ? 'Helvetica-BoldOblique'
-    : isBold ? 'Helvetica-Bold'
-    : isItalic ? 'Helvetica-Oblique'
-    : 'Helvetica';
-}
-
-// CSS font-family for the live editor / synthetic span, from a font name.
-function cssFamilyFor(name) {
-  const n = (name || '').toLowerCase();
-  if (n.includes('courier') || n.includes('consolas') || n.includes('mono')) return '"Courier New", Courier, monospace';
-  if (n.includes('times') || n.includes('garamond') || n.includes('georgia')
-      || n.includes('palatino') || n.includes('cambria') || n.includes('bookman') || n.includes('serif')) return '"Times New Roman", Times, serif';
-  return 'Helvetica, Arial, sans-serif';
-}
+// toStandardFontName (record/saver-naam) en cssFamilyForFontName (live editor
+// en synthetische span) staan in text-edit-appearance.js: daar is
+// 'sans-serif' geen schreeffont meer (#669).
+const cssFamilyFor = cssFamilyForFontName;
 
 function isInternalPdfFontName(name) {
   return /^g_d\d+_f\d+$/i.test(name || '');
+}
+
+// Per originele regel: anker, breedte, tekst en de runs van de spans. De
+// saver zoekt met het anker de originele show-text-operatoren terug (in-place
+// vervangen); de runs geven de strakke afdekvlakken waar de oude tekst stond,
+// zodat lijnen tussen en rond de runs (tabelranden) in beeld blijven (#669).
+function originalLineInfoFor(lineData, spanTexts) {
+  return lineData.map((ld, li) => {
+    const teksten = spanTexts?.[li] || ld.spans.map(s => s.textContent);
+    const items = ld.spans.map((sp, k) => {
+      let t = null;
+      try { t = JSON.parse(sp.dataset.pdfTransform); } catch (_) { t = null; }
+      return {
+        text: teksten[k] ?? '',
+        pdfX: Array.isArray(t) ? Number(t[4]) : NaN,
+        pdfY: Array.isArray(t) ? Number(t[5]) : NaN,
+        pdfWidth: parseFloat(sp.dataset.pdfWidth) || 0,
+        fontSize: Array.isArray(t) ? Math.hypot(t[2], t[3]) : ld.fontSize,
+      };
+    }).filter(it => Number.isFinite(it.pdfX) && Number.isFinite(it.pdfY));
+    return {
+      x: ld.pdfX,
+      y: ld.pdfY,
+      width: ld.pdfWidth,
+      fontSize: ld.fontSize,
+      angle: ld.angle || 0,
+      text: teksten.join(''),
+      runs: originalLineRuns(items, { x: ld.pdfX, y: ld.pdfY }, ld.angle || 0),
+    };
+  });
 }
 
 function editableFontName(line, cssFallbackFont) {
@@ -1448,14 +1454,7 @@ function finishPdfTextEditing() {
       // Per-regel origineel anker + ruwe tekst: hiermee kan de saver de
       // originele show-text-operatoren in de content stream terugvinden om
       // ze in-place te vervangen (het échte bewerken).
-      originalLineInfo: lineData.map((ld, li) => ({
-        x: ld.pdfX,
-        y: ld.pdfY,
-        width: ld.pdfWidth,
-        fontSize: ld.fontSize,
-        angle: ld.angle || 0,
-        text: (originalSpanTexts[li] || []).join(''),
-      })),
+      originalLineInfo: originalLineInfoFor(lineData, originalSpanTexts),
       originalSpanTexts
     };
 
@@ -2341,6 +2340,7 @@ function coverExistingText(ed) {
     loadedFontName: '',
     pdfFontName: block.lineData[0].pdfFontName || '',
     color: st.color != null ? st.color : (block.lineData[0].color || '#000000'),
+    originalLineInfo: originalLineInfoFor(block.lineData),
     originalSpanTexts: block.lineData.map(ld => ld.spans.map(s => s.textContent)),
   };
 

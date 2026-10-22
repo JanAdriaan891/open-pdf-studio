@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version tag (e.g., v1.0.0)'
+        description: 'Version tag vYYYY.W.N (year, ISO week, sequence); must match the version fields'
         required: true
-        default: 'v2026.43.4'
+        default: 'v2026.43.6'
 
 jobs:
   create-release:
@@ -31,6 +31,22 @@ jobs:
           else
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
+
+      # Het releasenummer komt uit de versievelden van de repo: de installers,
+      # de APK en latest.json krijgen hun versie uit tauri.conf.json, de
+      # .mcpb uit package.json. Een tag of handmatige invoer die daar niet bij
+      # hoort, of niet aan vJJJJ.W.N voldoet, stopt de run hier, voordat er
+      # een concept-release of een build is (#667). Eerst bump-version.js,
+      # dan committen, dan taggen.
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Verify version fields match the tag
+        env:
+          VERSION: ${{ steps.get-version.outputs.version }}
+        run: node open-pdf-studio/scripts/bump-version.js --check "$VERSION"
 
       - name: Create release
         id: create-release
