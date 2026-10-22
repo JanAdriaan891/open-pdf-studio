@@ -13,7 +13,9 @@
 //     een proefbouw waarvan de versie al getagd is);
 //  4. uitgepakt onder twee subpaden (/pdf/ en /tools/pdf/) opent de app in
 //     headless Chromium een PDF met standaardfonts en een CJK-CMap, tekent
-//     alle tekst, en gaat geen enkel verzoek buiten zijn eigen map.
+//     alle tekst, en gaat geen enkel verzoek buiten zijn eigen map;
+//  5. index.html heeft geen inline code en SRI op elk script en stylesheet
+//     (#693).
 
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -24,6 +26,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { BRON, LICENTIE, NOTICES, controleerManifest, leesTar, pakUit, sha256 } from './webbundel.mjs';
 import { inktPerBand, maakProefPdf, openPdfInApp, startServer } from './gehost-proef.mjs';
+import { controleerIndexHtml } from './gehost-html.mjs';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SUBPADEN = ['/pdf/', '/tools/pdf/'];
@@ -107,7 +110,12 @@ async function hoofd() {
   const manifestFouten = controleerManifest(map);
   eis(manifestFouten.length === 0, `manifest: ${manifestFouten.join(', ')}`);
   meld(`  ${items.length} files, manifest ${manifestFouten.length ? 'WRONG' : 'ok'}`);
-  eis(fs.existsSync(path.join(map, 'index.html')), 'index.html missing');
+  if (eis(fs.existsSync(path.join(map, 'index.html')), 'index.html missing')) {
+    const htmlFouten = controleerIndexHtml(fs.readFileSync(path.join(map, 'index.html'), 'utf8'),
+      (rel) => fs.readFileSync(path.join(map, ...rel.split('/'))));
+    eis(htmlFouten.length === 0, `index.html: ${htmlFouten.join('; ')}`);
+    meld(`  index.html: ${htmlFouten.length ? 'NOT CSP-ready' : 'no inline code, SRI on every script and stylesheet'}`);
+  }
   eis(fs.existsSync(path.join(map, NOTICES)) && fs.statSync(path.join(map, NOTICES)).size > 1000, `${NOTICES} missing or empty`);
 
   // 3. bron.json.

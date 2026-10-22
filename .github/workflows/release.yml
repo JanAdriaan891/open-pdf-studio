@@ -736,6 +736,12 @@ jobs:
           VERSION: ${{ needs.create-release.outputs.version }}
         run: npm run verify:hosted-bundle -- "dist-webbundel/open-pdf-studio-web-${VERSION#v}.tar.gz"
 
+      # De uitgebrachte bestanden zelf onder de strikte CSP van #693.
+      - name: Verify the web bundle under a strict CSP
+        env:
+          VERSION: ${{ needs.create-release.outputs.version }}
+        run: npm run test:hosted-csp -- --dist "dist-webbundel/open-pdf-studio-web-${VERSION#v}"
+
       - name: Attach to the release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
