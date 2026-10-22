@@ -214,8 +214,8 @@
     "viaMcp": "Přes připojení AI"
   },
   "annotateScreenshot": "Anotovat snímek obrazovky ze schránky",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Pracovní postupy dokumentů",
+  "drawingSets": "Sady výkresů",
+  "sheetLinks": "Odkazy mezi výkresy",
+  "approvalRouting": "Schvalovací oběh"
 }

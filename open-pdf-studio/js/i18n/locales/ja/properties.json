@@ -368,8 +368,8 @@
     "schedules": "集計表",
     "addPage": "ページを追加",
     "pageLabels": "ページラベル (名前ビルダー)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF ポートフォリオ",
+    "recognizeForm": "フォームフィールドの認識"
   },
   "scaleBar": {
     "title": "スケールバー",
@@ -422,7 +422,7 @@
     },
     "preview": "プレビュー",
     "exportCsv": "CSV をエクスポート",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "スプレッドシートのバインド"
   },
   "wizard": {
     "title": "集計表ウィザード",
@@ -605,8 +605,8 @@
       "imageName": "ファイル名",
       "width": "幅",
       "height": "高さ",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "場所",
+      "locationSource": "場所の取得元"
     },
     "type": {
       "line": "線",
@@ -707,17 +707,17 @@
     "failed": "変更を適用できませんでした: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "場所",
+    "none": "未割り当て",
+    "manual": "手動",
+    "computed": "計算済み",
+    "override": "手動で上書き（空欄にすると場所を消去）",
+    "automatic": "自動の場所を使用",
+    "zoneName": "この図形を名前付きゾーンとして使用",
+    "parent": "親ゾーン",
+    "removeZone": "ゾーンの定義を削除",
+    "invalid": "場所を更新できませんでした",
+    "rules": "割り当てにはマークアップの境界ボックスの中心（辺上を含む）が使用されます。最も深い階層のゾーンが優先され、次に面積が最小のゾーン、その次にゾーン ID の順で決まります。穴のない直線の多角形か、回転していないボックスを使用してください。無効または重複したゾーン識別子は除外されます。",
+    "loading": "注釈を読み込み中です。場所が変わる可能性があります。"
   }
 }

@@ -214,8 +214,8 @@
     "viaMcp": "Pela conexão de IA"
   },
   "annotateScreenshot": "Anotar captura de tela da área de transferência",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Fluxos de trabalho de documentos",
+  "drawingSets": "Conjuntos de pranchas",
+  "sheetLinks": "Links entre pranchas",
+  "approvalRouting": "Fluxo de aprovação"
 }

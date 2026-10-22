@@ -400,8 +400,8 @@
     "schedules": "ຕາຕະລາງລາຍການ",
     "addPage": "ເພີ່ມໜ້າ",
     "pageLabels": "ປ້າຍຊື່ໜ້າ (ຕົວສ້າງຊື່)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "ແຟ້ມສະສົມ PDF",
+    "recognizeForm": "ຮັບຮູ້ຊ່ອງຟອມ"
   },
   "schedules": {
     "title": "ຕາຕະລາງລາຍການ",
@@ -422,7 +422,7 @@
     },
     "preview": "ສະແດງຕົວຢ່າງ",
     "exportCsv": "ສົ່ງອອກ CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "ການເຊື່ອມໂຍງຕາຕະລາງຄຳນວນ"
   },
   "wizard": {
     "title": "ຕົວຊ່ວຍສ້າງຕາຕະລາງ",
@@ -605,8 +605,8 @@
       "imageName": "ຊື່ໄຟລ໌",
       "width": "ລວງກວ້າງ",
       "height": "ລວງສູງ",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "ສະຖານທີ່",
+      "locationSource": "ແຫຼ່ງທີ່ມາຂອງສະຖານທີ່"
     },
     "type": {
       "line": "ເສັ້ນຊື່",
@@ -707,17 +707,17 @@
     "failed": "ບໍ່ສາມາດນຳໃຊ້ການປ່ຽນແປງໄດ້: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "ສະຖານທີ່",
+    "none": "ບໍ່ໄດ້ກຳນົດ",
+    "manual": "ດ້ວຍຕົນເອງ",
+    "computed": "ຄຳນວນແລ້ວ",
+    "override": "ກຳນົດແທນດ້ວຍຕົນເອງ (ວ່າງເປົ່າຈະລຶບສະຖານທີ່)",
+    "automatic": "ໃຊ້ສະຖານທີ່ອັດຕະໂນມັດ",
+    "zoneName": "ໃຊ້ຮູບຮ່າງນີ້ເປັນເຂດທີ່ມີຊື່",
+    "parent": "ເຂດແມ່",
+    "removeZone": "ລຶບນິຍາມເຂດອອກ",
+    "invalid": "ບໍ່ສາມາດອັບເດດສະຖານທີ່ໄດ້",
+    "rules": "ການກຳນົດໃຊ້ຈຸດກາງຂອງກອບຂອບເຂດຂອງເຄື່ອງໝາຍ, ລວມທັງຂອບ. ເຂດທີ່ຢູ່ເລິກສຸດຊະນະ, ຕາມດ້ວຍພື້ນທີ່ນ້ອຍສຸດ, ແລ້ວ ID ຂອງເຂດ. ໃຊ້ຮູບຫຼາຍຫຼ່ຽມເສັ້ນຊື່ທີ່ບໍ່ມີຮູ ຫຼື ກອບທີ່ບໍ່ໝູນ. ຕົວຕົນຂອງເຂດທີ່ບໍ່ຖືກຕ້ອງ ຫຼື ຊ້ຳກັນຈະຖືກຍົກເວັ້ນ.",
+    "loading": "ກຳລັງໂຫຼດຄຳອະທິບາຍປະກອບ: ສະຖານທີ່ອາດຍັງປ່ຽນແປງໄດ້."
   }
 }

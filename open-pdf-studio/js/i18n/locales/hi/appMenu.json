@@ -214,8 +214,8 @@
     "viaMcp": "AI कनेक्शन के माध्यम से"
   },
   "annotateScreenshot": "क्लिपबोर्ड स्क्रीनशॉट पर एनोटेट करें",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "दस्तावेज़ वर्कफ़्लो",
+  "drawingSets": "ड्रॉइंग सेट",
+  "sheetLinks": "क्रॉस-शीट लिंक",
+  "approvalRouting": "अनुमोदन रूटिंग"
 }

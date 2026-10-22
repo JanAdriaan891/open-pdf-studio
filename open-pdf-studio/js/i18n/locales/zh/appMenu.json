@@ -214,8 +214,8 @@
     "viaMcp": "通过 AI 连接"
   },
   "annotateScreenshot": "批注剪贴板截图",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "文档工作流",
+  "drawingSets": "图纸集",
+  "sheetLinks": "跨图纸链接",
+  "approvalRouting": "审批流转"
 }

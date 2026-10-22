@@ -214,8 +214,8 @@
     "viaMcp": "Yapay zekâ bağlantısı üzerinden"
   },
   "annotateScreenshot": "Panodaki Ekran Görüntüsüne Açıklama Ekle",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Belge iş akışları",
+  "drawingSets": "Çizim setleri",
+  "sheetLinks": "Paftalar arası bağlantılar",
+  "approvalRouting": "Onay akışı"
 }

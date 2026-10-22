@@ -214,8 +214,8 @@
     "viaMcp": "Qua kết nối AI"
   },
   "annotateScreenshot": "Chú thích ảnh chụp màn hình từ bảng tạm",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Quy trình tài liệu",
+  "drawingSets": "Bộ bản vẽ",
+  "sheetLinks": "Liên kết giữa các bản vẽ",
+  "approvalRouting": "Luân chuyển phê duyệt"
 }

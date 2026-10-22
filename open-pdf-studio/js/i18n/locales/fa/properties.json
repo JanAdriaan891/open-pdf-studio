@@ -368,8 +368,8 @@
     "schedules": "جدول‌های مقادیر",
     "addPage": "افزودن صفحه",
     "pageLabels": "برچسب‌های صفحه (سازنده نام)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "پرتفولیوی PDF",
+    "recognizeForm": "شناسایی فیلدهای فرم"
   },
   "scaleBar": {
     "title": "نوار مقیاس",
@@ -422,7 +422,7 @@
     },
     "preview": "پیش‌نمایش",
     "exportCsv": "صدور CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "اتصال‌های صفحه‌گسترده"
   },
   "wizard": {
     "title": "راهنمای جدول",
@@ -605,8 +605,8 @@
       "imageName": "نام فایل",
       "width": "عرض",
       "height": "ارتفاع",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "مکان",
+      "locationSource": "منبع مکان"
     },
     "type": {
       "line": "خط",
@@ -707,17 +707,17 @@
     "failed": "اعمال تغییرات ممکن نشد: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "مکان",
+    "none": "تخصیص‌نیافته",
+    "manual": "دستی",
+    "computed": "محاسبه‌شده",
+    "override": "بازنویسی دستی (خالی بودن، مکان را پاک می‌کند)",
+    "automatic": "استفاده از مکان خودکار",
+    "zoneName": "استفاده از این شکل به‌عنوان یک ناحیه نام‌دار",
+    "parent": "ناحیه والد",
+    "removeZone": "حذف تعریف ناحیه",
+    "invalid": "مکان به‌روزرسانی نشد",
+    "rules": "تخصیص از مرکز کادر محصورکننده نشانه‌گذاری، با احتساب لبه‌ها، استفاده می‌کند. عمیق‌ترین ناحیه برنده است، سپس کوچک‌ترین مساحت، سپس شناسه ناحیه. از چندضلعی‌های راست‌خط بدون حفره یا کادرهای بدون چرخش استفاده کنید. هویت‌های ناحیه نامعتبر یا تکراری کنار گذاشته می‌شوند.",
+    "loading": "حاشیه‌نویسی‌ها در حال بارگذاری‌اند: مکان‌ها ممکن است هنوز تغییر کنند."
   }
 }

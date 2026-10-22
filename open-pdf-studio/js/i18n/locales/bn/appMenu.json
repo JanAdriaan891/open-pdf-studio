@@ -214,8 +214,8 @@
     "viaMcp": "AI সংযোগের মাধ্যমে"
   },
   "annotateScreenshot": "ক্লিপবোর্ডের স্ক্রিনশটে টীকা যোগ করুন",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "ডকুমেন্ট ওয়ার্কফ্লো",
+  "drawingSets": "ড্রয়িং সেট",
+  "sheetLinks": "ক্রস-শিট লিংক",
+  "approvalRouting": "অনুমোদন রাউটিং"
 }

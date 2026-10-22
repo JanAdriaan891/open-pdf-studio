@@ -368,8 +368,8 @@
     "schedules": "Luettelot",
     "addPage": "Lisää sivu",
     "pageLabels": "Sivujen nimiöt (nimien muodostus)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-portfolio",
+    "recognizeForm": "Tunnista lomakekentät"
   },
   "scaleBar": {
     "title": "Mittakaavajana",
@@ -422,7 +422,7 @@
     },
     "preview": "Esikatselu",
     "exportCsv": "Vie CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Laskentataulukkolinkitykset"
   },
   "wizard": {
     "title": "Ohjattu luettelon luonti",
@@ -605,8 +605,8 @@
       "imageName": "Tiedostonimi",
       "width": "Leveys",
       "height": "Korkeus",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Sijainti",
+      "locationSource": "Sijainnin lähde"
     },
     "type": {
       "line": "Viiva",
@@ -707,17 +707,17 @@
     "failed": "Muutoksia ei voitu ottaa käyttöön: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Sijainti",
+    "none": "Ei määritetty",
+    "manual": "Manuaalinen",
+    "computed": "Laskettu",
+    "override": "Manuaalinen ohitus (tyhjä tyhjentää sijainnin)",
+    "automatic": "Käytä automaattista sijaintia",
+    "zoneName": "Käytä tätä muotoa nimettynä vyöhykkeenä",
+    "parent": "Ylätason vyöhyke",
+    "removeZone": "Poista vyöhykkeen määritys",
+    "invalid": "Sijaintia ei voitu päivittää",
+    "rules": "Määritys käyttää merkinnän rajauslaatikon keskipistettä reunat mukaan lukien. Syvin vyöhyke voittaa, sitten pienin pinta-ala ja sitten vyöhykkeen tunnus. Käytä suorasivuisia monikulmioita ilman reikiä tai kiertämättömiä suorakulmioita. Virheelliset tai päällekkäiset vyöhyketunnisteet jätetään pois.",
+    "loading": "Merkintöjä ladataan: sijainnit voivat vielä muuttua."
   }
 }

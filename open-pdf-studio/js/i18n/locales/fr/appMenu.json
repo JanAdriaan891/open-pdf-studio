@@ -214,8 +214,8 @@
     "viaMcp": "Via la connexion IA"
   },
   "annotateScreenshot": "Annoter une capture d'écran du presse-papiers",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Flux de travail documentaires",
+  "drawingSets": "Jeux de plans",
+  "sheetLinks": "Liens entre feuilles",
+  "approvalRouting": "Circuit d'approbation"
 }

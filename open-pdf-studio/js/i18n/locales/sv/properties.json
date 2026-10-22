@@ -368,8 +368,8 @@
     "schedules": "Förteckningar",
     "addPage": "Lägg till sida",
     "pageLabels": "Sidetiketter (namnbyggare)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-portfölj",
+    "recognizeForm": "Identifiera formulärfält"
   },
   "scaleBar": {
     "title": "Skalstock",
@@ -422,7 +422,7 @@
     },
     "preview": "Förhandsvisning",
     "exportCsv": "Exportera CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Kalkylbladskopplingar"
   },
   "wizard": {
     "title": "Förteckningsguide",
@@ -605,8 +605,8 @@
       "imageName": "Filnamn",
       "width": "Bredd",
       "height": "Höjd",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Plats",
+      "locationSource": "Platskälla"
     },
     "type": {
       "line": "Linje",
@@ -707,17 +707,17 @@
     "failed": "Det gick inte att tillämpa ändringarna: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Plats",
+    "none": "Ej tilldelad",
+    "manual": "Manuell",
+    "computed": "Beräknad",
+    "override": "Manuell åsidosättning (tom rensar platsen)",
+    "automatic": "Använd automatisk plats",
+    "zoneName": "Använd den här formen som en namngiven zon",
+    "parent": "Överordnad zon",
+    "removeZone": "Ta bort zondefinition",
+    "invalid": "Platsen kunde inte uppdateras",
+    "rules": "Tilldelningen använder mitten av markeringens omslutande ram, kanter inräknade. Den djupaste zonen vinner, därefter minsta area och sedan zon-ID. Använd raka polygoner utan hål eller oroterade rektanglar. Ogiltiga eller dubblerade zonidentiteter undantas.",
+    "loading": "Anteckningar läses in: platser kan fortfarande ändras."
   }
 }

@@ -214,8 +214,8 @@
     "viaMcp": "Melalui koneksi AI"
   },
   "annotateScreenshot": "Anotasi Tangkapan Layar dari Papan Klip",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Alur kerja dokumen",
+  "drawingSets": "Set gambar",
+  "sheetLinks": "Tautan antarlembar",
+  "approvalRouting": "Perutean persetujuan"
 }

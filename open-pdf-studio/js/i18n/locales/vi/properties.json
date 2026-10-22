@@ -368,8 +368,8 @@
     "schedules": "Bảng thống kê",
     "addPage": "Thêm trang",
     "pageLabels": "Nhãn trang (trình tạo tên)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Danh mục PDF",
+    "recognizeForm": "Nhận dạng trường biểu mẫu"
   },
   "scaleBar": {
     "title": "Thước tỷ lệ",
@@ -422,7 +422,7 @@
     },
     "preview": "Xem trước",
     "exportCsv": "Xuất CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Liên kết bảng tính"
   },
   "wizard": {
     "title": "Trình hướng dẫn bảng thống kê",
@@ -605,8 +605,8 @@
       "imageName": "Tên tệp",
       "width": "Chiều rộng",
       "height": "Chiều cao",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Vị trí",
+      "locationSource": "Nguồn vị trí"
     },
     "type": {
       "line": "Đường thẳng",
@@ -707,17 +707,17 @@
     "failed": "Không thể áp dụng các thay đổi: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Vị trí",
+    "none": "Chưa gán",
+    "manual": "Thủ công",
+    "computed": "Đã tính toán",
+    "override": "Ghi đè thủ công (để trống sẽ xóa vị trí)",
+    "automatic": "Dùng vị trí tự động",
+    "zoneName": "Dùng hình này làm vùng được đặt tên",
+    "parent": "Vùng cha",
+    "removeZone": "Xóa định nghĩa vùng",
+    "invalid": "Không thể cập nhật vị trí",
+    "rules": "Việc gán dựa trên tâm hộp giới hạn của đánh dấu, tính cả cạnh. Vùng sâu nhất được ưu tiên, sau đó đến diện tích nhỏ nhất, rồi đến ID vùng. Hãy dùng đa giác cạnh thẳng không có lỗ hoặc hộp chưa xoay. Các định danh vùng không hợp lệ hoặc trùng lặp sẽ bị loại trừ.",
+    "loading": "Đang tải chú thích: vị trí có thể vẫn thay đổi."
   }
 }

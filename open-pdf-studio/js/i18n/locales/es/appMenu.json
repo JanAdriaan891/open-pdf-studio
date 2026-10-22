@@ -214,8 +214,8 @@
     "viaMcp": "Mediante la conexión de IA"
   },
   "annotateScreenshot": "Anotar captura de pantalla del portapapeles",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Flujos de trabajo de documentos",
+  "drawingSets": "Juegos de planos",
+  "sheetLinks": "Vínculos entre planos",
+  "approvalRouting": "Circuito de aprobación"
 }

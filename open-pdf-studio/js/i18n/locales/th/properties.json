@@ -368,8 +368,8 @@
     "schedules": "ตารางรายการ",
     "addPage": "เพิ่มหน้า",
     "pageLabels": "ป้ายชื่อหน้า (ตัวสร้างชื่อ)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "พอร์ตโฟลิโอ PDF",
+    "recognizeForm": "รู้จำฟิลด์ฟอร์ม"
   },
   "scaleBar": {
     "title": "แถบมาตราส่วน",
@@ -422,7 +422,7 @@
     },
     "preview": "ตัวอย่าง",
     "exportCsv": "ส่งออก CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "การผูกสเปรดชีต"
   },
   "wizard": {
     "title": "ตัวช่วยสร้างตารางรายการ",
@@ -605,8 +605,8 @@
       "imageName": "ชื่อไฟล์",
       "width": "ความกว้าง",
       "height": "ความสูง",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "ตำแหน่ง",
+      "locationSource": "แหล่งที่มาของตำแหน่ง"
     },
     "type": {
       "line": "เส้น",
@@ -707,17 +707,17 @@
     "failed": "ไม่สามารถนำการเปลี่ยนแปลงไปใช้ได้: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "ตำแหน่ง",
+    "none": "ยังไม่ได้กำหนด",
+    "manual": "กำหนดเอง",
+    "computed": "คำนวณแล้ว",
+    "override": "แทนที่ด้วยตนเอง (เว้นว่างเพื่อล้างตำแหน่ง)",
+    "automatic": "ใช้ตำแหน่งอัตโนมัติ",
+    "zoneName": "ใช้รูปร่างนี้เป็นโซนที่มีชื่อ",
+    "parent": "โซนหลัก",
+    "removeZone": "ลบคำจำกัดความของโซน",
+    "invalid": "ไม่สามารถอัปเดตตำแหน่งได้",
+    "rules": "การกำหนดใช้จุดศูนย์กลางของกรอบล้อมรอบมาร์กอัป รวมถึงขอบ โซนที่ลึกที่สุดมีลำดับความสำคัญสูงสุด ตามด้วยพื้นที่เล็กที่สุด แล้วจึงเป็น ID ของโซน โปรดใช้รูปหลายเหลี่ยมขอบตรงที่ไม่มีรู หรือกรอบที่ไม่หมุน ตัวระบุโซนที่ไม่ถูกต้องหรือซ้ำกันจะถูกตัดออก",
+    "loading": "กำลังโหลดคำอธิบายประกอบ: ตำแหน่งอาจยังเปลี่ยนแปลงได้"
   }
 }

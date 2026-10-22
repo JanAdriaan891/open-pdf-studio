@@ -214,8 +214,8 @@
     "viaMcp": "Μέσω της σύνδεσης AI"
   },
   "annotateScreenshot": "Σχολιασμός στιγμιότυπου οθόνης από το πρόχειρο",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Ροές εργασιών εγγράφων",
+  "drawingSets": "Σύνολα σχεδίων",
+  "sheetLinks": "Σύνδεσμοι μεταξύ φύλλων",
+  "approvalRouting": "Δρομολόγηση εγκρίσεων"
 }

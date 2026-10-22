@@ -368,8 +368,8 @@
     "schedules": "Výkazy",
     "addPage": "Pridať stranu",
     "pageLabels": "Menovky strán (tvorba názvov)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portfólio PDF",
+    "recognizeForm": "Rozpoznať polia formulára"
   },
   "scaleBar": {
     "title": "Grafická mierka",
@@ -422,7 +422,7 @@
     },
     "preview": "Náhľad",
     "exportCsv": "Exportovať CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Väzby na tabuľku"
   },
   "wizard": {
     "title": "Sprievodca výkazom",
@@ -605,8 +605,8 @@
       "imageName": "Názov súboru",
       "width": "Šírka",
       "height": "Výška",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Umiestnenie",
+      "locationSource": "Zdroj umiestnenia"
     },
     "type": {
       "line": "Čiara",
@@ -707,17 +707,17 @@
     "failed": "Zmeny sa nepodarilo použiť: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Umiestnenie",
+    "none": "Nepriradené",
+    "manual": "Ručne",
+    "computed": "Vypočítané",
+    "override": "Ručné prepísanie (prázdne umiestnenie vymaže)",
+    "automatic": "Použiť automatické umiestnenie",
+    "zoneName": "Použiť tento tvar ako pomenovanú zónu",
+    "parent": "Nadradená zóna",
+    "removeZone": "Odstrániť definíciu zóny",
+    "invalid": "Umiestnenie sa nedá aktualizovať",
+    "rules": "Priradenie vychádza zo stredu ohraničujúceho rámčeka označenia vrátane okrajov. Vyhráva najhlbšie vnorená zóna, potom najmenšia plocha, potom ID zóny. Používajte mnohouholníky s rovnými stranami bez otvorov alebo neotočené obdĺžniky. Neplatné alebo duplicitné identity zón sa vylučujú.",
+    "loading": "Načítavajú sa anotácie: umiestnenia sa ešte môžu zmeniť."
   }
 }

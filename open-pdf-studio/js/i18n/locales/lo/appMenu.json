@@ -214,8 +214,8 @@
     "viaMcp": "ຜ່ານການເຊື່ອມຕໍ່ AI"
   },
   "annotateScreenshot": "ບັນທຶກໂນ້ດໃສ່ຮູບພາບໜ້າຈໍຈາກຄລິບບອດ",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "ຂັ້ນຕອນວຽກເອກະສານ",
+  "drawingSets": "ຊຸດແບບແຕ້ມ",
+  "sheetLinks": "ລິ້ງຄ໌ລະຫວ່າງແຜ່ນແບບ",
+  "approvalRouting": "ການສົ່ງຕໍ່ເພື່ອອະນຸມັດ"
 }

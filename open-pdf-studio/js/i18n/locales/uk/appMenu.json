@@ -214,8 +214,8 @@
     "viaMcp": "Через підключення ШІ"
   },
   "annotateScreenshot": "Анотувати знімок екрана з буфера обміну",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Робочі процеси документів",
+  "drawingSets": "Комплекти креслень",
+  "sheetLinks": "Посилання між аркушами",
+  "approvalRouting": "Маршрут погодження"
 }

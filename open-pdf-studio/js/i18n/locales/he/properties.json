@@ -368,8 +368,8 @@
     "schedules": "טבלאות כמויות",
     "addPage": "הוספת עמוד",
     "pageLabels": "תוויות עמודים (בונה שמות)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "תיק PDF",
+    "recognizeForm": "זיהוי שדות טופס"
   },
   "scaleBar": {
     "title": "סרגל קנה מידה",
@@ -422,7 +422,7 @@
     },
     "preview": "תצוגה מקדימה",
     "exportCsv": "ייצוא CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "קישורי גיליון אלקטרוני"
   },
   "wizard": {
     "title": "אשף טבלאות",
@@ -605,8 +605,8 @@
       "imageName": "שם קובץ",
       "width": "רוחב",
       "height": "גובה",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "מיקום",
+      "locationSource": "מקור המיקום"
     },
     "type": {
       "line": "קו",
@@ -707,17 +707,17 @@
     "failed": "לא ניתן היה להחיל את השינויים: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "מיקום",
+    "none": "לא שויך",
+    "manual": "ידני",
+    "computed": "מחושב",
+    "override": "עקיפה ידנית (ריק מנקה את המיקום)",
+    "automatic": "שימוש במיקום אוטומטי",
+    "zoneName": "שימוש בצורה זו כאזור בעל שם",
+    "parent": "אזור אב",
+    "removeZone": "הסרת הגדרת האזור",
+    "invalid": "לא ניתן לעדכן את המיקום",
+    "rules": "השיוך משתמש במרכז התיבה התוחמת של הסימון, כולל הקצוות. האזור העמוק ביותר גובר, אחריו השטח הקטן ביותר, ואחריו מזהה האזור. השתמש במצולעים ישרים ללא חורים או בתיבות ללא סיבוב. זהויות אזור לא תקינות או כפולות מוחרגות.",
+    "loading": "ההערות נטענות: המיקומים עדיין עשויים להשתנות."
   }
 }
