@@ -3759,6 +3759,7 @@ dependencies = [
  "tauri-plugin-updater",
  "tesseract-rs",
  "tokio",
+ "unicode-normalization",
  "url",
  "urlencoding",
  "webview2-com",

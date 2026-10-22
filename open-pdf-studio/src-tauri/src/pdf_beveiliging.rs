@@ -1,6 +1,6 @@
 //! Een PDF beveiligen met een wachtwoord: het standaard beveiligingsmechanisme
 //! uit de PDF 2.0-norm (ISO 32000-2, Standard Security Handler, V 5 / R 6, AES-256).
-//! Acrobat, Voorvertoning, Chrome en pdf.js openen zo'n bestand met het wachtwoord.
+//! Andere PDF-lezers en browsers openen zo'n bestand met het wachtwoord.
 //!
 //! - Gebruikerswachtwoord ("openen"): zonder dat opent het bestand niet. Leeg =
 //!   het bestand opent vrij en alleen de rechten gelden.
@@ -9,17 +9,63 @@
 //!
 //! lopdf leest het bestand in (ook objectstromen: die worden losse objecten) en
 //! schrijft het weer weg; hier worden alleen de tekenreeksen en streams
-//! versleuteld en het /Encrypt-woordenboek toegevoegd.
+//! versleuteld en het /Encrypt-woordenboek toegevoegd. Wat lopdf niet kon
+//! inlezen, wordt opgezocht of de opdracht wordt geweigerd: nooit stil een
+//! kopie waarin iets ontbreekt (zie `laad_volledig`).
+//!
+//! Fouten gaan als vaste code naar de interface (`FOUT_*`), eventueel met een
+//! toelichting na ": "; de JS vertaalt de code. Nooit met een wachtwoord erin.
+
+use std::collections::{HashMap, HashSet};
+use std::io::Write as _;
 
 use aes::cipher::{BlockEncrypt, KeyInit as _};
 use cbc::cipher::{block_padding::{NoPadding, Pkcs7}, BlockEncryptMut, KeyIvInit};
+use lopdf::xref::XrefEntry;
 use lopdf::{Dictionary, Document, Object, ObjectId, StringFormat};
 use rand::RngCore;
 use sha2::{Digest, Sha256, Sha384, Sha512};
-use zeroize::Zeroize;
+use unicode_normalization::UnicodeNormalization;
+use zeroize::{Zeroize, Zeroizing};
 
 type Aes256CbcEnc = cbc::Encryptor<aes::Aes256>;
 type Aes128CbcEnc = cbc::Encryptor<aes::Aes128>;
+
+/// Geen enkel wachtwoord ingevuld.
+pub const FOUT_GEEN_WACHTWOORD: &str = "NEED_PASSWORD";
+/// De bron is al versleuteld.
+pub const FOUT_AL_BEVEILIGD: &str = "ALREADY_ENCRYPTED";
+/// De bron is niet te lezen (toelichting: de oorzaak).
+pub const FOUT_LEZEN: &str = "READ_FAILED";
+/// Niet alle objecten van de bron zijn in te lezen (toelichting: hoeveel).
+pub const FOUT_ONVOLLEDIG: &str = "INCOMPLETE";
+/// Het doel is niet te schrijven (toelichting: de oorzaak).
+pub const FOUT_SCHRIJVEN: &str = "WRITE_FAILED";
+
+/// Waarom beveiligen niet lukte.
+#[derive(Debug, PartialEq, Eq)]
+pub enum BeveiligFout {
+    GeenWachtwoord,
+    AlBeveiligd,
+    Lezen(String),
+    /// Object-id's uit de xref die niet in te lezen waren.
+    Onvolledig(Vec<u32>),
+    Schrijven(String),
+}
+
+impl BeveiligFout {
+    /// De tekst die naar de interface gaat: een vaste code, eventueel met een
+    /// toelichting. Bevat nooit een wachtwoord.
+    pub fn code(&self) -> String {
+        match self {
+            BeveiligFout::GeenWachtwoord => FOUT_GEEN_WACHTWOORD.to_string(),
+            BeveiligFout::AlBeveiligd => FOUT_AL_BEVEILIGD.to_string(),
+            BeveiligFout::Lezen(t) => format!("{FOUT_LEZEN}: {t}"),
+            BeveiligFout::Onvolledig(ids) => format!("{FOUT_ONVOLLEDIG}: {}", ids.len()),
+            BeveiligFout::Schrijven(t) => format!("{FOUT_SCHRIJVEN}: {t}"),
+        }
+    }
+}
 
 /// Wat het ontvangende programma mag doen. Alles uit = alleen lezen.
 #[derive(Debug, Clone, Copy, serde::Deserialize)]
@@ -72,43 +118,86 @@ impl Rechten {
     }
 }
 
-/// Het wachtwoord zoals de norm het wil voor revisie 6: SASLprep (NFKC en
-/// verboden tekens), daarna UTF-8, hoogstens 127 bytes. Zonder SASLprep opent
-/// een wachtwoord met bijvoorbeeld een "é" in een andere viewer niet als het
-/// daar anders (gecomponeerd of ontbonden) is getypt.
-fn wachtwoord_bytes(w: &str) -> Result<Vec<u8>, String> {
-    let genormaliseerd = stringprep::saslprep(w)
-        .map_err(|_| "Het wachtwoord bevat tekens die in een PDF-wachtwoord niet zijn toegestaan.".to_string())?;
-    let mut b = genormaliseerd.as_bytes().to_vec();
-    b.truncate(127);
-    Ok(b)
+// ─── Wachtwoorden ──────────────────────────────────────────────────────────
+
+/// Langste wachtwoord dat revisie 6 gebruikt, in UTF-8-bytes.
+pub const MAX_WACHTWOORD_BYTES: usize = 127;
+
+/// Het wachtwoord zoals revisie 6 het gebruikt: de toewijzingsstap van SASLprep
+/// (bijzondere spaties worden een gewone spatie, "onzichtbare" tekens vervallen)
+/// en NFKC, daarna UTF-8, hoogstens 127 bytes. Net als pdf.js zonder de
+/// verbodsregels van SASLprep: die weigerden gewone wachtwoorden (een emoji,
+/// Hebreeuws of Arabisch met cijfers erachter), en geen lezer past ze toe bij
+/// het openen. De dialoog weigert al wat deze stap zou veranderen, zodat het
+/// wachtwoord zoals getypt overal werkt (ook in PDFium, dat niets voorbereidt).
+pub(crate) fn bereid_wachtwoord(w: &str) -> Zeroizing<Vec<u8>> {
+    let mut gemapt: Zeroizing<String> = Zeroizing::new(String::with_capacity(w.len() + 4));
+    for c in w.chars() {
+        if stringprep::tables::non_ascii_space_character(c) {
+            gemapt.push(' ');
+        } else if !stringprep::tables::commonly_mapped_to_nothing(c) {
+            gemapt.push(c);
+        }
+    }
+    let mut genormaliseerd: Zeroizing<String> = Zeroizing::new(String::with_capacity(gemapt.len() * 3 + 4));
+    genormaliseerd.extend(gemapt.nfkc());
+    let mut b: Zeroizing<Vec<u8>> = Zeroizing::new(Vec::with_capacity(genormaliseerd.len()));
+    b.extend_from_slice(genormaliseerd.as_bytes());
+    b.truncate(MAX_WACHTWOORD_BYTES);
+    b
 }
 
-/// Algoritme 2.B (ISO 32000-2): de wachtwoordhash van revisie 6.
-fn hash_r6(wachtwoord: &[u8], zout: &[u8], udata: &[u8]) -> [u8; 32] {
-    let mut k: Vec<u8> = {
+/// De vormen waarmee een bestaand bestand geopend wordt, in volgorde en zonder
+/// dubbele: zoals getypt, zoals revisie 6 het voorschrijft (`bereid_wachtwoord`),
+/// en zoals getypt maar afgekapt op 127 bytes. PDFium bereidt een wachtwoord
+/// niet voor; zo opent toch wat een andere schrijver volgens de norm schreef.
+pub(crate) fn wachtwoord_vormen(w: &str) -> Vec<Zeroizing<Vec<u8>>> {
+    let mut vormen: Vec<Zeroizing<Vec<u8>>> = Vec::with_capacity(3);
+    let mut voeg_toe = |v: Zeroizing<Vec<u8>>| {
+        if !vormen.iter().any(|x| x.as_slice() == v.as_slice()) {
+            vormen.push(v);
+        }
+    };
+    voeg_toe(Zeroizing::new(w.as_bytes().to_vec()));
+    voeg_toe(bereid_wachtwoord(w));
+    let mut afgekapt = Zeroizing::new(w.as_bytes().to_vec());
+    afgekapt.truncate(MAX_WACHTWOORD_BYTES);
+    voeg_toe(afgekapt);
+    vormen
+}
+
+// ─── Sleutels ──────────────────────────────────────────────────────────────
+
+/// Algoritme 2.B (ISO 32000-2): de wachtwoordhash van revisie 6. Alle
+/// tussenbuffers (K, K1 bevat het wachtwoord 64 keer, E) worden gewist.
+fn hash_r6(wachtwoord: &[u8], zout: &[u8], udata: &[u8]) -> Zeroizing<[u8; 32]> {
+    let mut k: Zeroizing<Vec<u8>> = Zeroizing::new({
         let mut h = Sha256::new();
         h.update(wachtwoord);
         h.update(zout);
         h.update(udata);
         h.finalize().to_vec()
-    };
+    });
+    let mut k1: Zeroizing<Vec<u8>> = Zeroizing::new(Vec::with_capacity((wachtwoord.len() + 64 + udata.len()) * 64));
     let mut i: usize = 0;
     loop {
-        let mut k1 = Vec::with_capacity((wachtwoord.len() + k.len() + udata.len()) * 64);
+        k1.clear();
         for _ in 0..64 {
             k1.extend_from_slice(wachtwoord);
             k1.extend_from_slice(&k);
             k1.extend_from_slice(udata);
         }
-        let e = Aes128CbcEnc::new_from_slices(&k[0..16], &k[16..32])
-            .expect("sleutel en iv zijn 16 bytes")
-            .encrypt_padded_vec_mut::<NoPadding>(&k1);
+        let e: Zeroizing<Vec<u8>> = Zeroizing::new(
+            Aes128CbcEnc::new_from_slices(&k[0..16], &k[16..32])
+                .expect("sleutel en iv zijn 16 bytes")
+                .encrypt_padded_vec_mut::<NoPadding>(&k1),
+        );
         let modulo = e[..16].iter().map(|b| *b as u32).sum::<u32>() % 3;
-        k = match modulo {
-            0 => Sha256::digest(&e).to_vec(),
-            1 => Sha384::digest(&e).to_vec(),
-            _ => Sha512::digest(&e).to_vec(),
+        k.zeroize();
+        *k = match modulo {
+            0 => Sha256::digest(&e[..]).to_vec(),
+            1 => Sha384::digest(&e[..]).to_vec(),
+            _ => Sha512::digest(&e[..]).to_vec(),
         };
         let laatste = *e.last().expect("e is niet leeg") as usize;
         i += 1;
@@ -116,7 +205,7 @@ fn hash_r6(wachtwoord: &[u8], zout: &[u8], udata: &[u8]) -> [u8; 32] {
             break;
         }
     }
-    let mut uit = [0u8; 32];
+    let mut uit = Zeroizing::new([0u8; 32]);
     uit.copy_from_slice(&k[..32]);
     uit
 }
@@ -128,7 +217,8 @@ fn aes256_cbc_nul_iv(sleutel: &[u8; 32], data: &[u8]) -> Vec<u8> {
         .encrypt_padded_vec_mut::<NoPadding>(data)
 }
 
-/// De bestandssleutel plus de waarden voor het /Encrypt-woordenboek.
+/// De bestandssleutel plus de waarden voor het /Encrypt-woordenboek. De
+/// bestandssleutel wordt gewist zodra dit wegvalt, ook bij een fout.
 struct Sleutels {
     bestand: [u8; 32],
     u: Vec<u8>,
@@ -138,57 +228,65 @@ struct Sleutels {
     perms: Vec<u8>,
 }
 
-fn maak_sleutels(gebruiker: &str, eigenaar: &str, p: i32, rng: &mut impl RngCore) -> Result<Sleutels, String> {
-    let mut bestand = [0u8; 32];
-    rng.fill_bytes(&mut bestand);
+impl Drop for Sleutels {
+    fn drop(&mut self) {
+        self.bestand.zeroize();
+    }
+}
 
-    let mut gw = wachtwoord_bytes(gebruiker)?;
-    let mut ew = wachtwoord_bytes(eigenaar)?;
+fn maak_sleutels(gebruiker: &str, eigenaar: &str, p: i32, rng: &mut impl RngCore) -> Sleutels {
+    let mut s = Sleutels { bestand: [0u8; 32], u: Vec::new(), ue: Vec::new(), o: Vec::new(), oe: Vec::new(), perms: Vec::new() };
+    rng.fill_bytes(&mut s.bestand);
+
+    let gw = bereid_wachtwoord(gebruiker);
+    let mut ew = bereid_wachtwoord(eigenaar);
     if ew.is_empty() {
         // Geen eigenaarwachtwoord: een willekeurig, onbekend wachtwoord, zodat
         // niemand de rechten met een leeg wachtwoord kan omzeilen. 32 willekeurige
         // bytes als hex (64 tekens, 256 bits).
-        let mut w = [0u8; 32];
-        rng.fill_bytes(&mut w);
-        ew = w.iter().flat_map(|b| format!("{b:02x}").into_bytes()).collect();
-        w.zeroize();
+        const HEX: &[u8; 16] = b"0123456789abcdef";
+        let mut w = Zeroizing::new([0u8; 32]);
+        rng.fill_bytes(&mut w[..]);
+        for b in w.iter() {
+            ew.push(HEX[(b >> 4) as usize]);
+            ew.push(HEX[(b & 0x0f) as usize]);
+        }
     }
 
     let mut u_val_zout = [0u8; 8];
     let mut u_sleutel_zout = [0u8; 8];
     rng.fill_bytes(&mut u_val_zout);
     rng.fill_bytes(&mut u_sleutel_zout);
-    let mut u = hash_r6(&gw, &u_val_zout, &[]).to_vec();
-    u.extend_from_slice(&u_val_zout);
-    u.extend_from_slice(&u_sleutel_zout);
-    let ue = aes256_cbc_nul_iv(&hash_r6(&gw, &u_sleutel_zout, &[]), &bestand);
+    s.u = hash_r6(&gw, &u_val_zout, &[]).to_vec();
+    s.u.extend_from_slice(&u_val_zout);
+    s.u.extend_from_slice(&u_sleutel_zout);
+    s.ue = aes256_cbc_nul_iv(&hash_r6(&gw, &u_sleutel_zout, &[]), &s.bestand);
 
     let mut o_val_zout = [0u8; 8];
     let mut o_sleutel_zout = [0u8; 8];
     rng.fill_bytes(&mut o_val_zout);
     rng.fill_bytes(&mut o_sleutel_zout);
-    let mut o = hash_r6(&ew, &o_val_zout, &u).to_vec();
-    o.extend_from_slice(&o_val_zout);
-    o.extend_from_slice(&o_sleutel_zout);
-    let oe = aes256_cbc_nul_iv(&hash_r6(&ew, &o_sleutel_zout, &u), &bestand);
+    s.o = hash_r6(&ew, &o_val_zout, &s.u).to_vec();
+    s.o.extend_from_slice(&o_val_zout);
+    s.o.extend_from_slice(&o_sleutel_zout);
+    s.oe = aes256_cbc_nul_iv(&hash_r6(&ew, &o_sleutel_zout, &s.u), &s.bestand);
 
     // /Perms: P (4 bytes, little endian), 0xFFFFFFFF, 'T' (metadata versleuteld),
     // "adb" en vier willekeurige bytes, met AES-256-ECB onder de bestandssleutel.
-    let mut blok = [0u8; 16];
+    let mut blok = Zeroizing::new([0u8; 16]);
     blok[0..4].copy_from_slice(&p.to_le_bytes());
     blok[4..8].copy_from_slice(&[0xFF; 4]);
     blok[8] = b'T';
     blok[9..12].copy_from_slice(b"adb");
     rng.fill_bytes(&mut blok[12..16]);
-    let aes = aes::Aes256::new_from_slice(&bestand).expect("sleutel is 32 bytes");
-    let mut b = aes::cipher::generic_array::GenericArray::clone_from_slice(&blok);
+    let aes = aes::Aes256::new_from_slice(&s.bestand).expect("sleutel is 32 bytes");
+    let mut b = aes::cipher::generic_array::GenericArray::clone_from_slice(&blok[..]);
     aes.encrypt_block(&mut b);
-    let perms = b.to_vec();
-
-    gw.zeroize();
-    ew.zeroize();
-    Ok(Sleutels { bestand, u, ue, o, oe, perms })
+    s.perms = b.to_vec();
+    s
 }
+
+// ─── Versleutelen ──────────────────────────────────────────────────────────
 
 /// Eén tekenreeks of stream: AES-256-CBC met een willekeurige iv voorop, PKCS#7.
 fn versleutel_bytes(sleutel: &[u8; 32], data: &[u8], rng: &mut impl RngCore) -> Vec<u8> {
@@ -226,8 +324,20 @@ fn versleutel_object(obj: &mut Object, sleutel: &[u8; 32], rng: &mut impl RngCor
     }
 }
 
+/// Een handtekeningwoordenboek (/Type /Sig of /DocTimeStamp)?
+fn is_handtekening(dict: &Dictionary) -> bool {
+    matches!(dict.get(b"Type").and_then(Object::as_name), Ok(n) if n == b"Sig" || n == b"DocTimeStamp")
+}
+
 fn versleutel_woordenboek(dict: &mut Dictionary, sleutel: &[u8; 32], rng: &mut impl RngCore) {
-    for (_, waarde) in dict.iter_mut() {
+    let handtekening = is_handtekening(dict);
+    for (naam, waarde) in dict.iter_mut() {
+        // ISO 32000-2, 7.6.2: de /Contents van een handtekeningwoordenboek
+        // blijft onversleuteld (de lezers die handtekeningen controleren
+        // ontsleutelen hem ook niet).
+        if handtekening && naam.as_slice() == b"Contents" {
+            continue;
+        }
         versleutel_object(waarde, sleutel, rng);
     }
 }
@@ -259,22 +369,165 @@ fn encrypt_woordenboek(s: &Sleutels, p: i32) -> Dictionary {
     d
 }
 
+// ─── Volledig inlezen ──────────────────────────────────────────────────────
+
+/// Id's uit de xref (in gebruik, los of in een objectstroom) die lopdf niet als
+/// object heeft ingelezen.
+fn ontbrekende_ids(doc: &Document) -> Vec<u32> {
+    let aanwezig: HashSet<u32> = doc.objects.keys().map(|(id, _)| *id).collect();
+    let mut uit: Vec<u32> = doc
+        .reference_table
+        .entries
+        .iter()
+        .filter(|(id, e)| {
+            **id != 0
+                && matches!(e, XrefEntry::Normal { .. } | XrefEntry::Compressed { .. })
+                && !aanwezig.contains(*id)
+        })
+        .map(|(id, _)| *id)
+        .collect();
+    uit.sort_unstable();
+    uit
+}
+
+/// Alle kopregels "N G obj" aan het begin van een regel: id -> (plek, generatie).
+/// Bij meer dan één telt de laatste (de nieuwste versie van het object).
+fn objectkoppen(bytes: &[u8]) -> HashMap<u32, (usize, u16)> {
+    let mut uit = HashMap::new();
+    let mut i = 0;
+    while i + 3 <= bytes.len() {
+        let Some(rel) = bytes[i..].windows(3).position(|w| w == b"obj") else { break };
+        let p = i + rel;
+        i = p + 3;
+        // Na "obj" een scheidingsteken (niet "objstm" o.i.d.).
+        if let Some(&na) = bytes.get(p + 3) {
+            if !(na.is_ascii_whitespace() || b"<[(/%".contains(&na)) {
+                continue;
+            }
+        }
+        // Terug: witruimte, generatie, witruimte, nummer.
+        let mut j = p;
+        let tel_wit = |j: &mut usize| { let b = *j; while *j > 0 && bytes[*j - 1].is_ascii_whitespace() { *j -= 1; } b - *j };
+        let tel_cijfers = |j: &mut usize| { let b = *j; while *j > 0 && bytes[*j - 1].is_ascii_digit() { *j -= 1; } b - *j };
+        if tel_wit(&mut j) == 0 { continue; }
+        let gen_eind = j;
+        if tel_cijfers(&mut j) == 0 { continue; }
+        let gen_begin = j;
+        if tel_wit(&mut j) == 0 { continue; }
+        let nr_eind = j;
+        if tel_cijfers(&mut j) == 0 { continue; }
+        let nr_begin = j;
+        // Alleen aan het begin van een regel: minder kans op schijntreffers in
+        // binaire streams.
+        if nr_begin > 0 && bytes[nr_begin - 1] != b'\n' && bytes[nr_begin - 1] != b'\r' {
+            continue;
+        }
+        let (Ok(nr), Ok(gen)) = (
+            std::str::from_utf8(&bytes[nr_begin..nr_eind]).unwrap_or("").parse::<u32>(),
+            std::str::from_utf8(&bytes[gen_begin..gen_eind]).unwrap_or("").parse::<u16>(),
+        ) else { continue };
+        uit.insert(nr, (nr_begin, gen));
+    }
+    uit
+}
+
+/// Een trailerwaarde als PDF-tekst (alleen wat in een trailer voorkomt).
+fn trailer_waarde(o: &Object) -> Option<String> {
+    match o {
+        Object::Reference((id, gen)) => Some(format!("{id} {gen} R")),
+        Object::Integer(i) => Some(i.to_string()),
+        Object::String(b, _) => Some(format!("<{}>", b.iter().map(|x| format!("{x:02X}")).collect::<String>())),
+        Object::Array(a) => {
+            let delen: Option<Vec<String>> = a.iter().map(trailer_waarde).collect();
+            delen.map(|d| format!("[{}]", d.join(" ")))
+        }
+        _ => None,
+    }
+}
+
+/// `bytes` met een extra xref-doorsnede die de gegeven objecten naar hun
+/// werkelijke plek laat wijzen (een gewone incrementele update).
+fn met_herstelde_xref(bytes: &[u8], doc: &Document, herstel: &[(u32, usize, u16)]) -> Result<Vec<u8>, BeveiligFout> {
+    let root = doc.trailer.get(b"Root").ok().and_then(trailer_waarde)
+        .ok_or_else(|| BeveiligFout::Lezen("no /Root in the trailer".into()))?;
+    let mut uit = Vec::with_capacity(bytes.len() + 64 + herstel.len() * 32);
+    uit.extend_from_slice(bytes);
+    if !uit.ends_with(b"\n") {
+        uit.push(b'\n');
+    }
+    let begin = uit.len();
+    let grootte = herstel.iter().map(|(id, _, _)| id + 1).max().unwrap_or(0).max(doc.max_id + 1);
+    let fout = |e: std::io::Error| BeveiligFout::Lezen(e.to_string());
+    write!(uit, "xref\n").map_err(fout)?;
+    for (id, plek, gen) in herstel {
+        // Elke regel precies 20 bytes.
+        write!(uit, "{id} 1\n{plek:010} {gen:05} n\r\n").map_err(fout)?;
+    }
+    write!(uit, "trailer\n<</Size {grootte} /Root {root}").map_err(fout)?;
+    for sleutel in ["Info", "ID"] {
+        if let Some(w) = doc.trailer.get(sleutel.as_bytes()).ok().and_then(trailer_waarde) {
+            write!(uit, " /{sleutel} {w}").map_err(fout)?;
+        }
+    }
+    write!(uit, " /Prev {}>>\nstartxref\n{begin}\n%%EOF\n", doc.xref_start).map_err(fout)?;
+    Ok(uit)
+}
+
+/// Leest de PDF met lopdf en zorgt dat er geen object ontbreekt.
+///
+/// lopdf (0.34, en ook nieuwere versies) rekent de PNG-voorspeller "Average"
+/// verkeerd uit (`a + b / 2` i.p.v. `(a + b) / 2`). In een xref-stream met zo'n
+/// rij wijst het item dan naar een verkeerde plek en ontbreekt het object stil
+/// in het document; de beveiligde kopie verloor zo bv. annotatieweergaven.
+/// Daarom: ontbrekende objecten opzoeken op hun kopregel, het bestand opnieuw
+/// laten lezen met een extra xref-doorsnede die naar die plek wijst, en weigeren
+/// als er daarna nog iets ontbreekt.
+fn laad_volledig(bytes: &[u8]) -> Result<Document, BeveiligFout> {
+    let doc = Document::load_mem(bytes).map_err(|e| BeveiligFout::Lezen(e.to_string()))?;
+    let ontbrekend = ontbrekende_ids(&doc);
+    if ontbrekend.is_empty() {
+        return Ok(doc);
+    }
+    // Een al versleuteld bestand gaat niet verder; hier niet herstellen.
+    if doc.trailer.get(b"Encrypt").is_ok() {
+        return Ok(doc);
+    }
+    let koppen = objectkoppen(bytes);
+    let herstel: Vec<(u32, usize, u16)> = ontbrekend
+        .iter()
+        .filter_map(|id| koppen.get(id).map(|(plek, gen)| (*id, *plek, *gen)))
+        .collect();
+    if herstel.is_empty() {
+        return Err(BeveiligFout::Onvolledig(ontbrekend));
+    }
+    let aangevuld = met_herstelde_xref(bytes, &doc, &herstel)?;
+    let doc = Document::load_mem(&aangevuld).map_err(|e| BeveiligFout::Lezen(e.to_string()))?;
+    let nog = ontbrekende_ids(&doc);
+    if !nog.is_empty() {
+        return Err(BeveiligFout::Onvolledig(nog));
+    }
+    Ok(doc)
+}
+
 /// Versleutelt `bytes` (een niet-beveiligde PDF) met de gegeven wachtwoorden.
 pub fn beveilig_pdf(
     bytes: &[u8],
     gebruikerswachtwoord: &str,
     eigenaarwachtwoord: &str,
     rechten: &Rechten,
-) -> Result<Vec<u8>, String> {
-    let mut doc = Document::load_mem(bytes).map_err(|e| format!("Kan de PDF niet lezen: {e}"))?;
+) -> Result<Vec<u8>, BeveiligFout> {
+    if gebruikerswachtwoord.is_empty() && eigenaarwachtwoord.is_empty() {
+        return Err(BeveiligFout::GeenWachtwoord);
+    }
+    let mut doc = laad_volledig(bytes)?;
     // Ook een /Encrypt dat direct in de trailer staat: is_encrypted() van lopdf
     // ziet alleen een verwijzing, en dan zou het bestand dubbel versleuteld worden.
     if doc.trailer.get(b"Encrypt").is_ok() {
-        return Err("Deze PDF is al beveiligd.".into());
+        return Err(BeveiligFout::AlBeveiligd);
     }
     let mut rng = rand::rngs::OsRng;
     let p = rechten.bits();
-    let mut sleutels = maak_sleutels(gebruikerswachtwoord, eigenaarwachtwoord, p, &mut rng)?;
+    let sleutels = maak_sleutels(gebruikerswachtwoord, eigenaarwachtwoord, p, &mut rng);
 
     let ids: Vec<ObjectId> = doc.objects.keys().copied().collect();
     for id in ids {
@@ -300,12 +553,12 @@ pub fn beveilig_pdf(
     doc.trailer.remove(b"XRefStm");
 
     let mut uit = Vec::with_capacity(bytes.len() + 4096);
-    doc.save_to(&mut uit).map_err(|e| format!("Kan de PDF niet schrijven: {e}"))?;
-    sleutels.bestand.zeroize();
+    doc.save_to(&mut uit).map_err(|e| BeveiligFout::Schrijven(e.to_string()))?;
     Ok(uit)
 }
 
-/// Leest `bron`, beveiligt het en schrijft het naar `doel`.
+/// Leest `bron`, beveiligt het en schrijft het naar `doel` (atomair: een
+/// mislukte schrijfactie laat een bestaand doel heel).
 #[tauri::command]
 pub async fn protect_pdf_file(
     bron: String,
@@ -318,19 +571,17 @@ pub async fn protect_pdf_file(
         let mut gebruikerswachtwoord = gebruikerswachtwoord;
         let mut eigenaarwachtwoord = eigenaarwachtwoord;
         let resultaat = (|| {
-            if gebruikerswachtwoord.is_empty() && eigenaarwachtwoord.is_empty() {
-                return Err("Vul minstens één wachtwoord in.".to_string());
-            }
-            let bytes = std::fs::read(&bron).map_err(|e| format!("Kan {bron} niet lezen: {e}"))?;
+            let bytes = std::fs::read(&bron).map_err(|e| BeveiligFout::Lezen(e.to_string()))?;
             let uit = beveilig_pdf(&bytes, &gebruikerswachtwoord, &eigenaarwachtwoord, &rechten)?;
-            std::fs::write(&doel, uit).map_err(|e| format!("Kan {doel} niet schrijven: {e}"))
+            crate::atomic_file::write(std::path::Path::new(&doel), &uit)
+                .map_err(|e| BeveiligFout::Schrijven(e.to_string()))
         })();
         gebruikerswachtwoord.zeroize();
         eigenaarwachtwoord.zeroize();
-        resultaat
+        resultaat.map_err(|f| f.code())
     })
     .await
-    .map_err(|e| e.to_string())?
+    .map_err(|e| format!("{FOUT_SCHRIJVEN}: {e}"))?
 }
 
 #[cfg(test)]
@@ -358,8 +609,8 @@ mod tests {
         let a = hash_r6(b"geheim", b"zoutzout", &[]);
         let b = hash_r6(b"geheim", b"zoutzout", &[]);
         let c = hash_r6(b"ander", b"zoutzout", &[]);
-        assert_eq!(a, b);
-        assert_ne!(a, c);
+        assert_eq!(*a, *b);
+        assert_ne!(*a, *c);
     }
 
     use cbc::cipher::BlockDecryptMut;
@@ -375,7 +626,7 @@ mod tests {
     #[test]
     fn gebruikers_en_eigenaarsleutel_geven_dezelfde_bestandssleutel_terug() {
         let mut rng = rand::rngs::OsRng;
-        let s = maak_sleutels("open-ww", "rechten-ww", Rechten::default().bits(), &mut rng).unwrap();
+        let s = maak_sleutels("open-ww", "rechten-ww", Rechten::default().bits(), &mut rng);
         // Gebruiker: U = hash(ww, validatiezout) + validatiezout + sleutelzout.
         let (u_hash, u_zouten) = s.u.split_at(32);
         assert_eq!(s.u.len(), 48);
@@ -396,7 +647,7 @@ mod tests {
         use aes::cipher::BlockDecrypt;
         let mut rng = rand::rngs::OsRng;
         let p = Rechten { print: false, ..Rechten::default() }.bits();
-        let s = maak_sleutels("a1b2c3", "", p, &mut rng).unwrap();
+        let s = maak_sleutels("a1b2c3", "", p, &mut rng);
         let aes = aes::Aes256::new_from_slice(&s.bestand).unwrap();
         let mut blok = aes::cipher::generic_array::GenericArray::clone_from_slice(&s.perms);
         aes.decrypt_block(&mut blok);
@@ -409,23 +660,48 @@ mod tests {
     #[test]
     fn zonder_eigenaarwachtwoord_is_het_eigenaarwachtwoord_onbekend_maar_geldig() {
         let mut rng = rand::rngs::OsRng;
-        let s = maak_sleutels("a1b2c3", "", Rechten::default().bits(), &mut rng).unwrap();
+        let s = maak_sleutels("a1b2c3", "", Rechten::default().bits(), &mut rng);
         // Het lege wachtwoord opent de eigenaarssleutel niet.
         let (o_hash, o_zouten) = s.o.split_at(32);
         assert_ne!(hash_r6(b"", &o_zouten[..8], &s.u).as_slice(), o_hash);
     }
 
     #[test]
-    fn saslprep_maakt_gecomponeerd_en_ontbonden_gelijk() {
-        let gecomponeerd = wachtwoord_bytes("caf\u{e9}-ww").unwrap();
-        let ontbonden = wachtwoord_bytes("cafe\u{301}-ww").unwrap();
-        assert_eq!(gecomponeerd, ontbonden);
-        assert!(wachtwoord_bytes("a\u{0}b").is_err(), "stuurtekens zijn niet toegestaan");
+    fn voorbereiden_maakt_gecomponeerd_en_ontbonden_gelijk() {
+        let gecomponeerd = bereid_wachtwoord("caf\u{e9}-ww");
+        let ontbonden = bereid_wachtwoord("cafe\u{301}-ww");
+        assert_eq!(*gecomponeerd, *ontbonden);
+    }
+
+    #[test]
+    fn voorbereiden_wijst_toe_maar_weigert_niets() {
+        // Bijzondere spatie wordt een spatie, een zacht afbreekstreepje vervalt.
+        assert_eq!(bereid_wachtwoord("a\u{a0}b\u{ad}c").as_slice(), b"a bc");
+        // Volle breedte en superscript: NFKC.
+        assert_eq!(bereid_wachtwoord("\u{ff30}a\u{b2}").as_slice(), b"Pa2");
+        // Wat de strenge SASLprep weigerde, blijft gewoon staan.
+        assert_eq!(bereid_wachtwoord("slot\u{1F512}").as_slice(), "slot\u{1F512}".as_bytes());
+        let rtl = "\u{5e1}\u{5d9}\u{5e1}\u{5de}\u{5d4}123";
+        assert_eq!(bereid_wachtwoord(rtl).as_slice(), rtl.as_bytes());
     }
 
     #[test]
     fn wachtwoord_wordt_op_127_bytes_afgekapt() {
-        assert_eq!(wachtwoord_bytes(&"x".repeat(300)).unwrap().len(), 127);
+        assert_eq!(bereid_wachtwoord(&"x".repeat(300)).len(), 127);
+    }
+
+    #[test]
+    fn openvormen_eerst_zoals_getypt_dan_voorbereid_dan_afgekapt() {
+        let v = wachtwoord_vormen("geheim1");
+        assert_eq!(v.len(), 1, "niets te voorbereiden: één vorm");
+        let v = wachtwoord_vormen("\u{ff30}ass\u{b2}");
+        assert_eq!(v[0].as_slice(), "\u{ff30}ass\u{b2}".as_bytes());
+        assert_eq!(v[1].as_slice(), b"Pass2");
+        let lang = "L".repeat(200);
+        let v = wachtwoord_vormen(&lang);
+        assert_eq!(v.len(), 2);
+        assert_eq!(v[0].len(), 200);
+        assert_eq!(v[1].len(), 127);
     }
 
     #[test]
@@ -489,12 +765,21 @@ mod tests {
     }
 
     #[test]
+    fn zonder_wachtwoorden_een_vaste_foutcode() {
+        let f = beveilig_pdf(&kleine_pdf(), "", "", &Rechten::default()).unwrap_err();
+        assert_eq!(f, BeveiligFout::GeenWachtwoord);
+        assert_eq!(f.code(), "NEED_PASSWORD");
+        assert_eq!(BeveiligFout::Onvolledig(vec![4, 9]).code(), "INCOMPLETE: 2");
+        assert!(BeveiligFout::Lezen("x".into()).code().starts_with("READ_FAILED: "));
+    }
+
+    #[test]
     fn al_beveiligde_pdf_wordt_geweigerd_of_opnieuw_beveiligd_zonder_fout() {
         let eerste = beveilig_pdf(&kleine_pdf(), "open-ww", "", &Rechten::default()).unwrap();
         // lopdf leest een R6-bestand niet als ontsleuteld; het tweede beveiligen
         // mag het eerste nooit stilletjes dubbel versleutelen.
         let tweede = beveilig_pdf(&eerste, "ander-ww", "", &Rechten::default());
-        assert!(tweede.is_err(), "een al beveiligd bestand moet geweigerd worden");
+        assert_eq!(tweede.unwrap_err(), BeveiligFout::AlBeveiligd);
     }
 
     #[test]
@@ -528,6 +813,94 @@ mod tests {
         let doc = Document::load_mem(&uit).unwrap_or_else(|e| panic!("resultaat niet leesbaar: {e}"));
         assert!(doc.trailer.get(b"Prev").is_err(), "verouderde /Prev in de trailer");
         assert!(doc.trailer.get(b"XRefStm").is_err(), "verouderde /XRefStm in de trailer");
+    }
+
+    /// `kleine_pdf` waarin vóór object 2 (de inhoudsstream) tekst is ingevoegd
+    /// zonder de xref bij te werken: lopdf leest object 2 en volgende dan op de
+    /// verkeerde plek en laat ze weg. Dat is wat een verkeerd gelezen
+    /// xref-stream (PNG-voorspeller) ook doet.
+    fn pdf_met_verschoven_objecten() -> (Vec<u8>, usize) {
+        let bron = kleine_pdf();
+        let s = String::from_utf8_lossy(&bron).to_string();
+        let plek = s.find("\n2 0 obj").expect("object 2") + 1;
+        let opvulling = b"% opvulling zonder xref-update\n";
+        let mut kapot = bron[..plek].to_vec();
+        kapot.extend_from_slice(opvulling);
+        kapot.extend_from_slice(&bron[plek..]);
+        // startxref verschuift mee, anders vindt lopdf de xref zelf niet.
+        let t = String::from_utf8_lossy(&kapot).to_string();
+        let sx = t.rfind("startxref").unwrap();
+        let rest = &t[sx + "startxref".len()..];
+        let getal: usize = rest.split_whitespace().next().unwrap().parse().unwrap();
+        let nieuw = format!("startxref\n{}\n%%EOF\n", getal + opvulling.len());
+        kapot.truncate(sx);
+        kapot.extend_from_slice(nieuw.as_bytes());
+        (kapot, opvulling.len())
+    }
+
+    #[test]
+    fn objecten_op_een_verkeerde_xref_plek_gaan_niet_verloren() {
+        let (kapot, _) = pdf_met_verschoven_objecten();
+        let los = Document::load_mem(&kapot).unwrap();
+        assert!(!ontbrekende_ids(&los).is_empty(), "testbestand mist geen objecten");
+        // Alles behalve de oude xref-stream: die schrijft lopdf opnieuw.
+        let verwacht: HashSet<u32> = Document::load_mem(&kleine_pdf()).unwrap().objects.iter()
+            .filter(|(_, o)| o.type_name().map_or(true, |t| t != "XRef"))
+            .map(|(k, _)| k.0)
+            .collect();
+        assert!(verwacht.contains(&2));
+
+        let uit = beveilig_pdf(&kapot, "open-ww", "rechten-ww", &Rechten::default()).unwrap();
+        let doc = Document::load_mem(&uit).unwrap();
+        let aanwezig: HashSet<u32> = doc.objects.keys().map(|k| k.0).collect();
+        for id in &verwacht {
+            assert!(aanwezig.contains(id), "object {id} ontbreekt in de beveiligde kopie");
+        }
+        assert!(doc.trailer.get(b"Prev").is_err());
+    }
+
+    #[test]
+    fn een_object_dat_nergens_te_vinden_is_geeft_onvolledig() {
+        let bron = kleine_pdf();
+        let s = String::from_utf8_lossy(&bron).to_string();
+        let plek = s.find("\n2 0 obj").expect("object 2") + 1;
+        let mut kapot = bron.clone();
+        // De kopregel onleesbaar maken: lopdf leest het object niet, en op geen
+        // enkele regel staat nog "2 0 obj".
+        kapot[plek + 4..plek + 7].copy_from_slice(b"xbj");
+        match beveilig_pdf(&kapot, "open-ww", "", &Rechten::default()) {
+            Err(BeveiligFout::Onvolledig(ids)) => assert_eq!(ids, vec![2]),
+            ander => panic!("verwacht Onvolledig, kreeg {ander:?}"),
+        }
+    }
+
+    #[test]
+    fn contents_van_een_handtekening_blijft_onversleuteld() {
+        let mut doc = Document::load_mem(&kleine_pdf()).unwrap();
+        let handtekening = vec![0x30u8, 0x82, 0x01, 0x02, 0, 0, 0, 0];
+        let sig = doc.add_object(dictionary! {
+            "Type" => "Sig", "Filter" => "Test.Handtekening", "SubFilter" => "ETSI.CAdES.detached",
+            "ByteRange" => vec![0.into(), 10.into(), 20.into(), 30.into()],
+            "Contents" => Object::String(handtekening.clone(), StringFormat::Hexadecimal),
+            "M" => Object::string_literal("D:20261022120000Z"),
+        });
+        let stempel = doc.add_object(dictionary! {
+            "Type" => "DocTimeStamp", "SubFilter" => "ETSI.RFC3161",
+            "Contents" => Object::String(handtekening.clone(), StringFormat::Hexadecimal),
+        });
+        let mut bron = Vec::new();
+        doc.save_to(&mut bron).unwrap();
+
+        let uit = beveilig_pdf(&bron, "open-ww", "", &Rechten::default()).unwrap();
+        let doc = Document::load_mem(&uit).unwrap();
+        for id in [sig, stempel] {
+            let d = doc.get_object(id).unwrap().as_dict().unwrap();
+            assert_eq!(d.get(b"Contents").unwrap().as_str().unwrap(), handtekening.as_slice(), "/Contents is versleuteld");
+        }
+        // De andere tekenreeksen van het handtekeningwoordenboek wel.
+        let m = doc.get_object(sig).unwrap().as_dict().unwrap().get(b"M").unwrap().as_str().unwrap();
+        assert_ne!(m, b"D:20261022120000Z");
+        assert_eq!(m.len() % 16, 0);
     }
 
     /// Handmatig: PDF_IN, PDF_OUT, PDF_USER en PDF_OWNER uit de omgeving; het
