@@ -2,11 +2,9 @@ import { createSignal } from 'solid-js';
 import Dialog from '../Dialog.jsx';
 import { closeDialog, showMessage } from '../../stores/dialogStore.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
-import { controleerWachtwoorden, STANDAARD_RECHTEN } from '../../../pdf/protect-pdf.js';
+import { controleerWachtwoorden, STANDAARD_RECHTEN, foutMelding } from '../../../pdf/protect-pdf.js';
 
-const LABEL_STYLE = { width: '170px' };
-
-// Rights, in the order they are shown: [key in the rights object, i18n key].
+// De rechten in de volgorde van de dialoog: [sleutel in het rechtenobject, i18n-sleutel].
 const RECHTEN = [
   ['print', 'protectPdf.allowPrint'],
   ['printHogeKwaliteit', 'protectPdf.allowPrintHigh'],
@@ -18,9 +16,9 @@ const RECHTEN = [
 ];
 
 /**
- * "Protect with password": passwords and rights for a protected copy of the
- * open document (js/pdf/protect-pdf.js). Windows-style dialog via Dialog.jsx:
- * movable, does not close on a click outside.
+ * "Beveiligen met wachtwoord": wachtwoorden en rechten voor een beveiligde
+ * kopie van het geopende document (js/pdf/protect-pdf.js). Windows-stijl via
+ * Dialog.jsx: verplaatsbaar, sluit niet bij een klik ernaast.
  */
 export default function ProtectPdfDialog() {
   const { t } = useTranslation('dialogs');
@@ -62,9 +60,14 @@ export default function ProtectPdfDialog() {
       if (r.ok) showMessage(t('protectPdf.saved', { path: r.pad }));
       else if (r.reden === 'doel-is-geopend') showMessage(t('print.targetIsOpenFile'));
       else if (r.reden === 'beveiligd') showMessage(tCommon('protectedPdfReadOnly'));
-      else if (r.reden === 'mislukt') showMessage(t('protectPdf.failed', { error: r.fout }));
+      else if (r.reden === 'mislukt') {
+        // Vaste foutcode van de Rust-kant -> vertaalde melding.
+        const { sleutel, opties } = foutMelding(r.fout);
+        console.warn('Beveiligen mislukt:', r.fout);
+        showMessage(t(sleutel, opties));
+      }
     } catch (e) {
-      console.warn('Protect PDF failed:', e?.message || e);
+      console.warn('Beveiligen mislukt:', e?.message || e);
       showMessage(t('protectPdf.failed', { error: e?.message || String(e) }));
     }
   };
@@ -88,11 +91,12 @@ export default function ProtectPdfDialog() {
 
   const wachtwoordRij = (labelKey, waarde, zet) => (
     <div class="crop-margins-row">
-      <label class="crop-margins-label" style={LABEL_STYLE}>{t(labelKey)}</label>
+      <label class="crop-margins-label protect-pdf-label">{t(labelKey)}</label>
       <input
         type="password"
-        class="crop-margins-input"
+        class="crop-margins-input-wide"
         autocomplete="new-password"
+        spellcheck={false}
         value={waarde()}
         onInput={(e) => zet(e.target.value)}
         onKeyDown={onKeyDown}
@@ -104,7 +108,7 @@ export default function ProtectPdfDialog() {
     <Dialog
       title={t('protectPdf.title')}
       overlayClass="crop-margins-overlay"
-      dialogClass="crop-margins-dialog"
+      dialogClass="crop-margins-dialog protect-pdf-dialog"
       headerClass="crop-margins-header"
       bodyClass="crop-margins-content"
       footerClass="crop-margins-footer"
@@ -118,28 +122,29 @@ export default function ProtectPdfDialog() {
           <legend>{t('protectPdf.openPassword')}</legend>
           {wachtwoordRij('protectPdf.password', gebruiker, setGebruiker)}
           {wachtwoordRij('protectPdf.repeat', gebruikerHerhaald, setGebruikerHerhaald)}
-          <div class="pref-hint">{t('protectPdf.openPasswordHint')}</div>
+          <div class="protect-pdf-hint">{t('protectPdf.openPasswordHint')}</div>
         </fieldset>
 
         <fieldset class="pref-fieldset">
           <legend>{t('protectPdf.rightsPassword')}</legend>
           {wachtwoordRij('protectPdf.password', eigenaar, setEigenaar)}
           {wachtwoordRij('protectPdf.repeat', eigenaarHerhaald, setEigenaarHerhaald)}
-          <div class="pref-hint">{t('protectPdf.rightsPasswordHint')}</div>
-          <div class="pref-hint">{t('protectPdf.rightsWarning')}</div>
+          <div class="protect-pdf-hint">{t('protectPdf.rightsPasswordHint')} {t('protectPdf.rightsWarning')}</div>
         </fieldset>
 
         <fieldset class="pref-fieldset">
           <legend>{t('protectPdf.allow')}</legend>
-          {RECHTEN.map(([sleutel, label]) => (
-            <label class="pref-checkbox-row" style={{ display: 'flex', 'align-items': 'center', gap: '6px' }}>
-              <input type="checkbox" checked={rechten()[sleutel]} onChange={(e) => zetRecht(sleutel, e.target.checked)} />
-              <span>{t(label)}</span>
-            </label>
-          ))}
+          <div class="protect-pdf-rechten">
+            {RECHTEN.map(([sleutel, label]) => (
+              <label class="pref-checkbox-label">
+                <input type="checkbox" checked={rechten()[sleutel]} onChange={(e) => zetRecht(sleutel, e.target.checked)} />
+                <span>{t(label)}</span>
+              </label>
+            ))}
+          </div>
         </fieldset>
 
-        {fout() && <div class="crop-margins-info" style={{ color: '#e81123' }}>{fout()}</div>}
+        {fout() && <div class="protect-pdf-fout" role="alert">{fout()}</div>}
       </div>
     </Dialog>
   );

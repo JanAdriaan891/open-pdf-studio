@@ -133,7 +133,7 @@ export default function ExportPanel() {
     if (!r.ok && r.reden === 'doel-is-geopend') showMessage(i18next.t('dialogs:print.targetIsOpenFile'));
   };
 
-  // Beveiligde kopie met een wachtwoord (js/pdf/protect-pdf.js).
+  // Beveiligde kopie met een wachtwoord (js/pdf/protect-pdf.js); alleen op het bureaublad.
   const handleProtect = () => {
     const doc = getActiveDocument();
     if (!doc?.pdfDoc) {
@@ -262,7 +262,9 @@ export default function ExportPanel() {
           </div>
         </div>
 
-        <div class="bs-export-card" onClick={handleProtect}>
+        <div class={`bs-export-card${uit('export-protect') ? ' geen-webvariant' : ''}`}
+          title={uit('export-protect') ? meld(t('exportPanel.protect')) : undefined}
+          onClick={() => { if (!uit('export-protect')) handleProtect(); }}>
           <div class="bs-export-card-icon">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <rect x="5" y="11" width="14" height="10" rx="1"/>
