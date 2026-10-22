@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "चयनित PDF में कोई पृष्ठ नहीं है।",
   "failedToSavePdf": "PDF सहेजने में विफल: {{error}}",
   "failedToLoadPdf": "PDF लोड करने में विफल: {{error}}",
+  "hostOpenFailed": "फ़ाइल को स्टोरेज से पढ़ा नहीं जा सका। फिर से प्रयास करें।",
+  "hostNoContact": "Open PDF Studio वाला पेज जवाब नहीं दे रहा है, इसलिए फ़ाइलें न खोली जा सकती हैं न सहेजी जा सकती हैं। पेज फिर से लोड करें और फिर से प्रयास करें।",
   "failedToCreateDocument": "दस्तावेज़ बनाने में विफल: {{error}}",
   "failedToReplacePage": "पृष्ठ बदलने में विफल: {{error}}",
   "failedToMergeFile": "मर्ज करने में विफल: {{file}}\n{{error}}",

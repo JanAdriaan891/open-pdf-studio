@@ -192,6 +192,8 @@
   "selectedPdfNoPages": "De geselecteerde PDF heeft geen pagina's.",
   "failedToSavePdf": "PDF opslaan mislukt: {{error}}",
   "failedToLoadPdf": "PDF laden mislukt: {{error}}",
+  "hostOpenFailed": "Het bestand kon niet uit de opslag worden gelezen. Probeer het opnieuw.",
+  "hostNoContact": "De pagina rond Open PDF Studio reageert niet, dus bestanden kunnen niet worden geopend of opgeslagen. Laad de pagina opnieuw en probeer het nog eens.",
   "failedToCreateDocument": "Document aanmaken mislukt: {{error}}",
   "failedToReplacePage": "Pagina vervangen mislukt: {{error}}",
   "failedToMergeFile": "Samenvoegen mislukt: {{file}}\n{{error}}",

@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "A kiválasztott PDF-nek nincsenek oldalai.",
   "failedToSavePdf": "A PDF mentése sikertelen: {{error}}",
   "failedToLoadPdf": "A PDF betöltése sikertelen: {{error}}",
+  "hostOpenFailed": "A fájlt nem sikerült beolvasni a tárhelyről. Próbálja újra.",
+  "hostNoContact": "Az Open PDF Studiót tartalmazó oldal nem válaszol, ezért fájlokat nem lehet megnyitni vagy menteni. Töltse be újra az oldalt, és próbálja újra.",
   "failedToCreateDocument": "A dokumentum létrehozása sikertelen: {{error}}",
   "failedToReplacePage": "Az oldal cseréje sikertelen: {{error}}",
   "failedToMergeFile": "Az összefűzés sikertelen: {{file}}\n{{error}}",

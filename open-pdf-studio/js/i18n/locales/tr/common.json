@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Seçilen PDF'de sayfa yok.",
   "failedToSavePdf": "PDF kaydedilemedi: {{error}}",
   "failedToLoadPdf": "PDF yüklenemedi: {{error}}",
+  "hostOpenFailed": "Dosya depolamadan okunamadı. Yeniden deneyin.",
+  "hostNoContact": "Open PDF Studio'yu içeren sayfa yanıt vermiyor, bu nedenle dosyalar açılamıyor veya kaydedilemiyor. Sayfayı yeniden yükleyip tekrar deneyin.",
   "failedToCreateDocument": "Belge oluşturulamadı: {{error}}",
   "failedToReplacePage": "Sayfa değiştirilemedi: {{error}}",
   "failedToMergeFile": "Birleştirilemedi: {{file}}\n{{error}}",

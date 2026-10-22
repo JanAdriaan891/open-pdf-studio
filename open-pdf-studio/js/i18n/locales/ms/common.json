@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "PDF yang dipilih tidak mempunyai halaman.",
   "failedToSavePdf": "Gagal menyimpan PDF: {{error}}",
   "failedToLoadPdf": "Gagal memuatkan PDF: {{error}}",
+  "hostOpenFailed": "Fail tidak dapat dibaca daripada storan. Cuba lagi.",
+  "hostNoContact": "Halaman yang memuatkan Open PDF Studio tidak bertindak balas, jadi fail tidak dapat dibuka atau disimpan. Muat semula halaman dan cuba lagi.",
   "failedToCreateDocument": "Gagal mencipta dokumen: {{error}}",
   "failedToReplacePage": "Gagal menggantikan halaman: {{error}}",
   "failedToMergeFile": "Gagal menggabungkan: {{file}}\n{{error}}",

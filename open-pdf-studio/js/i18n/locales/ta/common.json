@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "தேர்ந்தெடுத்த PDF-இல் பக்கங்கள் இல்லை.",
   "failedToSavePdf": "PDF-ஐச் சேமிக்க முடியவில்லை: {{error}}",
   "failedToLoadPdf": "PDF-ஐ ஏற்ற முடியவில்லை: {{error}}",
+  "hostOpenFailed": "சேமிப்பகத்திலிருந்து கோப்பைப் படிக்க முடியவில்லை. மீண்டும் முயலவும்.",
+  "hostNoContact": "Open PDF Studio உள்ள பக்கம் பதிலளிக்கவில்லை, எனவே கோப்புகளைத் திறக்கவோ சேமிக்கவோ முடியாது. பக்கத்தை மீண்டும் ஏற்றி மீண்டும் முயலவும்.",
   "failedToCreateDocument": "ஆவணத்தை உருவாக்க முடியவில்லை: {{error}}",
   "failedToReplacePage": "பக்கத்தை மாற்ற முடியவில்லை: {{error}}",
   "failedToMergeFile": "ஒன்றிணைக்க முடியவில்லை: {{file}}\n{{error}}",

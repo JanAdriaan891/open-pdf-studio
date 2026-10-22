@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "El PDF seleccionat no té pàgines.",
   "failedToSavePdf": "No s'ha pogut desar el PDF: {{error}}",
   "failedToLoadPdf": "No s'ha pogut carregar el PDF: {{error}}",
+  "hostOpenFailed": "No s'ha pogut llegir el fitxer de l'emmagatzematge. Torneu-ho a provar.",
+  "hostNoContact": "La pàgina que conté Open PDF Studio no respon, de manera que no es poden obrir ni desar fitxers. Torneu a carregar la pàgina i torneu-ho a provar.",
   "failedToCreateDocument": "No s'ha pogut crear el document: {{error}}",
   "failedToReplacePage": "No s'ha pogut substituir la pàgina: {{error}}",
   "failedToMergeFile": "No s'ha pogut combinar: {{file}}\n{{error}}",

@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Odabrani PDF nema stranica.",
   "failedToSavePdf": "Spremanje PDF-a nije uspjelo: {{error}}",
   "failedToLoadPdf": "Učitavanje PDF-a nije uspjelo: {{error}}",
+  "hostOpenFailed": "Datoteku nije bilo moguće pročitati iz pohrane. Pokušajte ponovno.",
+  "hostNoContact": "Stranica oko Open PDF Studija ne odgovara pa se datoteke ne mogu otvoriti ni spremiti. Ponovno učitajte stranicu i pokušajte ponovno.",
   "failedToCreateDocument": "Izrada dokumenta nije uspjela: {{error}}",
   "failedToReplacePage": "Zamjena stranice nije uspjela: {{error}}",
   "failedToMergeFile": "Spajanje nije uspjelo: {{file}}\n{{error}}",

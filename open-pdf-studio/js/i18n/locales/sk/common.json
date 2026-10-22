@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Vybraté PDF nemá žiadne strany.",
   "failedToSavePdf": "Uloženie PDF zlyhalo: {{error}}",
   "failedToLoadPdf": "Načítanie PDF zlyhalo: {{error}}",
+  "hostOpenFailed": "Súbor sa nepodarilo načítať z úložiska. Skúste to znova.",
+  "hostNoContact": "Stránka okolo Open PDF Studio neodpovedá, takže súbory nemožno otvárať ani ukladať. Znova načítajte stránku a skúste to znova.",
   "failedToCreateDocument": "Vytvorenie dokumentu zlyhalo: {{error}}",
   "failedToReplacePage": "Nahradenie strany zlyhalo: {{error}}",
   "failedToMergeFile": "Zlúčenie zlyhalo: {{file}}\n{{error}}",

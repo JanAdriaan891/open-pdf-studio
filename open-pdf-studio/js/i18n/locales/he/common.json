@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "ב-PDF שנבחר אין עמודים.",
   "failedToSavePdf": "שמירת ה-PDF נכשלה: {{error}}",
   "failedToLoadPdf": "טעינת ה-PDF נכשלה: {{error}}",
+  "hostOpenFailed": "לא ניתן היה לקרוא את הקובץ מהאחסון. נסו שוב.",
+  "hostNoContact": "הדף שבו נמצא Open PDF Studio אינו מגיב, ולכן לא ניתן לפתוח או לשמור קבצים. טענו מחדש את הדף ונסו שוב.",
   "failedToCreateDocument": "יצירת המסמך נכשלה: {{error}}",
   "failedToReplacePage": "החלפת העמוד נכשלה: {{error}}",
   "failedToMergeFile": "המיזוג נכשל: {{file}}\n{{error}}",

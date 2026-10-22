@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "منتخب PDF میں کوئی صفحہ نہیں۔",
   "failedToSavePdf": "PDF محفوظ کرنے میں ناکامی: {{error}}",
   "failedToLoadPdf": "PDF لوڈ کرنے میں ناکامی: {{error}}",
+  "hostOpenFailed": "فائل اسٹوریج سے نہیں پڑھی جا سکی۔ دوبارہ کوشش کریں۔",
+  "hostNoContact": "Open PDF Studio والا صفحہ جواب نہیں دے رہا، اس لیے فائلیں نہ کھولی جا سکتی ہیں نہ محفوظ کی جا سکتی ہیں۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ کوشش کریں۔",
   "failedToCreateDocument": "دستاویز بنانے میں ناکامی: {{error}}",
   "failedToReplacePage": "صفحہ تبدیل کرنے میں ناکامی: {{error}}",
   "failedToMergeFile": "ضم کرنے میں ناکامی: {{file}}\n{{error}}",

@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "PDF ที่เลือกไม่มีหน้า",
   "failedToSavePdf": "บันทึก PDF ไม่สำเร็จ: {{error}}",
   "failedToLoadPdf": "โหลด PDF ไม่สำเร็จ: {{error}}",
+  "hostOpenFailed": "ไม่สามารถอ่านไฟล์จากที่เก็บข้อมูลได้ โปรดลองอีกครั้ง",
+  "hostNoContact": "หน้าที่ครอบ Open PDF Studio ไม่ตอบสนอง จึงเปิดหรือบันทึกไฟล์ไม่ได้ โปรดโหลดหน้าใหม่แล้วลองอีกครั้ง",
   "failedToCreateDocument": "สร้างเอกสารไม่สำเร็จ: {{error}}",
   "failedToReplacePage": "แทนที่หน้าไม่สำเร็จ: {{error}}",
   "failedToMergeFile": "รวมไม่สำเร็จ: {{file}}\n{{error}}",

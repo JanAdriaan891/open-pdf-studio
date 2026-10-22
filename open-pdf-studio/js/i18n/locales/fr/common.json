@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Le PDF sélectionné ne contient aucune page.",
   "failedToSavePdf": "Impossible d'enregistrer le PDF : {{error}}",
   "failedToLoadPdf": "Impossible de charger le PDF : {{error}}",
+  "hostOpenFailed": "Le fichier n'a pas pu être lu depuis le stockage. Réessayez.",
+  "hostNoContact": "La page qui contient Open PDF Studio ne répond pas : les fichiers ne peuvent être ni ouverts ni enregistrés. Rechargez la page et réessayez.",
   "failedToCreateDocument": "Impossible de créer le document : {{error}}",
   "failedToReplacePage": "Impossible de remplacer la page : {{error}}",
   "failedToMergeFile": "Échec de la fusion : {{file}}\n{{error}}",

@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Den valgte PDF-en har ingen sider.",
   "failedToSavePdf": "Kunne ikke lagre PDF-en: {{error}}",
   "failedToLoadPdf": "Kunne ikke laste inn PDF-en: {{error}}",
+  "hostOpenFailed": "Filen kunne ikke leses fra lagringen. Prøv igjen.",
+  "hostNoContact": "Siden rundt Open PDF Studio svarer ikke, så filer kan ikke åpnes eller lagres. Last inn siden på nytt og prøv igjen.",
   "failedToCreateDocument": "Kunne ikke opprette dokumentet: {{error}}",
   "failedToReplacePage": "Kunne ikke erstatte siden: {{error}}",
   "failedToMergeFile": "Sammenslåing mislyktes: {{file}}\n{{error}}",

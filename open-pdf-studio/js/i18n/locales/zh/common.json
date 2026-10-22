@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "所选 PDF 没有页面。",
   "failedToSavePdf": "保存 PDF 失败：{{error}}",
   "failedToLoadPdf": "加载 PDF 失败：{{error}}",
+  "hostOpenFailed": "无法从存储中读取该文件。请重试。",
+  "hostNoContact": "包含 Open PDF Studio 的页面没有响应，因此无法打开或保存文件。请重新加载页面后重试。",
   "failedToCreateDocument": "创建文档失败：{{error}}",
   "failedToReplacePage": "替换页面失败：{{error}}",
   "failedToMergeFile": "合并失败：{{file}}\n{{error}}",

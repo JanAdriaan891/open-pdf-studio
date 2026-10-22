@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "PDF iliyochaguliwa haina kurasa.",
   "failedToSavePdf": "Imeshindwa kuhifadhi PDF: {{error}}",
   "failedToLoadPdf": "Imeshindwa kupakia PDF: {{error}}",
+  "hostOpenFailed": "Faili haikuweza kusomwa kutoka kwenye hifadhi. Jaribu tena.",
+  "hostNoContact": "Ukurasa unaozunguka Open PDF Studio haujibu, kwa hivyo faili haziwezi kufunguliwa wala kuhifadhiwa. Pakia upya ukurasa kisha ujaribu tena.",
   "failedToCreateDocument": "Imeshindwa kuunda hati: {{error}}",
   "failedToReplacePage": "Imeshindwa kubadilisha ukurasa: {{error}}",
   "failedToMergeFile": "Imeshindwa kuunganisha: {{file}}\n{{error}}",

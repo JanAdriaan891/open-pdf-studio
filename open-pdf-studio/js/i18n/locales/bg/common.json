@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Избраният PDF няма страници.",
   "failedToSavePdf": "Запазването на PDF е неуспешно: {{error}}",
   "failedToLoadPdf": "Зареждането на PDF е неуспешно: {{error}}",
+  "hostOpenFailed": "Файлът не можа да бъде прочетен от хранилището. Опитайте отново.",
+  "hostNoContact": "Страницата около Open PDF Studio не отговаря, затова файловете не могат да се отварят или записват. Презаредете страницата и опитайте отново.",
   "failedToCreateDocument": "Създаването на документа е неуспешно: {{error}}",
   "failedToReplacePage": "Замяната на страницата е неуспешна: {{error}}",
   "failedToMergeFile": "Обединяването е неуспешно: {{file}}\n{{error}}",

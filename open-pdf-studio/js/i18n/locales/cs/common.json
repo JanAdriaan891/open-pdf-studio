@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Vybrané PDF nemá žádné stránky.",
   "failedToSavePdf": "Uložení PDF se nezdařilo: {{error}}",
   "failedToLoadPdf": "Načtení PDF se nezdařilo: {{error}}",
+  "hostOpenFailed": "Soubor se nepodařilo načíst z úložiště. Zkuste to znovu.",
+  "hostNoContact": "Stránka kolem Open PDF Studio neodpovídá, takže soubory nelze otevírat ani ukládat. Načtěte stránku znovu a zkuste to znovu.",
   "failedToCreateDocument": "Vytvoření dokumentu se nezdařilo: {{error}}",
   "failedToReplacePage": "Nahrazení stránky se nezdařilo: {{error}}",
   "failedToMergeFile": "Sloučení se nezdařilo: {{file}}\n{{error}}",
