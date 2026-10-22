@@ -134,8 +134,8 @@
     "officeTable": "Tabel",
     "officeText": "Teks",
     "officeFailed": "Ekspor dokumen gagal.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Lindungi dengan Kata Sandi",
+    "protectDesc": "Simpan salinan yang dilindungi kata sandi (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profil keluaran",

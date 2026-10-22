@@ -134,8 +134,8 @@
     "officeTable": "جدول",
     "officeText": "نص",
     "officeFailed": "فشل تصدير المستند.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "الحماية بكلمة مرور",
+    "protectDesc": "حفظ نسخة محمية بكلمة مرور (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "ملف تعريف الإخراج",

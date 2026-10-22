@@ -134,8 +134,8 @@
     "officeTable": "ຕາຕະລາງ",
     "officeText": "ຂໍ້ຄວາມ",
     "officeFailed": "ການສົ່ງອອກເອກະສານບໍ່ສຳເລັດ.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "ປ້ອງກັນດ້ວຍລະຫັດຜ່ານ",
+    "protectDesc": "ບັນທຶກສຳເນົາທີ່ປ້ອງກັນດ້ວຍລະຫັດຜ່ານ (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "ໂປຣໄຟລ໌ຜົນລັບ",

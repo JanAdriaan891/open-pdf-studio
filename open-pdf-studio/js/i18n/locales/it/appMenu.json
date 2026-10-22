@@ -134,8 +134,8 @@
     "officeTable": "Tabella",
     "officeText": "Testo",
     "officeFailed": "Esportazione del documento non riuscita.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Proteggi con password",
+    "protectDesc": "Salva una copia protetta da password (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profilo di output",

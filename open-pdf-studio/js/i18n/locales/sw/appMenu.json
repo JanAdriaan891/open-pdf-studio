@@ -134,8 +134,8 @@
     "officeTable": "Jedwali",
     "officeText": "Maandishi",
     "officeFailed": "Kuhamisha nje hati kumeshindwa.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Linda kwa Nenosiri",
+    "protectDesc": "Hifadhi nakala iliyolindwa kwa nenosiri (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Wasifu wa matokeo",

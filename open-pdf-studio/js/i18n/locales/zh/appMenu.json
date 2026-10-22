@@ -134,8 +134,8 @@
     "officeTable": "表格",
     "officeText": "文本",
     "officeFailed": "文档导出失败。",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "使用密码保护",
+    "protectDesc": "保存一份受密码保护的副本 (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "输出配置文件",

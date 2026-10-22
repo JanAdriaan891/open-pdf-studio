@@ -134,8 +134,8 @@
     "officeTable": "Πίνακας",
     "officeText": "Κείμενο",
     "officeFailed": "Η εξαγωγή του εγγράφου απέτυχε.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Προστασία με κωδικό",
+    "protectDesc": "Αποθήκευση αντιγράφου με προστασία κωδικού (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Προφίλ εξόδου",

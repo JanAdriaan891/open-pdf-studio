@@ -134,8 +134,8 @@
     "officeTable": "טבלה",
     "officeText": "טקסט",
     "officeFailed": "ייצוא המסמך נכשל.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "הגנה בסיסמה",
+    "protectDesc": "שמירת עותק מוגן בסיסמה (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "פרופיל פלט",

@@ -134,8 +134,8 @@
     "officeTable": "அட்டவணை",
     "officeText": "உரை",
     "officeFailed": "ஆவண ஏற்றுமதி தோல்வியடைந்தது.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "கடவுச்சொல்லால் பாதுகாக்கவும்",
+    "protectDesc": "கடவுச்சொல்லால் பாதுகாக்கப்பட்ட நகலைச் சேமிக்கவும் (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "வெளியீட்டுச் சுயவிவரம்",

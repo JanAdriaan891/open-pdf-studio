@@ -134,8 +134,8 @@
     "officeTable": "Bảng",
     "officeText": "Văn bản",
     "officeFailed": "Xuất tài liệu thất bại.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Bảo vệ bằng mật khẩu",
+    "protectDesc": "Lưu bản sao được bảo vệ bằng mật khẩu (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Hồ sơ màu đầu ra",

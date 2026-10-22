@@ -134,8 +134,8 @@
     "officeTable": "Tabell",
     "officeText": "Text",
     "officeFailed": "Exporten av dokumentet misslyckades.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Skydda med lösenord",
+    "protectDesc": "Spara en kopia skyddad med lösenord (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Utdataprofil",

@@ -134,8 +134,8 @@
     "officeTable": "Таблиця",
     "officeText": "Текст",
     "officeFailed": "Не вдалося експортувати документ.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Захистити паролем",
+    "protectDesc": "Зберегти копію, захищену паролем (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Профіль виведення",

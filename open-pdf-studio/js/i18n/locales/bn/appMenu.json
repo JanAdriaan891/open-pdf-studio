@@ -134,8 +134,8 @@
     "officeTable": "সারণি",
     "officeText": "পাঠ্য",
     "officeFailed": "নথি রপ্তানি ব্যর্থ হয়েছে।",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "পাসওয়ার্ড দিয়ে সুরক্ষিত করুন",
+    "protectDesc": "পাসওয়ার্ড-সুরক্ষিত একটি কপি সংরক্ষণ করুন (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "আউটপুট প্রোফাইল",

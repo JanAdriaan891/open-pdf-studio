@@ -134,8 +134,8 @@
     "officeTable": "Tableau",
     "officeText": "Texte",
     "officeFailed": "Échec de l'exportation du document.",
-    "protect": "Protect with Password",
-    "protectDesc": "Save a copy protected with a password (AES-256)"
+    "protect": "Protéger par mot de passe",
+    "protectDesc": "Enregistrer une copie protégée par mot de passe (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profil de sortie",
