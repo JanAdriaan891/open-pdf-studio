@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Reîncărcarea paginii pornește de la zero: în browser, documentul rămâne pe computerul dvs. și nu este stocat.",
   "desktopOnly": "{{feature}} funcționează doar în aplicația desktop. Această pagină este versiunea pentru browser.",
+  "hostedLinkTitle": "Link",
+  "hostedLinkMessage": "Linkurile nu pot fi deschise de aici. Copiați adresa pentru a o deschide singur:",
+  "hostedAttachmentMessage": "Atașamentele nu pot fi deschise aici. „{{filename}}” este oferit în schimb ca descărcare.",
   "assistantTitle": "Asistentul OpenAEC",
   "assistant": {
     "greeting": "Bună! Sunt **{{title}}**. Pot: 🌐 traduce, 📝 rezuma, ✏️ desena pe planșă și 🚪 recunoaște ușile. Alegeți o abilitate de mai jos sau puneți întrebarea.",

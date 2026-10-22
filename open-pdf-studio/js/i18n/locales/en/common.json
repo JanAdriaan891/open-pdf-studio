@@ -49,6 +49,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "A page reload starts empty: in the browser your document stays on your computer and is not stored.",
   "desktopOnly": "{{feature}} only works in the desktop app. This page is the browser version.",
+  "hostedLinkTitle": "Link",
+  "hostedLinkMessage": "Links cannot be opened from here. Copy the address to open it yourself:",
+  "hostedAttachmentMessage": "Attachments cannot be opened here. \"{{filename}}\" is offered as a download instead.",
   "assistantTitle": "OpenAEC assistant",
   "assistant": {
     "greeting": "Hello! I am the **{{title}}**. I can: 🌐 translate, 📝 summarise, ✏️ draw on the drawing, and 🚪 recognise doors. Pick a skill below or ask your question.",

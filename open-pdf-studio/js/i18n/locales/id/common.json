@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Memuat ulang halaman akan dimulai kosong: di browser, dokumen Anda tetap di komputer Anda dan tidak disimpan.",
   "desktopOnly": "{{feature}} hanya berfungsi di aplikasi desktop. Halaman ini adalah versi browser.",
+  "hostedLinkTitle": "Tautan",
+  "hostedLinkMessage": "Tautan tidak dapat dibuka dari sini. Salin alamatnya untuk membukanya sendiri:",
+  "hostedAttachmentMessage": "Lampiran tidak dapat dibuka di sini. \"{{filename}}\" ditawarkan sebagai unduhan.",
   "assistantTitle": "Asisten OpenAEC",
   "assistant": {
     "greeting": "Halo! Saya **{{title}}**. Saya bisa: 🌐 menerjemahkan, 📝 meringkas, ✏️ menggambar pada gambar kerja, dan 🚪 mengenali pintu. Pilih keterampilan di bawah atau ajukan pertanyaan Anda.",

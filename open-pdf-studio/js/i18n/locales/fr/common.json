@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Un rechargement de la page repart de zéro : dans le navigateur, votre document reste sur votre ordinateur et n'est pas stocké.",
   "desktopOnly": "{{feature}} ne fonctionne que dans l'application de bureau. Cette page est la version navigateur.",
+  "hostedLinkTitle": "Lien",
+  "hostedLinkMessage": "Les liens ne peuvent pas être ouverts ici. Copiez l'adresse pour l'ouvrir vous-même :",
+  "hostedAttachmentMessage": "Les pièces jointes ne peuvent pas être ouvertes ici. « {{filename}} » est proposé en téléchargement à la place.",
   "assistantTitle": "Assistant OpenAEC",
   "assistant": {
     "greeting": "Bonjour ! Je suis l'**{{title}}**. Je peux : 🌐 traduire, 📝 résumer, ✏️ dessiner sur le plan et 🚪 reconnaître les portes. Choisissez une compétence ci-dessous ou posez votre question.",

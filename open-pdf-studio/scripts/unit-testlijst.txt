@@ -450,3 +450,4 @@ js/pdf/pdf-viewport-paginaschilder.test.mjs
 js/pdf/protect-pdf.test.mjs
 scripts/webbundel.test.mjs
 scripts/gehost-html.test.mjs
+js/core/extern-openen.test.mjs

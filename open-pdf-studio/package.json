@@ -13,6 +13,7 @@
     "pack:hosted": "node scripts/pak-webbundel.mjs",
     "verify:hosted-bundle": "node scripts/controleer-webbundel.mjs",
     "test:hosted-csp": "node scripts/test-gehost-csp.mjs",
+    "verify:hosted-popups": "node scripts/verify-gast-popups.mjs",
     "build:web-unit": "vite build --config vite.web-unit.config.js",
     "dev:web-unit": "vite --config vite.web-unit.config.js --port 3079 --strictPort",
     "preview": "vite preview",

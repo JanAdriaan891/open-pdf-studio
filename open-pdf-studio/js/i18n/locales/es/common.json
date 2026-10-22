@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Al recargar la página se empieza vacío: en el navegador, su documento permanece en su equipo y no se almacena.",
   "desktopOnly": "{{feature}} solo funciona en la aplicación de escritorio. Esta página es la versión para navegador.",
+  "hostedLinkTitle": "Enlace",
+  "hostedLinkMessage": "Los enlaces no se pueden abrir desde aquí. Copie la dirección para abrirla usted mismo:",
+  "hostedAttachmentMessage": "Los adjuntos no se pueden abrir aquí. «{{filename}}» se ofrece como descarga en su lugar.",
   "assistantTitle": "Asistente de OpenAEC",
   "assistant": {
     "greeting": "¡Hola! Soy el **{{title}}**. Puedo: 🌐 traducir, 📝 resumir, ✏️ dibujar en el plano y 🚪 reconocer puertas. Elige una habilidad abajo o haz tu pregunta.",

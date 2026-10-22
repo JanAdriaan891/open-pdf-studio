@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Sayfa yenilendiğinde boş başlar: tarayıcıda belgeniz bilgisayarınızda kalır ve hiçbir yerde saklanmaz.",
   "desktopOnly": "{{feature}} yalnızca masaüstü uygulamasında çalışır. Bu sayfa tarayıcı sürümüdür.",
+  "hostedLinkTitle": "Bağlantı",
+  "hostedLinkMessage": "Bağlantılar buradan açılamaz. Kendiniz açmak için adresi kopyalayın:",
+  "hostedAttachmentMessage": "Ekler burada açılamaz. \"{{filename}}\" bunun yerine indirme olarak sunuluyor.",
   "assistantTitle": "OpenAEC asistanı",
   "assistant": {
     "greeting": "Merhaba! Ben **{{title}}**. Şunları yapabilirim: 🌐 çeviri, 📝 özetleme, ✏️ çizim üzerine çizim yapma ve 🚪 kapı tanıma. Aşağıdan bir beceri seçin veya sorunuzu sorun.",

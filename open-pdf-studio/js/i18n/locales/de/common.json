@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Ein Neuladen der Seite beginnt leer: Im Browser bleibt Ihr Dokument auf Ihrem Computer und wird nicht gespeichert.",
   "desktopOnly": "{{feature}} funktioniert nur in der Desktop-App. Diese Seite ist die Browserversion.",
+  "hostedLinkTitle": "Link",
+  "hostedLinkMessage": "Links können hier nicht geöffnet werden. Kopieren Sie die Adresse, um sie selbst zu öffnen:",
+  "hostedAttachmentMessage": "Anhänge können hier nicht geöffnet werden. \"{{filename}}\" wird stattdessen als Download angeboten.",
   "assistantTitle": "OpenAEC-Assistent",
   "assistant": {
     "greeting": "Hallo! Ich bin der **{{title}}**. Ich kann: 🌐 übersetzen, 📝 zusammenfassen, ✏️ auf der Zeichnung zeichnen und 🚪 Türen erkennen. Wählen Sie unten eine Fähigkeit oder stellen Sie Ihre Frage.",

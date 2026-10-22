@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Tải lại trang sẽ bắt đầu trống: trong trình duyệt, tài liệu của bạn ở trên máy tính của bạn và không được lưu trữ.",
   "desktopOnly": "{{feature}} chỉ hoạt động trong ứng dụng máy tính. Trang này là phiên bản trình duyệt.",
+  "hostedLinkTitle": "Liên kết",
+  "hostedLinkMessage": "Không thể mở liên kết từ đây. Hãy sao chép địa chỉ để tự mở:",
+  "hostedAttachmentMessage": "Không thể mở tệp đính kèm tại đây. \"{{filename}}\" được cung cấp dưới dạng tải xuống.",
   "assistantTitle": "Trợ lý OpenAEC",
   "assistant": {
     "greeting": "Xin chào! Tôi là **{{title}}**. Tôi có thể: 🌐 dịch, 📝 tóm tắt, ✏️ vẽ lên bản vẽ và 🚪 nhận diện cửa. Hãy chọn một kỹ năng bên dưới hoặc đặt câu hỏi.",

@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Az oldal újratöltése üresen indul: a böngészőben a dokumentum az Ön számítógépén marad, és nem kerül tárolásra.",
   "desktopOnly": "A(z) {{feature}} csak az asztali alkalmazásban működik. Ez az oldal a böngészős változat.",
+  "hostedLinkTitle": "Hivatkozás",
+  "hostedLinkMessage": "A hivatkozások itt nem nyithatók meg. Másolja ki a címet, és nyissa meg saját maga:",
+  "hostedAttachmentMessage": "A mellékletek itt nem nyithatók meg. A(z) „{{filename}}” fájl letöltésként érhető el.",
   "assistantTitle": "OpenAEC asszisztens",
   "assistant": {
     "greeting": "Helló! Én vagyok az **{{title}}**. Ezekre vagyok képes: 🌐 fordítás, 📝 összefoglalás, ✏️ rajzolás a rajzra és 🚪 ajtók felismerése. Válasszon alább egy képességet, vagy tegye fel a kérdését.",

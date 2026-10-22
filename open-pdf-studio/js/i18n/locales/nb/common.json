@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "En ny innlasting av siden starter tom: i nettleseren blir dokumentet ditt på datamaskinen og lagres ikke.",
   "desktopOnly": "{{feature}} fungerer bare i skrivebordsappen. Denne siden er nettleserversjonen.",
+  "hostedLinkTitle": "Lenke",
+  "hostedLinkMessage": "Lenker kan ikke åpnes herfra. Kopier adressen for å åpne den selv:",
+  "hostedAttachmentMessage": "Vedlegg kan ikke åpnes her. «{{filename}}» tilbys i stedet som nedlasting.",
   "assistantTitle": "OpenAEC-assistent",
   "assistant": {
     "greeting": "Hei! Jeg er **{{title}}**. Jeg kan: 🌐 oversette, 📝 oppsummere, ✏️ tegne på tegningen og 🚪 gjenkjenne dører. Velg en ferdighet nedenfor, eller still spørsmålet ditt.",

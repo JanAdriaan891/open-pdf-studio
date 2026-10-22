@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "重新加载页面后将为空：在浏览器中，您的文档保留在您的计算机上，不会被存储。",
   "desktopOnly": "{{feature}} 仅在桌面应用中可用。此页面是浏览器版本。",
+  "hostedLinkTitle": "链接",
+  "hostedLinkMessage": "无法从此处打开链接。请复制地址后自行打开：",
+  "hostedAttachmentMessage": "无法在此处打开附件。“{{filename}}”将改为以下载方式提供。",
   "assistantTitle": "OpenAEC 助手",
   "assistant": {
     "greeting": "你好！我是 **{{title}}**。我可以：🌐 翻译、📝 总结、✏️ 在图纸上绘制、🚪 识别门。请在下方选择一项技能或提出问题。",
