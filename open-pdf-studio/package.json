@@ -10,6 +10,7 @@
     "prebuild": "npm run prepare:native-runtime && npm run prepare:ocr-runtime && cargo build --release -p pdfium-worker -p open-pdf-thumbnails",
     "build": "vite build",
     "build:hosted": "vite build --mode hosted",
+    "verify:hosted-popups": "node scripts/verify-gast-popups.mjs",
     "build:web-unit": "vite build --config vite.web-unit.config.js",
     "dev:web-unit": "vite --config vite.web-unit.config.js --port 3079 --strictPort",
     "preview": "vite preview",

@@ -473,28 +473,7 @@ export async function fileExists(path) {
   return await invoke('file_exists', { path });
 }
 
-// Shell operations
-export async function openExternal(url) {
-  if (!isTauri()) {
-    window.open(url, '_blank');
-    return;
-  }
-  // Headless: geen browser van de gebruiker naar voren halen.
-  if (slaOverInHeadless(`open external ${url}`)) return;
-
-  // Try using the shell plugin
-  if (window.__TAURI__.shell) {
-    try {
-      await window.__TAURI__.shell.open(url);
-      return;
-    } catch (e) {
-      console.error('Shell plugin error:', e);
-    }
-  }
-
-  // Fallback: use invoke
-  await invoke('open_url', { url });
-}
+// Iets buiten de app openen (webadres, bijlage): core/extern-openen.js (#695).
 
 // ── Contract van invoke() buiten Tauri ──────────────────────────────────────
 // De webversie heeft geen Rust-kant. Een aanroep KAN daar dus niet slagen.

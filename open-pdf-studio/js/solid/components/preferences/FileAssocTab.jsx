@@ -1,6 +1,6 @@
 import { createSignal, onMount, Show } from 'solid-js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
-import { openExternal } from '../../../core/platform.js';
+import { openExtern } from '../../../core/extern-openen.js';
 import { showMessage } from '../../stores/dialogStore.js';
 import { GEEN_MINIATUREN, leesMiniatuurStatus, zetMiniaturen } from '../../../core/verkenner-miniaturen.js';
 
@@ -84,7 +84,7 @@ export default function FileAssocTab() {
     const platform = navigator.platform.toLowerCase();
     if (platform.includes('win')) {
       try {
-        await openExternal('ms-settings:defaultapps');
+        await openExtern('ms-settings:defaultapps');
         showMessage(t('fileAssoc.windowsInstructions'));
       } catch {
         showMessage(t('fileAssoc.windowsFailed'));

@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Po opätovnom načítaní sa stránka spustí prázdna: v prehliadači zostáva dokument vo vašom počítači a neukladá sa.",
   "desktopOnly": "{{feature}} funguje len v desktopovej aplikácii. Táto stránka je verzia pre prehliadač.",
+  "hostedLinkTitle": "Odkaz",
+  "hostedLinkMessage": "Odkazy tu nie je možné otvoriť. Skopírujte adresu a otvorte ju sami:",
+  "hostedAttachmentMessage": "Prílohy tu nie je možné otvoriť. „{{filename}}“ sa namiesto toho ponúka na stiahnutie.",
   "assistantTitle": "Asistent OpenAEC",
   "assistant": {
     "greeting": "Dobrý deň! Som **{{title}}**. Viem: 🌐 prekladať, 📝 zhrnúť, ✏️ kresliť do výkresu a 🚪 rozpoznať dvere. Vyberte zručnosť nižšie alebo položte otázku.",

@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Ponovno učitavanje stranice počinje prazno: u pregledniku dokument ostaje na vašem računalu i ne pohranjuje se.",
   "desktopOnly": "{{feature}} radi samo u desktop aplikaciji. Ova stranica je verzija za preglednik.",
+  "hostedLinkTitle": "Poveznica",
+  "hostedLinkMessage": "Poveznice se ne mogu otvoriti odavde. Kopirajte adresu kako biste je sami otvorili:",
+  "hostedAttachmentMessage": "Privici se ovdje ne mogu otvoriti. „{{filename}}” nudi se za preuzimanje.",
   "assistantTitle": "OpenAEC asistent",
   "assistant": {
     "greeting": "Pozdrav! Ja sam **{{title}}**. Mogu: 🌐 prevoditi, 📝 sažimati, ✏️ crtati na crtežu i 🚪 prepoznavati vrata. Odaberite vještinu u nastavku ili postavite pitanje.",

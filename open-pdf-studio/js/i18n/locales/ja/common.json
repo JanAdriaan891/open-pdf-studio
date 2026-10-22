@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "ページを再読み込みすると空の状態から始まります。ブラウザーでは文書はお使いのコンピューター上にあり、保存されません。",
   "desktopOnly": "{{feature}} はデスクトップアプリでのみ使用できます。このページはブラウザー版です。",
+  "hostedLinkTitle": "リンク",
+  "hostedLinkMessage": "ここからリンクを開くことはできません。アドレスをコピーしてご自身で開いてください:",
+  "hostedAttachmentMessage": "ここでは添付ファイルを開けません。「{{filename}}」はダウンロードとして提供されます。",
   "assistantTitle": "OpenAEC アシスタント",
   "assistant": {
     "greeting": "こんにちは！**{{title}}**です。🌐 翻訳、📝 要約、✏️ 図面への作図、🚪 ドアの検出ができます。下のスキルを選ぶか、質問を入力してください。",

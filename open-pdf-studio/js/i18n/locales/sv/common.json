@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "En omladdning av sidan startar tom: i webbläsaren stannar dokumentet på din dator och lagras inte.",
   "desktopOnly": "{{feature}} fungerar bara i skrivbordsappen. Den här sidan är webbläsarversionen.",
+  "hostedLinkTitle": "Länk",
+  "hostedLinkMessage": "Länkar kan inte öppnas härifrån. Kopiera adressen för att öppna den själv:",
+  "hostedAttachmentMessage": "Bilagor kan inte öppnas här. \"{{filename}}\" erbjuds i stället som nedladdning.",
   "assistantTitle": "OpenAEC-assistent",
   "assistant": {
     "greeting": "Hej! Jag är **{{title}}**. Jag kan: 🌐 översätta, 📝 sammanfatta, ✏️ rita på ritningen och 🚪 känna igen dörrar. Välj en färdighet nedan eller ställ din fråga.",

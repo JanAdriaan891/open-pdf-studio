@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Sivun uudelleenlataus alkaa tyhjästä: selaimessa asiakirjasi pysyy tietokoneellasi eikä sitä tallenneta.",
   "desktopOnly": "{{feature}} toimii vain työpöytäsovelluksessa. Tämä sivu on selainversio.",
+  "hostedLinkTitle": "Linkki",
+  "hostedLinkMessage": "Linkkejä ei voi avata täältä. Kopioi osoite ja avaa se itse:",
+  "hostedAttachmentMessage": "Liitteitä ei voi avata täällä. \"{{filename}}\" tarjotaan sen sijaan ladattavaksi.",
   "assistantTitle": "OpenAEC-avustaja",
   "assistant": {
     "greeting": "Hei! Olen **{{title}}**. Osaan: 🌐 kääntää, 📝 tiivistää, ✏️ piirtää piirustukseen ja 🚪 tunnistaa ovet. Valitse taito alta tai kysy kysymyksesi.",
