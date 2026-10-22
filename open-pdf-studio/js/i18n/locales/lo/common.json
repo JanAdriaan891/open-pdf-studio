@@ -122,6 +122,8 @@
   "selectedPdfNoPages": "PDF ທີ່ເລືອກບໍ່ມີໜ້າໃດໆເລີຍ.",
   "failedToSavePdf": "ບັນທຶກ PDF ບໍ່ສຳເລັດ: {{error}}",
   "failedToLoadPdf": "ໂຫຼດ PDF ບໍ່ສຳເລັດ: {{error}}",
+  "hostOpenFailed": "ບໍ່ສາມາດອ່ານໄຟລ໌ຈາກບ່ອນເກັບຂໍ້ມູນໄດ້. ກະລຸນາລອງໃໝ່.",
+  "hostNoContact": "ໜ້າທີ່ມີ Open PDF Studio ບໍ່ຕອບສະໜອງ, ສະນັ້ນຈຶ່ງເປີດ ຫຼື ບັນທຶກໄຟລ໌ບໍ່ໄດ້. ກະລຸນາໂຫຼດໜ້າຄືນໃໝ່ ແລ້ວລອງອີກຄັ້ງ.",
   "failedToCreateDocument": "ສ້າງເອກະສານບໍ່ສຳເລັດ: {{error}}",
   "failedToReplacePage": "ປ່ຽນແທນໜ້າບໍ່ສຳເລັດ: {{error}}",
   "failedToMergeFile": "ຮວມໄຟລ໌ບໍ່ສຳເລັດ: {{file}}\n{{error}}",

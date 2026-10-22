@@ -81,6 +81,17 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
+      # The hosted web bundle sets up the storage contract with its host page
+      # itself, over postMessage (#694). Build it unchanged, load it in a
+      # sandboxed iframe from a test page on another origin and drive it in
+      # headless Chromium: open, save an annotation back, list the versions,
+      # and ignore messages from any other origin or window.
+      - name: Test the hosted bridge (Linux)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:hosted-bridge
+
       - name: Run Linux release regression tests
         run: node --test scripts/linux-release-config.test.mjs
 

@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Il PDF selezionato non ha pagine.",
   "failedToSavePdf": "Impossibile salvare il PDF: {{error}}",
   "failedToLoadPdf": "Impossibile caricare il PDF: {{error}}",
+  "hostOpenFailed": "Impossibile leggere il file dall'archivio. Riprova.",
+  "hostNoContact": "La pagina che contiene Open PDF Studio non risponde, quindi non è possibile aprire o salvare file. Ricarica la pagina e riprova.",
   "failedToCreateDocument": "Impossibile creare il documento: {{error}}",
   "failedToReplacePage": "Impossibile sostituire la pagina: {{error}}",
   "failedToMergeFile": "Unione non riuscita: {{file}}\n{{error}}",

@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Вибраний PDF не містить сторінок.",
   "failedToSavePdf": "Не вдалося зберегти PDF: {{error}}",
   "failedToLoadPdf": "Не вдалося завантажити PDF: {{error}}",
+  "hostOpenFailed": "Не вдалося прочитати файл зі сховища. Спробуйте ще раз.",
+  "hostNoContact": "Сторінка, у яку вбудовано Open PDF Studio, не відповідає, тому файли не можна відкрити чи зберегти. Перезавантажте сторінку та спробуйте ще раз.",
   "failedToCreateDocument": "Не вдалося створити документ: {{error}}",
   "failedToReplacePage": "Не вдалося замінити сторінку: {{error}}",
   "failedToMergeFile": "Не вдалося об'єднати: {{file}}\n{{error}}",

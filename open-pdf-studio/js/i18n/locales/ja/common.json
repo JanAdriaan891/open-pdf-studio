@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "選択した PDF にはページがありません。",
   "failedToSavePdf": "PDF の保存に失敗しました：{{error}}",
   "failedToLoadPdf": "PDF の読み込みに失敗しました：{{error}}",
+  "hostOpenFailed": "ストレージからファイルを読み込めませんでした。もう一度お試しください。",
+  "hostNoContact": "Open PDF Studio を含むページが応答しないため、ファイルを開いたり保存したりできません。ページを再読み込みして、もう一度お試しください。",
   "failedToCreateDocument": "文書の作成に失敗しました：{{error}}",
   "failedToReplacePage": "ページの置換に失敗しました：{{error}}",
   "failedToMergeFile": "結合に失敗しました：{{file}}\n{{error}}",

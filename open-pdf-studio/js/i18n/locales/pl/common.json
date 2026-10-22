@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Wybrany plik PDF nie ma stron.",
   "failedToSavePdf": "Nie udało się zapisać PDF: {{error}}",
   "failedToLoadPdf": "Nie udało się wczytać PDF: {{error}}",
+  "hostOpenFailed": "Nie udało się odczytać pliku z magazynu. Spróbuj ponownie.",
+  "hostNoContact": "Strona zawierająca Open PDF Studio nie odpowiada, więc nie można otwierać ani zapisywać plików. Odśwież stronę i spróbuj ponownie.",
   "failedToCreateDocument": "Nie udało się utworzyć dokumentu: {{error}}",
   "failedToReplacePage": "Nie udało się zastąpić strony: {{error}}",
   "failedToMergeFile": "Nie udało się scalić: {{file}}\n{{error}}",

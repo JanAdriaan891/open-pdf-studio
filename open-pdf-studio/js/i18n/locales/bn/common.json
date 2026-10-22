@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "নির্বাচিত PDF-এ কোনো পৃষ্ঠা নেই।",
   "failedToSavePdf": "PDF সংরক্ষণ করতে ব্যর্থ: {{error}}",
   "failedToLoadPdf": "PDF লোড করতে ব্যর্থ: {{error}}",
+  "hostOpenFailed": "স্টোরেজ থেকে ফাইলটি পড়া যায়নি। আবার চেষ্টা করুন।",
+  "hostNoContact": "Open PDF Studio যে পৃষ্ঠায় আছে সেটি সাড়া দিচ্ছে না, তাই ফাইল খোলা বা সংরক্ষণ করা যাচ্ছে না। পৃষ্ঠাটি আবার লোড করে আবার চেষ্টা করুন।",
   "failedToCreateDocument": "নথি তৈরি করতে ব্যর্থ: {{error}}",
   "failedToReplacePage": "পৃষ্ঠা প্রতিস্থাপন করতে ব্যর্থ: {{error}}",
   "failedToMergeFile": "একত্রিত করতে ব্যর্থ: {{file}}\n{{error}}",

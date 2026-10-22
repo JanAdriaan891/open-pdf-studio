@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "PDF انتخاب‌شده هیچ صفحه‌ای ندارد.",
   "failedToSavePdf": "ذخیره PDF ناموفق بود: {{error}}",
   "failedToLoadPdf": "بارگذاری PDF ناموفق بود: {{error}}",
+  "hostOpenFailed": "خواندن فایل از فضای ذخیره‌سازی ممکن نشد. دوباره تلاش کنید.",
+  "hostNoContact": "صفحه‌ای که Open PDF Studio در آن قرار دارد پاسخ نمی‌دهد، بنابراین فایل‌ها باز یا ذخیره نمی‌شوند. صفحه را دوباره بارگیری کنید و دوباره تلاش کنید.",
   "failedToCreateDocument": "ایجاد سند ناموفق بود: {{error}}",
   "failedToReplacePage": "جایگزینی صفحه ناموفق بود: {{error}}",
   "failedToMergeFile": "ادغام ناموفق بود: {{file}}\n{{error}}",

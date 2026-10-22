@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "لا يحتوي ملف PDF المحدد على صفحات.",
   "failedToSavePdf": "فشل حفظ PDF: {{error}}",
   "failedToLoadPdf": "فشل تحميل PDF: {{error}}",
+  "hostOpenFailed": "تعذّرت قراءة الملف من التخزين. حاول مرة أخرى.",
+  "hostNoContact": "الصفحة التي تحتوي على Open PDF Studio لا تستجيب، لذا لا يمكن فتح الملفات أو حفظها. أعد تحميل الصفحة وحاول مرة أخرى.",
   "failedToCreateDocument": "فشل إنشاء المستند: {{error}}",
   "failedToReplacePage": "فشل استبدال الصفحة: {{error}}",
   "failedToMergeFile": "فشل الدمج: {{file}}\n{{error}}",

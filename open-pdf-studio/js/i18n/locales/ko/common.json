@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "선택한 PDF에 페이지가 없습니다.",
   "failedToSavePdf": "PDF를 저장하지 못했습니다: {{error}}",
   "failedToLoadPdf": "PDF를 불러오지 못했습니다: {{error}}",
+  "hostOpenFailed": "저장소에서 파일을 읽을 수 없습니다. 다시 시도하세요.",
+  "hostNoContact": "Open PDF Studio를 포함한 페이지가 응답하지 않아 파일을 열거나 저장할 수 없습니다. 페이지를 새로 고친 후 다시 시도하세요.",
   "failedToCreateDocument": "문서를 만들지 못했습니다: {{error}}",
   "failedToReplacePage": "페이지를 바꾸지 못했습니다: {{error}}",
   "failedToMergeFile": "병합하지 못했습니다: {{file}}\n{{error}}",

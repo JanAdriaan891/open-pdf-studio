@@ -121,6 +121,8 @@
   "selectedPdfNoPages": "Изабрани PDF нема страница.",
   "failedToSavePdf": "Чување PDF-а није успело: {{error}}",
   "failedToLoadPdf": "Учитавање PDF-а није успело: {{error}}",
+  "hostOpenFailed": "Датотека није могла да се прочита из складишта. Покушајте поново.",
+  "hostNoContact": "Страница око Open PDF Studio не одговара, па датотеке не могу да се отворе ни сачувају. Поново учитајте страницу и покушајте поново.",
   "failedToCreateDocument": "Прављење документа није успело: {{error}}",
   "failedToReplacePage": "Замена странице није успела: {{error}}",
   "failedToMergeFile": "Спајање није успело: {{file}}\n{{error}}",

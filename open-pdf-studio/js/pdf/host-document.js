@@ -29,7 +29,13 @@ export async function openHostDocument(id) {
     return true;
   } catch (e) {
     console.error('[gast] document van de site niet geopend:', e);
-    showMessage(i18next.t('failedToLoadPdf', { error: e?.message || String(e) }));
+    // De brug naar de gastpagina (core/host-brug.js) geeft een eigen, vertaalde
+    // melding mee, of heeft het geen-contact al gemeld.
+    if (!e?.gemeld) {
+      showMessage(typeof e?.gebruikersMelding === 'string' && e.gebruikersMelding
+        ? e.gebruikersMelding
+        : i18next.t('failedToLoadPdf', { error: e?.message || String(e) }));
+    }
     return false;
   }
 }
