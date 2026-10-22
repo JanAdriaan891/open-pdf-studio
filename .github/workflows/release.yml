@@ -696,6 +696,54 @@ jobs:
           VERSION="${{ needs.create-release.outputs.version }}"
           gh release upload "$VERSION" mcpb/dist/open-pdf-studio.mcpb --clobber --repo "${{ github.repository }}"
 
+  web-bundle:
+    # De gehoste webbundel (#692): één keer per tag gebouwd met een relatieve
+    # basis (--base=./), zodat een platform dezelfde bestanden onder elk
+    # subpad kan serveren. In het archief: de dist, MANIFEST.sha256,
+    # THIRD-PARTY-NOTICES.txt en bron.json; ernaast een .sha256. Komt na de
+    # versiecontrole van create-release en hangt niet aan de desktop-builds.
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    needs: create-release
+    defaults:
+      run:
+        working-directory: open-pdf-studio
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build and pack the web bundle
+        env:
+          VERSION: ${{ needs.create-release.outputs.version }}
+        run: npm run pack:hosted -- --tag "$VERSION"
+
+      # Zelfde controle als lokaal: hash, manifest, bron.json, en de bundel
+      # uitgepakt onder /pdf/ en /tools/pdf/ in headless Chromium.
+      - name: Install Chromium for the bundle check
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify the web bundle
+        env:
+          VERSION: ${{ needs.create-release.outputs.version }}
+        run: npm run verify:hosted-bundle -- "dist-webbundel/open-pdf-studio-web-${VERSION#v}.tar.gz"
+
+      - name: Attach to the release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.create-release.outputs.version }}
+        run: |
+          ARCHIVE="dist-webbundel/open-pdf-studio-web-${VERSION#v}.tar.gz"
+          gh release upload "$VERSION" "$ARCHIVE" "$ARCHIVE.sha256" --clobber --repo "${{ github.repository }}"
+
   publish-release:
     permissions:
       contents: write
