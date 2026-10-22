@@ -149,6 +149,7 @@
     "properties": "Vlastnosti",
     "color": "Farba",
     "width": "Šírka",
+    "propertiesHint": "Platí pre vybranú anotáciu alebo pre ďalšiu anotáciu, ktorú nakreslíte aktívnym nástrojom",
     "edit": "Upraviť",
     "undo": "Späť",
     "clearPageAnnotations": "Vymazať anotácie na strane",

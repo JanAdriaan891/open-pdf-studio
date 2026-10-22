@@ -133,7 +133,9 @@
     "officePage": "صفحة",
     "officeTable": "جدول",
     "officeText": "نص",
-    "officeFailed": "فشل تصدير المستند."
+    "officeFailed": "فشل تصدير المستند.",
+    "protect": "الحماية بكلمة مرور",
+    "protectDesc": "حفظ نسخة محمية بكلمة مرور (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "ملف تعريف الإخراج",

@@ -133,7 +133,9 @@
     "officePage": "Ukurasa",
     "officeTable": "Jedwali",
     "officeText": "Maandishi",
-    "officeFailed": "Kuhamisha nje hati kumeshindwa."
+    "officeFailed": "Kuhamisha nje hati kumeshindwa.",
+    "protect": "Linda kwa Nenosiri",
+    "protectDesc": "Hifadhi nakala iliyolindwa kwa nenosiri (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Wasifu wa matokeo",

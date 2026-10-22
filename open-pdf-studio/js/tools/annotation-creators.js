@@ -92,11 +92,12 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
   switch (tool) {
     case 'draw':
       if (state.currentPath.length > 1) {
-        // Ribbon values take precedence so the live color/width pickers in the
-        // Comment tab actually drive the freehand stroke. prefs.* serves as the
-        // fallback default applied at startup to seed the ribbon signals.
-        const _drawColor = getColorPickerValue() || prefs.drawStrokeColor || '#000000';
-        const _drawWidth = getLineWidthValue() || prefs.drawLineWidth || 2;
+        // De eigen voorkeur van het gereedschap gaat voor, net als bij elk
+        // ander gereedschap: kleur en dikte in het lint schrijven die voorkeur
+        // zolang de vrije hand actief is (#668). De lintwaarde is alleen nog
+        // de terugval.
+        const _drawColor = prefs.drawStrokeColor || getColorPickerValue() || '#000000';
+        const _drawWidth = prefs.drawLineWidth || getLineWidthValue() || 2;
         return {
           type: 'draw',
           page: getActiveDocument()?.currentPage || 1,

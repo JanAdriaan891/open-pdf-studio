@@ -4,6 +4,7 @@
 #![recursion_limit = "512"]
 
 mod accounts;
+mod pdf_beveiliging;
 mod atomic_file;
 pub mod beveiligde_pdf;
 pub mod cad_export;
@@ -3061,6 +3062,7 @@ pub fn run(opts: StartupOpts) {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            pdf_beveiliging::protect_pdf_file,
             get_opened_file,
             save_session,
             load_session,

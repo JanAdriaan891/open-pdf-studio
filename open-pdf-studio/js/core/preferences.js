@@ -9,6 +9,7 @@ import { leesOpslag, schrijfOpslag, VOORKEUREN_NAAM } from './opslag.js';
 import { voegSamenMetStandaarden } from './preferences-merge.js';
 import { randkleurVoorVoorkeur, randkleurenUitVoorkeur } from '../annotations/fill-utils.js';
 import { zetRanddikte } from '../annotations/rendering/textbox-layout.js';
+import { getStyleMapping } from './stijl-mapping.js';
 import { setZoomDpi, setZoomDpiSource, normalizeZoomDpi } from './zoom-display.js';
 import { kalibratieVoor } from '../pdf/schermkalibratie.js';
 
@@ -208,54 +209,8 @@ export function showPreferencesDialog(tabName = 'general') {
   openDialog('preferences', { tab: tabName });
 }
 
-// Map annotation type to preference key prefix and property mappings
-export function getStyleMapping(type) {
-  const hasHatch = ['box', 'circle', 'polygon', 'cloud'].includes(type);
-  switch (type) {
-    case 'draw':
-      return { prefix: 'draw', stroke: 'StrokeColor', width: 'LineWidth', opacity: 'Opacity' };
-    case 'highlight':
-      return { prefix: 'highlight', color: 'Color', opacity: 'Opacity' };
-    case 'line':
-      return { prefix: 'line', stroke: 'StrokeColor', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity' };
-    case 'arrow':
-      return { prefix: 'arrow', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', startHead: 'StartHead', endHead: 'EndHead', headSize: 'HeadSize' };
-    case 'box':
-      return { prefix: 'rect', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'BorderWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', hatch: hasHatch };
-    case 'circle':
-      return { prefix: 'circle', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'BorderWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', hatch: hasHatch };
-    case 'textbox':
-      return { prefix: 'textbox', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'BorderWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', fontSize: 'FontSize' };
-    case 'callout':
-      return { prefix: 'callout', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'BorderWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', fontSize: 'FontSize' };
-    case 'polygon':
-      return { prefix: 'polygon', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', hatch: hasHatch };
-    case 'cloud':
-      return { prefix: 'cloud', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', hatch: hasHatch };
-    case 'comment':
-      return { prefix: 'comment', color: 'Color', icon: 'Icon' };
-    case 'polyline':
-      return { prefix: 'polyline', stroke: 'StrokeColor', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity' };
-    case 'filledArea':
-      // Keys match what filled-area-tool.js reads at draw time
-      // (filledAreaStrokeColor, filledAreaHatchPattern, …).
-      return { prefix: 'filledArea', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', hatch: true };
-    case 'redaction':
-      return { prefix: 'redaction', overlayColor: 'OverlayColor' };
-    case 'measureDistance':
-      return { prefix: 'measureDist', stroke: 'StrokeColor', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', startHead: 'StartHead', endHead: 'EndHead', headSize: 'HeadSize', fontSize: 'FontSize', dimension: true };
-    // noDimScale: schaal en eenheid van een meetvlak zijn geen stijl. Een
-    // nieuw vlak rekent met de schaal van het document; een eigen schaal
-    // hoort bij dat ene vlak en mag niet via de standaardstijl naar een
-    // ander vlak (#536).
-    case 'measureArea':
-      return { prefix: 'measureArea', stroke: 'StrokeColor', fill: 'FillColor', fillNone: 'FillNone', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', dimension: true, noDimScale: true, edgeLengths: 'ShowEdgeLengths' };
-    case 'measurePerimeter':
-      return { prefix: 'measurePerim', stroke: 'StrokeColor', width: 'LineWidth', borderStyle: 'BorderStyle', opacity: 'Opacity', startHead: 'StartHead', endHead: 'EndHead', headSize: 'HeadSize', dimension: true };
-    default:
-      return null;
-  }
-}
+// De stijltabel per soort staat in stijl-mapping.js (zonder app-imports, #668).
+export { getStyleMapping };
 
 // Set the current annotation's style as default for its type
 export function setAsDefaultStyle(annotation) {

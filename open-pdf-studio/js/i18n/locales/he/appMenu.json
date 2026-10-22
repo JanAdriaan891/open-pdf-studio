@@ -133,7 +133,9 @@
     "officePage": "עמוד",
     "officeTable": "טבלה",
     "officeText": "טקסט",
-    "officeFailed": "ייצוא המסמך נכשל."
+    "officeFailed": "ייצוא המסמך נכשל.",
+    "protect": "הגנה בסיסמה",
+    "protectDesc": "שמירת עותק מוגן בסיסמה (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "פרופיל פלט",

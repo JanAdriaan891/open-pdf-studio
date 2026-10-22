@@ -133,7 +133,9 @@
     "officePage": "Sayfa",
     "officeTable": "Tablo",
     "officeText": "Metin",
-    "officeFailed": "Belge dışa aktarılamadı."
+    "officeFailed": "Belge dışa aktarılamadı.",
+    "protect": "Parolayla koru",
+    "protectDesc": "Parolayla korunan bir kopya kaydet (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Çıktı profili",

@@ -156,6 +156,7 @@
     "properties": "Properties",
     "color": "Color",
     "width": "Width",
+    "propertiesHint": "Applies to the selected annotation, or to the next annotation you draw with the active tool",
     "edit": "Edit",
     "undo": "Undo",
     "clearPageAnnotations": "Clear Page Annotations",

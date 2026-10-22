@@ -149,6 +149,7 @@
     "properties": "Properti",
     "color": "Warna",
     "width": "Lebar",
+    "propertiesHint": "Berlaku untuk anotasi yang dipilih, atau untuk anotasi berikutnya yang Anda gambar dengan alat aktif",
     "edit": "Edit",
     "undo": "Urungkan",
     "clearPageAnnotations": "Hapus Anotasi Halaman",

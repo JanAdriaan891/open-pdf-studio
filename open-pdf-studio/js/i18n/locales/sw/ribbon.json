@@ -149,6 +149,7 @@
     "properties": "Sifa",
     "color": "Rangi",
     "width": "Upana",
+    "propertiesHint": "Inatumika kwa maoni yaliyochaguliwa, au kwa maoni yanayofuata utakayochora kwa zana inayotumika",
     "edit": "Hariri",
     "undo": "Tendua",
     "clearPageAnnotations": "Futa Maoni ya Ukurasa",

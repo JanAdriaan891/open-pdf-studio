@@ -148,6 +148,7 @@
     "properties": "Eigenschappen",
     "color": "Kleur",
     "width": "Breedte",
+    "propertiesHint": "Geldt voor de geselecteerde annotatie, of voor de volgende annotatie die je met het actieve gereedschap tekent",
     "edit": "Bewerken",
     "undo": "Ongedaan maken",
     "clearPageAnnotations": "Annotaties op pagina wissen",

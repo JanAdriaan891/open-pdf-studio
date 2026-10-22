@@ -1759,7 +1759,10 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
               Subtype: 'Stamp',
               Rect: stRect,
               // /Name is een PDFName: alleen ASCII (de echte naam staat in /Subj en OPS_StampName).
-              Name: asciiPdfName(pdfStampName, 'Draft'),
+              // A text stamp with its own appearance gets its own name: with a
+              // standard name ('Draft') some editors draw their built-in stamp
+              // instead as soon as the stamp is edited or rotated.
+              Name: asciiPdfName((!ann.imageData && ann.stampText) ? `OPS_${pdfStampName.replace(/\s+/g, '')}` : pdfStampName, 'Draft'),
               Subj: pdfTextString(ann.stampName || pdfStampName),
               C: colorArr,
               CA: opacity,

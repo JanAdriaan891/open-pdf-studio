@@ -133,7 +133,9 @@
     "officePage": "Sida",
     "officeTable": "Tabell",
     "officeText": "Text",
-    "officeFailed": "Exporten av dokumentet misslyckades."
+    "officeFailed": "Exporten av dokumentet misslyckades.",
+    "protect": "Skydda med lösenord",
+    "protectDesc": "Spara en kopia skyddad med lösenord (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Utdataprofil",

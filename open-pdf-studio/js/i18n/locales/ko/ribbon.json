@@ -149,6 +149,7 @@
     "properties": "속성",
     "color": "색상",
     "width": "너비",
+    "propertiesHint": "선택한 주석 또는 활성 도구로 다음에 그리는 주석에 적용됩니다",
     "edit": "편집",
     "undo": "실행 취소",
     "clearPageAnnotations": "페이지 주석 지우기",

@@ -150,6 +150,7 @@
     "properties": "Eigenschaften",
     "color": "Farbe",
     "width": "Breite",
+    "propertiesHint": "Gilt für die ausgewählte Anmerkung oder für die nächste Anmerkung, die Sie mit dem aktiven Werkzeug zeichnen",
     "edit": "Bearbeiten",
     "undo": "Rückgängig",
     "clearPageAnnotations": "Anmerkungen der Seite löschen",

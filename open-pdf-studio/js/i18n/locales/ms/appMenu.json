@@ -133,7 +133,9 @@
     "officePage": "Halaman",
     "officeTable": "Jadual",
     "officeText": "Teks",
-    "officeFailed": "Eksport dokumen gagal."
+    "officeFailed": "Eksport dokumen gagal.",
+    "protect": "Lindungi dengan Kata Laluan",
+    "protectDesc": "Simpan salinan yang dilindungi kata laluan (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profil output",

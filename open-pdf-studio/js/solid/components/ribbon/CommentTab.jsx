@@ -3,7 +3,9 @@ import RibbonGroup from './RibbonGroup.jsx';
 import AdaptiveGroups from './AdaptiveGroups.jsx';
 import RibbonButton from './RibbonButton.jsx';
 import RibbonButtonStack from './RibbonButtonStack.jsx';
-import { colorPickerValue, setColorPickerValue, lineWidthValue, setLineWidthValue } from '../../stores/ribbonStore.js';
+import { colorPickerValue, lineWidthValue } from '../../stores/ribbonStore.js';
+import { strokeColor, fmtLineWidth, isLocked, opmaakDoel, opmaakOndersteunt, zetOpmaak } from '../../stores/formatStore.js';
+import { zetRanddikte } from '../../../annotations/rendering/textbox-layout.js';
 import { setTool } from '../../../tools/manager.js';
 import { state, getActiveDocument, noPdf } from '../../../core/state.js';
 import { isPdfAReadOnly } from '../../../pdf/loader.js';
@@ -39,6 +41,11 @@ const scheduleIcon = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"
 // drawing groups inside a single AdaptiveGroups container.
 export function CommentGroups() {
   const { t } = useTranslation('ribbon');
+
+  // Kleur en breedte (#668) werken op hetzelfde doel als de opmaakwerkbalk:
+  // de selectie, anders het volgende object van het actieve gereedschap (of
+  // de invoegsessie van symbolen). Zonder doel staan ze uit.
+  const kan = (key) => !noPdf() && !isPdfAReadOnly() && !isLocked() && opmaakOndersteunt(key);
 
   return (
     <>
@@ -92,16 +99,31 @@ export function CommentGroups() {
             <div class="ribbon-input-row">
               <label class="ribbon-input-label">{t('comment.color')}</label>
               <input type="color" id="color-picker" class="ribbon-color-input"
-                value={colorPickerValue()}
-                disabled={noPdf() || isPdfAReadOnly()}
-                onInput={(e) => setColorPickerValue(e.target.value)} />
+                title={t('comment.propertiesHint')}
+                value={opmaakDoel() ? strokeColor() : colorPickerValue()}
+                disabled={!kan('strokeColor')}
+                onChange={(e) => {
+                  const kleur = e.currentTarget.value;
+                  zetOpmaak({ strokeColor: kleur }, ann => {
+                    ann.strokeColor = kleur;
+                    ann.color = kleur;
+                    // Een markering kleurt met haar vulling, zoals het
+                    // markeergereedschap haar maakt.
+                    if (ann.type === 'highlight') ann.fillColor = kleur;
+                  });
+                }} />
             </div>
             <div class="ribbon-input-row">
               <label class="ribbon-input-label">{t('comment.width')}</label>
-              <input type="text" inputmode="decimal" data-getal id="line-width" class="ribbon-input" min="1" max="20"
-                value={lineWidthValue()}
-                disabled={noPdf() || isPdfAReadOnly()}
-                onInput={(e) => setLineWidthValue(parseInt(e.target.value) || 3)} />
+              <input type="text" inputmode="decimal" data-getal id="line-width" class="ribbon-input" min="0.1" max="50"
+                title={t('comment.propertiesHint')}
+                value={opmaakDoel() ? fmtLineWidth() : lineWidthValue()}
+                disabled={!kan('lineWidth')}
+                onInput={(e) => {
+                  const dikte = parseFloat(e.currentTarget.value);
+                  if (!Number.isFinite(dikte) || dikte <= 0) return;
+                  zetOpmaak({ lineWidth: dikte }, ann => { zetRanddikte(ann, dikte); });
+                }} />
             </div>
           </RibbonButtonStack>
         </RibbonGroup>
