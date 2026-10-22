@@ -133,7 +133,9 @@
     "officePage": "Stranica",
     "officeTable": "Tablica",
     "officeText": "Tekst",
-    "officeFailed": "Izvoz dokumenta nije uspio."
+    "officeFailed": "Izvoz dokumenta nije uspio.",
+    "protect": "Zaštiti lozinkom",
+    "protectDesc": "Spremi kopiju zaštićenu lozinkom (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Izlazni profil",

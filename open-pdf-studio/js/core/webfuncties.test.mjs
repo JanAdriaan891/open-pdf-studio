@@ -25,7 +25,7 @@ const { NietInBrowserError } = await import('./platform.js');
 test('elke functie zonder webvariant heeft een knop in de tabel', () => {
   const functies = new Set(Object.values(BUREAUBLAD_KNOPPEN));
   for (const f of ['print', 'ocr', 'cadImport', 'cadExport',
-    'compress', 'pdfx', 'ifc', 'plugins', 'updater', 'mcp']) {
+    'compress', 'pdfx', 'protectPdf', 'ifc', 'plugins', 'updater', 'mcp']) {
     assert.ok(functies.has(f), `geen knop gekoppeld aan "${f}"`);
   }
 });
