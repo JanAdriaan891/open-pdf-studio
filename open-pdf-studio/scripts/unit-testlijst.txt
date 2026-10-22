@@ -440,3 +440,5 @@ js/ui/getal-veld.test.mjs
 js/getal-velden-bron.test.mjs
 
 js/pdf/unicode-export-contract.test.mjs
+
+js/pdf/saver/unicode-layout-guard.test.mjs

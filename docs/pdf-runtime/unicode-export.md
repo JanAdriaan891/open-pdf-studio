@@ -29,12 +29,16 @@ De Thaise fixture is een variable font op de standaardinstelling; andere assen
 zijn hiermee niet gekwalificeerd. De bestaande CJK-tekstvak- en ontbrekend-font-
 tests blijven nodig voor de echte saver en zijn niet vervangen.
 
-Arabisch is een **bekende falende TODO-test**: fontkit produceert bij de gekozen
-fixture ook gevormde glyphs zonder codePoints. Bij heropenen voegt PDF.js daar
-controletekens aan toe. De browserrunner vermeldt dit afzonderlijk en verbergt
-het niet als een geslaagde extractie. Geen claim op correcte RTL-caretposities,
-joining of volledige tekstbewerking. Deze afwijking vraagt een afzonderlijke
-ToUnicode/shaping-oplossing vóór kwalificatie.
+De gekozen Arabische fixture wordt nu expliciet afgewezen met
+`PDF_UNMAPPED_SHAPED_GLYPH`: fontkit produceert gevormde glyphs zonder
+codePoints, die bij heropenen anders als controletekens terugkomen. De gedeelde
+font-embedding weigert zulke runs en ontbrekende glyphs (`PDF_MISSING_GLYPH`).
+De OCR-schrijver geeft deze fouten door voordat hij een tekststream toevoegt,
+ook wanneer eerdere woorden wel geldig waren. De tests controleren beide fouten
+met echte fonts. Dit is een bewaarbeveiliging, geen geslaagde Arabische rondgang.
+Shaping blijft ingeschakeld; we verzinnen geen Unicode-koppelingen om de test te
+laten slagen. Een correcte ToUnicode/shaping-oplossing en visuele kwalificatie
+blijven nodig. Geen claim op correcte RTL-caretposities of volledige tekstbewerking.
 
 Deze suite kwalificeert de gedeelde embedding-/OCR-primitieven. Zij bewijst niet
 dat alle bestaande tekstedit-, formulier- of annotatiepaden alle scripts kunnen

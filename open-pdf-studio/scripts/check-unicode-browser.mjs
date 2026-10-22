@@ -21,9 +21,15 @@ try {
   pdfjs.GlobalWorkerOptions.workerSrc='/node_modules/pdfjs-dist/build/pdf.worker.mjs';
   const results=[];
   for(const item of c.UNICODE_CASES) {
-   const bytes=await c.createUnicodeFixture(new Uint8Array(fonts[item.font]),item.text);
+   let bytes;
+   try { bytes=await c.createUnicodeFixture(new Uint8Array(fonts[item.font]),item.text); }
+   catch(e) {
+    if(item.direction==='rtl' && e.code==='PDF_UNMAPPED_SHAPED_GLYPH') {results.push({text:item.text,status:'explicitly rejected: unmapped shaped glyph'});continue;}
+    throw e;
+   }
+   if(item.direction==='rtl') throw new Error('Arabic guard no longer rejects; qualify shaping/extraction before changing the contract');
    try {await c.verifyUnicodeExtraction(pdfjs,bytes,item.text);results.push({text:item.text,status:'pass'});}
-   catch(e){if(item.direction!=='rtl')throw e;results.push({text:item.text,status:'known RTL extraction limitation',error:e.message});}
+   catch(e){throw e;}
    // Independent real-browser canvas paint: visible page must contain ink.
    const task=pdfjs.getDocument({data:bytes.slice(),verbosity:0});
    try {

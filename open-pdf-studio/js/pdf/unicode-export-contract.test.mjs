@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
+import {PDFDocument, PDFName} from 'pdf-lib';
+import {embedOcrFont, writeOcrTextLayer} from './saver/ocr-text-layer.js';
 import * as mupdf from 'mupdf';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import {UNICODE_CASES,createUnicodeFixture,verifyUnicodeExtraction} from './unicode-export-contract.js';
@@ -13,8 +15,13 @@ const load=async name=>{
  assert.equal(createHash('sha256').update(b).digest('hex'),assets.find(a=>a.name===name).sha256);
  return b;
 };
-for(const c of UNICODE_CASES) test(`Unicode visible + OCR roundtrip: ${c.text}`,{skip:directory?false:'Set OPS_UNICODE_FONT_DIR; CI provisions pinned fonts', todo:c.direction==='rtl'?'Arabic shaped glyphs without Unicode mapping produce control characters; not qualified':false},async()=>{
- const output=await createUnicodeFixture(await load(c.font),c.text);
+for(const c of UNICODE_CASES) test(`${c.direction==='rtl'?'Unsupported Arabic export rejected':'Unicode visible + OCR roundtrip'}: ${c.text}`,{skip:directory?false:'Set OPS_UNICODE_FONT_DIR; CI provisions pinned fonts'},async()=>{
+ const fontBytes=await load(c.font);
+ if(c.direction==='rtl') {
+  await assert.rejects(createUnicodeFixture(fontBytes,c.text), error=>error.code==='PDF_UNMAPPED_SHAPED_GLYPH');
+  return;
+ }
+ const output=await createUnicodeFixture(fontBytes,c.text);
  await verifyUnicodeExtraction(pdfjs,output,c.text);
  const doc=mupdf.Document.openDocument(output,'application/pdf');
  try {
@@ -31,4 +38,17 @@ for(const c of UNICODE_CASES) test(`Unicode visible + OCR roundtrip: ${c.text}`,
 });
 test('fixture contract rejects absent glyphs instead of claiming a successful Unicode roundtrip',{skip:!directory},async()=>{
  await assert.rejects(createUnicodeFixture(await load('Inter-Regular.ttf'),'中文'),/Missing glyph/);
+});
+
+for (const [name, text, code] of [
+ ['Inter-Regular.ttf', '中文', 'PDF_MISSING_GLYPH'],
+ ['NotoSansArabic.ttf', 'العربية', 'PDF_UNMAPPED_SHAPED_GLYPH'],
+]) test(`OCR propagates ${code} without appending a partial text stream`, {skip:!directory}, async()=>{
+ const doc=await PDFDocument.create();
+ const page=doc.addPage();
+ const font=await embedOcrFont(doc,await load(name));
+ const before=page.node.get(PDFName.of('Contents'));
+ const word=text=>({text,left:10,top:10,width:100,height:12});
+ assert.throws(()=>writeOcrTextLayer(page,[word('123'),word(text)],font),error=>error.code===code);
+ assert.equal(page.node.get(PDFName.of('Contents')),before);
 });
