@@ -267,7 +267,9 @@ pub fn beveilig_pdf(
     rechten: &Rechten,
 ) -> Result<Vec<u8>, String> {
     let mut doc = Document::load_mem(bytes).map_err(|e| format!("Kan de PDF niet lezen: {e}"))?;
-    if doc.is_encrypted() {
+    // Ook een /Encrypt dat direct in de trailer staat: is_encrypted() van lopdf
+    // ziet alleen een verwijzing, en dan zou het bestand dubbel versleuteld worden.
+    if doc.trailer.get(b"Encrypt").is_ok() {
         return Err("Deze PDF is al beveiligd.".into());
     }
     let mut rng = rand::rngs::OsRng;
@@ -290,6 +292,12 @@ pub fn beveilig_pdf(
         doc.trailer.set("ID", Object::Array(vec![s.clone(), s]));
     }
     doc.version = "2.0".into();
+
+    // lopdf schrijft het hele bestand in één doorsnede opnieuw. Een /Prev of
+    // /XRefStm uit de trailer van de bron (incrementele update, gelineariseerd
+    // bestand) wijst daarin naar een plek die niet meer bestaat.
+    doc.trailer.remove(b"Prev");
+    doc.trailer.remove(b"XRefStm");
 
     let mut uit = Vec::with_capacity(bytes.len() + 4096);
     doc.save_to(&mut uit).map_err(|e| format!("Kan de PDF niet schrijven: {e}"))?;
@@ -487,6 +495,39 @@ mod tests {
         // mag het eerste nooit stilletjes dubbel versleutelen.
         let tweede = beveilig_pdf(&eerste, "ander-ww", "", &Rechten::default());
         assert!(tweede.is_err(), "een al beveiligd bestand moet geweigerd worden");
+    }
+
+    #[test]
+    fn directe_encrypt_in_de_trailer_wordt_geweigerd() {
+        // /Encrypt mag ook direct in de trailer staan; is_encrypted() van lopdf
+        // ziet alleen een verwijzing. Zonder deze controle werd zo'n bestand
+        // dubbel versleuteld en waren de pagina's daarna leeg.
+        let mut doc = Document::load_mem(&kleine_pdf()).unwrap();
+        doc.trailer.set("Encrypt", Object::Dictionary(dictionary! {
+            "Filter" => "Standard", "V" => 5, "R" => 6,
+        }));
+        let mut bron = Vec::new();
+        doc.save_to(&mut bron).unwrap();
+        assert!(beveilig_pdf(&bron, "open-ww", "", &Rechten::default()).is_err());
+    }
+
+    #[test]
+    fn incrementele_of_gelineariseerde_bron_houdt_geen_verouderde_prev() {
+        // Een incrementele update (of een gelineariseerd bestand) heeft een
+        // /Prev in de trailer. lopdf schrijft alles in één doorsnede opnieuw;
+        // een overgenomen /Prev wijst dan naar een plek die niet meer bestaat.
+        let bron = kleine_pdf();
+        let vorig = Document::load_mem(&bron).unwrap();
+        let mut inc = lopdf::IncrementalDocument::create_from(bron.clone(), vorig);
+        inc.new_document.add_object(dictionary! { "Title" => Object::string_literal("bijgewerkt") });
+        let mut bijgewerkt = Vec::new();
+        inc.save_to(&mut bijgewerkt).unwrap();
+        assert!(Document::load_mem(&bijgewerkt).unwrap().trailer.get(b"Prev").is_ok(), "testbestand zonder /Prev");
+
+        let uit = beveilig_pdf(&bijgewerkt, "open-ww", "rechten-ww", &Rechten::default()).unwrap();
+        let doc = Document::load_mem(&uit).unwrap_or_else(|e| panic!("resultaat niet leesbaar: {e}"));
+        assert!(doc.trailer.get(b"Prev").is_err(), "verouderde /Prev in de trailer");
+        assert!(doc.trailer.get(b"XRefStm").is_err(), "verouderde /XRefStm in de trailer");
     }
 
     /// Handmatig: PDF_IN, PDF_OUT, PDF_USER en PDF_OWNER uit de omgeving; het
