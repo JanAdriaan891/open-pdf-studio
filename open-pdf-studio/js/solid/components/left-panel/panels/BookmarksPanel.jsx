@@ -6,10 +6,25 @@ import { showBookmarkMenu } from '../../../stores/contextMenuStore.js';
 import { getActiveDocument } from '../../../../core/state.js';
 import { huidigeBladwijzer, volgendeTreffer, scrollVoorItem } from '../../../../ui/panels/bladwijzer-zoeken.js';
 import { useTranslation } from '../../../../i18n/useTranslation.js';
+import { currentTheme } from '../../../stores/ribbonStore.js';
+import { weergaveKleur, leesCssKleur } from '../../../../ui/panels/bladwijzer-stijl.js';
 
 // Treffer van het zoekveld (#578): krijgt een streep links en wordt in beeld
 // geschoven. De lijst zelf wordt niet gefilterd.
 const [gevondenId, setGevondenId] = createSignal(null);
+
+// Achtergrond van de lijst als [r,g,b] (#689): een bladwijzerkleur met te
+// weinig contrast (donkerblauw op een donker thema) wordt voor de weergave
+// lichter getekend. Het PDF houdt de gekozen kleur.
+const [lijstAchtergrond, setLijstAchtergrond] = createSignal(null);
+
+function achtergrondVan(el) {
+  for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+    const rgb = leesCssKleur(getComputedStyle(n).backgroundColor);
+    if (rgb) return rgb;
+  }
+  return null;
+}
 
 function BookmarkNode(props) {
   const indent = () => props.depth * 16;
@@ -49,7 +64,7 @@ function BookmarkNode(props) {
         </span>
         <span
           class={`bookmark-title${props.node.bold ? ' bold' : ''}${props.node.italic ? ' italic' : ''}`}
-          style={props.node.color ? { color: props.node.color } : {}}
+          style={props.node.color ? { color: weergaveKleur(props.node.color, lijstAchtergrond()) } : {}}
         >
           {props.node.title}
         </span>
@@ -90,6 +105,11 @@ export default function BookmarksPanel() {
   // hij erin. Een frame later, zodat een net ververste boom er al staat.
   createEffect(on([huidig, paneelOpen], ([id, open]) => {
     if (id && open) requestAnimationFrame(() => scrollNaar(id, 'nearest'));
+  }));
+
+  // Thema gewisseld: achtergrond opnieuw meten (data-theme staat dan al).
+  createEffect(on(currentTheme, () => {
+    requestAnimationFrame(() => { if (lijstRef) setLijstAchtergrond(achtergrondVan(lijstRef)); });
   }));
 
   function wisZoeken() {

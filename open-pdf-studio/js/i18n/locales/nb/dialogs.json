@@ -425,7 +425,9 @@
     "editTitle": "Rediger bokmerke",
     "titleLabel": "Tittel:",
     "titlePlaceholder": "Bokmerketittel",
-    "pageLabel": "Side:"
+    "pageLabel": "Side:",
+    "colorLabel": "Farge:",
+    "styleLabel": "Stil:"
   },
   "formValidation": {
     "title": "Valideringsfeil"

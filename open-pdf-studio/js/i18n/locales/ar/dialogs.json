@@ -425,7 +425,9 @@
     "editTitle": "تعديل الإشارة المرجعية",
     "titleLabel": "العنوان:",
     "titlePlaceholder": "عنوان الإشارة المرجعية",
-    "pageLabel": "الصفحة:"
+    "pageLabel": "الصفحة:",
+    "colorLabel": "اللون:",
+    "styleLabel": "النمط:"
   },
   "formValidation": {
     "title": "خطأ في التحقق"

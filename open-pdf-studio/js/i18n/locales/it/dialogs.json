@@ -425,7 +425,9 @@
     "editTitle": "Modifica segnalibro",
     "titleLabel": "Titolo:",
     "titlePlaceholder": "Titolo del segnalibro",
-    "pageLabel": "Pagina:"
+    "pageLabel": "Pagina:",
+    "colorLabel": "Colore:",
+    "styleLabel": "Stile:"
   },
   "formValidation": {
     "title": "Errore di validazione"

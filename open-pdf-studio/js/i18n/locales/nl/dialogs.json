@@ -406,7 +406,9 @@
     "editTitle": "Bladwijzer bewerken",
     "titleLabel": "Titel:",
     "titlePlaceholder": "Bladwijzertitel",
-    "pageLabel": "Pagina:"
+    "pageLabel": "Pagina:",
+    "colorLabel": "Kleur:",
+    "styleLabel": "Stijl:"
   },
   "formValidation": {
     "title": "Validatiefout"

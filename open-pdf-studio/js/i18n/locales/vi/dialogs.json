@@ -425,7 +425,9 @@
     "editTitle": "Sửa Dấu trang",
     "titleLabel": "Tiêu đề:",
     "titlePlaceholder": "Tiêu đề dấu trang",
-    "pageLabel": "Trang:"
+    "pageLabel": "Trang:",
+    "colorLabel": "Màu sắc:",
+    "styleLabel": "Kiểu:"
   },
   "formValidation": {
     "title": "Lỗi Xác thực"

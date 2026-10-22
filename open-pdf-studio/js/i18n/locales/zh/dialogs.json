@@ -425,7 +425,9 @@
     "editTitle": "编辑书签",
     "titleLabel": "标题：",
     "titlePlaceholder": "书签标题",
-    "pageLabel": "页码："
+    "pageLabel": "页码：",
+    "colorLabel": "颜色：",
+    "styleLabel": "样式："
   },
   "formValidation": {
     "title": "验证错误"

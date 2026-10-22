@@ -425,7 +425,9 @@
     "editTitle": "Editar marcador",
     "titleLabel": "Título:",
     "titlePlaceholder": "Título do marcador",
-    "pageLabel": "Página:"
+    "pageLabel": "Página:",
+    "colorLabel": "Cor:",
+    "styleLabel": "Estilo:"
   },
   "formValidation": {
     "title": "Erro de validação"

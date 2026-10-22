@@ -425,7 +425,9 @@
     "editTitle": "புத்தகக்குறியைத் திருத்து",
     "titleLabel": "தலைப்பு:",
     "titlePlaceholder": "புத்தகக்குறி தலைப்பு",
-    "pageLabel": "பக்கம்:"
+    "pageLabel": "பக்கம்:",
+    "colorLabel": "நிறம்:",
+    "styleLabel": "பாணி:"
   },
   "formValidation": {
     "title": "சரிபார்ப்புப் பிழை"

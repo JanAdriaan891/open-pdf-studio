@@ -425,7 +425,9 @@
     "editTitle": "Rediger bogmærke",
     "titleLabel": "Titel:",
     "titlePlaceholder": "Bogmærketitel",
-    "pageLabel": "Side:"
+    "pageLabel": "Side:",
+    "colorLabel": "Farve:",
+    "styleLabel": "Stil:"
   },
   "formValidation": {
     "title": "Valideringsfejl"

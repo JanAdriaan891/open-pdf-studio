@@ -425,7 +425,9 @@
     "editTitle": "Lesezeichen bearbeiten",
     "titleLabel": "Titel:",
     "titlePlaceholder": "Lesezeichentitel",
-    "pageLabel": "Seite:"
+    "pageLabel": "Seite:",
+    "colorLabel": "Farbe:",
+    "styleLabel": "Stil:"
   },
   "formValidation": {
     "title": "Validierungsfehler"

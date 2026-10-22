@@ -425,7 +425,9 @@
     "editTitle": "ブックマークを編集",
     "titleLabel": "タイトル：",
     "titlePlaceholder": "ブックマークのタイトル",
-    "pageLabel": "ページ："
+    "pageLabel": "ページ：",
+    "colorLabel": "色：",
+    "styleLabel": "スタイル："
   },
   "formValidation": {
     "title": "入力エラー"

@@ -93,7 +93,18 @@
     "editBookmark": "Upravit záložku",
     "deleteBookmark": "Smazat záložku",
     "expandAll": "Rozbalit vše",
-    "collapseAll": "Sbalit vše"
+    "collapseAll": "Sbalit vše",
+    "color": "Barva",
+    "colorDefault": "Výchozí",
+    "colorRed": "Červená",
+    "colorOrange": "Oranžová",
+    "colorGreen": "Zelená",
+    "colorBlue": "Modrá",
+    "colorPurple": "Fialová",
+    "colorGray": "Šedá",
+    "colorCustom": "Vlastní...",
+    "bold": "Tučné",
+    "italic": "Kurzíva"
   },
   "thumbnail": {
     "rotateLeft": "Otočit doleva",

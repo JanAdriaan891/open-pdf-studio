@@ -425,7 +425,9 @@
     "editTitle": "Edit Bookmark",
     "titleLabel": "Title:",
     "titlePlaceholder": "Bookmark title",
-    "pageLabel": "Page:"
+    "pageLabel": "Page:",
+    "colorLabel": "Color:",
+    "styleLabel": "Style:"
   },
   "formValidation": {
     "title": "Validation Error"

@@ -93,7 +93,18 @@
     "editBookmark": "Edytuj zakładkę",
     "deleteBookmark": "Usuń zakładkę",
     "expandAll": "Rozwiń wszystko",
-    "collapseAll": "Zwiń wszystko"
+    "collapseAll": "Zwiń wszystko",
+    "color": "Kolor",
+    "colorDefault": "Domyślny",
+    "colorRed": "Czerwony",
+    "colorOrange": "Pomarańczowy",
+    "colorGreen": "Zielony",
+    "colorBlue": "Niebieski",
+    "colorPurple": "Fioletowy",
+    "colorGray": "Szary",
+    "colorCustom": "Niestandardowo...",
+    "bold": "Pogrubienie",
+    "italic": "Kursywa"
   },
   "thumbnail": {
     "rotateLeft": "Obróć w lewo",

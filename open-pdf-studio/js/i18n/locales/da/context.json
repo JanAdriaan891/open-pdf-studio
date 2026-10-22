@@ -93,7 +93,18 @@
     "editBookmark": "Rediger bogmærke",
     "deleteBookmark": "Slet bogmærke",
     "expandAll": "Udvid alle",
-    "collapseAll": "Skjul alle"
+    "collapseAll": "Skjul alle",
+    "color": "Farve",
+    "colorDefault": "Standard",
+    "colorRed": "Rød",
+    "colorOrange": "Orange",
+    "colorGreen": "Grøn",
+    "colorBlue": "Blå",
+    "colorPurple": "Lilla",
+    "colorGray": "Grå",
+    "colorCustom": "Brugerdefineret...",
+    "bold": "Fed",
+    "italic": "Kursiv"
   },
   "thumbnail": {
     "rotateLeft": "Roter til venstre",

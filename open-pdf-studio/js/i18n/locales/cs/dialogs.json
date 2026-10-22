@@ -425,7 +425,9 @@
     "editTitle": "Upravit záložku",
     "titleLabel": "Název:",
     "titlePlaceholder": "Název záložky",
-    "pageLabel": "Stránka:"
+    "pageLabel": "Stránka:",
+    "colorLabel": "Barva:",
+    "styleLabel": "Styl:"
   },
   "formValidation": {
     "title": "Chyba ověření"

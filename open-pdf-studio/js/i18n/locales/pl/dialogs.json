@@ -425,7 +425,9 @@
     "editTitle": "Edytuj zakładkę",
     "titleLabel": "Tytuł:",
     "titlePlaceholder": "Tytuł zakładki",
-    "pageLabel": "Strona:"
+    "pageLabel": "Strona:",
+    "colorLabel": "Kolor:",
+    "styleLabel": "Styl:"
   },
   "formValidation": {
     "title": "Błąd walidacji"

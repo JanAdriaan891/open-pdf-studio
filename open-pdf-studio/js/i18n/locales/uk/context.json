@@ -93,7 +93,18 @@
     "editBookmark": "Редагувати закладку",
     "deleteBookmark": "Видалити закладку",
     "expandAll": "Розгорнути все",
-    "collapseAll": "Згорнути все"
+    "collapseAll": "Згорнути все",
+    "color": "Колір",
+    "colorDefault": "За замовчуванням",
+    "colorRed": "Червоний",
+    "colorOrange": "Помаранчевий",
+    "colorGreen": "Зелений",
+    "colorBlue": "Синій",
+    "colorPurple": "Пурпурний",
+    "colorGray": "Сірий",
+    "colorCustom": "Користувацький...",
+    "bold": "Жирний",
+    "italic": "Курсив"
   },
   "thumbnail": {
     "rotateLeft": "Повернути ліворуч",

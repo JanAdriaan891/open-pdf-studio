@@ -425,7 +425,9 @@
     "editTitle": "Editare semn de carte",
     "titleLabel": "Titlu:",
     "titlePlaceholder": "Titlu semn de carte",
-    "pageLabel": "Pagina:"
+    "pageLabel": "Pagina:",
+    "colorLabel": "Culoare:",
+    "styleLabel": "Stil:"
   },
   "formValidation": {
     "title": "Eroare de validare"

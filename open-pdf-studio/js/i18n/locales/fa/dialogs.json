@@ -425,7 +425,9 @@
     "editTitle": "ویرایش نشانک",
     "titleLabel": "عنوان:",
     "titlePlaceholder": "عنوان نشانک",
-    "pageLabel": "صفحه:"
+    "pageLabel": "صفحه:",
+    "colorLabel": "رنگ:",
+    "styleLabel": "سبک:"
   },
   "formValidation": {
     "title": "خطای اعتبارسنجی"

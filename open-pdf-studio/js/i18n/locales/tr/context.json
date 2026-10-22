@@ -93,7 +93,18 @@
     "editBookmark": "Yer İmini Düzenle",
     "deleteBookmark": "Yer İmini Sil",
     "expandAll": "Tümünü Genişlet",
-    "collapseAll": "Tümünü Daralt"
+    "collapseAll": "Tümünü Daralt",
+    "color": "Renk",
+    "colorDefault": "Varsayılan",
+    "colorRed": "Kırmızı",
+    "colorOrange": "Turuncu",
+    "colorGreen": "Yeşil",
+    "colorBlue": "Mavi",
+    "colorPurple": "Mor",
+    "colorGray": "Gri",
+    "colorCustom": "Özel...",
+    "bold": "Kalın",
+    "italic": "İtalik"
   },
   "thumbnail": {
     "rotateLeft": "Sola Döndür",

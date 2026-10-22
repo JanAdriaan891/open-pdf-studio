@@ -425,7 +425,9 @@
     "editTitle": "แก้ไขบุ๊กมาร์ก",
     "titleLabel": "ชื่อ:",
     "titlePlaceholder": "ชื่อบุ๊กมาร์ก",
-    "pageLabel": "หน้า:"
+    "pageLabel": "หน้า:",
+    "colorLabel": "สี:",
+    "styleLabel": "รูปแบบ:"
   },
   "formValidation": {
     "title": "ข้อผิดพลาดในการตรวจสอบ"

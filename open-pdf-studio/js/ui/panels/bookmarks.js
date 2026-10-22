@@ -5,6 +5,7 @@ import { markDocumentModified } from '../../ui/chrome/tabs.js';
 import { isPdfAReadOnly } from '../../pdf/loader.js';
 import { ingeklapteVoorouders } from './bladwijzer-zoeken.js';
 import { loadBookmarksFromPdf } from '../../pdf/bladwijzers-lezen.js';
+import { zetBladwijzerStijl, stijlVanSelectie } from './bladwijzer-stijl.js';
 import {
   openDialog, setBookmarkTree as setTree, setBookmarkCountText as setCountText,
   setBookmarkEmptyMessage as setEmptyMessage, setBookmarkSelectedId as setSelectedId,
@@ -196,9 +197,9 @@ export async function addBookmark() {
     zoom: null,
     parentId: null,
     expanded: true,
-    bold: false,
-    italic: false,
-    color: null,
+    bold: !!result.bold,
+    italic: !!result.italic,
+    color: result.color || null,
     sortOrder: doc.bookmarks.filter(b => b.parentId === null).length,
     fromPdf: false,
   };
@@ -236,9 +237,9 @@ export async function addChildBookmark() {
     zoom: null,
     parentId: selectedBookmarkId,
     expanded: true,
-    bold: false,
-    italic: false,
-    color: null,
+    bold: !!result.bold,
+    italic: !!result.italic,
+    color: result.color || null,
     sortOrder: siblings.length,
     fromPdf: false,
   };
@@ -266,12 +267,16 @@ export async function editBookmark() {
   const bm = doc.bookmarks.find(b => b.id === selectedBookmarkId);
   if (!bm) return;
 
-  const result = await showBookmarkDialog('Edit Bookmark', bm.title, bm.page);
+  const result = await showBookmarkDialog('Edit Bookmark', bm.title, bm.page,
+    { color: bm.color || null, bold: !!bm.bold, italic: !!bm.italic });
   if (!result) return;
 
   const oldState = { ...bm };
   bm.title = result.title;
   bm.page = result.page;
+  bm.color = result.color || null;
+  bm.bold = !!result.bold;
+  bm.italic = !!result.italic;
   markDocumentModified();
 
   const { recordModifyBookmark } = await import('../../core/undo-manager.js');
@@ -331,15 +336,58 @@ function getDescendants(bookmarks, parentId) {
   return result;
 }
 
-function showBookmarkDialog(dialogTitle, currentTitle, currentPage) {
+function showBookmarkDialog(dialogTitle, currentTitle, currentPage, stijl = {}) {
   return new Promise((resolve) => {
     const isEdit = dialogTitle.toLowerCase().includes('edit');
     openDialog('bookmark', {
       title: currentTitle,
       page: currentPage,
+      color: stijl.color || null,
+      bold: !!stijl.bold,
+      italic: !!stijl.italic,
       isEdit,
       onOk: resolve,
     });
   });
+}
+
+// ── Kleur en vet/cursief (#689) ──────────────────────────────────────────────
+
+// De bladwijzers waarop een stijlkeuze uit het menu werkt.
+export function getSelectedBookmarkIds() {
+  return selectedBookmarkId ? [selectedBookmarkId] : [];
+}
+
+// Vinkjes voor het menu: vet/cursief als alle geselecteerde het hebben,
+// kleur als ze allemaal dezelfde hebben.
+export function bookmarkSelectionStyle() {
+  const doc = getActiveDocument();
+  return stijlVanSelectie(doc?.bookmarks || [], getSelectedBookmarkIds());
+}
+
+// Zet kleur en/of vet/cursief op de selectie: één undo-stap, document gewijzigd.
+// `wijziging`: { color?: '#rrggbb'|null, bold?: boolean, italic?: boolean }.
+export async function setBookmarkStyle(wijziging) {
+  if (isPdfAReadOnly()) return false;
+  const doc = getActiveDocument();
+  const ids = getSelectedBookmarkIds();
+  if (!doc || ids.length === 0) return false;
+  const oud = (doc.bookmarks || []).map(b => ({ ...b }));
+  const { bookmarks, gewijzigd } = zetBladwijzerStijl(oud, ids, wijziging);
+  if (!gewijzigd) return false;
+  doc.bookmarks = bookmarks;
+  markDocumentModified();
+  const { recordBookmarksChange } = await import('../../core/undo-manager.js');
+  recordBookmarksChange(oud, bookmarks);
+  updateBookmarksList();
+  return true;
+}
+
+export function toggleBookmarkBold() {
+  return setBookmarkStyle({ bold: !bookmarkSelectionStyle().bold });
+}
+
+export function toggleBookmarkItalic() {
+  return setBookmarkStyle({ italic: !bookmarkSelectionStyle().italic });
 }
 

@@ -425,7 +425,9 @@
     "editTitle": "עריכת סימנייה",
     "titleLabel": "כותרת:",
     "titlePlaceholder": "כותרת סימנייה",
-    "pageLabel": "עמוד:"
+    "pageLabel": "עמוד:",
+    "colorLabel": "צבע:",
+    "styleLabel": "סגנון:"
   },
   "formValidation": {
     "title": "שגיאת אימות"

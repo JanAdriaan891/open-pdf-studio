@@ -425,7 +425,9 @@
     "editTitle": "Уреди обележивач",
     "titleLabel": "Наслов:",
     "titlePlaceholder": "Наслов обележивача",
-    "pageLabel": "Страница:"
+    "pageLabel": "Страница:",
+    "colorLabel": "Боја:",
+    "styleLabel": "Стил:"
   },
   "formValidation": {
     "title": "Грешка валидације"

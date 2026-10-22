@@ -54,6 +54,8 @@ import { layersVersion, moveAnnotationsToAnnotationLayer } from '../stores/annot
 import { layerRows, layerOf } from '../../annotations/annotatie-lagen.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
 import i18next from '../../i18n/config.js';
+import { tree as bookmarkTree, selectedId as bookmarkSelectedId, toolbarDisabled as bookmarkToolbarDisabled } from '../stores/panels/bookmarksStore.js';
+import { BLADWIJZER_KLEUREN, kleurLabelSleutel, stijlVanSelectie } from '../../ui/panels/bladwijzer-stijl.js';
 import { gevelPreset } from '../../gevelelement/herkenning.js';
 import { paneelTypenVoor, typeNaam } from '../../gevelelement/catalogus.js';
 import { indeling, veldBij, voegStijlToe, verwijderStijl, wisselPaneel } from '../../gevelelement/indeling.js';
@@ -1041,8 +1043,42 @@ function PageMenuContent() {
   );
 }
 
+// Een gekleurd vierkantje als menu-icoon; zonder kleur (Standaard) een leeg vak.
+function kleurIcoon(hex) {
+  return hex
+    ? `<svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" fill="${hex}" stroke="#808080"/></svg>`
+    : '<svg viewBox="0 0 16 16"><rect x="2.5" y="2.5" width="11" height="11" fill="none" stroke="#808080"/></svg>';
+}
+
+// Eigen kleur (#689): de kleurkiezer van het systeem. Synchroon in de klik
+// openen, anders staat de webview hem niet toe.
+function kiesEigenBladwijzerKleur(huidig) {
+  const invoer = document.createElement('input');
+  invoer.type = 'color';
+  invoer.value = huidig || '#000000';
+  invoer.style.cssText = 'position:fixed;left:-100px;top:0;width:1px;height:1px;opacity:0;';
+  document.body.appendChild(invoer);
+  const opruimen = () => invoer.remove();
+  invoer.addEventListener('change', () => {
+    const waarde = invoer.value;
+    opruimen();
+    import('../../ui/panels/bookmarks.js').then(m => m.setBookmarkStyle({ color: waarde }));
+  }, { once: true });
+  invoer.addEventListener('blur', () => setTimeout(opruimen, 0), { once: true });
+  invoer.click();
+}
+
 function BookmarkMenuContent() {
   const { t } = useTranslation('context');
+  // Kleur en stijl werken op de selectie; uit bij geen selectie of PDF/A (zoals bewerken).
+  const stijlUit = () => bookmarkToolbarDisabled().edit;
+  // Vinkjes uit het model; de boom verandert na elke stijlwijziging mee.
+  const stijl = () => {
+    bookmarkTree();
+    const id = bookmarkSelectedId();
+    return stijlVanSelectie(getActiveDocument()?.bookmarks || [], id ? [id] : []);
+  };
+  const zet = (wijziging) => import('../../ui/panels/bookmarks.js').then(m => m.setBookmarkStyle(wijziging));
 
   return (
     <>
@@ -1058,6 +1094,26 @@ function BookmarkMenuContent() {
       }} />
       <MenuItem label={t('bookmark.deleteBookmark')} onClick={() => {
         import('../../ui/panels/bookmarks.js').then(m => m.deleteBookmark());
+      }} />
+      <Separator />
+      <Submenu icon={kleurIcoon(stijl().color || null)} label={t('bookmark.color')} disabled={stijlUit()}>
+        <MenuItem icon={kleurIcoon(null)} label={t('bookmark.colorDefault')} checkbox={true}
+          checked={stijl().color === null} disabled={stijlUit()} onClick={() => zet({ color: null })} />
+        <For each={BLADWIJZER_KLEUREN}>
+          {(k) => (
+            <MenuItem icon={kleurIcoon(k.hex)} label={t(kleurLabelSleutel(k.sleutel))} checkbox={true}
+              checked={stijl().color === k.hex} disabled={stijlUit()} onClick={() => zet({ color: k.hex })} />
+          )}
+        </For>
+        <Separator />
+        <MenuItem label={t('bookmark.colorCustom')} disabled={stijlUit()}
+          onClick={() => kiesEigenBladwijzerKleur(stijl().color)} />
+      </Submenu>
+      <MenuItem label={t('bookmark.bold')} checkbox={true} checked={stijl().bold} disabled={stijlUit()} onClick={() => {
+        import('../../ui/panels/bookmarks.js').then(m => m.toggleBookmarkBold());
+      }} />
+      <MenuItem label={t('bookmark.italic')} checkbox={true} checked={stijl().italic} disabled={stijlUit()} onClick={() => {
+        import('../../ui/panels/bookmarks.js').then(m => m.toggleBookmarkItalic());
       }} />
       <Separator />
       <MenuItem label={t('bookmark.expandAll')} onClick={() => {

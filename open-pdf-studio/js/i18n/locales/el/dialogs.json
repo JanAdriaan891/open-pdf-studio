@@ -425,7 +425,9 @@
     "editTitle": "Επεξεργασία σελιδοδείκτη",
     "titleLabel": "Τίτλος:",
     "titlePlaceholder": "Τίτλος σελιδοδείκτη",
-    "pageLabel": "Σελίδα:"
+    "pageLabel": "Σελίδα:",
+    "colorLabel": "Χρώμα:",
+    "styleLabel": "Στυλ:"
   },
   "formValidation": {
     "title": "Σφάλμα επικύρωσης"

@@ -425,7 +425,9 @@
     "editTitle": "ແກ້ໄຂບຸກມາກ",
     "titleLabel": "ຫົວຂໍ້:",
     "titlePlaceholder": "ຫົວຂໍ້ບຸກມາກ",
-    "pageLabel": "ໜ້າ:"
+    "pageLabel": "ໜ້າ:",
+    "colorLabel": "ສີ:",
+    "styleLabel": "ຮູບແບບ:"
   },
   "formValidation": {
     "title": "ຂໍ້ຜິດພາດໃນການກວດສອບ"

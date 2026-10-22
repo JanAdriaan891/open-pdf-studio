@@ -425,7 +425,9 @@
     "editTitle": "Sunting Penanda Buku",
     "titleLabel": "Tajuk:",
     "titlePlaceholder": "Tajuk penanda buku",
-    "pageLabel": "Halaman:"
+    "pageLabel": "Halaman:",
+    "colorLabel": "Warna:",
+    "styleLabel": "Gaya:"
   },
   "formValidation": {
     "title": "Ralat Pengesahan"

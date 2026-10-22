@@ -93,7 +93,18 @@
     "editBookmark": "ویرایش نشانک",
     "deleteBookmark": "حذف نشانک",
     "expandAll": "باز کردن همه",
-    "collapseAll": "جمع کردن همه"
+    "collapseAll": "جمع کردن همه",
+    "color": "رنگ",
+    "colorDefault": "پیش‌فرض",
+    "colorRed": "قرمز",
+    "colorOrange": "نارنجی",
+    "colorGreen": "سبز",
+    "colorBlue": "آبی",
+    "colorPurple": "بنفش",
+    "colorGray": "خاکستری",
+    "colorCustom": "سفارشی...",
+    "bold": "ضخیم",
+    "italic": "کج"
   },
   "thumbnail": {
     "rotateLeft": "چرخش به چپ",

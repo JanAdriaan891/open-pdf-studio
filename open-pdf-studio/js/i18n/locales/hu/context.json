@@ -93,7 +93,18 @@
     "editBookmark": "Könyvjelző szerkesztése",
     "deleteBookmark": "Könyvjelző törlése",
     "expandAll": "Összes kibontása",
-    "collapseAll": "Összes összecsukása"
+    "collapseAll": "Összes összecsukása",
+    "color": "Szín",
+    "colorDefault": "Alapértelmezett",
+    "colorRed": "Piros",
+    "colorOrange": "Narancs",
+    "colorGreen": "Zöld",
+    "colorBlue": "Kék",
+    "colorPurple": "Lila",
+    "colorGray": "Szürke",
+    "colorCustom": "Egyedi...",
+    "bold": "Félkövér",
+    "italic": "Dőlt"
   },
   "thumbnail": {
     "rotateLeft": "Forgatás balra",

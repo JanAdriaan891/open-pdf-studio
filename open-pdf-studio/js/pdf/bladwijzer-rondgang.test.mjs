@@ -1,0 +1,110 @@
+// Bladwijzers: kleur, vet/cursief (#689) en volgorde/nesting (#690) overleven
+// opslaan en heropenen met de echte saver en de echte lader. Extern gecontroleerd
+// op de rauwe outline-items (/C, /F, /First, /Next) via pdf-lib.
+
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { PDFDocument, PDFName, PDFArray, PDFNumber } from 'pdf-lib';
+import { opslaan } from './rondgang.testhulp.mjs';
+import { loadBookmarksFromPdf, pdfjsKleurNaarHex } from './bladwijzers-lezen.js';
+
+const N = (s) => PDFName.of(s);
+const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+
+async function driePaginas() {
+  const doc = await PDFDocument.create();
+  for (let i = 0; i < 3; i++) doc.addPage([595, 842]);
+  return doc.save();
+}
+
+async function leesBladwijzers(bytes) {
+  const pd = await pdfjs.getDocument({ data: bytes.slice(), isEvalSupported: false, verbosity: 0 }).promise;
+  const bms = await loadBookmarksFromPdf(pd);
+  await pd.loadingTask.destroy();
+  return bms;
+}
+
+/** De outline als boom van { titel, C, F, kinderen } uit de rauwe dictionaries. */
+async function rauweOutline(bytes) {
+  const doc = await PDFDocument.load(bytes);
+  const ctx = doc.context;
+  const outlines = ctx.lookup(doc.catalog.get(N('Outlines')));
+  if (!outlines) return null;
+  const loop = (eersteRef) => {
+    const uit = [];
+    let ref = eersteRef;
+    while (ref) {
+      const d = ctx.lookup(ref);
+      const c = d.get(N('C'));
+      const f = d.get(N('F'));
+      uit.push({
+        titel: d.get(N('Title')).decodeText(),
+        C: c instanceof PDFArray ? c.asArray().map((n) => Math.round(n.asNumber() * 255)) : null,
+        F: f instanceof PDFNumber ? f.asNumber() : null,
+        kinderen: d.get(N('First')) ? loop(d.get(N('First'))) : [],
+      });
+      ref = d.get(N('Next'));
+    }
+    return uit;
+  };
+  return loop(outlines.get(N('First')));
+}
+
+const bm = (id, title, page, parentId, sortOrder, extra = {}) => ({
+  id, title, page, top: null, left: null, zoom: null, parentId, expanded: true,
+  bold: false, italic: false, color: null, sortOrder, fromPdf: false, ...extra,
+});
+
+test('pdf.js-kleuren (0-255) worden hex; zwart en ontbrekend worden geen kleur', () => {
+  assert.equal(pdfjsKleurNaarHex(new Uint8ClampedArray([255, 0, 0])), '#ff0000');
+  assert.equal(pdfjsKleurNaarHex(new Uint8ClampedArray([0, 128, 255])), '#0080ff');
+  assert.equal(pdfjsKleurNaarHex(new Uint8ClampedArray([0, 0, 0])), null, 'zwart is de standaard van pdf.js');
+  assert.equal(pdfjsKleurNaarHex(null), null);
+  assert.equal(pdfjsKleurNaarHex([1, 2]), null);
+});
+
+test('opslaan en heropenen: kleur, vet, cursief, volgorde en nesting blijven', async () => {
+  const bron = await driePaginas();
+  const bookmarks = [
+    // Bewust door elkaar in de array: de volgorde komt uit sortOrder.
+    bm('b', 'CIVIL', 2, null, 1, { color: '#0078d7', bold: true }),
+    bm('a', 'Cover', 1, null, 0),
+    bm('c2', 'C-102', 3, 'b', 1, { italic: true }),
+    bm('c1', 'C-101', 2, 'b', 0, { color: '#e81123', bold: true, italic: true }),
+    bm('c1a', 'Detail', 2, 'c1', 0, { color: '#808080' }),
+  ];
+  const uit = await opslaan(bron, [], { document: { bookmarks } });
+
+  const rauw = await rauweOutline(uit);
+  assert.deepEqual(rauw, [
+    { titel: 'Cover', C: null, F: null, kinderen: [] },
+    { titel: 'CIVIL', C: [0, 120, 215], F: 2, kinderen: [
+      { titel: 'C-101', C: [232, 17, 35], F: 3, kinderen: [
+        { titel: 'Detail', C: [128, 128, 128], F: null, kinderen: [] },
+      ] },
+      { titel: 'C-102', C: null, F: 1, kinderen: [] },
+    ] },
+  ]);
+
+  const terug = await leesBladwijzers(uit);
+  const opTitel = Object.fromEntries(terug.map((b) => [b.title, b]));
+  assert.deepEqual(terug.map((b) => b.title), ['Cover', 'CIVIL', 'C-101', 'Detail', 'C-102']);
+  assert.equal(opTitel['CIVIL'].color, '#0078d7');
+  assert.equal(opTitel['CIVIL'].bold, true);
+  assert.equal(opTitel['CIVIL'].italic, false);
+  assert.equal(opTitel['C-101'].color, '#e81123');
+  assert.equal(opTitel['C-101'].bold, true);
+  assert.equal(opTitel['C-101'].italic, true);
+  assert.equal(opTitel['C-102'].color, null);
+  assert.equal(opTitel['C-102'].italic, true);
+  assert.equal(opTitel['Cover'].color, null, 'geen kleur blijft geen kleur');
+  assert.equal(opTitel['Detail'].parentId, opTitel['C-101'].id);
+  assert.equal(opTitel['C-101'].parentId, opTitel['CIVIL'].id);
+  assert.equal(opTitel['Cover'].parentId, null);
+  assert.equal(opTitel['C-102'].page, 3);
+
+  // Nog een keer opslaan wat er gelezen is: niets verandert (geen /C [0 0 0]
+  // op elke bladwijzer, geen kapotte kleur).
+  const opnieuw = await opslaan(uit, [], { document: { bookmarks: terug } });
+  assert.deepEqual(await rauweOutline(opnieuw), rauw);
+});

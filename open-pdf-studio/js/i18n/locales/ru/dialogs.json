@@ -425,7 +425,9 @@
     "editTitle": "Редактировать закладку",
     "titleLabel": "Название:",
     "titlePlaceholder": "Название закладки",
-    "pageLabel": "Страница:"
+    "pageLabel": "Страница:",
+    "colorLabel": "Цвет:",
+    "styleLabel": "Стиль:"
   },
   "formValidation": {
     "title": "Ошибка валидации"

@@ -93,7 +93,18 @@
     "editBookmark": "编辑书签",
     "deleteBookmark": "删除书签",
     "expandAll": "全部展开",
-    "collapseAll": "全部折叠"
+    "collapseAll": "全部折叠",
+    "color": "颜色",
+    "colorDefault": "默认",
+    "colorRed": "红色",
+    "colorOrange": "橙色",
+    "colorGreen": "绿色",
+    "colorBlue": "蓝色",
+    "colorPurple": "紫色",
+    "colorGray": "灰色",
+    "colorCustom": "自定义...",
+    "bold": "粗体",
+    "italic": "斜体"
   },
   "thumbnail": {
     "rotateLeft": "向左旋转",

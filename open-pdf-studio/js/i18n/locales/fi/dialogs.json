@@ -425,7 +425,9 @@
     "editTitle": "Muokkaa kirjanmerkkia",
     "titleLabel": "Otsikko:",
     "titlePlaceholder": "Kirjanmerkin otsikko",
-    "pageLabel": "Sivu:"
+    "pageLabel": "Sivu:",
+    "colorLabel": "Väri:",
+    "styleLabel": "Tyyli:"
   },
   "formValidation": {
     "title": "Vahvistusvirhe"

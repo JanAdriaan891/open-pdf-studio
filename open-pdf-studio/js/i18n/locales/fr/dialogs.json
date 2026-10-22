@@ -425,7 +425,9 @@
     "editTitle": "Modifier le signet",
     "titleLabel": "Titre :",
     "titlePlaceholder": "Titre du signet",
-    "pageLabel": "Page :"
+    "pageLabel": "Page :",
+    "colorLabel": "Couleur :",
+    "styleLabel": "Style :"
   },
   "formValidation": {
     "title": "Erreur de validation"

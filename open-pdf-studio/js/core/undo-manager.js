@@ -121,7 +121,7 @@ function pagesForCommand(cmd) {
   // thumbnail composite — skip them entirely (empty set = no refresh).
   const skipTypes = new Set([
     'addWatermark', 'removeWatermark', 'modifyWatermark',
-    'addBookmark', 'removeBookmark', 'modifyBookmark',
+    'addBookmark', 'removeBookmark', 'modifyBookmark', 'setBookmarks',
     // pageStructure (insert/delete/reorder pages) shifts page numbers and is
     // handled by restorePageState → clearThumbnailCache + generateThumbnails,
     // which regenerates every thumbnail. A per-page hook here would be wrong.
@@ -624,6 +624,12 @@ function applyUndo(cmd, lookup) {
       if (idx !== -1) Object.assign(doc.bookmarks[idx], cmd.oldState);
       break;
     }
+    case 'setBookmarks': {
+      // Hele bladwijzerlijst terug (stijl, verplaatsen, nesten, meervoudig
+      // verwijderen: één stap). Eén toewijzing: het document kopieert.
+      doc.bookmarks = cmd.oldBookmarks.map(b => ({ ...b }));
+      break;
+    }
   }
 }
 
@@ -742,6 +748,10 @@ function applyRedo(cmd, lookup) {
       if (!doc.bookmarks) doc.bookmarks = [];
       const idx = doc.bookmarks.findIndex(b => b.id === cmd.id);
       if (idx !== -1) Object.assign(doc.bookmarks[idx], cmd.newState);
+      break;
+    }
+    case 'setBookmarks': {
+      doc.bookmarks = cmd.newBookmarks.map(b => ({ ...b }));
       break;
     }
   }
@@ -1037,6 +1047,16 @@ export function recordRemoveBookmark(bookmarks) {
 
 export function recordModifyBookmark(id, oldState, newState) {
   execute({ type: 'modifyBookmark', id, oldState: { ...oldState }, newState: { ...newState } });
+}
+
+// Eén undo-stap voor een wijziging aan meerdere bladwijzers tegelijk: de hele
+// lijst ervoor en erna (#689 stijl op een selectie, #690 verplaatsen/nesten).
+export function recordBookmarksChange(oldBookmarks, newBookmarks) {
+  execute({
+    type: 'setBookmarks',
+    oldBookmarks: (oldBookmarks || []).map(b => ({ ...b })),
+    newBookmarks: (newBookmarks || []).map(b => ({ ...b })),
+  });
 }
 
 // Record a page structure change (insert, delete, reorder) for undo/redo.

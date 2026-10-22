@@ -425,7 +425,9 @@
     "editTitle": "বুকমার্ক সম্পাদনা করুন",
     "titleLabel": "শিরোনাম:",
     "titlePlaceholder": "বুকমার্ক শিরোনাম",
-    "pageLabel": "পৃষ্ঠা:"
+    "pageLabel": "পৃষ্ঠা:",
+    "colorLabel": "রঙ:",
+    "styleLabel": "শৈলী:"
   },
   "formValidation": {
     "title": "যাচাইকরণ ত্রুটি"

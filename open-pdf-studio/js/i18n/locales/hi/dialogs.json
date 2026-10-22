@@ -425,7 +425,9 @@
     "editTitle": "बुकमार्क संपादित करें",
     "titleLabel": "शीर्षक:",
     "titlePlaceholder": "बुकमार्क शीर्षक",
-    "pageLabel": "पृष्ठ:"
+    "pageLabel": "पृष्ठ:",
+    "colorLabel": "रंग:",
+    "styleLabel": "शैली:"
   },
   "formValidation": {
     "title": "सत्यापन त्रुटि"

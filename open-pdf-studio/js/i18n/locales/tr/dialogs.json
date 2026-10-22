@@ -425,7 +425,9 @@
     "editTitle": "Yer İmini Düzenle",
     "titleLabel": "Başlık:",
     "titlePlaceholder": "Yer imi başlığı",
-    "pageLabel": "Sayfa:"
+    "pageLabel": "Sayfa:",
+    "colorLabel": "Renk:",
+    "styleLabel": "Stil:"
   },
   "formValidation": {
     "title": "Doğrulama Hatası"

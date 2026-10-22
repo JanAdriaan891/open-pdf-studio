@@ -425,7 +425,9 @@
     "editTitle": "Редактиране на отметка",
     "titleLabel": "Заглавие:",
     "titlePlaceholder": "Заглавие на отметката",
-    "pageLabel": "Страница:"
+    "pageLabel": "Страница:",
+    "colorLabel": "Цвят:",
+    "styleLabel": "Стил:"
   },
   "formValidation": {
     "title": "Грешка при валидиране"

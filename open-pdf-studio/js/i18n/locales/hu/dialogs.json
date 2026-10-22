@@ -425,7 +425,9 @@
     "editTitle": "Könyvjelző szerkesztése",
     "titleLabel": "Cím:",
     "titlePlaceholder": "Könyvjelző címe",
-    "pageLabel": "Oldal:"
+    "pageLabel": "Oldal:",
+    "colorLabel": "Szín:",
+    "styleLabel": "Stílus:"
   },
   "formValidation": {
     "title": "Érvényesítési hiba"

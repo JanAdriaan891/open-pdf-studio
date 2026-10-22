@@ -425,7 +425,9 @@
     "editTitle": "بک مارک میں ترمیم کریں",
     "titleLabel": "عنوان:",
     "titlePlaceholder": "بک مارک عنوان",
-    "pageLabel": "صفحہ:"
+    "pageLabel": "صفحہ:",
+    "colorLabel": "رنگ:",
+    "styleLabel": "سٹائل:"
   },
   "formValidation": {
     "title": "تصدیق کی خرابی"

@@ -425,7 +425,9 @@
     "editTitle": "책갈피 편집",
     "titleLabel": "제목:",
     "titlePlaceholder": "책갈피 제목",
-    "pageLabel": "페이지:"
+    "pageLabel": "페이지:",
+    "colorLabel": "색상:",
+    "styleLabel": "스타일:"
   },
   "formValidation": {
     "title": "유효성 검사 오류"
