@@ -20,7 +20,7 @@ export async function createUnicodeFixture(bytes, text) {
   for(const glyph of run.glyphs) require(glyph.id!==0,'Unexpected .notdef glyph');
   require(run.glyphs.some(g=>g.path.commands.length>0),'No visible glyph outlines');
   const pdf=await PDFDocument.create();
-  const font=await embedOcrFont(pdf,bytes);
+  const font=await embedOcrFont(pdf,bytes,{unicodeGuard:true});
   pdf.addPage([600,150]).drawText(text,{x:20,y:80,font,size:24});
   const ocr=pdf.addPage([600,150]);
   writeOcrTextLayer(ocr,[{text,left:20,top:40,width:300,height:24,confidence:90}],font);

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import {PDFDocument, PDFName} from 'pdf-lib';
+import {PDFDocument} from 'pdf-lib';
 import {embedOcrFont, writeOcrTextLayer} from './saver/ocr-text-layer.js';
 import * as mupdf from 'mupdf';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
@@ -43,12 +43,16 @@ test('fixture contract rejects absent glyphs instead of claiming a successful Un
 for (const [name, text, code] of [
  ['Inter-Regular.ttf', '中文', 'PDF_MISSING_GLYPH'],
  ['NotoSansArabic.ttf', 'العربية', 'PDF_UNMAPPED_SHAPED_GLYPH'],
-]) test(`OCR propagates ${code} without appending a partial text stream`, {skip:!directory}, async()=>{
+]) test(`OCR skips a ${code} word and keeps the rest of the layer`, {skip:!directory}, async()=>{
  const doc=await PDFDocument.create();
  const page=doc.addPage();
- const font=await embedOcrFont(doc,await load(name));
- const before=page.node.get(PDFName.of('Contents'));
+ const font=await embedOcrFont(doc,await load(name),{unicodeGuard:true});
  const word=text=>({text,left:10,top:10,width:100,height:12});
- assert.throws(()=>writeOcrTextLayer(page,[word('123'),word(text)],font),error=>error.code===code);
- assert.equal(page.node.get(PDFName.of('Contents')),before);
+ assert.throws(()=>font.encodeText(text),error=>error.code===code);
+ assert.doesNotThrow(()=>writeOcrTextLayer(page,[word('123'),word(text)],font));
+ const task=pdfjs.getDocument({data:await doc.save(),verbosity:0,isEvalSupported:false});
+ try {
+  const items=(await (await (await task.promise).getPage(1)).getTextContent()).items.map(i=>i.str||'').join('');
+  assert.equal(items,'123');
+ } finally {await task.destroy();}
 });

@@ -31,11 +31,15 @@ tests blijven nodig voor de echte saver en zijn niet vervangen.
 
 De gekozen Arabische fixture wordt nu expliciet afgewezen met
 `PDF_UNMAPPED_SHAPED_GLYPH`: fontkit produceert gevormde glyphs zonder
-codePoints, die bij heropenen anders als controletekens terugkomen. De gedeelde
-font-embedding weigert zulke runs en ontbrekende glyphs (`PDF_MISSING_GLYPH`).
-De OCR-schrijver geeft deze fouten door voordat hij een tekststream toevoegt,
-ook wanneer eerdere woorden wel geldig waren. De tests controleren beide fouten
-met echte fonts. Dit is een bewaarbeveiliging, geen geslaagde Arabische rondgang.
+codePoints, die bij heropenen anders als controletekens terugkomen. Met de
+Unicode-bewaking (`embedOcrFont(..., { unicodeGuard: true })`) weigert de
+font-embedding zulke runs en ontbrekende glyphs (`PDF_MISSING_GLYPH`). De
+OCR-laag gebruikt de bewaking en slaat zo'n woord over; de rest van de laag en
+de opslag blijven heel, zoals de OCR-schrijver al deed met woorden die het font
+niet kon coderen. Zichtbare tekst (CJK-tekstvakken, MCP-tekst) gebruikt de
+bewaking niet: een teken zonder glyph blijft daar een leeg vakje, want een fout
+zou de hele opslag laten mislukken. De tests controleren beide fouten met echte
+fonts. Dit is een bewaarbeveiliging, geen geslaagde Arabische rondgang.
 Shaping blijft ingeschakeld; we verzinnen geen Unicode-koppelingen om de test te
 laten slagen. Een correcte ToUnicode/shaping-oplossing en visuele kwalificatie
 blijven nodig. Geen claim op correcte RTL-caretposities of volledige tekstbewerking.
