@@ -367,7 +367,9 @@
     "csvLayer": "Strat",
     "schedules": "Extrase",
     "addPage": "Adăugare pagină",
-    "pageLabels": "Etichete de pagină (generator de nume)"
+    "pageLabels": "Etichete de pagină (generator de nume)",
+    "portfolio": "Portofoliu PDF",
+    "recognizeForm": "Recunoaștere câmpuri de formular"
   },
   "scaleBar": {
     "title": "Bară de scară",
@@ -419,7 +421,8 @@
       "image": "Imagini și ștampile"
     },
     "preview": "Previzualizare",
-    "exportCsv": "Exportă CSV"
+    "exportCsv": "Exportă CSV",
+    "workbookBindings": "Legături cu foaia de calcul"
   },
   "wizard": {
     "title": "Expert extrase",
@@ -601,7 +604,9 @@
       "symbolId": "Simbol",
       "imageName": "Nume fișier",
       "width": "Lățime",
-      "height": "Înălțime"
+      "height": "Înălțime",
+      "location": "Locație",
+      "locationSource": "Sursa locației"
     },
     "type": {
       "line": "Linie",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Acest obiect a fost modificat în altă parte. Formularul afișează valorile curente; modificările dvs. nu au fost aplicate.",
     "failed": "Modificările nu au putut fi aplicate: {{error}}"
+  },
+  "location": {
+    "title": "Locație",
+    "none": "Neatribuit",
+    "manual": "Manual",
+    "computed": "Calculat",
+    "override": "Suprascriere manuală (gol șterge locația)",
+    "automatic": "Utilizare locație automată",
+    "zoneName": "Utilizare formă ca zonă denumită",
+    "parent": "Zonă părinte",
+    "removeZone": "Eliminare definiție zonă",
+    "invalid": "Locația nu a putut fi actualizată",
+    "rules": "Atribuirea folosește centrul casetei de încadrare a marcajului, inclusiv marginile. Câștigă zona cea mai adânc imbricată, apoi cea cu aria cea mai mică, apoi ID-ul zonei. Folosiți poligoane cu laturi drepte, fără găuri, sau casete nerotite. Identitățile de zonă nevalide sau duplicate sunt excluse.",
+    "loading": "Adnotările se încarcă: locațiile se pot încă modifica."
   }
 }

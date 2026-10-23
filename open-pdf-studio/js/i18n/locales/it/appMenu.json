@@ -213,5 +213,9 @@
     "activationFailed": "Non attiva: {{error}}",
     "viaMcp": "Tramite la connessione IA"
   },
-  "annotateScreenshot": "Annota screenshot dagli appunti"
+  "annotateScreenshot": "Annota screenshot dagli appunti",
+  "workflows": "Flussi di lavoro dei documenti",
+  "drawingSets": "Set di tavole",
+  "sheetLinks": "Collegamenti tra tavole",
+  "approvalRouting": "Iter di approvazione"
 }

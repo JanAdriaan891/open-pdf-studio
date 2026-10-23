@@ -1,7 +1,7 @@
 // The MCP `tools/list` descriptor table in mcp_server.rs is one large
 // `serde_json::json!` literal; its recursive macro expansion exceeds the
-// default limit of 128 once the tool count grew past ~30.
-#![recursion_limit = "256"]
+// default limit of 128. The 89-tool public catalog requires a limit of 512.
+#![recursion_limit = "512"]
 
 mod accounts;
 mod pdf_beveiliging;
@@ -12,6 +12,7 @@ pub mod cad_import;
 pub mod crashlog;
 pub mod datamap;
 mod email;
+pub mod export_policy;
 pub mod extensie_installatie;
 pub mod linux_runtime;
 pub mod logboek;
@@ -273,6 +274,50 @@ async fn write_file_atomic(request: tauri::ipc::Request<'_>) -> Result<(), Strin
     };
     tauri::async_runtime::spawn_blocking(move || {
         atomic_file::write(std::path::Path::new(&path), &bytes).map_err(|e| e.to_string())
+    }).await.map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn write_file_new(request: tauri::ipc::Request<'_>) -> Result<(), String> {
+    let header = request.headers().get("x-opds-path")
+        .ok_or("Missing destination path")?.to_str().map_err(|e| e.to_string())?;
+    let path = urlencoding::decode(header).map_err(|e| e.to_string())?.into_owned();
+    let bytes = match request.body() {
+        tauri::ipc::InvokeBody::Raw(bytes) => bytes.clone(),
+        // Android cannot transport a raw IPC body.
+        tauri::ipc::InvokeBody::Json(value) => {
+            serde_json::from_value::<Vec<u8>>(value.get("data").cloned().ok_or("Missing file data")?)
+                .map_err(|e| e.to_string())?
+        }
+    };
+    tauri::async_runtime::spawn_blocking(move || {
+        atomic_file::write_new(std::path::Path::new(&path), &bytes).map_err(|e| e.to_string())
+    }).await.map_err(|e| e.to_string())?
+}
+
+// A component extracted from a PDF collection: untrusted bytes. Never replaces
+// a file, refuses autostart folders (and, with x-opds-restrict, programs and
+// scripts) and marks the result as downloaded content on Windows.
+#[tauri::command]
+async fn write_downloaded_file_new(request: tauri::ipc::Request<'_>) -> Result<(), String> {
+    let header = request.headers().get("x-opds-path")
+        .ok_or("Missing destination path")?.to_str().map_err(|e| e.to_string())?;
+    let path = urlencoding::decode(header).map_err(|e| e.to_string())?.into_owned();
+    let restrict = request.headers().get("x-opds-restrict").map_or(true, |v| v.as_bytes() != b"0");
+    if let Some(code) = export_policy::problem(&path, restrict) {
+        return Err(code.to_string());
+    }
+    let bytes = match request.body() {
+        tauri::ipc::InvokeBody::Raw(bytes) => bytes.clone(),
+        tauri::ipc::InvokeBody::Json(value) => {
+            serde_json::from_value::<Vec<u8>>(value.get("data").cloned().ok_or("Missing file data")?)
+                .map_err(|e| e.to_string())?
+        }
+    };
+    tauri::async_runtime::spawn_blocking(move || {
+        let target = std::path::Path::new(&path);
+        atomic_file::write_new(target, &bytes).map_err(|e| e.to_string())?;
+        export_policy::mark_of_the_web(target).map_err(|e| e.to_string())
     }).await.map_err(|e| e.to_string())?
 }
 
@@ -1520,6 +1565,36 @@ fn list_pdf_files(dir: String) -> Result<Vec<String>, String> {
 
     pdf_files.sort();
     Ok(pdf_files)
+}
+
+/// PDF files directly in `dir` with size and modification time, so a folder
+/// watch can skip unchanged files without reading them.
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct PdfFileStat {
+    path: String,
+    size: u64,
+    mtime_ms: f64,
+}
+
+#[tauri::command]
+fn list_pdf_file_stats(dir: String) -> Result<Vec<PdfFileStat>, String> {
+    let entries = fs::read_dir(&dir).map_err(|e| format!("Failed to read directory: {}", e))?;
+    let mut files: Vec<PdfFileStat> = Vec::new();
+    for entry in entries.flatten() {
+        let path = entry.path();
+        let is_pdf = path.extension().map_or(false, |e| e.to_string_lossy().eq_ignore_ascii_case("pdf"));
+        let Ok(meta) = fs::metadata(&path) else { continue };
+        if !is_pdf || !meta.is_file() {
+            continue;
+        }
+        let mtime_ms = meta.modified().ok()
+            .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok())
+            .map_or(0.0, |d| d.as_secs_f64() * 1000.0);
+        files.push(PdfFileStat { path: path.to_string_lossy().to_string(), size: meta.len(), mtime_ms });
+    }
+    files.sort_by(|a, b| a.path.cmp(&b.path));
+    Ok(files)
 }
 
 #[tauri::command]
@@ -2995,6 +3070,8 @@ pub fn run(opts: StartupOpts) {
             read_file,
             write_file,
             write_file_atomic,
+            write_file_new,
+            write_downloaded_file_new,
             file_exists,
             open_url,
             is_dev_mode,
@@ -3028,6 +3105,7 @@ pub fn run(opts: StartupOpts) {
             discard_spool_pdf,
             download_pdf_from_url,
             list_pdf_files,
+            list_pdf_file_stats,
             save_preferences,
             load_preferences,
             save_catalog,

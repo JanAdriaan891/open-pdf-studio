@@ -213,5 +213,9 @@
     "activationFailed": "Није активно: {{error}}",
     "viaMcp": "Преко AI везе"
   },
-  "annotateScreenshot": "Анотирај снимак екрана из оставе"
+  "annotateScreenshot": "Анотирај снимак екрана из оставе",
+  "workflows": "Радни токови докумената",
+  "drawingSets": "Комплети цртежа",
+  "sheetLinks": "Везе између листова",
+  "approvalRouting": "Ток одобравања"
 }

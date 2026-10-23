@@ -367,7 +367,9 @@
     "csvLayer": "Tabaka",
     "schedules": "Majedwali ya orodha",
     "addPage": "Ongeza ukurasa",
-    "pageLabels": "Lebo za kurasa (kiunda majina)"
+    "pageLabels": "Lebo za kurasa (kiunda majina)",
+    "portfolio": "Jalada la PDF",
+    "recognizeForm": "Tambua sehemu za fomu"
   },
   "scaleBar": {
     "title": "Upau wa Kipimo",
@@ -419,7 +421,8 @@
       "image": "Picha na mihuri"
     },
     "preview": "Hakikisho",
-    "exportCsv": "Hamisha CSV"
+    "exportCsv": "Hamisha CSV",
+    "workbookBindings": "Miunganisho ya lahajedwali"
   },
   "wizard": {
     "title": "Mchawi wa jedwali la orodha",
@@ -601,7 +604,9 @@
       "symbolId": "Alama",
       "imageName": "Jina la faili",
       "width": "Upana",
-      "height": "Kimo"
+      "height": "Kimo",
+      "location": "Mahali",
+      "locationSource": "Chanzo cha mahali"
     },
     "type": {
       "line": "Mstari",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Kitu hiki kimebadilishwa mahali pengine. Fomu inaonyesha thamani za sasa; mabadiliko yako hayakutumika.",
     "failed": "Imeshindwa kutumia mabadiliko: {{error}}"
+  },
+  "location": {
+    "title": "Mahali",
+    "none": "Haijapangiwa",
+    "manual": "Kwa mkono",
+    "computed": "Imekokotolewa",
+    "override": "Ubatilishaji wa mkono (tupu hufuta mahali)",
+    "automatic": "Tumia mahali kiotomatiki",
+    "zoneName": "Tumia umbo hili kama kanda yenye jina",
+    "parent": "Kanda mzazi",
+    "removeZone": "Ondoa ufafanuzi wa kanda",
+    "invalid": "Mahali hapakuweza kusasishwa",
+    "rules": "Upangaji hutumia kitovu cha kisanduku cha mipaka cha alama, pamoja na kingo. Kanda ya ndani kabisa hushinda, kisha eneo dogo zaidi, kisha kitambulisho cha kanda. Tumia poligoni zilizonyooka zisizo na matundu au visanduku visivyozungushwa. Utambulisho wa kanda batili au unaojirudia huachwa.",
+    "loading": "Maoni yanapakiwa: maeneo bado yanaweza kubadilika."
   }
 }

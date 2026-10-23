@@ -367,7 +367,9 @@
     "csvLayer": "Katman",
     "schedules": "Çizelgeler",
     "addPage": "Sayfa ekle",
-    "pageLabels": "Sayfa etiketleri (ad oluşturucu)"
+    "pageLabels": "Sayfa etiketleri (ad oluşturucu)",
+    "portfolio": "PDF portföyü",
+    "recognizeForm": "Form alanlarını tanı"
   },
   "scaleBar": {
     "title": "Ölçek Çubuğu",
@@ -419,7 +421,8 @@
       "image": "Görüntüler ve damgalar"
     },
     "preview": "Önizleme",
-    "exportCsv": "CSV dışa aktar"
+    "exportCsv": "CSV dışa aktar",
+    "workbookBindings": "Elektronik tablo bağlamaları"
   },
   "wizard": {
     "title": "Çizelge sihirbazı",
@@ -601,7 +604,9 @@
       "symbolId": "Sembol",
       "imageName": "Dosya adı",
       "width": "Genişlik",
-      "height": "Yükseklik"
+      "height": "Yükseklik",
+      "location": "Konum",
+      "locationSource": "Konum kaynağı"
     },
     "type": {
       "line": "Çizgi",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Bu nesne başka bir yerde değiştirildi. Form geçerli değerleri gösteriyor; değişiklikleriniz uygulanmadı.",
     "failed": "Değişiklikler uygulanamadı: {{error}}"
+  },
+  "location": {
+    "title": "Konum",
+    "none": "Atanmamış",
+    "manual": "Elle",
+    "computed": "Hesaplanan",
+    "override": "Elle geçersiz kılma (boş bırakmak konumu temizler)",
+    "automatic": "Otomatik konumu kullan",
+    "zoneName": "Bu şekli adlandırılmış bölge olarak kullan",
+    "parent": "Üst bölge",
+    "removeZone": "Bölge tanımını kaldır",
+    "invalid": "Konum güncellenemedi",
+    "rules": "Atama, kenarlar dahil işaretlemenin sınırlayıcı kutu merkezini kullanır. En derin bölge kazanır, ardından en küçük alan, ardından bölge kimliği. Deliksiz düz kenarlı çokgenler veya döndürülmemiş kutular kullanın. Geçersiz veya yinelenen bölge kimlikleri hariç tutulur.",
+    "loading": "Açıklamalar yükleniyor: konumlar hâlâ değişebilir."
   }
 }

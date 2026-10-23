@@ -213,5 +213,9 @@
     "activationFailed": "No actiu: {{error}}",
     "viaMcp": "Mitjançant la connexió d'IA"
   },
-  "annotateScreenshot": "Anota una captura de pantalla del porta-retalls"
+  "annotateScreenshot": "Anota una captura de pantalla del porta-retalls",
+  "workflows": "Fluxos de treball de documents",
+  "drawingSets": "Jocs de plànols",
+  "sheetLinks": "Enllaços entre plànols",
+  "approvalRouting": "Circuit d'aprovació"
 }

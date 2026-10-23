@@ -367,7 +367,9 @@
     "csvLayer": "Sloj",
     "schedules": "Iskazi",
     "addPage": "Dodaj stranicu",
-    "pageLabels": "Oznake stranica (izrada naziva)"
+    "pageLabels": "Oznake stranica (izrada naziva)",
+    "portfolio": "PDF portfelj",
+    "recognizeForm": "Prepoznaj polja obrasca"
   },
   "scaleBar": {
     "title": "Grafičko mjerilo",
@@ -419,7 +421,8 @@
       "image": "Slike i pečati"
     },
     "preview": "Pretpregled",
-    "exportCsv": "Izvezi CSV"
+    "exportCsv": "Izvezi CSV",
+    "workbookBindings": "Veze s proračunskim tablicama"
   },
   "wizard": {
     "title": "Čarobnjak za iskaz",
@@ -601,7 +604,9 @@
       "symbolId": "Simbol",
       "imageName": "Naziv datoteke",
       "width": "Širina",
-      "height": "Visina"
+      "height": "Visina",
+      "location": "Lokacija",
+      "locationSource": "Izvor lokacije"
     },
     "type": {
       "line": "Linija",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Ovaj je objekt promijenjen na drugom mjestu. Obrazac prikazuje trenutačne vrijednosti; vaše promjene nisu primijenjene.",
     "failed": "Promjene nije moguće primijeniti: {{error}}"
+  },
+  "location": {
+    "title": "Lokacija",
+    "none": "Nije dodijeljeno",
+    "manual": "Ručno",
+    "computed": "Izračunato",
+    "override": "Ručno nadjačavanje (prazno briše lokaciju)",
+    "automatic": "Koristi automatsku lokaciju",
+    "zoneName": "Koristi ovaj oblik kao imenovanu zonu",
+    "parent": "Nadređena zona",
+    "removeZone": "Ukloni definiciju zone",
+    "invalid": "Lokaciju nije moguće ažurirati",
+    "rules": "Dodjela koristi središte graničnog okvira oznake, uključujući rubove. Prednost ima najdublja zona, zatim najmanja površina, pa ID zone. Koristite ravne mnogokute bez rupa ili nerotirane okvire. Nevaljani ili dvostruki identiteti zona isključuju se.",
+    "loading": "Bilješke se učitavaju: lokacije se još mogu promijeniti."
   }
 }

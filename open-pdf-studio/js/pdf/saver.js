@@ -33,6 +33,7 @@ import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
 import { opslaanGeweigerd } from './wachtwoord-pdf.js';
 import { meldOpgeslagen } from '../herstel/haken.js';
+import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 
 // Sub-modules
 import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
@@ -254,7 +255,7 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // `filePath` (so they render via the real pipeline), so we ALSO check the
   // `isUntitled` flag — otherwise "Save" would silently overwrite the temp
   // file and the user would never be asked where to keep their document.
-  if ((!currentPath || activeDoc?.isUntitled) && !saveAsPath) {
+  if (opslaanVraagtOpslaanAls(activeDoc) && !saveAsPath) {
     return await savePDFAs(activeDoc);
   }
 
@@ -3127,6 +3128,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // watermerken, bladwijzers, stijlen, paginalabels en bijlagen blijven in
     // het model en gaan pas bij het echte opslaan het bestand in.
     let watermerkUitkomst = null;
+    let ocrWritten = false;
     if (!alleenAnnotaties) {
       // Burn text edits into the PDF (cover-and-replace)
       await saveTextEditsToPages(pdfDocLib, pages, activeDoc);
@@ -3139,6 +3141,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         try {
           ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes());
         } catch (err) {
+          if (Object.values(activeDoc.ocrResults).some(words => words.some(word => word.review))) throw err;
           console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);
         }
         for (const [pageNumStr, words] of Object.entries(ocrFont ? activeDoc.ocrResults : {})) {
@@ -3146,6 +3149,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
           const page = pages[pageIndex];
           if (page && words && words.length > 0) {
             writeOcrTextLayer(page, words, ocrFont);
+            ocrWritten = true;
           }
         }
       }
@@ -3293,7 +3297,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // gebakken text-edit-records zijn daarna overbodig — pixels én tekst
     // zitten in het bestand — en de tekstlaag toont de nieuwe tekst als
     // gewone paginatekst, direct opnieuw bewerkbaar.
-    if (textEditsGebakken && activeDoc) {
+    if ((textEditsGebakken || ocrWritten) && activeDoc) {
       try {
         if (saveAsPath) activeDoc.saveTargetPath = saveAsPath;
         const { reloadFromBytes } = await import('./page-manager.js');
@@ -3313,7 +3317,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         // nieuwe tekst dan nog steeds over de oude render heen, in plaats
         // van dat de bewerking uit beeld verdwijnt terwijl ze wél in het
         // bestand staat. (#345)
-        activeDoc.textEdits = [];
+        if (textEditsGebakken) activeDoc.textEdits = [];
         // reloadFromBytes is voor structurele edits en markeert het document
         // als gewijzigd; deze save heeft alles net weggeschreven.
         markDocumentSaved(activeDoc);

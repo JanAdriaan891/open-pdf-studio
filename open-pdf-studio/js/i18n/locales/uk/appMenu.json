@@ -213,5 +213,9 @@
     "activationFailed": "Неактивне: {{error}}",
     "viaMcp": "Через підключення ШІ"
   },
-  "annotateScreenshot": "Анотувати знімок екрана з буфера обміну"
+  "annotateScreenshot": "Анотувати знімок екрана з буфера обміну",
+  "workflows": "Робочі процеси документів",
+  "drawingSets": "Комплекти креслень",
+  "sheetLinks": "Посилання між аркушами",
+  "approvalRouting": "Маршрут погодження"
 }

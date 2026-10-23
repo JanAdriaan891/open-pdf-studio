@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { opslaanGeweigerd, markeerBeveiligd } from './wachtwoord-pdf.js';
 import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
+import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 
 // Execute the production save functions with controlled I/O. The app imports
 // require a webview; only those dependencies and dynamic imports are replaced.
@@ -42,6 +43,8 @@ function harness() {
     i18next: { t: x => x }, showMessage() {}, window: {},
     // Met een wachtwoord geopend: nooit opslaan (wachtwoord-pdf.js, echt).
     opslaanGeweigerd,
+    // Naamloos of zonder pad: Opslaan vraagt om een plek (handtekeningen/opslaan.js, echt).
+    opslaanVraagtOpslaanAls,
     // Leesbare naam, ook voor een content://-URI van Android (#596).
     bestandsnaamUitPad,
     // Herstelmomentopname weg na opslaan (js/herstel/haken.js).

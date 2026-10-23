@@ -213,5 +213,9 @@
     "activationFailed": "비활성: {{error}}",
     "viaMcp": "AI 연결을 통해"
   },
-  "annotateScreenshot": "클립보드 스크린샷에 주석 달기"
+  "annotateScreenshot": "클립보드 스크린샷에 주석 달기",
+  "workflows": "문서 워크플로",
+  "drawingSets": "도면 세트",
+  "sheetLinks": "도면 간 링크",
+  "approvalRouting": "승인 라우팅"
 }

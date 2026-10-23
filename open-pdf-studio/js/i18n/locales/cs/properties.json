@@ -367,7 +367,9 @@
     "csvLayer": "Vrstva",
     "schedules": "Výkazy",
     "addPage": "Přidat stránku",
-    "pageLabels": "Popisky stránek (tvorba názvů)"
+    "pageLabels": "Popisky stránek (tvorba názvů)",
+    "portfolio": "Portfolio PDF",
+    "recognizeForm": "Rozpoznat pole formuláře"
   },
   "scaleBar": {
     "title": "Grafické měřítko",
@@ -419,7 +421,8 @@
       "image": "Obrázky a razítka"
     },
     "preview": "Náhled",
-    "exportCsv": "Exportovat CSV"
+    "exportCsv": "Exportovat CSV",
+    "workbookBindings": "Vazby na tabulku"
   },
   "wizard": {
     "title": "Průvodce výkazem",
@@ -601,7 +604,9 @@
       "symbolId": "Symbol",
       "imageName": "Název souboru",
       "width": "Šířka",
-      "height": "Výška"
+      "height": "Výška",
+      "location": "Umístění",
+      "locationSource": "Zdroj umístění"
     },
     "type": {
       "line": "Čára",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Tento objekt byl změněn jinde. Formulář zobrazuje aktuální hodnoty; vaše změny nebyly použity.",
     "failed": "Změny nelze použít: {{error}}"
+  },
+  "location": {
+    "title": "Umístění",
+    "none": "Nepřiřazeno",
+    "manual": "Ručně",
+    "computed": "Vypočteno",
+    "override": "Ruční přepsání (prázdné umístění vymaže)",
+    "automatic": "Použít automatické umístění",
+    "zoneName": "Použít tento tvar jako pojmenovanou zónu",
+    "parent": "Nadřazená zóna",
+    "removeZone": "Odebrat definici zóny",
+    "invalid": "Umístění nelze aktualizovat",
+    "rules": "Přiřazení vychází ze středu ohraničujícího rámečku značky, včetně okrajů. Vyhrává nejhlouběji vnořená zóna, pak nejmenší plocha, pak ID zóny. Používejte mnohoúhelníky s rovnými stranami bez otvorů nebo neotočené obdélníky. Neplatné nebo duplicitní identity zón se vylučují.",
+    "loading": "Načítají se anotace: umístění se ještě mohou změnit."
   }
 }

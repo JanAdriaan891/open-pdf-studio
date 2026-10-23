@@ -109,5 +109,38 @@
   "searchResultPage": "Ukurasa {{page}}",
   "searchHitsOne": "Tokeo 1",
   "searchHitsMany": "Matokeo {{count}}",
-  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu."
+  "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu.",
+  "documentSearch": {
+    "title": "Tafuta hati",
+    "query": "Maandishi ya kutafuta",
+    "scope": "Tafuta ndani ya",
+    "active": "Hati ya sasa",
+    "open": "Hati zilizo wazi",
+    "folder": "Folda",
+    "choose": "Chagua folda",
+    "annotations": "Jumuisha maoni",
+    "search": "Tafuta",
+    "cancel": "Ghairi",
+    "stale": "Hati imebadilika. Endesha utafutaji tena.",
+    "folderHint": "Hutafuta faili za PDF moja kwa moja katika folda hii, bila kufungua vichupo wala kubadilisha faili.",
+    "limited": "Kikomo cha matokeo kimefikiwa. Boresha utafutaji wako.",
+    "cancelled": "Utafutaji umeghairiwa; matokeo hayajakamilika.",
+    "ocrHint": "Hakuna maandishi yanayotafutika kwenye kurasa {{pages}}. Fungua hati na uendeshe OCR waziwazi ikihitajika.",
+    "status": {
+      "searching": "Inatafuta",
+      "complete": "Imekamilika",
+      "needs_ocr": "Ina kurasa zisizo na maandishi yanayotafutika",
+      "encrypted": "Nenosiri linahitajika",
+      "unreadable": "Imeshindwa kutafuta",
+      "changed": "Hati imebadilika; tafuta tena",
+      "cancelled": "Imeghairiwa",
+      "limited": "Kikomo cha matokeo kimefikiwa"
+    },
+    "failed": "Utafutaji umeshindwa. Kagua hoja na folda, kisha ujaribu tena.",
+    "prepareOcr": "Fungua kwa OCR…"
+  },
+  "symbolSearch": "Tafuta alama",
+  "watchActive": "Inafuatilia {{folder}}",
+  "watchFailed": "Hitilafu ya ufuatiliaji: {{folder}}",
+  "watchTitle": "Mtiririko wa kazi wa hati unafuatilia {{input}} na kuandika kwenye {{output}}. Bofya ili kuacha kufuatilia."
 }

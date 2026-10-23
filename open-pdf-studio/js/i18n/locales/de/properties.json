@@ -367,7 +367,9 @@
     "csvLayer": "Ebene",
     "schedules": "Listen",
     "addPage": "Seite hinzufügen",
-    "pageLabels": "Seitenbeschriftungen (Namensgenerator)"
+    "pageLabels": "Seitenbeschriftungen (Namensgenerator)",
+    "portfolio": "PDF-Portfolio",
+    "recognizeForm": "Formularfelder erkennen"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",
@@ -419,7 +421,8 @@
       "image": "Bilder & Stempel"
     },
     "preview": "Vorschau",
-    "exportCsv": "CSV exportieren"
+    "exportCsv": "CSV exportieren",
+    "workbookBindings": "Tabellenverknüpfungen"
   },
   "wizard": {
     "title": "Listen-Assistent",
@@ -601,7 +604,9 @@
       "symbolId": "Symbol",
       "imageName": "Dateiname",
       "width": "Breite",
-      "height": "Höhe"
+      "height": "Höhe",
+      "location": "Standort",
+      "locationSource": "Standortquelle"
     },
     "type": {
       "line": "Linie",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Dieses Objekt wurde an anderer Stelle geändert. Das Formular zeigt die aktuellen Werte; Ihre Änderungen wurden nicht übernommen.",
     "failed": "Die Änderungen konnten nicht übernommen werden: {{error}}"
+  },
+  "location": {
+    "title": "Standort",
+    "none": "Nicht zugewiesen",
+    "manual": "Manuell",
+    "computed": "Berechnet",
+    "override": "Manuelle Überschreibung (leer löscht den Standort)",
+    "automatic": "Automatischen Standort verwenden",
+    "zoneName": "Diese Form als benannte Zone verwenden",
+    "parent": "Übergeordnete Zone",
+    "removeZone": "Zonendefinition entfernen",
+    "invalid": "Standort konnte nicht aktualisiert werden",
+    "rules": "Die Zuordnung verwendet den Mittelpunkt des Begrenzungsrahmens der Markierung, einschließlich Kanten. Die tiefste Zone hat Vorrang, dann die kleinste Fläche, dann die Zonen-ID. Verwenden Sie gerade Polygone ohne Löcher oder nicht gedrehte Rechtecke. Ungültige oder doppelte Zonenidentitäten werden ausgeschlossen.",
+    "loading": "Anmerkungen werden geladen: Standorte können sich noch ändern."
   }
 }

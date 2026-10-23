@@ -213,5 +213,9 @@
     "activationFailed": "Μη ενεργό: {{error}}",
     "viaMcp": "Μέσω της σύνδεσης AI"
   },
-  "annotateScreenshot": "Σχολιασμός στιγμιότυπου οθόνης από το πρόχειρο"
+  "annotateScreenshot": "Σχολιασμός στιγμιότυπου οθόνης από το πρόχειρο",
+  "workflows": "Ροές εργασιών εγγράφων",
+  "drawingSets": "Σύνολα σχεδίων",
+  "sheetLinks": "Σύνδεσμοι μεταξύ φύλλων",
+  "approvalRouting": "Δρομολόγηση εγκρίσεων"
 }

@@ -213,5 +213,9 @@
     "activationFailed": "Haitumiki: {{error}}",
     "viaMcp": "Kupitia muunganisho wa AI"
   },
-  "annotateScreenshot": "Weka Maelezo kwenye Picha ya Skrini ya Ubao wa Kunakili"
+  "annotateScreenshot": "Weka Maelezo kwenye Picha ya Skrini ya Ubao wa Kunakili",
+  "workflows": "Mitiririko ya kazi ya hati",
+  "drawingSets": "Seti za michoro",
+  "sheetLinks": "Viungo kati ya laha",
+  "approvalRouting": "Upitishaji wa idhini"
 }

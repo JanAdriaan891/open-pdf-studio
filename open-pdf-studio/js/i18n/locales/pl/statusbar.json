@@ -109,5 +109,38 @@
   "searchResultPage": "Strona {{page}}",
   "searchHitsOne": "1 dopasowanie",
   "searchHitsMany": "Dopasowania: {{count}}",
-  "passwordProtectedBar": "Chroniony hasłem: otwarty tylko do odczytu."
+  "passwordProtectedBar": "Chroniony hasłem: otwarty tylko do odczytu.",
+  "documentSearch": {
+    "title": "Przeszukaj dokumenty",
+    "query": "Szukany tekst",
+    "scope": "Szukaj w",
+    "active": "Bieżący dokument",
+    "open": "Otwarte dokumenty",
+    "folder": "Folder",
+    "choose": "Wybierz folder",
+    "annotations": "Uwzględnij komentarze",
+    "search": "Szukaj",
+    "cancel": "Anuluj",
+    "stale": "Dokument został zmieniony. Uruchom wyszukiwanie ponownie.",
+    "folderHint": "Przeszukuje pliki PDF bezpośrednio w tym folderze, bez otwierania kart i bez zmieniania plików.",
+    "limited": "Osiągnięto limit wyników. Zawęź wyszukiwanie.",
+    "cancelled": "Wyszukiwanie anulowane; wyniki są niekompletne.",
+    "ocrHint": "Brak tekstu do wyszukania na stronach {{pages}}. W razie potrzeby otwórz dokument i uruchom OCR.",
+    "status": {
+      "searching": "Wyszukiwanie",
+      "complete": "Ukończono",
+      "needs_ocr": "Zawiera strony bez tekstu do wyszukania",
+      "encrypted": "Wymagane hasło",
+      "unreadable": "Nie można przeszukać",
+      "changed": "Dokument zmieniony; wyszukaj ponownie",
+      "cancelled": "Anulowano",
+      "limited": "Osiągnięto limit wyników"
+    },
+    "failed": "Wyszukiwanie nie powiodło się. Sprawdź zapytanie i folder, a następnie spróbuj ponownie.",
+    "prepareOcr": "Otwórz do OCR…"
+  },
+  "symbolSearch": "Znajdź symbole",
+  "watchActive": "Obserwowanie: {{folder}}",
+  "watchFailed": "Błąd obserwowania: {{folder}}",
+  "watchTitle": "Przepływ pracy dokumentów obserwuje {{input}} i zapisuje do {{output}}. Kliknij, aby zatrzymać obserwowanie."
 }

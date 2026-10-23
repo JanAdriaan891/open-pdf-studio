@@ -213,5 +213,9 @@
     "activationFailed": "Neaktívne: {{error}}",
     "viaMcp": "Cez pripojenie AI"
   },
-  "annotateScreenshot": "Anotovať snímku obrazovky zo schránky"
+  "annotateScreenshot": "Anotovať snímku obrazovky zo schránky",
+  "workflows": "Pracovné postupy dokumentov",
+  "drawingSets": "Súbory výkresov",
+  "sheetLinks": "Odkazy medzi výkresmi",
+  "approvalRouting": "Schvaľovací obeh"
 }

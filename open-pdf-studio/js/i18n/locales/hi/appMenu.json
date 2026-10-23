@@ -213,5 +213,9 @@
     "activationFailed": "सक्रिय नहीं: {{error}}",
     "viaMcp": "AI कनेक्शन के माध्यम से"
   },
-  "annotateScreenshot": "क्लिपबोर्ड स्क्रीनशॉट पर एनोटेट करें"
+  "annotateScreenshot": "क्लिपबोर्ड स्क्रीनशॉट पर एनोटेट करें",
+  "workflows": "दस्तावेज़ वर्कफ़्लो",
+  "drawingSets": "ड्रॉइंग सेट",
+  "sheetLinks": "क्रॉस-शीट लिंक",
+  "approvalRouting": "अनुमोदन रूटिंग"
 }

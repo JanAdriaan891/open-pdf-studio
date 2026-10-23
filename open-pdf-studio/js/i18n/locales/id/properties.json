@@ -367,7 +367,9 @@
     "csvLayer": "Lapisan",
     "schedules": "Daftar",
     "addPage": "Tambah halaman",
-    "pageLabels": "Label halaman (pembuat nama)"
+    "pageLabels": "Label halaman (pembuat nama)",
+    "portfolio": "Portofolio PDF",
+    "recognizeForm": "Kenali bidang formulir"
   },
   "scaleBar": {
     "title": "Batang Skala",
@@ -419,7 +421,8 @@
       "image": "Gambar & stempel"
     },
     "preview": "Pratinjau",
-    "exportCsv": "Ekspor CSV"
+    "exportCsv": "Ekspor CSV",
+    "workbookBindings": "Pengikatan spreadsheet"
   },
   "wizard": {
     "title": "Wizard daftar",
@@ -601,7 +604,9 @@
       "symbolId": "Simbol",
       "imageName": "Nama berkas",
       "width": "Lebar",
-      "height": "Tinggi"
+      "height": "Tinggi",
+      "location": "Lokasi",
+      "locationSource": "Sumber lokasi"
     },
     "type": {
       "line": "Garis",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Objek ini telah diubah di tempat lain. Formulir menampilkan nilai saat ini; perubahan Anda tidak diterapkan.",
     "failed": "Perubahan tidak dapat diterapkan: {{error}}"
+  },
+  "location": {
+    "title": "Lokasi",
+    "none": "Belum ditetapkan",
+    "manual": "Manual",
+    "computed": "Terhitung",
+    "override": "Penggantian manual (kosong menghapus lokasi)",
+    "automatic": "Gunakan lokasi otomatis",
+    "zoneName": "Gunakan bentuk ini sebagai zona bernama",
+    "parent": "Zona induk",
+    "removeZone": "Hapus definisi zona",
+    "invalid": "Lokasi tidak dapat diperbarui",
+    "rules": "Penetapan menggunakan titik tengah kotak pembatas markup, termasuk tepinya. Zona terdalam diutamakan, lalu luas terkecil, lalu ID zona. Gunakan poligon bersisi lurus tanpa lubang atau kotak tanpa rotasi. Identitas zona yang tidak valid atau duplikat dikecualikan.",
+    "loading": "Anotasi sedang dimuat: lokasi masih dapat berubah."
   }
 }

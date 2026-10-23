@@ -109,5 +109,38 @@
   "searchResultPage": "Page {{page}}",
   "searchHitsOne": "1 correspondance",
   "searchHitsMany": "{{count}} correspondances",
-  "passwordProtectedBar": "Protégé par un mot de passe : ouvert en lecture seule."
+  "passwordProtectedBar": "Protégé par un mot de passe : ouvert en lecture seule.",
+  "documentSearch": {
+    "title": "Rechercher dans les documents",
+    "query": "Texte à rechercher",
+    "scope": "Rechercher dans",
+    "active": "Document actif",
+    "open": "Documents ouverts",
+    "folder": "Dossier",
+    "choose": "Choisir un dossier",
+    "annotations": "Inclure les commentaires",
+    "search": "Rechercher",
+    "cancel": "Annuler",
+    "stale": "Le document a été modifié. Relancez la recherche.",
+    "folderHint": "Recherche dans les fichiers PDF directement présents dans ce dossier, sans ouvrir d'onglets ni modifier de fichiers.",
+    "limited": "Limite de résultats atteinte. Affinez votre recherche.",
+    "cancelled": "Recherche annulée ; les résultats sont incomplets.",
+    "ocrHint": "Aucun texte consultable sur les pages {{pages}}. Ouvrez le document et lancez explicitement l'OCR si nécessaire.",
+    "status": {
+      "searching": "Recherche en cours",
+      "complete": "Terminée",
+      "needs_ocr": "Contient des pages sans texte consultable",
+      "encrypted": "Mot de passe requis",
+      "unreadable": "Recherche impossible",
+      "changed": "Document modifié ; relancez la recherche",
+      "cancelled": "Annulée",
+      "limited": "Limite de résultats atteinte"
+    },
+    "failed": "La recherche a échoué. Vérifiez la requête et le dossier, puis réessayez.",
+    "prepareOcr": "Ouvrir pour l'OCR…"
+  },
+  "symbolSearch": "Rechercher des symboles",
+  "watchActive": "Surveillance de {{folder}}",
+  "watchFailed": "Erreur de surveillance : {{folder}}",
+  "watchTitle": "Le flux de travail documentaire surveille {{input}} et écrit dans {{output}}. Cliquez pour arrêter la surveillance."
 }

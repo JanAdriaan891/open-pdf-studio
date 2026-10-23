@@ -367,7 +367,9 @@
     "csvLayer": "Lag",
     "schedules": "Lister",
     "addPage": "Tilføj side",
-    "pageLabels": "Sideetiketter (navnegenerator)"
+    "pageLabels": "Sideetiketter (navnegenerator)",
+    "portfolio": "PDF-portefølje",
+    "recognizeForm": "Genkend formularfelter"
   },
   "scaleBar": {
     "title": "Skalabjælke",
@@ -419,7 +421,8 @@
       "image": "Billeder og stempler"
     },
     "preview": "Eksempel",
-    "exportCsv": "Eksportér CSV"
+    "exportCsv": "Eksportér CSV",
+    "workbookBindings": "Regnearkskoblinger"
   },
   "wizard": {
     "title": "Listeguide",
@@ -601,7 +604,9 @@
       "symbolId": "Symbol",
       "imageName": "Filnavn",
       "width": "Bredde",
-      "height": "Højde"
+      "height": "Højde",
+      "location": "Placering",
+      "locationSource": "Kilde til placering"
     },
     "type": {
       "line": "Linje",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Dette objekt er blevet ændret et andet sted. Formularen viser de aktuelle værdier; dine ændringer blev ikke anvendt.",
     "failed": "Ændringerne kunne ikke anvendes: {{error}}"
+  },
+  "location": {
+    "title": "Placering",
+    "none": "Ikke tildelt",
+    "manual": "Manuel",
+    "computed": "Beregnet",
+    "override": "Manuel tilsidesættelse (tom rydder placeringen)",
+    "automatic": "Brug automatisk placering",
+    "zoneName": "Brug denne figur som en navngivet zone",
+    "parent": "Overordnet zone",
+    "removeZone": "Fjern zonedefinition",
+    "invalid": "Placeringen kunne ikke opdateres",
+    "rules": "Tildelingen bruger midten af markeringens afgrænsningsramme, inklusive kanter. Den dybeste zone vinder, derefter det mindste areal og derefter zone-id. Brug lige polygoner uden huller eller uroterede rektangler. Ugyldige eller dublerede zoneidentiteter udelades.",
+    "loading": "Annotationer indlæses: placeringer kan stadig ændre sig."
   }
 }

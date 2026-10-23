@@ -213,5 +213,9 @@
     "activationFailed": "Inativa: {{error}}",
     "viaMcp": "Pela conexão de IA"
   },
-  "annotateScreenshot": "Anotar captura de tela da área de transferência"
+  "annotateScreenshot": "Anotar captura de tela da área de transferência",
+  "workflows": "Fluxos de trabalho de documentos",
+  "drawingSets": "Conjuntos de pranchas",
+  "sheetLinks": "Links entre pranchas",
+  "approvalRouting": "Fluxo de aprovação"
 }
