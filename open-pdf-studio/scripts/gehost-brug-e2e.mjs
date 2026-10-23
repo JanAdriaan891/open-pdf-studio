@@ -142,10 +142,16 @@ try {
     return g.eersteAntwoord !== null || g.log.some((r) => r.soort !== 'hallo');
   }, 60_000, 'eerste antwoord op hallo');
   let g = await gast();
-  const hallosVoor = g.log.filter((r) => r.soort === 'hallo' && r.t < 2000).length;
+  const hallosVoor = g.log.filter((r) => r.soort === 'hallo' && r.t < 2000);
   const eersteAnder = g.log.find((r) => r.soort !== 'hallo');
-  noteer(`1. handdruk: ${hallosVoor} keer hallo in de eerste 2 s, ${g.vervalsingen} keer vervalst geantwoord; verbonden na ${g.eersteAntwoord} ms`);
-  eis(hallosVoor >= 6, `te weinig hallo tijdens het zwijgen (${hallosVoor})`);
+  noteer(`1. handdruk: ${hallosVoor.length} keer hallo in de eerste 2 s, ${g.vervalsingen} keer vervalst geantwoord; verbonden na ${g.eersteAntwoord} ms`);
+  // De cadans telt vanaf het eerste hallo: wanneer dat komt hangt af van hoe
+  // snel de app opstart (op een belaste machine soms pas na ~1 s), niet van
+  // de brug. Elke 250 ms één hallo, met wat speling voor timers.
+  const eersteHallo = hallosVoor[0]?.t ?? 2000;
+  const verwacht = Math.floor((2000 - eersteHallo) / 250) + 1;
+  eis(hallosVoor.length >= 3 && hallosVoor.length >= verwacht - 1,
+    `te weinig hallo tijdens het zwijgen (${hallosVoor.length}, verwacht ~${verwacht} vanaf ${Math.round(eersteHallo)} ms)`);
   if (eersteAnder && (g.eersteAntwoord === null || eersteAnder.t < g.eersteAntwoord)) {
     throw new Error(`de app vroeg "${eersteAnder.soort}" vóór de echte handdruk: een vervalst hallo-antwoord telde`);
   }
