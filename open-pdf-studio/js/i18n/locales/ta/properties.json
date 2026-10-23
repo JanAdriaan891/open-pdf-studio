@@ -64,6 +64,7 @@
     "color": "நிறம்",
     "opacity": "ஒளிபுகாமை",
     "fillOpacity": "நிரப்பு ஒளிபுகாமை",
+    "strokeOpacity": "கோட்டு ஒளிபுகாமை",
     "lineWidth": "கோட்டு அகலம்",
     "borderWidth": "கரை அகலம்",
     "borderStyle": "கரை பாணி",

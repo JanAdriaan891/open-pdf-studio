@@ -64,6 +64,7 @@
     "color": "اللون",
     "opacity": "الشفافية",
     "fillOpacity": "شفافية التعبئة",
+    "strokeOpacity": "شفافية الحد",
     "lineWidth": "عرض الخط",
     "borderWidth": "عرض الحد",
     "borderStyle": "نمط الحد",

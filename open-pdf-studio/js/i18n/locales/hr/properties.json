@@ -64,6 +64,7 @@
     "color": "Boja",
     "opacity": "Prozirnost",
     "fillOpacity": "Prozirnost ispune",
+    "strokeOpacity": "Prozirnost obruba",
     "lineWidth": "Širina linije",
     "borderWidth": "Širina obruba",
     "borderStyle": "Stil obruba",

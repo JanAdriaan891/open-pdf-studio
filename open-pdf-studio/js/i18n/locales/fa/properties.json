@@ -64,6 +64,7 @@
     "color": "رنگ",
     "opacity": "شفافیت",
     "fillOpacity": "شفافیت پر کردن",
+    "strokeOpacity": "شفافیت خط",
     "lineWidth": "عرض خط",
     "borderWidth": "عرض حاشیه",
     "borderStyle": "سبک حاشیه",

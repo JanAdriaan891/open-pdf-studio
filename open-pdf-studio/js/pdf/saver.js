@@ -37,7 +37,8 @@ import { meldOpgeslagen } from '../herstel/haken.js';
 // Sub-modules
 import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
   ensureAcroFormFonts, stripPdfAMetadata, generateAppearanceStream, zetDoorzichtigheidInAp, tekstvakFontDict, boogHoekenNaRotatie,
-  randSleutelZonderRand, markeerZonderRand, onzichtbaarVlak, vlakRect } from './saver/utils.js';
+  randSleutelZonderRand, markeerZonderRand, onzichtbaarVlak, vlakRect, metVulGs } from './saver/utils.js';
+import { eigenVulDekking } from '../annotations/vul-dekking.js';
 import { saveTextEditsToPages } from './saver/text-edits.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
@@ -1235,8 +1236,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
                 const ongedraaid = grondvorm.map((pt) => naarPagina(pt.x, pt.y));
                 const ops = hatchFillOps({ points: ongedraaid, holes: null, ...polyArcering,
                   hatchColorRgb: hexToRgb(polyArcering.hatchColorHex), X: convertX, Y: convertY });
-                pgContent += polyRotatie
-                  ? `q\n${draaiCm(convertX(polyMidden.x), convertY(polyMidden.y), polyRotatie)}${ops}Q\n` : ops;
+                // Bij een eigen vul-dekking onder /GSv, zoals de vulling (#685).
+                pgContent += metVulGs(ann, polyRotatie
+                  ? `q\n${draaiCm(convertX(polyMidden.x), convertY(polyMidden.y), polyRotatie)}${ops}Q\n` : ops);
               }
               if (pgStroke) {
                 const [psr, psg, psb] = hexToRgb(ann.strokeColor || ann.color || '#000000');
@@ -1275,6 +1277,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
                   lineWidth: borderWidth, borderStyle: ann.borderStyle,
                   heeftRand: !randSleutelZonderRand(ann),
                   ...(polyArcering || {}),
+                  // Arcering onder de vul-dekking (#685), zie metVulGs.
+                  arceringOps: (ops) => metVulGs(ann, ops),
                 });
                 // Gedraaid: de ongedraaide wolk met één cm om het midden.
                 if (wolkAp && polyRotatie) {
@@ -2995,7 +2999,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         if (annotDict && typeof annotDict.get === 'function') {
           // Een pijl als geheel, zoals het scherm (overlap van schacht en kop).
           // Met de mengmodus (#614) in dezelfde graphics-state.
-          zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep: ann.type === 'arrow', blendMode: ann.blendMode });
+          // Een vorm met aparte dekking voor lijn en vulling (#685) krijgt /ca
+          // op de vul-dekking in dezelfde graphics-state.
+          zetDoorzichtigheidInAp(context, annotDict, opacity, {
+            alsGroep: ann.type === 'arrow', blendMode: ann.blendMode, vulOpacity: eigenVulDekking(ann),
+          });
         }
 
         // Add annotation to page
@@ -3006,6 +3014,12 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
           if (fillOpacity !== undefined && fillOpacity !== null && fillOpacity !== opacity
               && typeof annotDict.set === 'function') {
             annotDict.set(PDFName.of('OPS_FillOpacity'), context.obj(fillOpacity));
+          }
+          // Aparte vul-dekking van een vorm (#685) ook als /ca (PDF 2.0): de
+          // dekking van de vulling als een lezer de appearance zelf opbouwt.
+          const eigenVul = eigenVulDekking(ann);
+          if (eigenVul !== null && typeof annotDict.set === 'function') {
+            annotDict.set(PDFName.of('ca'), context.obj(eigenVul));
           }
           // Vorm zonder rand (#431): geen randkleur, /BS /W 0 en /OPS_NoStroke —
           // ook één plek voor alle soorten. De appearance is hierboven al

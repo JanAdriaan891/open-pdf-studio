@@ -447,3 +447,4 @@ js/text/text-edit-afdekking.test.mjs
 js/pdf/saver/text-edit-tabelranden.test.mjs
 js/pdf/pdf-viewport-paginaschilder.test.mjs
 js/pdf/protect-pdf.test.mjs
+js/pdf/vul-dekking-rondgang.test.mjs

@@ -51,6 +51,7 @@ import { klemMaat, toonMaat, veiligeVerhouding, RECHTHOEK_VORMEN } from '../../a
 import { nieuweAfbeeldingsMaat } from '../../annotations/papiermaat-eenheid.js';
 import { papierEenheid } from './papierEenheidStore.js';
 import { kanZonderRand } from '../../annotations/fill-utils.js';
+import { heeftVulDekking, zetLijnDekking } from '../../annotations/vul-dekking.js';
 import { schaalgebiedStijl } from '../../annotations/scale-region-style.js';
 import { leesGetalBegin, leesGeheelGetal } from '../../core/getal-invoer.js';
 
@@ -200,6 +201,9 @@ const [sectionVis, setSectionVis] = createStore({
   fontSizeGroup: false,
   opacityGroup: true,
   fillOpacityGroup: false,
+  // Aparte dekking voor lijn en vulling (#685): de dekking heet dan
+  // lijndekking en de vul-dekking staat ernaast.
+  aparteDekking: false,
   rotationGroup: false,
 });
 
@@ -299,7 +303,8 @@ function computeSectionVisibility(type) {
     textGroup: isTextContent,
     fontSizeGroup: type === 'text',
     opacityGroup: !isScaleBar,
-    fillOpacityGroup: isScaleRegion,
+    fillOpacityGroup: isScaleRegion || heeftVulDekking(type),
+    aparteDekking: heeftVulDekking(type),
     rotationGroup: hasRotation,
   });
 }
@@ -629,6 +634,7 @@ export function storeHideProperties() {
     fontSizeGroup: false,
     opacityGroup: false,
     fillOpacityGroup: false,
+    aparteDekking: false,
     rotationGroup: false,
   });
 
@@ -793,7 +799,8 @@ export function storeShowMultiSelection(selected) {
     textGroup: allSameType && (sharedType === 'text' || sharedType === 'comment'),
     fontSizeGroup: allSameType && sharedType === 'text',
     opacityGroup: true,
-    fillOpacityGroup: allMatch(t => t === 'scaleRegion'),
+    fillOpacityGroup: allMatch(t => t === 'scaleRegion') || allMatch(heeftVulDekking),
+    aparteDekking: allMatch(heeftVulDekking),
     rotationGroup: allMatch(t => rotationTypes.has(t)),
   });
 
@@ -894,6 +901,7 @@ export function storeShowTextEditProperties(info) {
     fontSizeGroup: false,
     opacityGroup: false,
     fillOpacityGroup: false,
+    aparteDekking: false,
     rotationGroup: false,
   });
 
@@ -1139,7 +1147,8 @@ function applyPropToAnnotation(ann, key, value) {
       // stampSvg meekrijgt.
       if (ann.type === 'stamp') applyStampLineWidth(ann);
       break;
-    case 'opacity': ann.opacity = leesGeheelGetal(value) / 100; break;
+    // Bij een vorm met aparte vul-dekking houdt de vulling haar dekking (#685).
+    case 'opacity': zetLijnDekking(ann, leesGeheelGetal(value) / 100); break;
     case 'icon': ann.icon = value; break;
     case 'borderStyle': ann.borderStyle = value; break;
     case 'cross': ann.cross = value === true || undefined; break;
@@ -1545,7 +1554,8 @@ function applyAnnotProp(key, value) {
       if (currentAnnotation.type === 'stamp') applyStampLineWidth(currentAnnotation);
       break;
     case 'opacity':
-      currentAnnotation.opacity = leesGeheelGetal(value) / 100;
+      // Bij een vorm met aparte vul-dekking houdt de vulling haar dekking (#685).
+      zetLijnDekking(currentAnnotation, leesGeheelGetal(value) / 100);
       break;
     case 'icon': currentAnnotation.icon = value; break;
     case 'borderStyle': currentAnnotation.borderStyle = value; break;

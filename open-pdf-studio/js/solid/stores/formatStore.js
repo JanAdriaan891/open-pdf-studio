@@ -14,6 +14,7 @@ import {
   gereedschapMetOpmaak, gereedschapOndersteunt, leesGereedschapOpmaak,
   zetGereedschapOpmaak, stijlTypeVanGereedschap,
 } from '../../tools/gereedschap-opmaak.js';
+import { heeftVulDekking, vulDekking } from '../../annotations/vul-dekking.js';
 
 // Een symbool (SVG-stempel) wordt als raster getekend: kleur en lijndikte
 // moeten na de wijziging de SVG in, anders heeft de werkbalk geen effect (#398).
@@ -30,6 +31,10 @@ const [fillColor, setFillColor] = createSignal('#ffffff');
 const [strokeColor, setStrokeColor] = createSignal('#000000');
 const [fmtLineWidth, setFmtLineWidth] = createSignal(1);
 const [opacity, setOpacity] = createSignal(100);
+// Aparte dekking voor de vulling (#685), in procenten, en of het doel die
+// kent (rechthoek, ellips, veelhoek, wolk).
+const [fillOpacity, setFillOpacity] = createSignal(100);
+const [aparteVulDekking, setAparteVulDekking] = createSignal(false);
 const [borderStyle, setBorderStyle] = createSignal('solid');
 const [blendMode, setBlendMode] = createSignal('normal');
 const [arrowStart, setArrowStart] = createSignal('none');
@@ -115,6 +120,7 @@ function syncFromSymbolInsert(selectedAnnotations) {
   setStrokeColor(d.strokeColor);
   setFmtLineWidth(d.lineWidth);
   setOpacity(d.opacity);
+  setAparteVulDekking(false);
   setBorderStyle('solid');
   setBlendMode(d.blendMode);
 }
@@ -185,6 +191,8 @@ function syncFromGereedschap(tool) {
   setStrokeColor(o.strokeColor);
   setFmtLineWidth(o.lineWidth);
   setOpacity(o.opacity);
+  setFillOpacity(o.fillOpacity);
+  setAparteVulDekking(gereedschapOndersteunt(tool, 'fillOpacity'));
   setBorderStyle(o.borderStyle);
   setBlendMode('normal');
   setArrowStart(o.startHead);
@@ -227,7 +235,8 @@ function zetGereedschapOpmaakEnBewaar(tool, patch) {
  * wat er nu het doel is: de invoegsessie van symbolen, het volgende object
  * van het actieve tekengereedschap, of de selectie (`applyFn`, met undo).
  * `patch` gebruikt de namen van de werkbalk: strokeColor, lineWidth, opacity
- * (0..1), blendMode, borderStyle, fillColor (null = geen), startHead, endHead.
+ * (0..1), fillOpacity (0..1), blendMode, borderStyle, fillColor (null = geen),
+ * startHead, endHead.
  */
 export function zetOpmaak(patch, applyFn) {
   switch (opmaakDoel()) {
@@ -271,6 +280,7 @@ export function syncFormatStore(selectedAnnotations) {
     }
     setHasSelection(false);
     setIsSingleSymbolStamp(false);
+    setAparteVulDekking(false);
     return;
   }
 
@@ -297,6 +307,8 @@ export function syncFormatStore(selectedAnnotations) {
 
   const op = ann.opacity !== undefined ? Math.round(ann.opacity * 100) : 100;
   setOpacity(op);
+  setFillOpacity(Math.round(vulDekking(ann) * 100));
+  setAparteVulDekking(selectedAnnotations.every(a => heeftVulDekking(a.type)));
 
   setBorderStyle(ann.borderStyle || 'solid');
   setBlendMode(ann.blendMode || 'normal');
@@ -314,6 +326,8 @@ export {
   strokeColor, setStrokeColor,
   fmtLineWidth, setFmtLineWidth,
   opacity, setOpacity,
+  fillOpacity, setFillOpacity,
+  aparteVulDekking, setAparteVulDekking,
   borderStyle, setBorderStyle,
   blendMode, setBlendMode,
   arrowStart, setArrowStart,

@@ -64,6 +64,7 @@
     "color": "رنگ",
     "opacity": "شفافیت",
     "fillOpacity": "بھرنے کی شفافیت",
+    "strokeOpacity": "لکیر کی شفافیت",
     "lineWidth": "لکیر کی چوڑائی",
     "borderWidth": "بارڈر کی چوڑائی",
     "borderStyle": "بارڈر سٹائل",

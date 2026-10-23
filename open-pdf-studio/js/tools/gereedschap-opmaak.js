@@ -17,7 +17,7 @@ import { lintZetLijnkoppen } from '../pdf/lijnkoppen.js';
 
 /** De opties van de werkbalk die een tekengereedschap kan krijgen. */
 export const GEREEDSCHAP_OPMAAK_SLEUTELS = Object.freeze([
-  'strokeColor', 'lineWidth', 'opacity', 'borderStyle', 'fillColor', 'startHead', 'endHead',
+  'strokeColor', 'lineWidth', 'opacity', 'borderStyle', 'fillColor', 'fillOpacity', 'startHead', 'endHead',
 ]);
 
 const MAX_LIJNDIKTE = 50;
@@ -32,9 +32,9 @@ const GEREEDSCHAP_TYPE = Object.freeze({ rectangle: 'box', rect: 'box', ellipse:
 // nieuwe annotatie terechtkomt.
 const NIET_BIJ_TEKENEN = Object.freeze({
   highlight: ['opacity'],              // markeren tekent met een vaste dekking
-  ellipse: ['opacity'],                // de ellips tekent op de halve cirkeldekking
+  ellipse: ['opacity', 'fillOpacity'], // de ellips tekent op de halve cirkeldekking
   arrow: ['fillColor'],                // de pijlpunt negeert "geen vulling"
-  cloud: ['fillColor', 'borderStyle'],
+  cloud: ['fillColor', 'fillOpacity', 'borderStyle'], // de wolk tekent zonder vulling
   polyline: ['borderStyle'],
   measureDistance: ['borderStyle'],  // de maatlijn-tool tekent altijd doorgetrokken
 });
@@ -61,6 +61,7 @@ export function gereedschapOpmaakOpties(tool) {
   if (m.opacity) opties.push('opacity');
   if (m.borderStyle) opties.push('borderStyle');
   if (m.fill) opties.push('fillColor');
+  if (m.fillOpacity) opties.push('fillOpacity');
   if (m.startHead && koppen) opties.push('startHead');
   if (m.endHead && koppen) opties.push('endHead');
   const uit = NIET_BIJ_TEKENEN[tool] || [];
@@ -94,10 +95,14 @@ export function leesGereedschapOpmaak(prefs, tool) {
   const dikte = Number(lees(m.width));
   const dekking = lees(m.opacity);
   const vulling = lees(m.fill);
+  const vulDekking = lees(m.fillOpacity);
+  const lijnPct = typeof dekking === 'number' && Number.isFinite(dekking) ? Math.round(dekking) : 100;
   return {
     strokeColor: lees(m.stroke) || lees(m.color) || '#000000',
     lineWidth: Number.isFinite(dikte) && dikte > 0 ? dikte : 1,
-    opacity: typeof dekking === 'number' && Number.isFinite(dekking) ? Math.round(dekking) : 100,
+    opacity: lijnPct,
+    // Zonder eigen voorkeur volgt de vulling de dekking (#685).
+    fillOpacity: typeof vulDekking === 'number' && Number.isFinite(vulDekking) ? Math.round(vulDekking) : lijnPct,
     borderStyle: lees(m.borderStyle) || 'solid',
     fillColor: m.fill && !lees(m.fillNone) && hasFill(vulling) ? vulling : null,
     startHead: lees(m.startHead) || 'none',
@@ -133,10 +138,18 @@ export function zetGereedschapOpmaak(prefs, tool, patch) {
       zet(p + m.width, dikte);
     }
   }
-  if (opties.has('opacity') && typeof patch.opacity === 'number') {
-    if (Number.isFinite(patch.opacity) && patch.opacity >= 0 && patch.opacity <= 1) {
-      zet(p + m.opacity, Math.round(patch.opacity * 100));
+  const geldigeDekking = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 1;
+  if (opties.has('opacity') && geldigeDekking(patch.opacity)) {
+    // Met een aparte vul-dekking houdt de vulling de dekking die ze had
+    // (#685), net als bij een geselecteerde vorm (zetLijnDekking).
+    if (opties.has('fillOpacity') && typeof prefs[p + m.fillOpacity] !== 'number') {
+      const oud = prefs[p + m.opacity];
+      zet(p + m.fillOpacity, typeof oud === 'number' && Number.isFinite(oud) ? Math.round(oud) : 100);
     }
+    zet(p + m.opacity, Math.round(patch.opacity * 100));
+  }
+  if (opties.has('fillOpacity') && geldigeDekking(patch.fillOpacity)) {
+    zet(p + m.fillOpacity, Math.round(patch.fillOpacity * 100));
   }
   if (opties.has('borderStyle') && typeof patch.borderStyle === 'string' && patch.borderStyle) {
     zet(p + m.borderStyle, patch.borderStyle);

@@ -64,6 +64,7 @@
     "color": "Боја",
     "opacity": "Непрозирност",
     "fillOpacity": "Непрозирност испуне",
+    "strokeOpacity": "Непрозирност потеза",
     "lineWidth": "Ширина линије",
     "borderWidth": "Ширина ивице",
     "borderStyle": "Стил ивице",

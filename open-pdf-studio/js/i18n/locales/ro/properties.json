@@ -64,6 +64,7 @@
     "color": "Culoare",
     "opacity": "Opacitate",
     "fillOpacity": "Opacitate umplere",
+    "strokeOpacity": "Opacitate contur",
     "lineWidth": "Grosime linie",
     "borderWidth": "Latime chenar",
     "borderStyle": "Stil chenar",

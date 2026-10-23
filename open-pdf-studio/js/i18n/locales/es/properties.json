@@ -64,6 +64,7 @@
     "color": "Color",
     "opacity": "Opacidad",
     "fillOpacity": "Opacidad del relleno",
+    "strokeOpacity": "Opacidad del trazo",
     "borderStyle": "Estilo de borde",
     "cross": "Cruz",
     "crossHint": "Dibuja una cruz dentro del rectángulo, círculo o elipse (ej. un hueco)",

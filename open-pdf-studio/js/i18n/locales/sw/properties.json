@@ -64,6 +64,7 @@
     "color": "Rangi",
     "opacity": "Uwazi",
     "fillOpacity": "Uwazi wa Kujaza",
+    "strokeOpacity": "Uwazi wa Mstari",
     "lineWidth": "Upana wa Mstari",
     "borderWidth": "Upana wa Mpaka",
     "borderStyle": "Mtindo wa Mpaka",

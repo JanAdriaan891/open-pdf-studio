@@ -64,6 +64,7 @@
     "color": "Farge",
     "opacity": "Ugjennomsiktighet",
     "fillOpacity": "Ugjennomsiktighet for fyll",
+    "strokeOpacity": "Ugjennomsiktighet for strek",
     "lineWidth": "Linjebredde",
     "borderWidth": "Kantlinjebredde",
     "borderStyle": "Kantlinjestil",

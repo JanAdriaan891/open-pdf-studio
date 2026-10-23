@@ -64,6 +64,7 @@
     "color": "색상",
     "opacity": "불투명도",
     "fillOpacity": "채우기 불투명도",
+    "strokeOpacity": "윤곽선 불투명도",
     "lineWidth": "선 너비",
     "borderWidth": "테두리 너비",
     "borderStyle": "테두리 스타일",

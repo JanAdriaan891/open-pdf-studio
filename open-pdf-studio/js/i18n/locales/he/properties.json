@@ -64,6 +64,7 @@
     "color": "צבע",
     "opacity": "אטימות",
     "fillOpacity": "אטימות המילוי",
+    "strokeOpacity": "אטימות הקו",
     "lineWidth": "עובי קו",
     "borderWidth": "עובי גבול",
     "borderStyle": "סגנון גבול",

@@ -4,7 +4,7 @@ import AdaptiveGroups from './AdaptiveGroups.jsx';
 import ColorPickerButton from './ColorPickerButton.jsx';
 import Dialog from '../Dialog.jsx';
 import {
-  fillColor, strokeColor, fmtLineWidth, opacity, borderStyle, blendMode,
+  fillColor, strokeColor, fmtLineWidth, opacity, fillOpacity, aparteVulDekking, hasFill, borderStyle, blendMode,
   arrowStart, arrowEnd, isLocked, isSingleSymbolStamp,
   STYLE_DEFS, applyToSelected, zetOpmaak, opmaakVoorNieuw, opmaakOndersteunt,
 } from '../../stores/formatStore.js';
@@ -25,6 +25,7 @@ import { paginaMaat } from '../../../pdf/weergave-ruimte.js';
 import { lintZetLijnkoppen } from '../../../pdf/lijnkoppen.js';
 import { BLEND_MODES } from '../../../annotations/blend-modes.js';
 import { volgPopup } from './ribbon-popup.js';
+import { heeftVulDekking, zetLijnDekking } from '../../../annotations/vul-dekking.js';
 
 const STYLE_GALLERY = [
   { name: 'red', labelKey: 'format.styleRed', color: '#ff0000', cloudy: false },
@@ -47,6 +48,9 @@ const STYLE_GALLERY = [
 // waarde wel staan voor het volgende.
 const invoegen = () => opmaakVoorNieuw();
 const nietOndersteund = (key) => invoegen() && !opmaakOndersteunt(key);
+// Vul-dekking (#685): alleen voor rechthoek, ellips, veelhoek en wolk, en
+// alleen met een vulling om op te werken.
+const vulDekkingUit = () => nietOndersteund('fillOpacity') || !aparteVulDekking() || !hasFill();
 
 function applyStyle(styleName) {
   const style = STYLE_DEFS[styleName];
@@ -297,26 +301,53 @@ export default function FormatTab() {
               </select>
             </div>
           </div>
-          <div class="ribbon-slider-row">
-            <label>{t('format.opacityLabel')}</label>
-            <input type="range" class="ribbon-slider" id="fmt-opacity" title={t('format.opacity')}
-              min="0" max="100" step="1"
-              value={opacity()}
-              disabled={nietOndersteund('opacity')}
-              onInput={(e) => {
-                const v = parseInt(e.currentTarget.value, 10) / 100;
-                zetOpmaak({ opacity: v }, ann => { ann.opacity = v; });
-              }} />
-            <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number" title={t('format.opacity')}
-              min="0" max="100" step="1"
-              value={opacity()}
-              disabled={nietOndersteund('opacity')}
-              onInput={(e) => {
-                const v = parseInt(e.currentTarget.value, 10);
-                if (!Number.isFinite(v) || v < 0 || v > 100) return;
-                zetOpmaak({ opacity: v / 100 }, ann => { ann.opacity = v / 100; });
-              }} />
-            <span class="ribbon-slider-unit">%</span>
+          {/* Dekking van de lijn en, bij een rechthoek, ellips, veelhoek of
+              wolk, apart die van de vulling (#685). */}
+          <div class="ribbon-slider-grid">
+            <div class="ribbon-slider-row">
+              <label>{aparteVulDekking() ? t('format.strokeOpacityLabel') : t('format.opacityLabel')}</label>
+              <input type="range" class="ribbon-slider" id="fmt-opacity"
+                title={aparteVulDekking() ? t('format.strokeOpacity') : t('format.opacity')}
+                min="0" max="100" step="1"
+                value={opacity()}
+                disabled={nietOndersteund('opacity')}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10) / 100;
+                  zetOpmaak({ opacity: v }, ann => { zetLijnDekking(ann, v); });
+                }} />
+              <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number"
+                title={aparteVulDekking() ? t('format.strokeOpacity') : t('format.opacity')}
+                min="0" max="100" step="1"
+                value={opacity()}
+                disabled={nietOndersteund('opacity')}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10);
+                  if (!Number.isFinite(v) || v < 0 || v > 100) return;
+                  zetOpmaak({ opacity: v / 100 }, ann => { zetLijnDekking(ann, v / 100); });
+                }} />
+              <span class="ribbon-slider-unit">%</span>
+            </div>
+            <div class="ribbon-slider-row">
+              <label>{t('format.fillOpacityLabel')}</label>
+              <input type="range" class="ribbon-slider" id="fmt-fill-opacity" title={t('format.fillOpacity')}
+                min="0" max="100" step="1"
+                value={fillOpacity()}
+                disabled={vulDekkingUit()}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10) / 100;
+                  zetOpmaak({ fillOpacity: v }, ann => { if (heeftVulDekking(ann.type)) ann.fillOpacity = v; });
+                }} />
+              <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number" title={t('format.fillOpacity')}
+                min="0" max="100" step="1"
+                value={fillOpacity()}
+                disabled={vulDekkingUit()}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10);
+                  if (!Number.isFinite(v) || v < 0 || v > 100) return;
+                  zetOpmaak({ fillOpacity: v / 100 }, ann => { if (heeftVulDekking(ann.type)) ann.fillOpacity = v / 100; });
+                }} />
+              <span class="ribbon-slider-unit">%</span>
+            </div>
           </div>
         </RibbonGroup>
 

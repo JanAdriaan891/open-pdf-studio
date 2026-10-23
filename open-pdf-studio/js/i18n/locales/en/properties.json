@@ -44,6 +44,7 @@
     "color": "Color",
     "opacity": "Opacity",
     "fillOpacity": "Fill Opacity",
+    "strokeOpacity": "Stroke Opacity",
     "lineWidth": "Line Width",
     "borderWidth": "Border Width",
     "borderStyle": "Border Style",

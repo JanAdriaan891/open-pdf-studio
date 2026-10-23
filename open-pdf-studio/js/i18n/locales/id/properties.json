@@ -64,6 +64,7 @@
     "color": "Warna",
     "opacity": "Opasitas",
     "fillOpacity": "Opasitas Isi",
+    "strokeOpacity": "Opasitas Garis",
     "lineWidth": "Lebar Garis",
     "borderWidth": "Lebar Batas",
     "borderStyle": "Gaya Batas",

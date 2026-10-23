@@ -64,6 +64,7 @@
     "color": "สี",
     "opacity": "ความทึบ",
     "fillOpacity": "ความทึบของสีเติม",
+    "strokeOpacity": "ความทึบของเส้นขอบ",
     "lineWidth": "ความกว้างเส้น",
     "borderWidth": "ความกว้างเส้นขอบ",
     "borderStyle": "รูปแบบเส้นขอบ",

@@ -4,6 +4,7 @@ import { hasFill, hasStroke, colorWithoutStroke, kanZonderRand } from '../../ann
 import { vlakOmhullende } from '../../annotations/vlak-ringen.js';
 import { blendPdfNaam } from '../../annotations/blend-modes.js';
 import { hatchFillOps } from './appearance-vectors.js';
+import { eigenVulDekking } from '../../annotations/vul-dekking.js';
 
 /** Heeft de vorm een arcering uit het eigenschappenpaneel (#621)? */
 function heeftArcering(ann) {
@@ -19,11 +20,25 @@ function vormArcering(ann, punten, w, h) {
   if (!heeftArcering(ann)) return '';
   const X = (x) => x - ann.x;
   const Y = (y) => ann.y + h - y;
-  return hatchFillOps({
+  return metVulGs(ann, hatchFillOps({
     points: punten, holes: null, hatchPattern: ann.hatchPattern,
     hatchColorRgb: hexToRgb(ann.hatchColor || ann.strokeColor || ann.color || '#000000'),
     hatchScale: ann.hatchScale, hatchAngle: ann.hatchAngle, X, Y,
-  });
+  }));
+}
+
+/** Naam van de graphics-state voor de arcering van een vorm met eigen vul-dekking. */
+export const VUL_GS_NAAM = 'GSv';
+
+/**
+ * Arcering onder de vul-dekking (#685): de arcering hoort bij de vulling,
+ * maar bestaat uit lijnen (/CA). Bij een eigen vul-dekking gaat ze daarom in
+ * q…Q met /GSv (CA en ca op de vul-dekking); zetDoorzichtigheidInAp legt die
+ * graphics-state in de resources. Zonder eigen vul-dekking ongewijzigd.
+ */
+export function metVulGs(ann, ops) {
+  if (!ops || eigenVulDekking(ann) === null) return ops;
+  return `q\n/${VUL_GS_NAAM} gs\n${ops}Q\n`;
 }
 
 /** De ellips van een vak als veelhoek in app-coördinaten (voor de arcering). */
@@ -366,8 +381,12 @@ export function stripPdfAMetadata(pdfDocLib) {
  * gaan over overdrukken, niet over mengen. /BM komt bewust niet ook op de
  * annotatie-dict (PDF 2.0): een lezer die beide toepast, mengt dubbel.
  */
-export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep = false, blendMode = null } = {}) {
-  const alfa = opacity >= 0 && opacity < 1;
+export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep = false, blendMode = null, vulOpacity = null } = {}) {
+  // Eigen vul-dekking (#685): /ca in dezelfde graphics-state, plus /GSv voor
+  // de arcering (zie metVulGs). Gelijk aan de lijn is het één dekking.
+  const vul = typeof vulOpacity === 'number' && vulOpacity >= 0 && vulOpacity <= 1 && vulOpacity !== opacity
+    ? vulOpacity : null;
+  const alfa = (opacity >= 0 && opacity < 1) || vul !== null;
   const bm = blendPdfNaam(blendMode);
   if (!alfa && !bm) return;
   const apRaw = annotDict.get(PDFName.of('AP'));
@@ -392,7 +411,7 @@ export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep =
     dict[naam.slice(1)] = waarde;
   }
   const gsVelden = { Type: 'ExtGState' };
-  if (alfa) { gsVelden.CA = opacity; gsVelden.ca = opacity; }
+  if (alfa) { gsVelden.CA = opacity; gsVelden.ca = vul ?? opacity; }
   if (bm) gsVelden.BM = PDFName.of(bm);
   const gso = context.obj(gsVelden);
   const resOud = n.dict.get(PDFName.of('Resources'));
@@ -416,6 +435,9 @@ export function zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep =
     const egsOud = resNieuw.get(PDFName.of('ExtGState'));
     const egs = egsOud ? context.lookup(egsOud).clone(context) : context.obj({});
     egs.set(PDFName.of('GSo'), gso);
+    if (vul !== null) {
+      egs.set(PDFName.of(VUL_GS_NAAM), context.obj({ Type: 'ExtGState', CA: vul, ca: vul }));
+    }
     resNieuw.set(PDFName.of('ExtGState'), egs);
     dict.Resources = resNieuw;
     inhoud = metKop('/GSo gs\n', oud);

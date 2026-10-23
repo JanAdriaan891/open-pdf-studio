@@ -64,6 +64,7 @@
     "color": "Колір",
     "opacity": "Прозорість",
     "fillOpacity": "Прозорість заливки",
+    "strokeOpacity": "Прозорість обведення",
     "lineWidth": "Ширина лінії",
     "borderWidth": "Ширина рамки",
     "borderStyle": "Стиль рамки",

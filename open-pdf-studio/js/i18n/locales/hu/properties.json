@@ -64,6 +64,7 @@
     "color": "Szín",
     "opacity": "Átlátszatlanság",
     "fillOpacity": "Kitöltés átlátszatlansága",
+    "strokeOpacity": "Körvonal átlátszatlansága",
     "lineWidth": "Vonalvastagság",
     "borderWidth": "Szegély szélesség",
     "borderStyle": "Szegélystílus",
