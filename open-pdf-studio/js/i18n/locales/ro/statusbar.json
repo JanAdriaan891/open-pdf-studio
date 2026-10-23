@@ -142,5 +142,10 @@
   "symbolSearch": "Găsire simboluri",
   "watchActive": "Monitorizare: {{folder}}",
   "watchFailed": "Eroare de monitorizare: {{folder}}",
-  "watchTitle": "Fluxul de lucru pentru documente monitorizează {{input}} și scrie în {{output}}. Faceți clic pentru a opri monitorizarea."
+  "watchTitle": "Fluxul de lucru pentru documente monitorizează {{input}} și scrie în {{output}}. Faceți clic pentru a opri monitorizarea.",
+  "renderDiagnostics": {
+    "title": "Mergi la următoarea constatare de randare. Lipsa constatărilor nu garantează o randare completă.",
+    "count": "Constatări de randare: {{count}}",
+    "detail": "Pagina {{page}}: {{code}}. Încercați un zoom mai mic sau redeschideți documentul; completitudinea nu este garantată."
+  }
 }

@@ -142,5 +142,10 @@
   "symbolSearch": "Cerca símbols",
   "watchActive": "Supervisant {{folder}}",
   "watchFailed": "Error de supervisió: {{folder}}",
-  "watchTitle": "El flux de treball de documents supervisa {{input}} i escriu a {{output}}. Feu clic per deixar de supervisar."
+  "watchTitle": "El flux de treball de documents supervisa {{input}} i escriu a {{output}}. Feu clic per deixar de supervisar.",
+  "renderDiagnostics": {
+    "title": "Ves a la següent incidència de renderització. No tenir incidències no garanteix una renderització completa.",
+    "count": "Incidències de renderització: {{count}}",
+    "detail": "Pàgina {{page}}: {{code}}. Proveu un zoom més baix o torneu a obrir el document; la completesa no està garantida."
+  }
 }

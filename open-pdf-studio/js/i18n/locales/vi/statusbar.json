@@ -142,5 +142,10 @@
   "symbolSearch": "Tìm ký hiệu",
   "watchActive": "Đang theo dõi {{folder}}",
   "watchFailed": "Lỗi theo dõi: {{folder}}",
-  "watchTitle": "Quy trình tài liệu đang theo dõi {{input}} và ghi vào {{output}}. Nhấp để dừng theo dõi."
+  "watchTitle": "Quy trình tài liệu đang theo dõi {{input}} và ghi vào {{output}}. Nhấp để dừng theo dõi.",
+  "renderDiagnostics": {
+    "title": "Đi tới thông báo hiển thị tiếp theo. Không có thông báo không đảm bảo hiển thị đầy đủ.",
+    "count": "Thông báo hiển thị: {{count}}",
+    "detail": "Trang {{page}}: {{code}}. Hãy thử thu phóng nhỏ hơn hoặc mở lại tài liệu; không đảm bảo tính đầy đủ."
+  }
 }

@@ -113,7 +113,12 @@ test('welke opties een gereedschap krijgt', () => {
   assert.deepEqual(go.gereedschapOpmaakOpties('arrow'),
     ['strokeColor', 'lineWidth', 'opacity', 'borderStyle', 'startHead', 'endHead']);
   assert.deepEqual(go.gereedschapOpmaakOpties('box'),
-    ['strokeColor', 'lineWidth', 'opacity', 'borderStyle', 'fillColor']);
+    ['strokeColor', 'lineWidth', 'opacity', 'borderStyle', 'fillColor', 'fillOpacity']);
+  // Aparte vul-dekking (#685) niet bij de ellips (halve dekking) en de wolk
+  // (tekent zonder vulling).
+  assert.ok(!go.gereedschapOndersteunt('ellipse', 'fillOpacity'));
+  assert.ok(!go.gereedschapOndersteunt('cloud', 'fillOpacity'));
+  assert.ok(!go.gereedschapOndersteunt('line', 'fillOpacity'));
   // Markeren en notitie hebben alleen een kleur.
   assert.deepEqual(go.gereedschapOpmaakOpties('highlight'), ['strokeColor']);
   assert.deepEqual(go.gereedschapOpmaakOpties('comment'), ['strokeColor']);
@@ -138,12 +143,18 @@ test('schrijven en lezen gaan via de stijlvoorkeuren van het gereedschap', () =>
   assert.equal(go.zetGereedschapOpmaak(prefs, 'box', {
     strokeColor: '#00aa00', lineWidth: 4.5, opacity: 0.25, borderStyle: 'dashed', fillColor: '#abcdef',
   }), true);
+  // De vulling houdt haar dekking (100) als alleen de lijn verandert (#685).
   assert.deepEqual(prefs, { rectStrokeColor: '#00aa00', rectBorderWidth: 4.5, rectOpacity: 25,
-    rectBorderStyle: 'dashed', rectFillColor: '#abcdef', rectFillNone: false });
+    rectBorderStyle: 'dashed', rectFillColor: '#abcdef', rectFillNone: false, rectFillOpacity: 100 });
   assert.deepEqual(go.leesGereedschapOpmaak(prefs, 'box'), {
-    strokeColor: '#00aa00', lineWidth: 4.5, opacity: 25, borderStyle: 'dashed', fillColor: '#abcdef',
-    startHead: 'none', endHead: 'none',
+    strokeColor: '#00aa00', lineWidth: 4.5, opacity: 25, fillOpacity: 100, borderStyle: 'dashed',
+    fillColor: '#abcdef', startHead: 'none', endHead: 'none',
   });
+  go.zetGereedschapOpmaak(prefs, 'box', { fillOpacity: 0.3 });
+  assert.equal(prefs.rectFillOpacity, 30);
+  assert.equal(go.leesGereedschapOpmaak(prefs, 'box').fillOpacity, 30);
+  // Zonder eigen voorkeur toont de werkbalk de dekking.
+  assert.equal(go.leesGereedschapOpmaak({ circleOpacity: 60 }, 'circle').fillOpacity, 60);
   // Geen vulling: de kleur blijft bewaard voor later.
   go.zetGereedschapOpmaak(prefs, 'box', { fillColor: null });
   assert.equal(prefs.rectFillNone, true);
@@ -162,7 +173,7 @@ test('schrijven en lezen gaan via de stijlvoorkeuren van het gereedschap', () =>
 
 const WAARDE = {
   strokeColor: '#12ab34', lineWidth: 7.5, opacity: 0.4, borderStyle: 'dashed',
-  fillColor: '#abcdef', startHead: 'diamond', endHead: 'square',
+  fillColor: '#abcdef', fillOpacity: 0.25, startHead: 'diamond', endHead: 'square',
 };
 const KLOPT = {
   strokeColor: (a) => a.color === WAARDE.strokeColor && (a.strokeColor ?? a.color) === WAARDE.strokeColor,
@@ -170,6 +181,7 @@ const KLOPT = {
   opacity: (a) => Math.abs(a.opacity - WAARDE.opacity) < 1e-9,
   borderStyle: (a) => a.borderStyle === WAARDE.borderStyle,
   fillColor: (a) => a.fillColor === WAARDE.fillColor,
+  fillOpacity: (a) => Math.abs(a.fillOpacity - WAARDE.fillOpacity) < 1e-9,
   startHead: (a) => a.startHead === WAARDE.startHead,
   endHead: (a) => a.endHead === WAARDE.endHead,
 };
@@ -218,7 +230,8 @@ for (const [tool, maak] of Object.entries(MAKEN)) {
     const ann = maak();
     for (const k of opties) {
       assert.ok(KLOPT[k](ann), `${tool}.${k}: ${JSON.stringify({ strokeColor: ann.strokeColor, color: ann.color,
-        lineWidth: ann.lineWidth, opacity: ann.opacity, borderStyle: ann.borderStyle, fillColor: ann.fillColor,
+        lineWidth: ann.lineWidth, opacity: ann.opacity, fillOpacity: ann.fillOpacity,
+        borderStyle: ann.borderStyle, fillColor: ann.fillColor,
         startHead: ann.startHead, endHead: ann.endHead })}`);
     }
     if (opties.includes('fillColor')) {
@@ -235,7 +248,7 @@ for (const [tool, pad] of Object.entries(BRONNEN)) {
     const m = getStyleMapping(go.stijlTypeVanGereedschap(tool));
     const achtervoegsel = {
       strokeColor: m.stroke || m.color, lineWidth: m.width, opacity: m.opacity, borderStyle: m.borderStyle,
-      fillColor: m.fill, startHead: m.startHead, endHead: m.endHead,
+      fillColor: m.fill, fillOpacity: m.fillOpacity, startHead: m.startHead, endHead: m.endHead,
     };
     for (const k of go.gereedschapOpmaakOpties(tool)) {
       const sleutel = m.prefix + achtervoegsel[k];

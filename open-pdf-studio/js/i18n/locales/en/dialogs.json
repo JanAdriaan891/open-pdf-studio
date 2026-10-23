@@ -425,7 +425,12 @@
     "editTitle": "Edit Bookmark",
     "titleLabel": "Title:",
     "titlePlaceholder": "Bookmark title",
-    "pageLabel": "Page:"
+    "pageLabel": "Page:",
+    "colorLabel": "Color:",
+    "styleLabel": "Style:",
+    "nestTitle": "Nest Under New Bookmark",
+    "deleteTitle": "Delete Bookmarks",
+    "deleteConfirm": "Delete {{count}} selected bookmarks and everything under them?"
   },
   "formValidation": {
     "title": "Validation Error"

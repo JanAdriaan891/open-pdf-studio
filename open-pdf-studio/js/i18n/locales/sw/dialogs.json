@@ -425,7 +425,12 @@
     "editTitle": "Hariri Alamisho",
     "titleLabel": "Kichwa:",
     "titlePlaceholder": "Kichwa cha alamisho",
-    "pageLabel": "Ukurasa:"
+    "pageLabel": "Ukurasa:",
+    "colorLabel": "Rangi:",
+    "styleLabel": "Mtindo:",
+    "nestTitle": "Weka chini ya alamisho jipya",
+    "deleteTitle": "Futa alamisho",
+    "deleteConfirm": "Futa alamisho {{count}} zilizochaguliwa na kila kitu kilicho chini yake?"
   },
   "formValidation": {
     "title": "Kosa la Uthibitishaji"

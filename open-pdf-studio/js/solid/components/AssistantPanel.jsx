@@ -2,6 +2,9 @@
 // answer, tried in order:
 //   1. Claude (Anthropic) -> direct API with a locally stored API key
 //   2. MCP relay          -> an external MCP client answers via the app server
+// In the hosted build inside the OpenAEC workplace (#704) there is one way: the
+// host page asks the AI service with its own session (see
+// core/werkplek-ai.js); the app never holds a key.
 //
 // Every text the user sees comes from the locale files (common.assistant.*), and
 // the system prompt tells the model to answer in the current app language. The
@@ -14,7 +17,8 @@ import { useTranslation } from '../../i18n/useTranslation.js';
 import { LANGUAGES } from '../../i18n/config.js';
 import { leesAiSleutel, bewaarAiSleutel, ruimAiSleutelOpAlsGast } from '../../core/ai-sleutel.js';
 import { knopUit, externeDienstenAan } from '../../core/webfuncties.js';
-import { isTauri } from '../../core/platform.js';
+import { isTauri, hostAi } from '../../core/platform.js';
+import { maakAiVraag, tekstUitBericht, aiFoutSleutel } from '../../core/werkplek-ai.js';
 
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
@@ -35,6 +39,9 @@ function renderContent(text) {
 // the raw error texts of the providers (the relay time-out text is the relay's
 // own wording), not anything the user sees.
 function describeAiError(err, t) {
+  // Errors from the workplace bridge carry a code (no credit, busy, …).
+  const werkplekSleutel = aiFoutSleutel(err);
+  if (werkplekSleutel) return `⚠️ ${t(werkplekSleutel)}`;
   const raw = String(err?.message ?? err ?? '').trim();
   const detail = (text) => `\n\n_${t('assistant.detail')}: ${text}_`;
   if (/Claude API 401|invalid x-api-key|authentication_error/i.test(raw)) {
@@ -62,9 +69,11 @@ function currentLanguage(lang) {
 }
 
 export default function AssistantPanel() {
+  // The host page of the workplace answers for us (#704): no key, no relay.
+  const werkplekAi = hostAi();
   // As a guest the AI service is off (#548): no floating button over the
   // drawing that cannot do anything. The key is cleared from storage there too.
-  if (knopUit('assistant-launcher', { inTauri: isTauri() })) {
+  if (!werkplekAi && knopUit('assistant-launcher', { inTauri: isTauri() })) {
     ruimAiSleutelOpAlsGast();
     return null;
   }
@@ -163,14 +172,28 @@ export default function AssistantPanel() {
       return await enqueueAssistantQuestion({ prompt, system: systemPrompt(), docName });
     };
 
+    // The workplace (#704): the host page asks the AI service. Its answer
+    // (`bericht`) goes back unchanged in the next turn; error notices stay out
+    // of the conversation.
+    const werkplek = async () => {
+      const beurten = messages().slice(1)
+        .filter((m) => !m.failed)
+        .map((m) => (m.bericht ? { bericht: m.bericht } : { role: m.role, content: modelText(m) }));
+      const { bericht } = await werkplekAi(maakAiVraag(systemPrompt(), beurten));
+      return { content: tekstUitBericht(bericht) || t('assistant.noAnswer'), bericht };
+    };
+
     // Provider order. When a Claude Code/Desktop MCP client is connected (it
     // polled recently), route to the relay FIRST so it answers instantly — no
     // Anthropic API, no key. Otherwise: Claude key -> relay (fallback).
     const relayActive = relayClientActive();
     const providers = [];
-    if (relayActive) providers.push(mcpRelay);
-    if (key && externeDienstenAan()) providers.push(claudeDirect);
-    if (!relayActive) providers.push(mcpRelay);
+    if (werkplekAi) providers.push(werkplek);
+    else {
+      if (relayActive) providers.push(mcpRelay);
+      if (key && externeDienstenAan()) providers.push(claudeDirect);
+      if (!relayActive) providers.push(mcpRelay);
+    }
 
     let answer = null;
     let lastErr = null;
@@ -178,7 +201,9 @@ export default function AssistantPanel() {
       try { answer = await provider(); break; }
       catch (e) { lastErr = e; console.warn('[assistant] provider failed, trying the next one:', e?.message ?? e); }
     }
-    setMessages((m) => [...m, { role: 'assistant', content: answer == null ? describeAiError(lastErr, t) : answer }]);
+    if (answer == null) setMessages((m) => [...m, { role: 'assistant', content: describeAiError(lastErr, t), failed: true }]);
+    else if (typeof answer === 'object') setMessages((m) => [...m, { role: 'assistant', content: answer.content, bericht: answer.bericht }]);
+    else setMessages((m) => [...m, { role: 'assistant', content: answer }]);
     setLoading(false);
   }
 
@@ -208,7 +233,10 @@ export default function AssistantPanel() {
   }
 
   // Subtitle shows the active provider so the user knows where answers come from.
-  const providerLabel = () => (apiKey() ? t('assistant.viaClaude') : t('assistant.notConnected'));
+  const providerLabel = () => {
+    if (werkplekAi) return t('assistant.viaWorkplace');
+    return apiKey() ? t('assistant.viaClaude') : t('assistant.notConnected');
+  };
 
   return (
     <Show
@@ -226,7 +254,9 @@ export default function AssistantPanel() {
                 {activeDocName() ? `${t('assistant.workingIn')}: ${activeDocName()} · ${providerLabel()}` : providerLabel()}
               </span>
             </div>
-            <button class="chat-close" title={t('assistant.keyButton')} onClick={() => setShowKey(!showKey())}>🔑</button>
+            <Show when={!werkplekAi}>
+              <button class="chat-close" title={t('assistant.keyButton')} onClick={() => setShowKey(!showKey())}>🔑</button>
+            </Show>
             <button class="chat-close" title={t('close')} onClick={() => setOpen(false)}>✕</button>
           </div>
 

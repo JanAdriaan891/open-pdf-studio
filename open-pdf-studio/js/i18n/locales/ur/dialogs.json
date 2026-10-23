@@ -425,7 +425,12 @@
     "editTitle": "بک مارک میں ترمیم کریں",
     "titleLabel": "عنوان:",
     "titlePlaceholder": "بک مارک عنوان",
-    "pageLabel": "صفحہ:"
+    "pageLabel": "صفحہ:",
+    "colorLabel": "رنگ:",
+    "styleLabel": "سٹائل:",
+    "nestTitle": "نئے بک مارک کے تحت رکھیں",
+    "deleteTitle": "بک مارکس حذف کریں",
+    "deleteConfirm": "منتخب {{count}} بک مارکس اور ان کے تحت سب کچھ حذف کریں؟"
   },
   "formValidation": {
     "title": "تصدیق کی خرابی"

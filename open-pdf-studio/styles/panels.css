@@ -527,6 +527,61 @@
   box-shadow: inset 3px 0 0 var(--theme-thumbnail-active-border);
 }
 
+/* Slepen en nesten (#690). De streep begint op het niveau van de rij. */
+.bookmarks-container:focus {
+  outline: none;
+}
+
+.bookmark-item {
+  position: relative;
+}
+
+.bookmark-item.dragging {
+  opacity: 0.4;
+}
+
+.bookmark-item.drop-before::before,
+.bookmark-item.drop-after::after {
+  content: '';
+  position: absolute;
+  left: var(--bm-indent, 0);
+  right: 0;
+  height: 2px;
+  background: #0078d7;
+  pointer-events: none;
+}
+
+.bookmark-item.drop-before::before {
+  top: -1px;
+}
+
+.bookmark-item.drop-after::after {
+  bottom: -1px;
+}
+
+/* Erop: de rij zelf gemarkeerd, de selectie wordt zijn laatste kinderen */
+.bookmark-item.drop-inside {
+  background: var(--theme-thumbnail-active-bg);
+  box-shadow: inset 0 0 0 1px #0078d7;
+}
+
+/* In de lege ruimte onder de lijst: achteraan in de wortel */
+.bookmarks-container.drop-end {
+  box-shadow: inset 0 -2px 0 #0078d7;
+}
+
+/* Sleepbeeld bij meerdere bladwijzers ("3 bladwijzers") */
+.bookmark-drag-image {
+  position: fixed;
+  left: -1000px;
+  top: 0;
+  padding: 2px 8px;
+  font-size: 12px;
+  background: #ffffff;
+  color: #333333;
+  border: 1px solid #0078d7;
+}
+
 .bookmark-arrow {
   width: 14px;
   height: 14px;
@@ -657,6 +712,57 @@
   background: #006cbd;
 }
 
+/* Kleur en vet/cursief in de bladwijzerdialoog (#689) */
+.bookmark-dialog-colors {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.bookmark-swatch {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid #a0a0a0;
+  cursor: default;
+}
+
+.bookmark-swatch.selected,
+.bookmark-swatch-custom.selected {
+  outline: 2px solid #0078d4;
+  outline-offset: 1px;
+}
+
+/* Standaard: geen eigen kleur, wit vlak met een diagonale streep */
+.bookmark-swatch-default {
+  background: linear-gradient(to top right, #fff calc(50% - 1px), #e81123 50%, #fff calc(50% + 1px));
+}
+
+.bookmark-swatch-custom {
+  width: 28px;
+  height: 22px;
+  padding: 0 1px;
+  border: 1px solid #a0a0a0;
+  background: #fff;
+  margin-left: 6px;
+}
+
+.bookmark-dialog-style {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.bookmark-dialog-body label.bookmark-dialog-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
 /* Signatures Panel (inside left panel) */
 .signatures-container {
   flex: 1;
@@ -785,7 +891,8 @@
 .layer-list-item input[type="checkbox"] {
   width: 14px;
   height: 14px;
-  cursor: pointer;
+  margin: 0;
+  cursor: default;
   accent-color: var(--theme-panel-accent, #2563eb);
   flex-shrink: 0;
 }
@@ -793,11 +900,6 @@
 .layer-list-toggle {
   display: flex;
   flex-shrink: 0;
-}
-
-.layer-list-item input[type="checkbox"]:disabled {
-  cursor: default;
-  margin: 0;
 }
 
 /* Kop van een groep in de lagenboom (/Order-label): geen vinkje. */

@@ -142,5 +142,10 @@
   "symbolSearch": "Temukan simbol",
   "watchActive": "Memantau {{folder}}",
   "watchFailed": "Kesalahan pemantauan: {{folder}}",
-  "watchTitle": "Alur kerja dokumen sedang memantau {{input}} dan menulis ke {{output}}. Klik untuk berhenti memantau."
+  "watchTitle": "Alur kerja dokumen sedang memantau {{input}} dan menulis ke {{output}}. Klik untuk berhenti memantau.",
+  "renderDiagnostics": {
+    "title": "Buka temuan render berikutnya. Tidak adanya temuan tidak menjamin render yang lengkap.",
+    "count": "Temuan render: {{count}}",
+    "detail": "Halaman {{page}}: {{code}}. Coba zoom yang lebih kecil atau buka ulang dokumen; kelengkapan tidak dijamin."
+  }
 }

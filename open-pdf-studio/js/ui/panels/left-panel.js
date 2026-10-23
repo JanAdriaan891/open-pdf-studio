@@ -869,10 +869,12 @@ async function renderMiniatuur(pdfDoc, pageNum, doc, doel) {
       canvas.height = viewport.height;
       const ctx = canvas.getContext('2d');
 
+      const { pdfjsLaagOpties } = await import('../../pdf/lagen-schakelen.js');
       await page.render({
         canvasContext: ctx,
         viewport: viewport,
-        annotationMode: 0
+        annotationMode: 0,
+        ...pdfjsLaagOpties(doc),
       }).promise;
 
       // Overlay plugin/Solid-store annotations op dezelfde ctx vóór toDataURL.

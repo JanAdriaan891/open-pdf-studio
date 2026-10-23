@@ -425,7 +425,12 @@
     "editTitle": "Редагувати закладку",
     "titleLabel": "Назва:",
     "titlePlaceholder": "Назва закладки",
-    "pageLabel": "Сторінка:"
+    "pageLabel": "Сторінка:",
+    "colorLabel": "Колір:",
+    "styleLabel": "Стиль:",
+    "nestTitle": "Вкласти в нову закладку",
+    "deleteTitle": "Видалити закладки",
+    "deleteConfirm": "Видалити вибрані закладки ({{count}}) і все, що під ними?"
   },
   "formValidation": {
     "title": "Помилка валідації"

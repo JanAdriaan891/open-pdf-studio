@@ -11,16 +11,23 @@
 // Elk verzoek gaat dan als bericht naar de gastpagina, die zelf met de opslag
 // praat: geen token, cookie of sessie komt ooit in het iframe.
 //
-// Het protocol:
+// Het protocol volgt de werkplek van de OpenAEC SuperCloud (#704; de
+// gastpagina is daar leidend):
 //  - Verzoek:  { werkplek: 1, id: <getal>, soort: <tekst>, ...velden }
 //  - Antwoord: { werkplek: 1, antwoord: <id>, ok: true,  waarde: … }
-//              { werkplek: 1, antwoord: <id>, ok: false, fout: '<melding>' }
+//              { werkplek: 1, antwoord: <id>, ok: false, fout: '<melding>'[, code] }
 //  - Handdruk: elke 250 ms soort "hallo" tot de gastpagina antwoordt (die mag
 //    later laden dan het iframe); na 60 s opgeven.
-//  - Soorten:  open { bestand } -> { naam, adres }  (adres: kortlevende URL
-//              voor precies dat bestand, opgehaald zonder cookies en zonder
-//              omleiding), opslaan { bestand, bytes } (bytes: ArrayBuffer, als
-//              transferable), lijst {} en versies { bestand }.
+//  - Soorten:
+//      open { bestand }            -> { bestand, naam, versie, alleen_lezen, bytes }
+//                                     (bytes: overgedragen ArrayBuffer)
+//      opslaan { bestand, bytes }  -> { bestand, naam, versie, conflict, melding, vergrendeld }
+//      lijst {}                    -> [{ id, name, modified }]
+//      versies { bestand }         -> [{ version, modified, author }]
+//      geopend { bestand }         -> true (ter informatie)
+//      melding { tekst, toon }     -> true (de gastpagina toont hem)
+//      ai.vraag { vraag }          -> { bericht, stop, vraag_id } (OpenAI-chatvorm;
+//                                     een fout heeft een `code`)
 //  - Elk verzoek heeft 120 s; daarna geeft het op.
 //
 // Strikt op oorsprong: `ouder` alleen als scheme://host[:poort]; waar de
@@ -28,10 +35,13 @@
 // alleen berichten met event.source === window.parent én
 // event.origin === ouder tellen; en we sturen alleen naar `ouder`.
 //
+// De app vraagt de gastpagina nooit om een adres en haalt zelf niets op bij
+// de host: in de werkplek staat connect-src alleen de eigen bundel toe.
+//
 // Een `__OPDS_HOST__` die er al staat, wint: dan doet de brug niets.
 //
-// Pure logica: venster, fetch en klok komen van buiten, zodat dit zonder DOM
-// te testen is (host-brug.test.mjs). De koppeling met de app staat in
+// Pure logica: venster en klok komen van buiten, zodat dit zonder DOM te
+// testen is (host-brug.test.mjs). De koppeling met de app staat in
 // core/host-brug-start.js.
 
 export const WERKPLEK = 1;
@@ -39,16 +49,28 @@ export const HALLO_INTERVAL_MS = 250;
 export const HALLO_OPGEVEN_MS = 60_000;
 export const VERZOEK_TIMEOUT_MS = 120_000;
 
+/** De tonen die de gastpagina kent voor een melding; standaard 'fout'. */
+export const MELDING_TONEN = Object.freeze(['info', 'succes', 'waarschuwing', 'fout']);
+
+/** De foutcodes van `ai.vraag` (de gastpagina en de AI-dienst erachter). */
+export const AI_FOUTCODES = Object.freeze([
+  'ongeldige_vraag', 'te_groot', 'geen_tegoed', 'plafond_bereikt', 'te_druk',
+  'te_veel_vragen', 'al_bezig', 'opnieuw_inloggen', 'dienst_onbereikbaar',
+]);
+
 /** Een fout van de brug, met een code voor de koppeling. */
 export class BrugFout extends Error {
   /**
-   * @param {'geen-contact'|'geweigerd'|'time-out'|'host'|'ophalen'|'antwoord'} code
+   * @param {'geen-contact'|'geweigerd'|'time-out'|'host'|'antwoord'} code
    * @param {string} bericht
+   * @param {string|null} [hostCode] de `code` uit het foutantwoord van de
+   *   gastpagina (bv. geen_tegoed bij ai.vraag), anders null
    */
-  constructor(code, bericht) {
+  constructor(code, bericht, hostCode = null) {
     super(bericht);
     this.name = 'BrugFout';
     this.code = code;
+    this.hostCode = hostCode;
   }
 }
 
@@ -122,6 +144,13 @@ function eigenBuffer(bytes) {
   throw new BrugFout('antwoord', 'Nothing to save');
 }
 
+/** De bytes uit het antwoord op `open`, of null als er geen staan. */
+function bytesUit(waarde) {
+  if (waarde instanceof ArrayBuffer) return new Uint8Array(waarde);
+  if (ArrayBuffer.isView(waarde)) return new Uint8Array(waarde.buffer, waarde.byteOffset, waarde.byteLength);
+  return null;
+}
+
 // Engels als er geen vertaling is meegegeven (zoals in de tests).
 const STANDAARD_TEKSTEN = {
   hostOpenFailed: 'The file could not be read from storage. Try again.',
@@ -131,7 +160,7 @@ const standaardTekst = (sleutel) => STANDAARD_TEKSTEN[sleutel] || sleutel;
 
 const tekst = (v) => (v === undefined || v === null ? undefined : String(v));
 
-/** Een lijst van de gastpagina in de vorm van het contract ({ id, name }). */
+/** Een lijst van de gastpagina in de vorm van het contract ({ id, name, modified }). */
 function normaliseerLijst(waarde) {
   if (!Array.isArray(waarde)) return [];
   return waarde
@@ -139,7 +168,7 @@ function normaliseerLijst(waarde) {
     .map((d) => ({ ...d, id: String(d.id), name: tekst(d.name ?? d.naam) }));
 }
 
-/** Versies van de gastpagina in de vorm van het contract ({ version }). */
+/** Versies van de gastpagina in de vorm van het contract ({ version, modified, author }). */
 function normaliseerVersies(waarde) {
   if (!Array.isArray(waarde)) return [];
   return waarde
@@ -148,21 +177,63 @@ function normaliseerVersies(waarde) {
 }
 
 /**
+ * Het antwoord op `opslaan` in een vaste vorm. `vergrendeld` blijft null als
+ * de gastpagina er niets over zegt; alleen een uitdrukkelijke false betekent
+ * dat het bestand niet (meer) voor ons vastgezet is.
+ */
+export function normaliseerOpslaan(waarde) {
+  const w = waarde && typeof waarde === 'object' ? waarde : {};
+  return {
+    bestand: tekst(w.bestand) ?? null,
+    naam: tekst(w.naam) ?? null,
+    versie: w.versie === undefined || w.versie === null ? null : w.versie,
+    conflict: w.conflict === true,
+    melding: typeof w.melding === 'string' && w.melding.trim() ? w.melding.trim() : null,
+    vergrendeld: typeof w.vergrendeld === 'boolean' ? w.vergrendeld : null,
+  };
+}
+
+/**
+ * Wat de gebruiker na het opslaan te horen krijgt, of null als er niets te
+ * melden is. Een conflict: de gastpagina bewaarde onze versie als kopie (naam
+ * erbij; volgende opslagen gaan daarheen). Een bestand dat niet voor ons
+ * vastgezet is (`vergrendeld: false`): één keer per bestand, want dat blijft
+ * zo. En de melding van de gastpagina zelf, ongewijzigd.
+ * @param {ReturnType<typeof normaliseerOpslaan>} uitkomst
+ * @param {(sleutel: string, opties?: object) => string} t
+ * @param {Set<string>} [alGemeld] bestanden waarvoor `vergrendeld` al gemeld is
+ */
+export function opslaanMelding(uitkomst, t, alGemeld = new Set()) {
+  if (!uitkomst) return null;
+  const delen = [];
+  if (uitkomst.conflict) delen.push(t('hostSaveConflict', { name: uitkomst.naam || '' }));
+  const sleutel = uitkomst.bestand ?? '';
+  if (uitkomst.vergrendeld === false && !alGemeld.has(sleutel)) {
+    alGemeld.add(sleutel);
+    delen.push(t('hostSaveNotLocked'));
+  }
+  if (uitkomst.melding) delen.push(uitkomst.melding);
+  return delen.length ? delen.join('\n\n') : null;
+}
+
+/**
  * De brug zelf.
  * @param {object} o
  * @param {string} o.ouder         oorsprong van de gastpagina
  * @param {object} o.ouderVenster  window.parent
  * @param {object} o.venster       het eigen venster (voor 'message')
- * @param {Function} [o.fetch]
  * @param {object} [o.klok]        { setTimeout, clearTimeout, setInterval, clearInterval }
  * @param {Function} [o.bijGeenContact] als de handdruk opgeeft (de koppeling
  *                                toont dan een melding)
+ * @param {Function} [o.bijOpslaan] met de uitkomst van elk geslaagd opslaan
+ *                                (normaliseerOpslaan); de koppeling toont een
+ *                                conflict of een melding
  * @param {Function} [o.vertaal]   sleutel -> tekst voor de gebruiker
  * @param {object} [o.limieten]    { halloInterval, halloOpgeven, verzoek } in ms
  */
 export function maakHostBrug({
-  ouder, ouderVenster, venster, fetch: haal = globalThis.fetch?.bind(globalThis),
-  klok = standaardKlok(), bijGeenContact = null, vertaal = standaardTekst, limieten = {},
+  ouder, ouderVenster, venster,
+  klok = standaardKlok(), bijGeenContact = null, bijOpslaan = null, vertaal = standaardTekst, limieten = {},
 }) {
   if (!isGeldigeOorsprong(ouder)) throw new Error('Invalid parent origin');
   const halloInterval = limieten.halloInterval ?? HALLO_INTERVAL_MS;
@@ -240,7 +311,13 @@ export function maakHostBrug({
     wachtend.delete(id);
     klok.clearTimeout(verzoek.timer);
     if (data.ok === true) verzoek.klaar(data.waarde);
-    else verzoek.mis(new BrugFout('host', typeof data.fout === 'string' && data.fout ? data.fout : 'The host could not handle the request'));
+    else {
+      verzoek.mis(new BrugFout(
+        'host',
+        typeof data.fout === 'string' && data.fout ? data.fout : 'The host could not handle the request',
+        typeof data.code === 'string' && data.code ? data.code : null,
+      ));
+    }
   }
 
   /** Begin de handdruk. */
@@ -294,50 +371,21 @@ export function maakHostBrug({
     });
   }
 
-  /** Haal de bytes van `adres`: zonder cookies, zonder cache, zonder omleiding. */
-  async function haalBytes(adres) {
-    let url;
-    try {
-      url = new URL(adres);
-    } catch {
-      throw new BrugFout('antwoord', 'The host page returned no valid address');
-    }
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') {
-      throw new BrugFout('antwoord', 'The host page returned no valid address');
-    }
-    if (typeof haal !== 'function') throw new BrugFout('ophalen', 'fetch is not available');
-    const Afbreker = globalThis.AbortController;
-    const afbreker = Afbreker ? new Afbreker() : null;
-    const timer = afbreker ? klok.setTimeout(() => afbreker.abort(), verzoekTimeout) : null;
-    try {
-      const antwoord = await haal(url.href, {
-        credentials: 'omit',
-        cache: 'no-store',
-        redirect: 'error',
-        ...(afbreker ? { signal: afbreker.signal } : {}),
-      });
-      if (!antwoord || !antwoord.ok) {
-        throw new BrugFout('ophalen', `Reading the file failed (${antwoord?.status ?? 'no response'})`);
-      }
-      return await antwoord.arrayBuffer();
-    } catch (e) {
-      if (e instanceof BrugFout) throw e;
-      throw new BrugFout('ophalen', `Reading the file failed: ${e?.message || e}`);
-    } finally {
-      if (timer !== null) klok.clearTimeout(timer);
-    }
-  }
-
   /** Het opslagcontract van #546, over de brug. */
   const opslag = {
+    /** @returns {Promise<{ name: string, data: Uint8Array, versie: unknown, alleenLezen: boolean, bestand: string }>} */
     async open(bestand) {
       try {
         const waarde = await verzoek('open', { bestand: String(bestand) });
-        if (!waarde || typeof waarde !== 'object' || typeof waarde.adres !== 'string') {
-          throw new BrugFout('antwoord', 'The host page returned no address for the file');
-        }
-        const data = await haalBytes(waarde.adres);
-        return { name: tekst(waarde.naam) || 'document.pdf', data };
+        const data = waarde && typeof waarde === 'object' ? bytesUit(waarde.bytes) : null;
+        if (!data) throw new BrugFout('antwoord', 'The host page returned no bytes for the file');
+        return {
+          name: tekst(waarde.naam) || 'document.pdf',
+          data,
+          versie: waarde.versie ?? null,
+          alleenLezen: waarde.alleen_lezen === true,
+          bestand: tekst(waarde.bestand) ?? String(bestand),
+        };
       } catch (e) {
         // Wat de gebruiker ziet bij een mislukte open (pdf/host-document.js);
         // de technische oorzaak blijft in de melding voor de console.
@@ -345,9 +393,14 @@ export function maakHostBrug({
         throw e;
       }
     },
+    /** @returns {Promise<ReturnType<typeof normaliseerOpslaan>>} */
     async save(bestand, bytes) {
       const buffer = eigenBuffer(bytes);
-      return verzoek('opslaan', { bestand: String(bestand), bytes: buffer }, [buffer]);
+      const uitkomst = normaliseerOpslaan(await verzoek('opslaan', { bestand: String(bestand), bytes: buffer }, [buffer]));
+      if (typeof bijOpslaan === 'function') {
+        try { bijOpslaan(uitkomst); } catch (e) { console.warn('[brug] melding na opslaan mislukt:', e); }
+      }
+      return uitkomst;
     },
     async list() {
       return normaliseerLijst(await verzoek('lijst', {}));
@@ -357,12 +410,47 @@ export function maakHostBrug({
     },
   };
 
+  /** De app meldt het document dat open staat (alleen ter informatie). */
+  async function geopend(bestand) {
+    await verzoek('geopend', bestand === undefined || bestand === null ? {} : { bestand: String(bestand) });
+    return true;
+  }
+
+  /** Een melding in de statusbalk van de gastpagina. */
+  async function melding(tekstVoorHost, toon = 'fout') {
+    const t = String(tekstVoorHost ?? '').trim();
+    if (!t) return false;
+    await verzoek('melding', { tekst: t, toon: MELDING_TONEN.includes(toon) ? toon : 'fout' });
+    return true;
+  }
+
+  /**
+   * De assistent: een vraag in OpenAI-chatvorm ({ messages, tools?, model?,
+   * max_tokens? }). Terug komt { bericht, stop, vraag_id }; `bericht` gaat in
+   * de volgende beurt ongewijzigd mee. Een fout draagt `hostCode`.
+   */
+  const ai = {
+    async vraag(vraag) {
+      if (!vraag || typeof vraag !== 'object' || !Array.isArray(vraag.messages)) {
+        throw new BrugFout('antwoord', 'The question has no messages', 'ongeldige_vraag');
+      }
+      const waarde = await verzoek('ai.vraag', { vraag });
+      if (!waarde || typeof waarde !== 'object' || !waarde.bericht || typeof waarde.bericht !== 'object') {
+        throw new BrugFout('antwoord', 'The host page returned no answer from the assistant');
+      }
+      return { bericht: waarde.bericht, stop: waarde.stop ?? null, vraag_id: waarde.vraag_id ?? null };
+    },
+  };
+
   return {
     ouder,
     start,
     stop,
     verzoek,
     opslag,
+    geopend,
+    melding,
+    ai,
     /** Belofte die vervult zodra de gastpagina de handdruk beantwoordt. */
     verbinding,
     get toestand() { return toestand; },
@@ -381,6 +469,9 @@ export function installeerHostBrug({ venster, ...opties } = {}) {
   const brug = maakHostBrug({ ...opties, ouder: gegevens.ouder, ouderVenster: venster.parent, venster });
   venster.__OPDS_HOST__ = {
     storage: brug.opslag,
+    ai: brug.ai,
+    geopend: brug.geopend,
+    melding: brug.melding,
     ...(gegevens.bestand !== null ? { document: gegevens.bestand } : {}),
   };
   brug.start();

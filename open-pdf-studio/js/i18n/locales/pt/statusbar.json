@@ -142,5 +142,10 @@
   "symbolSearch": "Localizar símbolos",
   "watchActive": "Monitorando {{folder}}",
   "watchFailed": "Erro de monitoramento: {{folder}}",
-  "watchTitle": "O fluxo de trabalho de documentos está monitorando {{input}} e gravando em {{output}}. Clique para parar o monitoramento."
+  "watchTitle": "O fluxo de trabalho de documentos está monitorando {{input}} e gravando em {{output}}. Clique para parar o monitoramento.",
+  "renderDiagnostics": {
+    "title": "Ir para o próximo aviso de renderização. A ausência de avisos não garante uma renderização completa.",
+    "count": "Avisos de renderização: {{count}}",
+    "detail": "Página {{page}}: {{code}}. Tente um zoom menor ou reabra o documento; a completude não é garantida."
+  }
 }

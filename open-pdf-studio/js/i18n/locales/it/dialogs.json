@@ -425,7 +425,12 @@
     "editTitle": "Modifica segnalibro",
     "titleLabel": "Titolo:",
     "titlePlaceholder": "Titolo del segnalibro",
-    "pageLabel": "Pagina:"
+    "pageLabel": "Pagina:",
+    "colorLabel": "Colore:",
+    "styleLabel": "Stile:",
+    "nestTitle": "Annida sotto un nuovo segnalibro",
+    "deleteTitle": "Elimina segnalibri",
+    "deleteConfirm": "Eliminare {{count}} segnalibri selezionati e tutto ciò che contengono?"
   },
   "formValidation": {
     "title": "Errore di validazione"

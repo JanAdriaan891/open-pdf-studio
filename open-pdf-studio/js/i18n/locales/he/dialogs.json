@@ -425,7 +425,12 @@
     "editTitle": "עריכת סימנייה",
     "titleLabel": "כותרת:",
     "titlePlaceholder": "כותרת סימנייה",
-    "pageLabel": "עמוד:"
+    "pageLabel": "עמוד:",
+    "colorLabel": "צבע:",
+    "styleLabel": "סגנון:",
+    "nestTitle": "קינון תחת סימנייה חדשה",
+    "deleteTitle": "מחיקת סימניות",
+    "deleteConfirm": "למחוק {{count}} סימניות נבחרות וכל מה שמתחתיהן?"
   },
   "formValidation": {
     "title": "שגיאת אימות"

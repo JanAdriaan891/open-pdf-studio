@@ -142,5 +142,10 @@
   "symbolSearch": "Trova simboli",
   "watchActive": "Monitoraggio di {{folder}}",
   "watchFailed": "Errore di monitoraggio: {{folder}}",
-  "watchTitle": "Il flusso di lavoro dei documenti monitora {{input}} e scrive in {{output}}. Fai clic per interrompere il monitoraggio."
+  "watchTitle": "Il flusso di lavoro dei documenti monitora {{input}} e scrive in {{output}}. Fai clic per interrompere il monitoraggio.",
+  "renderDiagnostics": {
+    "title": "Vai alla segnalazione di rendering successiva. L’assenza di segnalazioni non garantisce un rendering completo.",
+    "count": "Segnalazioni di rendering: {{count}}",
+    "detail": "Pagina {{page}}: {{code}}. Prova uno zoom inferiore o riapri il documento; la completezza non è garantita."
+  }
 }

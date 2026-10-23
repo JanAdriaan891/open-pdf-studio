@@ -142,5 +142,10 @@
   "symbolSearch": "Sembol bul",
   "watchActive": "{{folder}} izleniyor",
   "watchFailed": "İzleme hatası: {{folder}}",
-  "watchTitle": "Belge iş akışı {{input}} klasörünü izliyor ve {{output}} klasörüne yazıyor. İzlemeyi durdurmak için tıklayın."
+  "watchTitle": "Belge iş akışı {{input}} klasörünü izliyor ve {{output}} klasörüne yazıyor. İzlemeyi durdurmak için tıklayın.",
+  "renderDiagnostics": {
+    "title": "Sonraki görüntüleme bulgusuna git. Bulgu olmaması görüntülemenin eksiksiz olduğunu garanti etmez.",
+    "count": "Görüntüleme bulguları: {{count}}",
+    "detail": "Sayfa {{page}}: {{code}}. Daha düşük bir yakınlaştırma deneyin veya belgeyi yeniden açın; eksiksizlik garanti edilmez."
+  }
 }

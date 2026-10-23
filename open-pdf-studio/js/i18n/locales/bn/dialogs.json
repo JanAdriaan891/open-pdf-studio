@@ -425,7 +425,12 @@
     "editTitle": "বুকমার্ক সম্পাদনা করুন",
     "titleLabel": "শিরোনাম:",
     "titlePlaceholder": "বুকমার্ক শিরোনাম",
-    "pageLabel": "পৃষ্ঠা:"
+    "pageLabel": "পৃষ্ঠা:",
+    "colorLabel": "রঙ:",
+    "styleLabel": "শৈলী:",
+    "nestTitle": "নতুন বুকমার্কের অধীনে রাখুন",
+    "deleteTitle": "বুকমার্ক মুছুন",
+    "deleteConfirm": "নির্বাচিত {{count}}টি বুকমার্ক এবং তাদের অধীনের সবকিছু মুছবেন?"
   },
   "formValidation": {
     "title": "যাচাইকরণ ত্রুটি"

@@ -142,5 +142,10 @@
   "symbolSearch": "Najít symboly",
   "watchActive": "Sledování: {{folder}}",
   "watchFailed": "Chyba sledování: {{folder}}",
-  "watchTitle": "Pracovní postup dokumentů sleduje {{input}} a zapisuje do {{output}}. Kliknutím sledování zastavíte."
+  "watchTitle": "Pracovní postup dokumentů sleduje {{input}} a zapisuje do {{output}}. Kliknutím sledování zastavíte.",
+  "renderDiagnostics": {
+    "title": "Přejít na další nález vykreslování. Žádné nálezy nezaručují úplné vykreslení.",
+    "count": "Nálezy vykreslování: {{count}}",
+    "detail": "Strana {{page}}: {{code}}. Zkuste menší přiblížení nebo dokument znovu otevřete; úplnost není zaručena."
+  }
 }

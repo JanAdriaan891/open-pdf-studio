@@ -142,5 +142,10 @@
   "symbolSearch": "記号を検索",
   "watchActive": "{{folder}} を監視中",
   "watchFailed": "監視エラー：{{folder}}",
-  "watchTitle": "ドキュメントワークフローが {{input}} を監視し、{{output}} に書き込んでいます。クリックすると監視を停止します。"
+  "watchTitle": "ドキュメントワークフローが {{input}} を監視し、{{output}} に書き込んでいます。クリックすると監視を停止します。",
+  "renderDiagnostics": {
+    "title": "次の描画に関する通知へ移動します。通知がなくても完全な描画は保証されません。",
+    "count": "描画に関する通知: {{count}}",
+    "detail": "ページ {{page}}: {{code}}。ズームを下げるか、文書を開き直してください。完全性は保証されません。"
+  }
 }

@@ -21,6 +21,7 @@ import { labelFontSizeAt } from '../annotations/drafting-rules.js';
 import { isKlikSleep, klemMaat, schermPxNaarPt, KLIK_DREMPEL_PX } from '../annotations/minimummaat.js';
 import { getEffectiveScale } from './effective-scale.js';
 import { randkleurenUitVoorkeur } from '../annotations/fill-utils.js';
+import { vulDekkingUitVoorkeur } from '../annotations/vul-dekking.js';
 import { rechtopRotatie } from '../pdf/weergave-ruimte.js';
 import { rechtopVak, nieuweMaatHoekVast } from '../pdf/weergave-rotatie.js';
 import { documentHeeftSchaal } from '../annotations/schaal-op-punt.js';
@@ -38,6 +39,7 @@ export function veelhoekOpmaak(prefs = state.preferences || {}) {
     lineWidth: prefs.polygonLineWidth || getLineWidthValue(),
     borderStyle: prefs.polygonBorderStyle || 'solid',
     opacity: (prefs.polygonOpacity || 100) / 100,
+    ...vulDekkingUitVoorkeur(prefs, 'polygon'),
   };
 }
 
@@ -231,6 +233,7 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
         lineWidth: prefs.circleBorderWidth,
         borderStyle: prefs.circleBorderStyle,
         opacity: prefs.circleOpacity / 100,
+        ...vulDekkingUitVoorkeur(prefs, 'circle'),
         ...o
       };
     }
@@ -249,6 +252,7 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
         lineWidth: prefs.circleBorderWidth,
         borderStyle: prefs.circleBorderStyle,
         opacity: (prefs.circleOpacity / 100) * 0.5,
+        ...vulDekkingUitVoorkeur(prefs, 'circle', 0.5),
         ...o
       };
     }
@@ -264,6 +268,7 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
         lineWidth: prefs.rectBorderWidth,
         borderStyle: prefs.rectBorderStyle,
         opacity: prefs.rectOpacity / 100,
+        ...vulDekkingUitVoorkeur(prefs, 'rect'),
         ...o
       };
     }
@@ -342,7 +347,8 @@ export function buildAnnotationProps(tool, startX, startY, endX, endY, e) {
         ...b,
         ...randkleurenUitVoorkeur(prefs, 'cloud', 'cloud', getColorPickerValue()),
         lineWidth: prefs.cloudLineWidth || getLineWidthValue(),
-        opacity: (prefs.cloudOpacity || 100) / 100
+        opacity: (prefs.cloudOpacity || 100) / 100,
+        ...vulDekkingUitVoorkeur(prefs, 'cloud'),
       };
     }
 

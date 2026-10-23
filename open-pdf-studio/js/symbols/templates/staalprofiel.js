@@ -10,6 +10,10 @@
 
 import { normaliseerKokerNaam, oudeKokerNaam, migreerProfielParams } from '../koker-notatie.js';
 
+// Profielgroep (#697): binnen één groep kan een geplaatst profiel van type
+// wisselen (UNP → HEB, koker, hoeklijn …), zie symbols/profieltype.js.
+export const NL_STAAL_GROEP = 'nl-staal';
+
 const HEA = [
   ['HEA 100', 96, 100, 5, 8, 12],
   ['HEA 120', 114, 120, 5, 8, 12],
@@ -303,6 +307,7 @@ function _iProfileTemplate(id, familyName, table, defaultMaat, sectionPtsFn = _i
     name: familyName,
     nameEn: familyName,
     category: 'NL Constructie',
+    profielGroep: NL_STAAL_GROEP,
     defaultSize: { width: 60, height: 60 },
     // No graphic resize handles — size comes from maat × schaal (real mm).
     fixedSize: true,
@@ -385,6 +390,7 @@ function _kokerTemplate() {
     name: 'Koker',
     nameEn: 'Hollow section',
     category: 'NL Constructie',
+    profielGroep: NL_STAAL_GROEP,
     defaultSize: { width: 60, height: 60 },
     fixedSize: true,
     params: [
@@ -507,6 +513,7 @@ function _hoeklijnTemplate() {
     name: 'Hoeklijn',
     nameEn: 'Angle',
     category: 'NL Constructie',
+    profielGroep: NL_STAAL_GROEP,
     defaultSize: { width: 60, height: 60 },
     fixedSize: true,
     params: [

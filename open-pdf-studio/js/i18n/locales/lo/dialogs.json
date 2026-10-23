@@ -425,7 +425,12 @@
     "editTitle": "ແກ້ໄຂບຸກມາກ",
     "titleLabel": "ຫົວຂໍ້:",
     "titlePlaceholder": "ຫົວຂໍ້ບຸກມາກ",
-    "pageLabel": "ໜ້າ:"
+    "pageLabel": "ໜ້າ:",
+    "colorLabel": "ສີ:",
+    "styleLabel": "ຮູບແບບ:",
+    "nestTitle": "ຈັດໄວ້ພາຍໃຕ້ບຸກມາກໃໝ່",
+    "deleteTitle": "ລຶບບຸກມາກ",
+    "deleteConfirm": "ລຶບ {{count}} ບຸກມາກທີ່ເລືອກ ແລະ ທຸກຢ່າງທີ່ຢູ່ພາຍໃຕ້ບໍ?"
   },
   "formValidation": {
     "title": "ຂໍ້ຜິດພາດໃນການກວດສອບ"

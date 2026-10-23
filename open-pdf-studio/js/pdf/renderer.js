@@ -773,7 +773,9 @@ async function tekenPaginaMetPdfJs(page, viewport, canvas) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, viewport.width, viewport.height);
-  await page.render({ canvasContext: ctx, viewport, annotationMode: 0 }).promise;
+  // Geschakelde lagen (#684): de stand uit het paneel.
+  const { pdfjsLaagOpties } = await import('./lagen-schakelen.js');
+  await page.render({ canvasContext: ctx, viewport, annotationMode: 0, ...pdfjsLaagOpties() }).promise;
 }
 
 // Render page offscreen and swap canvases atomically to avoid zoom flicker.
@@ -1095,10 +1097,12 @@ async function renderLowResPreview(doc, pageNum, nogActueel = () => true) {
   const ctx = canvas.getContext('2d');
 
   try {
+    const { pdfjsLaagOpties } = await import('./lagen-schakelen.js');
     await page.render({
       canvasContext: ctx,
       viewport,
       annotationMode: 0,
+      ...pdfjsLaagOpties(doc),
     }).promise;
   } catch (e) {
     if (e.name === 'RenderingCancelledException') return null;

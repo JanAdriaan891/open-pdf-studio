@@ -48,7 +48,7 @@ export async function loadBookmarksFromPdf(pdfDoc) {
           expanded: true,
           bold: !!(item.bold),
           italic: !!(item.italic),
-          color: item.color ? rgbArrayToHex(item.color) : null,
+          color: pdfjsKleurNaarHex(item.color),
           sortOrder: i,
           fromPdf: true,
         };
@@ -67,10 +67,12 @@ export async function loadBookmarksFromPdf(pdfDoc) {
   }
 }
 
-function rgbArrayToHex(arr) {
+// Kleur van een outline-item (/C, #689). pdf.js geeft hem als RGB in 0-255
+// (Uint8ClampedArray), en zwart [0,0,0] ook als het item geen /C heeft. Zwart
+// is daarom "geen eigen kleur": de titel volgt dan het thema.
+export function pdfjsKleurNaarHex(arr) {
   if (!arr || arr.length < 3) return null;
-  const r = Math.round(arr[0] * 255);
-  const g = Math.round(arr[1] * 255);
-  const b = Math.round(arr[2] * 255);
-  return '#' + [r, g, b].map(c => c.toString(16).padStart(2, '0')).join('');
+  const rgb = [arr[0], arr[1], arr[2]].map(c => Math.max(0, Math.min(255, Math.round(Number(c) || 0))));
+  if (rgb[0] === 0 && rgb[1] === 0 && rgb[2] === 0) return null;
+  return '#' + rgb.map(c => c.toString(16).padStart(2, '0')).join('');
 }

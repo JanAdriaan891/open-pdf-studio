@@ -1,3 +1,4 @@
+import { readRenderDiagnostics } from '../pdf/render-diagnostics.js';
 /**
  * Plugin API
  *
@@ -450,7 +451,7 @@ export function createPluginApi(pluginId) {
       // revision: verandert bij elke stap in de undo-geschiedenis; geef hem als
       // revisionContext.documentRevision mee aan een wijzigende opdracht (#575).
       return doc ? { id: doc.id, pageCount: doc.numPages || doc.pdfDoc?.numPages || 0, currentPage: doc.currentPage,
-        name: doc.fileName || null, revision: documentRevisie(doc) } : null;
+        name: doc.fileName || null, revision: documentRevisie(doc), renderDiagnostics: readRenderDiagnostics(doc.filePath) } : null;
     },
 
     getPageInfo(pageNum, options = {}) {

@@ -67,9 +67,38 @@ test('een schaalgebied toont vulkleur (zonder "geen") en vul-doorzichtigheid, me
 });
 
 test('een andere vorm houdt "geen vulling" en krijgt geen vul-doorzichtigheid', () => {
-  selecteer({ ...gebied(), type: 'box', fillColor: null, strokeColor: '#000000' });
+  // Een tekstvak: de rechthoek heeft sinds #685 wel een eigen vul-dekking.
+  selecteer({ ...gebied(), type: 'textbox', fillColor: null, strokeColor: '#000000' });
   assert.equal(sectionVis.fillNoneAllowed, true);
   assert.equal(sectionVis.fillOpacityGroup, false);
+  assert.equal(sectionVis.aparteDekking, false);
+});
+
+test('rechthoek, ellips, veelhoek en wolk: lijndekking en vuldekking apart (#685)', () => {
+  for (const type of ['box', 'circle', 'polygon', 'cloud']) {
+    const ann = { ...gebied(), type, fillColor: '#ffff00', strokeColor: '#ff0000', opacity: 0.6 };
+    selecteer(ann);
+    assert.equal(sectionVis.fillOpacityGroup, true, type);
+    assert.equal(sectionVis.aparteDekking, true, type);
+    assert.equal(annotProps.fillOpacity, 60, `${type}: een oud bestand toont de vulling op de dekking`);
+    // De lijn wijzigen laat de vulling staan.
+    updateAnnotProp('opacity', 100);
+    assert.equal(ann.opacity, 1);
+    assert.equal(ann.fillOpacity, 0.6, type);
+    updateAnnotProp('fillOpacity', 25);
+    assert.equal(ann.fillOpacity, 0.25);
+    assert.equal(ann.opacity, 1);
+  }
+  // Meervoudige selectie van vormen: dezelfde twee velden.
+  const a = { ...gebied(), type: 'box', fillColor: '#ffff00', opacity: 1, fillOpacity: 0.3 };
+  const b = { ...gebied(), type: 'circle', fillColor: '#00ffff', opacity: 1, fillOpacity: 0.3 };
+  const doc = openen([a, b]);
+  doc.selectedAnnotations = [a, b];
+  storeShowMultiSelection([a, b]);
+  assert.equal(sectionVis.aparteDekking, true);
+  assert.equal(annotProps.fillOpacity, 30);
+  updateAnnotProp('opacity', 40);
+  assert.deepEqual([a.opacity, a.fillOpacity, b.opacity, b.fillOpacity], [0.4, 0.3, 0.4, 0.3]);
 });
 
 test('de vul-doorzichtigheid schrijft een eigen waarde; de doorzichtigheid blijft voor de rand', () => {

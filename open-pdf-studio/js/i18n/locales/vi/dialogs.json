@@ -425,7 +425,12 @@
     "editTitle": "Sửa Dấu trang",
     "titleLabel": "Tiêu đề:",
     "titlePlaceholder": "Tiêu đề dấu trang",
-    "pageLabel": "Trang:"
+    "pageLabel": "Trang:",
+    "colorLabel": "Màu sắc:",
+    "styleLabel": "Kiểu:",
+    "nestTitle": "Lồng vào dấu trang mới",
+    "deleteTitle": "Xóa dấu trang",
+    "deleteConfirm": "Xóa {{count}} dấu trang đã chọn và mọi thứ bên dưới?"
   },
   "formValidation": {
     "title": "Lỗi Xác thực"
