@@ -9,7 +9,9 @@ import { readFileSync } from 'node:fs';
 const source = readFileSync(new URL('./find-bar.js', import.meta.url), 'utf8');
 const start = source.indexOf('let navigationToken');
 const rest = source.slice(start);
-const body = rest.slice(0, rest.search(/\r?\n\}\r?\n/) + 2);
+// Tot en met de eerste "}" aan het begin van een regel, ook bij CRLF.
+const einde = rest.match(/\r?\n\}\r?\n/);
+const body = rest.slice(0, einde.index + einde[0].length);
 
 function harness({ highlightAfter = 0 } = {}) {
   const doc = { currentPage: 1, viewMode: 'continuous' };
