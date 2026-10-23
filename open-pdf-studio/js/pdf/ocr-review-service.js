@@ -76,20 +76,32 @@ export async function listOcrReview(documentId, threshold = 80, options = {}) {
   };
 }
 
-export async function updateOcrReview(request) {
-  if (request.action === 'correct' && typeof request.text === 'string') {
-    const missing = await missingOcrFontCharacters(request.text);
-    if (missing.length) {
-      const error = new Error('OCR_REVIEW_TEXT_NOT_ENCODABLE');
-      error.characters = missing;
-      throw error;
-    }
+/**
+ * A reviewed word the OCR layer cannot show refuses the save (#657), so the
+ * review refuses such text up front: a correction, and also accepting a
+ * recognized text with such characters.
+ */
+async function refuseUnencodable(text) {
+  const missing = await missingOcrFontCharacters(text);
+  if (missing.length) {
+    const error = new Error('OCR_REVIEW_TEXT_NOT_ENCODABLE');
+    error.characters = missing;
+    throw error;
   }
+}
+
+export async function updateOcrReview(request) {
+  if (request.action === 'correct' && typeof request.text === 'string') await refuseUnencodable(request.text);
   const doc = await documentFor(request.documentId);
   if (opslaanGeweigerd(doc)) throw new Error('READ_ONLY_DOCUMENT');
   if (request.revision !== (doc.inhoudRevisie || 0)) throw new Error('DOCUMENT_CHANGED');
   const word = doc.ocrResults[request.page]?.[request.index];
   if (!word) throw new Error('OCR_WORD_NOT_FOUND');
+  if (request.action === 'accept') {
+    await refuseUnencodable(word.text);
+    if (getActiveDocument() !== doc || request.revision !== (doc.inhoudRevisie || 0)
+      || doc.ocrResults[request.page]?.[request.index] !== word) throw new Error('DOCUMENT_CHANGED');
+  }
   reviewQueue(doc.ocrResults, request.threshold ?? 80);
   const oldWord = JSON.parse(JSON.stringify(word));
   const newWord = reviewWord(oldWord, request);

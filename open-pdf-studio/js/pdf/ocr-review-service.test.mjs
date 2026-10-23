@@ -1,5 +1,6 @@
-// The OCR review service: a correction the OCR font cannot show is refused
-// in the dialog, before it reaches the document; stored compact reviews are
+// The OCR review service: a correction the OCR font cannot show, or accepting
+// such a recognized text, is refused in the dialog, before it reaches the
+// document (the save would refuse it, #657); stored compact reviews are
 // listed read-only.
 
 import assert from 'node:assert/strict';
@@ -63,6 +64,19 @@ test('a correction with a glyph the OCR font lacks is refused and changes nothin
   assert.equal(state.documents[0].ocrResults[1][0].review, undefined);
   await updateOcrReview(request(doc, { action: 'correct', text: 'rooms' }));
   assert.equal(state.documents[0].ocrResults[1][0].text, 'rooms');
+});
+
+test('accepting a recognized text with a glyph the OCR font lacks is refused and changes nothing', async () => {
+  fontAvailable = true;
+  const doc = await openDocument({ ocrResults: { 1: [word('房間'), word('room')] } });
+  await assert.rejects(
+    updateOcrReview(request(doc, { action: 'accept', expectedText: '房間' })),
+    (err) => err.message === 'OCR_REVIEW_TEXT_NOT_ENCODABLE' && err.characters.join('') === '房間',
+  );
+  assert.equal(state.documents[0].ocrResults[1][0].review, undefined);
+  assert.equal(state.documents[0].undoStack.length, 0);
+  await updateOcrReview(request(doc, { action: 'accept', index: 1 }));
+  assert.equal(state.documents[0].ocrResults[1][1].review.status, 'accepted');
 });
 
 test('compact reviews stored in the file are listed as archived and cannot be changed', async () => {

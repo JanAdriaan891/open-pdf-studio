@@ -1246,7 +1246,7 @@
     "error": "Could not update verification. Refresh the queue if the document changed.",
     "accepted": "Accepted",
     "corrected": "Corrected",
-    "notEncodable": "The searchable OCR text cannot contain these characters: {{characters}}. Use other characters, or accept the recognized text.",
+    "notEncodable": "The searchable OCR text cannot contain these characters: {{characters}}. Correct the word using other characters.",
     "archived": "Review stored in the file. Run OCR on this page again to change it."
   },
   "portfolio": {

@@ -1247,7 +1247,7 @@
     "error": "Verificatie kon niet worden bijgewerkt. Vernieuw de lijst als het document is gewijzigd.",
     "accepted": "Geaccepteerd",
     "corrected": "Gecorrigeerd",
-    "notEncodable": "De doorzoekbare OCR-tekst kan deze tekens niet bevatten: {{characters}}. Gebruik andere tekens of accepteer de herkende tekst.",
+    "notEncodable": "De doorzoekbare OCR-tekst kan deze tekens niet bevatten: {{characters}}. Corrigeer het woord met andere tekens.",
     "archived": "Controle opgeslagen in het bestand. Voer OCR op deze pagina opnieuw uit om haar te wijzigen."
   },
   "portfolio": {
