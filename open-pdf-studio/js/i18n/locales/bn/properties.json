@@ -648,6 +648,8 @@
     "sectionTitle": "প্রতীক: {{name}}",
     "symbolLabel": "প্রতীক",
     "typeLabel": "ধরন",
+    "profileType": "প্রোফাইলের ধরন",
+    "profileTypeTitle": "ইস্পাত প্রোফাইল",
     "unknownSymbol": "অজানা প্রতীক",
     "listNew": "নতুন",
     "listAdd": "যোগ করুন",

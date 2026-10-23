@@ -648,6 +648,8 @@
     "sectionTitle": "نماد: {{name}}",
     "symbolLabel": "نماد",
     "typeLabel": "نوع",
+    "profileType": "نوع پروفیل",
+    "profileTypeTitle": "پروفیل فولادی",
     "unknownSymbol": "نماد ناشناخته",
     "listNew": "جدید",
     "listAdd": "افزودن",

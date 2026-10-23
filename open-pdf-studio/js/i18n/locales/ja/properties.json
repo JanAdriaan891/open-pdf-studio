@@ -648,6 +648,8 @@
     "sectionTitle": "シンボル：{{name}}",
     "symbolLabel": "シンボル",
     "typeLabel": "タイプ",
+    "profileType": "形鋼の種類",
+    "profileTypeTitle": "形鋼",
     "unknownSymbol": "不明なシンボル",
     "listNew": "新規",
     "listAdd": "追加",

@@ -648,6 +648,8 @@
     "sectionTitle": "Symboli: {{name}}",
     "symbolLabel": "Symboli",
     "typeLabel": "Tyyppi",
+    "profileType": "Profiilityyppi",
+    "profileTypeTitle": "Teräsprofiili",
     "unknownSymbol": "Tuntematon symboli",
     "listNew": "Uusi",
     "listAdd": "Lisää",

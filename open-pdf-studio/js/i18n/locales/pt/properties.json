@@ -648,6 +648,8 @@
     "sectionTitle": "Símbolo: {{name}}",
     "symbolLabel": "Símbolo",
     "typeLabel": "Tipo",
+    "profileType": "Tipo de perfil",
+    "profileTypeTitle": "Perfil de aço",
     "unknownSymbol": "Símbolo desconhecido",
     "listNew": "Novo",
     "listAdd": "Adicionar",

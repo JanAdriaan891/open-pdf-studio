@@ -648,6 +648,8 @@
     "sectionTitle": "Simbol: {{name}}",
     "symbolLabel": "Simbol",
     "typeLabel": "Tip",
+    "profileType": "Tip profil",
+    "profileTypeTitle": "Profil din oțel",
     "unknownSymbol": "Simbol necunoscut",
     "listNew": "Nou",
     "listAdd": "Adăugare",

@@ -648,6 +648,8 @@
     "sectionTitle": "סמל: {{name}}",
     "symbolLabel": "סמל",
     "typeLabel": "סוג",
+    "profileType": "סוג פרופיל",
+    "profileTypeTitle": "פרופיל פלדה",
     "unknownSymbol": "סמל לא ידוע",
     "listNew": "חדש",
     "listAdd": "הוספה",

@@ -648,6 +648,8 @@
     "sectionTitle": "Symbool: {{name}}",
     "symbolLabel": "Symbool",
     "typeLabel": "Type",
+    "profileType": "Profieltype",
+    "profileTypeTitle": "Staalprofiel",
     "unknownSymbol": "Onbekend symbool",
     "listNew": "Nieuw",
     "listAdd": "Toevoegen",

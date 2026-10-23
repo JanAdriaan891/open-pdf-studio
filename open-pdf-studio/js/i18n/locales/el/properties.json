@@ -648,6 +648,8 @@
     "sectionTitle": "Σύμβολο: {{name}}",
     "symbolLabel": "Σύμβολο",
     "typeLabel": "Τύπος",
+    "profileType": "Τύπος διατομής",
+    "profileTypeTitle": "Χαλύβδινη διατομή",
     "unknownSymbol": "Άγνωστο σύμβολο",
     "listNew": "Νέο",
     "listAdd": "Προσθήκη",

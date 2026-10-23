@@ -648,6 +648,8 @@
     "sectionTitle": "Szimbólum: {{name}}",
     "symbolLabel": "Szimbólum",
     "typeLabel": "Típus",
+    "profileType": "Szelvénytípus",
+    "profileTypeTitle": "Acélszelvény",
     "unknownSymbol": "Ismeretlen szimbólum",
     "listNew": "Új",
     "listAdd": "Hozzáadás",

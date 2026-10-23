@@ -648,6 +648,8 @@
     "sectionTitle": "Ký hiệu: {{name}}",
     "symbolLabel": "Ký hiệu",
     "typeLabel": "Kiểu",
+    "profileType": "Loại tiết diện",
+    "profileTypeTitle": "Tiết diện thép",
     "unknownSymbol": "Ký hiệu không xác định",
     "listNew": "Mới",
     "listAdd": "Thêm",

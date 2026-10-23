@@ -648,6 +648,8 @@
     "sectionTitle": "ສັນຍະລັກ: {{name}}",
     "symbolLabel": "ສັນຍະລັກ",
     "typeLabel": "ປະເພດ",
+    "profileType": "ປະເພດໂປຣໄຟລ໌",
+    "profileTypeTitle": "ໂປຣໄຟລ໌ເຫຼັກ",
     "unknownSymbol": "ບໍ່ຮູ້ຈັກສັນຍະລັກ",
     "listNew": "ໃໝ່",
     "listAdd": "ເພີ່ມ",

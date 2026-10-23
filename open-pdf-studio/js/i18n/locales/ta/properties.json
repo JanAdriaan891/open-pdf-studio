@@ -648,6 +648,8 @@
     "sectionTitle": "குறியீடு: {{name}}",
     "symbolLabel": "குறியீடு",
     "typeLabel": "வகை",
+    "profileType": "சுயவிவர வகை",
+    "profileTypeTitle": "எஃகு சுயவிவரம்",
     "unknownSymbol": "தெரியாத குறியீடு",
     "listNew": "புதியது",
     "listAdd": "சேர்",

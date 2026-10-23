@@ -648,6 +648,8 @@
     "sectionTitle": "Simbol: {{name}}",
     "symbolLabel": "Simbol",
     "typeLabel": "Vrsta",
+    "profileType": "Vrsta profila",
+    "profileTypeTitle": "Čelični profil",
     "unknownSymbol": "Nepoznat simbol",
     "listNew": "Novo",
     "listAdd": "Dodaj",

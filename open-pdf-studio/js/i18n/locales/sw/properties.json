@@ -648,6 +648,8 @@
     "sectionTitle": "Alama: {{name}}",
     "symbolLabel": "Alama",
     "typeLabel": "Aina",
+    "profileType": "Aina ya wasifu",
+    "profileTypeTitle": "Wasifu wa chuma",
     "unknownSymbol": "Ishara isiyojulikana",
     "listNew": "Mpya",
     "listAdd": "Ongeza",

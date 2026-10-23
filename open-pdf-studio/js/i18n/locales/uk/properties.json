@@ -648,6 +648,8 @@
     "sectionTitle": "Символ: {{name}}",
     "symbolLabel": "Символ",
     "typeLabel": "Тип",
+    "profileType": "Тип профілю",
+    "profileTypeTitle": "Сталевий профіль",
     "unknownSymbol": "Невідомий символ",
     "listNew": "Новий",
     "listAdd": "Додати",

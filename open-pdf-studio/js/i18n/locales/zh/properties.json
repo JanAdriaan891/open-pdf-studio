@@ -648,6 +648,8 @@
     "sectionTitle": "符号：{{name}}",
     "symbolLabel": "符号",
     "typeLabel": "类型",
+    "profileType": "型材类型",
+    "profileTypeTitle": "钢型材",
     "unknownSymbol": "未知符号",
     "listNew": "新建",
     "listAdd": "添加",

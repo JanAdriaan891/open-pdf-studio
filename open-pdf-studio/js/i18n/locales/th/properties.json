@@ -648,6 +648,8 @@
     "sectionTitle": "สัญลักษณ์: {{name}}",
     "symbolLabel": "สัญลักษณ์",
     "typeLabel": "ประเภท",
+    "profileType": "ชนิดหน้าตัด",
+    "profileTypeTitle": "หน้าตัดเหล็ก",
     "unknownSymbol": "สัญลักษณ์ที่ไม่รู้จัก",
     "listNew": "ใหม่",
     "listAdd": "เพิ่ม",

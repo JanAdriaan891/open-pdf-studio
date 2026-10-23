@@ -648,6 +648,8 @@
     "sectionTitle": "علامت: {{name}}",
     "symbolLabel": "علامت",
     "typeLabel": "قسم",
+    "profileType": "پروفائل کی قسم",
+    "profileTypeTitle": "اسٹیل پروفائل",
     "unknownSymbol": "نامعلوم علامت",
     "listNew": "نیا",
     "listAdd": "شامل کریں",

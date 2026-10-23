@@ -648,6 +648,8 @@
     "sectionTitle": "प्रतीक: {{name}}",
     "symbolLabel": "प्रतीक",
     "typeLabel": "प्रकार",
+    "profileType": "प्रोफ़ाइल प्रकार",
+    "profileTypeTitle": "स्टील प्रोफ़ाइल",
     "unknownSymbol": "अज्ञात प्रतीक",
     "listNew": "नया",
     "listAdd": "जोड़ें",

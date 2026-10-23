@@ -648,6 +648,8 @@
     "sectionTitle": "Sembol: {{name}}",
     "symbolLabel": "Sembol",
     "typeLabel": "Tür",
+    "profileType": "Profil türü",
+    "profileTypeTitle": "Çelik profil",
     "unknownSymbol": "Bilinmeyen sembol",
     "listNew": "Yeni",
     "listAdd": "Ekle",

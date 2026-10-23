@@ -648,6 +648,8 @@
     "sectionTitle": "Simbol: {{name}}",
     "symbolLabel": "Simbol",
     "typeLabel": "Jenis",
+    "profileType": "Jenis profil",
+    "profileTypeTitle": "Profil baja",
     "unknownSymbol": "Simbol tidak dikenal",
     "listNew": "Baru",
     "listAdd": "Tambah",

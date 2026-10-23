@@ -648,6 +648,8 @@
     "sectionTitle": "Simbol: {{name}}",
     "symbolLabel": "Simbol",
     "typeLabel": "Jenis",
+    "profileType": "Jenis profil",
+    "profileTypeTitle": "Profil keluli",
     "unknownSymbol": "Simbol tidak diketahui",
     "listNew": "Baharu",
     "listAdd": "Tambah",

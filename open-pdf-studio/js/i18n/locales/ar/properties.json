@@ -648,6 +648,8 @@
     "sectionTitle": "الرمز: {{name}}",
     "symbolLabel": "الرمز",
     "typeLabel": "النوع",
+    "profileType": "نوع المقطع",
+    "profileTypeTitle": "مقطع فولاذي",
     "unknownSymbol": "رمز غير معروف",
     "listNew": "جديد",
     "listAdd": "إضافة",

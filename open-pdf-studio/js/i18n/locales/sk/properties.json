@@ -648,6 +648,8 @@
     "sectionTitle": "Symbol: {{name}}",
     "symbolLabel": "Symbol",
     "typeLabel": "Typ",
+    "profileType": "Typ profilu",
+    "profileTypeTitle": "Oceľový profil",
     "unknownSymbol": "Neznámy symbol",
     "listNew": "Nový",
     "listAdd": "Pridať",

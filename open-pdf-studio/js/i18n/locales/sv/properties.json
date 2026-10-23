@@ -648,6 +648,8 @@
     "sectionTitle": "Symbol: {{name}}",
     "symbolLabel": "Symbol",
     "typeLabel": "Typ",
+    "profileType": "Profiltyp",
+    "profileTypeTitle": "Stålprofil",
     "unknownSymbol": "Okänd symbol",
     "listNew": "Ny",
     "listAdd": "Lägg till",
