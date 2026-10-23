@@ -24,7 +24,10 @@ import { embedMcpTextFont } from '../../text/mcp-text-font.js';
 // toelaat in het originele font, anders via het Standard-14-pad. Alleen als
 // de originele run niet eenduidig te lokaliseren is, valt een edit terug op
 // het oude afdekken-en-overheen-tekenen (wit vlak + nieuwe tekst).
-export async function saveTextEditsToPages(pdfDocLib, pages, doc = getActiveDocument()) {
+// kiesUnicodeFont: kiest een gebundeld volledig font voor tekst buiten WinAnsi
+// (CJK, Grieks, ...); te vervangen in tests.
+export async function saveTextEditsToPages(pdfDocLib, pages, doc = getActiveDocument(),
+  { kiesUnicodeFont = embedMcpTextFont } = {}) {
   if (!doc || !doc.textEdits || doc.textEdits.length === 0) return;
 
   const fontCache = {};
@@ -66,7 +69,7 @@ export async function saveTextEditsToPages(pdfDocLib, pages, doc = getActiveDocu
     // Eén corrupte/onencodeerbare edit mag NOOIT de hele save laten falen:
     // alle andere wijzigingen (annotaties, andere edits) moeten doorgaan.
     try {
-      await saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplaceResults.get(edit) || null);
+      await saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplaceResults.get(edit) || null, kiesUnicodeFont);
     } catch (editErr) {
       if (edit.mcpStrict) throw editErr;
       console.warn(
@@ -103,7 +106,7 @@ function drawOriginalFontRun(page, enc, sizePt, colorRgb, angleDeg, x, y) {
   page.pushOperators(...opsList);
 }
 
-async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace) {
+async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, kiesUnicodeFont) {
   const pageIndex = edit.page - 1;
   if (pageIndex < 0 || pageIndex >= pages.length) return;
 
@@ -295,20 +298,37 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace) {
         return penX + font.widthOfTextAtSize(cleaned, lineFontSize);
       }
       const { text: safe, replaced } = sanitizeWinAnsiText(cleaned);
-      if (replaced.length > 0) {
-        console.warn(
-          `[text-edits] Edit ${edit.id ?? '?'} regel ${i + 1}: niet-WinAnsi-tekens ` +
-          `vervangen bij opslaan: ${replaced.join(' ')}`,
-        );
-      }
-      if (!safe) return penX;
-      const variant = standardFontVariant(lineStyle.fontFamily, bold, italic);
-      const font = await getEditFont(variant);
       let color = lineColor;
       if (runColor) {
         const [rr, rg, rb] = hexToRgb(runColor);
         color = rgb(rr, rg, rb);
       }
+      if (replaced.length > 0) {
+        // Tekens buiten WinAnsi (CJK, Grieks, ...): een gebundeld volledig font
+        // dat ze allemaal heeft, ingebed met ToUnicode. Eerder werden ze
+        // stil '?', terwijl de weergave ze wel toonde.
+        try {
+          const { font: uniFont } = await kiesUnicodeFont(pdfDocLib, cleaned, { bold, italic });
+          page.drawText(cleaned, {
+            x: anchor.x + readDir.x * penX,
+            y: anchor.y + readDir.y * penX,
+            size: lineFontSize,
+            font: uniFont,
+            rotate: degrees(angle),
+            color,
+          });
+          bakeLine.text += cleaned;
+          return penX + uniFont.widthOfTextAtSize(cleaned, lineFontSize);
+        } catch (fontErr) {
+          console.warn(
+            `[text-edits] Edit ${edit.id ?? '?'} regel ${i + 1}: geen font met alle tekens; ` +
+            `niet-WinAnsi-tekens vervangen bij opslaan: ${replaced.join(' ')}`, fontErr,
+          );
+        }
+      }
+      if (!safe) return penX;
+      const variant = standardFontVariant(lineStyle.fontFamily, bold, italic);
+      const font = await getEditFont(variant);
       page.drawText(safe, {
         x: anchor.x + readDir.x * penX,
         y: anchor.y + readDir.y * penX,
