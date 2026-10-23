@@ -425,7 +425,12 @@
     "editTitle": "Muokkaa kirjanmerkkia",
     "titleLabel": "Otsikko:",
     "titlePlaceholder": "Kirjanmerkin otsikko",
-    "pageLabel": "Sivu:"
+    "pageLabel": "Sivu:",
+    "colorLabel": "Väri:",
+    "styleLabel": "Tyyli:",
+    "nestTitle": "Sisennä uuden kirjanmerkin alle",
+    "deleteTitle": "Poista kirjanmerkit",
+    "deleteConfirm": "Poistetaanko {{count}} valittua kirjanmerkkiä ja kaikki niiden alla olevat?"
   },
   "formValidation": {
     "title": "Vahvistusvirhe"

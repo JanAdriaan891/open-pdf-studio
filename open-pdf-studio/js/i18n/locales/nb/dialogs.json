@@ -425,7 +425,12 @@
     "editTitle": "Rediger bokmerke",
     "titleLabel": "Tittel:",
     "titlePlaceholder": "Bokmerketittel",
-    "pageLabel": "Side:"
+    "pageLabel": "Side:",
+    "colorLabel": "Farge:",
+    "styleLabel": "Stil:",
+    "nestTitle": "Legg under nytt bokmerke",
+    "deleteTitle": "Slett bokmerker",
+    "deleteConfirm": "Slette {{count}} valgte bokmerker og alt under dem?"
   },
   "formValidation": {
     "title": "Valideringsfeil"

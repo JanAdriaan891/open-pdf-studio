@@ -425,7 +425,12 @@
     "editTitle": "Lesezeichen bearbeiten",
     "titleLabel": "Titel:",
     "titlePlaceholder": "Lesezeichentitel",
-    "pageLabel": "Seite:"
+    "pageLabel": "Seite:",
+    "colorLabel": "Farbe:",
+    "styleLabel": "Stil:",
+    "nestTitle": "Unter neuem Lesezeichen verschachteln",
+    "deleteTitle": "Lesezeichen löschen",
+    "deleteConfirm": "{{count}} ausgewählte Lesezeichen und alles darunter löschen?"
   },
   "formValidation": {
     "title": "Validierungsfehler"

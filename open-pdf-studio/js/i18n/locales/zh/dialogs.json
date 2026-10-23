@@ -425,7 +425,12 @@
     "editTitle": "编辑书签",
     "titleLabel": "标题：",
     "titlePlaceholder": "书签标题",
-    "pageLabel": "页码："
+    "pageLabel": "页码：",
+    "colorLabel": "颜色：",
+    "styleLabel": "样式：",
+    "nestTitle": "嵌套到新书签下",
+    "deleteTitle": "删除书签",
+    "deleteConfirm": "删除所选的 {{count}} 个书签及其下的所有内容？"
   },
   "formValidation": {
     "title": "验证错误"

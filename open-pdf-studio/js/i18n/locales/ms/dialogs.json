@@ -425,7 +425,12 @@
     "editTitle": "Sunting Penanda Buku",
     "titleLabel": "Tajuk:",
     "titlePlaceholder": "Tajuk penanda buku",
-    "pageLabel": "Halaman:"
+    "pageLabel": "Halaman:",
+    "colorLabel": "Warna:",
+    "styleLabel": "Gaya:",
+    "nestTitle": "Sarangkan di bawah penanda buku baharu",
+    "deleteTitle": "Padam penanda buku",
+    "deleteConfirm": "Padam {{count}} penanda buku yang dipilih dan semua di bawahnya?"
   },
   "formValidation": {
     "title": "Ralat Pengesahan"

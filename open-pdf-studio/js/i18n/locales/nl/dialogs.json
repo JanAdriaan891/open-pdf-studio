@@ -406,7 +406,12 @@
     "editTitle": "Bladwijzer bewerken",
     "titleLabel": "Titel:",
     "titlePlaceholder": "Bladwijzertitel",
-    "pageLabel": "Pagina:"
+    "pageLabel": "Pagina:",
+    "colorLabel": "Kleur:",
+    "styleLabel": "Stijl:",
+    "nestTitle": "Onder nieuwe bladwijzer nesten",
+    "deleteTitle": "Bladwijzers verwijderen",
+    "deleteConfirm": "{{count}} geselecteerde bladwijzers en alles eronder verwijderen?"
   },
   "formValidation": {
     "title": "Validatiefout"

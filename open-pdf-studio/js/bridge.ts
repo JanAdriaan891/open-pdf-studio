@@ -257,6 +257,7 @@ export {
   setCountText as setBookmarkCountText,
   setEmptyMessage as setBookmarkEmptyMessage,
   setSelectedId as setBookmarkSelectedId,
+  setSelectedIds as setBookmarkSelectedIds,
   setToolbarDisabled as setBookmarkToolbarDisabled,
 } from './solid/stores/panels/bookmarksStore.js';
 

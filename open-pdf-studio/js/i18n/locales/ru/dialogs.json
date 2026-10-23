@@ -425,7 +425,12 @@
     "editTitle": "Редактировать закладку",
     "titleLabel": "Название:",
     "titlePlaceholder": "Название закладки",
-    "pageLabel": "Страница:"
+    "pageLabel": "Страница:",
+    "colorLabel": "Цвет:",
+    "styleLabel": "Стиль:",
+    "nestTitle": "Вложить в новую закладку",
+    "deleteTitle": "Удалить закладки",
+    "deleteConfirm": "Удалить выбранные закладки ({{count}}) и всё, что под ними?"
   },
   "formValidation": {
     "title": "Ошибка валидации"

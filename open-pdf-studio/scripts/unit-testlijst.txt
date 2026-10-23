@@ -347,6 +347,12 @@ js/pdf/pdf-lib-snelheid.test.mjs
 scripts/cargo-config-draagbaar.test.mjs
 # Bladwijzerpaneel: huidige bladwijzer en zoekveld (#578)
 js/ui/panels/bladwijzer-zoeken.test.mjs
+# Bladwijzers: kleur en vet/cursief (#689), rondgang en undo
+js/ui/panels/bladwijzer-stijl.test.mjs
+js/pdf/bladwijzer-rondgang.test.mjs
+js/core/bladwijzer-undo.test.mjs
+# Bladwijzers selecteren, verplaatsen en nesten (#690)
+js/ui/panels/bladwijzer-boom.test.mjs
 # Miniaturen groeien mee, kolommen en scherpte (#579)
 js/ui/panels/miniatuur-maat.test.mjs
 js/pdf/pagina-labels.test.mjs

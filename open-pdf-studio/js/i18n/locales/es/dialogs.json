@@ -425,7 +425,12 @@
     "editTitle": "Editar marcador",
     "titleLabel": "Título:",
     "titlePlaceholder": "Título del marcador",
-    "pageLabel": "Página:"
+    "pageLabel": "Página:",
+    "colorLabel": "Color:",
+    "styleLabel": "Estilo:",
+    "nestTitle": "Anidar bajo un marcador nuevo",
+    "deleteTitle": "Eliminar marcadores",
+    "deleteConfirm": "¿Eliminar {{count}} marcadores seleccionados y todo lo que hay debajo?"
   },
   "formValidation": {
     "title": "Error de validación"

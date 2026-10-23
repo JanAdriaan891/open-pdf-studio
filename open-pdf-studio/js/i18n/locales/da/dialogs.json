@@ -425,7 +425,12 @@
     "editTitle": "Rediger bogmærke",
     "titleLabel": "Titel:",
     "titlePlaceholder": "Bogmærketitel",
-    "pageLabel": "Side:"
+    "pageLabel": "Side:",
+    "colorLabel": "Farve:",
+    "styleLabel": "Stil:",
+    "nestTitle": "Indlejr under nyt bogmærke",
+    "deleteTitle": "Slet bogmærker",
+    "deleteConfirm": "Slet {{count}} markerede bogmærker og alt under dem?"
   },
   "formValidation": {
     "title": "Valideringsfejl"
