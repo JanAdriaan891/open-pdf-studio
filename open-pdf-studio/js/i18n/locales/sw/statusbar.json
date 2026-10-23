@@ -111,8 +111,8 @@
   "searchHitsMany": "Matokeo {{count}}",
   "passwordProtectedBar": "Imelindwa kwa nenosiri: imefunguliwa kwa kusoma tu.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Nenda kwenye taarifa inayofuata ya uonyeshaji. Kukosekana kwa taarifa hakuhakikishi uonyeshaji kamili.",
+    "count": "Taarifa za uonyeshaji: {{count}}",
+    "detail": "Ukurasa {{page}}: {{code}}. Jaribu kukuza kidogo au fungua hati upya; ukamilifu haujahakikishwa."
   }
 }

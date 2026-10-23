@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} תוצאות",
   "passwordProtectedBar": "מוגן בסיסמה: נפתח לקריאה בלבד.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "מעבר לממצא העיבוד הבא. היעדר ממצאים אינו מבטיח עיבוד מלא.",
+    "count": "ממצאי עיבוד: {{count}}",
+    "detail": "עמוד {{page}}: {{code}}. נסו זום נמוך יותר או פתחו את המסמך מחדש; השלמות אינה מובטחת."
   }
 }

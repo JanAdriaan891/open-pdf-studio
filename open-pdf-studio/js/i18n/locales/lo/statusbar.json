@@ -111,8 +111,8 @@
   "searchHitsMany": "ພົບ {{count}} ລາຍການ",
   "passwordProtectedBar": "ປ້ອງກັນດ້ວຍລະຫັດຜ່ານ: ເປີດແບບອ່ານຢ່າງດຽວ.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "ໄປຫາການແຈ້ງເຕືອນການສະແດງຜົນຖັດໄປ. ການບໍ່ມີການແຈ້ງເຕືອນບໍ່ໄດ້ຮັບປະກັນການສະແດງຜົນທີ່ຄົບຖ້ວນ.",
+    "count": "ການແຈ້ງເຕືອນການສະແດງຜົນ: {{count}}",
+    "detail": "ໜ້າ {{page}}: {{code}}. ລອງຊູມໜ້ອຍລົງ ຫຼື ເປີດເອກະສານຄືນໃໝ່; ບໍ່ຮັບປະກັນຄວາມຄົບຖ້ວນ."
   }
 }

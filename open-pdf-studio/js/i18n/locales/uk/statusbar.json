@@ -111,8 +111,8 @@
   "searchHitsMany": "Збігів: {{count}}",
   "passwordProtectedBar": "Захищено паролем: відкрито лише для читання.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Перейти до наступного зауваження відтворення. Відсутність зауважень не гарантує повного відтворення.",
+    "count": "Зауваження відтворення: {{count}}",
+    "detail": "Сторінка {{page}}: {{code}}. Спробуйте менший масштаб або відкрийте документ знову; повнота не гарантується."
   }
 }

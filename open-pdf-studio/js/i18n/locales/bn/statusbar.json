@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}}টি মিল",
   "passwordProtectedBar": "পাসওয়ার্ড দিয়ে সুরক্ষিত: শুধু পড়ার জন্য খোলা হয়েছে।",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "পরবর্তী রেন্ডার বার্তায় যান। কোনো বার্তা না থাকা সম্পূর্ণ রেন্ডারের নিশ্চয়তা দেয় না।",
+    "count": "রেন্ডার বার্তা: {{count}}",
+    "detail": "পৃষ্ঠা {{page}}: {{code}}। কম জুম চেষ্টা করুন বা নথিটি আবার খুলুন; সম্পূর্ণতা নিশ্চিত নয়।"
   }
 }

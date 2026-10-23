@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} treff",
   "passwordProtectedBar": "Beskyttet med passord: åpnet skrivebeskyttet.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Gå til neste gjengivelsesfunn. Ingen funn garanterer ikke en fullstendig gjengivelse.",
+    "count": "Gjengivelsesfunn: {{count}}",
+    "detail": "Side {{page}}: {{code}}. Prøv lavere zoom, eller åpne dokumentet på nytt; fullstendigheten er ikke garantert."
   }
 }

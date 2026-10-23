@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} 处匹配",
   "passwordProtectedBar": "受密码保护：已以只读方式打开。",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "转到下一条渲染提示。没有提示并不保证渲染完整。",
+    "count": "渲染提示：{{count}}",
+    "detail": "第 {{page}} 页：{{code}}。请尝试降低缩放比例或重新打开文档；不保证完整性。"
   }
 }

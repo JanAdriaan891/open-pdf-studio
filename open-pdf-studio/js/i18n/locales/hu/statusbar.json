@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} találat",
   "passwordProtectedBar": "Jelszóval védett: csak olvasásra megnyitva.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Ugrás a következő megjelenítési észrevételre. Az észrevételek hiánya nem garantálja a teljes megjelenítést.",
+    "count": "Megjelenítési észrevételek: {{count}}",
+    "detail": "{{page}}. oldal: {{code}}. Próbáljon kisebb nagyítást, vagy nyissa meg újra a dokumentumot; a teljesség nem garantált."
   }
 }

@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} hasil",
   "passwordProtectedBar": "Dilindungi kata sandi: dibuka dalam mode hanya baca.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Buka temuan render berikutnya. Tidak adanya temuan tidak menjamin render yang lengkap.",
+    "count": "Temuan render: {{count}}",
+    "detail": "Halaman {{page}}: {{code}}. Coba zoom yang lebih kecil atau buka ulang dokumen; kelengkapan tidak dijamin."
   }
 }

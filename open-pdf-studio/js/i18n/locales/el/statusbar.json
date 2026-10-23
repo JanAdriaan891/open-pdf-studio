@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} αποτελέσματα",
   "passwordProtectedBar": "Προστατεύεται με κωδικό πρόσβασης: άνοιξε μόνο για ανάγνωση.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Μετάβαση στο επόμενο εύρημα απόδοσης. Η απουσία ευρημάτων δεν εγγυάται πλήρη απόδοση.",
+    "count": "Ευρήματα απόδοσης: {{count}}",
+    "detail": "Σελίδα {{page}}: {{code}}. Δοκιμάστε μικρότερο ζουμ ή ανοίξτε ξανά το έγγραφο· η πληρότητα δεν είναι εγγυημένη."
   }
 }

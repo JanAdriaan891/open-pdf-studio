@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} osumaa",
   "passwordProtectedBar": "Suojattu salasanalla: avattu vain luku -tilassa.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Siirry seuraavaan piirtohavaintoon. Havaintojen puuttuminen ei takaa täydellistä piirtoa.",
+    "count": "Piirtohavainnot: {{count}}",
+    "detail": "Sivu {{page}}: {{code}}. Kokeile pienempää zoomausta tai avaa asiakirja uudelleen; täydellisyyttä ei taata."
   }
 }

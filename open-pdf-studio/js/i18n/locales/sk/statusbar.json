@@ -111,8 +111,8 @@
   "searchHitsMany": "Zhôd: {{count}}",
   "passwordProtectedBar": "Chránené heslom: otvorené iba na čítanie.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Prejsť na ďalšie zistenie vykresľovania. Žiadne zistenia nezaručujú úplné vykreslenie.",
+    "count": "Zistenia vykresľovania: {{count}}",
+    "detail": "Strana {{page}}: {{code}}. Skúste menšie priblíženie alebo dokument znova otvorte; úplnosť nie je zaručená."
   }
 }

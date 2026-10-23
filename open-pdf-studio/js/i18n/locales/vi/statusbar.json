@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} kết quả",
   "passwordProtectedBar": "Được bảo vệ bằng mật khẩu: đã mở ở chế độ chỉ đọc.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Đi tới thông báo hiển thị tiếp theo. Không có thông báo không đảm bảo hiển thị đầy đủ.",
+    "count": "Thông báo hiển thị: {{count}}",
+    "detail": "Trang {{page}}: {{code}}. Hãy thử thu phóng nhỏ hơn hoặc mở lại tài liệu; không đảm bảo tính đầy đủ."
   }
 }

@@ -111,8 +111,8 @@
   "searchHitsMany": "Подударања: {{count}}",
   "passwordProtectedBar": "Заштићено лозинком: отворено само за читање.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Иди на следећи налаз приказа. Без налаза не значи да је приказ потпун.",
+    "count": "Налази приказа: {{count}}",
+    "detail": "Страница {{page}}: {{code}}. Покушајте мање увећање или поново отворите документ; потпуност није загарантована."
   }
 }

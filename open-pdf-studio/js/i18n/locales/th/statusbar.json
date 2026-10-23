@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} รายการ",
   "passwordProtectedBar": "ป้องกันด้วยรหัสผ่าน: เปิดแบบอ่านอย่างเดียว",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "ไปยังข้อสังเกตการแสดงผลถัดไป การไม่มีข้อสังเกตไม่ได้รับประกันว่าแสดงผลครบถ้วน",
+    "count": "ข้อสังเกตการแสดงผล: {{count}}",
+    "detail": "หน้า {{page}}: {{code}} ลองลดการซูมหรือเปิดเอกสารใหม่ ไม่รับประกันความครบถ้วน"
   }
 }

@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} eşleşme",
   "passwordProtectedBar": "Parola ile korunuyor: salt okunur açıldı.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Sonraki görüntüleme bulgusuna git. Bulgu olmaması görüntülemenin eksiksiz olduğunu garanti etmez.",
+    "count": "Görüntüleme bulguları: {{count}}",
+    "detail": "Sayfa {{page}}: {{code}}. Daha düşük bir yakınlaştırma deneyin veya belgeyi yeniden açın; eksiksizlik garanti edilmez."
   }
 }

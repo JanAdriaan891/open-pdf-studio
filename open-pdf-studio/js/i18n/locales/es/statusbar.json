@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} coincidencias",
   "passwordProtectedBar": "Protegido con contraseña: abierto en modo de solo lectura.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Ir al siguiente aviso de renderizado. No tener avisos no garantiza un renderizado completo.",
+    "count": "Avisos de renderizado: {{count}}",
+    "detail": "Página {{page}}: {{code}}. Pruebe un zoom menor o vuelva a abrir el documento; no se garantiza que esté completo."
   }
 }

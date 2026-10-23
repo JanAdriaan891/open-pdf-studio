@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} corrispondenze",
   "passwordProtectedBar": "Protetto da password: aperto in sola lettura.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Vai alla segnalazione di rendering successiva. L’assenza di segnalazioni non garantisce un rendering completo.",
+    "count": "Segnalazioni di rendering: {{count}}",
+    "detail": "Pagina {{page}}: {{code}}. Prova uno zoom inferiore o riapri il documento; la completezza non è garantita."
   }
 }

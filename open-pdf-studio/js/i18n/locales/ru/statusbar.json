@@ -111,8 +111,8 @@
   "searchHitsMany": "Совпадений: {{count}}",
   "passwordProtectedBar": "Защищён паролем: открыт только для чтения.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Перейти к следующему замечанию отрисовки. Отсутствие замечаний не гарантирует полную отрисовку.",
+    "count": "Замечания отрисовки: {{count}}",
+    "detail": "Страница {{page}}: {{code}}. Попробуйте уменьшить масштаб или откройте документ заново; полнота не гарантируется."
   }
 }

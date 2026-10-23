@@ -111,8 +111,8 @@
   "searchHitsMany": "Dopasowania: {{count}}",
   "passwordProtectedBar": "Chroniony hasłem: otwarty tylko do odczytu.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Przejdź do następnego zgłoszenia renderowania. Brak zgłoszeń nie gwarantuje pełnego renderowania.",
+    "count": "Zgłoszenia renderowania: {{count}}",
+    "detail": "Strona {{page}}: {{code}}. Spróbuj mniejszego powiększenia lub otwórz dokument ponownie; kompletność nie jest gwarantowana."
   }
 }

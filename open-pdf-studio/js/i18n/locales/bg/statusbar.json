@@ -111,8 +111,8 @@
   "searchHitsMany": "{{count}} съвпадения",
   "passwordProtectedBar": "Защитен с парола: отворен само за четене.",
   "renderDiagnostics": {
-    "title": "Go to the next render finding. No findings does not certify complete rendering.",
-    "count": "Render findings: {{count}}",
-    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+    "title": "Към следващата бележка за изобразяването. Липсата на бележки не гарантира пълно изобразяване.",
+    "count": "Бележки за изобразяването: {{count}}",
+    "detail": "Страница {{page}}: {{code}}. Опитайте по-малко мащабиране или отворете документа отново; пълнотата не е гарантирана."
   }
 }
