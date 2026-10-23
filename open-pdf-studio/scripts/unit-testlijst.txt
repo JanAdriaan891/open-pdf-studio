@@ -448,3 +448,4 @@ js/pdf/saver/text-edit-tabelranden.test.mjs
 js/pdf/pdf-viewport-paginaschilder.test.mjs
 js/pdf/protect-pdf.test.mjs
 js/search/find-bar-resultaten.test.mjs
+js/pdf/laagstand.test.mjs

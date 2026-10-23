@@ -25,9 +25,10 @@ export function padNogInGebruik(overgebleven, pad) {
 }
 
 // ── Tijdelijke werkbestanden ───────────────────────────────────────────────
-// Een geïmporteerde tekening opent uit een tijdelijke PDF (`opds-import-…`) en
+// Een geïmporteerde tekening opent uit een tijdelijke PDF (`opds-import-…`),
 // na een paginabewerking rendert een document uit een nieuw werkbestand
-// (`opds-edit-…`). Elk document onthoudt welke van die bestanden het heeft
+// (`opds-edit-…`), en met geschakelde lagen uit een weergavekopie
+// (`opds-lagen-…`, #684). Elk document onthoudt welke van die bestanden het heeft
 // gebruikt; waar het niet meer naar verwijst hoort meteen weg, en bij sluiten
 // alles. Lukt het verwijderen niet (het bestand is nog even in gebruik), dan
 // blijft het onthouden en komt het bij de volgende gelegenheid opnieuw aan de
@@ -40,7 +41,7 @@ export function padNogInGebruik(overgebleven, pad) {
  */
 export function isWerkbestand(pad) {
   const naam = String(pad || '').split(/[\\/]/).pop();
-  return /^opds-(import|edit)-\d{10,}[^\\/]*\.pdf$/i.test(naam);
+  return /^opds-(import|edit|lagen)-\d{10,}[^\\/]*\.pdf$/i.test(naam);
 }
 
 /**
@@ -51,7 +52,7 @@ export function isWerkbestand(pad) {
  */
 export function ouderdomWerkbestand(naam, nu = Date.now()) {
   if (!isWerkbestand(naam)) return null;
-  const match = /^opds-(?:import|edit)-(\d{10,})/i.exec(String(naam).split(/[\\/]/).pop());
+  const match = /^opds-(?:import|edit|lagen)-(\d{10,})/i.exec(String(naam).split(/[\\/]/).pop());
   return match ? nu - Number(match[1]) : null;
 }
 
@@ -60,6 +61,21 @@ export function onthoudWerkbestand(doc, pad) {
   if (!doc || !isWerkbestand(pad)) return;
   const lijst = Array.isArray(doc._werkbestanden) ? doc._werkbestanden : [];
   if (!lijst.includes(pad)) doc._werkbestanden = [...lijst, pad];
+}
+
+// Werkbestanden waar de app nu nog uit tekent zonder dat het document ernaar
+// verwijst: de weergavekopie van geschakelde lagen (#684). Die blijven staan
+// tot de lagenstand ze loslaat of het tabblad sluit.
+const vastgehouden = new Set();
+
+/** Dit werkbestand is in gebruik, ook al verwijst het document er niet naar. */
+export function houdWerkbestandVast(pad) {
+  if (pad) vastgehouden.add(pad);
+}
+
+/** Niet langer vasthouden (zie houdWerkbestandVast). */
+export function laatWerkbestandLos(pad) {
+  vastgehouden.delete(pad);
 }
 
 /** Het werkbestand is weg (of was al weg): niet langer onthouden. */
@@ -83,7 +99,8 @@ function werkbestandInGebruik(documenten, pad) {
  */
 export function losgelatenWerkbestanden(doc, andere) {
   return (Array.isArray(doc?._werkbestanden) ? doc._werkbestanden : []).filter(
-    (pad) => isWerkbestand(pad) && pad !== doc.filePath && pad !== doc.saveTargetPath && !werkbestandInGebruik(andere, pad),
+    (pad) => isWerkbestand(pad) && pad !== doc.filePath && pad !== doc.saveTargetPath
+      && !vastgehouden.has(pad) && !werkbestandInGebruik(andere, pad),
   );
 }
 
@@ -185,6 +202,7 @@ export async function ruimWerkbestandenOp(doc, paden, middelen = schijfMiddelen(
     try {
       await middelen.verwijder(pad);
       vergeetWerkbestand(doc, pad);
+      laatWerkbestandLos(pad);
       weg += 1;
     } catch {
       // Al weg? Dan hoeft het ook niet meer onthouden te worden.

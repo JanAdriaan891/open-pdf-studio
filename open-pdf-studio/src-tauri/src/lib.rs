@@ -28,6 +28,7 @@ pub mod pdfx_cmyk;
 pub mod handtekening;
 pub mod headless;
 pub mod herstel;
+pub mod laagweergave;
 pub mod instantie;
 pub mod print_formulieren;
 pub mod print_instelling;
@@ -1775,6 +1776,8 @@ fn render_pdf_page_skia(
     bytes_cache: tauri::State<PdfBytesCache>,
     handle_cache: tauri::State<DocHandleCache>,
 ) -> Result<tauri::ipc::Response, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let extra_rot = rotation.unwrap_or(0);
     let doc = get_or_load_doc(&path, &bytes_cache, &handle_cache)?;
     let rendered = doc.render_page(page_index as usize, scale, extra_rot)
@@ -1818,6 +1821,8 @@ async fn render_pdf_page(
     pixmap_cache: tauri::State<'_, pdfium_renderer::PixmapCacheState>,
     pool: tauri::State<'_, std::sync::Arc<tokio::sync::OnceCell<worker_pool::WorkerPool>>>,
 ) -> Result<tauri::ipc::Response, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let extra_rot = rotation.unwrap_or(0);
     let thin_lines = thin_lines.unwrap_or(false);
     let cache_key = pdfium_renderer::pixmap_key(&path, page_index, scale, extra_rot, thin_lines);
@@ -1988,6 +1993,8 @@ async fn render_pdf_page_region(
     pdfium_cache: tauri::State<'_, pdfium_renderer::PdfiumDocCache>,
     pool: tauri::State<'_, std::sync::Arc<tokio::sync::OnceCell<worker_pool::WorkerPool>>>,
 ) -> Result<tauri::ipc::Response, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let extra_rot = rotation.unwrap_or(0);
     let thin_lines = thin_lines.unwrap_or(false);
 
@@ -2080,6 +2087,8 @@ async fn render_tile_scene_region(
     handle_cache: tauri::State<'_, DocHandleCache>,
     scene_cache: tauri::State<'_, TileSceneCache>,
 ) -> Result<tauri::ipc::Response, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let extra_rot = rotation.unwrap_or(0);
     let thin_lines = thin_lines.unwrap_or(false);
     let meta = std::fs::metadata(&path).map_err(|e| format!("stat: {}", e))?;
@@ -2231,6 +2240,8 @@ fn render_thumbnail(
     pdfium_cache: tauri::State<pdfium_renderer::PdfiumDocCache>,
     thumb_cache: tauri::State<ThumbnailCache>,
 ) -> Result<String, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let extra_rot = rotation.unwrap_or(0);
     // skip_images: PDFium renders form-data on by default but doesn't
     // expose a "drop image XObjects" knob — accept the option for API
@@ -2359,6 +2370,8 @@ fn extract_draw_commands(
     bytes_cache: tauri::State<PdfBytesCache>,
     handle_cache: tauri::State<DocHandleCache>,
 ) -> Result<Vec<u8>, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let doc = get_or_load_doc(&path, &bytes_cache, &handle_cache)?;
     let extra_rot = rotation.unwrap_or(0);
     let cmds = doc.extract_draw_commands(page_index as usize, extra_rot).map_err(|e| format!("{}", e))?;
@@ -2391,6 +2404,8 @@ fn extract_draw_commands_batch(
     bytes_cache: tauri::State<PdfBytesCache>,
     handle_cache: tauri::State<DocHandleCache>,
 ) -> Result<Vec<Vec<u8>>, String> {
+    // Geschakelde lagen (#684): teken uit de weergavekopie.
+    let path = laagweergave::tekenpad(&path);
     let doc = get_or_load_doc(&path, &bytes_cache, &handle_cache)?;
     let rots = rotations.unwrap_or_default();
     let pairs: Vec<(usize, i32)> = page_indices.iter().enumerate().map(|(i, &p)| {
@@ -2425,6 +2440,14 @@ fn invalidate_pdf_cache(
     Ok(true)
 }
 
+/// Lagen schakelen (#684): meldt de weergavekopie van een document aan
+/// (`view`) of af (`None`). Vanaf nu tekenen de render-opdrachten voor `path`
+/// uit die kopie. Geeft de vorige kopie terug.
+#[tauri::command]
+fn set_layer_view(path: String, view: Option<String>) -> Option<String> {
+    laagweergave::zet(&path, view)
+}
+
 /// Alles loslaten wat het proces voor een gesloten document vasthoudt: ruwe
 /// bytes, geparsede handles (lopdf én PDFium), thumbnails, paginatypen en
 /// pixmaps. Alleen aanroepen als geen ander open tabblad hetzelfde pad
@@ -2440,6 +2463,7 @@ fn release_pdf_document(
     pdfium_cache: tauri::State<pdfium_renderer::PdfiumDocCache>,
     pixmap_cache: tauri::State<pdfium_renderer::PixmapCacheState>,
 ) -> Result<bool, String> {
+    laagweergave::vergeet(&path);
     bytes_cache.0.lock().map_err(|e| format!("Bytes cache lock: {}", e))?.remove(&path);
     handle_cache.0.lock().map_err(|e| format!("Handle cache lock: {}", e))?.remove(&path);
     if let Ok(mut tc) = thumb_cache.0.lock() {
@@ -3056,6 +3080,7 @@ pub fn run(opts: StartupOpts) {
             handtekening::verifieer::pdf_signature_list,
             handtekening::verifieer::pdf_signed_revision,
             release_pdf_document,
+            set_layer_view,
             clear_pdf_cache,
             analyze_page_type,
             analyze_page_type_batch,
