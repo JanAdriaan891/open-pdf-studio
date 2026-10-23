@@ -468,6 +468,29 @@ export function normalizeRuns(runs) {
   return out;
 }
 
+// Is de opmaak van een regel in de editor anders dan bij het openen? Alleen
+// de stijlreeks telt (vet, cursief, kleur, onder-/doorstreping per run), niet
+// de tekst. Eerder werden de runs inclusief tekst vergeleken: elke getypte
+// letter gold dan als opmaakwijziging, waardoor het herverdelen van een
+// alinea (C2) en het ongemoeid laten van ongewijzigde regels (C3) nooit
+// gebeurden.
+export function opmaakGewijzigd(runs, beginRuns) {
+  const a = normalizeRuns(runs || []);
+  const b = normalizeRuns(beginRuns || []);
+  if (a.length !== b.length) return true;
+  return a.some((r, k) => !!r.bold !== !!b[k].bold
+    || !!r.italic !== !!b[k].italic
+    || (r.color || null) !== (b[k].color || null)
+    || !!r.underline !== !!b[k].underline
+    || !!r.strikethrough !== !!b[k].strikethrough);
+}
+
+// Wist de gebruiker alle tekst van een bestaande run (en niet van een nieuw
+// toegevoegd blok)? Dan is de bewerking: de oude tekst verwijderen.
+export function tekstGewist(nieuweTekst, origineleTekst) {
+  return String(origineleTekst ?? '').trim() !== '' && String(nieuweTekst ?? '').trim() === '';
+}
+
 // ── Opsommings-glyfs ──
 // Bullets komen in PDF's vaak uit Symbol/ZapfDingbats(-subsets); de tekstlaag
 // levert dan een PUA-codepoint (U+F0xx) of een geometrisch teken dat in de

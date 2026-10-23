@@ -25,12 +25,13 @@ import {
   textEditAngleFromTransform,
   reflowBlockLines,
   detectBlockAlignment,
-  normalizeRuns,
   pdfDeltaFromScreenDelta,
   nieuwTekstblokRecord,
   toStandardFontName,
   cssFamilyForFontName,
   originalLineRuns,
+  opmaakGewijzigd,
+  tekstGewist,
 } from '../text/text-edit-appearance.js';
 import { weergaveRotatie, paginaNaarClient, clientNaarPagina } from '../pdf/weergave-ruimte.js';
 import { groepeerTekstBlokken, blokRegelafstand } from '../text/tekst-blokken.js';
@@ -1142,20 +1143,11 @@ function finishPdfTextEditing() {
   // verloren bij commit. Vergelijk tegen de GEDETECTEERDE beginopmaak
   // (initialLineRuns): bestaande per-woord-runs die de editor toont zijn
   // geen wijziging; alleen daadwerkelijk aangepaste opmaak telt.
-  const _runsGelijk = (a, b) => {
-    const na = normalizeRuns(a || []);
-    const nb = normalizeRuns(b || []);
-    if (na.length !== nb.length) return false;
-    return na.every((r, k) => r.text === nb[k].text
-      && !!r.bold === !!nb[k].bold
-      && !!r.italic === !!nb[k].italic
-      && (r.color || null) === (nb[k].color || null));
-  };
   const _peekRuns = getEditorLineRuns();
   const inlineFormattingChanged = Array.isArray(_peekRuns) && _peekRuns.some((runs, i) => {
     if (!Array.isArray(runs) || runs.length === 0) return false;
     if (Array.isArray(initialRuns) && initialRuns[i]) {
-      return !_runsGelijk(runs, initialRuns[i]);
+      return opmaakGewijzigd(runs, initialRuns[i]);
     }
     const baseBold = block.lineData[i]?.isBold || false;
     const baseItalic = block.lineData[i]?.isItalic || false;
@@ -1164,9 +1156,14 @@ function finishPdfTextEditing() {
       || runs[0].italic !== baseItalic;
   });
 
+  // Alle tekst gewist en bevestigd: de oude tekst verwijderen, zoals de
+  // verwijderknop in het paneel. Eerder gebeurde er dan niets en bleef de
+  // tekst gewoon staan.
+  if (tekstGewist(newText, originalText)) {
+    coverExistingText(activeEditor);
   // Persist when the text OR the formatting changed (a pure re-style of
   // existing PDF text must be saveable too).
-  if ((newText !== originalText || styleChanged || inlineFormattingChanged || moved) && newText.trim() !== '') {
+  } else if ((newText !== originalText || styleChanged || inlineFormattingChanged || moved) && newText.trim() !== '') {
     const { lineData } = block;
     const pdfFontName = lineData[0].pdfFontName || '';
 
@@ -1740,6 +1737,13 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
         delete textEdit.justifyWidth;
       }
       textEdit.newText = newText;
+    } else if (tekstGewist(newText, textEdit.originalText)) {
+      // Een bewerking van bestaande tekst helemaal gewist: de oude tekst
+      // verwijderen (lege vervanging), zoals de verwijderknop.
+      textEdit.newText = '';
+      delete textEdit.unchangedLines;
+      delete textEdit.lineJustifyTw;
+      delete textEdit.justifyWidth;
     }
     // Segment- en run-structuur meesynchroniseren met de bewerkte tekst:
     // kolommen behouden zolang de tab-structuur intact is; inline opmaak
@@ -2261,6 +2265,9 @@ function coverExistingText(ed) {
     loadedFontName: '',
     pdfFontName: block.lineData[0].pdfFontName || '',
     color: st.color != null ? st.color : (block.lineData[0].color || '#000000'),
+    // Richting van de run: zonder hoek dekte de saver gedraaide tekst af en
+    // zocht hij de run in de verkeerde richting.
+    textAngle: block.lineData[0].angle || 0,
     originalLineInfo: originalLineInfoFor(block.lineData),
     originalSpanTexts: block.lineData.map(ld => ld.spans.map(s => s.textContent)),
   };
