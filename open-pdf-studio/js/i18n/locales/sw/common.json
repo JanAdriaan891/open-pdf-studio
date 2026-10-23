@@ -58,6 +58,7 @@
     "workingIn": "inafanya kazi katika",
     "viaClaude": "kupitia Claude",
     "notConnected": "haijaunganishwa",
+    "viaWorkplace": "kupitia eneo la kazi la OpenAEC",
     "keyButton": "Weka ufunguo wa API wa Claude (Anthropic)",
     "keyPlaceholder": "Ufunguo wa API wa Claude (Anthropic) — sk-ant-…",
     "thinking": "Inafikiri…",
@@ -71,6 +72,19 @@
     "errorFailed": "Mwito wa AI umeshindwa.",
     "detail": "Maelezo",
     "unknownError": "hitilafu isiyojulikana",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Msaidizi hakuweza kushughulikia swali. Jaribu tena au anza mazungumzo mapya.",
+      "te_groot": "Swali ni kubwa mno kwa huduma ya AI. Anza mazungumzo mapya au uliza swali fupi zaidi.",
+      "geen_tegoed": "Salio lako la AI limekwisha. Ongeza salio katika OpenAEC ili uendelee kutumia msaidizi.",
+      "plafond_bereikt": "Kikomo cha matumizi ya AI kimefikiwa. Mwombe msimamizi wako akiongeze.",
+      "te_druk": "Msaidizi ana shughuli nyingi sasa. Jaribu tena baada ya muda mfupi.",
+      "te_veel_vragen": "Maswali mengi mno kwa muda mfupi. Subiri dakika moja kisha ujaribu tena.",
+      "al_bezig": "Swali lako la awali bado linajibiwa. Subiri hadi likamilike.",
+      "opnieuw_inloggen": "Ingia tena kwenye OpenAEC ili kutumia msaidizi.",
+      "dienst_onbereikbaar": "Huduma ya AI haipatikani kwa sasa. Jaribu tena baadaye.",
+      "geen_antwoord": "Eneo la kazi halikujibu kwa wakati. Jaribu tena.",
+      "geen_contact": "Hakuna muunganisho na eneo la kazi. Pakia ukurasa upya kisha ujaribu tena."
+    },
     "skills": {
       "translate": {
         "label": "Tafsiri",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "Imeshindwa kupakia PDF: {{error}}",
   "hostOpenFailed": "Faili haikuweza kusomwa kutoka kwenye hifadhi. Jaribu tena.",
   "hostNoContact": "Ukurasa unaozunguka Open PDF Studio haujibu, kwa hivyo faili haziwezi kufunguliwa wala kuhifadhiwa. Pakia upya ukurasa kisha ujaribu tena.",
+  "hostSaveConflict": "Mtu mwingine amehifadhi faili hili wakati huo huo. Mabadiliko yako yamehifadhiwa kama nakala tofauti: {{name}}. Uhifadhi unaofuata utaenda kwenye nakala hiyo.",
+  "hostSaveNotLocked": "Faili hili halijahifadhiwa kwa ajili yako pekee, kwa hiyo wengine wanaweza kulibadilisha wakati huo huo. Mabadiliko yako yanahifadhiwa kama matoleo mapya; hakuna kinachoandikwa juu.",
+  "hostReadOnlySave": "Faili hili limefunguliwa kwa kusoma tu, kwa hiyo mabadiliko hayawezi kuhifadhiwa ndani yake. Tumia Hifadhi Kama ili kupakua nakala.",
   "failedToCreateDocument": "Imeshindwa kuunda hati: {{error}}",
   "failedToReplacePage": "Imeshindwa kubadilisha ukurasa: {{error}}",
   "failedToMergeFile": "Imeshindwa kuunganisha: {{file}}\n{{error}}",

@@ -58,6 +58,7 @@
     "workingIn": "al lavoro su",
     "viaClaude": "tramite Claude",
     "notConnected": "non connesso",
+    "viaWorkplace": "tramite lo spazio di lavoro OpenAEC",
     "keyButton": "Imposta la chiave API di Claude (Anthropic)",
     "keyPlaceholder": "Chiave API di Claude (Anthropic) — sk-ant-…",
     "thinking": "Sto pensando…",
@@ -71,6 +72,19 @@
     "errorFailed": "Chiamata all'IA non riuscita.",
     "detail": "Dettaglio",
     "unknownError": "errore sconosciuto",
+    "workplaceErrors": {
+      "ongeldige_vraag": "L'assistente non è riuscito a elaborare la domanda. Riprova o avvia una nuova conversazione.",
+      "te_groot": "La domanda è troppo grande per il servizio di IA. Avvia una nuova conversazione o fai una domanda più breve.",
+      "geen_tegoed": "Il tuo credito IA è esaurito. Ricarica il credito in OpenAEC per continuare a usare l'assistente.",
+      "plafond_bereikt": "È stato raggiunto il limite di spesa per l'IA. Chiedi al tuo amministratore di aumentarlo.",
+      "te_druk": "L'assistente è occupato in questo momento. Riprova tra poco.",
+      "te_veel_vragen": "Troppe domande in poco tempo. Attendi un minuto e riprova.",
+      "al_bezig": "La tua domanda precedente è ancora in elaborazione. Attendi che sia completata.",
+      "opnieuw_inloggen": "Accedi di nuovo a OpenAEC per usare l'assistente.",
+      "dienst_onbereikbaar": "Il servizio di IA non è raggiungibile al momento. Riprova più tardi.",
+      "geen_antwoord": "Lo spazio di lavoro non ha risposto in tempo. Riprova.",
+      "geen_contact": "Nessuna connessione con lo spazio di lavoro. Ricarica la pagina e riprova."
+    },
     "skills": {
       "translate": {
         "label": "Traduci",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "Impossibile caricare il PDF: {{error}}",
   "hostOpenFailed": "Impossibile leggere il file dall'archivio. Riprova.",
   "hostNoContact": "La pagina che contiene Open PDF Studio non risponde, quindi non è possibile aprire o salvare file. Ricarica la pagina e riprova.",
+  "hostSaveConflict": "Qualcun altro ha salvato questo file nel frattempo. Le tue modifiche sono state salvate in una copia separata: {{name}}. I salvataggi successivi andranno in quella copia.",
+  "hostSaveNotLocked": "Questo file non è riservato a te, quindi altri possono modificarlo contemporaneamente. Le tue modifiche vengono salvate come nuove versioni; nulla viene sovrascritto.",
+  "hostReadOnlySave": "Questo file è aperto in sola lettura, quindi non è possibile salvarvi le modifiche. Usa Salva con nome per scaricare una copia.",
   "failedToCreateDocument": "Impossibile creare il documento: {{error}}",
   "failedToReplacePage": "Impossibile sostituire la pagina: {{error}}",
   "failedToMergeFile": "Unione non riuscita: {{file}}\n{{error}}",

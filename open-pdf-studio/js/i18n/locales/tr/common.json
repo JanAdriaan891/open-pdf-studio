@@ -58,6 +58,7 @@
     "workingIn": "çalışılan belge",
     "viaClaude": "Claude üzerinden",
     "notConnected": "bağlı değil",
+    "viaWorkplace": "OpenAEC çalışma alanı üzerinden",
     "keyButton": "Claude (Anthropic) API anahtarını ayarla",
     "keyPlaceholder": "Claude (Anthropic) API anahtarı — sk-ant-…",
     "thinking": "Düşünüyorum…",
@@ -71,6 +72,19 @@
     "errorFailed": "Yapay zekâ çağrısı başarısız oldu.",
     "detail": "Ayrıntı",
     "unknownError": "bilinmeyen hata",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Asistan soruyu işleyemedi. Yeniden deneyin veya yeni bir sohbet başlatın.",
+      "te_groot": "Soru, yapay zekâ hizmeti için çok büyük. Yeni bir sohbet başlatın veya daha kısa bir soru sorun.",
+      "geen_tegoed": "Yapay zekâ krediniz bitti. Asistanı kullanmaya devam etmek için OpenAEC'te kredinizi yükleyin.",
+      "plafond_bereikt": "Yapay zekâ harcama sınırına ulaşıldı. Yöneticinizden sınırı yükseltmesini isteyin.",
+      "te_druk": "Asistan şu anda meşgul. Birazdan yeniden deneyin.",
+      "te_veel_vragen": "Kısa sürede çok fazla soru. Bir dakika bekleyip yeniden deneyin.",
+      "al_bezig": "Önceki sorunuz hâlâ yanıtlanıyor. Bitmesini bekleyin.",
+      "opnieuw_inloggen": "Asistanı kullanmak için OpenAEC'te yeniden oturum açın.",
+      "dienst_onbereikbaar": "Yapay zekâ hizmetine şu anda ulaşılamıyor. Daha sonra yeniden deneyin.",
+      "geen_antwoord": "Çalışma alanı zamanında yanıt vermedi. Yeniden deneyin.",
+      "geen_contact": "Çalışma alanıyla bağlantı yok. Sayfayı yeniden yükleyip tekrar deneyin."
+    },
     "skills": {
       "translate": {
         "label": "Çevir",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "PDF yüklenemedi: {{error}}",
   "hostOpenFailed": "Dosya depolamadan okunamadı. Yeniden deneyin.",
   "hostNoContact": "Open PDF Studio'yu içeren sayfa yanıt vermiyor, bu nedenle dosyalar açılamıyor veya kaydedilemiyor. Sayfayı yeniden yükleyip tekrar deneyin.",
+  "hostSaveConflict": "Bu dosyayı bu arada başka biri kaydetti. Değişiklikleriniz ayrı bir kopya olarak kaydedildi: {{name}}. Sonraki kayıtlar bu kopyaya gider.",
+  "hostSaveNotLocked": "Bu dosya size ayrılmış değil, bu yüzden başkaları da aynı anda değiştirebilir. Değişiklikleriniz yeni sürümler olarak kaydedilir; hiçbir şeyin üzerine yazılmaz.",
+  "hostReadOnlySave": "Bu dosya salt okunur açıldı, bu yüzden değişiklikler buna kaydedilemez. Bir kopya indirmek için Farklı Kaydet'i kullanın.",
   "failedToCreateDocument": "Belge oluşturulamadı: {{error}}",
   "failedToReplacePage": "Sayfa değiştirilemedi: {{error}}",
   "failedToMergeFile": "Birleştirilemedi: {{file}}\n{{error}}",

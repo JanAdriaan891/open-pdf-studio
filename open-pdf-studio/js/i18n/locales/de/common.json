@@ -58,6 +58,7 @@
     "workingIn": "arbeitet in",
     "viaClaude": "über Claude",
     "notConnected": "nicht verbunden",
+    "viaWorkplace": "über den OpenAEC-Arbeitsplatz",
     "keyButton": "Claude-(Anthropic-)API-Schlüssel festlegen",
     "keyPlaceholder": "Claude-(Anthropic-)API-Schlüssel — sk-ant-…",
     "thinking": "Denke nach…",
@@ -71,6 +72,19 @@
     "errorFailed": "KI-Anfrage fehlgeschlagen.",
     "detail": "Details",
     "unknownError": "unbekannter Fehler",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Der Assistent konnte die Frage nicht verarbeiten. Versuchen Sie es erneut oder beginnen Sie ein neues Gespräch.",
+      "te_groot": "Die Frage ist zu groß für den KI-Dienst. Beginnen Sie ein neues Gespräch oder stellen Sie eine kürzere Frage.",
+      "geen_tegoed": "Ihr KI-Guthaben ist aufgebraucht. Laden Sie Ihr Guthaben in OpenAEC auf, um den Assistenten weiter zu nutzen.",
+      "plafond_bereikt": "Das KI-Ausgabenlimit ist erreicht. Bitten Sie Ihren Administrator, es zu erhöhen.",
+      "te_druk": "Der Assistent ist gerade ausgelastet. Versuchen Sie es gleich noch einmal.",
+      "te_veel_vragen": "Zu viele Fragen in kurzer Zeit. Warten Sie eine Minute und versuchen Sie es erneut.",
+      "al_bezig": "Ihre vorherige Frage wird noch beantwortet. Warten Sie, bis sie fertig ist.",
+      "opnieuw_inloggen": "Melden Sie sich erneut bei OpenAEC an, um den Assistenten zu nutzen.",
+      "dienst_onbereikbaar": "Der KI-Dienst ist gerade nicht erreichbar. Versuchen Sie es später erneut.",
+      "geen_antwoord": "Der Arbeitsplatz hat nicht rechtzeitig geantwortet. Versuchen Sie es erneut.",
+      "geen_contact": "Keine Verbindung zum Arbeitsplatz. Laden Sie die Seite neu und versuchen Sie es erneut."
+    },
     "skills": {
       "translate": {
         "label": "Übersetzen",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "PDF konnte nicht geladen werden: {{error}}",
   "hostOpenFailed": "Die Datei konnte nicht aus dem Speicher gelesen werden. Versuchen Sie es erneut.",
   "hostNoContact": "Die Seite um Open PDF Studio antwortet nicht, daher können Dateien nicht geöffnet oder gespeichert werden. Laden Sie die Seite neu und versuchen Sie es erneut.",
+  "hostSaveConflict": "Jemand anderes hat diese Datei inzwischen gespeichert. Ihre Änderungen wurden als separate Kopie gespeichert: {{name}}. Weitere Speichervorgänge gehen in diese Kopie.",
+  "hostSaveNotLocked": "Diese Datei ist nicht für Sie reserviert, andere können sie also gleichzeitig ändern. Ihre Änderungen werden als neue Versionen gespeichert; nichts wird überschrieben.",
+  "hostReadOnlySave": "Diese Datei ist schreibgeschützt geöffnet, Änderungen können nicht darin gespeichert werden. Verwenden Sie „Speichern unter“, um eine Kopie herunterzuladen.",
   "failedToCreateDocument": "Dokument konnte nicht erstellt werden: {{error}}",
   "failedToReplacePage": "Seite konnte nicht ersetzt werden: {{error}}",
   "failedToMergeFile": "Zusammenführen fehlgeschlagen: {{file}}\n{{error}}",

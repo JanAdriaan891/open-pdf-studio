@@ -38,6 +38,35 @@ export function cspBeleid(hostOrigin) {
   ].join('; ');
 }
 
+/** De sandbox van de werkplek (#704): zonder allow-same-origin, dus een opaque origin. */
+export const WERKPLEK_SANDBOX = 'allow-scripts allow-downloads allow-modals';
+
+/**
+ * Het beleid op elk app-document in de werkplek van de OpenAEC SuperCloud
+ * (#704), zoals de host het zet (csp_app in openaec_werkplek/oorsprong.py):
+ * de sandbox, geen 'self', alles alleen binnen de absolute bundel-URL.
+ * @param {string} bundelUrl  bv. https://klant/werkplek/app/pdf/
+ * @param {string} klantOrigin de oorsprong van de gastpagina
+ * @param {string} [brugUrl]  de map van de brug van de host (bv. …/werkplek/app/brug/)
+ */
+export function werkplekCsp(bundelUrl, klantOrigin, brugUrl = null) {
+  return [
+    `sandbox ${WERKPLEK_SANDBOX}`,
+    "default-src 'none'",
+    `script-src ${bundelUrl}${brugUrl ? ` ${brugUrl}` : ''} 'wasm-unsafe-eval'`,
+    `worker-src ${bundelUrl} blob:`,
+    `style-src ${bundelUrl} 'unsafe-inline'`,
+    `img-src ${bundelUrl} data: blob:`,
+    `font-src ${bundelUrl} data:`,
+    `media-src ${bundelUrl} data: blob:`,
+    `connect-src ${bundelUrl}`,
+    `frame-ancestors ${klantOrigin}`,
+    "form-action 'none'",
+    "base-uri 'none'",
+    "object-src 'none'",
+  ].join('; ');
+}
+
 export function sri(data) {
   return `sha384-${createHash('sha384').update(data).digest('base64')}`;
 }

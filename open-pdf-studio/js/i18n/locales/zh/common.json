@@ -58,6 +58,7 @@
     "workingIn": "正在处理",
     "viaClaude": "通过 Claude",
     "notConnected": "未连接",
+    "viaWorkplace": "通过 OpenAEC 工作区",
     "keyButton": "设置 Claude (Anthropic) API 密钥",
     "keyPlaceholder": "Claude (Anthropic) API 密钥 — sk-ant-…",
     "thinking": "思考中…",
@@ -71,6 +72,19 @@
     "errorFailed": "AI 调用失败。",
     "detail": "详细信息",
     "unknownError": "未知错误",
+    "workplaceErrors": {
+      "ongeldige_vraag": "助手无法处理这个问题。请重试或开始新的对话。",
+      "te_groot": "问题太大，AI 服务无法处理。请开始新的对话或提出更简短的问题。",
+      "geen_tegoed": "你的 AI 额度已用完。请在 OpenAEC 中充值额度，以继续使用助手。",
+      "plafond_bereikt": "已达到 AI 支出上限。请让管理员提高上限。",
+      "te_druk": "助手当前繁忙。请稍后再试。",
+      "te_veel_vragen": "短时间内提问过多。请等待一分钟后再试。",
+      "al_bezig": "你上一个问题仍在回答中。请等待其完成。",
+      "opnieuw_inloggen": "请重新登录 OpenAEC 以使用助手。",
+      "dienst_onbereikbaar": "当前无法连接 AI 服务。请稍后再试。",
+      "geen_antwoord": "工作区未能及时响应。请重试。",
+      "geen_contact": "未连接到工作区。请重新加载页面后重试。"
+    },
     "skills": {
       "translate": {
         "label": "翻译",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "加载 PDF 失败：{{error}}",
   "hostOpenFailed": "无法从存储中读取该文件。请重试。",
   "hostNoContact": "包含 Open PDF Studio 的页面没有响应，因此无法打开或保存文件。请重新加载页面后重试。",
+  "hostSaveConflict": "在此期间有其他人保存了此文件。你的更改已另存为一个副本：{{name}}。之后的保存都会写入该副本。",
+  "hostSaveNotLocked": "此文件没有为你锁定，因此其他人可以同时修改它。你的更改会保存为新版本，不会覆盖任何内容。",
+  "hostReadOnlySave": "此文件以只读方式打开，无法保存更改。请使用“另存为”下载一个副本。",
   "failedToCreateDocument": "创建文档失败：{{error}}",
   "failedToReplacePage": "替换页面失败：{{error}}",
   "failedToMergeFile": "合并失败：{{file}}\n{{error}}",

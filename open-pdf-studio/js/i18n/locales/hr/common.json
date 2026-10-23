@@ -58,6 +58,7 @@
     "workingIn": "radi u",
     "viaClaude": "preko Claudea",
     "notConnected": "nije povezano",
+    "viaWorkplace": "putem radnog mjesta OpenAEC",
     "keyButton": "Postavi Claude (Anthropic) API ključ",
     "keyPlaceholder": "Claude (Anthropic) API ključ — sk-ant-…",
     "thinking": "Razmišljam…",
@@ -71,6 +72,19 @@
     "errorFailed": "AI poziv nije uspio.",
     "detail": "Pojedinosti",
     "unknownError": "nepoznata pogreška",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Asistent nije mogao obraditi pitanje. Pokušajte ponovno ili započnite novi razgovor.",
+      "te_groot": "Pitanje je preveliko za AI uslugu. Započnite novi razgovor ili postavite kraće pitanje.",
+      "geen_tegoed": "Vaš AI kredit je potrošen. Nadopunite kredit u OpenAEC-u kako biste nastavili koristiti asistenta.",
+      "plafond_bereikt": "Dosegnuto je ograničenje potrošnje za AI. Zamolite administratora da ga poveća.",
+      "te_druk": "Asistent je trenutno zauzet. Pokušajte ponovno za trenutak.",
+      "te_veel_vragen": "Previše pitanja u kratkom vremenu. Pričekajte minutu i pokušajte ponovno.",
+      "al_bezig": "Na vaše prethodno pitanje još se odgovara. Pričekajte da završi.",
+      "opnieuw_inloggen": "Ponovno se prijavite u OpenAEC kako biste koristili asistenta.",
+      "dienst_onbereikbaar": "AI usluga trenutno nije dostupna. Pokušajte kasnije.",
+      "geen_antwoord": "Radno mjesto nije odgovorilo na vrijeme. Pokušajte ponovno.",
+      "geen_contact": "Nema veze s radnim mjestom. Ponovno učitajte stranicu i pokušajte ponovno."
+    },
     "skills": {
       "translate": {
         "label": "Prevedi",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "Učitavanje PDF-a nije uspjelo: {{error}}",
   "hostOpenFailed": "Datoteku nije bilo moguće pročitati iz pohrane. Pokušajte ponovno.",
   "hostNoContact": "Stranica oko Open PDF Studija ne odgovara pa se datoteke ne mogu otvoriti ni spremiti. Ponovno učitajte stranicu i pokušajte ponovno.",
+  "hostSaveConflict": "Netko drugi je u međuvremenu spremio ovu datoteku. Vaše promjene spremljene su kao zasebna kopija: {{name}}. Sljedeća spremanja idu u tu kopiju.",
+  "hostSaveNotLocked": "Ova datoteka nije rezervirana za vas, pa je drugi mogu mijenjati u isto vrijeme. Vaše promjene spremaju se kao nove verzije; ništa se ne prepisuje.",
+  "hostReadOnlySave": "Ova je datoteka otvorena samo za čitanje, pa se u nju ne mogu spremiti promjene. Upotrijebite Spremi kao da biste preuzeli kopiju.",
   "failedToCreateDocument": "Izrada dokumenta nije uspjela: {{error}}",
   "failedToReplacePage": "Zamjena stranice nije uspjela: {{error}}",
   "failedToMergeFile": "Spajanje nije uspjelo: {{file}}\n{{error}}",

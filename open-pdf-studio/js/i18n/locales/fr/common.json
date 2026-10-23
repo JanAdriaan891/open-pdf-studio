@@ -58,6 +58,7 @@
     "workingIn": "travaille dans",
     "viaClaude": "via Claude",
     "notConnected": "non connecté",
+    "viaWorkplace": "via l'espace de travail OpenAEC",
     "keyButton": "Définir la clé API Claude (Anthropic)",
     "keyPlaceholder": "Clé API Claude (Anthropic) — sk-ant-…",
     "thinking": "Réflexion…",
@@ -71,6 +72,19 @@
     "errorFailed": "La requête IA a échoué.",
     "detail": "Détail",
     "unknownError": "erreur inconnue",
+    "workplaceErrors": {
+      "ongeldige_vraag": "L'assistant n'a pas pu traiter la question. Réessayez ou commencez une nouvelle conversation.",
+      "te_groot": "La question est trop volumineuse pour le service d'IA. Commencez une nouvelle conversation ou posez une question plus courte.",
+      "geen_tegoed": "Votre crédit IA est épuisé. Rechargez votre crédit dans OpenAEC pour continuer à utiliser l'assistant.",
+      "plafond_bereikt": "Le plafond de dépenses IA est atteint. Demandez à votre administrateur de le relever.",
+      "te_druk": "L'assistant est occupé pour le moment. Réessayez dans un instant.",
+      "te_veel_vragen": "Trop de questions en peu de temps. Attendez une minute et réessayez.",
+      "al_bezig": "Votre question précédente est encore en cours de traitement. Attendez qu'elle soit terminée.",
+      "opnieuw_inloggen": "Reconnectez-vous à OpenAEC pour utiliser l'assistant.",
+      "dienst_onbereikbaar": "Le service d'IA est injoignable pour le moment. Réessayez plus tard.",
+      "geen_antwoord": "L'espace de travail n'a pas répondu à temps. Réessayez.",
+      "geen_contact": "Pas de connexion avec l'espace de travail. Rechargez la page et réessayez."
+    },
     "skills": {
       "translate": {
         "label": "Traduire",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "Impossible de charger le PDF : {{error}}",
   "hostOpenFailed": "Le fichier n'a pas pu être lu depuis le stockage. Réessayez.",
   "hostNoContact": "La page qui contient Open PDF Studio ne répond pas : les fichiers ne peuvent être ni ouverts ni enregistrés. Rechargez la page et réessayez.",
+  "hostSaveConflict": "Quelqu'un d'autre a enregistré ce fichier entre-temps. Vos modifications ont été enregistrées dans une copie distincte : {{name}}. Les prochains enregistrements iront dans cette copie.",
+  "hostSaveNotLocked": "Ce fichier ne vous est pas réservé : d'autres personnes peuvent le modifier en même temps. Vos modifications sont enregistrées comme nouvelles versions ; rien n'est écrasé.",
+  "hostReadOnlySave": "Ce fichier est ouvert en lecture seule : les modifications ne peuvent pas y être enregistrées. Utilisez Enregistrer sous pour télécharger une copie.",
   "failedToCreateDocument": "Impossible de créer le document : {{error}}",
   "failedToReplacePage": "Impossible de remplacer la page : {{error}}",
   "failedToMergeFile": "Échec de la fusion : {{file}}\n{{error}}",

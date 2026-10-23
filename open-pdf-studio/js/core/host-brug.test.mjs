@@ -8,6 +8,7 @@ import test from 'node:test';
 import {
   isGeldigeOorsprong, leesBrugHash, brugGegevens, maakHostBrug, installeerHostBrug,
   BrugFout, WERKPLEK, HALLO_INTERVAL_MS, HALLO_OPGEVEN_MS, VERZOEK_TIMEOUT_MS,
+  normaliseerOpslaan, opslaanMelding, AI_FOUTCODES,
 } from './host-brug.js';
 
 const OUDER = 'https://cloud.example.org';
@@ -72,7 +73,7 @@ function nepVenster({ hash = `#ouder=${encodeURIComponent(OUDER)}&app=pdf&bestan
 }
 
 const ok = (antwoord, waarde) => ({ werkplek: WERKPLEK, antwoord, ok: true, waarde });
-const mis = (antwoord, fout) => ({ werkplek: WERKPLEK, antwoord, ok: false, fout });
+const mis = (antwoord, fout, code) => ({ werkplek: WERKPLEK, antwoord, ok: false, fout, ...(code !== undefined ? { code } : {}) });
 const rust = () => new Promise((r) => setImmediate(r));
 
 /** Brug in een nepvenster, met de handdruk al beantwoord. */
@@ -134,6 +135,9 @@ test('installeren: zet het contract neer en begint de handdruk; een bestaand con
   assert.ok(brug);
   assert.equal(venster.__OPDS_HOST__.document, 'DOC-1');
   for (const f of ['open', 'save', 'list', 'versions']) assert.equal(typeof venster.__OPDS_HOST__.storage[f], 'function', f);
+  assert.equal(typeof venster.__OPDS_HOST__.ai.vraag, 'function', 'ai.vraag');
+  assert.equal(typeof venster.__OPDS_HOST__.geopend, 'function', 'geopend');
+  assert.equal(typeof venster.__OPDS_HOST__.melding, 'function', 'melding');
   assert.deepEqual(venster.parent.soorten(), ['hallo']);
   assert.equal(venster.parent.verzonden[0].doel, OUDER, 'alleen naar ouder');
   brug.stop();
@@ -302,43 +306,50 @@ test('elk verzoek geeft na 120 s op; een laat antwoord doet dan niets meer', asy
   assert.equal(tijd.aantal, 0);
 });
 
-// ── De vier soorten ────────────────────────────────────────────────────────
-test('open: adres van de gastpagina ophalen zonder cookies, cache of omleiding', async () => {
+// ── De soorten van de werkplek (#704) ─────────────────────────────────────
+const pdfBytes = () => Uint8Array.from([37, 80, 68, 70, 45]).buffer;
+
+test('open: de bytes komen in het antwoord (overgedragen ArrayBuffer); de app haalt niets op', async () => {
   const opgehaald = [];
-  const fetch = async (url, opties) => {
-    opgehaald.push({ url, opties });
-    return { ok: true, status: 200, arrayBuffer: async () => Uint8Array.from([37, 80, 68, 70]).buffer };
-  };
-  const { brug, venster, ouder } = await verbondenBrug({ fetch });
-  const open = brug.opslag.open('DOC-1');
-  await rust();
-  const v = ouder.laatste('open').bericht;
-  assert.deepEqual(v, { bestand: 'DOC-1', werkplek: 1, id: v.id, soort: 'open' });
-  venster.ontvang(ok(v.id, { naam: 'Plattegrond.pdf', adres: 'https://opslag.example/t/abc?sig=1' }));
-  const { name, data } = await open;
-  assert.equal(name, 'Plattegrond.pdf');
-  assert.deepEqual([...new Uint8Array(data)], [37, 80, 68, 70]);
-  assert.equal(opgehaald.length, 1);
-  assert.equal(opgehaald[0].url, 'https://opslag.example/t/abc?sig=1');
-  assert.equal(opgehaald[0].opties.credentials, 'omit');
-  assert.equal(opgehaald[0].opties.cache, 'no-store');
-  assert.equal(opgehaald[0].opties.redirect, 'error');
+  const echteFetch = globalThis.fetch;
+  globalThis.fetch = async (...a) => { opgehaald.push(a); throw new Error('mag niet'); };
+  try {
+    const { brug, venster, ouder } = await verbondenBrug();
+    const open = brug.opslag.open('DOC-1');
+    await rust();
+    const v = ouder.laatste('open').bericht;
+    assert.deepEqual(v, { bestand: 'DOC-1', werkplek: 1, id: v.id, soort: 'open' });
+    const bytes = pdfBytes();
+    venster.ontvang(ok(v.id, { bestand: 'DOC-1', naam: 'Plattegrond.pdf', versie: 4, alleen_lezen: false, bytes }));
+    const uit = await open;
+    assert.equal(uit.name, 'Plattegrond.pdf');
+    assert.ok(uit.data instanceof Uint8Array);
+    assert.deepEqual([...uit.data], [37, 80, 68, 70, 45]);
+    assert.equal(uit.data.buffer, bytes, 'de overgedragen buffer zelf, niet gekopieerd');
+    assert.equal(uit.versie, 4);
+    assert.equal(uit.alleenLezen, false);
+    assert.equal(uit.bestand, 'DOC-1');
+
+    const alleenLezen = brug.opslag.open('DOC-2');
+    await rust();
+    venster.ontvang(ok(ouder.laatste('open').bericht.id, { bestand: 'DOC-2', naam: 'B.pdf', versie: 1, alleen_lezen: true, bytes: pdfBytes() }));
+    assert.equal((await alleenLezen).alleenLezen, true, 'alleen_lezen gaat door naar de app');
+    assert.equal(opgehaald.length, 0, 'geen enkele fetch');
+  } finally {
+    globalThis.fetch = echteFetch;
+  }
 });
 
 test('open: elke mislukking draagt de vertaalde melding voor de gebruiker', async () => {
   const gevallen = [
     ['de gastpagina weigert', (v, venster) => venster.ontvang(mis(v.id, 'Forbidden'))],
-    ['geen adres', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf' }))],
-    ['een ongeldig adres', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf', adres: 'javascript:alert(1)' }))],
-    ['ophalen mislukt', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf', adres: 'https://opslag.example/404' }))],
-    ['omleiding of netwerkfout', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf', adres: 'https://opslag.example/omleiding' }))],
+    ['geen bytes', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf' }))],
+    ['alleen een adres (oud protocol)', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf', adres: 'https://opslag.example/t/abc' }))],
+    ['bytes als tekst', (v, venster) => venster.ontvang(ok(v.id, { naam: 'a.pdf', bytes: '%PDF-' }))],
+    ['geen object', (v, venster) => venster.ontvang(ok(v.id, null))],
   ];
-  const fetch = async (url) => {
-    if (url.endsWith('/omleiding')) throw new TypeError('Failed to fetch');
-    return { ok: false, status: 404, arrayBuffer: async () => new ArrayBuffer(0) };
-  };
   for (const [naam, antwoord] of gevallen) {
-    const { brug, venster, ouder } = await verbondenBrug({ fetch, vertaal: (s) => `vertaald:${s}` });
+    const { brug, venster, ouder } = await verbondenBrug({ vertaal: (s) => `vertaald:${s}` });
     const open = brug.opslag.open('DOC-1');
     await rust();
     antwoord(ouder.laatste('open').bericht, venster);
@@ -348,7 +359,7 @@ test('open: elke mislukking draagt de vertaalde melding voor de gebruiker', asyn
     }, naam);
   }
   // Zonder vertaling: de Engelse tekst uit het issue.
-  const { brug, tijd } = await verbondenBrug({ fetch });
+  const { brug, tijd } = await verbondenBrug();
   const open = brug.opslag.open('DOC-1');
   await rust();
   tijd.vooruit(VERZOEK_TIMEOUT_MS);
@@ -356,8 +367,9 @@ test('open: elke mislukking draagt de vertaalde melding voor de gebruiker', asyn
     && e.gebruikersMelding === 'The file could not be read from storage. Try again.');
 });
 
-test('opslaan: een eigen kopie van de bytes gaat als transferable mee', async () => {
-  const { brug, venster, ouder } = await verbondenBrug();
+test('opslaan: een eigen kopie van de bytes gaat als transferable mee; het antwoord in vaste vorm', async () => {
+  const uitkomsten = [];
+  const { brug, venster, ouder } = await verbondenBrug({ bijOpslaan: (u) => uitkomsten.push(u) });
   const groot = Uint8Array.from([0, 0, 1, 2, 3, 0]);
   const bytes = groot.subarray(2, 5); // een venster op een grotere buffer
   const opslaan = brug.opslag.save('DOC-1', bytes, { name: 'a.pdf' });
@@ -370,8 +382,117 @@ test('opslaan: een eigen kopie van de bytes gaat als transferable mee', async ()
   assert.deepEqual(overdracht, [bericht.bytes]);
   assert.notEqual(bericht.bytes, groot.buffer, 'de buffer van de app zelf blijft van de app');
   assert.deepEqual(Object.keys(bericht).sort(), ['bestand', 'bytes', 'id', 'soort', 'werkplek']);
-  venster.ontvang(ok(bericht.id, { versie: '3' }));
-  assert.deepEqual(await opslaan, { versie: '3' }, 'het resultaat van de gastpagina');
+  venster.ontvang(ok(bericht.id, { bestand: 'DOC-1', naam: 'a.pdf', versie: 3, conflict: false, melding: null, vergrendeld: true }));
+  const verwacht = { bestand: 'DOC-1', naam: 'a.pdf', versie: 3, conflict: false, melding: null, vergrendeld: true };
+  assert.deepEqual(await opslaan, verwacht);
+  assert.deepEqual(uitkomsten, [verwacht], 'de koppeling hoort de uitkomst');
+});
+
+test('opslaan: een conflict komt bij de koppeling, met de naam van de kopie', async () => {
+  const uitkomsten = [];
+  const { brug, venster, ouder } = await verbondenBrug({ bijOpslaan: (u) => uitkomsten.push(u) });
+  const opslaan = brug.opslag.save('DOC-1', Uint8Array.from([1]));
+  await rust();
+  venster.ontvang(ok(ouder.laatste('opslaan').bericht.id, {
+    bestand: 'DOC-9', naam: 'Plattegrond (conflict).pdf', versie: 1, conflict: true,
+    melding: 'Iemand anders sloeg dit bestand intussen op.', vergrendeld: false,
+  }));
+  const uit = await opslaan;
+  assert.equal(uit.conflict, true);
+  assert.equal(uit.naam, 'Plattegrond (conflict).pdf');
+  assert.equal(uit.vergrendeld, false);
+  assert.equal(uitkomsten.length, 1);
+});
+
+test('opslaan: een weigering van de gastpagina is een fout (het document blijft gewijzigd)', async () => {
+  const uitkomsten = [];
+  const { brug, venster, ouder } = await verbondenBrug({ bijOpslaan: (u) => uitkomsten.push(u) });
+  const opslaan = brug.opslag.save('DOC-1', Uint8Array.from([1]));
+  await rust();
+  venster.ontvang(mis(ouder.laatste('opslaan').bericht.id, 'Dit bestand is alleen-lezen geopend.'));
+  await assert.rejects(opslaan, (e) => e.code === 'host' && e.message === 'Dit bestand is alleen-lezen geopend.');
+  assert.equal(uitkomsten.length, 0);
+});
+
+test('normaliseerOpslaan: vaste velden, ook bij een onvolledig antwoord', () => {
+  assert.deepEqual(normaliseerOpslaan(null), {
+    bestand: null, naam: null, versie: null, conflict: false, melding: null, vergrendeld: null,
+  });
+  assert.deepEqual(normaliseerOpslaan({ bestand: 7, naam: 'a.pdf', versie: 2, conflict: 'ja', melding: '  ', vergrendeld: 0 }), {
+    bestand: '7', naam: 'a.pdf', versie: 2, conflict: false, melding: null, vergrendeld: null,
+  });
+});
+
+test('opslaanMelding: conflict, niet vastgezet (één keer per bestand) en de melding van de gastpagina', () => {
+  const t = (s, o) => (o ? `${s}(${o.name})` : s);
+  const gemeld = new Set();
+  const gewoon = normaliseerOpslaan({ bestand: 'A', naam: 'a.pdf', versie: 2, conflict: false, vergrendeld: true });
+  assert.equal(opslaanMelding(gewoon, t, gemeld), null, 'een gewone opslag: niets te melden');
+  const conflict = normaliseerOpslaan({ bestand: 'B', naam: 'a (kopie).pdf', versie: 1, conflict: true, melding: 'Server zegt kopie.', vergrendeld: false });
+  assert.equal(opslaanMelding(conflict, t, gemeld), 'hostSaveConflict(a (kopie).pdf)\n\nhostSaveNotLocked\n\nServer zegt kopie.');
+  assert.equal(opslaanMelding(conflict, t, gemeld), 'hostSaveConflict(a (kopie).pdf)\n\nServer zegt kopie.', 'niet vastgezet maar één keer');
+  assert.equal(opslaanMelding(normaliseerOpslaan({ bestand: 'A', melding: 'Let op.' }), t, gemeld), 'Let op.');
+  assert.equal(opslaanMelding(null, t), null);
+});
+
+test('geopend en melding: velden zoals de gastpagina ze leest', async () => {
+  const { brug, venster, ouder } = await verbondenBrug();
+  const geopend = brug.geopend('DOC-1');
+  await rust();
+  const g = ouder.laatste('geopend').bericht;
+  assert.deepEqual(g, { bestand: 'DOC-1', werkplek: 1, id: g.id, soort: 'geopend' });
+  venster.ontvang(ok(g.id, true));
+  assert.equal(await geopend, true);
+
+  const melding = brug.melding('Kon niet openen', 'waarschuwing');
+  await rust();
+  const m = ouder.laatste('melding').bericht;
+  assert.deepEqual(m, { tekst: 'Kon niet openen', toon: 'waarschuwing', werkplek: 1, id: m.id, soort: 'melding' });
+  venster.ontvang(ok(m.id, true));
+  assert.equal(await melding, true);
+
+  const onbekendeToon = brug.melding('x', 'paars');
+  await rust();
+  assert.equal(ouder.laatste('melding').bericht.toon, 'fout', 'een onbekende toon wordt fout (de standaard)');
+  venster.ontvang(ok(ouder.laatste('melding').bericht.id, true));
+  await onbekendeToon;
+  const aantal = ouder.verzonden.length;
+  assert.equal(await brug.melding('   '), false, 'een lege melding gaat niet naar buiten');
+  assert.equal(ouder.verzonden.length, aantal);
+});
+
+test('ai.vraag: de vraag in OpenAI-chatvorm; het bericht komt ongewijzigd terug', async () => {
+  const { brug, venster, ouder } = await verbondenBrug();
+  const vraag = { messages: [{ role: 'system', content: 'Je bent behulpzaam.' }, { role: 'user', content: 'Hoi' }], max_tokens: 50 };
+  const antwoord = brug.ai.vraag(vraag);
+  await rust();
+  const v = ouder.laatste('ai.vraag').bericht;
+  assert.deepEqual(v, { vraag, werkplek: 1, id: v.id, soort: 'ai.vraag' });
+  const bericht = { role: 'assistant', content: 'Hallo!', openaec_denkblokken: [{ type: 'thinking', signature: 'x' }] };
+  venster.ontvang(ok(v.id, { bericht, stop: 'stop', vraag_id: 'V-1' }));
+  const uit = await antwoord;
+  assert.deepEqual(uit, { bericht, stop: 'stop', vraag_id: 'V-1' });
+  assert.equal(uit.bericht, bericht, 'hetzelfde object: ongewijzigd terug in de volgende beurt');
+});
+
+test('ai.vraag: elke foutcode van de gastpagina komt mee als hostCode', async () => {
+  for (const code of AI_FOUTCODES) {
+    const { brug, venster, ouder } = await verbondenBrug();
+    const antwoord = brug.ai.vraag({ messages: [{ role: 'user', content: 'x' }] });
+    await rust();
+    venster.ontvang(mis(ouder.laatste('ai.vraag').bericht.id, `melding voor ${code}`, code));
+    await assert.rejects(antwoord, (e) => e instanceof BrugFout && e.code === 'host' && e.hostCode === code && e.message === `melding voor ${code}`, code);
+  }
+  const { brug, venster, ouder } = await verbondenBrug();
+  const zonderCode = brug.ai.vraag({ messages: [{ role: 'user', content: 'x' }] });
+  await rust();
+  venster.ontvang(mis(ouder.laatste('ai.vraag').bericht.id, 'kapot', null));
+  await assert.rejects(zonderCode, (e) => e.hostCode === null);
+  await assert.rejects(brug.ai.vraag({ prompt: 'geen messages' }), (e) => e.hostCode === 'ongeldige_vraag');
+  const leeg = brug.ai.vraag({ messages: [] });
+  await rust();
+  venster.ontvang(ok(ouder.laatste('ai.vraag').bericht.id, { stop: 'stop' }));
+  await assert.rejects(leeg, (e) => e.code === 'antwoord', 'een antwoord zonder bericht');
 });
 
 test('lijst en versies in de vorm van het contract', async () => {
@@ -380,18 +501,21 @@ test('lijst en versies in de vorm van het contract', async () => {
   await rust();
   const vl = ouder.laatste('lijst').bericht;
   assert.deepEqual(Object.keys(vl).sort(), ['id', 'soort', 'werkplek']);
-  venster.ontvang(ok(vl.id, [{ id: 7, naam: 'Gevel.pdf' }, { id: 'B', name: 'B.pdf', modified: 'gisteren' }, null, { naam: 'zonder id' }]));
+  venster.ontvang(ok(vl.id, [{ id: 7, naam: 'Gevel.pdf' }, { id: 'B', name: 'B.pdf', modified: '2026-10-01 12:00:00' }, null, { naam: 'zonder id' }]));
   assert.deepEqual(await lijst, [
     { id: '7', naam: 'Gevel.pdf', name: 'Gevel.pdf' },
-    { id: 'B', name: 'B.pdf', modified: 'gisteren' },
+    { id: 'B', name: 'B.pdf', modified: '2026-10-01 12:00:00' },
   ]);
 
   const versies = brug.opslag.versions('DOC-1');
   await rust();
   const vv = ouder.laatste('versies').bericht;
   assert.equal(vv.bestand, 'DOC-1');
-  venster.ontvang(ok(vv.id, [{ versie: 2, auteur: 'An' }, { version: '1' }]));
-  assert.deepEqual(await versies, [{ versie: 2, auteur: 'An', version: '2' }, { version: '1' }]);
+  venster.ontvang(ok(vv.id, [{ version: 2, modified: '2026-10-02', author: 'an@example.org' }, { versie: 1 }]));
+  assert.deepEqual(await versies, [
+    { version: '2', modified: '2026-10-02', author: 'an@example.org' },
+    { versie: 1, version: '1' },
+  ]);
 
   const leeg = brug.opslag.versions('DOC-2');
   await rust();
