@@ -71,6 +71,12 @@
     "site": "באתר זה",
     "noSiteDocuments": "אין מסמכים באתר זה",
     "siteListError": "לא ניתן לטעון את המסמכים של אתר זה",
+    "versions": "גרסאות",
+    "versionNumber": "גרסה {{version}}",
+    "currentVersion": "נוכחית",
+    "noVersions": "אין גרסאות",
+    "versionsError": "לא ניתן היה לטעון את הגרסאות",
+    "olderVersionsHint": "כאן ניתן לפתוח רק את הגרסה הנוכחית.",
     "save": "שמור"
   },
   "importPanel": {

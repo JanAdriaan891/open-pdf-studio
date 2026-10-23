@@ -71,6 +71,12 @@
     "site": "Na ovom web-mjestu",
     "noSiteDocuments": "Nema dokumenata na ovom web-mjestu",
     "siteListError": "Dokumente ovog web-mjesta nije moguće učitati",
+    "versions": "Verzije",
+    "versionNumber": "Verzija {{version}}",
+    "currentVersion": "trenutna",
+    "noVersions": "Nema verzija",
+    "versionsError": "Verzije se nisu mogle učitati",
+    "olderVersionsHint": "Ovdje se može otvoriti samo trenutna verzija.",
     "save": "Spremi"
   },
   "importPanel": {

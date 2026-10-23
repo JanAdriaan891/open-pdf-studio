@@ -140,6 +140,7 @@
   "failedToSavePdf": "PDF'en kunne ikke gemmes: {{error}}",
   "failedToLoadPdf": "PDF'en kunne ikke indlæses: {{error}}",
   "hostOpenFailed": "Filen kunne ikke læses fra lageret. Prøv igen.",
+  "hostInvalidPdf": "{{name}} er ikke en gyldig PDF-fil og kunne ikke åbnes.",
   "hostNoContact": "Siden omkring Open PDF Studio svarer ikke, så filer kan ikke åbnes eller gemmes. Genindlæs siden, og prøv igen.",
   "hostSaveConflict": "En anden har gemt denne fil i mellemtiden. Dine ændringer er gemt som en separat kopi: {{name}}. Fremtidige gemninger går til den kopi.",
   "hostSaveNotLocked": "Denne fil er ikke reserveret til dig, så andre kan ændre den samtidig. Dine ændringer gemmes som nye versioner; intet bliver overskrevet.",

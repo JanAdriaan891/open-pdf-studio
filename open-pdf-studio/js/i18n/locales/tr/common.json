@@ -140,6 +140,7 @@
   "failedToSavePdf": "PDF kaydedilemedi: {{error}}",
   "failedToLoadPdf": "PDF yüklenemedi: {{error}}",
   "hostOpenFailed": "Dosya depolamadan okunamadı. Yeniden deneyin.",
+  "hostInvalidPdf": "{{name}} geçerli bir PDF dosyası değil ve açılamadı.",
   "hostNoContact": "Open PDF Studio'yu içeren sayfa yanıt vermiyor, bu nedenle dosyalar açılamıyor veya kaydedilemiyor. Sayfayı yeniden yükleyip tekrar deneyin.",
   "hostSaveConflict": "Bu dosyayı bu arada başka biri kaydetti. Değişiklikleriniz ayrı bir kopya olarak kaydedildi: {{name}}. Sonraki kayıtlar bu kopyaya gider.",
   "hostSaveNotLocked": "Bu dosya size ayrılmış değil, bu yüzden başkaları da aynı anda değiştirebilir. Değişiklikleriniz yeni sürümler olarak kaydedilir; hiçbir şeyin üzerine yazılmaz.",

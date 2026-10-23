@@ -71,6 +71,12 @@
     "site": "Ezen a webhelyen",
     "noSiteDocuments": "Nincsenek dokumentumok ezen a webhelyen",
     "siteListError": "A webhely dokumentumait nem sikerült betölteni",
+    "versions": "Verziók",
+    "versionNumber": "{{version}}. verzió",
+    "currentVersion": "aktuális",
+    "noVersions": "Nincsenek verziók",
+    "versionsError": "A verziókat nem sikerült betölteni",
+    "olderVersionsHint": "Itt csak az aktuális verzió nyitható meg.",
     "save": "Mentés"
   },
   "importPanel": {

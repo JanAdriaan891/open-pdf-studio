@@ -241,8 +241,11 @@ function fout(tekst, code) { const f = new Error(tekst); if (code) f.code = code
         const echt = doel.get(id) || id;
         const d = docs[echt];
         if (!d) throw fout('Onbekend bestand.');
-        const r = await fetch('/werkplek/doc/' + encodeURIComponent(echt));
-        const bytes = d.versies.length ? d.versies.at(-1).bytes.slice(0).buffer : await r.arrayBuffer();
+        // De laatste opgeslagen versie, anders de begininhoud van de server (een
+        // conflictkopie heeft daar niets: die bestaat alleen in deze pagina).
+        const bytes = d.versies.length
+          ? d.versies.at(-1).bytes.slice(0).buffer
+          : await (await fetch('/werkplek/doc/' + encodeURIComponent(echt))).arrayBuffer();
         return new MetOverdracht({ bestand: id, naam: d.naam, versie: d.versies.length + 1, alleen_lezen: d.alleen_lezen, bytes }, [bytes]);
       }
       case 'opslaan': {

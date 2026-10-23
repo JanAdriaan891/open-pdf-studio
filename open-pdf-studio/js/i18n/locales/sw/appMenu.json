@@ -71,6 +71,12 @@
     "site": "Kwenye tovuti hii",
     "noSiteDocuments": "Hakuna nyaraka kwenye tovuti hii",
     "siteListError": "Imeshindwa kupakia nyaraka za tovuti hii",
+    "versions": "Matoleo",
+    "versionNumber": "Toleo {{version}}",
+    "currentVersion": "la sasa",
+    "noVersions": "Hakuna matoleo",
+    "versionsError": "Matoleo hayakuweza kupakiwa",
+    "olderVersionsHint": "Ni toleo la sasa pekee linaloweza kufunguliwa hapa.",
     "save": "Hifadhi"
   },
   "importPanel": {

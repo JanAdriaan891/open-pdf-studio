@@ -71,6 +71,12 @@
     "site": "Tällä sivustolla",
     "noSiteDocuments": "Tällä sivustolla ei ole asiakirjoja",
     "siteListError": "Tämän sivuston asiakirjoja ei voitu ladata",
+    "versions": "Versiot",
+    "versionNumber": "Versio {{version}}",
+    "currentVersion": "nykyinen",
+    "noVersions": "Ei versioita",
+    "versionsError": "Versioita ei voitu ladata",
+    "olderVersionsHint": "Täällä voi avata vain nykyisen version.",
     "save": "Tallenna"
   },
   "importPanel": {

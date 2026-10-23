@@ -17,7 +17,7 @@ globalThis.document = {
 const {
   hostOpslag, hostPad, leesHostPad, openHostBestand, hostDocumenten, hostVersies,
   readBinaryFile, writeBinaryFile, writeBinaryFileAtomic, saveFileDialog, fileExists,
-  extractFileName, hostAi, meldHostGeopend, meldBijHost,
+  extractFileName, hostAi, meldHostGeopend, meldBijHost, lockFile, unlockFile,
 } = await import('./platform.js');
 
 /** Een site die documenten in het geheugen bewaart, met versies. */
@@ -167,5 +167,31 @@ test('de werkplek (#704): alleen-lezen gaat door; ai, geopend en melding als de 
     assert.equal(await meldBijHost('x'), false);
   } finally {
     delete window.__OPDS_HOST__;
+  }
+});
+
+// Bestanden vastzetten bestaat alleen op het bureaublad (#707): in de browser
+// (de webbouw en de werkplek) geen invoke, en dus ook geen waarschuwing in de
+// console bij elk openen en opslaan.
+test('lock_file en unlock_file alleen in Tauri', async () => {
+  const waarschuwingen = [];
+  const warn = console.warn;
+  console.warn = (...a) => waarschuwingen.push(a.join(' '));
+  try {
+    assert.equal(await lockFile('opds-host://DOC-1/a.pdf'), false);
+    assert.equal(await unlockFile('opds-host://DOC-1/a.pdf'), false);
+    assert.equal(await lockFile('a.pdf'), false);
+    assert.equal(await unlockFile('a.pdf'), false);
+    assert.deepEqual(waarschuwingen, []);
+
+    // Op het bureaublad gaat het verzoek wel naar Rust.
+    const verzoeken = [];
+    window.__TAURI__ = { core: { invoke: async (cmd, args) => { verzoeken.push([cmd, args.path]); return true; } } };
+    assert.equal(await lockFile('C:/a.pdf'), true);
+    assert.equal(await unlockFile('C:/a.pdf'), true);
+    assert.deepEqual(verzoeken, [['lock_file', 'C:/a.pdf'], ['unlock_file', 'C:/a.pdf']]);
+  } finally {
+    console.warn = warn;
+    delete window.__TAURI__;
   }
 });

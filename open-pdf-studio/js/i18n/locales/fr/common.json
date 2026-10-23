@@ -140,6 +140,7 @@
   "failedToSavePdf": "Impossible d'enregistrer le PDF : {{error}}",
   "failedToLoadPdf": "Impossible de charger le PDF : {{error}}",
   "hostOpenFailed": "Le fichier n'a pas pu être lu depuis le stockage. Réessayez.",
+  "hostInvalidPdf": "{{name}} n'est pas un fichier PDF valide et n'a pas pu être ouvert.",
   "hostNoContact": "La page qui contient Open PDF Studio ne répond pas : les fichiers ne peuvent être ni ouverts ni enregistrés. Rechargez la page et réessayez.",
   "hostSaveConflict": "Quelqu'un d'autre a enregistré ce fichier entre-temps. Vos modifications ont été enregistrées dans une copie distincte : {{name}}. Les prochains enregistrements iront dans cette copie.",
   "hostSaveNotLocked": "Ce fichier ne vous est pas réservé : d'autres personnes peuvent le modifier en même temps. Vos modifications sont enregistrées comme nouvelles versions ; rien n'est écrasé.",

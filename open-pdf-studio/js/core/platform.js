@@ -827,8 +827,11 @@ export async function listPdfFileStats(dir) {
   return await invoke('list_pdf_file_stats', { dir });
 }
 
-// File locking - prevent other apps from writing to an open file
+// File locking - prevent other apps from writing to an open file.
+// Alleen op het bureaublad: de browser (webbouw, werkplek) kent geen
+// vergrendelde bestanden; daar niets vragen en dus ook niets in de console (#707).
 export async function lockFile(path) {
+  if (!isTauri()) return false;
   try {
     return await invoke('lock_file', { path });
   } catch (e) {
@@ -842,6 +845,7 @@ export async function renameFile(oldPath, newPath) {
 }
 
 export async function unlockFile(path) {
+  if (!isTauri()) return false;
   try {
     return await invoke('unlock_file', { path });
   } catch (e) {

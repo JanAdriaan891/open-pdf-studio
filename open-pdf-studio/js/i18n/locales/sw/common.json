@@ -140,6 +140,7 @@
   "failedToSavePdf": "Imeshindwa kuhifadhi PDF: {{error}}",
   "failedToLoadPdf": "Imeshindwa kupakia PDF: {{error}}",
   "hostOpenFailed": "Faili haikuweza kusomwa kutoka kwenye hifadhi. Jaribu tena.",
+  "hostInvalidPdf": "{{name}} si faili halali ya PDF na haikuweza kufunguliwa.",
   "hostNoContact": "Ukurasa unaozunguka Open PDF Studio haujibu, kwa hivyo faili haziwezi kufunguliwa wala kuhifadhiwa. Pakia upya ukurasa kisha ujaribu tena.",
   "hostSaveConflict": "Mtu mwingine amehifadhi faili hili wakati huo huo. Mabadiliko yako yamehifadhiwa kama nakala tofauti: {{name}}. Uhifadhi unaofuata utaenda kwenye nakala hiyo.",
   "hostSaveNotLocked": "Faili hili halijahifadhiwa kwa ajili yako pekee, kwa hiyo wengine wanaweza kulibadilisha wakati huo huo. Mabadiliko yako yanahifadhiwa kama matoleo mapya; hakuna kinachoandikwa juu.",

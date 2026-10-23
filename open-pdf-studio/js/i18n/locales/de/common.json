@@ -140,6 +140,7 @@
   "failedToSavePdf": "PDF konnte nicht gespeichert werden: {{error}}",
   "failedToLoadPdf": "PDF konnte nicht geladen werden: {{error}}",
   "hostOpenFailed": "Die Datei konnte nicht aus dem Speicher gelesen werden. Versuchen Sie es erneut.",
+  "hostInvalidPdf": "{{name}} ist keine gültige PDF-Datei und konnte nicht geöffnet werden.",
   "hostNoContact": "Die Seite um Open PDF Studio antwortet nicht, daher können Dateien nicht geöffnet oder gespeichert werden. Laden Sie die Seite neu und versuchen Sie es erneut.",
   "hostSaveConflict": "Jemand anderes hat diese Datei inzwischen gespeichert. Ihre Änderungen wurden als separate Kopie gespeichert: {{name}}. Weitere Speichervorgänge gehen in diese Kopie.",
   "hostSaveNotLocked": "Diese Datei ist nicht für Sie reserviert, andere können sie also gleichzeitig ändern. Ihre Änderungen werden als neue Versionen gespeichert; nichts wird überschrieben.",

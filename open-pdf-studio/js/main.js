@@ -95,6 +95,7 @@ import { addRecentFile } from './mobile/recent-files.js';
 // Tauri API
 import { isTauri, isMobile, isDevMode, getOpenedFiles, loadSession, saveSession, fileExists, isDefaultPdfApp, openDefaultAppsSettings, extractFileName, invoke } from './core/platform.js';
 import { instantieRol, taakToegestaan } from './core/instantie-rol.js';
+import { volgendeTaak } from './core/volgende-taak.js';
 import { meldSchoonAfsluiten } from './herstel/haken.js';
 import { sessieHerstelBeleid } from './core/sessie-herstel.js';
 import { sessieBestanden, bronPad } from './pdf/wachtwoord-pdf.js';
@@ -251,6 +252,11 @@ async function init() {
   if (taakToegestaan('mcp-koppeling', rol)) {
     import('./core/mcp-koppeling.js').then(m => m.pasMcpInstellingToe());
   }
+
+  // In de browser liep alles tot hier (de modules laden) en het opbouwen van
+  // het venster als één lange taak: eerst de beurt teruggeven (#707). Op het
+  // bureaublad gaf loadPreferences() die beurt al terug.
+  if (!isTauri()) await volgendeTaak();
 
   // Single render call — mounts the entire UI tree
   // render() is synchronous, so DOM elements exist immediately after

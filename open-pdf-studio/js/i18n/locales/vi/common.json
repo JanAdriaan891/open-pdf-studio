@@ -140,6 +140,7 @@
   "failedToSavePdf": "Lưu PDF thất bại: {{error}}",
   "failedToLoadPdf": "Tải PDF thất bại: {{error}}",
   "hostOpenFailed": "Không thể đọc tệp từ bộ lưu trữ. Hãy thử lại.",
+  "hostInvalidPdf": "{{name}} không phải là tệp PDF hợp lệ và không thể mở.",
   "hostNoContact": "Trang chứa Open PDF Studio không phản hồi nên không thể mở hoặc lưu tệp. Hãy tải lại trang và thử lại.",
   "hostSaveConflict": "Trong lúc đó, người khác đã lưu tệp này. Các thay đổi của bạn đã được lưu thành một bản sao riêng: {{name}}. Những lần lưu sau sẽ vào bản sao đó.",
   "hostSaveNotLocked": "Tệp này không được giữ riêng cho bạn, nên người khác có thể sửa nó cùng lúc. Các thay đổi của bạn được lưu thành phiên bản mới; không có gì bị ghi đè.",

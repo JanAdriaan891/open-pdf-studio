@@ -1,5 +1,6 @@
-import fontkit from '@pdf-lib/fontkit';
-import { embedOcrFont, loadBundledFontBytes } from '../pdf/saver/ocr-text-layer.js';
+// fontkit pas laden als er tekst ingebed wordt: als vaste import zat hij in
+// de hoofdbundel en pakte hij bij elke start zijn tabellen uit (#707).
+import { embedOcrFont, laadFontkit, loadBundledFontBytes } from '../pdf/saver/ocr-text-layer.js';
 import { CJK_FONTS } from '../pdf/saver/cjk-fonts.js';
 import { assetUrl } from '../core/basis-url.js';
 
@@ -32,6 +33,7 @@ export async function embedMcpTextFont(pdfDocLib, text, { bold = false, italic =
   const variant = bold && italic ? 'boldItalic' : bold ? 'bold' : italic ? 'italic' : 'regular';
   let embedded = embeddedFonts.get(pdfDocLib);
   if (!embedded) { embedded = new Map(); embeddedFonts.set(pdfDocLib, embedded); }
+  const fontkit = await laadFontkit();
   const latin = await liberationBytes(variant);
   if (covers(fontkit.create(latin), text)) {
     const name = latinFonts[variant].replace(/\.ttf$/, '');

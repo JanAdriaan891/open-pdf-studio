@@ -21,17 +21,21 @@
 //  4. een tweede opslag krijgt een conflict: de app toont de vertaalde
 //     melding met de naam van de kopie en de melding van de host; de bytes
 //     staan in de kopie, niets is weg; een derde opslag gaat naar de kopie;
-//  5. lijst en versies in de vorm van de host;
+//  5. lijst en versies in de vorm van de host; de versielijst in "Op deze
+//     site" vraagt `versies`, toont de huidige versie bovenaan en opent alleen
+//     die (via `open`); een oudere versie stuurt niets (#707);
 //  6. de assistent vraagt via ai.vraag (OpenAI-chatvorm); het antwoord van
 //     de host gaat ongewijzigd mee in de volgende beurt; de foutcode
 //     geen_tegoed wordt een vertaalde melding;
 //  7. een alleen-lezen document: opslaan weigert met een vertaalde melding,
 //     er gaat geen opslaan naar de host;
 //  8. een mislukte open toont de vertaalde melding en gaat als `melding`
-//     naar de host;
+//     naar de host; bytes die geen PDF zijn ook (#707);
 //  9. geen enkel vervalst antwoord telde;
-// 10. 0 CSP-overtredingen, 0 consolefouten, geen verzoek van de app buiten
-//     de bundel en geen enkel verzoek van de app naar de host;
+// 10. 0 CSP-overtredingen, 0 consolefouten (op de verwachte fout bij de
+//     kapotte PDF na), 0 waarschuwingen over lock_file/unlock_file (#707),
+//     geen verzoek van de app buiten de bundel en geen enkel verzoek van de
+//     app naar de host;
 // 11. met een `ouder` die niet de pagina erboven is, start de brug niet.
 //
 // Draaien:  npm run test:hosted-bridge   (bouwt de bundel zelf)
@@ -108,6 +112,8 @@ if (!fs.existsSync(path.join(BUNDEL, 'index.html'))) {
 const documenten = {
   'DOC-1': { naam: 'Plattegrond.pdf', bytes: await maakPdf('Plattegrond', 2) },
   'DOC-RO': { naam: 'Gevel.pdf', bytes: await maakPdf('Gevel', 1), alleenLezen: true },
+  // Geen PDF: wat een kapotte of verkeerde upload in de opslag geeft (#707).
+  'DOC-KAPOT': { naam: 'Kapot.pdf', bytes: new TextEncoder().encode('Dit is geen PDF, maar een tekstbestand.\n') },
 };
 const werkplek = await startWerkplek({ bundel: BUNDEL, poortApp: POORT_APP, poortGast: POORT_GAST, documenten });
 const { APP, GAST, DERDE } = werkplek;
@@ -212,8 +218,42 @@ try {
   const versies = await frame.evaluate(() => window.__OPDS_HOST__.storage.versions('DOC-1'));
   noteer(`5. lijst: ${JSON.stringify(lijst)}`);
   noteer(`   versies van DOC-1: ${versies.map((v) => `v${v.version} (${v.author})`).join(', ')}`);
-  eis(lijst.length === 2 && lijst[0].id === 'DOC-1' && lijst[0].name === 'Plattegrond.pdf' && lijst[0].modified, 'verkeerde lijst');
+  eis(lijst.length === 3 && lijst[0].id === 'DOC-1' && lijst[0].name === 'Plattegrond.pdf' && lijst[0].modified, 'verkeerde lijst');
   eis(versies.length === 3 && versies.every((v) => v.version && v.modified && v.author), 'verkeerde versies');
+
+  // De versielijst in "Op deze site" (#707).
+  await frame.locator('#file-tab').click();
+  await frame.locator('.app-menu-items .app-menu-item', { hasText: /^\s*Open\s*(Ctrl\+O)?\s*$/ }).first().click();
+  const rij = frame.locator('.site-doc[data-site-doc="DOC-1"]');
+  await rij.waitFor({ timeout: 30_000 });
+  const versiesVoor = (await gast()).log.filter((r) => r.soort === 'versies').length;
+  const opensVoor = (await gast()).log.filter((r) => r.soort === 'open').length;
+  await rij.locator('.site-versions-btn').click();
+  await totDat(() => frame.locator('.site-version').count(), 30_000, 'versielijst');
+  const rijen = await frame.locator('.site-version').evaluateAll((els) => els.map((e) => ({
+    versie: e.dataset.versie, huidig: e.classList.contains('current'), tekst: e.innerText.replace(/\s+/g, ' ').trim(),
+  })));
+  const hint = await frame.locator('.site-versions-hint').innerText().catch(() => '');
+  g = await gast();
+  const versieVerzoek = g.log.filter((r) => r.soort === 'versies').at(-1);
+  noteer(`   versielijst in de app: ${rijen.map((r) => `${r.tekst}${r.huidig ? ' [huidig]' : ''}`).join(' | ')}; hint: "${hint}"`);
+  eis(g.log.filter((r) => r.soort === 'versies').length === versiesVoor + 1 && versieVerzoek?.bestand === 'DOC-1', 'de versielijst vroeg geen versies { bestand: DOC-1 }');
+  eis(rijen.length === 3 && rijen.map((r) => r.versie).join() === '3,2,1', 'de versies staan niet nieuwste eerst');
+  eis(rijen[0].huidig && rijen.slice(1).every((r) => !r.huidig), 'niet precies de nieuwste versie is de huidige');
+  eis(/^Version 3 \(current\)/.test(rijen[0].tekst) && rijen[2].tekst.includes('beheer@klant.example'), 'tekst van de versies');
+  eis(/Only the current version/.test(hint), 'de uitleg bij oudere versies ontbreekt');
+  // Een oudere versie: er gaat niets naar de host.
+  await frame.locator('.site-version[data-versie="1"]').click();
+  await wacht(700);
+  eis((await gast()).log.filter((r) => r.soort === 'open').length === opensVoor, 'een oudere versie stuurde toch een open');
+  await page.screenshot({ path: path.join(UIT, '2-versies.png') });
+  // De huidige versie opent het bestand via `open`, en het menu gaat dicht.
+  await frame.locator('.site-version.current').click();
+  await totDat(async () => (await gast()).log.filter((r) => r.soort === 'open').length > opensVoor, 30_000, 'open na de huidige versie');
+  const openNaVersie = (await gast()).log.filter((r) => r.soort === 'open').at(-1);
+  eis(openNaVersie.bestand === 'DOC-1', `de huidige versie opende ${openNaVersie.bestand}`);
+  await totDat(async () => !(await frame.locator('.app-menu-overlay.visible').count()), 10_000, 'menu dicht');
+  await wacht(500);
 
   // 6. De assistent via ai.vraag.
   await frame.locator('#assistant-launcher').click();
@@ -268,6 +308,23 @@ try {
   eis(g.meldingen[0].tekst === misTekst && g.meldingen[0].toon === 'fout', 'de host kreeg de melding niet');
   await sluitMelding(frame);
 
+  // Bytes die geen PDF zijn (#707): de eigen melding van de app, en een `melding` aan de host.
+  const foutenVoorKapot = p.consolefouten.length;
+  await frame.evaluate(() => window.dispatchEvent(new CustomEvent('opds:open-document', { detail: { id: 'DOC-KAPOT' } })));
+  const kapotTekst = await totDat(() => melding(frame), 30_000, 'melding na kapotte bytes');
+  await totDat(async () => (await gast()).meldingen.length > 1, 10_000, 'melding bij de host na kapotte bytes');
+  g = await gast();
+  const kapotBijHost = g.meldingen.at(-1);
+  noteer(`   kapotte bytes: de app toont "${kapotTekst.replace(/\s+/g, ' ').slice(0, 160)}"; bij de host: ${JSON.stringify(kapotBijHost)}`);
+  eis(/Failed to load PDF/i.test(kapotTekst), 'de app toonde geen eigen melding bij kapotte bytes');
+  eis(kapotBijHost.tekst === 'Kapot.pdf is not a valid PDF file and could not be opened.' && kapotBijHost.toon === 'fout',
+    'de host kreeg geen melding met toon "fout" bij kapotte bytes');
+  eis(!g.geopend.includes('DOC-KAPOT'), 'geopend gemeld voor een document dat niet opende');
+  await sluitMelding(frame);
+  // De verwachte fout van de lader ("Error loading PDF") telt niet als consolefout.
+  const kapotFouten = p.consolefouten.splice(foutenVoorKapot).filter((t) => !/^Error loading PDF/.test(t));
+  p.consolefouten.push(...kapotFouten);
+
   // 9. Geen vervalst antwoord telde.
   const tekst = await frame.evaluate(() => document.body.innerText);
   noteer(`9. ${g.vervalsingen} keer vervalst geantwoord (derde oorsprong én ander venster op de juiste oorsprong)`);
@@ -286,6 +343,9 @@ try {
   eis(overtredingen.length === 0, `CSP-overtredingen:\n    ${overtredingen.join('\n    ')}`);
   eis(p.consolefouten.length === 0, `consolefouten:\n    ${p.consolefouten.join('\n    ')}`);
   eis(p.paginafouten.length === 0, `paginafouten:\n    ${p.paginafouten.join('\n    ')}`);
+  const lockWaarschuwingen = consoleAlles.filter((t) => /lock[ _]file/i.test(t));
+  noteer(`    ${lockWaarschuwingen.length} waarschuwing(en) over lock_file/unlock_file`);
+  eis(lockWaarschuwingen.length === 0, `lock_file/unlock_file in de browser:\n    ${lockWaarschuwingen.join('\n    ')}`);
   eis(buiten.length === 0 && naarHost.length === 0 && metKoekje.length === 0, 'de app haalde iets buiten de bundel of bij de host');
 
   // 11. Een ouder die niet de pagina erboven is: geen brug.

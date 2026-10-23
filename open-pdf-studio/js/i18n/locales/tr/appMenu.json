@@ -71,6 +71,12 @@
     "site": "Bu sitede",
     "noSiteDocuments": "Bu sitede belge yok",
     "siteListError": "Bu sitenin belgeleri yüklenemedi",
+    "versions": "Sürümler",
+    "versionNumber": "Sürüm {{version}}",
+    "currentVersion": "geçerli",
+    "noVersions": "Sürüm yok",
+    "versionsError": "Sürümler yüklenemedi",
+    "olderVersionsHint": "Burada yalnızca geçerli sürüm açılabilir.",
     "save": "Kaydet"
   },
   "importPanel": {

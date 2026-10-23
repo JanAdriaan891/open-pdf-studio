@@ -71,6 +71,12 @@
     "site": "På dette nettstedet",
     "noSiteDocuments": "Ingen dokumenter på dette nettstedet",
     "siteListError": "Kunne ikke laste inn dokumentene på dette nettstedet",
+    "versions": "Versjoner",
+    "versionNumber": "Versjon {{version}}",
+    "currentVersion": "gjeldende",
+    "noVersions": "Ingen versjoner",
+    "versionsError": "Kunne ikke laste inn versjonene",
+    "olderVersionsHint": "Bare den gjeldende versjonen kan åpnes her.",
     "save": "Lagre"
   },
   "importPanel": {

@@ -71,6 +71,12 @@
     "site": "このサイト",
     "noSiteDocuments": "このサイトにドキュメントはありません",
     "siteListError": "このサイトのドキュメントを読み込めませんでした",
+    "versions": "バージョン",
+    "versionNumber": "バージョン {{version}}",
+    "currentVersion": "現在",
+    "noVersions": "バージョンがありません",
+    "versionsError": "バージョンを読み込めませんでした",
+    "olderVersionsHint": "ここで開けるのは現在のバージョンのみです。",
     "save": "保存"
   },
   "importPanel": {

@@ -140,6 +140,7 @@
   "failedToSavePdf": "Gagal menyimpan PDF: {{error}}",
   "failedToLoadPdf": "Gagal memuatkan PDF: {{error}}",
   "hostOpenFailed": "Fail tidak dapat dibaca daripada storan. Cuba lagi.",
+  "hostInvalidPdf": "{{name}} bukan fail PDF yang sah dan tidak dapat dibuka.",
   "hostNoContact": "Halaman yang memuatkan Open PDF Studio tidak bertindak balas, jadi fail tidak dapat dibuka atau disimpan. Muat semula halaman dan cuba lagi.",
   "hostSaveConflict": "Orang lain telah menyimpan fail ini sementara itu. Perubahan anda disimpan sebagai salinan berasingan: {{name}}. Simpanan seterusnya akan pergi ke salinan itu.",
   "hostSaveNotLocked": "Fail ini tidak dikhaskan untuk anda, jadi orang lain boleh mengubahnya pada masa yang sama. Perubahan anda disimpan sebagai versi baharu; tiada apa-apa yang ditulis ganti.",
