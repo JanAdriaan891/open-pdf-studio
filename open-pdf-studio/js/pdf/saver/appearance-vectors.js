@@ -797,7 +797,7 @@ export function buildSysteemrasterAP({ geom, X, Y, strokeColorHex, lineWidth }) 
 // cloud / cloudPolyline: scalloped outline (optional fill).
 export function buildCloudAP({ kind, x, y, w, h, points, puff, X, Y,
   fillColorHex, strokeColorHex, lineWidth, borderStyle, heeftRand = true,
-  hatchPattern, hatchColorHex, hatchScale, hatchAngle }) {
+  hatchPattern, hatchColorHex, hatchScale, hatchAngle, arceringOps = (ops) => ops }) {
   const outline = kind === 'rect'
     ? cloudRectOutlinePts(x, y, w, h, puff || 15)
     : cloudPolyOutlinePts(points, true);
@@ -808,11 +808,12 @@ export function buildCloudAP({ kind, x, y, w, h, points, puff, X, Y,
     s += solidFillOps(outline, null, hexToRgb(fillColorHex), X, Y);
   }
   // Arcering uit het eigenschappenpaneel (#621), binnen de gebolde omtrek,
-  // tussen vulling en rand zoals het scherm.
+  // tussen vulling en rand zoals het scherm. `arceringOps` mag haar in een
+  // eigen graphics-state zetten (de vul-dekking, #685).
   if (hatchPattern && hatchPattern !== 'none') {
-    s += hatchFillOps({ points: outline, holes: null, hatchPattern,
+    s += arceringOps(hatchFillOps({ points: outline, holes: null, hatchPattern,
       hatchColorRgb: hexToRgb(hatchColorHex || strokeColorHex || '#000000'),
-      hatchScale, hatchAngle, X, Y });
+      hatchScale, hatchAngle, X, Y }));
   }
   if (heeftRand) {
     s += `${f(stroke[0])} ${f(stroke[1])} ${f(stroke[2])} RG\n${f(lineWidth ?? 1)} w\n${dashOp(borderStyle)}`;

@@ -52,6 +52,7 @@ import { drawSnapIndicator } from '../tools/snap-engine.js';
 import { drawImageAlignGuides } from '../tools/image-align-snap.js';
 import { getTemplate } from '../symbols/registry.js';
 import { hasFill, hasStroke } from './fill-utils.js';
+import { eigenVulDekking } from './vul-dekking.js';
 import { EDITABLE_NUMBER_COLOR, shouldHighlightNumbers } from './editable-numbers.js';
 // Side-effect: meldt de providers voor bewerkbare getallen aan
 // (stavenreeks, betonbalk, parametricSymbol).
@@ -447,6 +448,20 @@ function withFillAlpha(color, fillOpacity, baseOpacity) {
   return `rgba(${r}, ${g}, ${b}, ${ratio})`;
 }
 
+/**
+ * Vulling en arcering van een gesloten vorm met een eigen vul-dekking (#685):
+ * met die dekking als globalAlpha, daarna weer de lijn-dekking. Zo kan de
+ * vulling ook dekkender zijn dan de rand, wat een rgba-kleur onder de
+ * globalAlpha van de lijn niet kan. Zonder eigen vul-dekking (null) tekent
+ * `teken` gewoon met de dekking die al actief is.
+ */
+function metVulDekking(ctx, vulAlfa, teken) {
+  if (vulAlfa === null) { teken(); return; }
+  const lijnAlfa = ctx.globalAlpha;
+  ctx.globalAlpha = vulAlfa;
+  try { teken(); } finally { ctx.globalAlpha = lijnAlfa; }
+}
+
 export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
   // ── Weergavefilters ────────────────────────────────────────────────────
   // Eén centraal predicaat (annotations/view-filters.js) bundelt de
@@ -506,8 +521,16 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
   // zelf: globalAlpha (= baseOpacity) maal de alfa in de rgba-kleur levert
   // precies de gevraagde vul-alfa op. Zonder eigen fillOpacity verandert er
   // niets — dan blijft de kleur de kale hex.
-  const annFill = withFillAlpha(annotation.fillColor, annotation.fillOpacity, baseOpacity);
-  fillColor = withFillAlpha(fillColor, annotation.fillOpacity, baseOpacity);
+  // Een rechthoek, ellips, veelhoek of wolk met een eigen vul-dekking (#685)
+  // tekent vulling en arcering met die dekking als globalAlpha (zie
+  // metVulDekking), ook als ze hoger is dan die van de lijn. De vulkleur
+  // blijft dan de kale kleur; de halftone-factor geldt net als voor de lijn.
+  const eigenVul = eigenVulDekking(annotation);
+  const vormVulAlfa = eigenVul === null ? null
+    : eigenVul * (_evHalftone ? (_evHalftone.opacity ?? 0.35) : 1);
+  const annFill = vormVulAlfa !== null ? annotation.fillColor
+    : withFillAlpha(annotation.fillColor, annotation.fillOpacity, baseOpacity);
+  fillColor = vormVulAlfa !== null ? fillColor : withFillAlpha(fillColor, annotation.fillOpacity, baseOpacity);
 
   ctx.strokeStyle = strokeColor;
   ctx.fillStyle = fillColor;
@@ -752,18 +775,20 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       ctx.beginPath();
       ctx.ellipse(ellipseCX, ellipseCY, Math.abs(ellipseW / 2), Math.abs(ellipseH / 2), 0, 0, 2 * Math.PI);
 
-      // Fill if fillColor is set and not 'none'
-      if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
-        ctx.fillStyle = annFill;
-        ctx.fill();
-      }
+      metVulDekking(ctx, vormVulAlfa, () => {
+        // Fill if fillColor is set and not 'none'
+        if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
+          ctx.fillStyle = annFill;
+          ctx.fill();
+        }
 
-      // Hatch pattern fill
-      if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
-        ctx.beginPath();
-        ctx.ellipse(ellipseCX, ellipseCY, Math.abs(ellipseW / 2), Math.abs(ellipseH / 2), 0, 0, 2 * Math.PI);
-        applyHatchFill(ctx, annotation);
-      }
+        // Hatch pattern fill
+        if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
+          ctx.beginPath();
+          ctx.ellipse(ellipseCX, ellipseCY, Math.abs(ellipseW / 2), Math.abs(ellipseH / 2), 0, 0, 2 * Math.PI);
+          applyHatchFill(ctx, annotation);
+        }
+      });
 
       ctx.strokeStyle = strokeColor;
       applyBorderStyle(ctx, annotation.borderStyle);
@@ -832,18 +857,20 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
         ctx.translate(-boxCenterX, -boxCenterY);
       }
 
-      // Fill if fillColor is set and not 'none'
-      if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
-        ctx.fillStyle = annFill;
-        ctx.fillRect(annotation.x, annotation.y, annotation.width, annotation.height);
-      }
+      metVulDekking(ctx, vormVulAlfa, () => {
+        // Fill if fillColor is set and not 'none'
+        if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
+          ctx.fillStyle = annFill;
+          ctx.fillRect(annotation.x, annotation.y, annotation.width, annotation.height);
+        }
 
-      // Hatch pattern fill
-      if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
-        ctx.beginPath();
-        ctx.rect(annotation.x, annotation.y, annotation.width, annotation.height);
-        applyHatchFill(ctx, annotation);
-      }
+        // Hatch pattern fill
+        if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
+          ctx.beginPath();
+          ctx.rect(annotation.x, annotation.y, annotation.width, annotation.height);
+          applyHatchFill(ctx, annotation);
+        }
+      });
 
       ctx.strokeStyle = strokeColor;
       applyBorderStyle(ctx, annotation.borderStyle);
@@ -893,18 +920,20 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
         }
       };
 
-      // Fill if fillColor is set
-      if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
-        buildPolyPath();
-        ctx.fillStyle = annFill;
-        ctx.fill();
-      }
+      metVulDekking(ctx, vormVulAlfa, () => {
+        // Fill if fillColor is set
+        if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
+          buildPolyPath();
+          ctx.fillStyle = annFill;
+          ctx.fill();
+        }
 
-      // Hatch pattern fill
-      if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
-        buildPolyPath();
-        applyHatchFill(ctx, annotation);
-      }
+        // Hatch pattern fill
+        if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
+          buildPolyPath();
+          applyHatchFill(ctx, annotation);
+        }
+      });
 
       ctx.strokeStyle = strokeColor;
       applyBorderStyle(ctx, annotation.borderStyle);
@@ -926,18 +955,20 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
         if (annotation.flipX || annotation.flipY) ctx.scale(annotation.flipX ? -1 : 1, annotation.flipY ? -1 : 1);
         ctx.translate(-cloudCX, -cloudCY);
       }
-      // Fill if fillColor is set
-      if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
-        buildCloudPath(ctx, annotation.x, annotation.y, annotation.width, annotation.height);
-        ctx.fillStyle = annFill;
-        ctx.fill();
-      }
+      metVulDekking(ctx, vormVulAlfa, () => {
+        // Fill if fillColor is set
+        if (annotation.fillColor && annotation.fillColor !== 'none' && annotation.fillColor !== null) {
+          buildCloudPath(ctx, annotation.x, annotation.y, annotation.width, annotation.height);
+          ctx.fillStyle = annFill;
+          ctx.fill();
+        }
 
-      // Hatch pattern fill
-      if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
-        buildCloudPath(ctx, annotation.x, annotation.y, annotation.width, annotation.height);
-        applyHatchFill(ctx, annotation);
-      }
+        // Hatch pattern fill
+        if (annotation.hatchPattern && annotation.hatchPattern !== 'none') {
+          buildCloudPath(ctx, annotation.x, annotation.y, annotation.width, annotation.height);
+          applyHatchFill(ctx, annotation);
+        }
+      });
 
       ctx.strokeStyle = strokeColor;
       if (annHasStroke) drawCloudShape(ctx, annotation.x, annotation.y, annotation.width, annotation.height);

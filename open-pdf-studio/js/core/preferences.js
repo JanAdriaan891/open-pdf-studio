@@ -232,6 +232,11 @@ export function setAsDefaultStyle(annotation) {
   if (m.width) prefs[p + m.width] = annotation.lineWidth ?? prefs[p + m.width];
   if (m.borderStyle && annotation.borderStyle) prefs[p + m.borderStyle] = annotation.borderStyle;
   if (m.opacity && annotation.opacity !== undefined) prefs[p + m.opacity] = Math.round(annotation.opacity * 100);
+  // Eigen vul-dekking (#685); zonder eigen waarde volgt de vulling de dekking.
+  if (m.fillOpacity) {
+    if (typeof annotation.fillOpacity === 'number') prefs[p + m.fillOpacity] = Math.round(annotation.fillOpacity * 100);
+    else delete prefs[p + m.fillOpacity];
+  }
   if (m.startHead && annotation.startHead) prefs[p + m.startHead] = annotation.startHead;
   if (m.endHead && annotation.endHead) prefs[p + m.endHead] = annotation.endHead;
   if (m.headSize && annotation.headSize) prefs[p + m.headSize] = annotation.headSize;
@@ -293,6 +298,7 @@ export function applyDefaultStyle(annotation) {
   if (m.width && prefs[p + m.width] != null) zetRanddikte(annotation, prefs[p + m.width]);
   if (m.borderStyle && prefs[p + m.borderStyle]) annotation.borderStyle = prefs[p + m.borderStyle];
   if (m.opacity && prefs[p + m.opacity] !== undefined) annotation.opacity = prefs[p + m.opacity] / 100;
+  if (m.fillOpacity && typeof prefs[p + m.fillOpacity] === 'number') annotation.fillOpacity = prefs[p + m.fillOpacity] / 100;
   if (m.startHead && prefs[p + m.startHead]) annotation.startHead = prefs[p + m.startHead];
   if (m.endHead && prefs[p + m.endHead]) annotation.endHead = prefs[p + m.endHead];
   if (m.headSize && prefs[p + m.headSize]) annotation.headSize = prefs[p + m.headSize];

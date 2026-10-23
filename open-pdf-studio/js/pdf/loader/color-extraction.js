@@ -275,6 +275,15 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
           if (fo !== null && fo >= 0 && fo <= 1) colors.fillOpacity = fo;
         }
       }
+      // /ca op de annotatie (PDF 2.0): de vul-dekking als een lezer de
+      // appearance zelf opbouwt (#685). Ook alleen terugval.
+      if (colors.fillOpacity === undefined) {
+        const caVulRaw = annotDict.get(PDFName.of('ca'));
+        if (caVulRaw !== undefined) {
+          const caVul = pdfNum(context.lookup(caVulRaw) || caVulRaw);
+          if (caVul !== null && caVul >= 0 && caVul <= 1 && caVul !== colors.opacity) colors.fillOpacity = caVul;
+        }
+      }
 
       // Annotatielaag (#468): /OC naar een eigen OCG (herkenbaar aan
       // /OPS_LayerId, zie saver/annotatie-lagen.js). Een OCG van een ander
