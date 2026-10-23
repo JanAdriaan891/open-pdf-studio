@@ -1894,6 +1894,7 @@ async fn render_pdf_page(
         scale,
         extra_rot,
         thin_lines,
+        pdfium_renderer::INPROC_SCREEN_RGBA_BYTES,
     )?;
 
     let rgba_arc = std::sync::Arc::new(rgba);
