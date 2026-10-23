@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "إعادة تحميل الصفحة تبدأ فارغة: في المتصفح يبقى مستندك على جهازك ولا يتم تخزينه.",
   "desktopOnly": "{{feature}} يعمل فقط في تطبيق سطح المكتب. هذه الصفحة هي إصدار المتصفح.",
+  "hostedLinkTitle": "رابط",
+  "hostedLinkMessage": "لا يمكن فتح الروابط من هنا. انسخ العنوان لفتحه بنفسك:",
+  "hostedAttachmentMessage": "لا يمكن فتح المرفقات هنا. يُعرض \"{{filename}}\" للتنزيل بدلاً من ذلك.",
   "assistantTitle": "مساعد OpenAEC",
   "assistant": {
     "greeting": "مرحبًا! أنا **{{title}}**. يمكنني: 🌐 الترجمة، 📝 التلخيص، ✏️ الرسم على المخطط، و🚪 التعرّف على الأبواب. اختر مهارة أدناه أو اطرح سؤالك.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "لا يحتوي ملف PDF المحدد على صفحات.",
   "failedToSavePdf": "فشل حفظ PDF: {{error}}",
   "failedToLoadPdf": "فشل تحميل PDF: {{error}}",
+  "hostOpenFailed": "تعذّرت قراءة الملف من التخزين. حاول مرة أخرى.",
+  "hostNoContact": "الصفحة التي تحتوي على Open PDF Studio لا تستجيب، لذا لا يمكن فتح الملفات أو حفظها. أعد تحميل الصفحة وحاول مرة أخرى.",
   "failedToCreateDocument": "فشل إنشاء المستند: {{error}}",
   "failedToReplacePage": "فشل استبدال الصفحة: {{error}}",
   "failedToMergeFile": "فشل الدمج: {{file}}\n{{error}}",

@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Muat semula halaman akan bermula kosong: dalam pelayar, dokumen anda kekal pada komputer anda dan tidak disimpan.",
   "desktopOnly": "{{feature}} hanya berfungsi dalam aplikasi desktop. Halaman ini ialah versi pelayar.",
+  "hostedLinkTitle": "Pautan",
+  "hostedLinkMessage": "Pautan tidak boleh dibuka dari sini. Salin alamat untuk membukanya sendiri:",
+  "hostedAttachmentMessage": "Lampiran tidak boleh dibuka di sini. \"{{filename}}\" ditawarkan sebagai muat turun.",
   "assistantTitle": "Pembantu OpenAEC",
   "assistant": {
     "greeting": "Helo! Saya **{{title}}**. Saya boleh: 🌐 menterjemah, 📝 meringkaskan, ✏️ melukis pada lukisan dan 🚪 mengecam pintu. Pilih kemahiran di bawah atau tanya soalan anda.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "PDF yang dipilih tidak mempunyai halaman.",
   "failedToSavePdf": "Gagal menyimpan PDF: {{error}}",
   "failedToLoadPdf": "Gagal memuatkan PDF: {{error}}",
+  "hostOpenFailed": "Fail tidak dapat dibaca daripada storan. Cuba lagi.",
+  "hostNoContact": "Halaman yang memuatkan Open PDF Studio tidak bertindak balas, jadi fail tidak dapat dibuka atau disimpan. Muat semula halaman dan cuba lagi.",
   "failedToCreateDocument": "Gagal mencipta dokumen: {{error}}",
   "failedToReplacePage": "Gagal menggantikan halaman: {{error}}",
   "failedToMergeFile": "Gagal menggabungkan: {{file}}\n{{error}}",

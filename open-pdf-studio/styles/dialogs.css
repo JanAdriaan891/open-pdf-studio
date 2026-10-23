@@ -3656,6 +3656,24 @@
   /* Meerregelige meldingen (zoals het CMYK-verslag, #422) houden hun regels. */
   white-space: pre-line;
 }
+.message-dialog-address {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+  padding: 3px 6px;
+  font: inherit;
+  font-size: 12px;
+  border: 1px solid var(--theme-border, #acacac);
+  border-radius: 0;
+  background: var(--theme-surface, #fff);
+  color: var(--theme-text, #333);
+  user-select: text;
+}
+.message-dialog-address:focus {
+  outline: none;
+  border-color: var(--theme-active, #0078d7);
+}
 .message-dialog-footer {
   display: flex;
   justify-content: flex-end;

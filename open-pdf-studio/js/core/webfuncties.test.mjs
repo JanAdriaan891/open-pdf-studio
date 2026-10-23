@@ -121,7 +121,7 @@ test('elke knop uit de tabel bestaat echt', () => {
   }
 });
 
-// XML-naamruimten zijn geen verzoeken; een link via openExternal() opent de
+// XML-naamruimten zijn geen verzoeken; een link via openExtern() opent de
 // gebruiker zelf, in een nieuw venster.
 const NAAMRUIMTE = /^https?:\/\/(www\.w3\.org|schemas\.openxmlformats\.org|purl\.org|ns\.adobe\.com|www\.xfa\.org|www\.npes\.org|www\.color\.org)([/?#]|$)/;
 
@@ -141,7 +141,7 @@ test('elk verzoek naar een andere host vraagt eerst externeDienstenAan()', () =>
   const gevonden = new Set();
   for (const [rel, tekst] of bronnen) {
     for (const regel of tekst.split(/\r?\n/)) {
-      if (/^\s*(\/\/|\*|\/\*)/.test(regel) || /openExternal\(/.test(regel)) continue;
+      if (/^\s*(\/\/|\*|\/\*)/.test(regel) || /openExtern(al)?\(/.test(regel)) continue;
       for (const url of regel.match(/https?:\/\/[^\s'"`)<>]+/g) || []) {
         if (!NAAMRUIMTE.test(url)) gevonden.add(rel);
       }

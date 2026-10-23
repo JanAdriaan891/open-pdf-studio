@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Kupakia upya ukurasa huanza tupu: kwenye kivinjari, hati yako inabaki kwenye kompyuta yako na haihifadhiwi.",
   "desktopOnly": "{{feature}} inafanya kazi tu kwenye programu ya kompyuta ya mezani. Ukurasa huu ni toleo la kivinjari.",
+  "hostedLinkTitle": "Kiungo",
+  "hostedLinkMessage": "Viungo haviwezi kufunguliwa kutoka hapa. Nakili anwani ili uifungue mwenyewe:",
+  "hostedAttachmentMessage": "Viambatisho haviwezi kufunguliwa hapa. \"{{filename}}\" kinatolewa kama upakuaji badala yake.",
   "assistantTitle": "Msaidizi wa OpenAEC",
   "assistant": {
     "greeting": "Habari! Mimi ni **{{title}}**. Ninaweza: 🌐 kutafsiri, 📝 kufupisha, ✏️ kuchora kwenye mchoro, na 🚪 kutambua milango. Chagua ujuzi hapa chini au uliza swali lako.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "PDF iliyochaguliwa haina kurasa.",
   "failedToSavePdf": "Imeshindwa kuhifadhi PDF: {{error}}",
   "failedToLoadPdf": "Imeshindwa kupakia PDF: {{error}}",
+  "hostOpenFailed": "Faili haikuweza kusomwa kutoka kwenye hifadhi. Jaribu tena.",
+  "hostNoContact": "Ukurasa unaozunguka Open PDF Studio haujibu, kwa hivyo faili haziwezi kufunguliwa wala kuhifadhiwa. Pakia upya ukurasa kisha ujaribu tena.",
   "failedToCreateDocument": "Imeshindwa kuunda hati: {{error}}",
   "failedToReplacePage": "Imeshindwa kubadilisha ukurasa: {{error}}",
   "failedToMergeFile": "Imeshindwa kuunganisha: {{file}}\n{{error}}",

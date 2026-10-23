@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Sivun uudelleenlataus alkaa tyhjästä: selaimessa asiakirjasi pysyy tietokoneellasi eikä sitä tallenneta.",
   "desktopOnly": "{{feature}} toimii vain työpöytäsovelluksessa. Tämä sivu on selainversio.",
+  "hostedLinkTitle": "Linkki",
+  "hostedLinkMessage": "Linkkejä ei voi avata täältä. Kopioi osoite ja avaa se itse:",
+  "hostedAttachmentMessage": "Liitteitä ei voi avata täällä. \"{{filename}}\" tarjotaan sen sijaan ladattavaksi.",
   "assistantTitle": "OpenAEC-avustaja",
   "assistant": {
     "greeting": "Hei! Olen **{{title}}**. Osaan: 🌐 kääntää, 📝 tiivistää, ✏️ piirtää piirustukseen ja 🚪 tunnistaa ovet. Valitse taito alta tai kysy kysymyksesi.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Valitussa PDF:ssä ei ole sivuja.",
   "failedToSavePdf": "PDF:n tallennus epäonnistui: {{error}}",
   "failedToLoadPdf": "PDF:n lataus epäonnistui: {{error}}",
+  "hostOpenFailed": "Tiedostoa ei voitu lukea tallennustilasta. Yritä uudelleen.",
+  "hostNoContact": "Open PDF Studion ympäröivä sivu ei vastaa, joten tiedostoja ei voi avata eikä tallentaa. Lataa sivu uudelleen ja yritä uudelleen.",
   "failedToCreateDocument": "Asiakirjan luonti epäonnistui: {{error}}",
   "failedToReplacePage": "Sivun korvaaminen epäonnistui: {{error}}",
   "failedToMergeFile": "Yhdistäminen epäonnistui: {{file}}\n{{error}}",

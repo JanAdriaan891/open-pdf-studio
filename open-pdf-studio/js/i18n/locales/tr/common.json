@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Sayfa yenilendiğinde boş başlar: tarayıcıda belgeniz bilgisayarınızda kalır ve hiçbir yerde saklanmaz.",
   "desktopOnly": "{{feature}} yalnızca masaüstü uygulamasında çalışır. Bu sayfa tarayıcı sürümüdür.",
+  "hostedLinkTitle": "Bağlantı",
+  "hostedLinkMessage": "Bağlantılar buradan açılamaz. Kendiniz açmak için adresi kopyalayın:",
+  "hostedAttachmentMessage": "Ekler burada açılamaz. \"{{filename}}\" bunun yerine indirme olarak sunuluyor.",
   "assistantTitle": "OpenAEC asistanı",
   "assistant": {
     "greeting": "Merhaba! Ben **{{title}}**. Şunları yapabilirim: 🌐 çeviri, 📝 özetleme, ✏️ çizim üzerine çizim yapma ve 🚪 kapı tanıma. Aşağıdan bir beceri seçin veya sorunuzu sorun.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Seçilen PDF'de sayfa yok.",
   "failedToSavePdf": "PDF kaydedilemedi: {{error}}",
   "failedToLoadPdf": "PDF yüklenemedi: {{error}}",
+  "hostOpenFailed": "Dosya depolamadan okunamadı. Yeniden deneyin.",
+  "hostNoContact": "Open PDF Studio'yu içeren sayfa yanıt vermiyor, bu nedenle dosyalar açılamıyor veya kaydedilemiyor. Sayfayı yeniden yükleyip tekrar deneyin.",
   "failedToCreateDocument": "Belge oluşturulamadı: {{error}}",
   "failedToReplacePage": "Sayfa değiştirilemedi: {{error}}",
   "failedToMergeFile": "Birleştirilemedi: {{file}}\n{{error}}",
