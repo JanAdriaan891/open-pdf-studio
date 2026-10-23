@@ -104,7 +104,11 @@
     "colorGray": "Siva",
     "colorCustom": "Prilagođeno...",
     "bold": "Podebljano",
-    "italic": "Kurziv"
+    "italic": "Kurziv",
+    "nestUnderNew": "Ugnijezdi pod novu knjižnu oznaku...",
+    "indent": "Povećaj uvlaku",
+    "outdent": "Smanji uvlaku",
+    "deleteBookmarks": "Izbriši knjižne oznake ({{count}})"
   },
   "thumbnail": {
     "rotateLeft": "Rotiraj lijevo",

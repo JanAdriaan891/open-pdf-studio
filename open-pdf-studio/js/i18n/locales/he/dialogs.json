@@ -427,7 +427,10 @@
     "titlePlaceholder": "כותרת סימנייה",
     "pageLabel": "עמוד:",
     "colorLabel": "צבע:",
-    "styleLabel": "סגנון:"
+    "styleLabel": "סגנון:",
+    "nestTitle": "קינון תחת סימנייה חדשה",
+    "deleteTitle": "מחיקת סימניות",
+    "deleteConfirm": "למחוק {{count}} סימניות נבחרות וכל מה שמתחתיהן?"
   },
   "formValidation": {
     "title": "שגיאת אימות"

@@ -104,7 +104,11 @@
     "colorGray": "خاکستری",
     "colorCustom": "سفارشی...",
     "bold": "ضخیم",
-    "italic": "کج"
+    "italic": "کج",
+    "nestUnderNew": "قرار دادن زیر نشانک جدید...",
+    "indent": "افزایش تورفتگی",
+    "outdent": "کاهش تورفتگی",
+    "deleteBookmarks": "حذف {{count}} نشانک"
   },
   "thumbnail": {
     "rotateLeft": "چرخش به چپ",

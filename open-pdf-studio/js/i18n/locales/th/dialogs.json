@@ -427,7 +427,10 @@
     "titlePlaceholder": "ชื่อบุ๊กมาร์ก",
     "pageLabel": "หน้า:",
     "colorLabel": "สี:",
-    "styleLabel": "รูปแบบ:"
+    "styleLabel": "รูปแบบ:",
+    "nestTitle": "ซ้อนไว้ใต้บุ๊กมาร์กใหม่",
+    "deleteTitle": "ลบบุ๊กมาร์ก",
+    "deleteConfirm": "ลบบุ๊กมาร์กที่เลือก {{count}} รายการและทุกอย่างที่อยู่ข้างใต้หรือไม่?"
   },
   "formValidation": {
     "title": "ข้อผิดพลาดในการตรวจสอบ"

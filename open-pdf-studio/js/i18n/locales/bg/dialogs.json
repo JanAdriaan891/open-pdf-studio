@@ -427,7 +427,10 @@
     "titlePlaceholder": "Заглавие на отметката",
     "pageLabel": "Страница:",
     "colorLabel": "Цвят:",
-    "styleLabel": "Стил:"
+    "styleLabel": "Стил:",
+    "nestTitle": "Влагане под нова отметка",
+    "deleteTitle": "Изтриване на отметки",
+    "deleteConfirm": "Да се изтрият ли {{count}} избрани отметки и всичко под тях?"
   },
   "formValidation": {
     "title": "Грешка при валидиране"

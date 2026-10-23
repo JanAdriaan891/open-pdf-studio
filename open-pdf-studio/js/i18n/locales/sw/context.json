@@ -104,7 +104,11 @@
     "colorGray": "Kijivu",
     "colorCustom": "Desturi...",
     "bold": "Nzito",
-    "italic": "Italiki"
+    "italic": "Italiki",
+    "nestUnderNew": "Weka chini ya alamisho jipya...",
+    "indent": "Ongeza ujongezaji",
+    "outdent": "Punguza ujongezaji",
+    "deleteBookmarks": "Futa alamisho {{count}}"
   },
   "thumbnail": {
     "rotateLeft": "Zungusha Kushoto",

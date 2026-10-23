@@ -104,7 +104,11 @@
     "colorGray": "Sivá",
     "colorCustom": "Vlastné...",
     "bold": "Tučné",
-    "italic": "Kurzíva"
+    "italic": "Kurzíva",
+    "nestUnderNew": "Vnoriť pod novú záložku...",
+    "indent": "Zväčšiť odsadenie",
+    "outdent": "Zmenšiť odsadenie",
+    "deleteBookmarks": "Odstrániť záložky ({{count}})"
   },
   "thumbnail": {
     "rotateLeft": "Otočiť doľava",

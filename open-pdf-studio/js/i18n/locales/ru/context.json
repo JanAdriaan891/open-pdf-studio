@@ -104,7 +104,11 @@
     "colorGray": "Серый",
     "colorCustom": "Другое...",
     "bold": "Полужирный",
-    "italic": "Курсив"
+    "italic": "Курсив",
+    "nestUnderNew": "Вложить в новую закладку...",
+    "indent": "Увеличить отступ",
+    "outdent": "Уменьшить отступ",
+    "deleteBookmarks": "Удалить закладки: {{count}}"
   },
   "thumbnail": {
     "rotateLeft": "Повернуть влево",

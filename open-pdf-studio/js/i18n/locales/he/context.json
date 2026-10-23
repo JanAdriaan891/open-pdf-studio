@@ -104,7 +104,11 @@
     "colorGray": "אפור",
     "colorCustom": "מותאם אישית...",
     "bold": "מודגש",
-    "italic": "נטוי"
+    "italic": "נטוי",
+    "nestUnderNew": "קינון תחת סימנייה חדשה...",
+    "indent": "הגדלת כניסה",
+    "outdent": "הקטנת כניסה",
+    "deleteBookmarks": "מחיקת {{count}} סימניות"
   },
   "thumbnail": {
     "rotateLeft": "סיבוב שמאלה",

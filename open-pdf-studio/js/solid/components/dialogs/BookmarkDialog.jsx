@@ -20,7 +20,10 @@ export default function BookmarkDialog(props) {
   let resolved = false;
 
   const isEdit = () => !!props.data?.isEdit;
-  const headerText = () => isEdit() ? t('bookmark.editTitle') : t('bookmark.addTitle');
+  // Nesten onder een nieuwe bladwijzer (#690) vraagt ook een titel.
+  const headerText = () => props.data?.modus === 'nest'
+    ? t('bookmark.nestTitle')
+    : (isEdit() ? t('bookmark.editTitle') : t('bookmark.addTitle'));
 
   onMount(() => {
     if (titleInputRef) {

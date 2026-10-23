@@ -104,7 +104,11 @@
     "colorGray": "ধূসর",
     "colorCustom": "কাস্টম...",
     "bold": "গাঢ়",
-    "italic": "তির্যক"
+    "italic": "তির্যক",
+    "nestUnderNew": "নতুন বুকমার্কের অধীনে রাখুন...",
+    "indent": "ইনডেন্ট বাড়ান",
+    "outdent": "ইনডেন্ট কমান",
+    "deleteBookmarks": "{{count}}টি বুকমার্ক মুছুন"
   },
   "thumbnail": {
     "rotateLeft": "বামে ঘোরান",

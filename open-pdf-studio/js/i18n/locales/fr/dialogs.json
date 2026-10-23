@@ -427,7 +427,10 @@
     "titlePlaceholder": "Titre du signet",
     "pageLabel": "Page :",
     "colorLabel": "Couleur :",
-    "styleLabel": "Style :"
+    "styleLabel": "Style :",
+    "nestTitle": "Imbriquer sous un nouveau signet",
+    "deleteTitle": "Supprimer les signets",
+    "deleteConfirm": "Supprimer les {{count}} signets sélectionnés et tout ce qu’ils contiennent ?"
   },
   "formValidation": {
     "title": "Erreur de validation"

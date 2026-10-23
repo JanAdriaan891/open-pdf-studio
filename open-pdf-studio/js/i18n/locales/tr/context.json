@@ -104,7 +104,11 @@
     "colorGray": "Gri",
     "colorCustom": "Özel...",
     "bold": "Kalın",
-    "italic": "İtalik"
+    "italic": "İtalik",
+    "nestUnderNew": "Yeni yer iminin altına yerleştir...",
+    "indent": "Girintiyi artır",
+    "outdent": "Girintiyi azalt",
+    "deleteBookmarks": "{{count}} yer imini sil"
   },
   "thumbnail": {
     "rotateLeft": "Sola Döndür",

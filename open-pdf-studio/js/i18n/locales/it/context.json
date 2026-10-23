@@ -104,7 +104,11 @@
     "colorGray": "Grigio",
     "colorCustom": "Personalizzato...",
     "bold": "Grassetto",
-    "italic": "Corsivo"
+    "italic": "Corsivo",
+    "nestUnderNew": "Annida sotto un nuovo segnalibro...",
+    "indent": "Aumenta rientro",
+    "outdent": "Riduci rientro",
+    "deleteBookmarks": "Elimina {{count}} segnalibri"
   },
   "thumbnail": {
     "rotateLeft": "Ruota a sinistra",

@@ -427,7 +427,10 @@
     "titlePlaceholder": "Títol del marcador",
     "pageLabel": "Pàgina:",
     "colorLabel": "Color:",
-    "styleLabel": "Estil:"
+    "styleLabel": "Estil:",
+    "nestTitle": "Niua sota un marcador nou",
+    "deleteTitle": "Suprimeix els marcadors",
+    "deleteConfirm": "Voleu suprimir {{count}} marcadors seleccionats i tot el que hi ha a sota?"
   },
   "formValidation": {
     "title": "Error de validació"

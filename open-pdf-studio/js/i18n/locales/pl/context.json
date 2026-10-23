@@ -104,7 +104,11 @@
     "colorGray": "Szary",
     "colorCustom": "Niestandardowo...",
     "bold": "Pogrubienie",
-    "italic": "Kursywa"
+    "italic": "Kursywa",
+    "nestUnderNew": "Zagnieźdź pod nową zakładką...",
+    "indent": "Zwiększ wcięcie",
+    "outdent": "Zmniejsz wcięcie",
+    "deleteBookmarks": "Usuń zakładki ({{count}})"
   },
   "thumbnail": {
     "rotateLeft": "Obróć w lewo",

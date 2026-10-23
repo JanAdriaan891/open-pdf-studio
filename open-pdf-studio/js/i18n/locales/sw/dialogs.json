@@ -427,7 +427,10 @@
     "titlePlaceholder": "Kichwa cha alamisho",
     "pageLabel": "Ukurasa:",
     "colorLabel": "Rangi:",
-    "styleLabel": "Mtindo:"
+    "styleLabel": "Mtindo:",
+    "nestTitle": "Weka chini ya alamisho jipya",
+    "deleteTitle": "Futa alamisho",
+    "deleteConfirm": "Futa alamisho {{count}} zilizochaguliwa na kila kitu kilicho chini yake?"
   },
   "formValidation": {
     "title": "Kosa la Uthibitishaji"

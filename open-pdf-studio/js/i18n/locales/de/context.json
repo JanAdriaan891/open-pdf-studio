@@ -104,7 +104,11 @@
     "colorGray": "Grau",
     "colorCustom": "Benutzerdefiniert...",
     "bold": "Fett",
-    "italic": "Kursiv"
+    "italic": "Kursiv",
+    "nestUnderNew": "Unter neuem Lesezeichen verschachteln...",
+    "indent": "Einrücken",
+    "outdent": "Ausrücken",
+    "deleteBookmarks": "{{count}} Lesezeichen löschen"
   },
   "thumbnail": {
     "rotateLeft": "Links drehen",

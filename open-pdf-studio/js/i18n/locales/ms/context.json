@@ -104,7 +104,11 @@
     "colorGray": "Kelabu",
     "colorCustom": "Tersuai...",
     "bold": "Tebal",
-    "italic": "Italik"
+    "italic": "Italik",
+    "nestUnderNew": "Sarangkan di bawah penanda buku baharu...",
+    "indent": "Inden",
+    "outdent": "Nyahinden",
+    "deleteBookmarks": "Padam {{count}} penanda buku"
   },
   "thumbnail": {
     "rotateLeft": "Putar Kiri",

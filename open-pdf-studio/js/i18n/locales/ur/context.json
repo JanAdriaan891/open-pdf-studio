@@ -104,7 +104,11 @@
     "colorGray": "سرمئی",
     "colorCustom": "حسب ضرورت...",
     "bold": "بولڈ",
-    "italic": "ترچھا"
+    "italic": "ترچھا",
+    "nestUnderNew": "نئے بک مارک کے تحت رکھیں...",
+    "indent": "انڈینٹ بڑھائیں",
+    "outdent": "انڈینٹ گھٹائیں",
+    "deleteBookmarks": "{{count}} بک مارکس حذف کریں"
   },
   "thumbnail": {
     "rotateLeft": "بائیں گھمائیں",

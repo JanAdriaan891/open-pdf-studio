@@ -104,7 +104,11 @@
     "colorGray": "Сива",
     "colorCustom": "Прилагођено...",
     "bold": "Подебљано",
-    "italic": "Курзив"
+    "italic": "Курзив",
+    "nestUnderNew": "Угнезди под нови обележивач...",
+    "indent": "Повећај увлачење",
+    "outdent": "Смањи увлачење",
+    "deleteBookmarks": "Избриши обележиваче ({{count}})"
   },
   "thumbnail": {
     "rotateLeft": "Ротирај лево",

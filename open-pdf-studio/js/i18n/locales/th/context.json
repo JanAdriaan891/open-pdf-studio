@@ -104,7 +104,11 @@
     "colorGray": "เทา",
     "colorCustom": "กำหนดเอง...",
     "bold": "ตัวหนา",
-    "italic": "ตัวเอียง"
+    "italic": "ตัวเอียง",
+    "nestUnderNew": "ซ้อนไว้ใต้บุ๊กมาร์กใหม่...",
+    "indent": "เพิ่มการเยื้อง",
+    "outdent": "ลดการเยื้อง",
+    "deleteBookmarks": "ลบบุ๊กมาร์ก {{count}} รายการ"
   },
   "thumbnail": {
     "rotateLeft": "หมุนซ้าย",

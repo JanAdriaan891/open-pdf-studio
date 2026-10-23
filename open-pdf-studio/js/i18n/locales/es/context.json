@@ -104,7 +104,11 @@
     "colorGray": "Gris",
     "colorCustom": "Personalizado...",
     "bold": "Negrita",
-    "italic": "Cursiva"
+    "italic": "Cursiva",
+    "nestUnderNew": "Anidar bajo un marcador nuevo...",
+    "indent": "Aumentar sangría",
+    "outdent": "Disminuir sangría",
+    "deleteBookmarks": "Eliminar {{count}} marcadores"
   },
   "thumbnail": {
     "rotateLeft": "Girar a la izquierda",

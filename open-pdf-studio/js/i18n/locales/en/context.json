@@ -110,7 +110,11 @@
     "colorGray": "Gray",
     "colorCustom": "Custom...",
     "bold": "Bold",
-    "italic": "Italic"
+    "italic": "Italic",
+    "nestUnderNew": "Nest Under New Bookmark...",
+    "indent": "Indent",
+    "outdent": "Outdent",
+    "deleteBookmarks": "Delete {{count}} Bookmarks"
   },
   "thumbnail": {
     "rotateLeft": "Rotate Left",

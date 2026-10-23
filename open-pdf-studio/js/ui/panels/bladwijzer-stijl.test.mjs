@@ -110,6 +110,7 @@ test('menu en dialoog zijn aangesloten op het model', () => {
   const dialoog = readFileSync(join(hier, '../../solid/components/dialogs/BookmarkDialog.jsx'), 'utf8');
   assert.match(dialoog, /onOk\(\{ title: t, page: p, color: kleur\(\), bold: vet\(\), italic: cursief\(\) \}\)/);
   const paneel = readFileSync(join(hier, 'bookmarks.js'), 'utf8');
-  assert.match(paneel, /recordBookmarksChange\(oud, bookmarks\)/, 'stijl op de selectie is één undo-stap');
+  assert.match(paneel, /await vervangLijst\(doc, oud, bookmarks\)/, 'stijl op de selectie gaat via één lijstwissel');
+  assert.match(paneel, /recordBookmarksChange\(oud, nieuw\)/, 'een lijstwissel is één undo-stap');
   assert.match(paneel, /bm\.color = result\.color \|\| null/, 'bewerken neemt de kleur over');
 });

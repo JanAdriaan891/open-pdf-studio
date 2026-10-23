@@ -427,7 +427,10 @@
     "titlePlaceholder": "बुकमार्क शीर्षक",
     "pageLabel": "पृष्ठ:",
     "colorLabel": "रंग:",
-    "styleLabel": "शैली:"
+    "styleLabel": "शैली:",
+    "nestTitle": "नए बुकमार्क के अंतर्गत रखें",
+    "deleteTitle": "बुकमार्क हटाएँ",
+    "deleteConfirm": "चयनित {{count}} बुकमार्क और उनके अंतर्गत सब कुछ हटाएँ?"
   },
   "formValidation": {
     "title": "सत्यापन त्रुटि"

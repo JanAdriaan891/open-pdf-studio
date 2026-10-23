@@ -104,7 +104,11 @@
     "colorGray": "Xám",
     "colorCustom": "Tùy chỉnh...",
     "bold": "Đậm",
-    "italic": "Nghiêng"
+    "italic": "Nghiêng",
+    "nestUnderNew": "Lồng vào dấu trang mới...",
+    "indent": "Thụt lề",
+    "outdent": "Giảm thụt lề",
+    "deleteBookmarks": "Xóa {{count}} dấu trang"
   },
   "thumbnail": {
     "rotateLeft": "Xoay trái",

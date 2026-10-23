@@ -104,7 +104,11 @@
     "colorGray": "Abu-abu",
     "colorCustom": "Kustom...",
     "bold": "Tebal",
-    "italic": "Miring"
+    "italic": "Miring",
+    "nestUnderNew": "Sarangkan di bawah penanda baru...",
+    "indent": "Tambah inden",
+    "outdent": "Kurangi inden",
+    "deleteBookmarks": "Hapus {{count}} penanda"
   },
   "thumbnail": {
     "rotateLeft": "Putar Kiri",

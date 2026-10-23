@@ -427,7 +427,10 @@
     "titlePlaceholder": "Könyvjelző címe",
     "pageLabel": "Oldal:",
     "colorLabel": "Szín:",
-    "styleLabel": "Stílus:"
+    "styleLabel": "Stílus:",
+    "nestTitle": "Beágyazás új könyvjelző alá",
+    "deleteTitle": "Könyvjelzők törlése",
+    "deleteConfirm": "Törli a kijelölt {{count}} könyvjelzőt és mindent alattuk?"
   },
   "formValidation": {
     "title": "Érvényesítési hiba"

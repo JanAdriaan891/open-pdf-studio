@@ -427,7 +427,10 @@
     "titlePlaceholder": "عنوان الإشارة المرجعية",
     "pageLabel": "الصفحة:",
     "colorLabel": "اللون:",
-    "styleLabel": "النمط:"
+    "styleLabel": "النمط:",
+    "nestTitle": "تضمين تحت إشارة مرجعية جديدة",
+    "deleteTitle": "حذف الإشارات المرجعية",
+    "deleteConfirm": "حذف {{count}} إشارات مرجعية محددة وكل ما تحتها؟"
   },
   "formValidation": {
     "title": "خطأ في التحقق"

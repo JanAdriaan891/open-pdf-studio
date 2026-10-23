@@ -427,7 +427,10 @@
     "titlePlaceholder": "Titlu semn de carte",
     "pageLabel": "Pagina:",
     "colorLabel": "Culoare:",
-    "styleLabel": "Stil:"
+    "styleLabel": "Stil:",
+    "nestTitle": "Imbricare sub un marcaj nou",
+    "deleteTitle": "Ștergere marcaje",
+    "deleteConfirm": "Ștergeți {{count}} marcaje selectate și tot ce se află sub ele?"
   },
   "formValidation": {
     "title": "Eroare de validare"

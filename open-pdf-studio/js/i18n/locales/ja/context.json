@@ -104,7 +104,11 @@
     "colorGray": "灰色",
     "colorCustom": "カスタム...",
     "bold": "太字",
-    "italic": "斜体"
+    "italic": "斜体",
+    "nestUnderNew": "新しいしおりの下に入れる...",
+    "indent": "インデント",
+    "outdent": "インデント解除",
+    "deleteBookmarks": "{{count}} 件のしおりを削除"
   },
   "thumbnail": {
     "rotateLeft": "左に回転",

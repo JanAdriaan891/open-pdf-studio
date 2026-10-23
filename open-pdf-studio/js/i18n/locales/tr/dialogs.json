@@ -427,7 +427,10 @@
     "titlePlaceholder": "Yer imi başlığı",
     "pageLabel": "Sayfa:",
     "colorLabel": "Renk:",
-    "styleLabel": "Stil:"
+    "styleLabel": "Stil:",
+    "nestTitle": "Yeni yer iminin altına yerleştir",
+    "deleteTitle": "Yer imlerini sil",
+    "deleteConfirm": "Seçili {{count}} yer imi ve altındaki her şey silinsin mi?"
   },
   "formValidation": {
     "title": "Doğrulama Hatası"

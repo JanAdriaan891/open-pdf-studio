@@ -104,7 +104,11 @@
     "colorGray": "Grå",
     "colorCustom": "Brugerdefineret...",
     "bold": "Fed",
-    "italic": "Kursiv"
+    "italic": "Kursiv",
+    "nestUnderNew": "Indlejr under nyt bogmærke...",
+    "indent": "Indryk",
+    "outdent": "Ryk ud",
+    "deleteBookmarks": "Slet {{count}} bogmærker"
   },
   "thumbnail": {
     "rotateLeft": "Roter til venstre",

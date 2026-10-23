@@ -104,7 +104,11 @@
     "colorGray": "Grå",
     "colorCustom": "Egendefinert...",
     "bold": "Fet",
-    "italic": "Kursiv"
+    "italic": "Kursiv",
+    "nestUnderNew": "Legg under nytt bokmerke...",
+    "indent": "Øk innrykk",
+    "outdent": "Reduser innrykk",
+    "deleteBookmarks": "Slett {{count}} bokmerker"
   },
   "thumbnail": {
     "rotateLeft": "Roter til venstre",

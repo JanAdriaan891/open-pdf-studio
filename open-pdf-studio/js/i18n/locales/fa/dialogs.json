@@ -427,7 +427,10 @@
     "titlePlaceholder": "عنوان نشانک",
     "pageLabel": "صفحه:",
     "colorLabel": "رنگ:",
-    "styleLabel": "سبک:"
+    "styleLabel": "سبک:",
+    "nestTitle": "قرار دادن زیر نشانک جدید",
+    "deleteTitle": "حذف نشانک‌ها",
+    "deleteConfirm": "{{count}} نشانک انتخاب‌شده و هر آنچه زیر آن‌هاست حذف شود؟"
   },
   "formValidation": {
     "title": "خطای اعتبارسنجی"

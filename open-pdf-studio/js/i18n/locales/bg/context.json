@@ -104,7 +104,11 @@
     "colorGray": "Сив",
     "colorCustom": "По избор...",
     "bold": "Удебелен",
-    "italic": "Курсив"
+    "italic": "Курсив",
+    "nestUnderNew": "Влагане под нова отметка...",
+    "indent": "Увеличаване на отстъпа",
+    "outdent": "Намаляване на отстъпа",
+    "deleteBookmarks": "Изтриване на {{count}} отметки"
   },
   "thumbnail": {
     "rotateLeft": "Завъртане наляво",

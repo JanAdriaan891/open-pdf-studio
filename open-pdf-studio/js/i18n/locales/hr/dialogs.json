@@ -427,7 +427,10 @@
     "titlePlaceholder": "Naslov oznake",
     "pageLabel": "Stranica:",
     "colorLabel": "Boja:",
-    "styleLabel": "Stil:"
+    "styleLabel": "Stil:",
+    "nestTitle": "Ugnijezdi pod novu knjižnu oznaku",
+    "deleteTitle": "Izbriši knjižne oznake",
+    "deleteConfirm": "Izbrisati odabrane knjižne oznake ({{count}}) i sve ispod njih?"
   },
   "formValidation": {
     "title": "Pogreška provjere valjanosti"

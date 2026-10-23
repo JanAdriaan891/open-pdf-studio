@@ -104,7 +104,11 @@
     "colorGray": "Harmaa",
     "colorCustom": "Mukautettu...",
     "bold": "Lihavoitu",
-    "italic": "Kursiivi"
+    "italic": "Kursiivi",
+    "nestUnderNew": "Sisennä uuden kirjanmerkin alle...",
+    "indent": "Sisennä",
+    "outdent": "Pienennä sisennystä",
+    "deleteBookmarks": "Poista {{count}} kirjanmerkkiä"
   },
   "thumbnail": {
     "rotateLeft": "Kierrä vasemmalle",

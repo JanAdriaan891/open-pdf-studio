@@ -110,7 +110,11 @@
     "colorGray": "ສີເທົາ",
     "colorCustom": "ກຳນົດເອງ...",
     "bold": "ໜາ",
-    "italic": "ອຽງ"
+    "italic": "ອຽງ",
+    "nestUnderNew": "ຈັດໄວ້ພາຍໃຕ້ບຸກມາກໃໝ່...",
+    "indent": "ຍໍ້ໜ້າເຂົ້າ",
+    "outdent": "ຍໍ້ໜ້າອອກ",
+    "deleteBookmarks": "ລຶບ {{count}} ບຸກມາກ"
   },
   "thumbnail": {
     "rotateLeft": "ໝູນຊ້າຍ",

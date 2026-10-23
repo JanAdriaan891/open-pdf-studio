@@ -110,7 +110,11 @@
     "colorGray": "Grijs",
     "colorCustom": "Aangepast...",
     "bold": "Vet",
-    "italic": "Cursief"
+    "italic": "Cursief",
+    "nestUnderNew": "Onder nieuwe bladwijzer nesten...",
+    "indent": "Inspringen",
+    "outdent": "Uitspringen",
+    "deleteBookmarks": "{{count}} bladwijzers verwijderen"
   },
   "thumbnail": {
     "rotateLeft": "Linksom draaien",

@@ -104,7 +104,11 @@
     "colorGray": "Gri",
     "colorCustom": "Personalizat...",
     "bold": "Aldin",
-    "italic": "Cursiv"
+    "italic": "Cursiv",
+    "nestUnderNew": "Imbricare sub un marcaj nou...",
+    "indent": "Mărire indent",
+    "outdent": "Micșorare indent",
+    "deleteBookmarks": "Ștergere {{count}} marcaje"
   },
   "thumbnail": {
     "rotateLeft": "Rotire la stanga",

@@ -427,7 +427,10 @@
     "titlePlaceholder": "Наслов обележивача",
     "pageLabel": "Страница:",
     "colorLabel": "Боја:",
-    "styleLabel": "Стил:"
+    "styleLabel": "Стил:",
+    "nestTitle": "Угнезди под нови обележивач",
+    "deleteTitle": "Брисање обележивача",
+    "deleteConfirm": "Избрисати изабране обележиваче ({{count}}) и све испод њих?"
   },
   "formValidation": {
     "title": "Грешка валидације"

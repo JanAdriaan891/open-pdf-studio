@@ -104,7 +104,11 @@
     "colorGray": "சாம்பல்",
     "colorCustom": "தனிப்பயன்...",
     "bold": "தடிமன்",
-    "italic": "சாய்வு"
+    "italic": "சாய்வு",
+    "nestUnderNew": "புதிய புத்தகக்குறியின் கீழ் வை...",
+    "indent": "உள்தள்ளு",
+    "outdent": "வெளித்தள்ளு",
+    "deleteBookmarks": "{{count}} புத்தகக்குறிகளை நீக்கு"
   },
   "thumbnail": {
     "rotateLeft": "இடமாகச் சுழற்று",

@@ -104,7 +104,11 @@
     "colorGray": "Gris",
     "colorCustom": "Personalitzat...",
     "bold": "Negreta",
-    "italic": "Cursiva"
+    "italic": "Cursiva",
+    "nestUnderNew": "Niua sota un marcador nou...",
+    "indent": "Augmenta el sagnat",
+    "outdent": "Redueix el sagnat",
+    "deleteBookmarks": "Suprimeix {{count}} marcadors"
   },
   "thumbnail": {
     "rotateLeft": "Gira a l'esquerra",

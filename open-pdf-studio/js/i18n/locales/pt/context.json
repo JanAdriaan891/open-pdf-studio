@@ -104,7 +104,11 @@
     "colorGray": "Cinza",
     "colorCustom": "Personalizado...",
     "bold": "Negrito",
-    "italic": "Itálico"
+    "italic": "Itálico",
+    "nestUnderNew": "Aninhar em um novo marcador...",
+    "indent": "Aumentar recuo",
+    "outdent": "Diminuir recuo",
+    "deleteBookmarks": "Excluir {{count}} marcadores"
   },
   "thumbnail": {
     "rotateLeft": "Girar à esquerda",

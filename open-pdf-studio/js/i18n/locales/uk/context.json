@@ -104,7 +104,11 @@
     "colorGray": "Сірий",
     "colorCustom": "Користувацький...",
     "bold": "Жирний",
-    "italic": "Курсив"
+    "italic": "Курсив",
+    "nestUnderNew": "Вкласти в нову закладку...",
+    "indent": "Збільшити відступ",
+    "outdent": "Зменшити відступ",
+    "deleteBookmarks": "Видалити закладки: {{count}}"
   },
   "thumbnail": {
     "rotateLeft": "Повернути ліворуч",

@@ -7,6 +7,7 @@ import test from 'node:test';
 import { PDFDocument, PDFName, PDFArray, PDFNumber } from 'pdf-lib';
 import { opslaan } from './rondgang.testhulp.mjs';
 import { loadBookmarksFromPdf, pdfjsKleurNaarHex } from './bladwijzers-lezen.js';
+import { verplaatsBladwijzers, nestOnderNieuw, selectieBereik } from '../ui/panels/bladwijzer-boom.js';
 
 const N = (s) => PDFName.of(s);
 const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
@@ -107,4 +108,37 @@ test('opslaan en heropenen: kleur, vet, cursief, volgorde en nesting blijven', a
   // op elke bladwijzer, geen kapotte kleur).
   const opnieuw = await opslaan(uit, [], { document: { bookmarks: terug } });
   assert.deepEqual(await rauweOutline(opnieuw), rauw);
+});
+
+test('verplaatsen en nesten (#690) overleven opslaan en heropenen', async () => {
+  const bron = await driePaginas();
+  // Een platte set zoals plannen binnenkomen: één bladwijzer per blad.
+  const plat = ['Cover', 'C-101', 'C-102', 'S-201', 'S-202', 'CIVIL'].map((t, i) => bm(`b${i}`, t, (i % 3) + 1, null, i));
+  const eerste = await opslaan(bron, [], { document: { bookmarks: plat } });
+  let lijst = await leesBladwijzers(eerste);
+  const id = (titel) => lijst.find((b) => b.title === titel).id;
+
+  // Ctrl+klik C-101 en C-102, slepen op CIVIL; daarna S-201..S-202 onder een nieuwe STRUCTURAL.
+  lijst = verplaatsBladwijzers(lijst, [id('C-101'), id('C-102')], id('CIVIL'), 'inside');
+  lijst = nestOnderNieuw(lijst, selectieBereik(lijst, id('S-201'), id('S-202')),
+    bm('nieuw', 'STRUCTURAL', 2, null, 0, { color: '#107c10', bold: true }));
+  // En Cover naar achteren (streep onder CIVIL, dat dicht staat).
+  lijst = lijst.map((b) => (b.id === id('CIVIL') ? { ...b, expanded: false } : b));
+  lijst = verplaatsBladwijzers(lijst, [id('Cover')], id('CIVIL'), 'after');
+
+  const uit = await opslaan(eerste, [], { document: { bookmarks: lijst } });
+  assert.deepEqual(await rauweOutline(uit), [
+    { titel: 'STRUCTURAL', C: [16, 124, 16], F: 2, kinderen: [
+      { titel: 'S-201', C: null, F: null, kinderen: [] },
+      { titel: 'S-202', C: null, F: null, kinderen: [] },
+    ] },
+    { titel: 'CIVIL', C: null, F: null, kinderen: [
+      { titel: 'C-101', C: null, F: null, kinderen: [] },
+      { titel: 'C-102', C: null, F: null, kinderen: [] },
+    ] },
+    { titel: 'Cover', C: null, F: null, kinderen: [] },
+  ]);
+  const terug = await leesBladwijzers(uit);
+  assert.deepEqual(terug.map((b) => b.title), ['STRUCTURAL', 'S-201', 'S-202', 'CIVIL', 'C-101', 'C-102', 'Cover']);
+  assert.equal(terug.find((b) => b.title === 'STRUCTURAL').page, 2);
 });

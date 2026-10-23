@@ -104,7 +104,11 @@
     "colorGray": "Γκρι",
     "colorCustom": "Προσαρμοσμένο...",
     "bold": "Έντονα",
-    "italic": "Πλάγια"
+    "italic": "Πλάγια",
+    "nestUnderNew": "Ένθεση κάτω από νέο σελιδοδείκτη...",
+    "indent": "Αύξηση εσοχής",
+    "outdent": "Μείωση εσοχής",
+    "deleteBookmarks": "Διαγραφή {{count}} σελιδοδεικτών"
   },
   "thumbnail": {
     "rotateLeft": "Περιστροφή αριστερά",

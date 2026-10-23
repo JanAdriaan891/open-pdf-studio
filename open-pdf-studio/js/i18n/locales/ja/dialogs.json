@@ -427,7 +427,10 @@
     "titlePlaceholder": "ブックマークのタイトル",
     "pageLabel": "ページ：",
     "colorLabel": "色：",
-    "styleLabel": "スタイル："
+    "styleLabel": "スタイル：",
+    "nestTitle": "新しいしおりの下に入れる",
+    "deleteTitle": "しおりの削除",
+    "deleteConfirm": "選択した {{count}} 件のしおりと、その下のすべてを削除しますか？"
   },
   "formValidation": {
     "title": "入力エラー"

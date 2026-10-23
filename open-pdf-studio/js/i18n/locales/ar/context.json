@@ -104,7 +104,11 @@
     "colorGray": "رمادي",
     "colorCustom": "مخصص...",
     "bold": "غامق",
-    "italic": "مائل"
+    "italic": "مائل",
+    "nestUnderNew": "تضمين تحت إشارة مرجعية جديدة...",
+    "indent": "زيادة المسافة البادئة",
+    "outdent": "إنقاص المسافة البادئة",
+    "deleteBookmarks": "حذف {{count}} إشارات مرجعية"
   },
   "thumbnail": {
     "rotateLeft": "تدوير لليسار",

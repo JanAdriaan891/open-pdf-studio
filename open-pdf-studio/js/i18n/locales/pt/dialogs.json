@@ -427,7 +427,10 @@
     "titlePlaceholder": "Título do marcador",
     "pageLabel": "Página:",
     "colorLabel": "Cor:",
-    "styleLabel": "Estilo:"
+    "styleLabel": "Estilo:",
+    "nestTitle": "Aninhar em um novo marcador",
+    "deleteTitle": "Excluir marcadores",
+    "deleteConfirm": "Excluir {{count}} marcadores selecionados e tudo o que está abaixo deles?"
   },
   "formValidation": {
     "title": "Erro de validação"

@@ -104,7 +104,11 @@
     "colorGray": "Gris",
     "colorCustom": "Personnalisé...",
     "bold": "Gras",
-    "italic": "Italique"
+    "italic": "Italique",
+    "nestUnderNew": "Imbriquer sous un nouveau signet...",
+    "indent": "Augmenter le retrait",
+    "outdent": "Diminuer le retrait",
+    "deleteBookmarks": "Supprimer {{count}} signets"
   },
   "thumbnail": {
     "rotateLeft": "Rotation à gauche",

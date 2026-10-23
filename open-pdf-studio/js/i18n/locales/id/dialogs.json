@@ -427,7 +427,10 @@
     "titlePlaceholder": "Judul penanda",
     "pageLabel": "Halaman:",
     "colorLabel": "Warna:",
-    "styleLabel": "Gaya:"
+    "styleLabel": "Gaya:",
+    "nestTitle": "Sarangkan di bawah penanda baru",
+    "deleteTitle": "Hapus penanda",
+    "deleteConfirm": "Hapus {{count}} penanda terpilih beserta semua yang ada di bawahnya?"
   },
   "formValidation": {
     "title": "Kesalahan Validasi"

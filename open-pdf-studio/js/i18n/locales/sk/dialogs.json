@@ -427,7 +427,10 @@
     "titlePlaceholder": "Názov záložky",
     "pageLabel": "Strana:",
     "colorLabel": "Farba:",
-    "styleLabel": "Štýl:"
+    "styleLabel": "Štýl:",
+    "nestTitle": "Vnoriť pod novú záložku",
+    "deleteTitle": "Odstrániť záložky",
+    "deleteConfirm": "Odstrániť vybraté záložky ({{count}}) a všetko pod nimi?"
   },
   "formValidation": {
     "title": "Chyba overenia"
