@@ -1,14 +1,5 @@
-import OcrReviewDialog from './dialogs/OcrReviewDialog.jsx';
-import DocumentWorkflowsDialog from './dialogs/DocumentWorkflowsDialog.jsx';
-import DrawingSetsDialog from './dialogs/DrawingSetsDialog.jsx';
-import SheetLinksDialog from './dialogs/SheetLinksDialog.jsx';
-import ApprovalRoutingDialog from './dialogs/ApprovalRoutingDialog.jsx';
-import { For } from 'solid-js';
+import { For, lazy } from 'solid-js';
 import { getDialogs } from '../stores/dialogStore.js';
-import PortfolioDialog from './dialogs/PortfolioDialog.jsx';
-import FormRecognitionDialog from './dialogs/FormRecognitionDialog.jsx';
-import SymbolSearchDialog from './dialogs/SymbolSearchDialog.jsx';
-import WorkbookBindingsDialog from './dialogs/WorkbookBindingsDialog.jsx';
 import DocPropertiesDialog from './DocPropertiesDialog.jsx';
 import PreferencesDialog from './preferences/PreferencesDialog.jsx';
 import NewDocDialog from './dialogs/NewDocDialog.jsx';
@@ -71,6 +62,18 @@ import TekeninstellingenDialog from './dialogs/TekeninstellingenDialog.jsx';
 import SysteemtypenDialog from './dialogs/SysteemtypenDialog.jsx';
 import SysteemPaneelComponentDialog from './dialogs/SysteemPaneelComponentDialog.jsx';
 import PrintProgressToast from './PrintProgressToast.jsx';
+
+// Feature dialogs that are opened rarely: loaded on first use, with their
+// services, so they stay out of the main chunk.
+const OcrReviewDialog = lazy(() => import('./dialogs/OcrReviewDialog.jsx'));
+const DocumentWorkflowsDialog = lazy(() => import('./dialogs/DocumentWorkflowsDialog.jsx'));
+const DrawingSetsDialog = lazy(() => import('./dialogs/DrawingSetsDialog.jsx'));
+const SheetLinksDialog = lazy(() => import('./dialogs/SheetLinksDialog.jsx'));
+const ApprovalRoutingDialog = lazy(() => import('./dialogs/ApprovalRoutingDialog.jsx'));
+const PortfolioDialog = lazy(() => import('./dialogs/PortfolioDialog.jsx'));
+const FormRecognitionDialog = lazy(() => import('./dialogs/FormRecognitionDialog.jsx'));
+const SymbolSearchDialog = lazy(() => import('./dialogs/SymbolSearchDialog.jsx'));
+const WorkbookBindingsDialog = lazy(() => import('./dialogs/WorkbookBindingsDialog.jsx'));
 
 const DIALOG_MAP = {
   'portfolio': PortfolioDialog,

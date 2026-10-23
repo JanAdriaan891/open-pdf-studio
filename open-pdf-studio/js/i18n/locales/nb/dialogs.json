@@ -1246,7 +1246,9 @@
     "empty": "Ingen kandidater til gjennomgang. Kjør OCR først, eller hev terskelen. Eldre PDF-filer uten gjennomgangsmetadata trenger OCR på nytt.",
     "error": "Kunne ikke oppdatere verifiseringen. Oppdater køen hvis dokumentet er endret.",
     "accepted": "Godtatt",
-    "corrected": "Rettet"
+    "corrected": "Rettet",
+    "notEncodable": "Den søkbare OCR-teksten kan ikke inneholde disse tegnene: {{characters}}. Rett ordet med andre tegn.",
+    "archived": "Kontrollen er lagret i filen. Kjør OCR på denne siden på nytt for å endre den."
   },
   "portfolio": {
     "title": "PDF-samlingsportefølje",

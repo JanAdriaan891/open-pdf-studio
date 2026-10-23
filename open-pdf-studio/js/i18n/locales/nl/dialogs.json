@@ -1246,7 +1246,9 @@
     "empty": "Geen kandidaten. Voer eerst OCR uit of verhoog de grens. Oudere PDF’s zonder verificatiegegevens hebben opnieuw OCR nodig.",
     "error": "Verificatie kon niet worden bijgewerkt. Vernieuw de lijst als het document is gewijzigd.",
     "accepted": "Geaccepteerd",
-    "corrected": "Gecorrigeerd"
+    "corrected": "Gecorrigeerd",
+    "notEncodable": "De doorzoekbare OCR-tekst kan deze tekens niet bevatten: {{characters}}. Corrigeer het woord met andere tekens.",
+    "archived": "Controle opgeslagen in het bestand. Voer OCR op deze pagina opnieuw uit om haar te wijzigen."
   },
   "portfolio": {
     "title": "PDF-collectieportfolio",

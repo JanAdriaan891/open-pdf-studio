@@ -140,6 +140,7 @@
     "prepareOcr": "Fungua kwa OCR…"
   },
   "symbolSearch": "Tafuta alama",
+  "findMoreOptions": "Chaguo zaidi za utafutaji",
   "watchActive": "Inafuatilia {{folder}}",
   "watchFailed": "Hitilafu ya ufuatiliaji: {{folder}}",
   "watchTitle": "Mtiririko wa kazi wa hati unafuatilia {{input}} na kuandika kwenye {{output}}. Bofya ili kuacha kufuatilia.",

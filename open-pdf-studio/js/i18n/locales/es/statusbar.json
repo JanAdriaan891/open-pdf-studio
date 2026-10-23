@@ -140,6 +140,7 @@
     "prepareOcr": "Abrir para OCR…"
   },
   "symbolSearch": "Buscar símbolos",
+  "findMoreOptions": "Más opciones de búsqueda",
   "watchActive": "Vigilando {{folder}}",
   "watchFailed": "Error de vigilancia: {{folder}}",
   "watchTitle": "El flujo de trabajo de documentos vigila {{input}} y escribe en {{output}}. Haga clic para dejar de vigilar.",

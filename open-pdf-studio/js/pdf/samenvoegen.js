@@ -38,6 +38,7 @@ import {
   PDFObjectCopier, PDFPage, PDFStream,
 } from 'pdf-lib';
 import { voegLagenSamen } from './cad-import-logica.js';
+import { relinkZonesInPages, zoneIdsInPages } from './spatial-zone-relink.js';
 
 const N = (s) => PDFName.of(s);
 
@@ -336,15 +337,20 @@ function filterVolgorde(context, arr, houden) {
  * De bronnen zelf worden aangepast (handtekeningen, structuurverwijzingen):
  * geef geladen kopieën, nooit een document dat nog ergens anders dient.
  *
+ * `zoneIds`: ids van ruimtelijke zones die het documentmodel al gebruikt;
+ * een ingevoegde zone met zo'n id (of een id van het doel of van een
+ * eerdere bron) krijgt een nieuw id, zodat beide geldig blijven.
+ *
  * @param {import('pdf-lib').PDFDocument} doel
  * @param {{doc: import('pdf-lib').PDFDocument, naam: string}[]} bronnen
- * @param {{invoegIndex: number, positie?: 'start'|'after'|'end'}} opties
+ * @param {{invoegIndex: number, positie?: 'start'|'after'|'end', zoneIds?: Iterable<string>}} opties
  * @returns {Promise<{bronnen: object[], paginasIngevoegd: number}>}
  */
-export async function voegPdfsSamen(doel, bronnen, { invoegIndex, positie = 'end' } = {}) {
+export async function voegPdfsSamen(doel, bronnen, { invoegIndex, positie = 'end', zoneIds = [] } = {}) {
   const context = doel.context;
   const catalogus = doel.catalog;
   const oudAantal = doel.getPageCount();
+  const bezetteZones = new Set([...zoneIds, ...zoneIdsInPages(context, doel.getPages())]);
   const start0 = Math.max(0, Math.min(Number.isFinite(invoegIndex) ? invoegIndex : oudAantal, oudAantal));
 
   // Wat het doel al had, vóór er iets bij kwam.
@@ -436,6 +442,8 @@ export async function voegPdfsSamen(doel, bronnen, { invoegIndex, positie = 'end
       }
     }
     info.aantal = bronPaginas.length;
+    // Zones van deze bron met een id dat al bestaat: een nieuw id.
+    relinkZonesInPages(context, nieuwePaginas, bezetteZones);
 
     // Formuliervelden.
     if (bronAf) {

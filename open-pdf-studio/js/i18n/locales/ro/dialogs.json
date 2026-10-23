@@ -1246,7 +1246,9 @@
     "empty": "Nu există cuvinte de verificat. Rulați mai întâi OCR sau ridicați pragul. PDF-urile mai vechi fără metadate de verificare necesită din nou OCR.",
     "error": "Verificarea nu a putut fi actualizată. Reîmprospătați coada dacă documentul s-a modificat.",
     "accepted": "Acceptat",
-    "corrected": "Corectat"
+    "corrected": "Corectat",
+    "notEncodable": "Textul OCR căutabil nu poate conține aceste caractere: {{characters}}. Corectați cuvântul folosind alte caractere.",
+    "archived": "Verificarea este stocată în fișier. Rulați din nou OCR pe această pagină pentru a o modifica."
   },
   "portfolio": {
     "title": "Portofoliu colecție PDF",

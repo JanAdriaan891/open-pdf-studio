@@ -1246,7 +1246,9 @@
     "empty": "Žádná slova ke kontrole. Nejprve spusťte OCR nebo zvyšte práh. Starší PDF bez metadat kontroly vyžadují nové OCR.",
     "error": "Ověření nelze aktualizovat. Pokud se dokument změnil, obnovte frontu.",
     "accepted": "Přijato",
-    "corrected": "Opraveno"
+    "corrected": "Opraveno",
+    "notEncodable": "Prohledávatelný text OCR nemůže obsahovat tyto znaky: {{characters}}. Opravte slovo pomocí jiných znaků.",
+    "archived": "Kontrola je uložena v souboru. Chcete-li ji změnit, spusťte OCR na této stránce znovu."
   },
   "portfolio": {
     "title": "Portfolio kolekce PDF",

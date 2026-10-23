@@ -140,6 +140,7 @@
     "prepareOcr": "เปิดเพื่อทำ OCR…"
   },
   "symbolSearch": "ค้นหาสัญลักษณ์",
+  "findMoreOptions": "ตัวเลือกการค้นหาเพิ่มเติม",
   "watchActive": "กำลังเฝ้าดู {{folder}}",
   "watchFailed": "ข้อผิดพลาดในการเฝ้าดู: {{folder}}",
   "watchTitle": "เวิร์กโฟลว์เอกสารกำลังเฝ้าดู {{input}} และเขียนไปยัง {{output}} คลิกเพื่อหยุดเฝ้าดู",

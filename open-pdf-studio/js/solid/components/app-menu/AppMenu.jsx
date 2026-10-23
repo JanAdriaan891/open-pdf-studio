@@ -15,6 +15,9 @@ import { knopUit, meldingTekst } from '../../../core/webfuncties.js';
 import i18next from '../../../i18n/config.js';
 import { persistAllReaderPositions } from '../../../pdf/reader-mode-view.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
+import {
+  annotationsListIcon, annotationLayersIcon, facingPagesIcon, stampIcon,
+} from '../../data/ribbonIcons.js';
 
 function MenuItem(props) {
   // Zelfde regel als bij de lintknoppen: wat de webversie niet kan staat uit
@@ -40,6 +43,9 @@ function Divider() {
   return <div class="app-menu-divider" />;
 }
 
+// Ribbon icons at the size of the other menu icons.
+const menuSized = (svg) => svg.replace('<svg ', '<svg width="20" height="20" ');
+
 const ICONS = {
   new: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6m-3 3h6"/></svg>',
   open: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>',
@@ -54,6 +60,10 @@ const ICONS = {
   exit: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
   extensions: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
   annotateScreenshot: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><circle cx="12" cy="13" r="3"/></svg>',
+  workflows: menuSized(annotationsListIcon),
+  drawingSets: menuSized(annotationLayersIcon),
+  sheetLinks: menuSized(facingPagesIcon),
+  approvalRouting: menuSized(stampIcon),
 };
 
 function actionAndClose(fn) {
@@ -118,10 +128,6 @@ export default function AppMenu() {
             <span>{t('file')}</span>
           </button>
           <div class="app-menu-items">
-            <MenuItem icon={ICONS.docProperties} label={t('workflows')} onClick={() => actionAndClose(() => openDialog('document-workflows'))} />
-            <MenuItem icon={ICONS.docProperties} label={t('drawingSets')} onClick={() => actionAndClose(() => openDialog('drawing-sets'))} />
-            <MenuItem icon={ICONS.docProperties} label={t('sheetLinks')} onClick={() => actionAndClose(() => openDialog('sheet-links'))} />
-            <MenuItem icon={ICONS.docProperties} label={t('approvalRouting')} onClick={() => actionAndClose(() => openDialog('approval-routing'))} />
             <MenuItem icon={ICONS.new} label={t('new')} shortcut="Ctrl+N" onClick={() => actionAndClose(showNewDocDialog)} />
             <MenuItem icon={ICONS.open} label={t('open')} shortcut="Ctrl+O" active={getActivePanel() === 'open'} onClick={() => setActivePanel('open')} />
             <MenuItem icon={ICONS.save} label={t('save')} shortcut="Ctrl+S" onClick={() => actionAndClose(savePDF)} />
@@ -136,6 +142,10 @@ export default function AppMenu() {
             <MenuItem id="menu-extensions" icon={ICONS.extensions} label={t('extensions')} onClick={() => { closeAppMenu(); openDialog('extensions'); }} />
             <Divider />
             <MenuItem icon={ICONS.docProperties} label={t('docProperties')} shortcut="Ctrl+D" onClick={() => actionAndClose(showDocPropertiesDialog)} />
+            <MenuItem icon={ICONS.workflows} label={t('workflows')} onClick={() => actionAndClose(() => openDialog('document-workflows'))} />
+            <MenuItem icon={ICONS.drawingSets} label={t('drawingSets')} onClick={() => actionAndClose(() => openDialog('drawing-sets'))} />
+            <MenuItem icon={ICONS.sheetLinks} label={t('sheetLinks')} onClick={() => actionAndClose(() => openDialog('sheet-links'))} />
+            <MenuItem icon={ICONS.approvalRouting} label={t('approvalRouting')} onClick={() => actionAndClose(() => openDialog('approval-routing'))} />
             <Divider />
             <MenuItem icon={ICONS.preferences} label={t('preferences')} shortcut="Ctrl+," onClick={() => actionAndClose(showPreferencesDialog)} />
             <Divider />

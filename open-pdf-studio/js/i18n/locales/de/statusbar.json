@@ -140,6 +140,7 @@
     "prepareOcr": "Für OCR öffnen…"
   },
   "symbolSearch": "Symbole suchen",
+  "findMoreOptions": "Weitere Suchoptionen",
   "watchActive": "Überwache {{folder}}",
   "watchFailed": "Überwachungsfehler: {{folder}}",
   "watchTitle": "Der Dokument-Workflow überwacht {{input}} und schreibt nach {{output}}. Klicken, um die Überwachung zu beenden.",

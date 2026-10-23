@@ -140,6 +140,7 @@
     "prepareOcr": "ເປີດເພື່ອ OCR…"
   },
   "symbolSearch": "ຊອກຫາສັນຍາລັກ",
+  "findMoreOptions": "ຕົວເລືອກການຊອກຫາເພີ່ມເຕີມ",
   "watchActive": "ກຳລັງຕິດຕາມ {{folder}}",
   "watchFailed": "ຂໍ້ຜິດພາດການຕິດຕາມ: {{folder}}",
   "watchTitle": "ຂັ້ນຕອນວຽກເອກະສານກຳລັງຕິດຕາມ {{input}} ແລະ ຂຽນໄປທີ່ {{output}}. ຄລິກເພື່ອຢຸດການຕິດຕາມ.",

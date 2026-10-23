@@ -140,6 +140,7 @@
     "prepareOcr": "OCR 用に開く…"
   },
   "symbolSearch": "記号を検索",
+  "findMoreOptions": "その他の検索オプション",
   "watchActive": "{{folder}} を監視中",
   "watchFailed": "監視エラー：{{folder}}",
   "watchTitle": "ドキュメントワークフローが {{input}} を監視し、{{output}} に書き込んでいます。クリックすると監視を停止します。",

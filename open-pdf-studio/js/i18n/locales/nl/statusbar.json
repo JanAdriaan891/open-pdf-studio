@@ -140,6 +140,7 @@
     "prepareOcr": "Openen voor OCR…"
   },
   "symbolSearch": "Symbolen zoeken",
+  "findMoreOptions": "Meer zoekopties",
   "watchActive": "Bewaakt {{folder}}",
   "watchFailed": "Bewaakfout: {{folder}}",
   "watchTitle": "Documentworkflow bewaakt {{input}} en schrijft naar {{output}}. Klik om het bewaken te stoppen.",

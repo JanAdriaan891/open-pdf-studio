@@ -363,11 +363,17 @@ async function executeSearchAndUpdate() {
   });
 }
 
+// Each navigation gets a number: only the latest one still scrolls to its match.
+let navigationToken = 0;
+const SCROLL_ATTEMPTS = 10;
+const SCROLL_DELAY_MS = 100;
+
 /**
  * Navigate to a search result
  */
 async function navigateToResult(result) {
   if (!result) return;
+  const token = ++navigationToken;
 
   // Switch to the page if needed
   const doc = getActiveDocument();
@@ -389,25 +395,32 @@ async function navigateToResult(result) {
     }
   }
 
-  // Scroll to the match after a short delay to ensure rendering is complete
-  setTimeout(() => {
-    if (getActiveDocument() === doc && doc?.currentPage === result.pageNum) scrollToMatch(result);
-  }, 100);
+  // Scroll to the match once its page is rendered. In the continuous view a
+  // pending scroll sync can set currentPage to a page in between, so only the
+  // document and the navigation count, not currentPage.
+  let attempts = 0;
+  const scrollWhenRendered = () => {
+    if (token !== navigationToken || getActiveDocument() !== doc) return;
+    if (scrollToMatch(result) || ++attempts >= SCROLL_ATTEMPTS) return;
+    setTimeout(scrollWhenRendered, SCROLL_DELAY_MS);
+  };
+  setTimeout(scrollWhenRendered, SCROLL_DELAY_MS);
 }
 
 /**
  * Scroll to a specific match on the current page
  */
 function scrollToMatch(result) {
-  if (!result) return;
+  if (!result) return false;
 
   // Find the highlight element for the current match
   const highlights = document.querySelectorAll('.search-highlight.current');
-  if (highlights.length === 0) return;
+  if (highlights.length === 0) return false;
   // Een lopende wieluitloop zou de sprong naar de treffer afbreken (#522).
   stopAlleWielScrollers();
-  if (panViewportToElement(highlights[0])) return;
+  if (panViewportToElement(highlights[0])) return true;
   highlights[0].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+  return true;
 }
 
 /**

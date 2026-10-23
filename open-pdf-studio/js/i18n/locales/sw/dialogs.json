@@ -1246,7 +1246,9 @@
     "empty": "Hakuna vipengee vya kukagua. Endesha OCR kwanza, au ongeza kizingiti. PDF za zamani zisizo na data-meta ya ukaguzi zinahitaji OCR tena.",
     "error": "Imeshindwa kusasisha uthibitishaji. Onyesha upya foleni ikiwa hati imebadilika.",
     "accepted": "Imekubaliwa",
-    "corrected": "Imesahihishwa"
+    "corrected": "Imesahihishwa",
+    "notEncodable": "Maandishi ya OCR yanayoweza kutafutwa hayawezi kuwa na herufi hizi: {{characters}}. Sahihisha neno kwa kutumia herufi nyingine.",
+    "archived": "Uthibitisho umehifadhiwa kwenye faili. Endesha OCR tena kwenye ukurasa huu ili kuubadilisha."
   },
   "portfolio": {
     "title": "Jalada la mkusanyiko wa PDF",

@@ -1246,7 +1246,9 @@
     "empty": "Nema riječi za pregled. Najprije pokrenite OCR ili povećajte prag. Stariji PDF-ovi bez metapodataka za pregled zahtijevaju ponovni OCR.",
     "error": "Ažuriranje provjere nije uspjelo. Osvježite red ako je dokument promijenjen.",
     "accepted": "Prihvaćeno",
-    "corrected": "Ispravljeno"
+    "corrected": "Ispravljeno",
+    "notEncodable": "Pretraživi OCR tekst ne može sadržavati ove znakove: {{characters}}. Ispravite riječ drugim znakovima.",
+    "archived": "Provjera je spremljena u datoteci. Ponovno pokrenite OCR na ovoj stranici da biste je promijenili."
   },
   "portfolio": {
     "title": "PDF portfelj (zbirka)",

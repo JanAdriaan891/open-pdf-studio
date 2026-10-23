@@ -140,6 +140,7 @@
     "prepareOcr": "Abrir para OCR…"
   },
   "symbolSearch": "Localizar símbolos",
+  "findMoreOptions": "Mais opções de pesquisa",
   "watchActive": "Monitorando {{folder}}",
   "watchFailed": "Erro de monitoramento: {{folder}}",
   "watchTitle": "O fluxo de trabalho de documentos está monitorando {{input}} e gravando em {{output}}. Clique para parar o monitoramento.",

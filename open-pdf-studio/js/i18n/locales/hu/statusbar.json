@@ -140,6 +140,7 @@
     "prepareOcr": "Megnyitás OCR-hez…"
   },
   "symbolSearch": "Szimbólumok keresése",
+  "findMoreOptions": "További keresési beállítások",
   "watchActive": "Figyelés: {{folder}}",
   "watchFailed": "Figyelési hiba: {{folder}}",
   "watchTitle": "A dokumentum-munkafolyamat figyeli a(z) {{input}} mappát, és ide ír: {{output}}. Kattintson a figyelés leállításához.",

@@ -140,6 +140,7 @@
     "prepareOcr": "OCR-এর জন্য খুলুন…"
   },
   "symbolSearch": "প্রতীক খুঁজুন",
+  "findMoreOptions": "আরও অনুসন্ধান বিকল্প",
   "watchActive": "{{folder}} পর্যবেক্ষণ চলছে",
   "watchFailed": "পর্যবেক্ষণ ত্রুটি: {{folder}}",
   "watchTitle": "ডকুমেন্ট ওয়ার্কফ্লো {{input}} পর্যবেক্ষণ করছে এবং {{output}}-এ লিখছে। পর্যবেক্ষণ বন্ধ করতে ক্লিক করুন।",

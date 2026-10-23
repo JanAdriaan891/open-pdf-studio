@@ -140,6 +140,7 @@
     "prepareOcr": "Open for OCR…"
   },
   "symbolSearch": "Find symbols",
+  "findMoreOptions": "More search options",
   "watchActive": "Watching {{folder}}",
   "watchFailed": "Watch error: {{folder}}",
   "watchTitle": "Document workflow is watching {{input}} and writing to {{output}}. Click to stop watching.",

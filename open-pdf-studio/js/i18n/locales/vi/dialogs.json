@@ -1246,7 +1246,9 @@
     "empty": "Không có mục nào cần xem xét. Hãy chạy OCR trước hoặc tăng ngưỡng. Các tệp PDF cũ không có siêu dữ liệu xem xét cần chạy lại OCR.",
     "error": "Không thể cập nhật kết quả xác minh. Hãy làm mới hàng đợi nếu tài liệu đã thay đổi.",
     "accepted": "Đã chấp nhận",
-    "corrected": "Đã sửa"
+    "corrected": "Đã sửa",
+    "notEncodable": "Văn bản OCR có thể tìm kiếm không thể chứa các ký tự này: {{characters}}. Hãy sửa từ bằng ký tự khác.",
+    "archived": "Kết quả kiểm tra được lưu trong tệp. Chạy lại OCR trên trang này để thay đổi."
   },
   "portfolio": {
     "title": "Danh mục bộ sưu tập PDF",

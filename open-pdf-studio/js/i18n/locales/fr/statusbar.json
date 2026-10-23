@@ -140,6 +140,7 @@
     "prepareOcr": "Ouvrir pour l'OCR…"
   },
   "symbolSearch": "Rechercher des symboles",
+  "findMoreOptions": "Plus d'options de recherche",
   "watchActive": "Surveillance de {{folder}}",
   "watchFailed": "Erreur de surveillance : {{folder}}",
   "watchTitle": "Le flux de travail documentaire surveille {{input}} et écrit dans {{output}}. Cliquez pour arrêter la surveillance.",
