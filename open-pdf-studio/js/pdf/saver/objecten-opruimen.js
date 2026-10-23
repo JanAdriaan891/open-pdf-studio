@@ -57,12 +57,21 @@ function bereikbaar(context) {
   return { levend, verwezen };
 }
 
-/** Vervang in `o` (en zijn directe deelobjecten) de verwijzingen uit `kaart`. */
-function verwijsOm(o, kaart) {
+/**
+ * Vervang in `o` (en zijn directe deelobjecten) de verwijzingen uit `kaart`.
+ * `gezien` houdt bij welke woordenboeken en arrays al omgezet zijn: één
+ * instantie kan op meerdere plaatsen staan (pdf-lib zet een gedeeld indirect
+ * /Resources bij het normaliseren ook rechtstreeks in elke pagina). Een tweede
+ * keer omzetten zou een al omgezette verwijzing nóg een stap verschuiven.
+ */
+function verwijsOm(o, kaart, gezien = new Set()) {
   const stapel = [o];
   while (stapel.length) {
     const huidig = stapel.pop();
     const dict = huidig instanceof PDFStream ? huidig.dict : huidig;
+    if (!(dict instanceof PDFDict) && !(dict instanceof PDFArray)) continue;
+    if (gezien.has(dict)) continue;
+    gezien.add(dict);
     if (dict instanceof PDFDict) {
       for (const [sleutel, v] of dict.entries()) {
         if (v instanceof PDFRef) { if (kaart.has(v.tag)) dict.set(sleutel, kaart.get(v.tag)); }
@@ -105,12 +114,13 @@ function nummerNieuweTerug(context, grens, verwezen) {
   }
   if (kaart.size === 0) return 0;
 
-  for (const [, o] of objecten) verwijsOm(o, kaart);
+  const gezien = new Set();
+  for (const [, o] of objecten) verwijsOm(o, kaart, gezien);
   const t = context.trailerInfo;
   for (const sleutel of ['Root', 'Info', 'Encrypt']) {
     if (t[sleutel] instanceof PDFRef && kaart.has(t[sleutel].tag)) t[sleutel] = kaart.get(t[sleutel].tag);
   }
-  if (t.ID) verwijsOm(t.ID, kaart);
+  if (t.ID) verwijsOm(t.ID, kaart, gezien);
 
   const verhuizers = objecten.filter(([ref]) => kaart.has(ref.tag));
   for (const [ref] of verhuizers) context.delete(ref);

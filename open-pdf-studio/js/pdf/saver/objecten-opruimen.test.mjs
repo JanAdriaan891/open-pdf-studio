@@ -122,3 +122,44 @@ test('versleuteld: wel opruimen, niet hernummeren', async () => {
   assert.equal(r.hernummerd, 0);
   assert.equal(annots(doc).get(0), nieuw);
 });
+
+// Pagina's die één indirect /Resources-woordenboek delen: pdf-lib zet dat
+// woordenboek bij het normaliseren ook rechtstreeks in de pagina. Dezelfde
+// instantie staat dan meerdere keren in de context. Werd hij per vindplaats
+// opnieuw omgenummerd, dan schoof een verwijzing langs de hele keten (532 →
+// 531 → 530 → 3) en wees het lettertype van een tekstbewerking ineens naar
+// een inhoudsstroom: de tekst kwam in een vervangend font terug.
+test('een gedeeld woordenboek wordt maar één keer omgenummerd', async () => {
+  const src = await PDFDocument.create();
+  const res = src.context.register(src.context.obj({ Font: src.context.obj({}) }));
+  const lengte = src.context.register(src.context.obj(5));
+  for (let i = 0; i < 3; i++) {
+    const p = src.addPage([200, 200]);
+    p.node.set(N('Resources'), res);
+  }
+  const stroom = src.context.flateStream('BT ET');
+  stroom.dict.set(N('Length'), lengte);
+  src.getPage(0).node.set(N('Contents'), src.context.register(stroom));
+  const doc = await PDFDocument.load(await src.save({ useObjectStreams: false }));
+  const grens = doc.context.largestObjectNumber;
+  const pagina = doc.getPage(0);
+  // Zoals de in-place-knip: de eerste inhoudsstroom vervangen, zodat zijn
+  // /Length-object vrijkomt. Daarna nieuwe tekst met een nieuw lettertype.
+  pagina.node.normalize();
+  pagina.node.Contents().set(0, doc.context.register(doc.context.flateStream('BT ET')));
+  const { StandardFonts } = await import('pdf-lib');
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  pagina.drawText('Hallo', { x: 10, y: 10, size: 12, font });
+  await doc.flush();
+  ruimOngebruikteObjectenOp(doc, { nieuwVanaf: grens });
+  const opnieuw = await PDFDocument.load(await doc.save({ updateFieldAppearances: false }));
+  const fonts = opnieuw.getPage(0).node.Resources().lookup(N('Font'), PDFDict);
+  for (const [naam, ref] of fonts.entries()) {
+    const o = opnieuw.context.lookup(ref);
+    assert.ok(o instanceof PDFDict, `${naam} wijst naar ${o?.constructor?.name}`);
+    assert.equal(String(o.get(N('Type'))), '/Font', `${naam} is geen lettertype`);
+  }
+  for (const ref of opnieuw.getPage(0).node.Contents().asArray()) {
+    assert.equal(opnieuw.context.lookup(ref)?.constructor?.name, 'PDFRawStream', `${ref} is geen inhoudsstroom`);
+  }
+});
