@@ -704,7 +704,8 @@ jobs:
     # versiecontrole van create-release en hangt niet aan de desktop-builds.
     permissions:
       contents: write
-    runs-on: ubuntu-latest
+    # Vast op 24.04: Playwright 1.59 kent het nieuwere ubuntu-latest (26.04) niet.
+    runs-on: ubuntu-24.04
     needs: create-release
     defaults:
       run:

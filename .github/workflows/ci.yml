@@ -224,7 +224,8 @@ jobs:
   # annoteren en opslaan in headless Chromium, met nul overtredingen. Los van
   # de desktop-builds; lokaal: npm run test:hosted-csp.
   hosted-csp:
-    runs-on: ubuntu-latest
+    # Vast op 24.04: Playwright 1.59 kent het nieuwere ubuntu-latest (26.04) niet.
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: open-pdf-studio
