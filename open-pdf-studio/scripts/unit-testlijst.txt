@@ -492,3 +492,4 @@ js/symbols/profieltype.test.mjs
 js/tools/editor-ondergrond.test.mjs
 js/pdf/raster-export-plan.test.mjs
 js/annotations/rendering/lint-na-deselecteren.test.mjs
+js/pdf/inpassen-verborgen-viewer.test.mjs

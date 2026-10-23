@@ -2280,6 +2280,8 @@ async function _getFitInputs() {
   const pageViewport = page.getViewport(opts);
   const container = document.getElementById('pdf-container');
   if (!container) return null;
+  // Verborgen viewer: niets om in te passen, zoom laten staan (#675).
+  if (!(container.clientWidth > 0 && container.clientHeight > 0)) return null;
   const fit = {
     mode: 'legacy',
     pageW: pageViewport.width,

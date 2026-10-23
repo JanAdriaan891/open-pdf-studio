@@ -231,7 +231,7 @@ function _resizeCanvas() {
     // out, because zoomStepAtPoint anchors at the centered point and never
     // refits). Once the user has anchored (zoom-to-cursor or pan), preserve
     // their zoom and just re-anchor the world center.
-    if (!_anchorActive && viewport.pageW > 0) {
+    if ((!_anchorActive || _fitWacht) && viewport.pageW > 0) {
       fitToViewport();
     } else if (worldCenterX !== null) {
       viewport.offsetX = w / 2 - worldCenterX * viewport.zoom;
@@ -730,6 +730,10 @@ let _anchorActive = false;
 // this false so the page stays fully visible.
 let _strictAnchor = false;
 export function clearAnchor() { _anchorActive = false; _strictAnchor = false; }
+// Een fit die op een verborgen viewer (canvas 0×0) niet kon (#675). De
+// eerstvolgende _resizeCanvas() met een echte maat past dan alsnog in, ook als
+// de vorige pagina verankerd was.
+let _fitWacht = false;
 export function markAnchored() { _anchorActive = true; }
 
 // Eén render: tekenen en daarna de volgers (scrollbalken) bijwerken. Ook na
@@ -1253,6 +1257,17 @@ export function fitToViewport(mode = 'page') {
   const dpr = _getDpr();
   const cssW = _canvas.width / dpr;
   const cssH = _canvas.height / dpr;
+  // Verborgen viewer (laatste tabblad gesloten: #pdf-container display:none,
+  // canvas 0×0): geen ruimte om in te passen. computeFitZoom klemt die op
+  // 1 px en gaf zoom = 1/paginahoogte, die _render() in doc.scale overnam en
+  // waarmee het volgende document zijn lagen opbouwde (#675). De vorige zoom
+  // laten staan; _resizeCanvas() past opnieuw in zodra de viewer een maat
+  // krijgt.
+  if (!(cssW > 0 && cssH > 0)) {
+    _fitWacht = true;
+    return;
+  }
+  _fitWacht = false;
   // Fit on the POST-ROTATION extent so a 90°/270° (e.g. landscape) page is
   // sized and centred correctly instead of using the un-swapped dimensions.
   // "Post-rotation" = paginarotatie én weergaverotatie (#200): zoals de
