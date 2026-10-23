@@ -35,6 +35,7 @@
   "saved": "Salvato",
   "documentChangedDuringSave": "Il documento è cambiato durante il salvataggio. Salva di nuovo.",
   "documentChangedDuringExport": "Il documento è cambiato durante l'esportazione. Ricomincia.",
+  "rasterExportProgress": "Rasterizzazione delle pagine: {{done}} di {{total}}",
   "search": "Cerca",
   "find": "Trova",
   "page": "Pagina",

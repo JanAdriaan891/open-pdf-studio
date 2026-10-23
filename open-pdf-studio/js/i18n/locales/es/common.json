@@ -35,6 +35,7 @@
   "saved": "Guardado",
   "documentChangedDuringSave": "El documento cambió mientras se guardaba. Vuelva a guardar.",
   "documentChangedDuringExport": "El documento cambió durante la exportación. Vuelva a empezar.",
+  "rasterExportProgress": "Rasterizando páginas: {{done}} de {{total}}",
   "search": "Buscar",
   "find": "Buscar",
   "page": "Página",

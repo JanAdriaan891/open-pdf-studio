@@ -126,6 +126,8 @@ export {
   setVisible as setLoadingVisible,
   message as loadingMessage,
   setMessage as setLoadingMessage,
+  setProgress as setLoadingProgress,
+  setCancelHandler as setLoadingCancelHandler,
 } from './solid/stores/loadingStore.js';
 
 // ============= APP MENU =============

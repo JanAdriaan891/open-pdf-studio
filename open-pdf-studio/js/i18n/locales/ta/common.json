@@ -35,6 +35,7 @@
   "saved": "சேமிக்கப்பட்டது",
   "documentChangedDuringSave": "சேமிக்கும்போது ஆவணம் மாறியது. மீண்டும் சேமிக்கவும்.",
   "documentChangedDuringExport": "ஏற்றுமதியின்போது ஆவணம் மாறியது. மீண்டும் தொடங்கவும்.",
+  "rasterExportProgress": "பக்கங்கள் ராஸ்டராக்கப்படுகின்றன: {{total}} இல் {{done}}",
   "search": "தேடு",
   "find": "கண்டுபிடி",
   "page": "பக்கம்",

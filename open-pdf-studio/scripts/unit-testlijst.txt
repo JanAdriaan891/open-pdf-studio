@@ -448,3 +448,4 @@ js/pdf/saver/text-edit-tabelranden.test.mjs
 js/pdf/pdf-viewport-paginaschilder.test.mjs
 js/pdf/protect-pdf.test.mjs
 js/tools/editor-ondergrond.test.mjs
+js/pdf/raster-export-plan.test.mjs
