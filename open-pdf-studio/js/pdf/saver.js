@@ -3405,12 +3405,26 @@ export async function savePDFAs(doc = getActiveDocument(), explicitPath = null, 
         clearCachedPdfBytes(memKey);
       }
 
+      // Het pad waar de weergave nu uit tekent: na het inbakken van
+      // text-edits een verse werkkopie van de herlaad (opds-edit-…), niet
+      // currentPath.
+      const weergavePad = doc?.filePath;
       if (doc) {
         doc.filePath = savePath;
         doc.fileName = (savePath && bestandsnaamUitPad(savePath)) || 'Untitled';
         doc.isUntitled = false; // now a real, user-chosen file
         doc.saveTargetPath = null; // lives at its real path now; no separate save target
         doc._renderTemp = false;
+      }
+      // De weergave verhuist mee naar het opgeslagen bestand (zelfde bytes),
+      // vóórdat de werkkopie hieronder van schijf gaat. Anders vraagt de
+      // viewport bitmaps uit een verwijderd bestand en blijft de pagina wazig
+      // op elke zoom (#673).
+      if (weergavePad && weergavePad !== savePath) {
+        try {
+          const { wisselBestandspad } = await import('./pdf-viewport.js');
+          wisselBestandspad(weergavePad, savePath);
+        } catch (e) { console.warn('[save-as] view not moved to the saved file:', e); }
       }
       updateWindowTitle();
       // Session now contains the new path (debounced persist).

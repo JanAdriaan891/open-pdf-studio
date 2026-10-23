@@ -231,7 +231,7 @@ function _resizeCanvas() {
     // out, because zoomStepAtPoint anchors at the centered point and never
     // refits). Once the user has anchored (zoom-to-cursor or pan), preserve
     // their zoom and just re-anchor the world center.
-    if (!_anchorActive && viewport.pageW > 0) {
+    if ((!_anchorActive || _fitWacht) && viewport.pageW > 0) {
       fitToViewport();
     } else if (worldCenterX !== null) {
       viewport.offsetX = w / 2 - worldCenterX * viewport.zoom;
@@ -730,6 +730,10 @@ let _anchorActive = false;
 // this false so the page stays fully visible.
 let _strictAnchor = false;
 export function clearAnchor() { _anchorActive = false; _strictAnchor = false; }
+// Een fit die op een verborgen viewer (canvas 0×0) niet kon (#675). De
+// eerstvolgende _resizeCanvas() met een echte maat past dan alsnog in, ook als
+// de vorige pagina verankerd was.
+let _fitWacht = false;
 export function markAnchored() { _anchorActive = true; }
 
 // Eén render: tekenen en daarna de volgers (scrollbalken) bijwerken. Ook na
@@ -1087,6 +1091,25 @@ function _tekenViewport() {
 let _suppressNextFit = false;
 export function suppressNextFit() { _suppressNextFit = true; }
 
+// Het getoonde document kreeg een ander bestandspad, met dezelfde inhoud:
+// Opslaan als, na een herlaad uit een werkkopie (#673). De viewport tekent
+// voortaan uit het nieuwe pad, zonder opnieuw in te passen (geen setPage:
+// dat ziet een ander pad als een ander document). De oude werkkopie gaat
+// daarna van schijf; bleef de viewport die aanvragen, dan faalde elke
+// nieuwe bitmap en hield de pagina zijn laatste, grove bitmap op elke zoom.
+// De huidige bitmap blijft tot de nieuwe binnen is (zelfde pixels); de
+// scherpe tegel hoort bij het oude pad en vervalt.
+// Geeft true als de viewport dit document toonde en nu het nieuwe pad volgt.
+export function wisselBestandspad(oudPad, nieuwPad) {
+  if (!oudPad || !nieuwPad || oudPad === nieuwPad || viewport.filePath !== oudPad) return false;
+  viewport.filePath = nieuwPad;
+  viewport.currentTile = null;
+  viewport.currentTileMeta = null;
+  viewport.dirty = true;
+  _kickOrchestratorAfterZoom();
+  return true;
+}
+
 // Geeft true terug als de bewaarde weergavestand van een eerder getoond
 // document is teruggezet (tabwissel, #539); de aanroeper haalt dan ook de
 // gecachte scherpe tegel erbij.
@@ -1253,6 +1276,17 @@ export function fitToViewport(mode = 'page') {
   const dpr = _getDpr();
   const cssW = _canvas.width / dpr;
   const cssH = _canvas.height / dpr;
+  // Verborgen viewer (laatste tabblad gesloten: #pdf-container display:none,
+  // canvas 0×0): geen ruimte om in te passen. computeFitZoom klemt die op
+  // 1 px en gaf zoom = 1/paginahoogte, die _render() in doc.scale overnam en
+  // waarmee het volgende document zijn lagen opbouwde (#675). De vorige zoom
+  // laten staan; _resizeCanvas() past opnieuw in zodra de viewer een maat
+  // krijgt.
+  if (!(cssW > 0 && cssH > 0)) {
+    _fitWacht = true;
+    return;
+  }
+  _fitWacht = false;
   // Fit on the POST-ROTATION extent so a 90°/270° (e.g. landscape) page is
   // sized and centred correctly instead of using the un-swapped dimensions.
   // "Post-rotation" = paginarotatie én weergaverotatie (#200): zoals de

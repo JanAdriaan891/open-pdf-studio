@@ -266,6 +266,59 @@ test('Save As keeps a refreshed text edit bound to its new file', async () => {
   assert.equal(h.a.modified, false);
 });
 
+// #673: na het inbakken tekent de viewport uit de werkkopie van de herlaad.
+// Opslaan als ruimt die werkkopie op; de viewport moet dan al uit het
+// opgeslagen bestand tekenen, anders blijft de pagina wazig.
+test('Save As after a text edit moves the view to the saved file before the working copy is removed (#673)', async () => {
+  const h = harness();
+  const log = [];
+  h.a.textEdits = [{ id: 'edit-3', newText: 'Bienvenue', baked: false }];
+  h.deps.saveTextEditsToPages = async (_pdf, _pages, doc) => {
+    doc.textEdits[0]._pendingBakeInfo = { bakedNewText: 'Bienvenue', inplaceBaked: null };
+  };
+  const loadModule = h.deps.loadModule;
+  h.deps.loadModule = async path => {
+    if (path.includes('page-manager')) {
+      return { reloadFromBytes: async (_bytes, _annotations, _rotations, _page, _viewport, doc) => {
+        doc.filePath = 'opds-edit-1761210000000.pdf';
+        doc._renderTemp = true;
+        doc._werkbestanden = ['opds-edit-1761210000000.pdf'];
+        doc.pdfDoc = { fresh: true };
+      } };
+    }
+    if (path.includes('pdf-viewport')) {
+      return { wisselBestandspad: (oud, nieuw) => { log.push(`view ${oud} -> ${nieuw}`); return true; } };
+    }
+    if (path.includes('document-release')) {
+      return {
+        losgelatenWerkbestanden: doc => doc._werkbestanden.filter(p => p !== doc.filePath),
+        ruimWerkbestandenOp: async (_doc, paden) => { for (const p of paden) log.push(`remove ${p}`); },
+      };
+    }
+    return loadModule(path);
+  };
+  h.deps.window = { __TAURI__: { fs: { remove: async p => log.push(`remove ${p}`) } } };
+  assert.equal(await h.api.savePDFAs(h.a), true);
+  assert.equal(h.a.filePath, 'copy.pdf');
+  assert.deepEqual(log, [
+    'view opds-edit-1761210000000.pdf -> copy.pdf',
+    'remove opds-edit-1761210000000.pdf',
+  ]);
+});
+
+test('Save As of a document without a working copy leaves the view alone', async () => {
+  const h = harness();
+  const log = [];
+  const loadModule = h.deps.loadModule;
+  h.deps.loadModule = async path => path.includes('pdf-viewport')
+    ? { wisselBestandspad: (oud, nieuw) => { log.push(`view ${oud} -> ${nieuw}`); return true; } }
+    : loadModule(path);
+  assert.equal(await h.api.savePDFAs(h.a, 'a.pdf'), true);
+  assert.deepEqual(log, [], 'same path: nothing to move');
+  assert.equal(await h.api.savePDFAs(h.a, 'other.pdf'), true);
+  assert.deepEqual(log, ['view a.pdf -> other.pdf'], 'a new path: the view follows the document');
+});
+
 test('saving aborts before writing when a page has model annotations but is not ready', async () => {
   const h = harness();
   h.a.annotations = [{ page: 1, type: 'highlight' }];
