@@ -142,5 +142,10 @@
   "symbolSearch": "Finn symboler",
   "watchActive": "Overvåker {{folder}}",
   "watchFailed": "Overvåkingsfeil: {{folder}}",
-  "watchTitle": "Dokumentarbeidsflyten overvåker {{input}} og skriver til {{output}}. Klikk for å stoppe overvåkingen."
+  "watchTitle": "Dokumentarbeidsflyten overvåker {{input}} og skriver til {{output}}. Klikk for å stoppe overvåkingen.",
+  "renderDiagnostics": {
+    "title": "Gå til neste gjengivelsesfunn. Ingen funn garanterer ikke en fullstendig gjengivelse.",
+    "count": "Gjengivelsesfunn: {{count}}",
+    "detail": "Side {{page}}: {{code}}. Prøv lavere zoom, eller åpne dokumentet på nytt; fullstendigheten er ikke garantert."
+  }
 }

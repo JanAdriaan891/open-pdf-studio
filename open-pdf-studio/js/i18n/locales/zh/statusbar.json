@@ -142,5 +142,10 @@
   "symbolSearch": "查找符号",
   "watchActive": "正在监视 {{folder}}",
   "watchFailed": "监视错误：{{folder}}",
-  "watchTitle": "文档工作流正在监视 {{input}} 并写入 {{output}}。单击以停止监视。"
+  "watchTitle": "文档工作流正在监视 {{input}} 并写入 {{output}}。单击以停止监视。",
+  "renderDiagnostics": {
+    "title": "转到下一条渲染提示。没有提示并不保证渲染完整。",
+    "count": "渲染提示：{{count}}",
+    "detail": "第 {{page}} 页：{{code}}。请尝试降低缩放比例或重新打开文档；不保证完整性。"
+  }
 }

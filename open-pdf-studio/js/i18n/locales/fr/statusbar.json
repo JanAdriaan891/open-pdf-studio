@@ -142,5 +142,10 @@
   "symbolSearch": "Rechercher des symboles",
   "watchActive": "Surveillance de {{folder}}",
   "watchFailed": "Erreur de surveillance : {{folder}}",
-  "watchTitle": "Le flux de travail documentaire surveille {{input}} et écrit dans {{output}}. Cliquez pour arrêter la surveillance."
+  "watchTitle": "Le flux de travail documentaire surveille {{input}} et écrit dans {{output}}. Cliquez pour arrêter la surveillance.",
+  "renderDiagnostics": {
+    "title": "Aller à l’anomalie de rendu suivante. L’absence d’anomalie ne garantit pas un rendu complet.",
+    "count": "Anomalies de rendu : {{count}}",
+    "detail": "Page {{page}} : {{code}}. Essayez un zoom plus faible ou rouvrez le document ; l’exhaustivité n’est pas garantie."
+  }
 }

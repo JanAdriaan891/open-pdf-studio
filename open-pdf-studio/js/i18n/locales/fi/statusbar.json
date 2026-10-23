@@ -142,5 +142,10 @@
   "symbolSearch": "Etsi symboleja",
   "watchActive": "Valvotaan: {{folder}}",
   "watchFailed": "Valvontavirhe: {{folder}}",
-  "watchTitle": "Asiakirjatyönkulku valvoo kohdetta {{input}} ja kirjoittaa kohteeseen {{output}}. Lopeta valvonta napsauttamalla."
+  "watchTitle": "Asiakirjatyönkulku valvoo kohdetta {{input}} ja kirjoittaa kohteeseen {{output}}. Lopeta valvonta napsauttamalla.",
+  "renderDiagnostics": {
+    "title": "Siirry seuraavaan piirtohavaintoon. Havaintojen puuttuminen ei takaa täydellistä piirtoa.",
+    "count": "Piirtohavainnot: {{count}}",
+    "detail": "Sivu {{page}}: {{code}}. Kokeile pienempää zoomausta tai avaa asiakirja uudelleen; täydellisyyttä ei taata."
+  }
 }

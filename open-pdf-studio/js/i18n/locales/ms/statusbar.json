@@ -142,5 +142,10 @@
   "symbolSearch": "Cari simbol",
   "watchActive": "Memantau {{folder}}",
   "watchFailed": "Ralat pemantauan: {{folder}}",
-  "watchTitle": "Aliran kerja dokumen sedang memantau {{input}} dan menulis ke {{output}}. Klik untuk berhenti memantau."
+  "watchTitle": "Aliran kerja dokumen sedang memantau {{input}} dan menulis ke {{output}}. Klik untuk berhenti memantau.",
+  "renderDiagnostics": {
+    "title": "Pergi ke dapatan pemaparan seterusnya. Tiada dapatan tidak menjamin pemaparan yang lengkap.",
+    "count": "Dapatan pemaparan: {{count}}",
+    "detail": "Halaman {{page}}: {{code}}. Cuba zum yang lebih rendah atau buka semula dokumen; kelengkapan tidak dijamin."
+  }
 }

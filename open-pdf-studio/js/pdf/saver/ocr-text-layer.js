@@ -1,3 +1,4 @@
+import { withUnicodeLayoutGuard } from './unicode-layout-guard.js';
 import {removeOwnedOcrLayer,writeOcrReview,validOcrWords} from '../ocr-review.js';
 // Writes OCR'd words into a page's content stream as an INVISIBLE text
 // layer (PDF text-rendering-mode 3 — "add to path for clipping" is also
@@ -88,11 +89,16 @@ export function laadFontkit() {
  * (ocr.js does it via resourceDir()/fs.readFile(); a test script can just
  * pass fs.readFileSync(...) bytes directly).
  */
-export async function embedOcrFont(pdfDocLib, fontBytes) {
+export async function embedOcrFont(pdfDocLib, fontBytes, { unicodeGuard = false } = {}) {
   // fontkit hoort bij het PDFDocument, niet bij de module: registreer hem bij
   // elk document. Alleen het laden van de module wordt gedeeld; anders mislukt
   // elke volgende opslag in dezelfde sessie met "no fontkit instance was found".
-  pdfDocLib.registerFontkit(await laadFontkit());
+  // De Unicode-bewaking (#678) alleen op verzoek: de OCR-laag slaat zo een
+  // woord over dat het font niet terug naar Unicode kan brengen. Zichtbare
+  // tekst (CJK-tekstvakken, MCP-tekst) houdt zijn lege vakjes voor tekens die
+  // geen font heeft; een fout daar zou de hele opslag laten mislukken.
+  const fontkit = await laadFontkit();
+  pdfDocLib.registerFontkit(unicodeGuard ? withUnicodeLayoutGuard(fontkit) : fontkit);
   return pdfDocLib.embedFont(fontBytes, { subset: true });
 }
 
@@ -145,6 +151,11 @@ export function writeOcrTextLayer(page, words, font) {
     try {
       naturalWidth = font.widthOfTextAtSize(text, fontSize);
     } catch {
+      // Het font kan dit woord niet (terug)coderen, bv. een teken zonder glyph
+      // of een gevormde glyph zonder Unicode (UnicodeLayoutError). Een
+      // nagekeken woord mag niet stil verdwijnen; een ongecontroleerd woord
+      // slaan we over en de rest van de laag blijft, in plaats van de opslag
+      // te laten mislukken.
       if (word.review) throw new Error('OCR_REVIEW_TEXT_NOT_ENCODABLE');
       continue;
     }

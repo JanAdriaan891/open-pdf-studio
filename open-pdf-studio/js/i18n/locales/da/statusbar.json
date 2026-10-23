@@ -142,5 +142,10 @@
   "symbolSearch": "Find symboler",
   "watchActive": "Overvåger {{folder}}",
   "watchFailed": "Overvågningsfejl: {{folder}}",
-  "watchTitle": "Dokumentarbejdsgangen overvåger {{input}} og skriver til {{output}}. Klik for at stoppe overvågningen."
+  "watchTitle": "Dokumentarbejdsgangen overvåger {{input}} og skriver til {{output}}. Klik for at stoppe overvågningen.",
+  "renderDiagnostics": {
+    "title": "Gå til næste gengivelsesfund. Ingen fund garanterer ikke en fuldstændig gengivelse.",
+    "count": "Gengivelsesfund: {{count}}",
+    "detail": "Side {{page}}: {{code}}. Prøv en lavere zoom, eller åbn dokumentet igen; fuldstændigheden er ikke garanteret."
+  }
 }

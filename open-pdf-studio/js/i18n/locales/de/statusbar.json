@@ -142,5 +142,10 @@
   "symbolSearch": "Symbole suchen",
   "watchActive": "Überwache {{folder}}",
   "watchFailed": "Überwachungsfehler: {{folder}}",
-  "watchTitle": "Der Dokument-Workflow überwacht {{input}} und schreibt nach {{output}}. Klicken, um die Überwachung zu beenden."
+  "watchTitle": "Der Dokument-Workflow überwacht {{input}} und schreibt nach {{output}}. Klicken, um die Überwachung zu beenden.",
+  "renderDiagnostics": {
+    "title": "Zum nächsten Darstellungshinweis wechseln. Keine Hinweise garantieren keine vollständige Darstellung.",
+    "count": "Darstellungshinweise: {{count}}",
+    "detail": "Seite {{page}}: {{code}}. Versuchen Sie einen kleineren Zoom oder öffnen Sie das Dokument erneut; die Vollständigkeit ist nicht garantiert."
+  }
 }

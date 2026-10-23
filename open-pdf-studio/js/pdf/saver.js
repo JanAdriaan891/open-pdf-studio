@@ -3153,7 +3153,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         // geslaagde opslag; de herkende tekst blijft in het document staan.
         let ocrFont = null;
         try {
-          ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes());
+          ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes(), { unicodeGuard: true });
         } catch (err) {
           if (Object.values(activeDoc.ocrResults).some(words => words.some(word => word.review))) throw err;
           console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);

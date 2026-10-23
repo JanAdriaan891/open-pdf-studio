@@ -142,5 +142,10 @@
   "symbolSearch": "기호 찾기",
   "watchActive": "{{folder}} 감시 중",
   "watchFailed": "감시 오류: {{folder}}",
-  "watchTitle": "문서 워크플로가 {{input}}을(를) 감시하고 {{output}}에 쓰는 중입니다. 감시를 중지하려면 클릭하세요."
+  "watchTitle": "문서 워크플로가 {{input}}을(를) 감시하고 {{output}}에 쓰는 중입니다. 감시를 중지하려면 클릭하세요.",
+  "renderDiagnostics": {
+    "title": "다음 렌더링 알림으로 이동합니다. 알림이 없어도 완전한 렌더링이 보장되지는 않습니다.",
+    "count": "렌더링 알림: {{count}}",
+    "detail": "{{page}}페이지: {{code}}. 더 낮은 확대/축소를 시도하거나 문서를 다시 여세요. 완전성은 보장되지 않습니다."
+  }
 }

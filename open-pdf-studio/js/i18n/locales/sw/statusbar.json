@@ -142,5 +142,10 @@
   "symbolSearch": "Tafuta alama",
   "watchActive": "Inafuatilia {{folder}}",
   "watchFailed": "Hitilafu ya ufuatiliaji: {{folder}}",
-  "watchTitle": "Mtiririko wa kazi wa hati unafuatilia {{input}} na kuandika kwenye {{output}}. Bofya ili kuacha kufuatilia."
+  "watchTitle": "Mtiririko wa kazi wa hati unafuatilia {{input}} na kuandika kwenye {{output}}. Bofya ili kuacha kufuatilia.",
+  "renderDiagnostics": {
+    "title": "Nenda kwenye taarifa inayofuata ya uonyeshaji. Kukosekana kwa taarifa hakuhakikishi uonyeshaji kamili.",
+    "count": "Taarifa za uonyeshaji: {{count}}",
+    "detail": "Ukurasa {{page}}: {{code}}. Jaribu kukuza kidogo au fungua hati upya; ukamilifu haujahakikishwa."
+  }
 }

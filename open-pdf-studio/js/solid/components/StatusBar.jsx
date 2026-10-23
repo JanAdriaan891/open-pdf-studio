@@ -1,3 +1,4 @@
+import { readRenderDiagnostics, subscribeRenderDiagnostics } from '../../pdf/render-diagnostics.js';
 import { Show, createSignal, onCleanup } from 'solid-js';
 import { watchState, onWatchState } from '../../workflows/watch-status.js';
 import { state, getActiveDocument } from '../../core/state.js';
@@ -132,6 +133,25 @@ async function stopFolderWatch() {
 
 export default function StatusBar() {
   const { t } = useTranslation('statusbar');
+  const [diagnosticTick, setDiagnosticTick] = createSignal(0);
+  onCleanup(subscribeRenderDiagnostics(() => setDiagnosticTick(n => n + 1)));
+  const findings = () => {
+    diagnosticTick();
+    return readRenderDiagnostics(getActiveDocument()?.filePath).pages.flatMap(p => p.findings);
+  };
+  let nextFinding = 0;
+  const showFinding = async () => {
+    const list = findings();
+    if (!list.length) return;
+    const doc = getActiveDocument();
+    const item = list[nextFinding++ % list.length];
+    const { goToPage } = await import('../../pdf/renderer.js');
+    if (getActiveDocument() !== doc) return;
+    await goToPage(item.page);
+    if (getActiveDocument() !== doc) return;
+    const { showMessage } = await import('../stores/dialogStore.js');
+    showMessage(t('renderDiagnostics.detail', { page: item.page, code: item.code }));
+  };
   const [watching, setWatching] = createSignal(watchState());
   onCleanup(onWatchState(setWatching));
   const watchFolder = () => String(watching()?.input || '').replace(/[\\/]+$/, '').split(/[\\/]/).pop();
@@ -296,6 +316,11 @@ export default function StatusBar() {
       </Show>
 
       <div class="status-bar-right">
+        <Show when={findings().length > 0}>
+          <button class="status-nav-btn status-item status-render-findings" tabIndex={-1} onClick={showFinding} title={t('renderDiagnostics.title')}>
+            {t('renderDiagnostics.count', { count: findings().length })}
+          </button>
+        </Show>
         <Show when={watching()}>
           <button class="status-view-rotation status-watch" classList={{ 'status-watch-error': !!watching()?.error }} tabIndex={-1}
             title={t('watchTitle', { input: watching()?.input, output: watching()?.output })}

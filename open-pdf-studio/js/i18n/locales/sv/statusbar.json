@@ -142,5 +142,10 @@
   "symbolSearch": "Hitta symboler",
   "watchActive": "Bevakar {{folder}}",
   "watchFailed": "Bevakningsfel: {{folder}}",
-  "watchTitle": "Dokumentarbetsflödet bevakar {{input}} och skriver till {{output}}. Klicka för att sluta bevaka."
+  "watchTitle": "Dokumentarbetsflödet bevakar {{input}} och skriver till {{output}}. Klicka för att sluta bevaka.",
+  "renderDiagnostics": {
+    "title": "Gå till nästa renderingsanmärkning. Inga anmärkningar garanterar inte en fullständig rendering.",
+    "count": "Renderingsanmärkningar: {{count}}",
+    "detail": "Sida {{page}}: {{code}}. Prova en lägre zoom eller öppna dokumentet igen; fullständigheten är inte garanterad."
+  }
 }

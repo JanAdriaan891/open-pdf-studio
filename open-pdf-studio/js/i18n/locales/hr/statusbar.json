@@ -142,5 +142,10 @@
   "symbolSearch": "Pronađi simbole",
   "watchActive": "Praćenje: {{folder}}",
   "watchFailed": "Pogreška praćenja: {{folder}}",
-  "watchTitle": "Tijek rada dokumenta prati {{input}} i zapisuje u {{output}}. Kliknite za zaustavljanje praćenja."
+  "watchTitle": "Tijek rada dokumenta prati {{input}} i zapisuje u {{output}}. Kliknite za zaustavljanje praćenja.",
+  "renderDiagnostics": {
+    "title": "Idi na sljedeći nalaz iscrtavanja. Bez nalaza ne jamči potpuno iscrtavanje.",
+    "count": "Nalazi iscrtavanja: {{count}}",
+    "detail": "Stranica {{page}}: {{code}}. Pokušajte manje uvećanje ili ponovno otvorite dokument; potpunost nije zajamčena."
+  }
 }
