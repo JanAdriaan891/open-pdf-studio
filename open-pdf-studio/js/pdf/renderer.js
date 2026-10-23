@@ -1118,6 +1118,14 @@ export function clearLowResCache() {
   _lowResCache.clear();
 }
 
+/** Voorvertoningen van één bestand weg (tabblad gesloten, andere blijven open). */
+export function clearLowResCacheForFile(filePath) {
+  const prefix = `${filePath}|`;
+  for (const k of Array.from(_lowResCache.keys())) {
+    if (k.startsWith(prefix)) _lowResCache.delete(k);
+  }
+}
+
 // Render a single page inside its wrapper (used by lazy rendering)
 async function renderContinuousPage(pageNum) {
   if (_renderedPages.has(pageNum)) return;
