@@ -12,7 +12,7 @@ export default function LocationSection() {
   // annotProps.id is reactive; currentAnnotation itself is a plain reference.
   const ann=()=>{void annotProps.id;return getCurrentAnnotation();};
   const zones=()=>collectZones(getActiveDocument()?.annotations);
-  const location=()=>locationFor(ann()||{},zones(),ann()?getAnnotationBounds(ann()):null);
+  const locatie=()=>locationFor(ann()||{},zones(),ann()?getAnnotationBounds(ann()):null);
   const edit=(request)=>{
     setError('');
     try{updateLocation({documentId:getActiveDocument()?.id,annotationId:ann()?.id,...request});}
@@ -22,7 +22,7 @@ export default function LocationSection() {
     <CollapsibleSection title={t('location.title')} name="location"><div class="spatial-location">
       <Show when={(getActiveDocument()?._annotationPagesReady?.size || 0) < (getActiveDocument()?.pdfDoc?.numPages || 0)}><p>{t('location.loading')}</p></Show>
       <Show when={ann().spatialZone && !zones().find(z=>z.ann.id===ann().id)?.valid}><p role="alert">{t('location.invalid')}</p></Show>
-      <p>{location().path || t('location.none')} — {t('location.'+location().source)}</p>
+      <p>{locatie().path || t('location.none')} — {t('location.'+locatie().source)}</p>
       <div class="property-group"><label>{t('location.override')}</label>
         <input type="text" value={ann().locationOverride??''} disabled={ann().locked}
           onChange={e=>edit({action:'override',value:e.currentTarget.value})}/>
