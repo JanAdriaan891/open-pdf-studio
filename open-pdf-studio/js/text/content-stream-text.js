@@ -194,6 +194,7 @@ export function interpretContentStreams(streams) {
   let tc = 0;   // Tc: character spacing (pt, ongescaled tekstruimte)
   let tw = 0;   // Tw: word spacing (pt)
   let tz = 100; // Tz: horizontale schaal (%)
+  let tr = 0;    // Tr: render-modus (3 = onzichtbaar, bv. een OCR-laag)
   let chain = 0;
   let chainHasShow = false;
 
@@ -225,6 +226,7 @@ export function interpretContentStreams(streams) {
       tc,
       tw,
       tz,
+      tr,
     });
     chainHasShow = true;
   };
@@ -238,8 +240,12 @@ export function interpretContentStreams(streams) {
       const nums = operands.filter(t => t.t === 'num').map(t => t.v);
       const strs = operands.filter(t => t.t === 'str');
       switch (opName) {
-        case 'q': ctmStack.push(ctm.slice()); break;
-        case 'Q': if (ctmStack.length) ctm = ctmStack.pop(); break;
+        // De tekst-state (font, Tc, Tw, Tz, TL, Tr) hoort bij de grafische
+        // state en komt met Q terug, net als de CTM.
+        case 'q': ctmStack.push({ ctm: ctm.slice(), font, size, tl, tc, tw, tz, tr }); break;
+        case 'Q':
+          if (ctmStack.length) ({ ctm, font, size, tl, tc, tw, tz, tr } = ctmStack.pop());
+          break;
         case 'cm':
           if (nums.length >= 6) ctm = matMul(nums.slice(-6), ctm);
           break;
@@ -263,6 +269,7 @@ export function interpretContentStreams(streams) {
         case 'Tc': if (nums.length) tc = nums[nums.length - 1]; break;
         case 'Tw': if (nums.length) tw = nums[nums.length - 1]; break;
         case 'Tz': if (nums.length) tz = nums[nums.length - 1]; break;
+        case 'Tr': if (nums.length) tr = nums[nums.length - 1]; break;
         case 'Tj':
           record(si, operands, tok, 'Tj', strs.length ? [strs[strs.length - 1].v] : []);
           break;
@@ -284,7 +291,7 @@ export function interpretContentStreams(streams) {
         }
         case 'Do': {
           const nameTok = operands.filter(t => t.t === 'name').pop();
-          if (nameTok) xobjects.push({ si, name: nameTok.v, ctm: ctm.slice() });
+          if (nameTok) xobjects.push({ si, s: tok.s, name: nameTok.v, ctm: ctm.slice() });
           break;
         }
         default: break; // overige operatoren: geen tekst-state-effect dat wij volgen

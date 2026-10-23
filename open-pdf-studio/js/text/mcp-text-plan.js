@@ -5,6 +5,7 @@
 
 import { PDFDocument } from 'pdf-lib';
 import { applyInPlaceTextEdits } from '../pdf/saver/text-edit-inplace.js';
+import { standardFontVariant } from './text-edit-appearance.js';
 
 export const MAX_VERVANGINGEN = 500;
 
@@ -111,7 +112,14 @@ export async function proefOpKopie(sourceBytes, plannen, { embedFont }) {
     const { record } = plan;
     if (!record.newText) continue;
     const originalSize = record.fontSize;
-    const bold = /bold/i.test(record.fontFamily), italic = /italic|oblique/i.test(record.fontFamily);
+    // Vet/cursief uit de BaseFont van het originele font: PDF.js meldt alleen
+    // 'sans-serif' en een interne fontnaam, waardoor een vette kop met een
+    // terugvalfont gewoon (niet vet) terugkwam.
+    const variant = inPlace.lineFontVariant?.(0) || null;
+    const bold = variant ? variant.bold || /bold/i.test(record.fontFamily) : /bold/i.test(record.fontFamily);
+    const italic = variant ? variant.italic || /italic|oblique/i.test(record.fontFamily)
+      : /italic|oblique/i.test(record.fontFamily);
+    record.fontFamily = standardFontVariant(record.fontFamily, bold, italic);
     const encoded = inPlace.encodeRun(record.newText, 0, originalSize,
       { bold, italic, baseBold: bold, baseItalic: italic });
     let naturalWidth = 0;

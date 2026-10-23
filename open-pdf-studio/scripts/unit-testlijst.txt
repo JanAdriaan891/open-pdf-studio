@@ -507,3 +507,8 @@ js/pdf/host-versies.test.mjs
 js/pdf/host-versies-i18n.test.mjs
 js/core/volgende-taak.test.mjs
 js/solid/components/ribbon/na-lettertypen.test.mjs
+js/text/tekst-blokken.test.mjs
+js/tools/text-edit-commit.test.mjs
+js/pdf/saver/text-edit-afbeelding.test.mjs
+js/pdf/saver/text-edit-unicode.test.mjs
+js/text/tekstlaag-bron.test.mjs

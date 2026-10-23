@@ -319,12 +319,19 @@ function applyForPage(pdfDocLib, page, pageEdits, results) {
         if (sub === 'Image') imageNames.add(nameStr(key));
       }
       for (const rec of (ops.xobjects || [])) {
-        if (imageNames.has(rec.name)) imageRects.push(xobjectBBox(rec.ctm));
+        if (imageNames.has(rec.name)) imageRects.push({ ...xobjectBBox(rec.ctm), si: rec.si, s: rec.s });
       }
     }
   } catch (_) { /* geen afbeeldingsinfo → geen cover-forcering */ }
-  const anchorOnImage = (x, y) => imageRects.some(r =>
-    x >= r.minX - 1 && x <= r.maxX + 1 && y >= r.minY - 1 && y <= r.maxY + 1);
+  const opImage = (r, x, y) => x >= r.minX - 1 && x <= r.maxX + 1 && y >= r.minY - 1 && y <= r.maxY + 1;
+  // Zit de oude tekst in de pixels van een afbeelding? Alleen als hij er niet
+  // zelf zichtbaar overheen staat: onzichtbare tekst (Tr 3/7, een OCR-laag
+  // over een scan) of tekst die de afbeelding daarna overschildert. Zichtbare
+  // tekst over een foto staat niet in de foto; een wit vlak sloeg daar een
+  // gat in de afbeelding.
+  const tekstInBeeld = (op) => imageRects.some(r => opImage(r, op.x, op.y)
+    && ((Number(op.tr) & 7) === 3 || (Number(op.tr) & 7) === 7
+      || r.si > op.si || (r.si === op.si && r.s > op.s)));
 
   // Decoderen + gebruikte codes per font verzamelen (voor subset-her-encodering).
   const usedCodes = new Map();
@@ -374,9 +381,9 @@ function applyForPage(pdfDocLib, page, pageEdits, results) {
       continue;
     }
     idxs.forEach(i => claimed.add(i));
-    // Ligt (een regel van) de run op een afbeelding? Dan is de gescande/
-    // gerasterde oude tekst niet weg te knippen -> afdekvlak behouden.
-    const needsCover = (matchedLines || []).some(l => anchorOnImage(l.x, l.y));
+    // Staat de oude tekst (ook) in de pixels van een afbeelding, zoals bij een
+    // scan met OCR-laag? Dan is hij niet weg te knippen -> afdekvlak behouden.
+    const needsCover = idxs.some(i => tekstInBeeld(ops[i]));
     editMatches.push({ edit, idxs, lineMatches: matched.lineMatches, matchedLines, needsCover });
   }
 
@@ -494,6 +501,9 @@ function applyForPage(pdfDocLib, page, pageEdits, results) {
     }
     results.set(m.edit, {
       removedOriginal: true,
+      // Vet/cursief van het originele font van de regel (uit de BaseFont), of
+      // null. Voor een terugvalfont dat dezelfde dikte moet houden.
+      lineFontVariant: (lineIdx) => fontInfos.get(fontForLine(lineIdx))?.variant || null,
       needsCover: m.needsCover,
       coverExtent,
       lineTextState,
