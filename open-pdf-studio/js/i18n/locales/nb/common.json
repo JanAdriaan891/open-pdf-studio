@@ -57,6 +57,7 @@
     "workingIn": "jobber i",
     "viaClaude": "via Claude",
     "notConnected": "ikke tilkoblet",
+    "viaWorkplace": "via OpenAEC-arbeidsplassen",
     "keyButton": "Angi Claude (Anthropic) API-nøkkel",
     "keyPlaceholder": "Claude (Anthropic) API-nøkkel — sk-ant-…",
     "thinking": "Tenker…",
@@ -70,6 +71,19 @@
     "errorFailed": "AI-kallet mislyktes.",
     "detail": "Detaljer",
     "unknownError": "ukjent feil",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Assistenten kunne ikke behandle spørsmålet. Prøv igjen, eller start en ny samtale.",
+      "te_groot": "Spørsmålet er for stort for KI-tjenesten. Start en ny samtale, eller still et kortere spørsmål.",
+      "geen_tegoed": "KI-kreditten din er brukt opp. Fyll på kreditten i OpenAEC for å fortsette å bruke assistenten.",
+      "plafond_bereikt": "Utgiftsgrensen for KI er nådd. Be administratoren din om å øke den.",
+      "te_druk": "Assistenten er opptatt akkurat nå. Prøv igjen om litt.",
+      "te_veel_vragen": "For mange spørsmål på kort tid. Vent et minutt, og prøv igjen.",
+      "al_bezig": "Det forrige spørsmålet ditt blir fortsatt besvart. Vent til det er ferdig.",
+      "opnieuw_inloggen": "Logg inn på OpenAEC igjen for å bruke assistenten.",
+      "dienst_onbereikbaar": "KI-tjenesten kan ikke nås akkurat nå. Prøv igjen senere.",
+      "geen_antwoord": "Arbeidsplassen svarte ikke i tide. Prøv igjen.",
+      "geen_contact": "Ingen forbindelse med arbeidsplassen. Last inn siden på nytt, og prøv igjen."
+    },
     "skills": {
       "translate": {
         "label": "Oversett",
@@ -126,6 +140,9 @@
   "failedToLoadPdf": "Kunne ikke laste inn PDF-en: {{error}}",
   "hostOpenFailed": "Filen kunne ikke leses fra lagringen. Prøv igjen.",
   "hostNoContact": "Siden rundt Open PDF Studio svarer ikke, så filer kan ikke åpnes eller lagres. Last inn siden på nytt og prøv igjen.",
+  "hostSaveConflict": "Noen andre har lagret denne filen i mellomtiden. Endringene dine ble lagret som en egen kopi: {{name}}. Senere lagringer går til den kopien.",
+  "hostSaveNotLocked": "Denne filen er ikke reservert for deg, så andre kan endre den samtidig. Endringene dine lagres som nye versjoner; ingenting blir overskrevet.",
+  "hostReadOnlySave": "Denne filen er åpnet skrivebeskyttet, så endringer kan ikke lagres i den. Bruk Lagre som for å laste ned en kopi.",
   "failedToCreateDocument": "Kunne ikke opprette dokumentet: {{error}}",
   "failedToReplacePage": "Kunne ikke erstatte siden: {{error}}",
   "failedToMergeFile": "Sammenslåing mislyktes: {{file}}\n{{error}}",

@@ -6,7 +6,9 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { CSS_BESTAND, bundelPad, controleerIndexHtml, cspBeleid, gehostHtmlPlugin, maakCspKlaar, sri } from './gehost-html.mjs';
+import {
+  CSS_BESTAND, WERKPLEK_SANDBOX, bundelPad, controleerIndexHtml, cspBeleid, gehostHtmlPlugin, maakCspKlaar, sri, werkplekCsp,
+} from './gehost-html.mjs';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -39,6 +41,20 @@ test('the policy is the one from the issue', () => {
     "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; "
     + "style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; "
     + "connect-src 'self' https://cloud.example; object-src 'none'; base-uri 'self'; form-action 'none'");
+});
+
+test('the workplace policy is the one of the host: sandbox, no self, only the bundle URL (#704)', () => {
+  const bundel = 'https://klant.example/werkplek/app/pdf/';
+  const beleid = werkplekCsp(bundel, 'https://klant.example', 'https://klant.example/werkplek/app/brug/');
+  assert.equal(beleid,
+    "sandbox allow-scripts allow-downloads allow-modals; default-src 'none'; "
+    + `script-src ${bundel} https://klant.example/werkplek/app/brug/ 'wasm-unsafe-eval'; worker-src ${bundel} blob:; `
+    + `style-src ${bundel} 'unsafe-inline'; img-src ${bundel} data: blob:; font-src ${bundel} data:; `
+    + `media-src ${bundel} data: blob:; connect-src ${bundel}; frame-ancestors https://klant.example; `
+    + "form-action 'none'; base-uri 'none'; object-src 'none'");
+  assert.doesNotMatch(beleid, /'self'/);
+  assert.doesNotMatch(WERKPLEK_SANDBOX, /allow-same-origin/);
+  assert.match(werkplekCsp(bundel, 'https://klant.example'), new RegExp(`script-src ${bundel} 'wasm-unsafe-eval'`));
 });
 
 test('sri is sha384 in base64', () => {

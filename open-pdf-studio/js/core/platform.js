@@ -41,7 +41,14 @@ export function cacheWebFile(name, data) {
 //       versions(id) (optioneel)  -> Promise<[{ version, modified?, author? }]>
 //     },
 //     document: '<id>',  // optioneel: dit document gaat bij de start open
+//     // optioneel, van de brug naar de werkplek (core/host-brug.js, #704):
+//     ai: { vraag(vraag) -> Promise<{ bericht, stop, vraag_id }> },
+//     geopend(id)          -> Promise<true>  dit document staat open
+//     melding(tekst, toon) -> Promise<true>  melding in de statusbalk van de site
 //   };
+//
+// open() mag ook `alleenLezen: true` meegeven: dan opent het document
+// alleen-lezen (pdf/host-document.js).
 //
 // Een document van de site heeft als pad `opds-host://<id>/<naam>`: de naam
 // achteraan houdt alles wat een bestandsnaam uit het pad haalt (tabbladen,
@@ -90,7 +97,7 @@ async function naarBytes(data) {
 
 /**
  * Haal een document van de site op.
- * @returns {Promise<{ pad: string, naam: string, data: Uint8Array }>}
+ * @returns {Promise<{ pad: string, naam: string, data: Uint8Array, alleenLezen: boolean }>}
  */
 export async function openHostBestand(id) {
   const opslag = hostOpslag();
@@ -100,7 +107,41 @@ export async function openHostBestand(id) {
   const naam = String(antwoord?.name || 'document.pdf');
   const pad = hostPad(id, naam);
   _hostPaden.set(pad, String(id));
-  return { pad, naam, data };
+  return { pad, naam, data, alleenLezen: antwoord?.alleenLezen === true };
+}
+
+/** De assistent van de site (`ai.vraag`), of null als de site er geen heeft. */
+export function hostAi() {
+  const vraag = gastObject()?.ai?.vraag;
+  return typeof vraag === 'function' ? vraag : null;
+}
+
+/**
+ * Vertel de site dat document `id` open staat. Alleen ter informatie: een
+ * weigering of een site zonder dit bericht verandert niets aan de app.
+ */
+export async function meldHostGeopend(id) {
+  const geopend = gastObject()?.geopend;
+  if (typeof geopend !== 'function') return false;
+  try {
+    await geopend(String(id));
+    return true;
+  } catch (e) {
+    console.warn('[gast] geopend niet gemeld:', e?.message || e);
+    return false;
+  }
+}
+
+/** Een melding in de statusbalk van de site, als die dat kent. */
+export async function meldBijHost(tekst, toon = 'fout') {
+  const melding = gastObject()?.melding;
+  if (typeof melding !== 'function') return false;
+  try {
+    return (await melding(String(tekst ?? ''), toon)) !== false;
+  } catch (e) {
+    console.warn('[gast] melding niet doorgegeven:', e?.message || e);
+    return false;
+  }
 }
 
 /** De documenten die de site aanbiedt (leeg als het contract geen lijst kent). */

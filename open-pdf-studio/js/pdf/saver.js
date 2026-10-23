@@ -31,7 +31,7 @@ import { metOpslagSlot } from '../plugins/opslag-wissel-slot.js';
 import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnnotation } from '../plugins/plugin-pdf.js';
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
-import { opslaanGeweigerd } from './wachtwoord-pdf.js';
+import { opslaanGeweigerd, isHostAlleenLezen } from './wachtwoord-pdf.js';
 import { meldOpgeslagen } from '../herstel/haken.js';
 import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 
@@ -250,6 +250,12 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // Met een wachtwoord geopend: alleen-lezen, nooit opslaan (ook niet als
   // kopie), zodat het origineel beveiligd blijft (wachtwoord-pdf.js).
   if (weigerOpslaanBeveiligd(activeDoc)) return false;
+  // Door de gastsite alleen-lezen geopend (#704): niet terugschrijven naar de
+  // site; "Opslaan als" (een download) mag wel, zo gaat er niets verloren.
+  if (!saveAsPath && isHostAlleenLezen(activeDoc)) {
+    showMessage(i18next.t('hostReadOnlySave'));
+    return false;
+  }
   const currentPath = activeDoc?.filePath;
   // Redirect to "Save As" for untitled docs. These now have a temp-file
   // `filePath` (so they render via the real pipeline), so we ALSO check the

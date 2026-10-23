@@ -100,6 +100,7 @@ import { sessieHerstelBeleid } from './core/sessie-herstel.js';
 import { sessieBestanden, bronPad } from './pdf/wachtwoord-pdf.js';
 // De brug naar de gastpagina (#694): alleen in de gehoste bouw.
 import { startHostBrug } from './core/host-brug-start.js';
+import { installeerWorkerShim } from './core/blob-worker.js';
 
 // Open PDF files: tabs created instantly, loads serialized through ONE global
 // queue - also across separate openFiles() calls (the Windows single-instance
@@ -197,7 +198,12 @@ async function init() {
   // Gehoste bouw in een iframe met `#ouder=…`: het opslagcontract met de
   // gastpagina neerzetten vóór iets het leest (core/host-brug.js, #694). De
   // gewone bouw kent deze regel niet: Vite vult de modus in en de tak valt weg.
-  if (import.meta.env.MODE === 'hosted') startHostBrug();
+  if (import.meta.env.MODE === 'hosted') {
+    // Elke worker uit een blob: in de werkplek (opaque origin) start een
+    // worker van een http-adres niet (core/blob-worker.js, #704).
+    installeerWorkerShim(window);
+    startHostBrug();
+  }
   // Getalvelden accepteren komma én punt; ze tonen het decimaalteken van de
   // app-taal en schakelen mee bij een taalwissel (ui/getal-veld.js).
   installeerGetalVelden({ taal: () => language() });

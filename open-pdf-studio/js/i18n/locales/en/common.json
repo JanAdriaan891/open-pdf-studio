@@ -58,6 +58,7 @@
     "workingIn": "working in",
     "viaClaude": "via Claude",
     "notConnected": "not connected",
+    "viaWorkplace": "via the OpenAEC workplace",
     "keyButton": "Set the Claude (Anthropic) API key",
     "keyPlaceholder": "Claude (Anthropic) API key — sk-ant-…",
     "thinking": "Thinking…",
@@ -71,6 +72,19 @@
     "errorFailed": "The AI request failed.",
     "detail": "Detail",
     "unknownError": "unknown error",
+    "workplaceErrors": {
+      "ongeldige_vraag": "The assistant could not understand the question. Try again or start a new conversation.",
+      "te_groot": "The question is too large for the AI service. Start a new conversation or ask a shorter question.",
+      "geen_tegoed": "Your AI credit is used up. Top up your credit in OpenAEC to keep using the assistant.",
+      "plafond_bereikt": "The AI spending limit has been reached. Ask your administrator to raise it.",
+      "te_druk": "The assistant is busy right now. Try again in a moment.",
+      "te_veel_vragen": "Too many questions in a short time. Wait a minute and try again.",
+      "al_bezig": "Your previous question is still being answered. Wait for it to finish.",
+      "opnieuw_inloggen": "Sign in to OpenAEC again to use the assistant.",
+      "dienst_onbereikbaar": "The AI service cannot be reached right now. Try again later.",
+      "geen_antwoord": "The workplace did not answer in time. Try again.",
+      "geen_contact": "No connection with the workplace. Reload the page and try again."
+    },
     "skills": {
       "translate": {
         "label": "Translate",
@@ -127,6 +141,9 @@
   "failedToLoadPdf": "Failed to load PDF: {{error}}",
   "hostOpenFailed": "The file could not be read from storage. Try again.",
   "hostNoContact": "The page around Open PDF Studio does not respond, so files cannot be opened or saved. Reload the page and try again.",
+  "hostSaveConflict": "Someone else saved this file in the meantime. Your changes were saved as a separate copy: {{name}}. Later saves go to that copy.",
+  "hostSaveNotLocked": "This file is not reserved for you, so others can change it at the same time. Your changes are saved as new versions; nothing is overwritten.",
+  "hostReadOnlySave": "This file is open read-only, so changes cannot be saved to it. Use Save As to download a copy.",
   "failedToCreateDocument": "Failed to create document: {{error}}",
   "failedToReplacePage": "Failed to replace page: {{error}}",
   "failedToMergeFile": "Failed to merge: {{file}}\n{{error}}",

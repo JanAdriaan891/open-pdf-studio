@@ -57,6 +57,7 @@
     "workingIn": "pracuje w",
     "viaClaude": "przez Claude",
     "notConnected": "nie połączono",
+    "viaWorkplace": "przez obszar roboczy OpenAEC",
     "keyButton": "Ustaw klucz API Claude (Anthropic)",
     "keyPlaceholder": "Klucz API Claude (Anthropic) — sk-ant-…",
     "thinking": "Myślę…",
@@ -70,6 +71,19 @@
     "errorFailed": "Wywołanie AI nie powiodło się.",
     "detail": "Szczegóły",
     "unknownError": "nieznany błąd",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Asystent nie mógł przetworzyć pytania. Spróbuj ponownie lub rozpocznij nową rozmowę.",
+      "te_groot": "Pytanie jest za duże dla usługi AI. Rozpocznij nową rozmowę lub zadaj krótsze pytanie.",
+      "geen_tegoed": "Twój kredyt AI się wyczerpał. Doładuj kredyt w OpenAEC, aby dalej korzystać z asystenta.",
+      "plafond_bereikt": "Osiągnięto limit wydatków na AI. Poproś administratora o jego zwiększenie.",
+      "te_druk": "Asystent jest teraz zajęty. Spróbuj ponownie za chwilę.",
+      "te_veel_vragen": "Zbyt wiele pytań w krótkim czasie. Odczekaj minutę i spróbuj ponownie.",
+      "al_bezig": "Twoje poprzednie pytanie wciąż jest przetwarzane. Poczekaj, aż się zakończy.",
+      "opnieuw_inloggen": "Zaloguj się ponownie do OpenAEC, aby korzystać z asystenta.",
+      "dienst_onbereikbaar": "Usługa AI jest teraz niedostępna. Spróbuj ponownie później.",
+      "geen_antwoord": "Obszar roboczy nie odpowiedział na czas. Spróbuj ponownie.",
+      "geen_contact": "Brak połączenia z obszarem roboczym. Odśwież stronę i spróbuj ponownie."
+    },
     "skills": {
       "translate": {
         "label": "Przetłumacz",
@@ -126,6 +140,9 @@
   "failedToLoadPdf": "Nie udało się wczytać PDF: {{error}}",
   "hostOpenFailed": "Nie udało się odczytać pliku z magazynu. Spróbuj ponownie.",
   "hostNoContact": "Strona zawierająca Open PDF Studio nie odpowiada, więc nie można otwierać ani zapisywać plików. Odśwież stronę i spróbuj ponownie.",
+  "hostSaveConflict": "Ktoś inny zapisał ten plik w międzyczasie. Twoje zmiany zapisano jako osobną kopię: {{name}}. Kolejne zapisy trafią do tej kopii.",
+  "hostSaveNotLocked": "Ten plik nie jest zarezerwowany dla Ciebie, więc inni mogą go zmieniać w tym samym czasie. Twoje zmiany są zapisywane jako nowe wersje; nic nie jest nadpisywane.",
+  "hostReadOnlySave": "Ten plik jest otwarty tylko do odczytu, więc nie można w nim zapisać zmian. Użyj polecenia Zapisz jako, aby pobrać kopię.",
   "failedToCreateDocument": "Nie udało się utworzyć dokumentu: {{error}}",
   "failedToReplacePage": "Nie udało się zastąpić strony: {{error}}",
   "failedToMergeFile": "Nie udało się scalić: {{file}}\n{{error}}",

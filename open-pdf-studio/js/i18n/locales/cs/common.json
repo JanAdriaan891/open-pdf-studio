@@ -57,6 +57,7 @@
     "workingIn": "pracuje v",
     "viaClaude": "přes Claude",
     "notConnected": "nepřipojeno",
+    "viaWorkplace": "přes pracoviště OpenAEC",
     "keyButton": "Nastavit klíč API Claude (Anthropic)",
     "keyPlaceholder": "Klíč API Claude (Anthropic) — sk-ant-…",
     "thinking": "Přemýšlím…",
@@ -70,6 +71,19 @@
     "errorFailed": "Volání AI selhalo.",
     "detail": "Podrobnosti",
     "unknownError": "neznámá chyba",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Asistent nemohl otázku zpracovat. Zkuste to znovu nebo začněte novou konverzaci.",
+      "te_groot": "Otázka je pro službu AI příliš velká. Začněte novou konverzaci nebo položte kratší otázku.",
+      "geen_tegoed": "Váš kredit AI je vyčerpán. Dobijte si kredit v OpenAEC, abyste mohli asistenta dál používat.",
+      "plafond_bereikt": "Byl dosažen limit výdajů na AI. Požádejte správce o jeho navýšení.",
+      "te_druk": "Asistent je právě vytížený. Zkuste to za chvíli znovu.",
+      "te_veel_vragen": "Příliš mnoho otázek v krátkém čase. Počkejte minutu a zkuste to znovu.",
+      "al_bezig": "Na vaši předchozí otázku se stále odpovídá. Počkejte, až bude hotová.",
+      "opnieuw_inloggen": "Pro použití asistenta se znovu přihlaste do OpenAEC.",
+      "dienst_onbereikbaar": "Služba AI je nyní nedostupná. Zkuste to později.",
+      "geen_antwoord": "Pracoviště neodpovědělo včas. Zkuste to znovu.",
+      "geen_contact": "Žádné spojení s pracovištěm. Načtěte stránku znovu a zkuste to ještě jednou."
+    },
     "skills": {
       "translate": {
         "label": "Přeložit",
@@ -126,6 +140,9 @@
   "failedToLoadPdf": "Načtení PDF se nezdařilo: {{error}}",
   "hostOpenFailed": "Soubor se nepodařilo načíst z úložiště. Zkuste to znovu.",
   "hostNoContact": "Stránka kolem Open PDF Studio neodpovídá, takže soubory nelze otevírat ani ukládat. Načtěte stránku znovu a zkuste to znovu.",
+  "hostSaveConflict": "Někdo jiný mezitím tento soubor uložil. Vaše změny byly uloženy jako samostatná kopie: {{name}}. Další ukládání půjde do této kopie.",
+  "hostSaveNotLocked": "Tento soubor pro vás není rezervován, takže ho ostatní mohou měnit současně. Vaše změny se ukládají jako nové verze; nic se nepřepisuje.",
+  "hostReadOnlySave": "Tento soubor je otevřen jen pro čtení, takže do něj nelze uložit změny. Kopii stáhnete pomocí příkazu Uložit jako.",
   "failedToCreateDocument": "Vytvoření dokumentu se nezdařilo: {{error}}",
   "failedToReplacePage": "Nahrazení stránky se nezdařilo: {{error}}",
   "failedToMergeFile": "Sloučení se nezdařilo: {{file}}\n{{error}}",

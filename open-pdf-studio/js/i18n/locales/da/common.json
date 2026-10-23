@@ -57,6 +57,7 @@
     "workingIn": "arbejder i",
     "viaClaude": "via Claude",
     "notConnected": "ikke forbundet",
+    "viaWorkplace": "via OpenAEC-arbejdspladsen",
     "keyButton": "Angiv Claude (Anthropic) API-nøgle",
     "keyPlaceholder": "Claude (Anthropic) API-nøgle — sk-ant-…",
     "thinking": "Tænker…",
@@ -70,6 +71,19 @@
     "errorFailed": "AI-kaldet mislykkedes.",
     "detail": "Detaljer",
     "unknownError": "ukendt fejl",
+    "workplaceErrors": {
+      "ongeldige_vraag": "Assistenten kunne ikke behandle spørgsmålet. Prøv igen, eller start en ny samtale.",
+      "te_groot": "Spørgsmålet er for stort til AI-tjenesten. Start en ny samtale, eller stil et kortere spørgsmål.",
+      "geen_tegoed": "Din AI-kredit er brugt op. Fyld din kredit op i OpenAEC for at blive ved med at bruge assistenten.",
+      "plafond_bereikt": "Udgiftsgrænsen for AI er nået. Bed din administrator om at hæve den.",
+      "te_druk": "Assistenten har travlt lige nu. Prøv igen om lidt.",
+      "te_veel_vragen": "For mange spørgsmål på kort tid. Vent et minut, og prøv igen.",
+      "al_bezig": "Dit forrige spørgsmål bliver stadig besvaret. Vent, til det er færdigt.",
+      "opnieuw_inloggen": "Log ind på OpenAEC igen for at bruge assistenten.",
+      "dienst_onbereikbaar": "AI-tjenesten kan ikke nås lige nu. Prøv igen senere.",
+      "geen_antwoord": "Arbejdspladsen svarede ikke i tide. Prøv igen.",
+      "geen_contact": "Ingen forbindelse til arbejdspladsen. Genindlæs siden, og prøv igen."
+    },
     "skills": {
       "translate": {
         "label": "Oversæt",
@@ -126,6 +140,9 @@
   "failedToLoadPdf": "PDF'en kunne ikke indlæses: {{error}}",
   "hostOpenFailed": "Filen kunne ikke læses fra lageret. Prøv igen.",
   "hostNoContact": "Siden omkring Open PDF Studio svarer ikke, så filer kan ikke åbnes eller gemmes. Genindlæs siden, og prøv igen.",
+  "hostSaveConflict": "En anden har gemt denne fil i mellemtiden. Dine ændringer er gemt som en separat kopi: {{name}}. Fremtidige gemninger går til den kopi.",
+  "hostSaveNotLocked": "Denne fil er ikke reserveret til dig, så andre kan ændre den samtidig. Dine ændringer gemmes som nye versioner; intet bliver overskrevet.",
+  "hostReadOnlySave": "Denne fil er åbnet skrivebeskyttet, så ændringer kan ikke gemmes i den. Brug Gem som for at downloade en kopi.",
   "failedToCreateDocument": "Dokumentet kunne ikke oprettes: {{error}}",
   "failedToReplacePage": "Siden kunne ikke erstattes: {{error}}",
   "failedToMergeFile": "Fletning mislykkedes: {{file}}\n{{error}}",

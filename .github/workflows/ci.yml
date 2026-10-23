@@ -81,10 +81,12 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
-      # The hosted web bundle sets up the storage contract with its host page
-      # itself, over postMessage (#694). Build it unchanged, load it in a
-      # sandboxed iframe from a test page on another origin and drive it in
-      # headless Chromium: open, save an annotation back, list the versions,
+      # The hosted web bundle follows the workplace protocol of the OpenAEC
+      # SuperCloud (#694, #704). Build it unchanged, serve it from a sub-path
+      # under the host's strict CSP, load it in an opaque-origin sandboxed
+      # iframe (credentialless) from a test page on another origin and drive
+      # it in headless Chromium: open from bytes, save an annotation back
+      # (including a conflict), list files and versions, ask the assistant,
       # and ignore messages from any other origin or window.
       - name: Test the hosted bridge (Linux)
         if: matrix.platform == 'ubuntu-22.04'
@@ -220,7 +222,8 @@ jobs:
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
           bash scripts/macos-startup-smoke.sh "$APP_PATH"
 
-  # De gehoste bundel onder de strikte CSP van #693: openen, tekenen,
+  # De gehoste bundel onder de strikte CSP van #693 en onder die van de
+  # werkplek (#704: opaque sandbox, geen 'self', subpad): openen, tekenen,
   # annoteren en opslaan in headless Chromium, met nul overtredingen. Los van
   # de desktop-builds; lokaal: npm run test:hosted-csp.
   hosted-csp:
