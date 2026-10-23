@@ -493,3 +493,4 @@ js/tools/editor-ondergrond.test.mjs
 js/pdf/raster-export-plan.test.mjs
 js/annotations/rendering/lint-na-deselecteren.test.mjs
 js/pdf/inpassen-verborgen-viewer.test.mjs
+js/pdf/weergave-na-opslaan-als.test.mjs

@@ -1091,6 +1091,25 @@ function _tekenViewport() {
 let _suppressNextFit = false;
 export function suppressNextFit() { _suppressNextFit = true; }
 
+// Het getoonde document kreeg een ander bestandspad, met dezelfde inhoud:
+// Opslaan als, na een herlaad uit een werkkopie (#673). De viewport tekent
+// voortaan uit het nieuwe pad, zonder opnieuw in te passen (geen setPage:
+// dat ziet een ander pad als een ander document). De oude werkkopie gaat
+// daarna van schijf; bleef de viewport die aanvragen, dan faalde elke
+// nieuwe bitmap en hield de pagina zijn laatste, grove bitmap op elke zoom.
+// De huidige bitmap blijft tot de nieuwe binnen is (zelfde pixels); de
+// scherpe tegel hoort bij het oude pad en vervalt.
+// Geeft true als de viewport dit document toonde en nu het nieuwe pad volgt.
+export function wisselBestandspad(oudPad, nieuwPad) {
+  if (!oudPad || !nieuwPad || oudPad === nieuwPad || viewport.filePath !== oudPad) return false;
+  viewport.filePath = nieuwPad;
+  viewport.currentTile = null;
+  viewport.currentTileMeta = null;
+  viewport.dirty = true;
+  _kickOrchestratorAfterZoom();
+  return true;
+}
+
 // Geeft true terug als de bewaarde weergavestand van een eerder getoond
 // document is teruggezet (tabwissel, #539); de aanroeper haalt dan ook de
 // gecachte scherpe tegel erbij.
