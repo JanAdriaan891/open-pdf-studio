@@ -501,6 +501,9 @@ function applyForPage(pdfDocLib, page, pageEdits, results) {
     }
     results.set(m.edit, {
       removedOriginal: true,
+      // Vet/cursief van het originele font van de regel (uit de BaseFont), of
+      // null. Voor een terugvalfont dat dezelfde dikte moet houden.
+      lineFontVariant: (lineIdx) => fontInfos.get(fontForLine(lineIdx))?.variant || null,
       needsCover: m.needsCover,
       coverExtent,
       lineTextState,
