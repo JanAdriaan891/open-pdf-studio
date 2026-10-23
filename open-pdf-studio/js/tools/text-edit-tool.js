@@ -8,6 +8,7 @@ import { showPdfTextEditor, hidePdfTextEditor, getPdfEditorText as getEditorText
   getPdfEditorLineRuns as getEditorLineRuns,
   updatePdfEditorStyle, shiftPdfEditorPosition } from '../bridge.js';
 import { injectSyntheticTextSpans, resolveTextLayerFonts } from '../text/text-layer.js';
+import { caretKleur, meetOndergrond } from './editor-ondergrond.js';
 import {
   applyPageRotation,
   getPageRotationMatrix,
@@ -255,6 +256,45 @@ function cssBaselineOffset(fontFamily, fontSize, lineHeight, isBold = false, isI
     ? metrics.fontBoundingBoxDescent
     : (metrics.actualBoundingBoxDescent || fontSize * 0.2);
   return ascent + (lineHeight - ascent - descent) / 2;
+}
+
+// ── De editor op het canvas (#698) ──
+// De editor is doorzichtig, zodat de pagina eronder (een donkere titelblokkop,
+// tabelranden) zichtbaar blijft. Het canvas dekt daarom zelf de oude tekst af
+// en tekent de tekst die in de editor staat niet: rendering.js leest daarvoor
+// state.pdfTekstEditorCanvas ({ page, recordId?, afdekking? }).
+function hertekenTekstCanvas() {
+  if (getActiveDocument()?.viewMode === 'continuous') redrawContinuous();
+  else redrawAnnotations();
+}
+
+function meldEditorOpCanvas(page, { recordId = null, afdekking = null } = {}) {
+  state.pdfTekstEditorCanvas = { page, recordId, afdekking };
+  hertekenTekstCanvas();
+}
+
+// Verbergt de editor. Het hertekenen volgt na de lopende commit: die zet
+// eerst het nieuwe record (met de id van de afdekking) in het document, zodat
+// de uitsnede zonder tekst behouden blijft.
+function verbergPdfEditor() {
+  hidePdfTextEditor();
+  if (state.pdfTekstEditorCanvas) {
+    state.pdfTekstEditorCanvas = null;
+    queueMicrotask(hertekenTekstCanvas);
+  }
+}
+
+// Caretkleur die afsteekt tegen de ondergrond onder de editor.
+function pdfEditorCaret(styleObj) {
+  return caretKleur({
+    ondergrond: meetOndergrond({
+      left: parseFloat(styleObj.left) || 0,
+      top: parseFloat(styleObj.top) || 0,
+      width: parseFloat(styleObj.width) || 0,
+      height: parseFloat(styleObj.height) || 0,
+    }),
+    tekstKleur: styleObj.color,
+  });
 }
 
 // Re-inject the synthetic text-layer spans for added text on a page (after the
@@ -975,6 +1015,7 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
     color: lineData[0].color || '#000000',
     'z-index': '1000'
   };
+  styleObj['caret-color'] = pdfEditorCaret(styleObj);
   if (kader.theta) {
     styleObj.transform = `rotate(${kader.theta}deg)`;
     styleObj['transform-origin'] = '0 0';
@@ -1067,10 +1108,14 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
   // Hide all spans BEFORE showing editor so text doesn't double-render
   for (const s of block.spans) s.style.visibility = 'hidden';
 
+  // Id van het record dat deze bewerking straks wordt; de afdekking tijdens
+  // het bewerken gebruikt hem al, zodat haar uitsnede na de commit blijft.
+  const afdekId = Date.now() + Math.random().toString(36).substr(2, 9);
   activeEditor = {
     block,
     pageNum,
     kind: 'existingText',
+    afdekId,
     originalText: combinedText,
     // Gedetecteerde beginopmaak per regel: referentie voor de commit —
     // alleen ECHT gewijzigde opmaak telt als wijziging.
@@ -1165,6 +1210,21 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
     initialLines: editorInitialLines,
     dragHandlers: maakDragHandlers(),
   });
+  meldEditorOpCanvas(pageNum, {
+    afdekking: {
+      id: afdekId,
+      page: pageNum,
+      originalText: combinedText,
+      newText: '',
+      pdfX,
+      pdfY,
+      pdfWidth,
+      fontSize,
+      lineSpacing,
+      textAngle: lineData[0].angle || 0,
+      originalLineInfo: originalLineInfoFor(lineData),
+    },
+  });
 }
 
 let _laatsteFinishOp = 0;
@@ -1193,11 +1253,11 @@ function finishPdfTextEditing() {
   const {
     block, pageNum, originalText,
     pdfX, pdfY, pdfWidth, fontSize, lineSpacing, numOriginalLines, styleState,
-    initialLineRuns: initialRuns,
+    initialLineRuns: initialRuns, afdekId,
   } = activeEditor;
   const newText = getEditorText();
 
-  hidePdfTextEditor();
+  verbergPdfEditor();
 
   // Show all spans again
   for (const s of block.spans) s.style.visibility = '';
@@ -1429,7 +1489,7 @@ function finishPdfTextEditing() {
     const hasLineSegments = lineSegments.some(Boolean);
 
     const editRecord = {
-      id: Date.now() + Math.random().toString(36).substr(2, 9),
+      id: afdekId || (Date.now() + Math.random().toString(36).substr(2, 9)),
       page: pageNum,
       originalText,
       newText: finalNewText,
@@ -1515,7 +1575,7 @@ function cancelPdfTextEditing() {
   }
 
   const { block } = activeEditor;
-  hidePdfTextEditor();
+  verbergPdfEditor();
   for (const s of block.spans) s.style.visibility = '';
 
   activeEditor = null;
@@ -1768,6 +1828,7 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
     'transform-origin': '0 0',
     'z-index': '1000'
   };
+  styleObj['caret-color'] = pdfEditorCaret(styleObj);
   // Container-brede font-weight/style vervalt: de per-regel initialLines
   // (met <b>/<i>-runs) bepalen de weergave in de contenteditable.
   // Kolom-tab-stops uit de opgeslagen segmentstructuur.
@@ -1792,7 +1853,7 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
 
   const finishEditing = () => {
     const newText = getEditorText();
-    hidePdfTextEditor();
+    verbergPdfEditor();
 
     // Clearing all the text of an INSERTED edit deletes it entirely — this is
     // how the user removes inserted text (issue #264).
@@ -1912,7 +1973,7 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
     } else {
       restoreTextEditSnapshot(textEdit, oldTextEdit);
     }
-    hidePdfTextEditor();
+    verbergPdfEditor();
     reRenderAddedText(pageNum);
     activeEditor = null;
     state.pdfTextEditState = null;
@@ -2063,6 +2124,7 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
     initialLines: reopenInitialLines,
     dragHandlers: maakDragHandlers(),
   });
+  meldEditorOpCanvas(pageNum, { recordId: textEdit.id });
 }
 
 // ── Management of the ACTIVE text edit (called from the properties panel) ──
@@ -2179,7 +2241,7 @@ export function applyActiveTextEditStyle(key, value) {
 // Delete the text edit that is currently open in the inline editor.
 export function deleteActiveTextEdit() {
   if (!activeEditor) return;
-  hidePdfTextEditor();
+  verbergPdfEditor();
   // Restore any spans the existing-text session hid.
   if (activeEditor.block && activeEditor.block.spans) {
     for (const s of activeEditor.block.spans) s.style.visibility = '';
@@ -2325,7 +2387,7 @@ function coverExistingText(ed) {
   if (!doc) return;
 
   const editRecord = {
-    id: Date.now() + Math.random().toString(36).substr(2, 9),
+    id: ed.afdekId || (Date.now() + Math.random().toString(36).substr(2, 9)),
     page: pageNum,
     originalText,
     newText: '',
