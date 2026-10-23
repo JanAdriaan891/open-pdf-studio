@@ -213,5 +213,9 @@
     "activationFailed": "غير نشط: {{error}}",
     "viaMcp": "عبر اتصال الذكاء الاصطناعي"
   },
-  "annotateScreenshot": "إضافة تعليقات إلى لقطة الشاشة من الحافظة"
+  "annotateScreenshot": "إضافة تعليقات إلى لقطة الشاشة من الحافظة",
+  "workflows": "سير عمل المستندات",
+  "drawingSets": "مجموعات الرسومات",
+  "sheetLinks": "روابط بين اللوحات",
+  "approvalRouting": "توجيه الموافقات"
 }

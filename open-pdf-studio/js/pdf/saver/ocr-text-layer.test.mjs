@@ -208,3 +208,25 @@ test('zonder bewaking: een teken dat het font mist breekt de codering van zichtb
   doc.addPage().drawText('中文 ⌀12', { font, size: 12 });
   assert.ok((await doc.save()).length > 0);
 });
+
+// OCR-nakijken (#657) en de bewaking samen: een nagekeken correctie komt in de
+// laag of de opslag meldt OCR_REVIEW_TEXT_NOT_ENCODABLE; alleen ongecontroleerde
+// woorden worden stil overgeslagen.
+test('OCR-laag met bewaking: nagekeken correctie blijft, ongecontroleerd onleesbaar woord valt weg', { skip: zonderNoto, timeout: 30000 }, async () => {
+  const doc = await PDFDocument.create();
+  const page = doc.addPage([595, 842]);
+  const font = await embedOcrFont(doc, notoBytes, { unicodeGuard: true });
+  const woorden = [
+    { text: 'Ελληνικά', left: 72, top: 72, width: 80, height: 14, confidence: 40 },
+    { text: '中文', left: 160, top: 72, width: 40, height: 14, confidence: 30, review: { status: 'corrected', originalText: '申又' } },
+    { text: 'Plan', left: 210, top: 72, width: 40, height: 14, confidence: 95 },
+  ];
+  writeOcrTextLayer(page, woorden, font);
+  const tekst = await paginaTekst(await doc.save());
+  assert.match(tekst, /中文/);
+  assert.match(tekst, /Plan/);
+  assert.ok(!/Ε|λ/.test(tekst), `Grieks hoort niet in de laag: ${JSON.stringify(tekst)}`);
+
+  const page2 = doc.addPage([595, 842]);
+  assert.throws(() => writeOcrTextLayer(page2, [{ ...woorden[0], review: { status: 'corrected', originalText: 'x' } }], font), /OCR_REVIEW_TEXT_NOT_ENCODABLE/);
+});

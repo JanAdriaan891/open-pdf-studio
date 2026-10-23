@@ -19,7 +19,8 @@ export interface OcrWord {
   top: number;
   width: number;
   height: number;
-  confidence: number;
+  confidence: number | null;
+  review?: { status: 'accepted' | 'corrected'; originalText: string };
 }
 
 export interface Watermark {

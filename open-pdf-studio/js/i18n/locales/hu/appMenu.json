@@ -213,5 +213,9 @@
     "activationFailed": "Nem aktív: {{error}}",
     "viaMcp": "Az MI-kapcsolaton keresztül"
   },
-  "annotateScreenshot": "Vágólapon lévő képernyőkép jegyzetelése"
+  "annotateScreenshot": "Vágólapon lévő képernyőkép jegyzetelése",
+  "workflows": "Dokumentum-munkafolyamatok",
+  "drawingSets": "Rajzkészletek",
+  "sheetLinks": "Rajzlapok közötti hivatkozások",
+  "approvalRouting": "Jóváhagyási útvonal"
 }

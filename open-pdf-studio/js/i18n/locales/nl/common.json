@@ -46,6 +46,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Een herlaadbeurt begint leeg: in de browser blijft je document op je eigen computer en wordt het niet bewaard.",
   "desktopOnly": "{{feature}} werkt alleen in de bureaubladversie. Deze pagina is de webversie.",
+  "hostedLinkTitle": "Koppeling",
+  "hostedLinkMessage": "Koppelingen kunnen hier niet worden geopend. Kopieer het adres om het zelf te openen:",
+  "hostedAttachmentMessage": "Bijlagen kunnen hier niet worden geopend. \"{{filename}}\" wordt in plaats daarvan als download aangeboden.",
   "assistantTitle": "OpenAEC-assistent",
   "assistant": {
     "greeting": "Hallo! Ik ben de **{{title}}**. Ik kan: 🌐 vertalen, 📝 samenvatten, ✏️ tekenen op de tekening, en 🚪 deuren herkennen. Kies hieronder een vaardigheid of stel je vraag.",
@@ -192,6 +195,8 @@
   "selectedPdfNoPages": "De geselecteerde PDF heeft geen pagina's.",
   "failedToSavePdf": "PDF opslaan mislukt: {{error}}",
   "failedToLoadPdf": "PDF laden mislukt: {{error}}",
+  "hostOpenFailed": "Het bestand kon niet uit de opslag worden gelezen. Probeer het opnieuw.",
+  "hostNoContact": "De pagina rond Open PDF Studio reageert niet, dus bestanden kunnen niet worden geopend of opgeslagen. Laad de pagina opnieuw en probeer het nog eens.",
   "failedToCreateDocument": "Document aanmaken mislukt: {{error}}",
   "failedToReplacePage": "Pagina vervangen mislukt: {{error}}",
   "failedToMergeFile": "Samenvoegen mislukt: {{file}}\n{{error}}",

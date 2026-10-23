@@ -16,6 +16,7 @@
 // De lader leest dit in loader/annotatie-algemeen.js en
 // loader/annotaties-omzetten.js. Alleen pdf-lib: ook in node te testen.
 
+import { zoneDefinition } from '../../annotations/spatial-zones.js';
 import { PDFName, PDFString, PDFRef } from 'pdf-lib';
 import { pdfTextString } from './pdf-text.js';
 import { onderwerpPlek } from '../loader/annotatie-opmerking.js';
@@ -45,6 +46,9 @@ export function schrijfAlgemeneSleutels(dict, ann, gebruikteNm) {
     const onderwerp = plek === 'subj' ? ann.subject : plek === 'contents' ? ann.pdfSubject : '';
     if (onderwerp) dict.set(N('Subj'), pdfTextString(String(onderwerp)));
   }
+  const zone = zoneDefinition(ann.spatialZone);
+  if (zone) dict.set(N('OPS_SpatialZone'), pdfTextString(JSON.stringify(zone)));
+  if (typeof ann.locationOverride === 'string') dict.set(N('OPS_LocationOverride'), pdfTextString(ann.locationOverride.slice(0, 1000)));
   if (ann.altText) dict.set(N('OPS_AltText'), pdfTextString(String(ann.altText)));
   if (ann.ifcCategory && !heeft('OPS_IfcCategory')) {
     dict.set(N('OPS_IfcCategory'), pdfTextString(String(ann.ifcCategory)));

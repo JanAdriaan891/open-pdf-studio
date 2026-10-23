@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "En tornar a carregar la pàgina es comença de zero: al navegador, el document es queda a l'ordinador i no s'emmagatzema.",
   "desktopOnly": "{{feature}} només funciona a l'aplicació d'escriptori. Aquesta pàgina és la versió per al navegador.",
+  "hostedLinkTitle": "Enllaç",
+  "hostedLinkMessage": "Els enllaços no es poden obrir des d'aquí. Copieu l'adreça per obrir-la vosaltres mateixos:",
+  "hostedAttachmentMessage": "Els adjunts no es poden obrir aquí. «{{filename}}» s'ofereix com a baixada.",
   "assistantTitle": "Assistent d'OpenAEC",
   "assistant": {
     "greeting": "Hola! Soc l'**{{title}}**. Puc: 🌐 traduir, 📝 resumir, ✏️ dibuixar al plànol i 🚪 reconèixer portes. Tria una habilitat a sota o fes la teva pregunta.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "El PDF seleccionat no té pàgines.",
   "failedToSavePdf": "No s'ha pogut desar el PDF: {{error}}",
   "failedToLoadPdf": "No s'ha pogut carregar el PDF: {{error}}",
+  "hostOpenFailed": "No s'ha pogut llegir el fitxer de l'emmagatzematge. Torneu-ho a provar.",
+  "hostNoContact": "La pàgina que conté Open PDF Studio no respon, de manera que no es poden obrir ni desar fitxers. Torneu a carregar la pàgina i torneu-ho a provar.",
   "failedToCreateDocument": "No s'ha pogut crear el document: {{error}}",
   "failedToReplacePage": "No s'ha pogut substituir la pàgina: {{error}}",
   "failedToMergeFile": "No s'ha pogut combinar: {{file}}\n{{error}}",

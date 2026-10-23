@@ -396,6 +396,10 @@ export async function extractAnnotationColors(pageNum, pdfDoc) {
       if (subj) colors.subj = subj;
       const altTekst = leesPdfTekst(context, annotDict.get(PDFName.of('OPS_AltText')));
       if (altTekst) colors.opsAltText = altTekst;
+      const zoneText = leesPdfTekst(context, annotDict.get(PDFName.of('OPS_SpatialZone')));
+      if (zoneText && zoneText.length < 2000) { try { colors.spatialZone = JSON.parse(zoneText); } catch {} }
+      const locationOverride = leesPdfTekst(context, annotDict.get(PDFName.of('OPS_LocationOverride')));
+      if (typeof locationOverride === 'string') colors.locationOverride = locationOverride.slice(0, 1000);
 
       // Boog: middelpunt, straal en hoeken in de app-ruimte van de ongedraaide
       // pagina (zie de 'arc'-tak van saver.js). /Vertices is de benadering

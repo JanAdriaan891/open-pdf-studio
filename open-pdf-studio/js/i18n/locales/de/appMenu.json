@@ -213,5 +213,9 @@
     "activationFailed": "Nicht aktiv: {{error}}",
     "viaMcp": "Über die KI-Verbindung"
   },
-  "annotateScreenshot": "Screenshot aus Zwischenablage kommentieren"
+  "annotateScreenshot": "Screenshot aus Zwischenablage kommentieren",
+  "workflows": "Dokument-Workflows",
+  "drawingSets": "Zeichnungssätze",
+  "sheetLinks": "Blattübergreifende Verknüpfungen",
+  "approvalRouting": "Freigabeweiterleitung"
 }

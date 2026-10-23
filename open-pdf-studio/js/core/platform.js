@@ -456,6 +456,38 @@ export async function writeBinaryFileAtomic(path, data) {
   return true;
 }
 
+// An existing destination surfaces as CHOOSE_NEW_FILE (os error 17 on Unix,
+// 80/183 on Windows).
+async function invokeNew(command, path, data, headers = {}) {
+  const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+  const mobile = window.__TAURI__?.os?.type?.() === 'android';
+  try {
+    await getTauriCore().invoke(command, mobile ? { data: Array.from(bytes) } : bytes, {
+      headers: { 'x-opds-path': encodeURIComponent(path), ...headers },
+    });
+  } catch (e) {
+    const message = String(e?.message ?? e);
+    if (/already exists|file exists|os error (17|80|183)\b/i.test(message)) throw new Error('CHOOSE_NEW_FILE');
+    throw e instanceof Error ? e : new Error(message);
+  }
+  return true;
+}
+
+// Workflows and new-copy exports must fail on collisions, including races
+// after an existence check.
+export async function writeBinaryFileNew(path, data) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  return invokeNew('write_file_new', path, data);
+}
+
+// Untrusted bytes (a component of a PDF collection): never replaces a file,
+// refuses autostart folders and, when `restrict` is set, programs and scripts;
+// marked as downloaded content on Windows (src-tauri/src/export_policy.rs).
+export async function writeDownloadedFileNew(path, data, { restrict = true } = {}) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  return invokeNew('write_downloaded_file_new', path, data, { 'x-opds-restrict': restrict ? '1' : '0' });
+}
+
 export async function fileExists(path) {
   if (leesHostPad(path)) return hostOpslag() !== null;
   if (!isTauri()) return false;
@@ -474,28 +506,7 @@ export async function fileExists(path) {
   return await invoke('file_exists', { path });
 }
 
-// Shell operations
-export async function openExternal(url) {
-  if (!isTauri()) {
-    window.open(url, '_blank');
-    return;
-  }
-  // Headless: geen browser van de gebruiker naar voren halen.
-  if (slaOverInHeadless(`open external ${url}`)) return;
-
-  // Try using the shell plugin
-  if (window.__TAURI__.shell) {
-    try {
-      await window.__TAURI__.shell.open(url);
-      return;
-    } catch (e) {
-      console.error('Shell plugin error:', e);
-    }
-  }
-
-  // Fallback: use invoke
-  await invoke('open_url', { url });
-}
+// Iets buiten de app openen (webadres, bijlage): core/extern-openen.js (#695).
 
 // ── Contract van invoke() buiten Tauri ──────────────────────────────────────
 // De webversie heeft geen Rust-kant. Een aanroep KAN daar dus niet slagen.
@@ -768,6 +779,11 @@ export async function downloadPdfFromUrl(url) {
 // List PDF files in a directory
 export async function listPdfFiles(dir) {
   return await invoke('list_pdf_files', { dir });
+}
+
+/** PDF files directly in `dir` as [{path, size, mtimeMs}]. */
+export async function listPdfFileStats(dir) {
+  return await invoke('list_pdf_file_stats', { dir });
 }
 
 // File locking - prevent other apps from writing to an open file

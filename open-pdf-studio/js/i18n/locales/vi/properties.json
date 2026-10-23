@@ -367,7 +367,9 @@
     "csvLayer": "Lớp",
     "schedules": "Bảng thống kê",
     "addPage": "Thêm trang",
-    "pageLabels": "Nhãn trang (trình tạo tên)"
+    "pageLabels": "Nhãn trang (trình tạo tên)",
+    "portfolio": "Danh mục PDF",
+    "recognizeForm": "Nhận dạng trường biểu mẫu"
   },
   "scaleBar": {
     "title": "Thước tỷ lệ",
@@ -419,7 +421,8 @@
       "image": "Hình ảnh & con dấu"
     },
     "preview": "Xem trước",
-    "exportCsv": "Xuất CSV"
+    "exportCsv": "Xuất CSV",
+    "workbookBindings": "Liên kết bảng tính"
   },
   "wizard": {
     "title": "Trình hướng dẫn bảng thống kê",
@@ -601,7 +604,9 @@
       "symbolId": "Ký hiệu",
       "imageName": "Tên tệp",
       "width": "Chiều rộng",
-      "height": "Chiều cao"
+      "height": "Chiều cao",
+      "location": "Vị trí",
+      "locationSource": "Nguồn vị trí"
     },
     "type": {
       "line": "Đường thẳng",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Đối tượng này đã được thay đổi ở nơi khác. Biểu mẫu hiển thị các giá trị hiện tại; các thay đổi của bạn chưa được áp dụng.",
     "failed": "Không thể áp dụng các thay đổi: {{error}}"
+  },
+  "location": {
+    "title": "Vị trí",
+    "none": "Chưa gán",
+    "manual": "Thủ công",
+    "computed": "Đã tính toán",
+    "override": "Ghi đè thủ công (để trống sẽ xóa vị trí)",
+    "automatic": "Dùng vị trí tự động",
+    "zoneName": "Dùng hình này làm vùng được đặt tên",
+    "parent": "Vùng cha",
+    "removeZone": "Xóa định nghĩa vùng",
+    "invalid": "Không thể cập nhật vị trí",
+    "rules": "Việc gán dựa trên tâm hộp giới hạn của đánh dấu, tính cả cạnh. Vùng sâu nhất được ưu tiên, sau đó đến diện tích nhỏ nhất, rồi đến ID vùng. Hãy dùng đa giác cạnh thẳng không có lỗ hoặc hộp chưa xoay. Các định danh vùng không hợp lệ hoặc trùng lặp sẽ bị loại trừ.",
+    "loading": "Đang tải chú thích: vị trí có thể vẫn thay đổi."
   }
 }

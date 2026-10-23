@@ -213,5 +213,9 @@
     "activationFailed": "Inactive : {{error}}",
     "viaMcp": "Via la connexion IA"
   },
-  "annotateScreenshot": "Annoter une capture d'écran du presse-papiers"
+  "annotateScreenshot": "Annoter une capture d'écran du presse-papiers",
+  "workflows": "Flux de travail documentaires",
+  "drawingSets": "Jeux de plans",
+  "sheetLinks": "Liens entre feuilles",
+  "approvalRouting": "Circuit d'approbation"
 }

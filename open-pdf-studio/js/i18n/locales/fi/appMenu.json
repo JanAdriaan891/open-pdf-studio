@@ -213,5 +213,9 @@
     "activationFailed": "Ei käytössä: {{error}}",
     "viaMcp": "Tekoälyyhteyden kautta"
   },
-  "annotateScreenshot": "Merkitse leikepöydän kuvakaappaus"
+  "annotateScreenshot": "Merkitse leikepöydän kuvakaappaus",
+  "workflows": "Asiakirjatyönkulut",
+  "drawingSets": "Piirustussarjat",
+  "sheetLinks": "Piirustusten väliset linkit",
+  "approvalRouting": "Hyväksyntäkierto"
 }

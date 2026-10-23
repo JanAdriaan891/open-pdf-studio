@@ -1,3 +1,5 @@
+import { collectZones, locationFor } from '../../annotations/spatial-zones.js';
+import { getAnnotationBounds } from '../../core/state.js';
 // Hoeveelheden — config-store. Solid-signals voor de schedule-config + memo's
 // die de pure engine aanroepen. Visibility blijft in scheduleStore (re-exported).
 import { createSignal, createMemo } from 'solid-js';
@@ -95,7 +97,8 @@ function collectElements() {
     return a;
   }));
   const bi = selectedCategories().includes('text-built-in') ? builtInText() : [];
-  return [...anns, ...bi];
+  const zones = collectZones(doc?.annotations);
+  return [...anns, ...bi].map(a => ({...a, __location: locationFor(a, zones, getAnnotationBounds(a))}));
 }
 
 function computeSchedule() {

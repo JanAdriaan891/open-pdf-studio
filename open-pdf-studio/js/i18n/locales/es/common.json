@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Al recargar la página se empieza vacío: en el navegador, su documento permanece en su equipo y no se almacena.",
   "desktopOnly": "{{feature}} solo funciona en la aplicación de escritorio. Esta página es la versión para navegador.",
+  "hostedLinkTitle": "Enlace",
+  "hostedLinkMessage": "Los enlaces no se pueden abrir desde aquí. Copie la dirección para abrirla usted mismo:",
+  "hostedAttachmentMessage": "Los adjuntos no se pueden abrir aquí. «{{filename}}» se ofrece como descarga en su lugar.",
   "assistantTitle": "Asistente de OpenAEC",
   "assistant": {
     "greeting": "¡Hola! Soy el **{{title}}**. Puedo: 🌐 traducir, 📝 resumir, ✏️ dibujar en el plano y 🚪 reconocer puertas. Elige una habilidad abajo o haz tu pregunta.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "El PDF seleccionado no tiene páginas.",
   "failedToSavePdf": "No se pudo guardar el PDF: {{error}}",
   "failedToLoadPdf": "No se pudo cargar el PDF: {{error}}",
+  "hostOpenFailed": "No se pudo leer el archivo del almacenamiento. Inténtelo de nuevo.",
+  "hostNoContact": "La página que contiene Open PDF Studio no responde, por lo que no se pueden abrir ni guardar archivos. Recargue la página e inténtelo de nuevo.",
   "failedToCreateDocument": "No se pudo crear el documento: {{error}}",
   "failedToReplacePage": "No se pudo reemplazar la página: {{error}}",
   "failedToMergeFile": "Error al combinar: {{file}}\n{{error}}",

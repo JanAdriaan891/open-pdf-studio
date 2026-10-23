@@ -213,5 +213,9 @@
     "activationFailed": "فعال نہیں: {{error}}",
     "viaMcp": "AI کنکشن کے ذریعے"
   },
-  "annotateScreenshot": "کلپ بورڈ اسکرین شاٹ پر تشریح کریں"
+  "annotateScreenshot": "کلپ بورڈ اسکرین شاٹ پر تشریح کریں",
+  "workflows": "دستاویز ورک فلوز",
+  "drawingSets": "ڈرائنگ سیٹس",
+  "sheetLinks": "شیٹوں کے درمیان لنکس",
+  "approvalRouting": "منظوری کی روٹنگ"
 }

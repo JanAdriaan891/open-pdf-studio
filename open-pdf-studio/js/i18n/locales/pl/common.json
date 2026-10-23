@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Po przeładowaniu strona startuje pusta: w przeglądarce dokument pozostaje na Twoim komputerze i nie jest przechowywany.",
   "desktopOnly": "{{feature}} działa tylko w aplikacji na komputer. Ta strona to wersja przeglądarkowa.",
+  "hostedLinkTitle": "Łącze",
+  "hostedLinkMessage": "Łączy nie można tu otworzyć. Skopiuj adres, aby otworzyć go samodzielnie:",
+  "hostedAttachmentMessage": "Załączników nie można tu otworzyć. „{{filename}}” jest zamiast tego oferowany do pobrania.",
   "assistantTitle": "Asystent OpenAEC",
   "assistant": {
     "greeting": "Cześć! Tu **{{title}}**. Potrafię: 🌐 tłumaczyć, 📝 streszczać, ✏️ rysować na rysunku i 🚪 rozpoznawać drzwi. Wybierz umiejętność poniżej lub zadaj pytanie.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Wybrany plik PDF nie ma stron.",
   "failedToSavePdf": "Nie udało się zapisać PDF: {{error}}",
   "failedToLoadPdf": "Nie udało się wczytać PDF: {{error}}",
+  "hostOpenFailed": "Nie udało się odczytać pliku z magazynu. Spróbuj ponownie.",
+  "hostNoContact": "Strona zawierająca Open PDF Studio nie odpowiada, więc nie można otwierać ani zapisywać plików. Odśwież stronę i spróbuj ponownie.",
   "failedToCreateDocument": "Nie udało się utworzyć dokumentu: {{error}}",
   "failedToReplacePage": "Nie udało się zastąpić strony: {{error}}",
   "failedToMergeFile": "Nie udało się scalić: {{file}}\n{{error}}",

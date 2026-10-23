@@ -5,6 +5,7 @@
 // De saver schrijft ze in saver/annotatie-algemeen.js. Puur: geen DOM, geen
 // app-state.
 
+import { zoneDefinition } from '../../annotations/spatial-zones.js';
 import { onderwerpPlek } from './annotatie-opmerking.js';
 import { toIsoDate } from './status-replies.js';
 import { vormVingerafdruk } from '../saver/ruwe-sleutels.js';
@@ -21,6 +22,9 @@ export function algemeneEigenschappen(extra, model) {
   const e = extra || {};
   const m = model || {};
   const uit = {};
+  const zone = zoneDefinition(e.spatialZone);
+  if (zone) uit.spatialZone = zone;
+  if (typeof e.locationOverride === 'string') uit.locationOverride = e.locationOverride;
   if (e.nm && m.nm === undefined) uit.nm = e.nm;
   if (e.subj) {
     const plek = onderwerpPlek(m.type);

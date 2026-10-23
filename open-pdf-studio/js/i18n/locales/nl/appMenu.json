@@ -213,5 +213,9 @@
     "activationFailed": "Niet actief: {{error}}",
     "viaMcp": "Via de AI-koppeling"
   },
-  "annotateScreenshot": "Klembord-schermafbeelding annoteren"
+  "annotateScreenshot": "Klembord-schermafbeelding annoteren",
+  "workflows": "Documentworkflows",
+  "drawingSets": "Tekeningsets",
+  "sheetLinks": "Verwijzingen tussen bladen",
+  "approvalRouting": "Goedkeuringsroutes"
 }

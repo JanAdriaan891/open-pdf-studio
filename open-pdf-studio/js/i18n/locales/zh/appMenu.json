@@ -213,5 +213,9 @@
     "activationFailed": "未激活：{{error}}",
     "viaMcp": "通过 AI 连接"
   },
-  "annotateScreenshot": "批注剪贴板截图"
+  "annotateScreenshot": "批注剪贴板截图",
+  "workflows": "文档工作流",
+  "drawingSets": "图纸集",
+  "sheetLinks": "跨图纸链接",
+  "approvalRouting": "审批流转"
 }

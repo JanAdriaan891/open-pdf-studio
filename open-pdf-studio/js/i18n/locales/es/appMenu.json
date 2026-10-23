@@ -213,5 +213,9 @@
     "activationFailed": "No activa: {{error}}",
     "viaMcp": "Mediante la conexión de IA"
   },
-  "annotateScreenshot": "Anotar captura de pantalla del portapapeles"
+  "annotateScreenshot": "Anotar captura de pantalla del portapapeles",
+  "workflows": "Flujos de trabajo de documentos",
+  "drawingSets": "Juegos de planos",
+  "sheetLinks": "Vínculos entre planos",
+  "approvalRouting": "Circuito de aprobación"
 }

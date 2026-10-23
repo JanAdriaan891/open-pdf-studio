@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Po opětovném načtení stránka začíná prázdná: v prohlížeči zůstává dokument ve vašem počítači a neukládá se.",
   "desktopOnly": "{{feature}} funguje pouze v desktopové aplikaci. Tato stránka je verze pro prohlížeč.",
+  "hostedLinkTitle": "Odkaz",
+  "hostedLinkMessage": "Odkazy zde nelze otevřít. Zkopírujte adresu a otevřete ji sami:",
+  "hostedAttachmentMessage": "Přílohy zde nelze otevřít. „{{filename}}“ je místo toho nabídnut ke stažení.",
   "assistantTitle": "Asistent OpenAEC",
   "assistant": {
     "greeting": "Dobrý den! Jsem **{{title}}**. Umím: 🌐 překládat, 📝 shrnovat, ✏️ kreslit do výkresu a 🚪 rozpoznávat dveře. Vyberte dovednost níže nebo položte otázku.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Vybrané PDF nemá žádné stránky.",
   "failedToSavePdf": "Uložení PDF se nezdařilo: {{error}}",
   "failedToLoadPdf": "Načtení PDF se nezdařilo: {{error}}",
+  "hostOpenFailed": "Soubor se nepodařilo načíst z úložiště. Zkuste to znovu.",
+  "hostNoContact": "Stránka kolem Open PDF Studio neodpovídá, takže soubory nelze otevírat ani ukládat. Načtěte stránku znovu a zkuste to znovu.",
   "failedToCreateDocument": "Vytvoření dokumentu se nezdařilo: {{error}}",
   "failedToReplacePage": "Nahrazení stránky se nezdařilo: {{error}}",
   "failedToMergeFile": "Sloučení se nezdařilo: {{file}}\n{{error}}",

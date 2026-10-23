@@ -367,7 +367,9 @@
     "csvLayer": "Taso",
     "schedules": "Luettelot",
     "addPage": "Lisää sivu",
-    "pageLabels": "Sivujen nimiöt (nimien muodostus)"
+    "pageLabels": "Sivujen nimiöt (nimien muodostus)",
+    "portfolio": "PDF-portfolio",
+    "recognizeForm": "Tunnista lomakekentät"
   },
   "scaleBar": {
     "title": "Mittakaavajana",
@@ -419,7 +421,8 @@
       "image": "Kuvat ja leimat"
     },
     "preview": "Esikatselu",
-    "exportCsv": "Vie CSV"
+    "exportCsv": "Vie CSV",
+    "workbookBindings": "Laskentataulukkolinkitykset"
   },
   "wizard": {
     "title": "Ohjattu luettelon luonti",
@@ -601,7 +604,9 @@
       "symbolId": "Symboli",
       "imageName": "Tiedostonimi",
       "width": "Leveys",
-      "height": "Korkeus"
+      "height": "Korkeus",
+      "location": "Sijainti",
+      "locationSource": "Sijainnin lähde"
     },
     "type": {
       "line": "Viiva",
@@ -700,5 +705,19 @@
   "scopedPanel": {
     "stale": "Tätä objektia on muutettu muualla. Lomake näyttää nykyiset arvot; muutoksiasi ei otettu käyttöön.",
     "failed": "Muutoksia ei voitu ottaa käyttöön: {{error}}"
+  },
+  "location": {
+    "title": "Sijainti",
+    "none": "Ei määritetty",
+    "manual": "Manuaalinen",
+    "computed": "Laskettu",
+    "override": "Manuaalinen ohitus (tyhjä tyhjentää sijainnin)",
+    "automatic": "Käytä automaattista sijaintia",
+    "zoneName": "Käytä tätä muotoa nimettynä vyöhykkeenä",
+    "parent": "Ylätason vyöhyke",
+    "removeZone": "Poista vyöhykkeen määritys",
+    "invalid": "Sijaintia ei voitu päivittää",
+    "rules": "Määritys käyttää merkinnän rajauslaatikon keskipistettä reunat mukaan lukien. Syvin vyöhyke voittaa, sitten pienin pinta-ala ja sitten vyöhykkeen tunnus. Käytä suorasivuisia monikulmioita ilman reikiä tai kiertämättömiä suorakulmioita. Virheelliset tai päällekkäiset vyöhyketunnisteet jätetään pois.",
+    "loading": "Merkintöjä ladataan: sijainnit voivat vielä muuttua."
   }
 }
