@@ -1038,7 +1038,9 @@ body.pdf-cursor-override #canvas-container * {
   box-sizing: border-box;
   border: 0;
   outline: 1px solid #0078d7;
-  background: #ffffff;
+  /* Doorzichtig (#698): de pagina eronder blijft zichtbaar; het canvas dekt
+     de oude tekst af (rendering.js, tekstEditorOpCanvas). */
+  background: transparent;
   padding: 0;
   margin: 0;
   resize: none;

@@ -35,6 +35,7 @@
   "saved": "Desat",
   "documentChangedDuringSave": "El document ha canviat mentre es desava. Torneu a desar-lo.",
   "documentChangedDuringExport": "El document ha canviat durant l'exportació. Torneu a començar.",
+  "rasterExportProgress": "Rasteritzant pàgines: {{done}} de {{total}}",
   "search": "Cerca",
   "find": "Cerca",
   "page": "Pàgina",

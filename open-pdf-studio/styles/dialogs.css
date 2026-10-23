@@ -1145,6 +1145,34 @@
   color: var(--theme-text, #374151);
   font-weight: 500;
 }
+
+/* Voortgang en annuleren (bv. de rasterexport) */
+.loading-progress {
+  width: 280px;
+  height: 14px;
+  border: 1px solid #bcbcbc;
+  background: #e6e6e6;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: #06b025;
+}
+
+.loading-cancel {
+  min-width: 80px;
+  padding: 3px 12px;
+  border: 1px solid #adadad;
+  border-radius: 0;
+  background: #e1e1e1;
+  color: #000000;
+  font-size: 12px;
+}
+
+.loading-cancel:hover:not(:disabled) {
+  border-color: #0078d7;
+  background: #e5f1fb;
+}
 /* Text Annotation Dialog */
 .text-annot-overlay { z-index: 20000; }
 

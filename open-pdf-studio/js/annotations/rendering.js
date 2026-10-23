@@ -223,6 +223,18 @@ function laag(naam) {
   return !_lagen || _lagen[naam];
 }
 
+// Staat de inline editor open op dit tekstvak (#698)? Dan toont de editor de
+// tekst, doorzichtig boven het canvas: het canvas tekent vulling en rand wel,
+// de tekst niet, anders stond de oude tekst onder de getypte. Alleen op het
+// scherm: een afdruk of export kent geen bewerkingstoestand. Op id vergeleken,
+// want het document kan een kopie of proxy van de annotatie bewaren.
+function tekstInEditor(annotation) {
+  if (_lagen || !state.isEditingText) return false;
+  const ed = state.editingAnnotation;
+  if (!ed || !annotation) return false;
+  return ed === annotation || (ed.id != null && ed.id === annotation.id);
+}
+
 // Blauwe klik-affordance voor bewerkbare getallen: alleen wanneer de
 // annotatie de ENIGE selectie is (zie annotations/editable-numbers.js) —
 // precies dan opent een klik op zo'n getal de inline invoer.
@@ -1211,7 +1223,7 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       }
 
       // Draw text content
-      drawTextboxContent(ctx, annotation);
+      if (!tekstInEditor(annotation)) drawTextboxContent(ctx, annotation);
       ctx.restore();
 
       // Draw leaders (multi-leader generalisation of callout)
@@ -1329,7 +1341,7 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
       }
 
       // Draw text content
-      drawTextboxContent(ctx, annotation);
+      if (!tekstInEditor(annotation)) drawTextboxContent(ctx, annotation);
       ctx.restore();
       break;
 
@@ -2658,9 +2670,10 @@ export function drawAnnotation(ctx, annotation, snippetBitmaps = null) {
 // ctx is already scaled by state.scale, so coordinates are in unscaled page space
 function drawTextEdits(ctx, pageNum) {
   const doc = state.documents[state.activeDocumentIndex];
-  if (!doc || !doc.textEdits || doc.textEdits.length === 0) return;
-
-  const pageEdits = doc.textEdits.filter(e => e.page === pageNum);
+  if (!doc) return;
+  const actief = tekstEditorOpCanvas(pageNum);
+  const pageEdits = (doc.textEdits || []).filter(e => e.page === pageNum);
+  if (actief?.afdekking) pageEdits.push(actief.afdekking);
   if (pageEdits.length === 0) return;
 
   const canvasEl = ctx.canvas;
@@ -2701,7 +2714,10 @@ function drawTextEdits(ctx, pageNum) {
 
     ctx.textBaseline = 'alphabetic';
 
-    const newLines = edit.newText.split('\n');
+    // In de open editor staat deze tekst al: hier alleen de afdekking.
+    const inEditor = !!actief && (edit === actief.afdekking
+      || (edit.id != null && (edit.id === actief.recordId || edit.id === actief.afdekking?.id)));
+    const newLines = inEditor ? [] : String(edit.newText ?? '').split('\n');
     for (let i = 0; i < newLines.length; i++) {
       const line = newLines[i];
       if (!line) continue;
@@ -2796,6 +2812,16 @@ function drawTextEdits(ctx, pageNum) {
   houdAfdekkingen(doc, pageNum, afdekSleutels);
 }
 
+// De PDF-tekstbewerking die nu open staat op deze pagina (#698), alleen op
+// het scherm: { page, recordId?, afdekking? }. De editor is doorzichtig; het
+// canvas dekt de oude tekst af (afdekking: een tijdelijk record met de
+// originele regels) en tekent de tekst van het record in de editor niet.
+function tekstEditorOpCanvas(pageNum) {
+  if (_lagen) return null;
+  const a = state.pdfTekstEditorCanvas;
+  return a && a.page === pageNum ? a : null;
+}
+
 // Afdekking van de oude tekst van één bewerking (#669). Het afdekgebied is
 // per originele run een strak vlak (textEditCoverRects): lijnen tussen en
 // rond de runs, zoals tabelranden, liggen er buiten. Binnen die vlakken komt
@@ -2858,7 +2884,10 @@ let _getekendeTekstBewerkingen = null;
 function tekstBewerkingenHandtekening(doc, pageNum) {
   if (!doc) return '';
   const opPagina = (doc.textEdits || []).filter(e => e && e.page === pageNum);
-  return `${doc.id ?? ''}|${doc.filePath ?? ''}|${pageNum}|${JSON.stringify(opPagina.map(e => [
+  const actief = tekstEditorOpCanvas(pageNum);
+  if (actief?.afdekking) opPagina.push(actief.afdekking);
+  const inEditor = actief ? `${actief.recordId ?? ''}|${actief.afdekking?.id ?? ''}` : '';
+  return `${doc.id ?? ''}|${doc.filePath ?? ''}|${pageNum}|${inEditor}|${JSON.stringify(opPagina.map(e => [
     e.id, e.newText, e.originalText, e.pdfX, e.pdfY, e.fontSize, e.lineSpacing, e.color,
     e.fontFamily, e.loadedFontName, e.textAngle, e.fontUnderline, e.fontStrikethrough,
     e.lineStyles, e.lineSegments, e.lineJustifyTw, e.originalLineInfo,

@@ -32,6 +32,7 @@
   "saved": "Opgeslagen",
   "documentChangedDuringSave": "Het document is gewijzigd tijdens het opslaan. Sla opnieuw op.",
   "documentChangedDuringExport": "Het document is gewijzigd tijdens het exporteren. Start opnieuw.",
+  "rasterExportProgress": "Pagina's rasteren: {{done}} van {{total}}",
   "snippetOutputFailed": "Een vectorknipsel kon niet worden weergegeven, daarom is de export of afdruk gestopt. Probeer het opnieuw.",
   "search": "Zoeken",
   "find": "Zoeken",
