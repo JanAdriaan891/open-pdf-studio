@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "רענון הדף מתחיל ריק: בדפדפן המסמך שלך נשאר במחשב שלך ואינו נשמר.",
   "desktopOnly": "{{feature}} פועל רק באפליקציית שולחן העבודה. דף זה הוא גרסת הדפדפן.",
+  "hostedLinkTitle": "קישור",
+  "hostedLinkMessage": "לא ניתן לפתוח קישורים מכאן. העתיקו את הכתובת כדי לפתוח אותה בעצמכם:",
+  "hostedAttachmentMessage": "לא ניתן לפתוח קבצים מצורפים כאן. \"{{filename}}\" מוצע להורדה במקום זאת.",
   "assistantTitle": "העוזר של OpenAEC",
   "assistant": {
     "greeting": "שלום! אני **{{title}}**. אני יכול: 🌐 לתרגם, 📝 לסכם, ✏️ לשרטט על השרטוט ו־🚪 לזהות דלתות. בחרו מיומנות למטה או שאלו את שאלתכם.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "ב-PDF שנבחר אין עמודים.",
   "failedToSavePdf": "שמירת ה-PDF נכשלה: {{error}}",
   "failedToLoadPdf": "טעינת ה-PDF נכשלה: {{error}}",
+  "hostOpenFailed": "לא ניתן היה לקרוא את הקובץ מהאחסון. נסו שוב.",
+  "hostNoContact": "הדף שבו נמצא Open PDF Studio אינו מגיב, ולכן לא ניתן לפתוח או לשמור קבצים. טענו מחדש את הדף ונסו שוב.",
   "failedToCreateDocument": "יצירת המסמך נכשלה: {{error}}",
   "failedToReplacePage": "החלפת העמוד נכשלה: {{error}}",
   "failedToMergeFile": "המיזוג נכשל: {{file}}\n{{error}}",

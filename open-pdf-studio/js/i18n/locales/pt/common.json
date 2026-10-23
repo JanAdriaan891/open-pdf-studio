@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Recarregar a página começa do zero: no navegador, seu documento fica no seu computador e não é armazenado.",
   "desktopOnly": "{{feature}} só funciona no aplicativo para desktop. Esta página é a versão para navegador.",
+  "hostedLinkTitle": "Ligação",
+  "hostedLinkMessage": "Não é possível abrir ligações a partir daqui. Copie o endereço para o abrir manualmente:",
+  "hostedAttachmentMessage": "Não é possível abrir anexos aqui. \"{{filename}}\" é disponibilizado como transferência.",
   "assistantTitle": "Assistente OpenAEC",
   "assistant": {
     "greeting": "Olá! Sou o **{{title}}**. Posso: 🌐 traduzir, 📝 resumir, ✏️ desenhar no desenho e 🚪 reconhecer portas. Escolha uma habilidade abaixo ou faça a sua pergunta.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "O PDF selecionado não tem páginas.",
   "failedToSavePdf": "Falha ao salvar o PDF: {{error}}",
   "failedToLoadPdf": "Falha ao carregar o PDF: {{error}}",
+  "hostOpenFailed": "Não foi possível ler o ficheiro do armazenamento. Tente novamente.",
+  "hostNoContact": "A página que contém o Open PDF Studio não responde, por isso não é possível abrir nem guardar ficheiros. Recarregue a página e tente novamente.",
   "failedToCreateDocument": "Falha ao criar o documento: {{error}}",
   "failedToReplacePage": "Falha ao substituir a página: {{error}}",
   "failedToMergeFile": "Falha ao mesclar: {{file}}\n{{error}}",

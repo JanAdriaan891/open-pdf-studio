@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Ricaricando la pagina si riparte da vuoto: nel browser il documento resta sul tuo computer e non viene memorizzato.",
   "desktopOnly": "{{feature}} funziona solo nell'app desktop. Questa pagina è la versione per browser.",
+  "hostedLinkTitle": "Collegamento",
+  "hostedLinkMessage": "I collegamenti non possono essere aperti da qui. Copia l'indirizzo per aprirlo tu stesso:",
+  "hostedAttachmentMessage": "Gli allegati non possono essere aperti qui. \"{{filename}}\" viene offerto come download.",
   "assistantTitle": "Assistente OpenAEC",
   "assistant": {
     "greeting": "Ciao! Sono l'**{{title}}**. Posso: 🌐 tradurre, 📝 riassumere, ✏️ disegnare sul disegno e 🚪 riconoscere le porte. Scegli un'abilità qui sotto o fai la tua domanda.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Il PDF selezionato non ha pagine.",
   "failedToSavePdf": "Impossibile salvare il PDF: {{error}}",
   "failedToLoadPdf": "Impossibile caricare il PDF: {{error}}",
+  "hostOpenFailed": "Impossibile leggere il file dall'archivio. Riprova.",
+  "hostNoContact": "La pagina che contiene Open PDF Studio non risponde, quindi non è possibile aprire o salvare file. Ricarica la pagina e riprova.",
   "failedToCreateDocument": "Impossibile creare il documento: {{error}}",
   "failedToReplacePage": "Impossibile sostituire la pagina: {{error}}",
   "failedToMergeFile": "Unione non riuscita: {{file}}\n{{error}}",

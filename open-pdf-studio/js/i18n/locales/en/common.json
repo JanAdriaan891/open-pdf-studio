@@ -49,6 +49,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "A page reload starts empty: in the browser your document stays on your computer and is not stored.",
   "desktopOnly": "{{feature}} only works in the desktop app. This page is the browser version.",
+  "hostedLinkTitle": "Link",
+  "hostedLinkMessage": "Links cannot be opened from here. Copy the address to open it yourself:",
+  "hostedAttachmentMessage": "Attachments cannot be opened here. \"{{filename}}\" is offered as a download instead.",
   "assistantTitle": "OpenAEC assistant",
   "assistant": {
     "greeting": "Hello! I am the **{{title}}**. I can: 🌐 translate, 📝 summarise, ✏️ draw on the drawing, and 🚪 recognise doors. Pick a skill below or ask your question.",
@@ -122,6 +125,8 @@
   "selectedPdfNoPages": "The selected PDF has no pages.",
   "failedToSavePdf": "Failed to save PDF: {{error}}",
   "failedToLoadPdf": "Failed to load PDF: {{error}}",
+  "hostOpenFailed": "The file could not be read from storage. Try again.",
+  "hostNoContact": "The page around Open PDF Studio does not respond, so files cannot be opened or saved. Reload the page and try again.",
   "failedToCreateDocument": "Failed to create document: {{error}}",
   "failedToReplacePage": "Failed to replace page: {{error}}",
   "failedToMergeFile": "Failed to merge: {{file}}\n{{error}}",

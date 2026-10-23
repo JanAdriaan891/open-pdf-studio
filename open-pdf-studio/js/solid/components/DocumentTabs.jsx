@@ -294,7 +294,11 @@ let _dragModulePromise = null;
 let _dragIconPromise = null;
 function preloadDragDeps() {
   if (!_dragModulePromise) {
-    _dragModulePromise = import('@crabnebula/tauri-plugin-drag').catch(() => null);
+    // Tab naar buiten slepen kan alleen op het bureaublad. In de gehoste build
+    // valt de import zo weg en zit de plugin niet in de webbundel (#692).
+    _dragModulePromise = import.meta.env.MODE === 'hosted'
+      ? Promise.resolve(null)
+      : import('@crabnebula/tauri-plugin-drag').catch(() => null);
   }
   if (!_dragIconPromise) {
     _dragIconPromise = invoke('drag_icon_path').catch(() => '');

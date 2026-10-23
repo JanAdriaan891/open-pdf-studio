@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Un rechargement de la page repart de zéro : dans le navigateur, votre document reste sur votre ordinateur et n'est pas stocké.",
   "desktopOnly": "{{feature}} ne fonctionne que dans l'application de bureau. Cette page est la version navigateur.",
+  "hostedLinkTitle": "Lien",
+  "hostedLinkMessage": "Les liens ne peuvent pas être ouverts ici. Copiez l'adresse pour l'ouvrir vous-même :",
+  "hostedAttachmentMessage": "Les pièces jointes ne peuvent pas être ouvertes ici. « {{filename}} » est proposé en téléchargement à la place.",
   "assistantTitle": "Assistant OpenAEC",
   "assistant": {
     "greeting": "Bonjour ! Je suis l'**{{title}}**. Je peux : 🌐 traduire, 📝 résumer, ✏️ dessiner sur le plan et 🚪 reconnaître les portes. Choisissez une compétence ci-dessous ou posez votre question.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Le PDF sélectionné ne contient aucune page.",
   "failedToSavePdf": "Impossible d'enregistrer le PDF : {{error}}",
   "failedToLoadPdf": "Impossible de charger le PDF : {{error}}",
+  "hostOpenFailed": "Le fichier n'a pas pu être lu depuis le stockage. Réessayez.",
+  "hostNoContact": "La page qui contient Open PDF Studio ne répond pas : les fichiers ne peuvent être ni ouverts ni enregistrés. Rechargez la page et réessayez.",
   "failedToCreateDocument": "Impossible de créer le document : {{error}}",
   "failedToReplacePage": "Impossible de remplacer la page : {{error}}",
   "failedToMergeFile": "Échec de la fusion : {{file}}\n{{error}}",

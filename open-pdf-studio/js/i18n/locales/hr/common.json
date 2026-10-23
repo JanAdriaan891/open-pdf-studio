@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "Ponovno učitavanje stranice počinje prazno: u pregledniku dokument ostaje na vašem računalu i ne pohranjuje se.",
   "desktopOnly": "{{feature}} radi samo u desktop aplikaciji. Ova stranica je verzija za preglednik.",
+  "hostedLinkTitle": "Poveznica",
+  "hostedLinkMessage": "Poveznice se ne mogu otvoriti odavde. Kopirajte adresu kako biste je sami otvorili:",
+  "hostedAttachmentMessage": "Privici se ovdje ne mogu otvoriti. „{{filename}}” nudi se za preuzimanje.",
   "assistantTitle": "OpenAEC asistent",
   "assistant": {
     "greeting": "Pozdrav! Ja sam **{{title}}**. Mogu: 🌐 prevoditi, 📝 sažimati, ✏️ crtati na crtežu i 🚪 prepoznavati vrata. Odaberite vještinu u nastavku ili postavite pitanje.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Odabrani PDF nema stranica.",
   "failedToSavePdf": "Spremanje PDF-a nije uspjelo: {{error}}",
   "failedToLoadPdf": "Učitavanje PDF-a nije uspjelo: {{error}}",
+  "hostOpenFailed": "Datoteku nije bilo moguće pročitati iz pohrane. Pokušajte ponovno.",
+  "hostNoContact": "Stranica oko Open PDF Studija ne odgovara pa se datoteke ne mogu otvoriti ni spremiti. Ponovno učitajte stranicu i pokušajte ponovno.",
   "failedToCreateDocument": "Izrada dokumenta nije uspjela: {{error}}",
   "failedToReplacePage": "Zamjena stranice nije uspjela: {{error}}",
   "failedToMergeFile": "Spajanje nije uspjelo: {{file}}\n{{error}}",

@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "En ny innlasting av siden starter tom: i nettleseren blir dokumentet ditt på datamaskinen og lagres ikke.",
   "desktopOnly": "{{feature}} fungerer bare i skrivebordsappen. Denne siden er nettleserversjonen.",
+  "hostedLinkTitle": "Lenke",
+  "hostedLinkMessage": "Lenker kan ikke åpnes herfra. Kopier adressen for å åpne den selv:",
+  "hostedAttachmentMessage": "Vedlegg kan ikke åpnes her. «{{filename}}» tilbys i stedet som nedlasting.",
   "assistantTitle": "OpenAEC-assistent",
   "assistant": {
     "greeting": "Hei! Jeg er **{{title}}**. Jeg kan: 🌐 oversette, 📝 oppsummere, ✏️ tegne på tegningen og 🚪 gjenkjenne dører. Velg en ferdighet nedenfor, eller still spørsmålet ditt.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Den valgte PDF-en har ingen sider.",
   "failedToSavePdf": "Kunne ikke lagre PDF-en: {{error}}",
   "failedToLoadPdf": "Kunne ikke laste inn PDF-en: {{error}}",
+  "hostOpenFailed": "Filen kunne ikke leses fra lagringen. Prøv igjen.",
+  "hostNoContact": "Siden rundt Open PDF Studio svarer ikke, så filer kan ikke åpnes eller lagres. Last inn siden på nytt og prøv igjen.",
   "failedToCreateDocument": "Kunne ikke opprette dokumentet: {{error}}",
   "failedToReplacePage": "Kunne ikke erstatte siden: {{error}}",
   "failedToMergeFile": "Sammenslåing mislyktes: {{file}}\n{{error}}",

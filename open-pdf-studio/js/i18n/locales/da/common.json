@@ -48,6 +48,9 @@
   "percent": "%",
   "webSessionStartsEmpty": "En genindlæsning af siden starter tom: i browseren bliver dit dokument på din computer og gemmes ikke.",
   "desktopOnly": "{{feature}} virker kun i skrivebordsappen. Denne side er browserversionen.",
+  "hostedLinkTitle": "Link",
+  "hostedLinkMessage": "Links kan ikke åbnes herfra. Kopiér adressen for selv at åbne den:",
+  "hostedAttachmentMessage": "Vedhæftede filer kan ikke åbnes her. \"{{filename}}\" tilbydes i stedet som download.",
   "assistantTitle": "OpenAEC-assistent",
   "assistant": {
     "greeting": "Hej! Jeg er **{{title}}**. Jeg kan: 🌐 oversætte, 📝 opsummere, ✏️ tegne på tegningen og 🚪 genkende døre. Vælg en færdighed nedenfor, eller stil dit spørgsmål.",
@@ -121,6 +124,8 @@
   "selectedPdfNoPages": "Den valgte PDF har ingen sider.",
   "failedToSavePdf": "PDF'en kunne ikke gemmes: {{error}}",
   "failedToLoadPdf": "PDF'en kunne ikke indlæses: {{error}}",
+  "hostOpenFailed": "Filen kunne ikke læses fra lageret. Prøv igen.",
+  "hostNoContact": "Siden omkring Open PDF Studio svarer ikke, så filer kan ikke åbnes eller gemmes. Genindlæs siden, og prøv igen.",
   "failedToCreateDocument": "Dokumentet kunne ikke oprettes: {{error}}",
   "failedToReplacePage": "Siden kunne ikke erstattes: {{error}}",
   "failedToMergeFile": "Fletning mislykkedes: {{file}}\n{{error}}",
