@@ -493,3 +493,4 @@ js/tools/editor-ondergrond.test.mjs
 js/pdf/raster-export-plan.test.mjs
 js/text/tekst-blokken.test.mjs
 js/tools/text-edit-commit.test.mjs
+js/pdf/saver/text-edit-afbeelding.test.mjs

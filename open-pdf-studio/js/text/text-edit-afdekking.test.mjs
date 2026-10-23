@@ -26,6 +26,7 @@ import {
 import {
   afdekOverslaanOps,
   maakAfdekFilter,
+  heeftOnzichtbareTekst,
   uitsnedeDichtheid,
   uitsnedeKader,
   uitsnedeVoldoet,
@@ -165,6 +166,30 @@ test('het filter van de uitsnede slaat tekst en afbeeldingen over, lijnen en vla
   assert.deepEqual(uitgevoerd, [OPS.save, OPS.constructPath, OPS.beginText, OPS.setFont,
     OPS.endText, OPS.fill, OPS.restore]);
   assert.ok(!afdekOverslaanOps(OPS).has(undefined));
+});
+
+// Zichtbare tekst over een foto: de foto blijft in de uitsnede staan (geen
+// wit gat). Alleen op een pagina met een OCR-laag gaat de afbeelding weg.
+test('het filter laat afbeeldingen staan als de pagina geen OCR-laag heeft', () => {
+  const filter = maakAfdekFilter(OPS, { afbeeldingen: false });
+  const lijst = { fnArray: [OPS.save, OPS.showText, OPS.paintImageXObject, OPS.paintInlineImageXObject, OPS.restore] };
+  assert.deepEqual(lijst.fnArray.filter((_, i) => filter(i, lijst)),
+    [OPS.save, OPS.paintImageXObject, OPS.paintInlineImageXObject, OPS.restore]);
+});
+
+test('onzichtbare tekst (render-modus 3 of 7) maakt een pagina een OCR-pagina', () => {
+  const lijst = (modus) => ({ fnArray: [OPS.beginText, OPS.setTextRenderingMode, OPS.showText],
+    argsArray: [null, [modus], null] });
+  assert.equal(heeftOnzichtbareTekst(lijst(3), OPS), true);
+  assert.equal(heeftOnzichtbareTekst(lijst(7), OPS), true);
+  assert.equal(heeftOnzichtbareTekst(lijst(0), OPS), false);
+  assert.equal(heeftOnzichtbareTekst({ fnArray: [OPS.showText], argsArray: [null] }, OPS), false);
+});
+
+test('de uitsnede kiest het filter naar de OCR-laag van de pagina', async () => {
+  const fs = await import('node:fs');
+  const bron = fs.readFileSync(new URL('./text-edit-afdekking.js', import.meta.url), 'utf8');
+  assert.match(bron, /maakAfdekFilter\(pdfjs\.OPS, \{ afbeeldingen: ocrPagina \}\)/);
 });
 
 test('uitsnede: dichtheid van het canvas, begrensd per as en in pixels', () => {
