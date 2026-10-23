@@ -493,6 +493,11 @@ export async function createSinglePageTextLayer(page, viewport) {
 
   const doc = getActiveDocument();
   await createTextLayer(page, viewport, container, doc ? doc.currentPage : 1);
+  // Uit welk bestand komt deze laag? Na opslaan met tekstbewerkingen herlaadt
+  // het document uit een nieuw werkbestand; de renderer bouwt de laag dan
+  // opnieuw (anders bleef de oude tekst selecteerbaar en bewerkbaar).
+  const laag = container.querySelector('.textLayer');
+  if (laag) laag.dataset.bron = doc?.filePath || '';
 }
 
 /**

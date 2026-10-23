@@ -652,8 +652,11 @@ async function _renderPageImpl(pageNum) {
   const _existingLinkLayer = document.querySelector('#canvas-container .linkLayer');
   const _linkLayerRotationStale = !!_existingLinkLayer
     && Number(_existingLinkLayer.dataset.rotation || 0) !== ((lagenViewport.rotation || 0) % 360);
+  // Een laag uit een ander bestand (na opslaan met tekstbewerkingen herlaadt
+  // het document uit een nieuw werkbestand) toont oude tekst: opnieuw bouwen.
   const _textLayerStale = !_existingTextLayer
     || parseInt(_existingTextLayer.dataset.page) !== pageNum
+    || (_existingTextLayer.dataset.bron ?? '') !== (doc.filePath || '')
     || _linkLayerRotationStale;
   if (!_skipBitmapRender || _textLayerStale) {
     try {
