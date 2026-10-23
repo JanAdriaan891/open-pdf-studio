@@ -307,7 +307,7 @@ export default function StatusBar() {
 
       <div class="status-bar-right">
         <Show when={findings().length > 0}>
-          <button class="status-item" onClick={showFinding} title={t('renderDiagnostics.title')}>
+          <button class="status-nav-btn status-item" tabIndex={-1} onClick={showFinding} title={t('renderDiagnostics.title')}>
             {t('renderDiagnostics.count', { count: findings().length })}
           </button>
         </Show>

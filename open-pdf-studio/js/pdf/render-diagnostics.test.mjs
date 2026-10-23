@@ -26,3 +26,10 @@ test('notifications are removable and finding storage is bounded',()=>{
  for(let n=0;n<50;n++)report(t,{code:`failure-${n}`,status:'failed'});
  assert.equal(read('a').pages[0].findings.length,16);dispose();const before=calls;clear();assert.equal(calls,before);
 });
+test('a successful render does not notify listeners; a new finding does',async()=>{
+ clear();let calls=0;const dispose=subscribe(()=>calls++);
+ await observe('render_pdf_page_region',{path:'a',pageIndex:0},async()=>bitmap());
+ assert.equal(calls,0);
+ await assert.rejects(observe('render_pdf_page_region',{path:'a',pageIndex:0},async()=>{throw new Error('boom');}));
+ assert.equal(calls,1);dispose();
+});

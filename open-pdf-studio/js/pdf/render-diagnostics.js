@@ -24,11 +24,14 @@ export function reportRenderObservation(token,{code='RENDER_RETURNED',status='un
   if(!token || documents.get(token.path)!==token.doc || token.doc.pages.get(token.page)!==token.entry)return;
   const entry=token.entry;
   const finding={page:token.page,backend:token.backend,quality:token.quality,code,status,severity};
+  let added=false;
   if(code!=='RENDER_RETURNED' && !entry.findings.some(f=>f.code===code&&f.backend===token.backend&&f.quality===token.quality)) {
-    if(entry.findings.length>=16)entry.findings.shift();entry.findings.push(finding);
+    if(entry.findings.length>=16)entry.findings.shift();entry.findings.push(finding);added=true;
   }
   entry.backend=token.backend;entry.quality=token.quality;entry.status=status;
-  notify();
+  // Alleen een nieuwe bevinding verandert wat de statusbalk toont; elke
+  // geslaagde tegel melden zou de statusbalk bij iedere render herberekenen.
+  if(added)notify();
 }
 export function readRenderDiagnostics(path) {
   const doc=documents.get(path);
