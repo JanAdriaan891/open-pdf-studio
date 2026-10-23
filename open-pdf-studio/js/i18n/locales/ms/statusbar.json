@@ -140,6 +140,7 @@
     "prepareOcr": "Buka untuk OCR…"
   },
   "symbolSearch": "Cari simbol",
+  "findMoreOptions": "Lebih banyak pilihan carian",
   "watchActive": "Memantau {{folder}}",
   "watchFailed": "Ralat pemantauan: {{folder}}",
   "watchTitle": "Aliran kerja dokumen sedang memantau {{input}} dan menulis ke {{output}}. Klik untuk berhenti memantau.",

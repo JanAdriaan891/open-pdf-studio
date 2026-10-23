@@ -140,6 +140,7 @@
     "prepareOcr": "Otevřít pro OCR…"
   },
   "symbolSearch": "Najít symboly",
+  "findMoreOptions": "Další možnosti hledání",
   "watchActive": "Sledování: {{folder}}",
   "watchFailed": "Chyba sledování: {{folder}}",
   "watchTitle": "Pracovní postup dokumentů sleduje {{input}} a zapisuje do {{output}}. Kliknutím sledování zastavíte.",

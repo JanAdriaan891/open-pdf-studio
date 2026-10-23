@@ -140,6 +140,7 @@
     "prepareOcr": "OCR용으로 열기…"
   },
   "symbolSearch": "기호 찾기",
+  "findMoreOptions": "추가 검색 옵션",
   "watchActive": "{{folder}} 감시 중",
   "watchFailed": "감시 오류: {{folder}}",
   "watchTitle": "문서 워크플로가 {{input}}을(를) 감시하고 {{output}}에 쓰는 중입니다. 감시를 중지하려면 클릭하세요.",

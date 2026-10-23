@@ -140,6 +140,7 @@
     "prepareOcr": "Відкрити для OCR…"
   },
   "symbolSearch": "Знайти символи",
+  "findMoreOptions": "Додаткові параметри пошуку",
   "watchActive": "Стеження: {{folder}}",
   "watchFailed": "Помилка стеження: {{folder}}",
   "watchTitle": "Робочий процес документів стежить за {{input}} і записує в {{output}}. Натисніть, щоб зупинити стеження.",

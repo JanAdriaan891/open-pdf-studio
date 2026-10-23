@@ -1246,7 +1246,9 @@
     "empty": "No hi ha candidats per revisar. Executeu primer l'OCR o augmenteu el llindar. Els PDF antics sense metadades de revisió necessiten l'OCR de nou.",
     "error": "No s'ha pogut actualitzar la verificació. Actualitzeu la cua si el document ha canviat.",
     "accepted": "Acceptada",
-    "corrected": "Corregida"
+    "corrected": "Corregida",
+    "notEncodable": "El text OCR cercable no pot contenir aquests caràcters: {{characters}}. Corregiu la paraula amb altres caràcters.",
+    "archived": "Revisió desada al fitxer. Torneu a executar l'OCR en aquesta pàgina per canviar-la."
   },
   "portfolio": {
     "title": "Portafolis de col·lecció PDF",

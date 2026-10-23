@@ -140,6 +140,7 @@
     "prepareOcr": "Deschidere pentru OCR…"
   },
   "symbolSearch": "Găsire simboluri",
+  "findMoreOptions": "Mai multe opțiuni de căutare",
   "watchActive": "Monitorizare: {{folder}}",
   "watchFailed": "Eroare de monitorizare: {{folder}}",
   "watchTitle": "Fluxul de lucru pentru documente monitorizează {{input}} și scrie în {{output}}. Faceți clic pentru a opri monitorizarea.",

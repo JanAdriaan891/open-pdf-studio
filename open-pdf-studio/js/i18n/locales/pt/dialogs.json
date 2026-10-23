@@ -1246,7 +1246,9 @@
     "empty": "Nenhum item para revisar. Execute o OCR primeiro ou aumente o limite. PDFs mais antigos sem metadados de revisão precisam de um novo OCR.",
     "error": "Não foi possível atualizar a verificação. Atualize a fila se o documento tiver sido alterado.",
     "accepted": "Aceito",
-    "corrected": "Corrigido"
+    "corrected": "Corrigido",
+    "notEncodable": "O texto OCR pesquisável não pode conter estes caracteres: {{characters}}. Corrija a palavra usando outros caracteres.",
+    "archived": "Verificação armazenada no arquivo. Execute o OCR nesta página novamente para alterá-la."
   },
   "portfolio": {
     "title": "Portfólio PDF (coleção)",

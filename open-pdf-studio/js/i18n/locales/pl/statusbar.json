@@ -140,6 +140,7 @@
     "prepareOcr": "Otwórz do OCR…"
   },
   "symbolSearch": "Znajdź symbole",
+  "findMoreOptions": "Więcej opcji wyszukiwania",
   "watchActive": "Obserwowanie: {{folder}}",
   "watchFailed": "Błąd obserwowania: {{folder}}",
   "watchTitle": "Przepływ pracy dokumentów obserwuje {{input}} i zapisuje do {{output}}. Kliknij, aby zatrzymać obserwowanie.",

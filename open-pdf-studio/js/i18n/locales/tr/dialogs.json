@@ -1246,7 +1246,9 @@
     "empty": "İncelenecek aday yok. Önce OCR çalıştırın veya eşiği yükseltin. İnceleme meta verisi olmayan eski PDF'ler için OCR yeniden gerekir.",
     "error": "Doğrulama güncellenemedi. Belge değiştiyse kuyruğu yenileyin.",
     "accepted": "Kabul edildi",
-    "corrected": "Düzeltildi"
+    "corrected": "Düzeltildi",
+    "notEncodable": "Aranabilir OCR metni şu karakterleri içeremez: {{characters}}. Sözcüğü başka karakterlerle düzeltin.",
+    "archived": "Doğrulama dosyada saklanıyor. Değiştirmek için bu sayfada OCR'yi yeniden çalıştırın."
   },
   "portfolio": {
     "title": "PDF koleksiyon portföyü",

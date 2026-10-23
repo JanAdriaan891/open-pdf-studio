@@ -140,6 +140,7 @@
     "prepareOcr": "פתיחה לצורך OCR…"
   },
   "symbolSearch": "חיפוש סמלים",
+  "findMoreOptions": "אפשרויות חיפוש נוספות",
   "watchActive": "מעקב אחר {{folder}}",
   "watchFailed": "שגיאת מעקב: {{folder}}",
   "watchTitle": "תהליך העבודה של המסמך עוקב אחר {{input}} וכותב אל {{output}}. לחץ כדי להפסיק את המעקב.",

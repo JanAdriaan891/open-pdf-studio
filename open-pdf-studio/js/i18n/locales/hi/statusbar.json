@@ -140,6 +140,7 @@
     "prepareOcr": "OCR के लिए खोलें…"
   },
   "symbolSearch": "प्रतीक खोजें",
+  "findMoreOptions": "खोज के और विकल्प",
   "watchActive": "{{folder}} की निगरानी जारी",
   "watchFailed": "निगरानी त्रुटि: {{folder}}",
   "watchTitle": "दस्तावेज़ वर्कफ़्लो {{input}} की निगरानी कर रहा है और {{output}} में लिख रहा है। निगरानी रोकने के लिए क्लिक करें।",

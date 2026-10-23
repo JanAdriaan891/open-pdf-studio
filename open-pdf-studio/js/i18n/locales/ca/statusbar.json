@@ -140,6 +140,7 @@
     "prepareOcr": "Obre per a l'OCR…"
   },
   "symbolSearch": "Cerca símbols",
+  "findMoreOptions": "Més opcions de cerca",
   "watchActive": "Supervisant {{folder}}",
   "watchFailed": "Error de supervisió: {{folder}}",
   "watchTitle": "El flux de treball de documents supervisa {{input}} i escriu a {{output}}. Feu clic per deixar de supervisar.",

@@ -1246,7 +1246,9 @@
     "empty": "没有待检查的候选项。请先运行 OCR，或提高阈值。没有检查元数据的旧 PDF 需要重新运行 OCR。",
     "error": "无法更新校验。如果文档已更改，请刷新队列。",
     "accepted": "已接受",
-    "corrected": "已更正"
+    "corrected": "已更正",
+    "notEncodable": "可搜索的 OCR 文本不能包含这些字符：{{characters}}。请用其他字符更正该词。",
+    "archived": "校验已保存在文件中。要更改它，请在此页面上重新运行 OCR。"
   },
   "portfolio": {
     "title": "PDF 集合文件包",

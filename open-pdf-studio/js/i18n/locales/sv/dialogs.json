@@ -1246,7 +1246,9 @@
     "empty": "Inga kandidater att granska. Kör OCR först eller höj tröskelvärdet. Äldre PDF-filer utan granskningsmetadata behöver OCR igen.",
     "error": "Det gick inte att uppdatera verifieringen. Uppdatera kön om dokumentet har ändrats.",
     "accepted": "Godkänd",
-    "corrected": "Korrigerad"
+    "corrected": "Korrigerad",
+    "notEncodable": "Den sökbara OCR-texten kan inte innehålla dessa tecken: {{characters}}. Rätta ordet med andra tecken.",
+    "archived": "Granskningen är sparad i filen. Kör OCR på den här sidan igen för att ändra den."
   },
   "portfolio": {
     "title": "PDF-samlingsportfölj",

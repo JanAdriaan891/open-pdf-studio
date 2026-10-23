@@ -140,6 +140,7 @@
     "prepareOcr": "OCR کے لیے کھولیں…"
   },
   "symbolSearch": "علامات تلاش کریں",
+  "findMoreOptions": "تلاش کے مزید اختیارات",
   "watchActive": "{{folder}} کی نگرانی جاری",
   "watchFailed": "نگرانی کی خرابی: {{folder}}",
   "watchTitle": "دستاویز ورک فلو {{input}} کی نگرانی کر رہا ہے اور {{output}} میں لکھ رہا ہے۔ نگرانی روکنے کے لیے کلک کریں۔",
