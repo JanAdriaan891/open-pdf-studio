@@ -33,6 +33,7 @@ import {
   originalLineRuns,
 } from '../text/text-edit-appearance.js';
 import { weergaveRotatie, paginaNaarClient, clientNaarPagina } from '../pdf/weergave-ruimte.js';
+import { groepeerTekstBlokken, blokRegelafstand } from '../text/tekst-blokken.js';
 import { normaliseerRotatie, naarWeergave, rectNaarPagina, weergaveMaat } from '../pdf/weergave-rotatie.js';
 
 let activeEditor = null;
@@ -543,160 +544,23 @@ function getBlockGroups(layer, mode = 'strict') {
     };
   });
 
-  // ── Step 1: group spans into lines by pdfY ──
-  // Sort by pdfY descending (reading order: top line first)
-  items.sort((a, b) => b.pdfY - a.pdfY || a.pdfX - b.pdfX);
-
-  const lines = [];
-  let curLine = [items[0]];
-  for (let i = 1; i < items.length; i++) {
-    const tolerance = curLine[0].fontSize * 0.3;
-    if (Math.abs(items[i].pdfY - curLine[0].pdfY) <= tolerance) {
-      curLine.push(items[i]);
-    } else {
-      lines.push(curLine);
-      curLine = [items[i]];
-    }
+  // ── Regels en blokken (tekst-blokken.js) ──
+  // In het kader van de tekst zelf (leesrichting en loodrecht daarop), per
+  // tekstrichting: spans met een andere richting komen nooit in dezelfde
+  // regel of hetzelfde blok. In de strikte modus harde grenzen bij een
+  // font-/vetheidswissel (kop vs broodtekst), een regelafstand-sprong en
+  // tabelachtige structuren (per rij); 'loose' is de ruime, oude groepering.
+  for (const it of items) {
+    it.text = it.span.textContent;
+    // Fontidentiteit op de OPGELOSTE basisnaam (actualFontName): het ruwe
+    // resource-naam-alternatief bevat per pdf-lib-tekenactie een uniek
+    // suffix (Helvetica-123…), waardoor regels van één blok onterecht als
+    // verschillende fonts zouden splitsen.
+    it.fontKey = `${it.span.dataset.pdfActualFontName || it.span.dataset.pdfFontName || ''}`
+      + `|${it.span.dataset.pdfBold || ''}|${it.span.dataset.pdfItalic || ''}`;
   }
-  lines.push(curLine);
-
-  // Sort each line left → right by pdfX
-  for (const line of lines) line.sort((a, b) => a.pdfX - b.pdfX);
-
-  // ── Step 1b: split lines at large horizontal gaps (column boundaries) ──
-  const splitLines = [];
-  for (const line of lines) {
-    let segment = [line[0]];
-    for (let j = 1; j < line.length; j++) {
-      const prev = segment[segment.length - 1];
-      const curr = line[j];
-      const prevRight = prev.pdfX + prev.pdfWidth;
-      const gap = curr.pdfX - prevRight;
-      const avgFs = (prev.fontSize + curr.fontSize) / 2;
-
-      if (gap > avgFs * 3) {
-        // Large gap — treat as separate column
-        splitLines.push(segment);
-        segment = [curr];
-      } else {
-        segment.push(curr);
-      }
-    }
-    splitLines.push(segment);
-  }
-
-  // ── Step 1c (alleen strict): zelfde-rij-fragmenten weer samenvoegen ──
-  // Een tabelrij is bij het bewerken één eenheid: fragmenten op dezelfde
-  // baseline met een beperkte tussenruimte (≤ 6× fontgrootte) worden weer
-  // samengevoegd; de kolomstructuur blijft via buildLineSegments behouden.
-  // Echte pagina-kolommen (grote goot) blijven gescheiden.
-  let groupLines = splitLines;
-  if (mode === 'strict') {
-    const rowUnits = [];
-    for (const frag of splitLines) {
-      const prev = rowUnits[rowUnits.length - 1];
-      if (prev) {
-        const sameRow = Math.abs(frag[0].pdfY - prev[0].pdfY) <= prev[0].fontSize * 0.3;
-        const last = prev[prev.length - 1];
-        const gap = frag[0].pdfX - (last.pdfX + last.pdfWidth);
-        const avgFs = (last.fontSize + frag[0].fontSize) / 2;
-        if (sameRow && gap <= avgFs * 6) { prev.push(...frag); continue; }
-      }
-      rowUnits.push([...frag]);
-    }
-    groupLines = rowUnits;
-  }
-
-  // Per regel-eenheid: kolomachtig? en de dominante font-identiteit (voor de
-  // strikte kop-vs-broodtekst-grens).
-  const lineMeta = groupLines.map(li => {
-    const seg = buildLineSegments(
-      li.map(it => ({
-        text: it.span.textContent,
-        pdfX: it.pdfX,
-        pdfY: it.pdfY,
-        pdfWidth: it.pdfWidth,
-        fontSize: it.fontSize,
-      })),
-      li[0].angle || 0,
-    );
-    const dom = li.reduce((beste, it) => {
-      const len = (it.span.textContent || '').trim().length;
-      return len > beste.len ? { it, len } : beste;
-    }, { it: li[0], len: (li[0].span.textContent || '').trim().length }).it;
-    return {
-      kolomachtig: Array.isArray(seg.segments) && seg.segments.length >= 2,
-      // Fontidentiteit op de OPGELOSTE basisnaam (actualFontName): het ruwe
-      // resource-naam-alternatief bevat per pdf-lib-tekenactie een uniek
-      // suffix (Helvetica-123…), waardoor regels van één blok onterecht als
-      // verschillende fonts zouden splitsen.
-      fontKey: `${dom.span.dataset.pdfActualFontName || dom.span.dataset.pdfFontName || ''}`
-        + `|${dom.span.dataset.pdfBold || ''}|${dom.span.dataset.pdfItalic || ''}`,
-    };
-  });
-
-  // ── Step 2: group consecutive lines into blocks ──
-  //
-  // Two adjacent lines belong to the same block only when ALL of:
-  //   a) font sizes match closely   (ratio > 0.92)
-  //   b) baseline gap is reasonable  (0.5× – 1.8× fontSize)
-  //   c) left edges are aligned      (within 1× fontSize)
-  // In de strikte modus komen daar harde grenzen bij:
-  //   d) geen stapeling van twee kolomachtige regels (tabel → per rij)
-  //   e) zelfde dominante font-identiteit (kop vs broodtekst splitst)
-  //   f) consistente regelafstand binnen het blok (sprong = grens)
-  const blocks = [];
-  let curBlock = [groupLines[0]];
-  let curBlockMeta = [0];
-  let prevGap = null;
-
-  for (let i = 1; i < groupLines.length; i++) {
-    const prevLine = curBlock[curBlock.length - 1];
-    const nextLine = groupLines[i];
-
-    const prevFs = prevLine[0].fontSize;
-    const nextFs = nextLine[0].fontSize;
-    const fontRatio = Math.min(prevFs, nextFs) / Math.max(prevFs, nextFs);
-
-    // Baseline-to-baseline distance in PDF units (positive = going down)
-    const baselineGap = prevLine[0].pdfY - nextLine[0].pdfY;
-    const avgFs = (prevFs + nextFs) / 2;
-
-    // Left-edge proximity in PDF units
-    const prevLeft = Math.min(...prevLine.map(it => it.pdfX));
-    const nextLeft = Math.min(...nextLine.map(it => it.pdfX));
-
-    let sameBlock =
-      fontRatio > 0.92 &&
-      baselineGap > avgFs * 0.5 &&
-      baselineGap < avgFs * 1.8 &&
-      Math.abs(nextLeft - prevLeft) < avgFs * 1.0;
-
-    if (sameBlock && mode === 'strict') {
-      const mPrev = lineMeta[curBlockMeta[curBlockMeta.length - 1]];
-      const mNext = lineMeta[i];
-      if (mPrev.kolomachtig && mNext.kolomachtig) {
-        sameBlock = false; // tabel: per rij groeperen
-      } else if (mPrev.fontKey !== mNext.fontKey) {
-        sameBlock = false; // kop vs broodtekst (ander font/vetheid)
-      } else if (prevGap != null
-          && Math.abs(baselineGap - prevGap) > Math.max(1, prevGap * 0.25)) {
-        sameBlock = false; // regelafstand-sprong
-      }
-    }
-
-    if (sameBlock) {
-      curBlock.push(nextLine);
-      curBlockMeta.push(i);
-      prevGap = baselineGap;
-    } else {
-      blocks.push(curBlock);
-      curBlock = [nextLine];
-      curBlockMeta = [i];
-      prevGap = null;
-    }
-  }
-  blocks.push(curBlock);
+  const blocks = groepeerTekstBlokken(items, mode)
+    .map(blok => blok.map(regel => regel.map(i => items[i])));
 
   // ── Build group objects ──
   // Find the PDF canvas to sample text colors
@@ -772,15 +636,10 @@ function getBlockGroups(layer, mode = 'strict') {
       };
     });
 
-    // Baseline-to-baseline spacing in PDF units
-    let lineSpacing = lineData[0].fontSize * 1.2;
-    if (lineData.length > 1) {
-      let total = 0;
-      for (let i = 1; i < lineData.length; i++) {
-        total += lineData[i - 1].pdfY - lineData[i].pdfY;
-      }
-      lineSpacing = total / (lineData.length - 1);
-    }
+    // Afstand tussen de baselines, loodrecht op de leesrichting (PDF-punten)
+    const lineSpacing = blokRegelafstand(
+      lineData.map(l => ({ pdfX: l.pdfX, pdfY: l.pdfY })), lineData[0].angle || 0, lineData[0].fontSize,
+    );
 
     const group = {
       spans: allSpans,
