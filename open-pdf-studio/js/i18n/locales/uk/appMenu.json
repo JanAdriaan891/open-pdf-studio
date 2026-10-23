@@ -71,6 +71,12 @@
     "site": "На цьому сайті",
     "noSiteDocuments": "На цьому сайті немає документів",
     "siteListError": "Не вдалося завантажити документи цього сайту",
+    "versions": "Версії",
+    "versionNumber": "Версія {{version}}",
+    "currentVersion": "поточна",
+    "noVersions": "Немає версій",
+    "versionsError": "Не вдалося завантажити версії",
+    "olderVersionsHint": "Тут можна відкрити лише поточну версію.",
     "save": "Зберегти"
   },
   "importPanel": {

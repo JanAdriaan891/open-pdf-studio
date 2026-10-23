@@ -71,6 +71,12 @@
     "site": "På dette websted",
     "noSiteDocuments": "Ingen dokumenter på dette websted",
     "siteListError": "Dokumenterne på dette websted kunne ikke indlæses",
+    "versions": "Versioner",
+    "versionNumber": "Version {{version}}",
+    "currentVersion": "aktuel",
+    "noVersions": "Ingen versioner",
+    "versionsError": "Versionerne kunne ikke indlæses",
+    "olderVersionsHint": "Kun den aktuelle version kan åbnes her.",
     "save": "Gem"
   },
   "importPanel": {

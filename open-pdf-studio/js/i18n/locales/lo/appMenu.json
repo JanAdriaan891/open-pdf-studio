@@ -71,6 +71,12 @@
     "site": "ໃນເວັບໄຊນີ້",
     "noSiteDocuments": "ບໍ່ມີເອກະສານໃນເວັບໄຊນີ້",
     "siteListError": "ບໍ່ສາມາດໂຫຼດເອກະສານຂອງເວັບໄຊນີ້ໄດ້",
+    "versions": "ເວີຊັນ",
+    "versionNumber": "ເວີຊັນ {{version}}",
+    "currentVersion": "ປັດຈຸບັນ",
+    "noVersions": "ບໍ່ມີເວີຊັນ",
+    "versionsError": "ບໍ່ສາມາດໂຫຼດເວີຊັນໄດ້",
+    "olderVersionsHint": "ຢູ່ນີ້ເປີດໄດ້ສະເພາະເວີຊັນປັດຈຸບັນ.",
     "save": "ບັນທຶກ"
   },
   "importPanel": {

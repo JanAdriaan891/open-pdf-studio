@@ -140,6 +140,7 @@
   "failedToSavePdf": "Uloženie PDF zlyhalo: {{error}}",
   "failedToLoadPdf": "Načítanie PDF zlyhalo: {{error}}",
   "hostOpenFailed": "Súbor sa nepodarilo načítať z úložiska. Skúste to znova.",
+  "hostInvalidPdf": "{{name}} nie je platný súbor PDF a nepodarilo sa ho otvoriť.",
   "hostNoContact": "Stránka okolo Open PDF Studio neodpovedá, takže súbory nemožno otvárať ani ukladať. Znova načítajte stránku a skúste to znova.",
   "hostSaveConflict": "Niekto iný medzitým tento súbor uložil. Vaše zmeny boli uložené ako samostatná kópia: {{name}}. Ďalšie ukladanie pôjde do tejto kópie.",
   "hostSaveNotLocked": "Tento súbor nie je rezervovaný pre vás, takže ho ostatní môžu meniť súčasne. Vaše zmeny sa ukladajú ako nové verzie; nič sa neprepisuje.",

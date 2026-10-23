@@ -28,15 +28,23 @@ export const OPEN_EVENT = 'opds:open-document';
 export async function openHostDocument(id) {
   if (id === undefined || id === null || id === '') return false;
   try {
-    const { pad, data, alleenLezen } = await openHostBestand(id);
+    const { pad, naam, data, alleenLezen } = await openHostBestand(id);
     const { index } = createTab(pad);
     // Het document zoals de store het geeft (niet het kale object van
     // createTab), en vóór het laden, zodat bewerken geen moment kan.
     const doc = state.documents[index];
     if (alleenLezen && doc) doc.hostAlleenLezen = true;
     await loadPDFIfNeeded(pad, index, data);
-    if (doc && state.documents.includes(doc) && doc.pdfDoc) void meldHostGeopend(id);
-    return true;
+    // Gesloten tijdens het laden (of een wachtwoord geannuleerd): niets te melden.
+    if (!doc || !state.documents.includes(doc)) return false;
+    if (doc.pdfDoc) {
+      void meldHostGeopend(id);
+      return true;
+    }
+    // Bytes die geen geldige PDF zijn: de app toonde zijn eigen melding al
+    // (loader.js); de site hoort het ook, net als bij een mislukte open (#707).
+    void meldBijHost(i18next.t('hostInvalidPdf', { name: naam }), 'fout');
+    return false;
   } catch (e) {
     // Afgehandeld: de gebruiker en de site horen het hieronder.
     console.warn('[gast] document van de site niet geopend:', e);

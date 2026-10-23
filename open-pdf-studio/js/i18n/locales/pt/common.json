@@ -140,6 +140,7 @@
   "failedToSavePdf": "Falha ao salvar o PDF: {{error}}",
   "failedToLoadPdf": "Falha ao carregar o PDF: {{error}}",
   "hostOpenFailed": "Não foi possível ler o ficheiro do armazenamento. Tente novamente.",
+  "hostInvalidPdf": "{{name}} não é um ficheiro PDF válido e não foi possível abri-lo.",
   "hostNoContact": "A página que contém o Open PDF Studio não responde, por isso não é possível abrir nem guardar ficheiros. Recarregue a página e tente novamente.",
   "hostSaveConflict": "Outra pessoa guardou este ficheiro entretanto. As suas alterações foram guardadas numa cópia separada: {{name}}. Os próximos guardados vão para essa cópia.",
   "hostSaveNotLocked": "Este ficheiro não está reservado para si, por isso outras pessoas podem alterá-lo ao mesmo tempo. As suas alterações são guardadas como novas versões; nada é substituído.",

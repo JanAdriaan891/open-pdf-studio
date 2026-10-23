@@ -140,6 +140,7 @@
   "failedToSavePdf": "保存 PDF 失败：{{error}}",
   "failedToLoadPdf": "加载 PDF 失败：{{error}}",
   "hostOpenFailed": "无法从存储中读取该文件。请重试。",
+  "hostInvalidPdf": "{{name}} 不是有效的 PDF 文件，无法打开。",
   "hostNoContact": "包含 Open PDF Studio 的页面没有响应，因此无法打开或保存文件。请重新加载页面后重试。",
   "hostSaveConflict": "在此期间有其他人保存了此文件。你的更改已另存为一个副本：{{name}}。之后的保存都会写入该副本。",
   "hostSaveNotLocked": "此文件没有为你锁定，因此其他人可以同时修改它。你的更改会保存为新版本，不会覆盖任何内容。",

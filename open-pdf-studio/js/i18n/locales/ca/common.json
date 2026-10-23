@@ -140,6 +140,7 @@
   "failedToSavePdf": "No s'ha pogut desar el PDF: {{error}}",
   "failedToLoadPdf": "No s'ha pogut carregar el PDF: {{error}}",
   "hostOpenFailed": "No s'ha pogut llegir el fitxer de l'emmagatzematge. Torneu-ho a provar.",
+  "hostInvalidPdf": "{{name}} no és un fitxer PDF vàlid i no s'ha pogut obrir.",
   "hostNoContact": "La pàgina que conté Open PDF Studio no respon, de manera que no es poden obrir ni desar fitxers. Torneu a carregar la pàgina i torneu-ho a provar.",
   "hostSaveConflict": "Una altra persona ha desat aquest fitxer mentrestant. Els vostres canvis s'han desat com a còpia separada: {{name}}. Les properes desades aniran a aquesta còpia.",
   "hostSaveNotLocked": "Aquest fitxer no està reservat per a vós, de manera que altres persones el poden modificar alhora. Els vostres canvis es desen com a versions noves; no se sobreescriu res.",

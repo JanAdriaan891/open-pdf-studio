@@ -140,6 +140,7 @@
   "failedToSavePdf": "A PDF mentése sikertelen: {{error}}",
   "failedToLoadPdf": "A PDF betöltése sikertelen: {{error}}",
   "hostOpenFailed": "A fájlt nem sikerült beolvasni a tárhelyről. Próbálja újra.",
+  "hostInvalidPdf": "A(z) {{name}} nem érvényes PDF-fájl, ezért nem sikerült megnyitni.",
   "hostNoContact": "Az Open PDF Studiót tartalmazó oldal nem válaszol, ezért fájlokat nem lehet megnyitni vagy menteni. Töltse be újra az oldalt, és próbálja újra.",
   "hostSaveConflict": "Valaki más időközben mentette ezt a fájlt. A módosításai külön másolatként lettek mentve: {{name}}. A további mentések ebbe a másolatba kerülnek.",
   "hostSaveNotLocked": "Ez a fájl nincs önnek lefoglalva, így mások is módosíthatják egyszerre. A módosításai új verzióként mentődnek; semmi sem íródik felül.",

@@ -211,6 +211,7 @@
   "failedToSavePdf": "PDF opslaan mislukt: {{error}}",
   "failedToLoadPdf": "PDF laden mislukt: {{error}}",
   "hostOpenFailed": "Het bestand kon niet uit de opslag worden gelezen. Probeer het opnieuw.",
+  "hostInvalidPdf": "{{name}} is geen geldig PDF-bestand en kon niet worden geopend.",
   "hostNoContact": "De pagina rond Open PDF Studio reageert niet, dus bestanden kunnen niet worden geopend of opgeslagen. Laad de pagina opnieuw en probeer het nog eens.",
   "hostSaveConflict": "Iemand anders heeft dit bestand intussen opgeslagen. Je wijzigingen zijn als aparte kopie opgeslagen: {{name}}. Volgende keren opslaan gaat naar die kopie.",
   "hostSaveNotLocked": "Dit bestand is niet voor jou vastgezet, dus anderen kunnen het tegelijk wijzigen. Je wijzigingen worden als nieuwe versies opgeslagen; er wordt niets overschreven.",

@@ -140,6 +140,7 @@
   "failedToSavePdf": "PDF:n tallennus epäonnistui: {{error}}",
   "failedToLoadPdf": "PDF:n lataus epäonnistui: {{error}}",
   "hostOpenFailed": "Tiedostoa ei voitu lukea tallennustilasta. Yritä uudelleen.",
+  "hostInvalidPdf": "{{name}} ei ole kelvollinen PDF-tiedosto, eikä sitä voitu avata.",
   "hostNoContact": "Open PDF Studion ympäröivä sivu ei vastaa, joten tiedostoja ei voi avata eikä tallentaa. Lataa sivu uudelleen ja yritä uudelleen.",
   "hostSaveConflict": "Joku muu on tallentanut tämän tiedoston sillä välin. Muutoksesi tallennettiin erilliseksi kopioksi: {{name}}. Myöhemmät tallennukset menevät siihen kopioon.",
   "hostSaveNotLocked": "Tätä tiedostoa ei ole varattu sinulle, joten muut voivat muuttaa sitä samaan aikaan. Muutoksesi tallennetaan uusina versioina; mitään ei korvata.",

@@ -601,3 +601,35 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Versies van een document van de site (#707). Alleen de huidige versie
+   opent; oudere staan er ter informatie. */
+.site-version {
+  justify-content: space-between;
+}
+
+.site-version.older {
+  cursor: default;
+}
+
+.site-version.older:hover {
+  background: transparent;
+  border-color: transparent;
+}
+
+.site-version.older .place-file-name {
+  color: var(--theme-app-menu-shortcut);
+}
+
+.site-version-meta {
+  font-size: 11px;
+  color: var(--theme-app-menu-shortcut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.site-versions-hint {
+  padding: 4px 8px;
+}

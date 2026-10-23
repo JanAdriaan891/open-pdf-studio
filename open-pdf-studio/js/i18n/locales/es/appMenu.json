@@ -71,6 +71,12 @@
     "site": "En este sitio",
     "noSiteDocuments": "No hay documentos en este sitio",
     "siteListError": "No se pudieron cargar los documentos de este sitio",
+    "versions": "Versiones",
+    "versionNumber": "Versión {{version}}",
+    "currentVersion": "actual",
+    "noVersions": "No hay versiones",
+    "versionsError": "No se pudieron cargar las versiones",
+    "olderVersionsHint": "Aquí solo se puede abrir la versión actual.",
     "save": "Guardar"
   },
   "importPanel": {

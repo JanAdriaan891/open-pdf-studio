@@ -1,4 +1,4 @@
-import { createEffect, onMount, onCleanup, Show, Switch, Match, For } from 'solid-js';
+import { createEffect, createMemo, onMount, onCleanup, Show, Switch, Match, For } from 'solid-js';
 import { showConfirm } from '../../ui/chrome/confirm-dialog.js';
 import {
   visible, menuType, position, targetAnnotation, multiSelectCount, targetPage, hideMenu, vertexContext
@@ -1335,6 +1335,10 @@ function TextSelectionMenuContent() {
 
 export default function ContextMenu() {
   let menuRef;
+  // De inhoud pas opbouwen als het menu voor het eerst opengaat, en daarna
+  // laten staan. Het verborgen menu (standaard het annotatiemenu) kostte bij
+  // de start zo'n vijfde van het opbouwen van het hele venster (#707).
+  const inhoudOpgebouwd = createMemo((eerder) => eerder || visible(), false);
 
   // Position the menu when it becomes visible
   createEffect(() => {
@@ -1394,26 +1398,28 @@ export default function ContextMenu() {
       classList={{ visible: visible() }}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <Switch>
-        <Match when={menuType() === 'annotation'}>
-          <AnnotationMenuContent />
-        </Match>
-        <Match when={menuType() === 'annotationMulti'}>
-          <MultiAnnotationMenuContent />
-        </Match>
-        <Match when={menuType() === 'page'}>
-          <PageMenuContent />
-        </Match>
-        <Match when={menuType() === 'textSelection'}>
-          <TextSelectionMenuContent />
-        </Match>
-        <Match when={menuType() === 'bookmark'}>
-          <BookmarkMenuContent />
-        </Match>
-        <Match when={menuType() === 'thumbnail'}>
-          <ThumbnailMenuContent />
-        </Match>
-      </Switch>
+      <Show when={inhoudOpgebouwd()}>
+        <Switch>
+          <Match when={menuType() === 'annotation'}>
+            <AnnotationMenuContent />
+          </Match>
+          <Match when={menuType() === 'annotationMulti'}>
+            <MultiAnnotationMenuContent />
+          </Match>
+          <Match when={menuType() === 'page'}>
+            <PageMenuContent />
+          </Match>
+          <Match when={menuType() === 'textSelection'}>
+            <TextSelectionMenuContent />
+          </Match>
+          <Match when={menuType() === 'bookmark'}>
+            <BookmarkMenuContent />
+          </Match>
+          <Match when={menuType() === 'thumbnail'}>
+            <ThumbnailMenuContent />
+          </Match>
+        </Switch>
+      </Show>
     </div>
   );
 }

@@ -140,6 +140,7 @@
   "failedToSavePdf": "Det gick inte att spara PDF: {{error}}",
   "failedToLoadPdf": "Det gick inte att läsa in PDF: {{error}}",
   "hostOpenFailed": "Filen kunde inte läsas från lagringen. Försök igen.",
+  "hostInvalidPdf": "{{name}} är inte en giltig PDF-fil och kunde inte öppnas.",
   "hostNoContact": "Sidan runt Open PDF Studio svarar inte, så filer kan inte öppnas eller sparas. Ladda om sidan och försök igen.",
   "hostSaveConflict": "Någon annan har sparat filen under tiden. Dina ändringar sparades som en separat kopia: {{name}}. Senare sparningar går till den kopian.",
   "hostSaveNotLocked": "Filen är inte reserverad för dig, så andra kan ändra den samtidigt. Dina ändringar sparas som nya versioner; inget skrivs över.",

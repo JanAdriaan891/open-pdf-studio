@@ -140,6 +140,7 @@
   "failedToSavePdf": "Kunne ikke lagre PDF-en: {{error}}",
   "failedToLoadPdf": "Kunne ikke laste inn PDF-en: {{error}}",
   "hostOpenFailed": "Filen kunne ikke leses fra lagringen. Prøv igjen.",
+  "hostInvalidPdf": "{{name}} er ikke en gyldig PDF-fil og kunne ikke åpnes.",
   "hostNoContact": "Siden rundt Open PDF Studio svarer ikke, så filer kan ikke åpnes eller lagres. Last inn siden på nytt og prøv igjen.",
   "hostSaveConflict": "Noen andre har lagret denne filen i mellomtiden. Endringene dine ble lagret som en egen kopi: {{name}}. Senere lagringer går til den kopien.",
   "hostSaveNotLocked": "Denne filen er ikke reservert for deg, så andre kan endre den samtidig. Endringene dine lagres som nye versjoner; ingenting blir overskrevet.",

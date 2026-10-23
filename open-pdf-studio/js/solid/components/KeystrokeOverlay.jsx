@@ -105,12 +105,14 @@ export default function KeystrokeOverlay() {
   onCleanup(() => document.removeEventListener('keydown', onKeyDown, true));
 
   onMount(() => {
-    meetAnker();
     const el = document.getElementById('pdf-container');
     // Panelen die open/dicht gaan veranderen de canvasbreedte zonder dat het
     // venster verandert — vandaar een ResizeObserver naast de resize-listener.
     const ro = (typeof ResizeObserver !== 'undefined' && el) ? new ResizeObserver(meetAnker) : null;
+    // De ResizeObserver meet de eerste keer zelf, na de eerste layout. Hier
+    // meten dwong die layout midden in de opstarttaak af (#707).
     if (ro && el) ro.observe(el);
+    else meetAnker();
     window.addEventListener('resize', meetAnker);
     onCleanup(() => {
       if (ro) ro.disconnect();

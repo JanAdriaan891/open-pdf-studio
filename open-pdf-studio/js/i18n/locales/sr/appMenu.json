@@ -71,6 +71,12 @@
     "site": "На овом сајту",
     "noSiteDocuments": "Нема докумената на овом сајту",
     "siteListError": "Документи овог сајта нису могли да се учитају",
+    "versions": "Верзије",
+    "versionNumber": "Верзија {{version}}",
+    "currentVersion": "тренутна",
+    "noVersions": "Нема верзија",
+    "versionsError": "Верзије нису могле да се учитају",
+    "olderVersionsHint": "Овде може да се отвори само тренутна верзија.",
     "save": "Сачувај"
   },
   "importPanel": {
