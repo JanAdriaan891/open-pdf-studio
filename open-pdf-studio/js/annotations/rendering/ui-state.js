@@ -52,15 +52,23 @@ export function updateContextualTabs() {
   // van het volgende object van het actieve gereedschap (#668).
   const toolFormat = !hasSelection && !symbolInsert && !!_uiDoc
     && gereedschapMetOpmaak(state.currentTool) != null;
-  setContextualTabsVisible(hasSelection || symbolInsert || toolFormat);
-  if (hasSelection || symbolInsert || toolFormat) {
+  const zichtbaar = hasSelection || symbolInsert || toolFormat;
+  if (!zichtbaar) {
+    // Eerst terug naar het vorige tabblad, dán pas de contextuele tabbladen
+    // verbergen: het vangnet in ribbonStore.js draait synchroon binnen
+    // setContextualTabsVisible(false) en zette het lint anders al op Start
+    // voordat het vorige tabblad terug kon komen (#674).
+    autoActivateContextualTab(_uiSel, symbolInsert, toolFormat);
+  }
+  setContextualTabsVisible(zichtbaar);
+  if (zichtbaar) {
     syncFormatStore(_uiSel);
   }
   // Contextual "Afbeelding" tab: visible only for a single image selection.
   syncImageEditTab(_uiSel);
 
   // Auto-activate the right contextual tab on a *real* selection change only.
-  autoActivateContextualTab(_uiSel, symbolInsert, toolFormat);
+  if (zichtbaar) autoActivateContextualTab(_uiSel, symbolInsert, toolFormat);
 }
 
 // Automatically switch to the contextual tab that matches the current

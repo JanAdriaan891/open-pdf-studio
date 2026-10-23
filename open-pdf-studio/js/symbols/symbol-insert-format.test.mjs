@@ -309,5 +309,5 @@ test('de opmaakwerkbalk wijzigt tijdens het invoegen de sessie, niet de selectie
   assert.doesNotMatch(tab, /applyToSelected\(ann => \{ ann\.opacity/);
   assert.doesNotMatch(tab, /applyToSelected\(ann => \{ ann\.blendMode/);
   const ui = bron('../annotations/rendering/ui-state.js');
-  assert.match(ui, /setContextualTabsVisible\(hasSelection \|\| symbolInsert \|\| toolFormat\)/);
+  assert.match(ui, /const zichtbaar = hasSelection \|\| symbolInsert \|\| toolFormat;[\s\S]*setContextualTabsVisible\(zichtbaar\)/);
 });
