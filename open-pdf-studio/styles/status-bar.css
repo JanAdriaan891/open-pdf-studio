@@ -48,6 +48,15 @@
   cursor: default;
 }
 
+/* Knop met het aantal rendermeldingen (#677): één regel, niet laten krimpen
+   naast de statusmelding. */
+.status-nav-btn.status-render-findings {
+  width: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0 6px;
+}
+
 .status-separator {
   width: 1px;
   height: 14px;
