@@ -154,7 +154,11 @@ export async function invokeTileRegion(args) {
   const { withThinLines } = await import('./thin-lines.js');
   args = args.thinLines === undefined ? withThinLines(args) : withThinLines(args, args.thinLines);
   const key = `${args.path}|${args.pageIndex}|${args.rotation || 0}`;
-  const sceneWorthIt = (await pageContentBytes(args.path, args.pageIndex + 1)) > SCENE_CONTENT_BYTES;
+  // De scene-engine kent geen optionele inhoud: met geschakelde lagen (#684)
+  // tekent PDFium, uit de weergavekopie.
+  const { tekentUitKopie } = await import('./lagen-schakelen.js');
+  const sceneWorthIt = !tekentUitKopie(args.path)
+    && (await pageContentBytes(args.path, args.pageIndex + 1)) > SCENE_CONTENT_BYTES;
   if (sceneWorthIt) {
     const res = await _sceneAttempts.tryRegion(
       key,

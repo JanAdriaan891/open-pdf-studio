@@ -64,6 +64,7 @@
     "color": "Χρώμα",
     "opacity": "Αδιαφάνεια",
     "fillOpacity": "Αδιαφάνεια γεμίσματος",
+    "strokeOpacity": "Αδιαφάνεια περιγράμματος",
     "lineWidth": "Πλάτος γραμμής",
     "borderWidth": "Πλάτος περιγράμματος",
     "borderStyle": "Στυλ περιγράμματος",
@@ -368,8 +369,8 @@
     "schedules": "Πίνακες ποσοτήτων",
     "addPage": "Προσθήκη σελίδας",
     "pageLabels": "Ετικέτες σελίδων (δημιουργία ονομάτων)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Χαρτοφυλάκιο PDF",
+    "recognizeForm": "Αναγνώριση πεδίων φόρμας"
   },
   "scaleBar": {
     "title": "Γραμμή κλίμακας",
@@ -422,7 +423,7 @@
     },
     "preview": "Προεπισκόπηση",
     "exportCsv": "Εξαγωγή CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Συνδέσεις υπολογιστικού φύλλου"
   },
   "wizard": {
     "title": "Οδηγός πίνακα",
@@ -605,8 +606,8 @@
       "imageName": "Όνομα αρχείου",
       "width": "Πλάτος",
       "height": "Ύψος",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Τοποθεσία",
+      "locationSource": "Προέλευση τοποθεσίας"
     },
     "type": {
       "line": "Γραμμή",
@@ -652,6 +653,8 @@
     "sectionTitle": "Σύμβολο: {{name}}",
     "symbolLabel": "Σύμβολο",
     "typeLabel": "Τύπος",
+    "profileType": "Τύπος διατομής",
+    "profileTypeTitle": "Χαλύβδινη διατομή",
     "unknownSymbol": "Άγνωστο σύμβολο",
     "listNew": "Νέο",
     "listAdd": "Προσθήκη",
@@ -707,17 +710,17 @@
     "failed": "Δεν ήταν δυνατή η εφαρμογή των αλλαγών: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Τοποθεσία",
+    "none": "Χωρίς ανάθεση",
+    "manual": "Χειροκίνητη",
+    "computed": "Υπολογισμένη",
+    "override": "Χειροκίνητη παράκαμψη (το κενό διαγράφει την τοποθεσία)",
+    "automatic": "Χρήση αυτόματης τοποθεσίας",
+    "zoneName": "Χρήση αυτού του σχήματος ως ονομασμένης ζώνης",
+    "parent": "Γονική ζώνη",
+    "removeZone": "Αφαίρεση ορισμού ζώνης",
+    "invalid": "Δεν ήταν δυνατή η ενημέρωση της τοποθεσίας",
+    "rules": "Η ανάθεση χρησιμοποιεί το κέντρο του περιβάλλοντος πλαισίου της σήμανσης, συμπεριλαμβανομένων των άκρων. Υπερισχύει η βαθύτερη ζώνη, μετά η μικρότερη επιφάνεια και μετά το αναγνωριστικό ζώνης. Χρησιμοποιήστε ευθύγραμμα πολύγωνα χωρίς οπές ή μη περιστραμμένα πλαίσια. Μη έγκυρες ή διπλότυπες ταυτότητες ζωνών εξαιρούνται.",
+    "loading": "Οι σχολιασμοί φορτώνονται: οι τοποθεσίες ενδέχεται να αλλάξουν ακόμη."
   }
 }

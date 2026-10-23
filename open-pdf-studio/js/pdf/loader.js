@@ -26,6 +26,8 @@ import { loadIfNeeded } from './queued-load.js';
 import { leesAnnotatieLagen, pasGelezenLagenToe } from './saver/annotatie-lagen.js';
 import { voegAnnotatiesToe } from './loader/annotaties-toevoegen.js';
 import { pdfjsBronnen } from '../core/basis-url.js';
+import { GAST_MODUS } from '../core/gehost.js';
+import { maakBlobWorker } from '../core/blob-worker.js';
 import { isWachtwoordFout, vraagEnOntsleutel, markeerBeveiligd, isAlleenLezen, isBeveiligdDocument, bronPad } from './wachtwoord-pdf.js';
 
 
@@ -90,6 +92,18 @@ export function clearCachedPdfBytes(filePath) {
 pdfjsLib.GlobalWorkerOptions.workerSrc = import.meta.env?.DEV
   ? '/node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs'
   : new URL('pdfjs-dist/legacy/build/pdf.worker.mjs', import.meta.url).href;
+
+// Gehoste bouw (#704): in de werkplek (opaque origin) start PDF.js zijn
+// worker niet zelf; hij zou een module-worker uit een blob maken, en die
+// weigert Chromium daar. Eén klassieke blob-worker die de worker uit de
+// bundel laadt (core/blob-worker.js), gedeeld door alle documenten.
+if (import.meta.env?.MODE === GAST_MODUS && typeof Worker !== 'undefined') {
+  try {
+    pdfjsLib.GlobalWorkerOptions.workerPort = maakBlobWorker(pdfjsLib.GlobalWorkerOptions.workerSrc, { type: 'module' });
+  } catch (e) {
+    console.warn('[loader] PDF.js-worker uit een blob niet gestart; PDF.js valt terug op de hoofdthread:', e);
+  }
+}
 
 /**
  * Wrap doc.pdfDoc.getPage with a recovery layer that re-loads the doc when

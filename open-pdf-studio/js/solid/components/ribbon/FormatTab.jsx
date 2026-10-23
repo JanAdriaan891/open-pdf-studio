@@ -4,11 +4,10 @@ import AdaptiveGroups from './AdaptiveGroups.jsx';
 import ColorPickerButton from './ColorPickerButton.jsx';
 import Dialog from '../Dialog.jsx';
 import {
-  fillColor, strokeColor, fmtLineWidth, opacity, borderStyle, blendMode,
+  fillColor, strokeColor, fmtLineWidth, opacity, fillOpacity, aparteVulDekking, hasFill, borderStyle, blendMode,
   arrowStart, arrowEnd, isLocked, isSingleSymbolStamp,
-  STYLE_DEFS, applyToSelected, syncFormatStore, setSymbolInsertOption
+  STYLE_DEFS, applyToSelected, zetOpmaak, opmaakVoorNieuw, opmaakOndersteunt,
 } from '../../stores/formatStore.js';
-import { symbolInsertActive, symbolInsertSupports } from '../../../symbols/symbol-insert-format-store.js';
 import {
   getStylePresets, createStylePreset, deleteStylePreset, renameStylePreset,
   applyStylePresetById, copyStyleFromSelection, pasteStyleToSelection, copiedStyle,
@@ -26,6 +25,7 @@ import { paginaMaat } from '../../../pdf/weergave-ruimte.js';
 import { lintZetLijnkoppen } from '../../../pdf/lijnkoppen.js';
 import { BLEND_MODES } from '../../../annotations/blend-modes.js';
 import { volgPopup } from './ribbon-popup.js';
+import { heeftVulDekking, zetLijnDekking } from '../../../annotations/vul-dekking.js';
 
 const STYLE_GALLERY = [
   { name: 'red', labelKey: 'format.styleRed', color: '#ff0000', cloudy: false },
@@ -40,37 +40,32 @@ const STYLE_GALLERY = [
   { name: 'indigo-cloudy', labelKey: 'format.styleIndigoCloudy', color: '#7b68ee', cloudy: true, bg: 'rgba(123,104,238,0.15)' },
 ];
 
-// Invoegmodus voor symbolen (#587): de werkbalk stelt dan de opmaak in voor
-// de volgende plaatsingen in plaats van de selectie te wijzigen. Opties die
-// geen enkel symbool kent (vulling, randstijl, pijlpunten) en acties op de
-// selectie zijn dan uitgeschakeld; een optie die alleen het HUIDIGE symbool
-// niet kent ook, maar de gekozen waarde blijft staan voor het volgende.
-const invoegen = () => symbolInsertActive();
-const nietVoorSymbool = (key) => invoegen() && !symbolInsertSupports(key);
-
-function zetOpmaak(patch, applyFn) {
-  if (invoegen()) {
-    setSymbolInsertOption(patch);
-    return;
-  }
-  applyToSelected(applyFn);
-  syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
-}
+// Invoegmodus voor symbolen (#587) en tekenen met een gereedschap (#668): de
+// werkbalk stelt dan de opmaak in voor wat nog GEPLAATST wordt in plaats van
+// de selectie te wijzigen (zetOpmaak in formatStore kiest het doel). Acties
+// op de selectie zijn dan uitgeschakeld, en ook elke optie die het huidige
+// symbool of gereedschap niet kent; bij een symbool blijft een gekozen
+// waarde wel staan voor het volgende.
+const invoegen = () => opmaakVoorNieuw();
+const nietOndersteund = (key) => invoegen() && !opmaakOndersteunt(key);
+// Vul-dekking (#685): alleen voor rechthoek, ellips, veelhoek en wolk, en
+// alleen met een vulling om op te werken.
+const vulDekkingUit = () => nietOndersteund('fillOpacity') || !aparteVulDekking() || !hasFill();
 
 function applyStyle(styleName) {
   const style = STYLE_DEFS[styleName];
   if (!style) return;
-  if (invoegen()) {
-    // Van een stijl telt bij een symbool alleen de lijnkleur.
-    if (style.strokeColor) setSymbolInsertOption({ strokeColor: style.strokeColor });
-    return;
-  }
-  applyToSelected(ann => {
+  // Bij een symbool telt van een stijl alleen de lijnkleur, bij een
+  // gereedschap alles wat het kent (zie zetOpmaak).
+  zetOpmaak({
+    strokeColor: style.strokeColor,
+    fillColor: style.fillColor || null,
+    borderStyle: style.borderStyle,
+  }, ann => {
     if (style.strokeColor) { ann.strokeColor = style.strokeColor; ann.color = style.color; }
     ann.fillColor = style.fillColor || null;
     if (style.borderStyle) ann.borderStyle = style.borderStyle;
   });
-  syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
 }
 
 function fillIconSvg() {
@@ -153,7 +148,7 @@ export default function FormatTab() {
                 {(item) => (
                   <div
                     class="ribbon-style-item"
-                    classList={{ disabled: nietVoorSymbool('strokeColor') }}
+                    classList={{ disabled: nietOndersteund('strokeColor') }}
                     data-style={item.name}
                     title={t(item.labelKey)}
                     onClick={() => applyStyle(item.name)}
@@ -184,7 +179,7 @@ export default function FormatTab() {
                   {(item) => (
                     <div
                       class="ribbon-style-item"
-                      classList={{ disabled: nietVoorSymbool('strokeColor') }}
+                      classList={{ disabled: nietOndersteund('strokeColor') }}
                       title={t(item.labelKey)}
                       onClick={() => { applyStyle(item.name); setMoreOpen(false); }}
                     >
@@ -230,19 +225,16 @@ export default function FormatTab() {
               dropdownId="fmt-fill-dropdown"
               paletteId="fmt-fill-palette"
               showNoneButton={true}
-              disabled={invoegen()}
+              disabled={nietOndersteund('fillColor')}
               currentColor={fillColor()}
               onColorSelect={(color) => {
-                applyToSelected(ann => { ann.fillColor = color; });
-                syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+                zetOpmaak({ fillColor: color }, ann => { ann.fillColor = color; });
               }}
               onNone={() => {
-                applyToSelected(ann => { ann.fillColor = null; });
-                syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+                zetOpmaak({ fillColor: null }, ann => { ann.fillColor = null; });
               }}
               onCustom={(color) => {
-                applyToSelected(ann => { ann.fillColor = color; });
-                syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+                zetOpmaak({ fillColor: color }, ann => { ann.fillColor = color; });
               }}
             />
             <ColorPickerButton
@@ -253,7 +245,7 @@ export default function FormatTab() {
               dropdownId="fmt-stroke-dropdown"
               paletteId="fmt-stroke-palette"
               showNoneButton={false}
-              disabled={nietVoorSymbool('strokeColor')}
+              disabled={nietOndersteund('strokeColor')}
               currentColor={strokeColor()}
               onColorSelect={(color) => {
                 zetOpmaak({ strokeColor: color }, ann => { ann.strokeColor = color; ann.color = color; });
@@ -272,7 +264,7 @@ export default function FormatTab() {
               <input type="text" inputmode="decimal" data-getal class="ribbon-form-number" id="fmt-line-width" title={t('format.lineWidth')}
                 min="0.1" max="50" step="0.1"
                 value={fmtLineWidth()}
-                disabled={nietVoorSymbool('lineWidth')}
+                disabled={nietOndersteund('lineWidth')}
                 onInput={(e) => {
                   const v = parseFloat(e.currentTarget.value);
                   if (!Number.isFinite(v) || v <= 0) return;
@@ -283,10 +275,10 @@ export default function FormatTab() {
               <label>{t('format.borderLabel')}</label>
               <select class="ribbon-form-select" id="fmt-border-style" title={t('format.borderStyle')}
                 value={borderStyle()}
-                disabled={invoegen()}
+                disabled={nietOndersteund('borderStyle')}
                 onChange={(e) => {
-                  applyToSelected(ann => { ann.borderStyle = e.target.value; });
-                  syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+                  const stijl = e.target.value;
+                  zetOpmaak({ borderStyle: stijl }, ann => { ann.borderStyle = stijl; });
                 }}>
                 <option value="solid">{tc('solid')}</option>
                 <option value="dashed">{tc('dashed')}</option>
@@ -297,7 +289,7 @@ export default function FormatTab() {
               <label title={t('format.blendHint')}>{t('format.blendLabel')}</label>
               <select class="ribbon-form-select" id="fmt-blend-mode" title={t('format.blendHint')}
                 value={blendMode()}
-                disabled={nietVoorSymbool('blendMode')}
+                disabled={nietOndersteund('blendMode')}
                 onChange={(e) => {
                   const mode = e.target.value;
                   zetOpmaak({ blendMode: mode }, ann => { ann.blendMode = mode; });
@@ -309,26 +301,53 @@ export default function FormatTab() {
               </select>
             </div>
           </div>
-          <div class="ribbon-slider-row">
-            <label>{t('format.opacityLabel')}</label>
-            <input type="range" class="ribbon-slider" id="fmt-opacity" title={t('format.opacity')}
-              min="0" max="100" step="1"
-              value={opacity()}
-              disabled={nietVoorSymbool('opacity')}
-              onInput={(e) => {
-                const v = parseInt(e.currentTarget.value, 10) / 100;
-                zetOpmaak({ opacity: v }, ann => { ann.opacity = v; });
-              }} />
-            <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number" title={t('format.opacity')}
-              min="0" max="100" step="1"
-              value={opacity()}
-              disabled={nietVoorSymbool('opacity')}
-              onInput={(e) => {
-                const v = parseInt(e.currentTarget.value, 10);
-                if (!Number.isFinite(v) || v < 0 || v > 100) return;
-                zetOpmaak({ opacity: v / 100 }, ann => { ann.opacity = v / 100; });
-              }} />
-            <span class="ribbon-slider-unit">%</span>
+          {/* Dekking van de lijn en, bij een rechthoek, ellips, veelhoek of
+              wolk, apart die van de vulling (#685). */}
+          <div class="ribbon-slider-grid">
+            <div class="ribbon-slider-row">
+              <label>{aparteVulDekking() ? t('format.strokeOpacityLabel') : t('format.opacityLabel')}</label>
+              <input type="range" class="ribbon-slider" id="fmt-opacity"
+                title={aparteVulDekking() ? t('format.strokeOpacity') : t('format.opacity')}
+                min="0" max="100" step="1"
+                value={opacity()}
+                disabled={nietOndersteund('opacity')}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10) / 100;
+                  zetOpmaak({ opacity: v }, ann => { zetLijnDekking(ann, v); });
+                }} />
+              <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number"
+                title={aparteVulDekking() ? t('format.strokeOpacity') : t('format.opacity')}
+                min="0" max="100" step="1"
+                value={opacity()}
+                disabled={nietOndersteund('opacity')}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10);
+                  if (!Number.isFinite(v) || v < 0 || v > 100) return;
+                  zetOpmaak({ opacity: v / 100 }, ann => { zetLijnDekking(ann, v / 100); });
+                }} />
+              <span class="ribbon-slider-unit">%</span>
+            </div>
+            <div class="ribbon-slider-row">
+              <label>{t('format.fillOpacityLabel')}</label>
+              <input type="range" class="ribbon-slider" id="fmt-fill-opacity" title={t('format.fillOpacity')}
+                min="0" max="100" step="1"
+                value={fillOpacity()}
+                disabled={vulDekkingUit()}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10) / 100;
+                  zetOpmaak({ fillOpacity: v }, ann => { if (heeftVulDekking(ann.type)) ann.fillOpacity = v; });
+                }} />
+              <input type="text" inputmode="decimal" data-getal class="ribbon-slider-number" title={t('format.fillOpacity')}
+                min="0" max="100" step="1"
+                value={fillOpacity()}
+                disabled={vulDekkingUit()}
+                onInput={(e) => {
+                  const v = parseInt(e.currentTarget.value, 10);
+                  if (!Number.isFinite(v) || v < 0 || v > 100) return;
+                  zetOpmaak({ fillOpacity: v / 100 }, ann => { if (heeftVulDekking(ann.type)) ann.fillOpacity = v / 100; });
+                }} />
+              <span class="ribbon-slider-unit">%</span>
+            </div>
           </div>
         </RibbonGroup>
 
@@ -338,10 +357,10 @@ export default function FormatTab() {
               <label>{t('format.startLabel')}</label>
               <select class="ribbon-form-select" id="fmt-arrow-start" title={t('format.startArrow')}
                 value={arrowStart()}
-                disabled={invoegen()}
+                disabled={nietOndersteund('startHead')}
                 onChange={(e) => {
-                  applyToSelected(ann => { if (lintZetLijnkoppen(ann.type)) ann.startHead = e.target.value; });
-                  syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+                  const kop = e.target.value;
+                  zetOpmaak({ startHead: kop }, ann => { if (lintZetLijnkoppen(ann.type)) ann.startHead = kop; });
                 }}>
                 <option value="none">{tc('none')}</option>
                 <option value="open">{t('format.open')}</option>
@@ -357,10 +376,10 @@ export default function FormatTab() {
               <label>{t('format.endLabel')}</label>
               <select class="ribbon-form-select" id="fmt-arrow-end" title={t('format.endArrow')}
                 value={arrowEnd()}
-                disabled={invoegen()}
+                disabled={nietOndersteund('endHead')}
                 onChange={(e) => {
-                  applyToSelected(ann => { if (lintZetLijnkoppen(ann.type)) ann.endHead = e.target.value; });
-                  syncFormatStore(getActiveDocument()?.selectedAnnotations || []);
+                  const kop = e.target.value;
+                  zetOpmaak({ endHead: kop }, ann => { if (lintZetLijnkoppen(ann.type)) ann.endHead = kop; });
                 }}>
                 <option value="none">{tc('none')}</option>
                 <option value="open">{t('format.open')}</option>

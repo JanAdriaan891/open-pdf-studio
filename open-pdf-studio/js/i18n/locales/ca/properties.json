@@ -64,6 +64,7 @@
     "color": "Color",
     "opacity": "Opacitat",
     "fillOpacity": "Opacitat de l'emplenament",
+    "strokeOpacity": "Opacitat del traç",
     "lineWidth": "Amplada de línia",
     "borderWidth": "Amplada de la vora",
     "borderStyle": "Estil de vora",
@@ -374,8 +375,8 @@
     "schedules": "Llistats",
     "addPage": "Afegeix una pàgina",
     "pageLabels": "Etiquetes de pàgina (generador de noms)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portafolis PDF",
+    "recognizeForm": "Reconeix camps de formulari"
   },
   "scaleBar": {
     "title": "Barra d'escala",
@@ -428,7 +429,7 @@
     },
     "preview": "Previsualització",
     "exportCsv": "Exporta CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Vinculacions amb fulls de càlcul"
   },
   "wizard": {
     "title": "Assistent de llistats",
@@ -611,8 +612,8 @@
       "imageName": "Nom del fitxer",
       "width": "Amplada",
       "height": "Alçada",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Ubicació",
+      "locationSource": "Origen de la ubicació"
     },
     "type": {
       "line": "Línia",
@@ -658,6 +659,8 @@
     "sectionTitle": "Símbol: {{name}}",
     "symbolLabel": "Símbol",
     "typeLabel": "Tipus",
+    "profileType": "Tipus de perfil",
+    "profileTypeTitle": "Perfil d'acer",
     "unknownSymbol": "Símbol desconegut",
     "listNew": "Nou",
     "listAdd": "Afegeix",
@@ -713,17 +716,17 @@
     "failed": "No s'han pogut aplicar els canvis: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
+    "title": "Ubicació",
+    "none": "Sense assignar",
     "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "computed": "Calculada",
+    "override": "Substitució manual (buit esborra la ubicació)",
+    "automatic": "Utilitza la ubicació automàtica",
+    "zoneName": "Utilitza aquesta forma com a zona amb nom",
+    "parent": "Zona pare",
+    "removeZone": "Elimina la definició de zona",
+    "invalid": "No s'ha pogut actualitzar la ubicació",
+    "rules": "L'assignació utilitza el centre del quadre delimitador del marcatge, vores incloses. Guanya la zona més profunda, després l'àrea més petita i després l'identificador de zona. Utilitzeu polígons rectes sense forats o rectangles sense rotació. S'exclouen les identitats de zona no vàlides o duplicades.",
+    "loading": "S'estan carregant les anotacions: les ubicacions encara poden canviar."
   }
 }

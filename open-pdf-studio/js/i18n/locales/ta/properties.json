@@ -64,6 +64,7 @@
     "color": "நிறம்",
     "opacity": "ஒளிபுகாமை",
     "fillOpacity": "நிரப்பு ஒளிபுகாமை",
+    "strokeOpacity": "கோட்டு ஒளிபுகாமை",
     "lineWidth": "கோட்டு அகலம்",
     "borderWidth": "கரை அகலம்",
     "borderStyle": "கரை பாணி",
@@ -368,8 +369,8 @@
     "schedules": "அட்டவணைகள்",
     "addPage": "பக்கத்தைச் சேர்",
     "pageLabels": "பக்க லேபிள்கள் (பெயர் உருவாக்கி)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF போர்ட்ஃபோலியோ",
+    "recognizeForm": "படிவப் புலங்களை அடையாளம் காண்"
   },
   "scaleBar": {
     "title": "அளவுகோல் பட்டை",
@@ -422,7 +423,7 @@
     },
     "preview": "முன்னோட்டம்",
     "exportCsv": "CSV ஏற்றுமதி",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "விரிதாள் பிணைப்புகள்"
   },
   "wizard": {
     "title": "அட்டவணை வழிகாட்டி",
@@ -605,8 +606,8 @@
       "imageName": "கோப்புப் பெயர்",
       "width": "அகலம்",
       "height": "உயரம்",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "இடம்",
+      "locationSource": "இட மூலம்"
     },
     "type": {
       "line": "கோடு",
@@ -652,6 +653,8 @@
     "sectionTitle": "குறியீடு: {{name}}",
     "symbolLabel": "குறியீடு",
     "typeLabel": "வகை",
+    "profileType": "சுயவிவர வகை",
+    "profileTypeTitle": "எஃகு சுயவிவரம்",
     "unknownSymbol": "தெரியாத குறியீடு",
     "listNew": "புதியது",
     "listAdd": "சேர்",
@@ -707,17 +710,17 @@
     "failed": "மாற்றங்களைப் பயன்படுத்த முடியவில்லை: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "இடம்",
+    "none": "ஒதுக்கப்படவில்லை",
+    "manual": "கைமுறை",
+    "computed": "கணக்கிடப்பட்டது",
+    "override": "கைமுறை மேலெழுதல் (காலியாக விட்டால் இடம் அழிக்கப்படும்)",
+    "automatic": "தானியங்கு இடத்தைப் பயன்படுத்து",
+    "zoneName": "இந்த வடிவத்தைப் பெயரிடப்பட்ட மண்டலமாகப் பயன்படுத்து",
+    "parent": "தாய் மண்டலம்",
+    "removeZone": "மண்டல வரையறையை அகற்று",
+    "invalid": "இடத்தைப் புதுப்பிக்க முடியவில்லை",
+    "rules": "ஒதுக்கீடு குறியிடலின் எல்லைப்பெட்டி மையத்தைப் பயன்படுத்துகிறது, விளிம்புகள் உட்பட. ஆழமான மண்டலம் முன்னுரிமை பெறும், பின்னர் சிறிய பரப்பளவு, பின்னர் மண்டல ID. துளைகள் இல்லாத நேர்ப்பக்கப் பலகோணங்கள் அல்லது சுழற்றப்படாத பெட்டிகளைப் பயன்படுத்தவும். செல்லாத அல்லது இரட்டை மண்டல அடையாளங்கள் விலக்கப்படும்.",
+    "loading": "குறிப்புரைகள் ஏற்றப்படுகின்றன: இடங்கள் இன்னும் மாறலாம்."
   }
 }

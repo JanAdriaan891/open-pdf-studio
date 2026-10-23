@@ -55,11 +55,33 @@ export async function runWorkflow(inputs,workflow,io,{signal,onResult=()=>{}}={}
  }
  return results;
 }
+const LIMIT=100*1024*1024;
+const generated=path=>/-opds-[a-zA-Z0-9_-]+-[a-f0-9]{64}\.pdf$/i.test(path);
 // Require two stable observations. Changing files and outputs never enter a run.
-export async function watchCandidates(paths,read,previous=new Map()){
+// With size and modification time ({path,size,mtimeMs}) a file is read and
+// hashed only once its size and time stay the same between two polls, and
+// not again until they change. Plain paths are read and hashed every poll.
+// Returns next: Map(path -> {hash,size,mtimeMs}) for the next poll.
+export async function watchCandidates(files,read,previous=new Map()){
  const next=new Map(),ready=[];
- for(const path of paths.slice(0,1000)){
-  if(!/\.pdf$/i.test(path)||/-opds-[a-zA-Z0-9_-]+-[a-f0-9]{64}\.pdf$/i.test(path))continue;
-  try{const bytes=await read(path);if(bytes.length>100*1024*1024||!completePdf(bytes))continue;const hash=await hashBytes(bytes);next.set(path,hash);if(previous.get(path)===hash)ready.push(path);}catch{/* A copying or locked file is checked again next poll. */}
+ for(const file of files.slice(0,1000)){
+  const entry=typeof file==='string'?{path:file}:file||{},path=entry.path;
+  if(typeof path!=='string'||!/\.pdf$/i.test(path)||generated(path))continue;
+  const prev=previous.get(path),stat=Number.isFinite(entry.size)&&Number.isFinite(entry.mtimeMs);
+  try{
+   if(stat){
+    const seen={size:entry.size,mtimeMs:entry.mtimeMs,hash:null};
+    if(entry.size>LIMIT||!prev||prev.size!==entry.size||prev.mtimeMs!==entry.mtimeMs){next.set(path,seen);continue;}
+    if(prev.hash){next.set(path,prev);ready.push(path);continue;}
+    if(prev.incomplete){next.set(path,prev);continue;}
+    next.set(path,seen);
+    const bytes=await read(path);
+    if(bytes.length>LIMIT||!completePdf(bytes)){next.set(path,{...seen,incomplete:true});continue;}
+    next.set(path,{...seen,hash:await hashBytes(bytes)});ready.push(path);
+   }else{
+    const bytes=await read(path);if(bytes.length>LIMIT||!completePdf(bytes))continue;
+    const hash=await hashBytes(bytes);next.set(path,{hash});if(prev?.hash===hash)ready.push(path);
+   }
+  }catch{/* A copying or locked file is checked again next poll. */}
  }return {next,ready};
 }

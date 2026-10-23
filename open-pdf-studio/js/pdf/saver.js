@@ -31,13 +31,15 @@ import { metOpslagSlot } from '../plugins/opslag-wissel-slot.js';
 import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnnotation } from '../plugins/plugin-pdf.js';
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
-import { opslaanGeweigerd } from './wachtwoord-pdf.js';
+import { opslaanGeweigerd, isHostAlleenLezen } from './wachtwoord-pdf.js';
 import { meldOpgeslagen } from '../herstel/haken.js';
+import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 
 // Sub-modules
 import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
   ensureAcroFormFonts, stripPdfAMetadata, generateAppearanceStream, zetDoorzichtigheidInAp, tekstvakFontDict, boogHoekenNaRotatie,
-  randSleutelZonderRand, markeerZonderRand, onzichtbaarVlak, vlakRect } from './saver/utils.js';
+  randSleutelZonderRand, markeerZonderRand, onzichtbaarVlak, vlakRect, metVulGs } from './saver/utils.js';
+import { eigenVulDekking } from '../annotations/vul-dekking.js';
 import { saveTextEditsToPages } from './saver/text-edits.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
@@ -249,12 +251,18 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // Met een wachtwoord geopend: alleen-lezen, nooit opslaan (ook niet als
   // kopie), zodat het origineel beveiligd blijft (wachtwoord-pdf.js).
   if (weigerOpslaanBeveiligd(activeDoc)) return false;
+  // Door de gastsite alleen-lezen geopend (#704): niet terugschrijven naar de
+  // site; "Opslaan als" (een download) mag wel, zo gaat er niets verloren.
+  if (!saveAsPath && isHostAlleenLezen(activeDoc)) {
+    showMessage(i18next.t('hostReadOnlySave'));
+    return false;
+  }
   const currentPath = activeDoc?.filePath;
   // Redirect to "Save As" for untitled docs. These now have a temp-file
   // `filePath` (so they render via the real pipeline), so we ALSO check the
   // `isUntitled` flag — otherwise "Save" would silently overwrite the temp
   // file and the user would never be asked where to keep their document.
-  if ((!currentPath || activeDoc?.isUntitled) && !saveAsPath) {
+  if (opslaanVraagtOpslaanAls(activeDoc) && !saveAsPath) {
     return await savePDFAs(activeDoc);
   }
 
@@ -1235,8 +1243,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
                 const ongedraaid = grondvorm.map((pt) => naarPagina(pt.x, pt.y));
                 const ops = hatchFillOps({ points: ongedraaid, holes: null, ...polyArcering,
                   hatchColorRgb: hexToRgb(polyArcering.hatchColorHex), X: convertX, Y: convertY });
-                pgContent += polyRotatie
-                  ? `q\n${draaiCm(convertX(polyMidden.x), convertY(polyMidden.y), polyRotatie)}${ops}Q\n` : ops;
+                // Bij een eigen vul-dekking onder /GSv, zoals de vulling (#685).
+                pgContent += metVulGs(ann, polyRotatie
+                  ? `q\n${draaiCm(convertX(polyMidden.x), convertY(polyMidden.y), polyRotatie)}${ops}Q\n` : ops);
               }
               if (pgStroke) {
                 const [psr, psg, psb] = hexToRgb(ann.strokeColor || ann.color || '#000000');
@@ -1275,6 +1284,8 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
                   lineWidth: borderWidth, borderStyle: ann.borderStyle,
                   heeftRand: !randSleutelZonderRand(ann),
                   ...(polyArcering || {}),
+                  // Arcering onder de vul-dekking (#685), zie metVulGs.
+                  arceringOps: (ops) => metVulGs(ann, ops),
                 });
                 // Gedraaid: de ongedraaide wolk met één cm om het midden.
                 if (wolkAp && polyRotatie) {
@@ -1758,7 +1769,10 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
               Subtype: 'Stamp',
               Rect: stRect,
               // /Name is een PDFName: alleen ASCII (de echte naam staat in /Subj en OPS_StampName).
-              Name: asciiPdfName(pdfStampName, 'Draft'),
+              // A text stamp with its own appearance gets its own name: with a
+              // standard name ('Draft') some editors draw their built-in stamp
+              // instead as soon as the stamp is edited or rotated.
+              Name: asciiPdfName((!ann.imageData && ann.stampText) ? `OPS_${pdfStampName.replace(/\s+/g, '')}` : pdfStampName, 'Draft'),
               Subj: pdfTextString(ann.stampName || pdfStampName),
               C: colorArr,
               CA: opacity,
@@ -2992,7 +3006,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         if (annotDict && typeof annotDict.get === 'function') {
           // Een pijl als geheel, zoals het scherm (overlap van schacht en kop).
           // Met de mengmodus (#614) in dezelfde graphics-state.
-          zetDoorzichtigheidInAp(context, annotDict, opacity, { alsGroep: ann.type === 'arrow', blendMode: ann.blendMode });
+          // Een vorm met aparte dekking voor lijn en vulling (#685) krijgt /ca
+          // op de vul-dekking in dezelfde graphics-state.
+          zetDoorzichtigheidInAp(context, annotDict, opacity, {
+            alsGroep: ann.type === 'arrow', blendMode: ann.blendMode, vulOpacity: eigenVulDekking(ann),
+          });
         }
 
         // Add annotation to page
@@ -3003,6 +3021,12 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
           if (fillOpacity !== undefined && fillOpacity !== null && fillOpacity !== opacity
               && typeof annotDict.set === 'function') {
             annotDict.set(PDFName.of('OPS_FillOpacity'), context.obj(fillOpacity));
+          }
+          // Aparte vul-dekking van een vorm (#685) ook als /ca (PDF 2.0): de
+          // dekking van de vulling als een lezer de appearance zelf opbouwt.
+          const eigenVul = eigenVulDekking(ann);
+          if (eigenVul !== null && typeof annotDict.set === 'function') {
+            annotDict.set(PDFName.of('ca'), context.obj(eigenVul));
           }
           // Vorm zonder rand (#431): geen randkleur, /BS /W 0 en /OPS_NoStroke —
           // ook één plek voor alle soorten. De appearance is hierboven al
@@ -3132,8 +3156,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
       // Write out any OCR results as an invisible searchable text layer.
       // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
       // geslaagde opslag; de herkende tekst blijft in het document staan.
-      // Ongeldige woorden worden overgeslagen, nooit de hele opslag.
-      ocrUitkomst = await writeOcrLayers(pdfDocLib, pages, activeDoc);
+      // Ongeldige en niet te coderen ongecontroleerde woorden worden
+      // overgeslagen. Een nagekeken woord dat niet in de laag kan, of
+      // nagekeken woorden zonder lettertype, weigeren de opslag (#657); een
+      // herstelmomentopname laat zo'n woord weg in plaats van te mislukken.
+      ocrUitkomst = await writeOcrLayers(pdfDocLib, pages, activeDoc, { strictReviews: !momentopname });
 
       // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
       // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.

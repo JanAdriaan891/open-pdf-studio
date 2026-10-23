@@ -133,7 +133,9 @@
     "officePage": "Pagină",
     "officeTable": "Tabel",
     "officeText": "Text",
-    "officeFailed": "Exportul documentului a eșuat."
+    "officeFailed": "Exportul documentului a eșuat.",
+    "protect": "Protejare cu parolă",
+    "protectDesc": "Salvați o copie protejată cu parolă (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profil de ieșire",
@@ -212,8 +214,8 @@
     "viaMcp": "Prin conexiunea AI"
   },
   "annotateScreenshot": "Adnotare captură de ecran din clipboard",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Fluxuri de lucru pentru documente",
+  "drawingSets": "Seturi de planșe",
+  "sheetLinks": "Legături între planșe",
+  "approvalRouting": "Circuit de aprobare"
 }

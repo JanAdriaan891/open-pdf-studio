@@ -64,6 +64,7 @@
     "color": "Rangi",
     "opacity": "Uwazi",
     "fillOpacity": "Uwazi wa Kujaza",
+    "strokeOpacity": "Uwazi wa Mstari",
     "lineWidth": "Upana wa Mstari",
     "borderWidth": "Upana wa Mpaka",
     "borderStyle": "Mtindo wa Mpaka",
@@ -368,8 +369,8 @@
     "schedules": "Majedwali ya orodha",
     "addPage": "Ongeza ukurasa",
     "pageLabels": "Lebo za kurasa (kiunda majina)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Jalada la PDF",
+    "recognizeForm": "Tambua sehemu za fomu"
   },
   "scaleBar": {
     "title": "Upau wa Kipimo",
@@ -422,7 +423,7 @@
     },
     "preview": "Hakikisho",
     "exportCsv": "Hamisha CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Miunganisho ya lahajedwali"
   },
   "wizard": {
     "title": "Mchawi wa jedwali la orodha",
@@ -605,8 +606,8 @@
       "imageName": "Jina la faili",
       "width": "Upana",
       "height": "Kimo",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Mahali",
+      "locationSource": "Chanzo cha mahali"
     },
     "type": {
       "line": "Mstari",
@@ -652,6 +653,8 @@
     "sectionTitle": "Alama: {{name}}",
     "symbolLabel": "Alama",
     "typeLabel": "Aina",
+    "profileType": "Aina ya wasifu",
+    "profileTypeTitle": "Wasifu wa chuma",
     "unknownSymbol": "Ishara isiyojulikana",
     "listNew": "Mpya",
     "listAdd": "Ongeza",
@@ -707,17 +710,17 @@
     "failed": "Imeshindwa kutumia mabadiliko: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Mahali",
+    "none": "Haijapangiwa",
+    "manual": "Kwa mkono",
+    "computed": "Imekokotolewa",
+    "override": "Ubatilishaji wa mkono (tupu hufuta mahali)",
+    "automatic": "Tumia mahali kiotomatiki",
+    "zoneName": "Tumia umbo hili kama kanda yenye jina",
+    "parent": "Kanda mzazi",
+    "removeZone": "Ondoa ufafanuzi wa kanda",
+    "invalid": "Mahali hapakuweza kusasishwa",
+    "rules": "Upangaji hutumia kitovu cha kisanduku cha mipaka cha alama, pamoja na kingo. Kanda ya ndani kabisa hushinda, kisha eneo dogo zaidi, kisha kitambulisho cha kanda. Tumia poligoni zilizonyooka zisizo na matundu au visanduku visivyozungushwa. Utambulisho wa kanda batili au unaojirudia huachwa.",
+    "loading": "Maoni yanapakiwa: maeneo bado yanaweza kubadilika."
   }
 }

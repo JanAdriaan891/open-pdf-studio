@@ -133,7 +133,9 @@
     "officePage": "Sida",
     "officeTable": "Tabell",
     "officeText": "Text",
-    "officeFailed": "Exporten av dokumentet misslyckades."
+    "officeFailed": "Exporten av dokumentet misslyckades.",
+    "protect": "Skydda med lösenord",
+    "protectDesc": "Spara en kopia skyddad med lösenord (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Utdataprofil",
@@ -212,8 +214,8 @@
     "viaMcp": "Via AI-anslutningen"
   },
   "annotateScreenshot": "Kommentera skärmbild från Urklipp",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Dokumentarbetsflöden",
+  "drawingSets": "Ritningsuppsättningar",
+  "sheetLinks": "Länkar mellan ritningar",
+  "approvalRouting": "Godkännandeflöde"
 }

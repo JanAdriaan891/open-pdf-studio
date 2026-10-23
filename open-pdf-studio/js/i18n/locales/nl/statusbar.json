@@ -140,5 +140,13 @@
     "prepareOcr": "Openen voor OCR…"
   },
   "symbolSearch": "Symbolen zoeken",
-  "findMoreOptions": "Meer zoekopties"
+  "findMoreOptions": "Meer zoekopties",
+  "watchActive": "Bewaakt {{folder}}",
+  "watchFailed": "Bewaakfout: {{folder}}",
+  "watchTitle": "Documentworkflow bewaakt {{input}} en schrijft naar {{output}}. Klik om het bewaken te stoppen.",
+  "renderDiagnostics": {
+    "title": "Ga naar de volgende rendermelding. Geen melding garandeert geen volledige weergave.",
+    "count": "Rendermeldingen: {{count}}",
+    "detail": "Pagina {{page}}: {{code}}. Probeer een lagere zoom of heropen het document; de volledigheid is niet gecertificeerd."
+  }
 }

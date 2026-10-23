@@ -14,7 +14,7 @@ export default function LocationSection() {
     return getCurrentAnnotation();
   };
   const zones = () => collectZones(getActiveDocument()?.annotations);
-  const location = () => locationFor(ann() || {}, zones(), ann() ? getAnnotationBounds(ann()) : null);
+  const locatie = () => locationFor(ann() || {}, zones(), ann() ? getAnnotationBounds(ann()) : null);
   const edit = async (request) => {
     setError('');
     try {
@@ -35,7 +35,7 @@ export default function LocationSection() {
         <div class="spatial-location">
           <Show when={pagesLoading()}><p>{t('location.loading')}</p></Show>
           <Show when={zoneInvalid()}><p role="alert">{t('location.invalid')}</p></Show>
-          <p>{location().path || t('location.none')} — {t(`location.${location().source}`)}</p>
+          <p>{locatie().path || t('location.none')} — {t(`location.${locatie().source}`)}</p>
           <div class="property-group">
             <label>{t('location.override')}</label>
             <input

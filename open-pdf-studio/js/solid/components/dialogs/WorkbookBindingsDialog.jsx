@@ -87,8 +87,8 @@ export default function WorkbookBindingsDialog() {
   };
   const refresh = b => run(async () => {
     if (isTauri()) {
-      await refreshBinding(b.id);
-      setStatus(t('workbookBindings.refreshed'));
+      const r = await refreshBinding(b.id);
+      setStatus(t('workbookBindings.refreshedWithBackup', { path: r.backupPath }));
     } else {
       if (b.id !== id() || !bytes) throw new Error('RESELECT_WORKBOOK');
       const result = await prepareWorkbookBinding(b, bytes);

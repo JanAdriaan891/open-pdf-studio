@@ -64,6 +64,7 @@
     "color": "Warna",
     "opacity": "Opasitas",
     "fillOpacity": "Opasitas Isi",
+    "strokeOpacity": "Opasitas Garis",
     "lineWidth": "Lebar Garis",
     "borderWidth": "Lebar Batas",
     "borderStyle": "Gaya Batas",
@@ -368,8 +369,8 @@
     "schedules": "Daftar",
     "addPage": "Tambah halaman",
     "pageLabels": "Label halaman (pembuat nama)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portofolio PDF",
+    "recognizeForm": "Kenali bidang formulir"
   },
   "scaleBar": {
     "title": "Batang Skala",
@@ -422,7 +423,7 @@
     },
     "preview": "Pratinjau",
     "exportCsv": "Ekspor CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Pengikatan spreadsheet"
   },
   "wizard": {
     "title": "Wizard daftar",
@@ -605,8 +606,8 @@
       "imageName": "Nama berkas",
       "width": "Lebar",
       "height": "Tinggi",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Lokasi",
+      "locationSource": "Sumber lokasi"
     },
     "type": {
       "line": "Garis",
@@ -652,6 +653,8 @@
     "sectionTitle": "Simbol: {{name}}",
     "symbolLabel": "Simbol",
     "typeLabel": "Jenis",
+    "profileType": "Jenis profil",
+    "profileTypeTitle": "Profil baja",
     "unknownSymbol": "Simbol tidak dikenal",
     "listNew": "Baru",
     "listAdd": "Tambah",
@@ -707,17 +710,17 @@
     "failed": "Perubahan tidak dapat diterapkan: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
+    "title": "Lokasi",
+    "none": "Belum ditetapkan",
     "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "computed": "Terhitung",
+    "override": "Penggantian manual (kosong menghapus lokasi)",
+    "automatic": "Gunakan lokasi otomatis",
+    "zoneName": "Gunakan bentuk ini sebagai zona bernama",
+    "parent": "Zona induk",
+    "removeZone": "Hapus definisi zona",
+    "invalid": "Lokasi tidak dapat diperbarui",
+    "rules": "Penetapan menggunakan titik tengah kotak pembatas markup, termasuk tepinya. Zona terdalam diutamakan, lalu luas terkecil, lalu ID zona. Gunakan poligon bersisi lurus tanpa lubang atau kotak tanpa rotasi. Identitas zona yang tidak valid atau duplikat dikecualikan.",
+    "loading": "Anotasi sedang dimuat: lokasi masih dapat berubah."
   }
 }

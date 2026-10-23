@@ -133,7 +133,9 @@
     "officePage": "पृष्ठ",
     "officeTable": "तालिका",
     "officeText": "टेक्स्ट",
-    "officeFailed": "दस्तावेज़ निर्यात विफल रहा।"
+    "officeFailed": "दस्तावेज़ निर्यात विफल रहा।",
+    "protect": "पासवर्ड से सुरक्षित करें",
+    "protectDesc": "पासवर्ड से सुरक्षित एक प्रति सहेजें (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "आउटपुट प्रोफ़ाइल",
@@ -212,8 +214,8 @@
     "viaMcp": "AI कनेक्शन के माध्यम से"
   },
   "annotateScreenshot": "क्लिपबोर्ड स्क्रीनशॉट पर एनोटेट करें",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "दस्तावेज़ वर्कफ़्लो",
+  "drawingSets": "ड्रॉइंग सेट",
+  "sheetLinks": "क्रॉस-शीट लिंक",
+  "approvalRouting": "अनुमोदन रूटिंग"
 }

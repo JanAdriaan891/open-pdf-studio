@@ -133,7 +133,9 @@
     "officePage": "صفحة",
     "officeTable": "جدول",
     "officeText": "نص",
-    "officeFailed": "فشل تصدير المستند."
+    "officeFailed": "فشل تصدير المستند.",
+    "protect": "الحماية بكلمة مرور",
+    "protectDesc": "حفظ نسخة محمية بكلمة مرور (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "ملف تعريف الإخراج",
@@ -212,8 +214,8 @@
     "viaMcp": "عبر اتصال الذكاء الاصطناعي"
   },
   "annotateScreenshot": "إضافة تعليقات إلى لقطة الشاشة من الحافظة",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "سير عمل المستندات",
+  "drawingSets": "مجموعات الرسومات",
+  "sheetLinks": "روابط بين اللوحات",
+  "approvalRouting": "توجيه الموافقات"
 }

@@ -11,6 +11,7 @@ import {
   standardFontVariant,
   textEditLineAnchor,
   resolveTextEditLineStyle,
+  textEditCoverRects,
 } from '../../text/text-edit-appearance.js';
 import { applyInPlaceTextEdits } from './text-edit-inplace.js';
 import { embedMcpTextFont } from '../../text/mcp-text-font.js';
@@ -146,13 +147,33 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace) {
   const coverX = orig0 && Number.isFinite(Number(orig0.x)) ? Number(orig0.x) : edit.pdfX;
   const coverY = orig0 && Number.isFinite(Number(orig0.y)) ? Number(orig0.y) : edit.pdfY;
 
-  // Afdekvlak over alle originele regels — op het terugval-pad, én wanneer
-  // er een afbeelding (scan-achtergrond) onder de run ligt: de geknipte
-  // vector-tekst staat dan ook als pixels in de afbeelding en die dekt
-  // alleen het witte vlak af. Bij een geslaagde knip zonder onderliggende
-  // afbeelding is er niets meer om af te dekken. (Nieuw toegevoegde tekst
-  // heeft sowieso geen origineel.)
-  if (edit.originalText && !edit.mcpStrict && (!inplace || inplace.needsCover)) {
+  // Afdekken op het terugval-pad, én wanneer er een afbeelding (scan-
+  // achtergrond) onder de run ligt: de geknipte vector-tekst staat dan ook
+  // als pixels in de afbeelding en die dekt alleen een wit vlak af. Bij een
+  // geslaagde knip zonder onderliggende afbeelding is er niets meer om af te
+  // dekken. (Nieuw toegevoegde tekst heeft sowieso geen origineel.)
+  //
+  // Gewone vectortekst die niet in-place te knippen was: per originele run
+  // een strak wit vlak (textEditCoverRects). Het ruime vlak over het hele
+  // blok wiste tabellijnen tussen en rond de cellen in het bestand (#669).
+  // Het ruime vlak blijft voor een scan-onderlaag (de gescande pixels van de
+  // oude tekst liggen niet precies op de runs) en voor een her-bewerking van
+  // een eerder ingebakken edit (de eerder weggeschreven nieuwe tekst kan
+  // breder zijn dan de originele runs).
+  const ruimVlak = !!inplace?.needsCover || !!edit.bakedNewText || !!edit.inplaceBaked;
+  if (edit.originalText && !edit.mcpStrict && !inplace && !ruimVlak) {
+    for (const r of textEditCoverRects(edit)) {
+      page.drawRectangle({
+        x: r.x,
+        y: r.y,
+        width: r.width,
+        height: r.height,
+        rotate: degrees(r.angle),
+        color: rgb(1, 1, 1),
+        borderWidth: 0,
+      });
+    }
+  } else if (edit.originalText && !edit.mcpStrict && (!inplace || inplace.needsCover)) {
     // Bij een her-bewerking van een eerder ingebakken edit moet het vlak ook
     // de eerder weggeschreven (mogelijk langere) nieuwe tekst afdekken.
     const coverSources = [edit.originalText];

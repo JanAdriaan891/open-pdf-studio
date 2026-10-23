@@ -197,11 +197,11 @@ export async function sheetLinkRequest(request) {
     return { cancelled: !!scanController };
   }
   if (request.action === 'export') {
-    const { isTauri, fileExists, writeBinaryFileAtomic } = await import('../core/platform.js');
+    const { isTauri, fileExists, writeBinaryFileNew } = await import('../core/platform.js');
     if (!isTauri() || typeof request.outputPath !== 'string' || !request.outputPath.toLowerCase().endsWith('.zip')) throw new Error('DESKTOP_ZIP_PATH_REQUIRED');
     if (await fileExists(request.outputPath)) throw new Error('OUTPUT_EXISTS');
     const { bytes, report } = await exportLinkedPackage(request);
-    await writeBinaryFileAtomic(request.outputPath, bytes);
+    await writeBinaryFileNew(request.outputPath, bytes);
     return { path: request.outputPath, report };
   }
   throw new Error('INVALID_ACTION');

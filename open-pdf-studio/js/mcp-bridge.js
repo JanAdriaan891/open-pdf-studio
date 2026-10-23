@@ -769,6 +769,7 @@ async function handleGetViewportState() {
     selectedCount,
     pageCount,
     statusMessage,
+    renderDiagnostics: (await import('./pdf/render-diagnostics.js')).readRenderDiagnostics(activeDocPath),
     // Engine + timing — what the user sees in the status-bar chip.
     engine: renderEngine,
     renderTiming,
@@ -3782,7 +3783,7 @@ const HANDLERS = {
     catch (e) { return { ok: false, error: e.message }; }
   },
   'mcp:approval-routing': async (p) => {
-    try { const { approvalRequest } = await import('./approval-routing/service.js'); return { ok: true, ...(await approvalRequest(p)) }; }
+    try { const { approvalRequest } = await import('./approval-routing/service.js'); return { ok: true, ...(await approvalRequest(p, { origin: 'mcp' })) }; }
     catch (e) { return { ok: false, error: e.message }; }
   },
   'mcp:open-pdf':           handleOpenPdf,

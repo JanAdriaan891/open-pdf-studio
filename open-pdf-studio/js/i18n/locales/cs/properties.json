@@ -64,6 +64,7 @@
     "color": "Barva",
     "opacity": "Průhlednost",
     "fillOpacity": "Průhlednost výplně",
+    "strokeOpacity": "Průhlednost obrysu",
     "lineWidth": "Šířka čáry",
     "borderWidth": "Šířka okraje",
     "borderStyle": "Styl okraje",
@@ -368,8 +369,8 @@
     "schedules": "Výkazy",
     "addPage": "Přidat stránku",
     "pageLabels": "Popisky stránek (tvorba názvů)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portfolio PDF",
+    "recognizeForm": "Rozpoznat pole formuláře"
   },
   "scaleBar": {
     "title": "Grafické měřítko",
@@ -422,7 +423,7 @@
     },
     "preview": "Náhled",
     "exportCsv": "Exportovat CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Vazby na tabulku"
   },
   "wizard": {
     "title": "Průvodce výkazem",
@@ -605,8 +606,8 @@
       "imageName": "Název souboru",
       "width": "Šířka",
       "height": "Výška",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Umístění",
+      "locationSource": "Zdroj umístění"
     },
     "type": {
       "line": "Čára",
@@ -652,6 +653,8 @@
     "sectionTitle": "Symbol: {{name}}",
     "symbolLabel": "Symbol",
     "typeLabel": "Typ",
+    "profileType": "Typ profilu",
+    "profileTypeTitle": "Ocelový profil",
     "unknownSymbol": "Neznámý symbol",
     "listNew": "Nový",
     "listAdd": "Přidat",
@@ -707,17 +710,17 @@
     "failed": "Změny nelze použít: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Umístění",
+    "none": "Nepřiřazeno",
+    "manual": "Ručně",
+    "computed": "Vypočteno",
+    "override": "Ruční přepsání (prázdné umístění vymaže)",
+    "automatic": "Použít automatické umístění",
+    "zoneName": "Použít tento tvar jako pojmenovanou zónu",
+    "parent": "Nadřazená zóna",
+    "removeZone": "Odebrat definici zóny",
+    "invalid": "Umístění nelze aktualizovat",
+    "rules": "Přiřazení vychází ze středu ohraničujícího rámečku značky, včetně okrajů. Vyhrává nejhlouběji vnořená zóna, pak nejmenší plocha, pak ID zóny. Používejte mnohoúhelníky s rovnými stranami bez otvorů nebo neotočené obdélníky. Neplatné nebo duplicitní identity zón se vylučují.",
+    "loading": "Načítají se anotace: umístění se ještě mohou změnit."
   }
 }

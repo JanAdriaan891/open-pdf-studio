@@ -1,3 +1,4 @@
+import { isObservedRenderCommand, observeNativeRender } from '../pdf/render-diagnostics.js';
 import { leesOpslag, verwijderOpslag } from './opslag.js';
 import { bestandsnaamUitPad } from './bestandsnaam.js';
 import { gastObject } from './gehost.js';
@@ -41,7 +42,14 @@ export function cacheWebFile(name, data) {
 //       versions(id) (optioneel)  -> Promise<[{ version, modified?, author? }]>
 //     },
 //     document: '<id>',  // optioneel: dit document gaat bij de start open
+//     // optioneel, van de brug naar de werkplek (core/host-brug.js, #704):
+//     ai: { vraag(vraag) -> Promise<{ bericht, stop, vraag_id }> },
+//     geopend(id)          -> Promise<true>  dit document staat open
+//     melding(tekst, toon) -> Promise<true>  melding in de statusbalk van de site
 //   };
+//
+// open() mag ook `alleenLezen: true` meegeven: dan opent het document
+// alleen-lezen (pdf/host-document.js).
 //
 // Een document van de site heeft als pad `opds-host://<id>/<naam>`: de naam
 // achteraan houdt alles wat een bestandsnaam uit het pad haalt (tabbladen,
@@ -90,7 +98,7 @@ async function naarBytes(data) {
 
 /**
  * Haal een document van de site op.
- * @returns {Promise<{ pad: string, naam: string, data: Uint8Array }>}
+ * @returns {Promise<{ pad: string, naam: string, data: Uint8Array, alleenLezen: boolean }>}
  */
 export async function openHostBestand(id) {
   const opslag = hostOpslag();
@@ -100,7 +108,41 @@ export async function openHostBestand(id) {
   const naam = String(antwoord?.name || 'document.pdf');
   const pad = hostPad(id, naam);
   _hostPaden.set(pad, String(id));
-  return { pad, naam, data };
+  return { pad, naam, data, alleenLezen: antwoord?.alleenLezen === true };
+}
+
+/** De assistent van de site (`ai.vraag`), of null als de site er geen heeft. */
+export function hostAi() {
+  const vraag = gastObject()?.ai?.vraag;
+  return typeof vraag === 'function' ? vraag : null;
+}
+
+/**
+ * Vertel de site dat document `id` open staat. Alleen ter informatie: een
+ * weigering of een site zonder dit bericht verandert niets aan de app.
+ */
+export async function meldHostGeopend(id) {
+  const geopend = gastObject()?.geopend;
+  if (typeof geopend !== 'function') return false;
+  try {
+    await geopend(String(id));
+    return true;
+  } catch (e) {
+    console.warn('[gast] geopend niet gemeld:', e?.message || e);
+    return false;
+  }
+}
+
+/** Een melding in de statusbalk van de site, als die dat kent. */
+export async function meldBijHost(tekst, toon = 'fout') {
+  const melding = gastObject()?.melding;
+  if (typeof melding !== 'function') return false;
+  try {
+    return (await melding(String(tekst ?? ''), toon)) !== false;
+  } catch (e) {
+    console.warn('[gast] melding niet doorgegeven:', e?.message || e);
+    return false;
+  }
 }
 
 /** De documenten die de site aanbiedt (leeg als het contract geen lijst kent). */
@@ -455,15 +497,36 @@ export async function writeBinaryFileAtomic(path, data) {
   return true;
 }
 
-// Workflows must fail on collisions, including races after the existence check.
-export async function writeBinaryFileNew(path, data) {
-  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+// An existing destination surfaces as CHOOSE_NEW_FILE (os error 17 on Unix,
+// 80/183 on Windows).
+async function invokeNew(command, path, data, headers = {}) {
   const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
   const mobile = window.__TAURI__?.os?.type?.() === 'android';
-  await getTauriCore().invoke('write_file_new', mobile ? { data: Array.from(bytes) } : bytes, {
-    headers: { 'x-opds-path': encodeURIComponent(path) },
-  });
+  try {
+    await getTauriCore().invoke(command, mobile ? { data: Array.from(bytes) } : bytes, {
+      headers: { 'x-opds-path': encodeURIComponent(path), ...headers },
+    });
+  } catch (e) {
+    const message = String(e?.message ?? e);
+    if (/already exists|file exists|os error (17|80|183)\b/i.test(message)) throw new Error('CHOOSE_NEW_FILE');
+    throw e instanceof Error ? e : new Error(message);
+  }
   return true;
+}
+
+// Workflows and new-copy exports must fail on collisions, including races
+// after an existence check.
+export async function writeBinaryFileNew(path, data) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  return invokeNew('write_file_new', path, data);
+}
+
+// Untrusted bytes (a component of a PDF collection): never replaces a file,
+// refuses autostart folders and, when `restrict` is set, programs and scripts;
+// marked as downloaded content on Windows (src-tauri/src/export_policy.rs).
+export async function writeDownloadedFileNew(path, data, { restrict = true } = {}) {
+  if (!isTauri()) throw new Error('DESKTOP_REQUIRED');
+  return invokeNew('write_downloaded_file_new', path, data, { 'x-opds-restrict': restrict ? '1' : '0' });
 }
 
 export async function fileExists(path) {
@@ -484,28 +547,7 @@ export async function fileExists(path) {
   return await invoke('file_exists', { path });
 }
 
-// Shell operations
-export async function openExternal(url) {
-  if (!isTauri()) {
-    window.open(url, '_blank');
-    return;
-  }
-  // Headless: geen browser van de gebruiker naar voren halen.
-  if (slaOverInHeadless(`open external ${url}`)) return;
-
-  // Try using the shell plugin
-  if (window.__TAURI__.shell) {
-    try {
-      await window.__TAURI__.shell.open(url);
-      return;
-    } catch (e) {
-      console.error('Shell plugin error:', e);
-    }
-  }
-
-  // Fallback: use invoke
-  await invoke('open_url', { url });
-}
+// Iets buiten de app openen (webadres, bijlage): core/extern-openen.js (#695).
 
 // ── Contract van invoke() buiten Tauri ──────────────────────────────────────
 // De webversie heeft geen Rust-kant. Een aanroep KAN daar dus niet slagen.
@@ -536,8 +578,8 @@ export function isNietInBrowser(fout) {
 export async function invoke(cmd, args = {}, options = undefined) {
   const core = getTauriCore();
   if (!core) throw new NietInBrowserError(cmd);
-  if (options === undefined) return await core.invoke(cmd, args);
-  return await core.invoke(cmd, args, options);
+  const run = () => options === undefined ? core.invoke(cmd, args) : core.invoke(cmd, args, options);
+  return isObservedRenderCommand(cmd) ? observeNativeRender(cmd, args, run) : run();
 }
 
 // App-datamap (kaders, onderhoeken). Gaat via Rust zodat een testinstantie
@@ -778,6 +820,11 @@ export async function downloadPdfFromUrl(url) {
 // List PDF files in a directory
 export async function listPdfFiles(dir) {
   return await invoke('list_pdf_files', { dir });
+}
+
+/** PDF files directly in `dir` as [{path, size, mtimeMs}]. */
+export async function listPdfFileStats(dir) {
+  return await invoke('list_pdf_file_stats', { dir });
 }
 
 // File locking - prevent other apps from writing to an open file

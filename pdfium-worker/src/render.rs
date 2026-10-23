@@ -1,4 +1,6 @@
-use crate::shm;
+#[path = "render_budget.rs"]
+mod render_budget;
+use render_budget::{dimensions, SCREEN_RGBA_BYTES};
 use anyhow::{anyhow, Context, Result};
 use pdfium_render::prelude::*;
 use std::sync::OnceLock;
@@ -209,17 +211,16 @@ impl Renderer {
 
             let w_pt = page.width().value;
             let h_pt = page.height().value;
-            let target_w = (w_pt * scale).ceil() as i32;
-            let target_h = (h_pt * scale).ceil() as i32;
-
             // Past de bitmap niet in de SHM-regio, dan meteen een nette fout i.p.v.
-            // eerst volledig rasteren en de uitkomst weggooien. De uitvoer van
-            // set_target_width + set_maximum_height is in elke rotatie
-            // <= target_w x target_h, dus dit is een strakke bovengrens.
-            if let Err(e) = shm::ensure_bitmap_fits(target_w, target_h) {
-                self.release_page_if_cheap(idx);
-                return Err(e);
-            }
+            // eerst volledig rasteren; de app valt dan terug op in-proc. Ook bij
+            // die fout geen open handle van een goedkope pagina vasthouden.
+            let (target_w, target_h) = match dimensions(w_pt, h_pt, scale, SCREEN_RGBA_BYTES) {
+                Ok(maat) => maat,
+                Err(e) => {
+                    self.release_page_if_cheap(idx);
+                    return Err(e.into());
+                }
+            };
 
             let rot = match rotation.rem_euclid(360) {
                 0 => PdfPageRenderRotation::None,
@@ -281,12 +282,11 @@ impl Renderer {
         }
         // Bitmap-afmetingen hangen alleen van regio + schaal af: valideer ze
         // (incl. de SHM-grens) voordat het document/de pagina geladen wordt.
-        let bitmap_w = (region_w_pt * scale).ceil() as i32;
-        let bitmap_h = (region_h_pt * scale).ceil() as i32;
-        if bitmap_w <= 0 || bitmap_h <= 0 {
-            return Err(anyhow!("render_region: invalid bitmap {}x{}", bitmap_w, bitmap_h));
+        let (bitmap_w, bitmap_h) = dimensions(region_w_pt, region_h_pt, scale, SCREEN_RGBA_BYTES)?;
+        if !region_x_pt.is_finite() || !region_y_pt.is_finite() ||
+            !(region_x_pt * scale).is_finite() || !(region_y_pt * scale).is_finite() {
+            return Err(anyhow!("PDF_INVALID_GEOMETRY: non-finite tile origin"));
         }
-        shm::ensure_bitmap_fits(bitmap_w, bitmap_h)?;
         let idx = self.get_or_load(path)?;
         let result = {
             let page = self.get_or_load_page(idx, page_index, thin_lines)?;
@@ -324,6 +324,11 @@ impl Renderer {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn screen_budget_is_the_shm_payload() {
+        assert_eq!(SCREEN_RGBA_BYTES, crate::shm::PAYLOAD_CAP as u64);
+    }
 
     #[test]
     #[ignore]

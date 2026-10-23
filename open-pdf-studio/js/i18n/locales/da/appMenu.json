@@ -133,7 +133,9 @@
     "officePage": "Side",
     "officeTable": "Tabel",
     "officeText": "Tekst",
-    "officeFailed": "Eksport af dokumentet mislykkedes."
+    "officeFailed": "Eksport af dokumentet mislykkedes.",
+    "protect": "Beskyt med adgangskode",
+    "protectDesc": "Gem en kopi beskyttet med adgangskode (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Outputprofil",
@@ -212,8 +214,8 @@
     "viaMcp": "Via AI-forbindelsen"
   },
   "annotateScreenshot": "Annotér skærmbillede fra udklipsholderen",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Dokumentarbejdsgange",
+  "drawingSets": "Tegningssæt",
+  "sheetLinks": "Links mellem tegninger",
+  "approvalRouting": "Godkendelsesforløb"
 }

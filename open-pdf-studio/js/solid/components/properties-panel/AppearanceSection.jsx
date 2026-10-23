@@ -16,6 +16,16 @@ export default function AppearanceSection() {
   const { t } = useTranslation('properties');
   const { t: tCommon } = useTranslation('common');
   const isLocked = () => annotProps.locked === true || annotProps.locked === 'mixed';
+  // Aparte dekking voor lijn en vulling (#685): zonder vulling of zonder rand
+  // heeft die dekking niets om op te werken; het veld blijft zichtbaar maar
+  // staat uit.
+  const geenVulling = () => {
+    const fc = annotProps.fillColor;
+    return !fc || fc === 'none' || fc === 'transparent';
+  };
+  const geenRand = () => annotProps.strokeColor === 'none' || annotProps.strokeColor === 'transparent';
+  const lijnDekkingUit = () => isLocked() || (sectionVis.aparteDekking && geenRand());
+  const vulDekkingUit = () => isLocked() || (sectionVis.aparteDekking && geenVulling());
 
   // ── Benoemde lijnstijl-presets (issue #268) ──────────────────────────────
   const [createOpen, setCreateOpen] = createSignal(false);
@@ -140,19 +150,20 @@ export default function AppearanceSection() {
 
         <Show when={sectionVis.opacityGroup}>
           <div class="property-group">
-            <label>{t('appearance.opacity')}</label>
+            <label>{sectionVis.aparteDekking ? t('appearance.strokeOpacity') : t('appearance.opacity')}</label>
             <PrefComboBox
               value={() => annotProps.opacity}
               setValue={(val) => updateAnnotProp('opacity', val)}
               options={[100, 90, 80, 70, 60, 50, 40, 30, 20, 10]}
               min={0} max={100} fallback={100} suffix="%"
-              disabled={isLocked}
+              disabled={lijnDekkingUit}
             />
           </div>
         </Show>
 
-        {/* Vul-doorzichtigheid (#611): alleen waar de vulling een eigen alfa
-            heeft (schaalgebied); de doorzichtigheid hierboven geldt voor de rand. */}
+        {/* Vul-doorzichtigheid: waar de vulling een eigen alfa heeft
+            (schaalgebied #611; rechthoek, ellips, veelhoek en wolk #685); de
+            doorzichtigheid hierboven geldt dan voor de rand. */}
         <Show when={sectionVis.fillOpacityGroup}>
           <div class="property-group">
             <label>{t('appearance.fillOpacity')}</label>
@@ -161,7 +172,7 @@ export default function AppearanceSection() {
               setValue={(val) => updateAnnotProp('fillOpacity', val)}
               options={[100, 75, 50, 25, 10, 5, 0]}
               min={0} max={100} fallback={10} suffix="%"
-              disabled={isLocked}
+              disabled={vulDekkingUit}
             />
           </div>
         </Show>

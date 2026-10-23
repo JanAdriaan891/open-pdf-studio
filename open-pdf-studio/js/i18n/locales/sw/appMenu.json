@@ -133,7 +133,9 @@
     "officePage": "Ukurasa",
     "officeTable": "Jedwali",
     "officeText": "Maandishi",
-    "officeFailed": "Kuhamisha nje hati kumeshindwa."
+    "officeFailed": "Kuhamisha nje hati kumeshindwa.",
+    "protect": "Linda kwa Nenosiri",
+    "protectDesc": "Hifadhi nakala iliyolindwa kwa nenosiri (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Wasifu wa matokeo",
@@ -212,8 +214,8 @@
     "viaMcp": "Kupitia muunganisho wa AI"
   },
   "annotateScreenshot": "Weka Maelezo kwenye Picha ya Skrini ya Ubao wa Kunakili",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Mitiririko ya kazi ya hati",
+  "drawingSets": "Seti za michoro",
+  "sheetLinks": "Viungo kati ya laha",
+  "approvalRouting": "Upitishaji wa idhini"
 }

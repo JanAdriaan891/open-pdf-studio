@@ -64,6 +64,7 @@
     "color": "रंग",
     "opacity": "अपारदर्शिता",
     "fillOpacity": "भरण अपारदर्शिता",
+    "strokeOpacity": "स्ट्रोक अपारदर्शिता",
     "lineWidth": "रेखा चौड़ाई",
     "borderWidth": "बॉर्डर चौड़ाई",
     "borderStyle": "बॉर्डर शैली",
@@ -368,8 +369,8 @@
     "schedules": "शेड्यूल",
     "addPage": "पृष्ठ जोड़ें",
     "pageLabels": "पृष्ठ लेबल (नाम निर्माता)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF पोर्टफोलियो",
+    "recognizeForm": "फ़ॉर्म फ़ील्ड पहचानें"
   },
   "scaleBar": {
     "title": "स्केल बार",
@@ -422,7 +423,7 @@
     },
     "preview": "पूर्वावलोकन",
     "exportCsv": "CSV निर्यात करें",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "स्प्रेडशीट बाइंडिंग"
   },
   "wizard": {
     "title": "शेड्यूल विज़ार्ड",
@@ -605,8 +606,8 @@
       "imageName": "फ़ाइल नाम",
       "width": "चौड़ाई",
       "height": "ऊंचाई",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "स्थान",
+      "locationSource": "स्थान स्रोत"
     },
     "type": {
       "line": "रेखा",
@@ -652,6 +653,8 @@
     "sectionTitle": "प्रतीक: {{name}}",
     "symbolLabel": "प्रतीक",
     "typeLabel": "प्रकार",
+    "profileType": "प्रोफ़ाइल प्रकार",
+    "profileTypeTitle": "स्टील प्रोफ़ाइल",
     "unknownSymbol": "अज्ञात प्रतीक",
     "listNew": "नया",
     "listAdd": "जोड़ें",
@@ -707,17 +710,17 @@
     "failed": "परिवर्तन लागू नहीं किए जा सके: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "स्थान",
+    "none": "असाइन नहीं किया गया",
+    "manual": "मैन्युअल",
+    "computed": "परिकलित",
+    "override": "मैन्युअल ओवरराइड (खाली छोड़ने पर स्थान साफ़ हो जाता है)",
+    "automatic": "स्वचालित स्थान का उपयोग करें",
+    "zoneName": "इस आकृति को नामित ज़ोन के रूप में उपयोग करें",
+    "parent": "मूल ज़ोन",
+    "removeZone": "ज़ोन परिभाषा हटाएँ",
+    "invalid": "स्थान अपडेट नहीं किया जा सका",
+    "rules": "असाइनमेंट मार्कअप के बाउंडिंग-बॉक्स केंद्र का उपयोग करता है, किनारों सहित। सबसे गहरा ज़ोन प्राथमिक होता है, फिर सबसे छोटा क्षेत्रफल, फिर ज़ोन ID। बिना छिद्र वाले सीधी भुजाओं के बहुभुज या बिना घुमाए बॉक्स का उपयोग करें। अमान्य या दोहरी ज़ोन पहचानें बाहर रखी जाती हैं।",
+    "loading": "एनोटेशन लोड हो रहे हैं: स्थान अभी भी बदल सकते हैं।"
   }
 }

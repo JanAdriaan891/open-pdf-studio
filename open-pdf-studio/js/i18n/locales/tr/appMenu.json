@@ -133,7 +133,9 @@
     "officePage": "Sayfa",
     "officeTable": "Tablo",
     "officeText": "Metin",
-    "officeFailed": "Belge dışa aktarılamadı."
+    "officeFailed": "Belge dışa aktarılamadı.",
+    "protect": "Parolayla koru",
+    "protectDesc": "Parolayla korunan bir kopya kaydet (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Çıktı profili",
@@ -212,8 +214,8 @@
     "viaMcp": "Yapay zekâ bağlantısı üzerinden"
   },
   "annotateScreenshot": "Panodaki Ekran Görüntüsüne Açıklama Ekle",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Belge iş akışları",
+  "drawingSets": "Çizim setleri",
+  "sheetLinks": "Paftalar arası bağlantılar",
+  "approvalRouting": "Onay akışı"
 }

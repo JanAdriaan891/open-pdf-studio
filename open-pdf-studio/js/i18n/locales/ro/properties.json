@@ -64,6 +64,7 @@
     "color": "Culoare",
     "opacity": "Opacitate",
     "fillOpacity": "Opacitate umplere",
+    "strokeOpacity": "Opacitate contur",
     "lineWidth": "Grosime linie",
     "borderWidth": "Latime chenar",
     "borderStyle": "Stil chenar",
@@ -368,8 +369,8 @@
     "schedules": "Extrase",
     "addPage": "Adăugare pagină",
     "pageLabels": "Etichete de pagină (generator de nume)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portofoliu PDF",
+    "recognizeForm": "Recunoaștere câmpuri de formular"
   },
   "scaleBar": {
     "title": "Bară de scară",
@@ -422,7 +423,7 @@
     },
     "preview": "Previzualizare",
     "exportCsv": "Exportă CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Legături cu foaia de calcul"
   },
   "wizard": {
     "title": "Expert extrase",
@@ -605,8 +606,8 @@
       "imageName": "Nume fișier",
       "width": "Lățime",
       "height": "Înălțime",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Locație",
+      "locationSource": "Sursa locației"
     },
     "type": {
       "line": "Linie",
@@ -652,6 +653,8 @@
     "sectionTitle": "Simbol: {{name}}",
     "symbolLabel": "Simbol",
     "typeLabel": "Tip",
+    "profileType": "Tip profil",
+    "profileTypeTitle": "Profil din oțel",
     "unknownSymbol": "Simbol necunoscut",
     "listNew": "Nou",
     "listAdd": "Adăugare",
@@ -707,17 +710,17 @@
     "failed": "Modificările nu au putut fi aplicate: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
+    "title": "Locație",
+    "none": "Neatribuit",
     "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "computed": "Calculat",
+    "override": "Suprascriere manuală (gol șterge locația)",
+    "automatic": "Utilizare locație automată",
+    "zoneName": "Utilizare formă ca zonă denumită",
+    "parent": "Zonă părinte",
+    "removeZone": "Eliminare definiție zonă",
+    "invalid": "Locația nu a putut fi actualizată",
+    "rules": "Atribuirea folosește centrul casetei de încadrare a marcajului, inclusiv marginile. Câștigă zona cea mai adânc imbricată, apoi cea cu aria cea mai mică, apoi ID-ul zonei. Folosiți poligoane cu laturi drepte, fără găuri, sau casete nerotite. Identitățile de zonă nevalide sau duplicate sunt excluse.",
+    "loading": "Adnotările se încarcă: locațiile se pot încă modifica."
   }
 }

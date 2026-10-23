@@ -133,7 +133,9 @@
     "officePage": "Trang",
     "officeTable": "Bảng",
     "officeText": "Văn bản",
-    "officeFailed": "Xuất tài liệu thất bại."
+    "officeFailed": "Xuất tài liệu thất bại.",
+    "protect": "Bảo vệ bằng mật khẩu",
+    "protectDesc": "Lưu bản sao được bảo vệ bằng mật khẩu (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Hồ sơ màu đầu ra",
@@ -212,8 +214,8 @@
     "viaMcp": "Qua kết nối AI"
   },
   "annotateScreenshot": "Chú thích ảnh chụp màn hình từ bảng tạm",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Quy trình tài liệu",
+  "drawingSets": "Bộ bản vẽ",
+  "sheetLinks": "Liên kết giữa các bản vẽ",
+  "approvalRouting": "Luân chuyển phê duyệt"
 }

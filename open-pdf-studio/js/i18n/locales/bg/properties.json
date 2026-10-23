@@ -64,6 +64,7 @@
     "color": "Цвят",
     "opacity": "Непрозрачност",
     "fillOpacity": "Непрозрачност на запълването",
+    "strokeOpacity": "Непрозрачност на контура",
     "lineWidth": "Ширина на линията",
     "borderWidth": "Ширина на границата",
     "borderStyle": "Стил на границата",
@@ -368,8 +369,8 @@
     "schedules": "Спецификации",
     "addPage": "Добавяне на страница",
     "pageLabels": "Етикети на страници (създаване на имена)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF портфолио",
+    "recognizeForm": "Разпознаване на полета на формуляр"
   },
   "scaleBar": {
     "title": "Линеен мащаб",
@@ -422,7 +423,7 @@
     },
     "preview": "Преглед",
     "exportCsv": "Експортиране в CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Връзки с електронни таблици"
   },
   "wizard": {
     "title": "Съветник за спецификация",
@@ -605,8 +606,8 @@
       "imageName": "Име на файла",
       "width": "Ширина",
       "height": "Височина",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Местоположение",
+      "locationSource": "Източник на местоположението"
     },
     "type": {
       "line": "Линия",
@@ -652,6 +653,8 @@
     "sectionTitle": "Символ: {{name}}",
     "symbolLabel": "Символ",
     "typeLabel": "Тип",
+    "profileType": "Тип профил",
+    "profileTypeTitle": "Стоманен профил",
     "unknownSymbol": "Неизвестен символ",
     "listNew": "Нов",
     "listAdd": "Добавяне",
@@ -707,17 +710,17 @@
     "failed": "Промените не можаха да бъдат приложени: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Местоположение",
+    "none": "Неприсвоено",
+    "manual": "Ръчно",
+    "computed": "Изчислено",
+    "override": "Ръчно задаване (празно изчиства местоположението)",
+    "automatic": "Използвай автоматично местоположение",
+    "zoneName": "Използвай тази фигура като именувана зона",
+    "parent": "Родителска зона",
+    "removeZone": "Премахни дефиницията на зоната",
+    "invalid": "Местоположението не можа да бъде обновено",
+    "rules": "Присвояването използва центъра на ограничаващия правоъгълник на маркировката, включително ръбовете. Предимство има най-дълбоката зона, след това най-малката площ, след това ID на зоната. Използвайте праволинейни многоъгълници без отвори или правоъгълници без завъртане. Невалидни или дублирани идентификатори на зони се изключват.",
+    "loading": "Анотациите се зареждат: местоположенията още могат да се променят."
   }
 }

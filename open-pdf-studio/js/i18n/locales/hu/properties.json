@@ -64,6 +64,7 @@
     "color": "Szín",
     "opacity": "Átlátszatlanság",
     "fillOpacity": "Kitöltés átlátszatlansága",
+    "strokeOpacity": "Körvonal átlátszatlansága",
     "lineWidth": "Vonalvastagság",
     "borderWidth": "Szegély szélesség",
     "borderStyle": "Szegélystílus",
@@ -368,8 +369,8 @@
     "schedules": "Kimutatások",
     "addPage": "Oldal hozzáadása",
     "pageLabels": "Oldalcímkék (névkészítő)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-portfólió",
+    "recognizeForm": "Űrlapmezők felismerése"
   },
   "scaleBar": {
     "title": "Aránymérték",
@@ -422,7 +423,7 @@
     },
     "preview": "Előnézet",
     "exportCsv": "CSV exportálása",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Táblázatkötések"
   },
   "wizard": {
     "title": "Kimutatásvarázsló",
@@ -605,8 +606,8 @@
       "imageName": "Fájlnév",
       "width": "Szélesség",
       "height": "Magasság",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Hely",
+      "locationSource": "Hely forrása"
     },
     "type": {
       "line": "Vonal",
@@ -652,6 +653,8 @@
     "sectionTitle": "Szimbólum: {{name}}",
     "symbolLabel": "Szimbólum",
     "typeLabel": "Típus",
+    "profileType": "Szelvénytípus",
+    "profileTypeTitle": "Acélszelvény",
     "unknownSymbol": "Ismeretlen szimbólum",
     "listNew": "Új",
     "listAdd": "Hozzáadás",
@@ -707,17 +710,17 @@
     "failed": "A módosítások nem alkalmazhatók: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Hely",
+    "none": "Nincs hozzárendelve",
+    "manual": "Kézi",
+    "computed": "Számított",
+    "override": "Kézi felülbírálás (üresen törli a helyet)",
+    "automatic": "Automatikus hely használata",
+    "zoneName": "Alakzat használata elnevezett zónaként",
+    "parent": "Szülőzóna",
+    "removeZone": "Zónadefiníció eltávolítása",
+    "invalid": "A hely nem frissíthető",
+    "rules": "A hozzárendelés a jelölés befoglaló téglalapjának középpontján alapul, a széleket is beleértve. A legmélyebben beágyazott zóna nyer, utána a legkisebb terület, majd a zónaazonosító. Egyenes oldalú, lyuk nélküli sokszögeket vagy elforgatás nélküli téglalapokat használjon. Az érvénytelen vagy ismétlődő zónaazonosítók kimaradnak.",
+    "loading": "Az annotációk betöltése folyamatban: a helyek még változhatnak."
   }
 }

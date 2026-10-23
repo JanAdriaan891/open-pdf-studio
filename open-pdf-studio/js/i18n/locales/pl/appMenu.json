@@ -133,7 +133,9 @@
     "officePage": "Strona",
     "officeTable": "Tabela",
     "officeText": "Tekst",
-    "officeFailed": "Eksport dokumentu nie powiódł się."
+    "officeFailed": "Eksport dokumentu nie powiódł się.",
+    "protect": "Chroń hasłem",
+    "protectDesc": "Zapisz kopię chronioną hasłem (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profil wyjściowy",
@@ -212,8 +214,8 @@
     "viaMcp": "Przez połączenie AI"
   },
   "annotateScreenshot": "Dodaj adnotacje do zrzutu ekranu ze schowka",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Przepływy pracy dokumentów",
+  "drawingSets": "Zestawy rysunków",
+  "sheetLinks": "Łącza między arkuszami",
+  "approvalRouting": "Obieg zatwierdzania"
 }

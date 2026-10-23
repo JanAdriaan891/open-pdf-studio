@@ -64,6 +64,7 @@
     "color": "Cor",
     "opacity": "Opacidade",
     "fillOpacity": "Opacidade do preenchimento",
+    "strokeOpacity": "Opacidade do traço",
     "borderStyle": "Estilo da borda",
     "cross": "Cruz",
     "crossHint": "Desenha uma cruz dentro do retângulo, círculo ou elipse (ex. uma abertura)",
@@ -368,8 +369,8 @@
     "schedules": "Quadros",
     "addPage": "Adicionar página",
     "pageLabels": "Rótulos de página (gerador de nomes)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portfólio PDF",
+    "recognizeForm": "Reconhecer campos de formulário"
   },
   "scaleBar": {
     "title": "Barra de escala",
@@ -422,7 +423,7 @@
     },
     "preview": "Pré-visualização",
     "exportCsv": "Exportar CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Vínculos com planilhas"
   },
   "wizard": {
     "title": "Assistente de quadros",
@@ -605,8 +606,8 @@
       "imageName": "Nome do arquivo",
       "width": "Largura",
       "height": "Altura",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Localização",
+      "locationSource": "Origem da localização"
     },
     "type": {
       "line": "Linha",
@@ -652,6 +653,8 @@
     "sectionTitle": "Símbolo: {{name}}",
     "symbolLabel": "Símbolo",
     "typeLabel": "Tipo",
+    "profileType": "Tipo de perfil",
+    "profileTypeTitle": "Perfil de aço",
     "unknownSymbol": "Símbolo desconhecido",
     "listNew": "Novo",
     "listAdd": "Adicionar",
@@ -707,17 +710,17 @@
     "failed": "Não foi possível aplicar as alterações: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
+    "title": "Localização",
+    "none": "Não atribuída",
     "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "computed": "Calculada",
+    "override": "Substituição manual (vazio apaga a localização)",
+    "automatic": "Usar localização automática",
+    "zoneName": "Usar esta forma como zona nomeada",
+    "parent": "Zona pai",
+    "removeZone": "Remover definição de zona",
+    "invalid": "Não foi possível atualizar a localização",
+    "rules": "A atribuição usa o centro da caixa delimitadora da marcação, incluindo as bordas. Prevalece a zona mais profunda, depois a menor área e, por fim, o ID da zona. Use polígonos retos sem furos ou retângulos sem rotação. Identidades de zona inválidas ou duplicadas são excluídas.",
+    "loading": "Carregando anotações: as localizações ainda podem mudar."
   }
 }

@@ -133,7 +133,9 @@
     "officePage": "Страница",
     "officeTable": "Таблица",
     "officeText": "Текст",
-    "officeFailed": "Не удалось экспортировать документ."
+    "officeFailed": "Не удалось экспортировать документ.",
+    "protect": "Защитить паролем",
+    "protectDesc": "Сохранить копию, защищённую паролем (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Профиль вывода",
@@ -212,8 +214,8 @@
     "viaMcp": "Через подключение ИИ"
   },
   "annotateScreenshot": "Аннотировать снимок экрана из буфера обмена",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Рабочие процессы документов",
+  "drawingSets": "Комплекты чертежей",
+  "sheetLinks": "Ссылки между листами",
+  "approvalRouting": "Маршрут согласования"
 }

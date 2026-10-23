@@ -133,7 +133,9 @@
     "officePage": "Strana",
     "officeTable": "Tabuľka",
     "officeText": "Text",
-    "officeFailed": "Export dokumentu zlyhal."
+    "officeFailed": "Export dokumentu zlyhal.",
+    "protect": "Chrániť heslom",
+    "protectDesc": "Uložiť kópiu chránenú heslom (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Výstupný profil",
@@ -212,8 +214,8 @@
     "viaMcp": "Cez pripojenie AI"
   },
   "annotateScreenshot": "Anotovať snímku obrazovky zo schránky",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Pracovné postupy dokumentov",
+  "drawingSets": "Súbory výkresov",
+  "sheetLinks": "Odkazy medzi výkresmi",
+  "approvalRouting": "Schvaľovací obeh"
 }

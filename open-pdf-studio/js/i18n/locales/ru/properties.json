@@ -64,6 +64,7 @@
     "color": "Цвет",
     "opacity": "Непрозрачность",
     "fillOpacity": "Непрозрачность заливки",
+    "strokeOpacity": "Непрозрачность обводки",
     "lineWidth": "Толщина линии",
     "borderWidth": "Толщина границы",
     "borderStyle": "Стиль границы",
@@ -368,8 +369,8 @@
     "schedules": "Спецификации",
     "addPage": "Добавить страницу",
     "pageLabels": "Метки страниц (конструктор имён)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-портфолио",
+    "recognizeForm": "Распознать поля формы"
   },
   "scaleBar": {
     "title": "Масштабная линейка",
@@ -422,7 +423,7 @@
     },
     "preview": "Предпросмотр",
     "exportCsv": "Экспорт в CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Привязки к таблицам"
   },
   "wizard": {
     "title": "Мастер спецификаций",
@@ -605,8 +606,8 @@
       "imageName": "Имя файла",
       "width": "Ширина",
       "height": "Высота",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Расположение",
+      "locationSource": "Источник расположения"
     },
     "type": {
       "line": "Линия",
@@ -652,6 +653,8 @@
     "sectionTitle": "Символ: {{name}}",
     "symbolLabel": "Символ",
     "typeLabel": "Тип",
+    "profileType": "Тип профиля",
+    "profileTypeTitle": "Стальной профиль",
     "unknownSymbol": "Неизвестный символ",
     "listNew": "Новый",
     "listAdd": "Добавить",
@@ -707,17 +710,17 @@
     "failed": "Не удалось применить изменения: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Расположение",
+    "none": "Не назначено",
+    "manual": "Вручную",
+    "computed": "Вычислено",
+    "override": "Ручное переопределение (пусто — очистить расположение)",
+    "automatic": "Использовать автоматическое расположение",
+    "zoneName": "Использовать эту фигуру как именованную зону",
+    "parent": "Родительская зона",
+    "removeZone": "Удалить определение зоны",
+    "invalid": "Не удалось обновить расположение",
+    "rules": "Для назначения используется центр габаритного прямоугольника пометки, включая края. Приоритет у самой глубокой зоны, затем у наименьшей площади, затем по ID зоны. Используйте прямолинейные многоугольники без отверстий или прямоугольники без поворота. Недопустимые или повторяющиеся идентификаторы зон исключаются.",
+    "loading": "Аннотации загружаются: расположения ещё могут измениться."
   }
 }

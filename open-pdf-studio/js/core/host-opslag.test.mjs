@@ -17,7 +17,7 @@ globalThis.document = {
 const {
   hostOpslag, hostPad, leesHostPad, openHostBestand, hostDocumenten, hostVersies,
   readBinaryFile, writeBinaryFile, writeBinaryFileAtomic, saveFileDialog, fileExists,
-  extractFileName,
+  extractFileName, hostAi, meldHostGeopend, meldBijHost,
 } = await import('./platform.js');
 
 /** Een site die documenten in het geheugen bewaart, met versies. */
@@ -127,4 +127,45 @@ test('de site mag de bytes als Blob of Uint8Array teruggeven', () => {
     assert.deepEqual([...(await openHostBestand('blob')).data], [4, 2]);
     assert.deepEqual([...(await openHostBestand('u8')).data], [4, 3]);
   });
+});
+
+test('de werkplek (#704): alleen-lezen gaat door; ai, geopend en melding als de site ze kent', async () => {
+  const meldingen = [];
+  const geopend = [];
+  const vraag = async () => ({ bericht: { role: 'assistant', content: 'ja' } });
+  window.__OPDS_HOST__ = {
+    storage: {
+      open: async (id) => ({ name: 'a.pdf', data: Uint8Array.from([1]), alleenLezen: id === 'RO' }),
+      save: async () => {},
+    },
+    ai: { vraag },
+    geopend: async (id) => { geopend.push(id); return true; },
+    melding: async (tekst, toon) => { meldingen.push([tekst, toon]); return true; },
+  };
+  try {
+    assert.equal((await openHostBestand('RO')).alleenLezen, true);
+    assert.equal((await openHostBestand('RW')).alleenLezen, false);
+    assert.equal(hostAi(), vraag);
+    assert.equal(await meldHostGeopend(7), true);
+    assert.deepEqual(geopend, ['7']);
+    assert.equal(await meldBijHost('Kon niet openen', 'fout'), true);
+    assert.deepEqual(meldingen, [['Kon niet openen', 'fout']]);
+
+    // Een weigering van de site verandert niets aan de app.
+    window.__OPDS_HOST__.geopend = async () => { throw new Error('niet toegestaan'); };
+    window.__OPDS_HOST__.melding = async () => { throw new Error('weg'); };
+    assert.equal(await meldHostGeopend('X'), false);
+    assert.equal(await meldBijHost('x'), false);
+  } finally {
+    delete window.__OPDS_HOST__;
+  }
+  // Een site met alleen het opslagcontract (#546): geen assistent, geen berichten.
+  window.__OPDS_HOST__ = { storage: { open: async () => ({}), save: async () => {} } };
+  try {
+    assert.equal(hostAi(), null);
+    assert.equal(await meldHostGeopend('A'), false);
+    assert.equal(await meldBijHost('x'), false);
+  } finally {
+    delete window.__OPDS_HOST__;
+  }
 });

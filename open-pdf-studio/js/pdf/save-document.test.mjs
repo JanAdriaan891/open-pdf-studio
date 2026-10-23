@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
-import { opslaanGeweigerd, markeerBeveiligd } from './wachtwoord-pdf.js';
+import { opslaanGeweigerd, isHostAlleenLezen, markeerBeveiligd } from './wachtwoord-pdf.js';
 import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
+import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 
 // Execute the production save functions with controlled I/O. The app imports
 // require a webview; only those dependencies and dynamic imports are replaced.
@@ -33,6 +34,8 @@ function harness() {
     schrijfAnnotatieLagen() {}, maakCjkFontKeten: () => ({}), layersForSave: doc => { owners.push(doc); return []; }, currentLayerId() {},
     saveTextEditsToPages: async (_pdf, _pages, doc) => owners.push(doc),
     saveWatermarksToPages: async (_pdf, _pages, doc) => owners.push(doc),
+    // Geen OCR-resultaten in deze documenten: geen laag (saver/ocr-text-layer.js).
+    writeOcrLayers: async () => null,
     saveBookmarksToOutline: (_pdf, doc) => owners.push(doc), saveStylePresetsToCatalog() {},
     slaPaginaLabelsOp: (_pdf, doc) => owners.push(doc),
     pasBijlagenToe: (_pdf, wijzigingen) => attachmentEdits.push(wijzigingen),
@@ -42,6 +45,10 @@ function harness() {
     i18next: { t: x => x }, showMessage() {}, window: {},
     // Met een wachtwoord geopend: nooit opslaan (wachtwoord-pdf.js, echt).
     opslaanGeweigerd,
+    // Door de gastsite alleen-lezen geopend (#704, echt).
+    isHostAlleenLezen,
+    // Naamloos of zonder pad: Opslaan vraagt om een plek (handtekeningen/opslaan.js, echt).
+    opslaanVraagtOpslaanAls,
     // Leesbare naam, ook voor een content://-URI van Android (#596).
     bestandsnaamUitPad,
     // Herstelmomentopname weg na opslaan (js/herstel/haken.js).
@@ -290,6 +297,20 @@ test('a PDF opened with a password is never saved: Save, Save As and a given pat
   assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), true);
   assert.equal(h.writes.length, 1);
   assert.equal(h.writes[0].path, 'b.pdf');
+});
+
+test('a document the host opened read-only (#704) is not saved back; Save As (a download) still works', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  h.a.filePath = 'opds-host://DOC-1/Plattegrond.pdf';
+  h.a.hostAlleenLezen = true;
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.deepEqual(h.writes, [], 'nothing goes to the host');
+  assert.deepEqual(meldingen, ['hostReadOnlySave']);
+  assert.equal(h.a.modified, true, 'nothing is lost: the document stays modified');
+  assert.equal(await h.api.savePDF('Plattegrond.pdf', { zonderHandtekeningVraag: true }), true, 'a copy may be downloaded');
+  assert.deepEqual(h.writes.map((w) => w.path), ['Plattegrond.pdf']);
 });
 
 test('a save writes the attachment changes of the document being saved (#376)', async () => {

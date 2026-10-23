@@ -133,7 +133,9 @@
     "officePage": "பக்கம்",
     "officeTable": "அட்டவணை",
     "officeText": "உரை",
-    "officeFailed": "ஆவண ஏற்றுமதி தோல்வியடைந்தது."
+    "officeFailed": "ஆவண ஏற்றுமதி தோல்வியடைந்தது.",
+    "protect": "கடவுச்சொல்லால் பாதுகாக்கவும்",
+    "protectDesc": "கடவுச்சொல்லால் பாதுகாக்கப்பட்ட நகலைச் சேமிக்கவும் (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "வெளியீட்டுச் சுயவிவரம்",
@@ -212,8 +214,8 @@
     "viaMcp": "AI இணைப்பு வழியாக"
   },
   "annotateScreenshot": "கிளிப்போர்டு திரைப்பிடிப்பில் குறிப்புரை சேர்",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "ஆவணப் பணிப்பாய்வுகள்",
+  "drawingSets": "வரைபடத் தொகுப்புகள்",
+  "sheetLinks": "தாள்களுக்கு இடையிலான இணைப்புகள்",
+  "approvalRouting": "ஒப்புதல் வழித்தடம்"
 }

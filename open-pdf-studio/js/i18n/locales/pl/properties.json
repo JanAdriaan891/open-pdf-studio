@@ -64,6 +64,7 @@
     "color": "Kolor",
     "opacity": "Krycie",
     "fillOpacity": "Krycie wypełnienia",
+    "strokeOpacity": "Krycie obrysu",
     "borderStyle": "Styl obramowania",
     "cross": "Krzyż",
     "crossHint": "Rysuje krzyż wewnątrz prostokąta, okręgu lub elipsy (np. otwór)",
@@ -368,8 +369,8 @@
     "schedules": "Zestawienia",
     "addPage": "Dodaj stronę",
     "pageLabels": "Etykiety stron (kreator nazw)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portfolio PDF",
+    "recognizeForm": "Rozpoznaj pola formularza"
   },
   "scaleBar": {
     "title": "Podziałka liniowa",
@@ -422,7 +423,7 @@
     },
     "preview": "Podgląd",
     "exportCsv": "Eksportuj CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Powiązania z arkuszem kalkulacyjnym"
   },
   "wizard": {
     "title": "Kreator zestawień",
@@ -605,8 +606,8 @@
       "imageName": "Nazwa pliku",
       "width": "Szerokość",
       "height": "Wysokość",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Lokalizacja",
+      "locationSource": "Źródło lokalizacji"
     },
     "type": {
       "line": "Linia",
@@ -652,6 +653,8 @@
     "sectionTitle": "Symbol: {{name}}",
     "symbolLabel": "Symbol",
     "typeLabel": "Typ",
+    "profileType": "Typ profilu",
+    "profileTypeTitle": "Profil stalowy",
     "unknownSymbol": "Nieznany symbol",
     "listNew": "Nowy",
     "listAdd": "Dodaj",
@@ -707,17 +710,17 @@
     "failed": "Nie można zastosować zmian: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Lokalizacja",
+    "none": "Nieprzypisane",
+    "manual": "Ręcznie",
+    "computed": "Obliczone",
+    "override": "Ręczne nadpisanie (puste usuwa lokalizację)",
+    "automatic": "Użyj automatycznej lokalizacji",
+    "zoneName": "Użyj tego kształtu jako nazwanej strefy",
+    "parent": "Strefa nadrzędna",
+    "removeZone": "Usuń definicję strefy",
+    "invalid": "Nie można zaktualizować lokalizacji",
+    "rules": "Przypisanie opiera się na środku prostokąta ograniczającego znacznik, łącznie z krawędziami. Wygrywa najgłębiej zagnieżdżona strefa, potem najmniejsza powierzchnia, potem identyfikator strefy. Używaj wielokątów o prostych bokach bez otworów lub prostokątów bez obrotu. Nieprawidłowe lub zduplikowane identyfikatory stref są pomijane.",
+    "loading": "Trwa wczytywanie adnotacji: lokalizacje mogą się jeszcze zmienić."
   }
 }

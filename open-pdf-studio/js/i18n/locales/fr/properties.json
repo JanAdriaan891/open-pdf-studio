@@ -64,6 +64,7 @@
     "color": "Couleur",
     "opacity": "Opacité",
     "fillOpacity": "Opacité du remplissage",
+    "strokeOpacity": "Opacité du trait",
     "borderStyle": "Style de bordure",
     "cross": "Croix",
     "crossHint": "Dessine une croix dans le rectangle, le cercle ou l'ellipse (ex. une réservation)",
@@ -368,8 +369,8 @@
     "schedules": "Nomenclatures",
     "addPage": "Ajouter une page",
     "pageLabels": "Étiquettes de page (générateur de noms)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "Portfolio PDF",
+    "recognizeForm": "Reconnaître les champs de formulaire"
   },
   "scaleBar": {
     "title": "Barre d'échelle",
@@ -422,7 +423,7 @@
     },
     "preview": "Aperçu",
     "exportCsv": "Exporter en CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Liaisons avec un tableur"
   },
   "wizard": {
     "title": "Assistant de nomenclature",
@@ -605,8 +606,8 @@
       "imageName": "Nom du fichier",
       "width": "Largeur",
       "height": "Hauteur",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Emplacement",
+      "locationSource": "Source de l'emplacement"
     },
     "type": {
       "line": "Ligne",
@@ -652,6 +653,8 @@
     "sectionTitle": "Symbole : {{name}}",
     "symbolLabel": "Symbole",
     "typeLabel": "Type",
+    "profileType": "Type de profilé",
+    "profileTypeTitle": "Profilé acier",
     "unknownSymbol": "Symbole inconnu",
     "listNew": "Nouveau",
     "listAdd": "Ajouter",
@@ -707,17 +710,17 @@
     "failed": "Impossible d'appliquer les modifications : {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Emplacement",
+    "none": "Non attribué",
+    "manual": "Manuel",
+    "computed": "Calculé",
+    "override": "Remplacement manuel (vide efface l'emplacement)",
+    "automatic": "Utiliser l'emplacement automatique",
+    "zoneName": "Utiliser cette forme comme zone nommée",
+    "parent": "Zone parente",
+    "removeZone": "Supprimer la définition de zone",
+    "invalid": "Impossible de mettre à jour l'emplacement",
+    "rules": "L'attribution utilise le centre du cadre de délimitation de l'annotation, bords compris. La zone la plus profonde l'emporte, puis la plus petite surface, puis l'ID de zone. Utilisez des polygones droits sans trous ou des rectangles non pivotés. Les identités de zone non valides ou en double sont exclues.",
+    "loading": "Chargement des annotations : les emplacements peuvent encore changer."
   }
 }

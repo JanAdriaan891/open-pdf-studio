@@ -133,7 +133,9 @@
     "officePage": "Página",
     "officeTable": "Tabla",
     "officeText": "Texto",
-    "officeFailed": "Error al exportar el documento."
+    "officeFailed": "Error al exportar el documento.",
+    "protect": "Proteger con contraseña",
+    "protectDesc": "Guardar una copia protegida con contraseña (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Perfil de salida",
@@ -212,8 +214,8 @@
     "viaMcp": "Mediante la conexión de IA"
   },
   "annotateScreenshot": "Anotar captura de pantalla del portapapeles",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Flujos de trabajo de documentos",
+  "drawingSets": "Juegos de planos",
+  "sheetLinks": "Vínculos entre planos",
+  "approvalRouting": "Circuito de aprobación"
 }

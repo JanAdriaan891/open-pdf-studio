@@ -64,6 +64,7 @@
     "color": "Renk",
     "opacity": "Opasite",
     "fillOpacity": "Dolgu Opasitesi",
+    "strokeOpacity": "Çizgi Opasitesi",
     "borderStyle": "Kenarlık Stili",
     "cross": "Çarpı",
     "crossHint": "Dikdörtgen, daire veya elipsin içine çarpı çizer (örn. bir boşluk)",
@@ -368,8 +369,8 @@
     "schedules": "Çizelgeler",
     "addPage": "Sayfa ekle",
     "pageLabels": "Sayfa etiketleri (ad oluşturucu)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF portföyü",
+    "recognizeForm": "Form alanlarını tanı"
   },
   "scaleBar": {
     "title": "Ölçek Çubuğu",
@@ -422,7 +423,7 @@
     },
     "preview": "Önizleme",
     "exportCsv": "CSV dışa aktar",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Elektronik tablo bağlamaları"
   },
   "wizard": {
     "title": "Çizelge sihirbazı",
@@ -605,8 +606,8 @@
       "imageName": "Dosya adı",
       "width": "Genişlik",
       "height": "Yükseklik",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Konum",
+      "locationSource": "Konum kaynağı"
     },
     "type": {
       "line": "Çizgi",
@@ -652,6 +653,8 @@
     "sectionTitle": "Sembol: {{name}}",
     "symbolLabel": "Sembol",
     "typeLabel": "Tür",
+    "profileType": "Profil türü",
+    "profileTypeTitle": "Çelik profil",
     "unknownSymbol": "Bilinmeyen sembol",
     "listNew": "Yeni",
     "listAdd": "Ekle",
@@ -707,17 +710,17 @@
     "failed": "Değişiklikler uygulanamadı: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Konum",
+    "none": "Atanmamış",
+    "manual": "Elle",
+    "computed": "Hesaplanan",
+    "override": "Elle geçersiz kılma (boş bırakmak konumu temizler)",
+    "automatic": "Otomatik konumu kullan",
+    "zoneName": "Bu şekli adlandırılmış bölge olarak kullan",
+    "parent": "Üst bölge",
+    "removeZone": "Bölge tanımını kaldır",
+    "invalid": "Konum güncellenemedi",
+    "rules": "Atama, kenarlar dahil işaretlemenin sınırlayıcı kutu merkezini kullanır. En derin bölge kazanır, ardından en küçük alan, ardından bölge kimliği. Deliksiz düz kenarlı çokgenler veya döndürülmemiş kutular kullanın. Geçersiz veya yinelenen bölge kimlikleri hariç tutulur.",
+    "loading": "Açıklamalar yükleniyor: konumlar hâlâ değişebilir."
   }
 }

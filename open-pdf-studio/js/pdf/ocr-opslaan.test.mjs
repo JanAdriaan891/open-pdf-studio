@@ -1,9 +1,10 @@
 // Saving a document with OCR results, with the real saver.
 //
-// Word-level OCR problems (an empty box, a correction the OCR font cannot
-// show) and a missing OCR font never fail the save or the crash-recovery
-// snapshot. An unchanged OCR layer does not reload the document after a
-// save; a changed one (including an undone OCR run) does.
+// Invalid OCR words (an empty box, oversized text) never fail the save or the
+// crash-recovery snapshot. A reviewed word the OCR font cannot show, or
+// reviewed words without the OCR font, refuse the save (#657) but never the
+// crash-recovery snapshot. An unchanged OCR layer does not reload the document
+// after a save; a changed one (including an undone OCR run) does.
 
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -88,11 +89,27 @@ function ownedLayerText(pdf, pageIndex = 0) {
 const word = (text, extra = {}) => ({ text, left: 72, top: 72, width: 60, height: 14, confidence: 50, ...extra });
 
 // First: the bundled font is cached once it has been read successfully.
-test('a missing OCR font with reviews present still saves', async () => {
+test('a missing OCR font with reviews present refuses the save, not the recovery snapshot', async () => {
   fontAvailable = false;
   try {
     const reviewed = word('Hello', { review: { status: 'accepted', originalText: 'Hello' } });
     const h = await harness({ ocrResults: { 1: [reviewed] } });
+    const before = h.bytes();
+    assert.equal(await h.save(), false, 'save refused');
+    assert.deepEqual(h.calls.writes, [], 'nothing written');
+    assert.equal(h.bytes(), before);
+    const { result: bytes, messages } = await warnings(() => bouwMomentopname(h.doc));
+    assert.ok(bytes instanceof Uint8Array && bytes.length > 0, 'snapshot made');
+    assert.ok(messages.some((m) => /OCR/i.test(m)), `warning: ${JSON.stringify(messages)}`);
+  } finally {
+    fontAvailable = true;
+  }
+});
+
+test('a missing OCR font without reviews still saves', async () => {
+  fontAvailable = false;
+  try {
+    const h = await harness({ ocrResults: { 1: [word('Hello')] } });
     const { result, messages } = await warnings(() => h.save());
     assert.equal(result, true, 'save succeeded');
     assert.ok(messages.some((m) => /OCR/i.test(m)), `warning: ${JSON.stringify(messages)}`);
@@ -116,15 +133,22 @@ test('a crash-recovery snapshot with an invalid OCR word still succeeds', async 
   assert.ok(bytes instanceof Uint8Array && bytes.length > 0);
 });
 
-test('a correction with a glyph the OCR font lacks saves with the recognized text', async () => {
+test('a correction with a glyph the OCR font lacks refuses the save (#657)', async () => {
   const corrected = word('room', { text: 'room 🙂', review: { status: 'corrected', originalText: 'room' } });
   const h = await harness({ ocrResults: { 1: [corrected, word('wall')] } });
-  const { result, messages } = await warnings(() => h.save());
-  assert.equal(result, true, 'save succeeded');
-  const pdf = await PDFDocument.load(h.bytes());
+  const before = h.bytes();
+  assert.equal(await h.save(), false, 'save refused');
+  assert.deepEqual(h.calls.writes, [], 'nothing written');
+  assert.equal(h.bytes(), before);
+});
+
+test('a recovery snapshot leaves an unencodable correction out of the layer and keeps it in the review', async () => {
+  const corrected = word('room', { text: 'room 🙂', review: { status: 'corrected', originalText: 'room' } });
+  const h = await harness({ ocrResults: { 1: [corrected, word('wall', { left: 200 })] } });
+  const { result: bytes, messages } = await warnings(() => bouwMomentopname(h.doc));
+  const pdf = await PDFDocument.load(bytes);
   assert.ok(ownedLayerText(pdf), 'the OCR layer was written');
-  assert.ok(messages.some((m) => /OCR/i.test(m)), `warning: ${JSON.stringify(messages)}`);
-  // The correction itself stays in the review metadata.
+  assert.ok(messages.some((m) => /OCR/i.test(m) && /reviewed/i.test(m)), `warning: ${JSON.stringify(messages)}`);
   const { readOcrReview } = await import('./ocr-review.js');
   assert.equal(readOcrReview(pdf).reviewsOnly[1][0].text, 'room 🙂');
 });

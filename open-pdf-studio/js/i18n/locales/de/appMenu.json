@@ -133,7 +133,9 @@
     "officePage": "Seite",
     "officeTable": "Tabelle",
     "officeText": "Text",
-    "officeFailed": "Dokumentexport fehlgeschlagen."
+    "officeFailed": "Dokumentexport fehlgeschlagen.",
+    "protect": "Mit Kennwort schützen",
+    "protectDesc": "Eine mit Kennwort geschützte Kopie speichern (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Ausgabeprofil",
@@ -212,8 +214,8 @@
     "viaMcp": "Über die KI-Verbindung"
   },
   "annotateScreenshot": "Screenshot aus Zwischenablage kommentieren",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Dokument-Workflows",
+  "drawingSets": "Zeichnungssätze",
+  "sheetLinks": "Blattübergreifende Verknüpfungen",
+  "approvalRouting": "Freigabeweiterleitung"
 }

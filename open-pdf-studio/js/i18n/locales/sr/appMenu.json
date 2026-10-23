@@ -133,7 +133,9 @@
     "officePage": "Страница",
     "officeTable": "Табела",
     "officeText": "Текст",
-    "officeFailed": "Извоз документа није успео."
+    "officeFailed": "Извоз документа није успео.",
+    "protect": "Заштити лозинком",
+    "protectDesc": "Сачувај копију заштићену лозинком (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Излазни профил",
@@ -212,8 +214,8 @@
     "viaMcp": "Преко AI везе"
   },
   "annotateScreenshot": "Анотирај снимак екрана из оставе",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Радни токови докумената",
+  "drawingSets": "Комплети цртежа",
+  "sheetLinks": "Везе између листова",
+  "approvalRouting": "Ток одобравања"
 }

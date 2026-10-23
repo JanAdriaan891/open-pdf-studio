@@ -64,6 +64,7 @@
     "color": "Farbe",
     "opacity": "Deckkraft",
     "fillOpacity": "Deckkraft der Füllung",
+    "strokeOpacity": "Deckkraft der Kontur",
     "borderStyle": "Rahmenstil",
     "cross": "Kreuz",
     "crossHint": "Zeichnet ein Kreuz in das Rechteck, den Kreis oder die Ellipse (z.B. eine Aussparung)",
@@ -368,8 +369,8 @@
     "schedules": "Listen",
     "addPage": "Seite hinzufügen",
     "pageLabels": "Seitenbeschriftungen (Namensgenerator)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-Portfolio",
+    "recognizeForm": "Formularfelder erkennen"
   },
   "scaleBar": {
     "title": "Maßstabsleiste",
@@ -422,7 +423,7 @@
     },
     "preview": "Vorschau",
     "exportCsv": "CSV exportieren",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Tabellenverknüpfungen"
   },
   "wizard": {
     "title": "Listen-Assistent",
@@ -605,8 +606,8 @@
       "imageName": "Dateiname",
       "width": "Breite",
       "height": "Höhe",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Standort",
+      "locationSource": "Standortquelle"
     },
     "type": {
       "line": "Linie",
@@ -652,6 +653,8 @@
     "sectionTitle": "Symbol: {{name}}",
     "symbolLabel": "Symbol",
     "typeLabel": "Typ",
+    "profileType": "Profiltyp",
+    "profileTypeTitle": "Stahlprofil",
     "unknownSymbol": "Unbekanntes Symbol",
     "listNew": "Neu",
     "listAdd": "Hinzufügen",
@@ -707,17 +710,17 @@
     "failed": "Die Änderungen konnten nicht übernommen werden: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Standort",
+    "none": "Nicht zugewiesen",
+    "manual": "Manuell",
+    "computed": "Berechnet",
+    "override": "Manuelle Überschreibung (leer löscht den Standort)",
+    "automatic": "Automatischen Standort verwenden",
+    "zoneName": "Diese Form als benannte Zone verwenden",
+    "parent": "Übergeordnete Zone",
+    "removeZone": "Zonendefinition entfernen",
+    "invalid": "Standort konnte nicht aktualisiert werden",
+    "rules": "Die Zuordnung verwendet den Mittelpunkt des Begrenzungsrahmens der Markierung, einschließlich Kanten. Die tiefste Zone hat Vorrang, dann die kleinste Fläche, dann die Zonen-ID. Verwenden Sie gerade Polygone ohne Löcher oder nicht gedrehte Rechtecke. Ungültige oder doppelte Zonenidentitäten werden ausgeschlossen.",
+    "loading": "Anmerkungen werden geladen: Standorte können sich noch ändern."
   }
 }

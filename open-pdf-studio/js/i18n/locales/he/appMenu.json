@@ -133,7 +133,9 @@
     "officePage": "עמוד",
     "officeTable": "טבלה",
     "officeText": "טקסט",
-    "officeFailed": "ייצוא המסמך נכשל."
+    "officeFailed": "ייצוא המסמך נכשל.",
+    "protect": "הגנה בסיסמה",
+    "protectDesc": "שמירת עותק מוגן בסיסמה (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "פרופיל פלט",
@@ -212,8 +214,8 @@
     "viaMcp": "דרך חיבור הבינה המלאכותית"
   },
   "annotateScreenshot": "הוספת הערות לצילום מסך מהלוח",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "תהליכי עבודה למסמכים",
+  "drawingSets": "סטים של שרטוטים",
+  "sheetLinks": "קישורים בין גיליונות",
+  "approvalRouting": "ניתוב אישורים"
 }

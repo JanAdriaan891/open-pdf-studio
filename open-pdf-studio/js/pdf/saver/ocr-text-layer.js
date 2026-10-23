@@ -17,6 +17,7 @@ import {
   setFontAndSize, setTextMatrix, showText,
 } from 'pdf-lib';
 import { metCffHerstel } from './cff-subset-herstel.js';
+import { withUnicodeLayoutGuard } from './unicode-layout-guard.js';
 import {
   removeOwnedOcrLayer, removeOcrReview, writeOcrReview, usableOcrWords, unencodableCharacters,
 } from '../ocr-review.js';
@@ -90,11 +91,16 @@ export function laadFontkit() {
  * (ocr.js does it via resourceDir()/fs.readFile(); a test script can just
  * pass fs.readFileSync(...) bytes directly).
  */
-export async function embedOcrFont(pdfDocLib, fontBytes) {
+export async function embedOcrFont(pdfDocLib, fontBytes, { unicodeGuard = false } = {}) {
   // fontkit hoort bij het PDFDocument, niet bij de module: registreer hem bij
   // elk document. Alleen het laden van de module wordt gedeeld; anders mislukt
   // elke volgende opslag in dezelfde sessie met "no fontkit instance was found".
-  pdfDocLib.registerFontkit(await laadFontkit());
+  // De Unicode-bewaking (#678) alleen op verzoek: de OCR-laag slaat zo een
+  // woord over dat het font niet terug naar Unicode kan brengen. Zichtbare
+  // tekst (CJK-tekstvakken, MCP-tekst) houdt zijn lege vakjes voor tekens die
+  // geen font heeft; een fout daar zou de hele opslag laten mislukken.
+  const fontkit = await laadFontkit();
+  pdfDocLib.registerFontkit(unicodeGuard ? withUnicodeLayoutGuard(fontkit) : fontkit);
   return pdfDocLib.embedFont(fontBytes, { subset: true });
 }
 
@@ -115,8 +121,13 @@ export async function embedOcrFont(pdfDocLib, fontBytes) {
  * words: [{ text, left, top, width, height, confidence }] in PDF points,
  * top-left origin (as returned by the ocr_pdf_page Tauri command — the same
  * space render_page_to_rgba/app annotation coordinates already use).
+ *
+ * strictReviews (default): a reviewed word the font cannot encode throws
+ * OCR_REVIEW_TEXT_NOT_ENCODABLE before the page changes. Off (crash-recovery
+ * snapshot): the word is left out of the layer with a warning; the correction
+ * stays in the review metadata.
  */
-export function writeOcrTextLayer(page, words, font, { pageNum } = {}) {
+export function writeOcrTextLayer(page, words, font, { pageNum, strictReviews = true } = {}) {
   if (!Array.isArray(words)) return;
   const where = Number.isInteger(pageNum) ? ` on page ${pageNum}` : '';
   const { words: usable, skipped } = usableOcrWords(words);
@@ -133,21 +144,21 @@ export function writeOcrTextLayer(page, words, font, { pageNum } = {}) {
   let notEncodable = 0;
 
   for (const word of usable) {
-    let wordOps = wordOperators(word, word.text, font, fontName, convertX, convertY, !!word.review);
-    // A reviewed word the font cannot show: keep the recognized text in the
-    // layer (the correction itself stays in the review metadata), or leave
-    // the word out when that cannot be shown either.
+    const wordOps = wordOperators(word, word.text, font, fontName, convertX, convertY, !!word.review);
+    // Het font kan dit woord niet (terug)coderen, bv. een teken zonder glyph
+    // of een gevormde glyph zonder Unicode (UnicodeLayoutError). Een nagekeken
+    // woord mag niet stil verdwijnen (#657): de opslag weigert, nog voordat de
+    // pagina verandert. Een ongecontroleerd woord slaan we over en de rest van
+    // de laag blijft. Een herstelmomentopname mag nooit mislukken: daar valt
+    // ook het nagekeken woord weg, met een waarschuwing.
     if (wordOps === undefined && word.review) {
+      if (strictReviews) throw new Error('OCR_REVIEW_TEXT_NOT_ENCODABLE');
       notEncodable++;
-      if (word.review.originalText !== word.text) {
-        wordOps = wordOperators(word, word.review.originalText, font, fontName, convertX, convertY, false);
-      }
     }
     if (wordOps) ops.push(...wordOps);
   }
   if (notEncodable) {
-    console.warn(`[save] OCR: ${notEncodable} reviewed word(s)${where} cannot be shown by the OCR font; `
-      + 'the recognized text was written instead, or the word was left out');
+    console.warn(`[save] OCR: ${notEncodable} reviewed word(s)${where} cannot be shown by the OCR font; left out of this snapshot`);
   }
 
   ops.push(popGraphicsState());
@@ -230,21 +241,28 @@ export function ocrSignature(results) {
  * - A page with an empty word list (an undone OCR run) loses the own layer
  *   and review metadata that an earlier save of this session wrote
  *   (`doc.ocrLayerPages`); a layer from before this session stays.
- * - Without the OCR font nothing is written and the save goes on.
+ * - Without the OCR font nothing is written and the save goes on, unless
+ *   reviewed words exist (they must not silently disappear, #657) and
+ *   `strictReviews` is on.
  *
  * Returns null when nothing was written, else `{ signature, layerPages }`:
  * the fingerprint of the written results and the pages that now carry an own
- * layer. Never throws for word-level problems.
+ * layer. Invalid and unencodable unreviewed words are skipped; a reviewed
+ * word the font cannot encode fails the save (OCR_REVIEW_TEXT_NOT_ENCODABLE).
+ * `strictReviews: false` (crash-recovery snapshot) never fails over OCR.
  */
-export async function writeOcrLayers(pdfDocLib, pages, doc, { loadFontBytes = loadDefaultOcrFontBytes } = {}) {
+export async function writeOcrLayers(pdfDocLib, pages, doc, { loadFontBytes = loadDefaultOcrFontBytes, strictReviews = true } = {}) {
   const results = doc?.ocrResults;
   if (!results || !Object.keys(results).length) return null;
   const hasWords = Object.values(results).some((words) => Array.isArray(words) && words.length > 0);
   let font = null;
   if (hasWords) {
     try {
-      font = await embedOcrFont(pdfDocLib, await loadFontBytes());
+      font = await embedOcrFont(pdfDocLib, await loadFontBytes(), { unicodeGuard: true });
     } catch (err) {
+      // Zonder font geen laag, maar wel een geslaagde opslag; behalve als er
+      // nagekeken woorden zijn: die mogen niet stil verdwijnen (#657).
+      if (strictReviews && Object.values(results).some((words) => Array.isArray(words) && words.some((word) => word?.review))) throw err;
       console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);
       return null;
     }
@@ -255,7 +273,7 @@ export async function writeOcrLayers(pdfDocLib, pages, doc, { loadFontBytes = lo
     const page = pages[pageNum - 1];
     if (!page) continue;
     if (Array.isArray(words) && words.length > 0) {
-      writeOcrTextLayer(page, words, font, { pageNum });
+      writeOcrTextLayer(page, words, font, { pageNum, strictReviews });
       layerPages.add(pageNum);
     } else if (layerPages.has(pageNum)) {
       removeOwnedOcrLayer(page);

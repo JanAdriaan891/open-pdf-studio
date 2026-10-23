@@ -133,7 +133,9 @@
     "officePage": "Σελίδα",
     "officeTable": "Πίνακας",
     "officeText": "Κείμενο",
-    "officeFailed": "Η εξαγωγή του εγγράφου απέτυχε."
+    "officeFailed": "Η εξαγωγή του εγγράφου απέτυχε.",
+    "protect": "Προστασία με κωδικό",
+    "protectDesc": "Αποθήκευση αντιγράφου με προστασία κωδικού (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Προφίλ εξόδου",
@@ -212,8 +214,8 @@
     "viaMcp": "Μέσω της σύνδεσης AI"
   },
   "annotateScreenshot": "Σχολιασμός στιγμιότυπου οθόνης από το πρόχειρο",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Ροές εργασιών εγγράφων",
+  "drawingSets": "Σύνολα σχεδίων",
+  "sheetLinks": "Σύνδεσμοι μεταξύ φύλλων",
+  "approvalRouting": "Δρομολόγηση εγκρίσεων"
 }

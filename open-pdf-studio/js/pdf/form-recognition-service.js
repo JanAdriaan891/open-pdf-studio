@@ -1,5 +1,5 @@
 import { getActiveDocument } from '../core/state.js';
-import { isTauri, invoke, fileExists, writeBinaryFileAtomic } from '../core/platform.js';
+import { isTauri, invoke, fileExists, writeBinaryFileNew } from '../core/platform.js';
 import { detectFormShapes, labelCandidates, createRecognizedForm, overlap } from './form-recognition.js';
 
 export async function openFormRecognition(documentId) {
@@ -127,9 +127,8 @@ export async function exportRecognizedForm(session, candidates, path) {
   if (typeof path !== 'string' || !path.toLowerCase().endsWith('.pdf')) throw new Error('PDF_PATH_REQUIRED');
   if (await fileExists(path)) throw new Error('CHOOSE_NEW_FILE');
   const result = await session.prepare(candidates);
-  if (await fileExists(path)) throw new Error('CHOOSE_NEW_FILE');
   session.check();
-  await writeBinaryFileAtomic(path, result.bytes);
+  await writeBinaryFileNew(path, result.bytes);
   return { path, created: result.created, fields: result.fields };
 }
 

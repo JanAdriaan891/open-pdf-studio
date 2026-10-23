@@ -299,8 +299,10 @@
   color: var(--theme-text-secondary, #888);
 }
 
+/* De lijst groeit mee met het aantal pagina's met treffers, tot ruim een
+   derde van het venster (nooit minder dan 150 px), en scrolt daarna (#686). */
 .find-results-list {
-  max-height: 150px;
+  max-height: max(150px, 40vh);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -308,6 +310,9 @@
 
 .find-results-row {
   display: flex;
+  /* Niet krimpen: met overflow: hidden mag een flex-item anders tot 0 hoog
+     worden, en schoven de regels bij veel treffers over elkaar (#686). */
+  flex-shrink: 0;
   overflow: hidden;
   align-items: baseline;
   gap: 6px;

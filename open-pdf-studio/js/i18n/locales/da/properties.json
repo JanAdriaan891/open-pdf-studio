@@ -64,6 +64,7 @@
     "color": "Farve",
     "opacity": "Gennemsigtighed",
     "fillOpacity": "Fyldets gennemsigtighed",
+    "strokeOpacity": "Stregens gennemsigtighed",
     "lineWidth": "Linjebredde",
     "borderWidth": "Kantbredde",
     "borderStyle": "Kantstil",
@@ -368,8 +369,8 @@
     "schedules": "Lister",
     "addPage": "Tilføj side",
     "pageLabels": "Sideetiketter (navnegenerator)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-portefølje",
+    "recognizeForm": "Genkend formularfelter"
   },
   "scaleBar": {
     "title": "Skalabjælke",
@@ -422,7 +423,7 @@
     },
     "preview": "Eksempel",
     "exportCsv": "Eksportér CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Regnearkskoblinger"
   },
   "wizard": {
     "title": "Listeguide",
@@ -605,8 +606,8 @@
       "imageName": "Filnavn",
       "width": "Bredde",
       "height": "Højde",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Placering",
+      "locationSource": "Kilde til placering"
     },
     "type": {
       "line": "Linje",
@@ -652,6 +653,8 @@
     "sectionTitle": "Symbol: {{name}}",
     "symbolLabel": "Symbol",
     "typeLabel": "Type",
+    "profileType": "Profiltype",
+    "profileTypeTitle": "Stålprofil",
     "unknownSymbol": "Ukendt symbol",
     "listNew": "Ny",
     "listAdd": "Tilføj",
@@ -707,17 +710,17 @@
     "failed": "Ændringerne kunne ikke anvendes: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Placering",
+    "none": "Ikke tildelt",
+    "manual": "Manuel",
+    "computed": "Beregnet",
+    "override": "Manuel tilsidesættelse (tom rydder placeringen)",
+    "automatic": "Brug automatisk placering",
+    "zoneName": "Brug denne figur som en navngivet zone",
+    "parent": "Overordnet zone",
+    "removeZone": "Fjern zonedefinition",
+    "invalid": "Placeringen kunne ikke opdateres",
+    "rules": "Tildelingen bruger midten af markeringens afgrænsningsramme, inklusive kanter. Den dybeste zone vinder, derefter det mindste areal og derefter zone-id. Brug lige polygoner uden huller eller uroterede rektangler. Ugyldige eller dublerede zoneidentiteter udelades.",
+    "loading": "Annotationer indlæses: placeringer kan stadig ændre sig."
   }
 }

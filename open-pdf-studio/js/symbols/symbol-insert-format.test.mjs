@@ -298,12 +298,16 @@ test('plaatsing en voorbeeld gebruiken de sessie-opmaak', () => {
 
 test('de opmaakwerkbalk wijzigt tijdens het invoegen de sessie, niet de selectie', () => {
   const tab = bron('../solid/components/ribbon/FormatTab.jsx');
-  assert.match(tab, /if \(invoegen\(\)\) \{\s*setSymbolInsertOption\(patch\);\s*return;\s*\}/);
+  // De doelkeuze staat sinds #668 in formatStore (ook het lint gebruikt haar):
+  // tijdens het invoegen gaat elke optie naar de sessie.
+  assert.match(bron('../solid/stores/formatStore.js'),
+    /case 'symbool':\s*setSymbolInsertOption\(patch\);\s*return;/);
+  assert.match(tab, /zetOpmaak, opmaakVoorNieuw, opmaakOndersteunt,\s*\} from '\.\.\/\.\.\/stores\/formatStore\.js';/);
   // Geen enkele directe applyToSelected meer voor lijnkleur, dikte, dekking of mengmodus.
   assert.doesNotMatch(tab, /applyToSelected\(ann => \{ ann\.strokeColor = color/);
   assert.doesNotMatch(tab, /applyToSelected\(ann => \{ zetRanddikte/);
   assert.doesNotMatch(tab, /applyToSelected\(ann => \{ ann\.opacity/);
   assert.doesNotMatch(tab, /applyToSelected\(ann => \{ ann\.blendMode/);
   const ui = bron('../annotations/rendering/ui-state.js');
-  assert.match(ui, /setContextualTabsVisible\(hasSelection \|\| symbolInsert\)/);
+  assert.match(ui, /setContextualTabsVisible\(hasSelection \|\| symbolInsert \|\| toolFormat\)/);
 });

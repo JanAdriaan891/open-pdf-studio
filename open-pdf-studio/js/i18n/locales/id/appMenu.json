@@ -133,7 +133,9 @@
     "officePage": "Halaman",
     "officeTable": "Tabel",
     "officeText": "Teks",
-    "officeFailed": "Ekspor dokumen gagal."
+    "officeFailed": "Ekspor dokumen gagal.",
+    "protect": "Lindungi dengan Kata Sandi",
+    "protectDesc": "Simpan salinan yang dilindungi kata sandi (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Profil keluaran",
@@ -212,8 +214,8 @@
     "viaMcp": "Melalui koneksi AI"
   },
   "annotateScreenshot": "Anotasi Tangkapan Layar dari Papan Klip",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Alur kerja dokumen",
+  "drawingSets": "Set gambar",
+  "sheetLinks": "Tautan antarlembar",
+  "approvalRouting": "Perutean persetujuan"
 }

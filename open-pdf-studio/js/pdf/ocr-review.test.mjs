@@ -121,7 +121,18 @@ test('unencodable characters are reported once each, whitespace never', () => {
   assert.deepEqual(unencodableCharacters('room room', codePoints), []);
 });
 
-test('a reviewed glyph outside font coverage keeps the recognized text instead of becoming notdef', async () => {
+test('a reviewed glyph outside font coverage fails instead of silently becoming notdef', async () => {
+  const pdf = await PDFDocument.create();
+  const page = pdf.addPage();
+  const before = page.node.get(PDFName.of('Contents'));
+  const fontBytes = readFileSync(new URL('../../public/pdfjs/web/standard_fonts/LiberationSans-Regular.ttf', import.meta.url));
+  const font = await embedOcrFont(pdf, fontBytes);
+  const corrected = reviewWord(word('room', 10), { action: 'correct', expectedText: 'room', text: '房間' });
+  assert.throws(() => writeOcrTextLayer(page, [corrected], font), /OCR_REVIEW_TEXT_NOT_ENCODABLE/);
+  assert.equal(page.node.get(PDFName.of('Contents')), before, 'the page is unchanged');
+});
+
+test('without strict reviews (recovery snapshot) the word is left out and the correction stays in the metadata', async () => {
   let pdf = await PDFDocument.create();
   const page = pdf.addPage();
   const fontBytes = readFileSync(new URL('../../public/pdfjs/web/standard_fonts/LiberationSans-Regular.ttf', import.meta.url));
@@ -131,7 +142,7 @@ test('a reviewed glyph outside font coverage keeps the recognized text instead o
   const old = console.warn;
   console.warn = (...args) => warnings.push(args.join(' '));
   try {
-    assert.doesNotThrow(() => writeOcrTextLayer(page, [corrected], font));
+    assert.doesNotThrow(() => writeOcrTextLayer(page, [corrected, word('wall', 12)], font, { strictReviews: false }));
   } finally {
     console.warn = old;
   }
@@ -139,6 +150,6 @@ test('a reviewed glyph outside font coverage keeps the recognized text instead o
   pdf = await PDFDocument.load(await pdf.save());
   const [stream] = ownedStreams(pdf, pdf.getPage(0));
   const text = new TextDecoder().decode(decodePDFRawStream(stream).decode());
-  assert.equal((text.match(/Tj/g) || []).length, 1, 'the word is in the layer with its recognized text');
+  assert.equal((text.match(/Tj/g) || []).length, 1, 'only the unreviewed word is in the layer');
   assert.equal(readOcrReview(pdf).reviewsOnly[1][0].text, '房間', 'the correction stays in the metadata');
 });

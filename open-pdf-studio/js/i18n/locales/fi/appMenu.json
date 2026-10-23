@@ -133,7 +133,9 @@
     "officePage": "Sivu",
     "officeTable": "Taulukko",
     "officeText": "Teksti",
-    "officeFailed": "Asiakirjan vienti epäonnistui."
+    "officeFailed": "Asiakirjan vienti epäonnistui.",
+    "protect": "Suojaa salasanalla",
+    "protectDesc": "Tallenna salasanalla suojattu kopio (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Tulostusprofiili",
@@ -212,8 +214,8 @@
     "viaMcp": "Tekoälyyhteyden kautta"
   },
   "annotateScreenshot": "Merkitse leikepöydän kuvakaappaus",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Asiakirjatyönkulut",
+  "drawingSets": "Piirustussarjat",
+  "sheetLinks": "Piirustusten väliset linkit",
+  "approvalRouting": "Hyväksyntäkierto"
 }

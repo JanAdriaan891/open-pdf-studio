@@ -133,7 +133,9 @@
     "officePage": "Stranica",
     "officeTable": "Tablica",
     "officeText": "Tekst",
-    "officeFailed": "Izvoz dokumenta nije uspio."
+    "officeFailed": "Izvoz dokumenta nije uspio.",
+    "protect": "Zaštiti lozinkom",
+    "protectDesc": "Spremi kopiju zaštićenu lozinkom (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Izlazni profil",
@@ -212,8 +214,8 @@
     "viaMcp": "Putem AI veze"
   },
   "annotateScreenshot": "Označi snimku zaslona iz međuspremnika",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Tijekovi rada dokumenata",
+  "drawingSets": "Kompleti nacrta",
+  "sheetLinks": "Poveznice između listova",
+  "approvalRouting": "Tijek odobravanja"
 }

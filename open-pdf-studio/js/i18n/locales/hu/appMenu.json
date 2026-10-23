@@ -133,7 +133,9 @@
     "officePage": "Oldal",
     "officeTable": "Táblázat",
     "officeText": "Szöveg",
-    "officeFailed": "A dokumentum exportálása sikertelen."
+    "officeFailed": "A dokumentum exportálása sikertelen.",
+    "protect": "Védelem jelszóval",
+    "protectDesc": "Jelszóval védett másolat mentése (AES-256)"
   },
   "pdfxCmyk": {
     "profile": "Kimeneti profil",
@@ -212,8 +214,8 @@
     "viaMcp": "Az MI-kapcsolaton keresztül"
   },
   "annotateScreenshot": "Vágólapon lévő képernyőkép jegyzetelése",
-  "workflows": "Document workflows",
-  "drawingSets": "Drawing sets",
-  "sheetLinks": "Cross-sheet links",
-  "approvalRouting": "Approval routing"
+  "workflows": "Dokumentum-munkafolyamatok",
+  "drawingSets": "Rajzkészletek",
+  "sheetLinks": "Rajzlapok közötti hivatkozások",
+  "approvalRouting": "Jóváhagyási útvonal"
 }

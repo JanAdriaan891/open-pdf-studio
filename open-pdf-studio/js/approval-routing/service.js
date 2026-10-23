@@ -1,9 +1,10 @@
 import {state,getActiveDocument} from '../core/state.js';
 import {savePreferences} from '../core/preferences.js';
-import {isTauri,readBinaryFile,writeBinaryFileAtomic,fileExists} from '../core/platform.js';
+import {isTauri,readBinaryFile,writeBinaryFileNew,fileExists} from '../core/platform.js';
 import {documentRevisie} from '../core/undo-manager.js';
 import {createRequest,verifyRequest,appendEvent,recordReceipt,makeReceipt,digest} from './model.js';
 import {zipStore} from '../bcf/bcf-zip.js';
+import {actorFor,checkAutomationRequest} from './origin.js';
 const cache=new Map();let pending=Promise.resolve();
 const prefs=()=>state.preferences.approvalRouting||{enabled:false,requests:[]};
 const persist=value=>{state.preferences.approvalRouting=value;savePreferences();};
@@ -33,18 +34,20 @@ export async function renderApprovalPreview(record,bytes,pageNumber,canvas){
 export async function approvalPackage(id){
  const e=entry(id),verified=await verifyRequest(e.record);if(verified.status==='draft')throw new Error('RELEASE_FIRST');const bytes=await sourceBytes(e);return {bytes:zipStore([{name:'document.pdf',data:bytes},{name:'request.json',data:JSON.stringify(e.record,null,2)},{name:'audit-summary.json',data:JSON.stringify(verified,null,2)},{name:'README.txt',data:'Local file approval package. No document has been sent by this application. Hand this package to the next recipient(s) yourself. The PDF is the exact reviewed source, not a digitally signed derivative. Receipt identities are self-reported. The audit hash chain checks internal consistency, not sender identity, delivery or legal validity. Keep request.json and the PDF together. A recipient imports request.json and the PDF into the local approval receipt form; return the receipt JSON to the request owner. For sequential routing, forward an updated package after recording each receipt.'}]),record:copy(e.record),state:verified};
 }
-async function handle(request){
+async function handle(request,origin){
+ checkAutomationRequest(request,origin);const actor=actorFor(origin);
  if(request.action==='list')return approvalState();
  if(request.action==='configure'){if(request.adapter!=='local-file-v1'||request.enabled!==true)throw new Error('EXPLICIT_ADAPTER_REQUIRED');persist({...prefs(),enabled:true});return approvalState();}
  if(request.action==='draft')return {record:await draft(request)};
  if(request.action==='verify')return verifyRequest(request.record);
  if(request.action==='createReceipt'){const doc=getActiveDocument();if(!doc?.pdfDoc||doc.modified)throw new Error('OPEN_SAVED_SOURCE');const {getCachedPdfBytes}=await import('../pdf/loader.js');const bytes=getCachedPdfBytes(doc.saveTargetPath||doc.filePath)||await doc.pdfDoc.getData();return {receipt:await makeReceipt(request.record,bytes,request.recipientId,request.decision,request.comment||'')};}
- if(request.action==='submit'){const e=entry(request.id);if(!prefs().enabled)throw new Error('CONFIGURE_ADAPTER_FIRST');if(request.confirmedHash!==e.record.config.source.hash)throw new Error('CONFIRM_EXACT_VERSION');await sourceBytes(e);const record=store(await appendEvent(e.record,'submit'));return {record:copy(record),state:await verifyRequest(record)};}
- if(request.action==='receipt'){const e=entry(request.id),record=store(await recordReceipt(e.record,request.receipt));return {record:copy(record),state:await verifyRequest(record)};}
- if(request.action==='cancel'){const record=store(await appendEvent(entry(request.id).record,'cancel'));return {record:copy(record),state:await verifyRequest(record)};}
- if(request.action==='supersede'){entry(request.replacementId);const record=store(await appendEvent(entry(request.id).record,'supersede',{replacementId:request.replacementId}));return {record:copy(record),state:await verifyRequest(record)};}
- if(request.action==='export'){if(!isTauri()||typeof request.outputPath!=='string'||!request.outputPath.endsWith('.zip'))throw new Error('DESKTOP_ZIP_PATH_REQUIRED');if(await fileExists(request.outputPath))throw new Error('OUTPUT_EXISTS');const result=await approvalPackage(request.id);await writeBinaryFileAtomic(request.outputPath,result.bytes);return {path:request.outputPath,state:result.state};}
+ if(request.action==='submit'){const e=entry(request.id);if(!prefs().enabled)throw new Error('CONFIGURE_ADAPTER_FIRST');if(request.confirmedHash!==e.record.config.source.hash)throw new Error('CONFIRM_EXACT_VERSION');await sourceBytes(e);const record=store(await appendEvent(e.record,'submit',{},actor));return {record:copy(record),state:await verifyRequest(record)};}
+ if(request.action==='receipt'){const e=entry(request.id),record=store(await recordReceipt(e.record,request.receipt,undefined,origin?actor:undefined));return {record:copy(record),state:await verifyRequest(record)};}
+ if(request.action==='cancel'){const record=store(await appendEvent(entry(request.id).record,'cancel',{},actor));return {record:copy(record),state:await verifyRequest(record)};}
+ if(request.action==='supersede'){entry(request.replacementId);const record=store(await appendEvent(entry(request.id).record,'supersede',{replacementId:request.replacementId},actor));return {record:copy(record),state:await verifyRequest(record)};}
+ if(request.action==='export'){if(!isTauri()||typeof request.outputPath!=='string'||!request.outputPath.endsWith('.zip'))throw new Error('DESKTOP_ZIP_PATH_REQUIRED');if(await fileExists(request.outputPath))throw new Error('OUTPUT_EXISTS');const result=await approvalPackage(request.id);await writeBinaryFileNew(request.outputPath,result.bytes);return {path:request.outputPath,state:result.state};}
  throw new Error('INVALID_ACTION');
 }
-export function approvalRequest(request){const result=pending.then(()=>handle(request));pending=result.catch(()=>{});return result;}
+// origin: 'mcp' or 'plugin' for automation clients; the dialog passes none.
+export function approvalRequest(request,{origin}={}){const result=pending.then(()=>handle(request,origin));pending=result.catch(()=>{});return result;}
 export {makeReceipt,verifyRequest};

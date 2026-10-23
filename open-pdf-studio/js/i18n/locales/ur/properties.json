@@ -64,6 +64,7 @@
     "color": "رنگ",
     "opacity": "شفافیت",
     "fillOpacity": "بھرنے کی شفافیت",
+    "strokeOpacity": "لکیر کی شفافیت",
     "lineWidth": "لکیر کی چوڑائی",
     "borderWidth": "بارڈر کی چوڑائی",
     "borderStyle": "بارڈر سٹائل",
@@ -368,8 +369,8 @@
     "schedules": "شیڈولز",
     "addPage": "صفحہ شامل کریں",
     "pageLabels": "صفحہ لیبلز (نام ساز)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF پورٹ فولیو",
+    "recognizeForm": "فارم فیلڈز کی شناخت کریں"
   },
   "scaleBar": {
     "title": "اسکیل بار",
@@ -422,7 +423,7 @@
     },
     "preview": "پیش منظر",
     "exportCsv": "CSV برآمد کریں",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "اسپریڈشیٹ بائنڈنگز"
   },
   "wizard": {
     "title": "شیڈول وزرڈ",
@@ -605,8 +606,8 @@
       "imageName": "فائل کا نام",
       "width": "چوڑائی",
       "height": "اونچائی",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "مقام",
+      "locationSource": "مقام کا ماخذ"
     },
     "type": {
       "line": "لکیر",
@@ -652,6 +653,8 @@
     "sectionTitle": "علامت: {{name}}",
     "symbolLabel": "علامت",
     "typeLabel": "قسم",
+    "profileType": "پروفائل کی قسم",
+    "profileTypeTitle": "اسٹیل پروفائل",
     "unknownSymbol": "نامعلوم علامت",
     "listNew": "نیا",
     "listAdd": "شامل کریں",
@@ -707,17 +710,17 @@
     "failed": "تبدیلیاں لاگو نہیں کی جا سکیں: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "مقام",
+    "none": "غیر تفویض شدہ",
+    "manual": "دستی",
+    "computed": "شمار شدہ",
+    "override": "دستی اوور رائیڈ (خالی چھوڑنے سے مقام صاف ہو جاتا ہے)",
+    "automatic": "خودکار مقام استعمال کریں",
+    "zoneName": "اس شکل کو نام والے زون کے طور پر استعمال کریں",
+    "parent": "والد زون",
+    "removeZone": "زون کی تعریف ہٹائیں",
+    "invalid": "مقام اپ ڈیٹ نہیں ہو سکا",
+    "rules": "تفویض مارک اپ کے حدی باکس کے مرکز کو استعمال کرتی ہے، کناروں سمیت۔ سب سے گہرا زون جیتتا ہے، پھر سب سے چھوٹا رقبہ، پھر زون ID۔ سوراخوں کے بغیر سیدھے کثیر الاضلاع یا غیر گھمائے گئے باکس استعمال کریں۔ غلط یا دہرائی گئی زون شناختیں خارج کر دی جاتی ہیں۔",
+    "loading": "تشریحات لوڈ ہو رہی ہیں: مقامات اب بھی تبدیل ہو سکتے ہیں۔"
   }
 }

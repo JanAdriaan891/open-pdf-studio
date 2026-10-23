@@ -140,5 +140,13 @@
     "prepareOcr": "Open for OCR…"
   },
   "symbolSearch": "Find symbols",
-  "findMoreOptions": "More search options"
+  "findMoreOptions": "More search options",
+  "watchActive": "Watching {{folder}}",
+  "watchFailed": "Watch error: {{folder}}",
+  "watchTitle": "Document workflow is watching {{input}} and writing to {{output}}. Click to stop watching.",
+  "renderDiagnostics": {
+    "title": "Go to the next render finding. No findings does not certify complete rendering.",
+    "count": "Render findings: {{count}}",
+    "detail": "Page {{page}}: {{code}}. Try a lower zoom or reopen the document; completeness is not certified."
+  }
 }

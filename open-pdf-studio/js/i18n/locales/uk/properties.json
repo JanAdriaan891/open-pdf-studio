@@ -64,6 +64,7 @@
     "color": "Колір",
     "opacity": "Прозорість",
     "fillOpacity": "Прозорість заливки",
+    "strokeOpacity": "Прозорість обведення",
     "lineWidth": "Ширина лінії",
     "borderWidth": "Ширина рамки",
     "borderStyle": "Стиль рамки",
@@ -368,8 +369,8 @@
     "schedules": "Специфікації",
     "addPage": "Додати сторінку",
     "pageLabels": "Мітки сторінок (конструктор назв)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF-портфоліо",
+    "recognizeForm": "Розпізнати поля форми"
   },
   "scaleBar": {
     "title": "Масштабна лінійка",
@@ -422,7 +423,7 @@
     },
     "preview": "Попередній перегляд",
     "exportCsv": "Експорт CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Прив’язки до таблиць"
   },
   "wizard": {
     "title": "Майстер специфікацій",
@@ -605,8 +606,8 @@
       "imageName": "Ім'я файлу",
       "width": "Ширина",
       "height": "Висота",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Розташування",
+      "locationSource": "Джерело розташування"
     },
     "type": {
       "line": "Лінія",
@@ -652,6 +653,8 @@
     "sectionTitle": "Символ: {{name}}",
     "symbolLabel": "Символ",
     "typeLabel": "Тип",
+    "profileType": "Тип профілю",
+    "profileTypeTitle": "Сталевий профіль",
     "unknownSymbol": "Невідомий символ",
     "listNew": "Новий",
     "listAdd": "Додати",
@@ -707,17 +710,17 @@
     "failed": "Не вдалося застосувати зміни: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Розташування",
+    "none": "Не призначено",
+    "manual": "Вручну",
+    "computed": "Обчислено",
+    "override": "Ручне перевизначення (порожньо — очистити розташування)",
+    "automatic": "Використовувати автоматичне розташування",
+    "zoneName": "Використовувати цю фігуру як іменовану зону",
+    "parent": "Батьківська зона",
+    "removeZone": "Вилучити визначення зони",
+    "invalid": "Не вдалося оновити розташування",
+    "rules": "Для призначення використовується центр габаритного прямокутника розмітки, включно з краями. Пріоритет має найглибша зона, потім найменша площа, потім ID зони. Використовуйте прямолінійні багатокутники без отворів або прямокутники без повороту. Недійсні або повторювані ідентифікатори зон виключаються.",
+    "loading": "Анотації завантажуються: розташування ще можуть змінитися."
   }
 }

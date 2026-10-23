@@ -64,6 +64,7 @@
     "color": "Боја",
     "opacity": "Непрозирност",
     "fillOpacity": "Непрозирност испуне",
+    "strokeOpacity": "Непрозирност потеза",
     "lineWidth": "Ширина линије",
     "borderWidth": "Ширина ивице",
     "borderStyle": "Стил ивице",
@@ -368,8 +369,8 @@
     "schedules": "Спецификације",
     "addPage": "Додај страницу",
     "pageLabels": "Ознаке страница (израда назива)",
-    "portfolio": "PDF portfolio",
-    "recognizeForm": "Recognize form fields"
+    "portfolio": "PDF портфолио",
+    "recognizeForm": "Препознај поља обрасца"
   },
   "scaleBar": {
     "title": "Графичка размера",
@@ -422,7 +423,7 @@
     },
     "preview": "Преглед",
     "exportCsv": "Извези CSV",
-    "workbookBindings": "Spreadsheet bindings"
+    "workbookBindings": "Везе са табелама"
   },
   "wizard": {
     "title": "Чаробњак за спецификацију",
@@ -605,8 +606,8 @@
       "imageName": "Назив датотеке",
       "width": "Ширина",
       "height": "Висина",
-      "location": "Location",
-      "locationSource": "Location source"
+      "location": "Локација",
+      "locationSource": "Извор локације"
     },
     "type": {
       "line": "Линија",
@@ -652,6 +653,8 @@
     "sectionTitle": "Симбол: {{name}}",
     "symbolLabel": "Симбол",
     "typeLabel": "Тип",
+    "profileType": "Тип профила",
+    "profileTypeTitle": "Челични профил",
     "unknownSymbol": "Непознат симбол",
     "listNew": "Ново",
     "listAdd": "Додај",
@@ -707,17 +710,17 @@
     "failed": "Измене није могуће применити: {{error}}"
   },
   "location": {
-    "title": "Location",
-    "none": "Unassigned",
-    "manual": "Manual",
-    "computed": "Computed",
-    "override": "Manual override (empty clears location)",
-    "automatic": "Use automatic location",
-    "zoneName": "Use this shape as a named zone",
-    "parent": "Parent zone",
-    "removeZone": "Remove zone definition",
-    "invalid": "Location could not be updated",
-    "rules": "Assignment uses the markup bounding-box centre, including edges. Deepest zone wins, then smallest area, then zone ID. Use straight polygons without holes or unrotated boxes. Invalid or duplicate zone identities are excluded.",
-    "loading": "Annotations are loading: locations may still change."
+    "title": "Локација",
+    "none": "Није додељено",
+    "manual": "Ручно",
+    "computed": "Израчунато",
+    "override": "Ручно замењивање (празно брише локацију)",
+    "automatic": "Користи аутоматску локацију",
+    "zoneName": "Користи овај облик као именовану зону",
+    "parent": "Надређена зона",
+    "removeZone": "Уклони дефиницију зоне",
+    "invalid": "Ажурирање локације није успело",
+    "rules": "Додела користи средиште граничног оквира ознаке, укључујући ивице. Предност има најдубља зона, затим најмања површина, па ID зоне. Користите праве многоуглове без рупа или неротиране правоугаонике. Неважећи или дуплирани идентитети зона се изузимају.",
+    "loading": "Анотације се учитавају: локације се још могу променити."
   }
 }
