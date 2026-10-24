@@ -153,3 +153,10 @@ test('een intussen opnieuw opgebouwde tekstlaag (andere tekst) blijft ongemoeid'
   assert.deepEqual(spans.map(s => s.textContent), ['Tweede versie', 'Buurtekst'],
     'de laag toont niet het origineel: niets overschrijven');
 });
+
+test('een vervanging via de MCP-teksttools zet de tekstlaag ook bij', async () => {
+  const fs = await import('node:fs');
+  const bron = fs.readFileSync(new URL('../text/mcp-text-tools.js', import.meta.url), 'utf8');
+  const pasToe = bron.slice(bron.indexOf('async function pasToe'), bron.indexOf('export async function replaceTextForMcp'));
+  assert.match(pasToe, /toonBewerkingInTekstlaag\(laag, record\)/);
+});

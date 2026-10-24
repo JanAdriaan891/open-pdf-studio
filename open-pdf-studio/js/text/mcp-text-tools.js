@@ -3,6 +3,7 @@ import { state, getActiveDocument } from '../core/state.js';
 import { pageTextSpans } from './mcp-page-text.js';
 import { textItemColors } from './mcp-text-color.js';
 import { embedMcpTextFont } from './mcp-text-font.js';
+import { toonBewerkingInTekstlaag } from './tekstlaag-bewerking.js';
 import {
   MAX_VERVANGINGEN, parseSpanId, vervangingVormFout, planVervanging, proefOpKopie, verslag,
 } from './mcp-text-plan.js';
@@ -56,6 +57,11 @@ async function pasToe(doc, page, records) {
   }
   markDocumentModified(doc);
   if (getActiveDocument() === doc && doc.currentPage === page) {
+    // De tekstlaag toont de nieuwe tekst, zoals na een bewerking in de editor
+    // en na opnieuw uitvoeren (#719): zoeken en selecteren vinden geen oude tekst.
+    const laag = typeof document !== 'undefined'
+      ? document.querySelector(`.textLayer[data-page="${page}"]`) || document.querySelector('.textLayer') : null;
+    if (laag) for (const record of records) toonBewerkingInTekstlaag(laag, record);
     try {
       const { renderPage } = await import('../pdf/renderer.js');
       if (getActiveDocument() === doc && doc.currentPage === page) await renderPage(page);
