@@ -80,6 +80,7 @@ js/tools/snap-geometrie-cache.test.mjs
 js/annotations/schaal-bronnen.test.mjs
 js/solid/stores/quantitiesStore.test.mjs
 js/core/undo-manager.test.mjs
+js/core/undo-tekstlaag.test.mjs
 js/utils/date-formatter.test.mjs
 js/pdf/loader/annotaties-toevoegen.test.mjs
 js/solid/components/dialogs/SignatureDialog.test.mjs
@@ -510,5 +511,7 @@ js/solid/components/ribbon/na-lettertypen.test.mjs
 js/text/tekst-blokken.test.mjs
 js/tools/text-edit-commit.test.mjs
 js/pdf/saver/text-edit-afbeelding.test.mjs
+js/pdf/saver/text-edit-formxobject.test.mjs
+js/pdf/saver/text-edit-mcp-scan.test.mjs
 js/pdf/saver/text-edit-unicode.test.mjs
 js/text/tekstlaag-bron.test.mjs

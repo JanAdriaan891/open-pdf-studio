@@ -189,10 +189,11 @@ test('onzichtbare tekst (render-modus 3 of 7) maakt een pagina een OCR-pagina', 
 test('de uitsnede kiest het filter naar de OCR-laag van de pagina', async () => {
   const fs = await import('node:fs');
   const bron = fs.readFileSync(new URL('./text-edit-afdekking.js', import.meta.url), 'utf8');
-  assert.match(bron, /maakAfdekFilter\(pdfjs\.OPS, \{ afbeeldingen: ocrPagina && !behoudBeeld \}\)/);
-  // Een MCP-bewerking dekt in het bestand niet af; de weergave dan ook niet.
+  assert.match(bron, /maakAfdekFilter\(pdfjs\.OPS, \{ afbeeldingen: ocrPagina \}\)/);
+  // Een MCP-bewerking dekt een scan in het bestand af zoals de UI (#720): de
+  // weergave laat de afbeelding dan ook niet meer staan.
   const painter = fs.readFileSync(new URL('../annotations/rendering.js', import.meta.url), 'utf8');
-  assert.match(painter, /behoudBeeld: !!edit\.mcpStrict/);
+  assert.doesNotMatch(painter, /behoudBeeld/);
 });
 
 test('uitsnede: dichtheid van het canvas, begrensd per as en in pixels', () => {

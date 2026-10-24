@@ -176,7 +176,11 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, kie
         borderWidth: 0,
       });
     }
-  } else if (edit.originalText && !edit.mcpStrict && (!inplace || inplace.needsCover)) {
+  } else if (edit.originalText && (!inplace || inplace.needsCover)) {
+    // Ook voor een MCP-bewerking (mcpStrict, altijd in-place): op een scan met
+    // OCR-laag staat het oude woord in de pixels. Net als de UI-route dekt de
+    // saver het af en komt de nieuwe tekst zichtbaar erop (#720); de
+    // onzichtbare OCR-run is geknipt.
     // Bij een her-bewerking van een eerder ingebakken edit moet het vlak ook
     // de eerder weggeschreven (mogelijk langere) nieuwe tekst afdekken.
     const coverSources = [edit.originalText];

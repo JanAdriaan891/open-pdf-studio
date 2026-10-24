@@ -121,7 +121,7 @@ export function zetAfdekkingHerteken(fn) {
 // Rendert het kader (tekenkader van de painter: x vanaf de linkerrand van de
 // pagina-box, y omlaag vanaf de bovenrand, in punten) zonder tekst (en op een
 // OCR-pagina zonder afbeeldingen). Het PDF.js-viewport zonder rotatie heeft hetzelfde kader.
-async function renderUitsnede(pdfDoc, pageNum, kader, px, behoudBeeld = false) {
+async function renderUitsnede(pdfDoc, pageNum, kader, px) {
   const pdfjs = await import('pdfjs-dist');
   const page = await pdfDoc.getPage(pageNum);
   // Scan met OCR-laag: de oude tekst zit in de pixels, de afbeelding moet weg.
@@ -137,12 +137,12 @@ async function renderUitsnede(pdfDoc, pageNum, kader, px, behoudBeeld = false) {
     transform: [1, 0, 0, 1, -kader.x * px, -kader.y * px],
     annotationMode: pdfjs.AnnotationMode.DISABLE,
     background: '#ffffff',
-    operationsFilter: maakAfdekFilter(pdfjs.OPS, { afbeeldingen: ocrPagina && !behoudBeeld }),
+    operationsFilter: maakAfdekFilter(pdfjs.OPS, { afbeeldingen: ocrPagina }),
   }).promise;
   return canvas;
 }
 
-function plan(doc, cache, sleutel, pageNum, kader, px, behoudBeeld) {
+function plan(doc, cache, sleutel, pageNum, kader, px) {
   let u = cache.get(sleutel);
   if (!u) {
     u = { pdfDoc: doc.pdfDoc, kader: null, px: 0, canvas: null, doel: null, wens: null, mislukt: null };
@@ -155,7 +155,7 @@ function plan(doc, cache, sleutel, pageNum, kader, px, behoudBeeld) {
       u.doel = u.wens;
       u.wens = null;
       try {
-        const canvas = await renderUitsnede(u.pdfDoc, pageNum, u.doel.kader, u.doel.px, behoudBeeld);
+        const canvas = await renderUitsnede(u.pdfDoc, pageNum, u.doel.kader, u.doel.px);
         if (cache.get(sleutel) !== u) break; // intussen vergeten
         u.canvas = canvas;
         u.kader = u.doel.kader;
@@ -187,11 +187,9 @@ function plan(doc, cache, sleutel, pageNum, kader, px, behoudBeeld) {
  * @param {{x:number,y:number,width:number,height:number}} omhullende
  *   gebied dat afgedekt moet worden, in het tekenkader (punten)
  * @param {number} pxPerPt   pixels per punt van het canvas waarop hij komt
- * @param {{plannen?: boolean, behoudBeeld?: boolean}} [opties]  plannen:false = alleen uit de
- *   cache; behoudBeeld: afbeeldingen blijven ook op een OCR-pagina staan (een
- *   bewerking via de MCP-teksttools dekt in het bestand nooit af)
+ * @param {{plannen?: boolean}} [opties]  plannen:false = alleen uit de cache
  */
-export function afdekUitsnede(doc, pageNum, sleutel, omhullende, pxPerPt, { plannen = true, behoudBeeld = false } = {}) {
+export function afdekUitsnede(doc, pageNum, sleutel, omhullende, pxPerPt, { plannen = true } = {}) {
   if (!doc?.pdfDoc || typeof doc.pdfDoc.getPage !== 'function' || !omhullende) return null;
   let cache = _caches.get(doc);
   if (!cache) {
@@ -209,7 +207,7 @@ export function afdekUitsnede(doc, pageNum, sleutel, omhullende, pxPerPt, { plan
     || (u?.doel && bevat(u.doel.kader, omhullende) && uitsnedeVoldoet(u.doel.px, nodig))
     || (u?.mislukt && bevat(u.mislukt.kader, omhullende));
   if (plannen && !klaarOfOnderweg && typeof document !== 'undefined') {
-    plan(doc, cache, sleutel, pageNum, uitsnedeKader(omhullende, nodig), nodig, behoudBeeld);
+    plan(doc, cache, sleutel, pageNum, uitsnedeKader(omhullende, nodig), nodig);
   }
   return bruikbaar ? { canvas: bruikbaar.canvas, kader: bruikbaar.kader, px: bruikbaar.px } : null;
 }

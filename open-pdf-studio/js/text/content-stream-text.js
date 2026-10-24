@@ -146,7 +146,7 @@ export function tokenizeContentStream(src) {
 const IDENTITY = [1, 0, 0, 1, 0, 0];
 
 // A daarna B toepassen: resultaat = A·B.
-function matMul(A, B) {
+export function matMul(A, B) {
   return [
     A[0] * B[0] + A[1] * B[2],
     A[0] * B[1] + A[1] * B[3],
@@ -177,24 +177,29 @@ function matMul(A, B) {
 //   behouden).
 //
 // Het resultaat-array draagt daarnaast een `xobjects`-eigenschap:
-// [{ si, name, ctm }] voor elke Do-operator, met de CTM op dat moment. De
-// aanroeper kan hiermee bepalen of een afbeelding (bv. een scan-achtergrond)
-// onder een tekstrun ligt — dan moet het afdekvlak blijven, ook al is de
-// vector-tekst geknipt.
-export function interpretContentStreams(streams) {
+// [{ si, s, name, ctm, tekstState }] voor elke Do-operator, met de CTM en de
+// tekst-state op dat moment. De aanroeper kan hiermee bepalen of een
+// afbeelding (bv. een scan-achtergrond) onder een tekstrun ligt — dan moet
+// het afdekvlak blijven, ook al is de vector-tekst geknipt — en de inhoud
+// van een Form XObject interpreteren zoals hij getekend wordt.
+//
+// start: begintoestand, voor de inhoud van een Form XObject: { ctm } (Matrix
+// × CTM bij de Do) en de tekst-state bij de Do ({ font, size, tl, tc, tw,
+// tz, tr }); die hoort bij de grafische state en geldt ook in het formulier.
+export function interpretContentStreams(streams, start = {}) {
   const ops = [];
   const xobjects = [];
-  let ctm = IDENTITY.slice();
+  let ctm = Array.isArray(start.ctm) && start.ctm.length === 6 ? start.ctm.slice() : IDENTITY.slice();
   const ctmStack = [];
   let tm = null;
   let lm = null;
-  let font = null;
-  let size = 0;
-  let tl = 0;
-  let tc = 0;   // Tc: character spacing (pt, ongescaled tekstruimte)
-  let tw = 0;   // Tw: word spacing (pt)
-  let tz = 100; // Tz: horizontale schaal (%)
-  let tr = 0;    // Tr: render-modus (3 = onzichtbaar, bv. een OCR-laag)
+  let font = start.font ?? null;
+  let size = Number(start.size) || 0;
+  let tl = Number(start.tl) || 0;
+  let tc = Number(start.tc) || 0;   // Tc: character spacing (pt, ongescaled tekstruimte)
+  let tw = Number(start.tw) || 0;   // Tw: word spacing (pt)
+  let tz = Number.isFinite(Number(start.tz)) && start.tz != null ? Number(start.tz) : 100; // Tz: horizontale schaal (%)
+  let tr = Number(start.tr) || 0;    // Tr: render-modus (3 = onzichtbaar, bv. een OCR-laag)
   let chain = 0;
   let chainHasShow = false;
 
@@ -291,7 +296,12 @@ export function interpretContentStreams(streams) {
         }
         case 'Do': {
           const nameTok = operands.filter(t => t.t === 'name').pop();
-          if (nameTok) xobjects.push({ si, s: tok.s, name: nameTok.v, ctm: ctm.slice() });
+          if (nameTok) {
+            xobjects.push({
+              si, s: tok.s, name: nameTok.v, ctm: ctm.slice(),
+              tekstState: { font, size, tl, tc, tw, tz, tr },
+            });
+          }
           break;
         }
         default: break; // overige operatoren: geen tekst-state-effect dat wij volgen

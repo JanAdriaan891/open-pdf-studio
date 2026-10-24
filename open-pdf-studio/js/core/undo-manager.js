@@ -3,6 +3,7 @@ import { state, getActiveDocument, getPageRotation, setPageRotation, imageCache 
 import { cloneAnnotation } from '../annotations/factory.js';
 import { stampRasterStale } from '../annotations/stamp-appearance-sync.js';
 import { applyOcrShift } from '../pdf/shift-page-geometry.js';
+import { toonOrigineelInTekstlaag, toonBewerkingInTekstlaag } from '../text/tekstlaag-bewerking.js';
 const MAX_UNDO_STACK = 100;
 let undoTransactionDepth = 0;
 let undoTransactionCommands = null;
@@ -538,60 +539,9 @@ function applyUndo(cmd, lookup) {
       if (!doc.textEdits) doc.textEdits = [];
       const idx = doc.textEdits.findIndex(e => e.id === cmd.textEdit.id);
       if (idx !== -1) doc.textEdits.splice(idx, 1);
-      // Restore original span text in the text layer
-      if (cmd.textEdit.originalSpanTexts) {
-        const pageNum = cmd.textEdit.page;
-        const textLayer = document.querySelector(`.textLayer[data-page="${pageNum}"]`)
-          || document.querySelector('.textLayer');
-        if (textLayer) {
-          const spans = Array.from(textLayer.querySelectorAll('span[data-pdf-transform]'));
-          // Find spans matching the edit's PDF position
-          const editPdfY = cmd.textEdit.pdfY;
-          const editPdfX = cmd.textEdit.pdfX;
-          const fontSize = cmd.textEdit.fontSize;
-          const tolerance = fontSize * 0.3;
-          // Group spans into lines by pdfY
-          const lineMap = new Map();
-          for (const span of spans) {
-            const transform = JSON.parse(span.dataset.pdfTransform);
-            const pdfY = transform[5];
-            let foundKey = null;
-            for (const key of lineMap.keys()) {
-              if (Math.abs(pdfY - key) <= tolerance) { foundKey = key; break; }
-            }
-            if (foundKey !== null) {
-              lineMap.get(foundKey).push({ span, pdfX: transform[4], pdfY });
-            } else {
-              lineMap.set(pdfY, [{ span, pdfX: transform[4], pdfY }]);
-            }
-          }
-          // Match lines from originalSpanTexts to text layer lines
-          const origTexts = cmd.textEdit.originalSpanTexts;
-          const ls = cmd.textEdit.lineSpacing || fontSize * 1.2;
-          for (let li = 0; li < origTexts.length; li++) {
-            const expectedY = editPdfY - li * ls;
-            let bestLine = null;
-            let bestDist = Infinity;
-            for (const [key, lineSpans] of lineMap) {
-              const dist = Math.abs(key - expectedY);
-              if (dist < bestDist) { bestDist = dist; bestLine = lineSpans; }
-            }
-            if (bestLine && bestDist <= tolerance * 3) {
-              bestLine.sort((a, b) => a.pdfX - b.pdfX);
-              // Find starting span that matches the edit's pdfX position
-              let startIdx = 0;
-              let bestXDist = Infinity;
-              for (let si = 0; si < bestLine.length; si++) {
-                const dist = Math.abs(bestLine[si].pdfX - editPdfX);
-                if (dist < bestXDist) { bestXDist = dist; startIdx = si; }
-              }
-              for (let si = 0; si < origTexts[li].length && (startIdx + si) < bestLine.length; si++) {
-                bestLine[startIdx + si].span.textContent = origTexts[li][si];
-              }
-            }
-          }
-        }
-      }
+      // De originele tekst terug in de tekstlaag.
+      const laag = tekstlaagVan(cmd.textEdit.page);
+      if (laag) toonOrigineelInTekstlaag(laag, cmd.textEdit, cmd.tekstlaagNa || null);
       break;
     }
     case 'removeTextEdit': {
@@ -604,6 +554,8 @@ function applyUndo(cmd, lookup) {
       if (!doc.textEdits) doc.textEdits = [];
       const idx = doc.textEdits.findIndex(e => e.id === cmd.newTextEdit.id);
       if (idx !== -1) doc.textEdits[idx] = { ...cmd.oldTextEdit };
+      const laag = tekstlaagVan(cmd.oldTextEdit.page);
+      if (laag) toonBewerkingInTekstlaag(laag, cmd.oldTextEdit, { vorige: cmd.newTextEdit });
       break;
     }
     case 'addWatermark': {
@@ -647,6 +599,13 @@ function applyUndo(cmd, lookup) {
       break;
     }
   }
+}
+
+// De tekstlaag van een pagina (enkele pagina: de enige laag).
+function tekstlaagVan(pageNum) {
+  if (typeof document === 'undefined' || typeof document.querySelector !== 'function') return null;
+  return document.querySelector(`.textLayer[data-page="${pageNum}"]`)
+    || document.querySelector('.textLayer');
 }
 
 // Apply redo for a command
@@ -724,6 +683,10 @@ function applyRedo(cmd, lookup) {
     case 'addTextEdit': {
       if (!doc.textEdits) doc.textEdits = [];
       doc.textEdits.push({ ...cmd.textEdit });
+      // De bewerkte tekst weer in de tekstlaag, zoals finishPdfTextEditing
+      // hem zette (#719); anders vonden zoeken en selecteren de oude tekst.
+      const laag = tekstlaagVan(cmd.textEdit.page);
+      if (laag) toonBewerkingInTekstlaag(laag, cmd.textEdit, { teksten: cmd.tekstlaagNa || null });
       break;
     }
     case 'removeTextEdit': {
@@ -736,6 +699,8 @@ function applyRedo(cmd, lookup) {
       if (!doc.textEdits) doc.textEdits = [];
       const idx = doc.textEdits.findIndex(e => e.id === cmd.oldTextEdit.id);
       if (idx !== -1) doc.textEdits[idx] = { ...cmd.newTextEdit };
+      const laag = tekstlaagVan(cmd.newTextEdit.page);
+      if (laag) toonBewerkingInTekstlaag(laag, cmd.newTextEdit, { vorige: cmd.oldTextEdit });
       break;
     }
     case 'addWatermark': {
