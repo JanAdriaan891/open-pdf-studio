@@ -13,6 +13,7 @@ import {
   textEditLineAnchor,
   resolveTextEditLineStyle,
   textEditCoverRects,
+  textEditLineCharSpacing,
 } from '../../text/text-edit-appearance.js';
 import { applyInPlaceTextEdits } from './text-edit-inplace.js';
 import { embedMcpTextFont, gebundeldeFontKeten } from '../../text/mcp-text-font.js';
@@ -291,6 +292,18 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
       }
     };
 
+    // Tekenafstand (Tc) van het origineel op de terugvalroute (#718): een
+    // gespatieerde kop blijft gespatieerd. In het originele font komt de Tc
+    // uit de tekst-state van de run (enc.tc). Tc is tekst-state en geldt dus
+    // ook binnen de q…Q van drawText. Geeft de extra breedte terug.
+    const lijnTc = textEditLineCharSpacing(edit, i);
+    const tekenTekst = (tekst, opties) => {
+      if (lijnTc) page.pushOperators(pushGraphicsState(), setCharacterSpacing(lijnTc));
+      page.drawText(tekst, opties);
+      if (lijnTc) page.pushOperators(popGraphicsState());
+      return lijnTc * [...tekst].length;
+    };
+
     // Codeert tekst in het originele font van de regel (in-place-route), of
     // null als dat font een teken niet heeft.
     const encodeOrigineel = (text, bold, italic) => (lineMayUseOriginalFont && text
@@ -328,7 +341,7 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
           penX += enc.width;
         } else if (bron === 'standaard') {
           const font = await getEditFont(standardFontVariant(lineStyle.fontFamily, bold, italic));
-          page.drawText(tekst, { x, y, size: lineFontSize, font, rotate: degrees(angle), color });
+          penX += tekenTekst(tekst, { x, y, size: lineFontSize, font, rotate: degrees(angle), color });
           penX += font.widthOfTextAtSize(tekst, lineFontSize);
         } else {
           // Een reeks tekens die elk wel, maar samen niet te coderen is
@@ -336,7 +349,7 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
           const index = bron === 'origineel' ? keten.index(tekst.codePointAt(0)) : bron;
           if (index < 0) throw new OntbrekendeGlyfenFout([...tekst]);
           const { font } = await keten.embed(index);
-          page.drawText(tekst, { x, y, size: lineFontSize, font, rotate: degrees(angle), color });
+          penX += tekenTekst(tekst, { x, y, size: lineFontSize, font, rotate: degrees(angle), color });
           penX += font.widthOfTextAtSize(tekst, lineFontSize);
         }
         bakeLine.text += tekst;
@@ -371,7 +384,7 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
         // stil '?', terwijl de weergave ze wel toonde.
         try {
           const { font: uniFont } = await kiesUnicodeFont(pdfDocLib, cleaned, { bold, italic });
-          page.drawText(cleaned, {
+          const extra = tekenTekst(cleaned, {
             x: anchor.x + readDir.x * penX,
             y: anchor.y + readDir.y * penX,
             size: lineFontSize,
@@ -380,7 +393,7 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
             color,
           });
           bakeLine.text += cleaned;
-          return penX + uniFont.widthOfTextAtSize(cleaned, lineFontSize);
+          return penX + extra + uniFont.widthOfTextAtSize(cleaned, lineFontSize);
         } catch (fontErr) {
           // Geen enkel font heeft alle tekens: per teken (of weigeren).
           return drawGemengd(cleaned, bold, italic, penX, color);
@@ -389,7 +402,7 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
       if (!safe) return penX;
       const variant = standardFontVariant(lineStyle.fontFamily, bold, italic);
       const font = await getEditFont(variant);
-      page.drawText(safe, {
+      const extra = tekenTekst(safe, {
         x: anchor.x + readDir.x * penX,
         y: anchor.y + readDir.y * penX,
         size: lineFontSize,
@@ -398,7 +411,7 @@ async function saveOneTextEdit(pdfDocLib, pages, edit, getEditFont, inplace, { k
         color
       });
       bakeLine.text += safe;
-      return penX + font.widthOfTextAtSize(safe, lineFontSize);
+      return penX + extra + font.widthOfTextAtSize(safe, lineFontSize);
     };
 
     // Uniforme run-lus: kolom-segmenten op hun eigen dx langs de baseline;

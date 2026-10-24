@@ -753,6 +753,18 @@ export function resolveTextEditLineStyle(edit, lineIndex) {
   };
 }
 
+/**
+ * De tekenafstand (Tc, punten) van regel `lineIndex` van een tekstbewerking
+ * (#718): gespatieerde tekst houdt zijn afstand, ook op de terugvalroute en
+ * live. 0 zonder `lineCharSpacing`; nieuwe regels erven die van de laatste.
+ */
+export function textEditLineCharSpacing(edit, lineIndex) {
+  const lijst = edit?.lineCharSpacing;
+  if (!Array.isArray(lijst) || lijst.length === 0) return 0;
+  const tc = Number(lijst[Math.min(Math.max(0, lineIndex), lijst.length - 1)]);
+  return Number.isFinite(tc) && tc > 0 ? tc : 0;
+}
+
 export function restoreTextEditSnapshot(record, snapshot) {
   if (!record || !snapshot) return;
   for (const key of Object.keys(record)) {

@@ -66,6 +66,7 @@ import {
   resolveTextEditLineStyle,
   textEditLineAnchor,
   textEditCoverRects,
+  textEditLineCharSpacing,
   coverRectsFrameBounds,
 } from '../text/text-edit-appearance.js';
 import {
@@ -2758,6 +2759,9 @@ function drawTextEdits(ctx, pageNum) {
       // zodat het canvas toont wat er bij opslaan in het bestand komt.
       const jtw = Array.isArray(edit.lineJustifyTw) ? edit.lineJustifyTw[i] : null;
       if (jtw != null && 'wordSpacing' in ctx) ctx.wordSpacing = `${jtw}px`;
+      // Gespatieerde tekst (#718): de tekenafstand (Tc) van het origineel.
+      const tc = textEditLineCharSpacing(edit, i);
+      if (tc > 0 && 'letterSpacing' in ctx) ctx.letterSpacing = `${tc}px`;
 
       const decorate = (fromX, toX) => {
         if (!(edit.fontUnderline || edit.fontStrikethrough) || toX <= fromX) return;

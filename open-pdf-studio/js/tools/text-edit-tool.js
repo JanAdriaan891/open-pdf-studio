@@ -11,7 +11,8 @@ import i18next from '../i18n/config.js';
 import {
   heeftKandidaten, laadBundelDekking, ontbrekendeTekensNu, tekensVoorMelding,
 } from '../text/glyf-dekking.js';
-import { injectSyntheticTextSpans, resolveTextLayerFonts } from '../text/text-layer.js';
+import { injectSyntheticTextSpans, resolveTextLayerFonts, resolveTextLayerCharSpacing } from '../text/text-layer.js';
+import { zonderSpatieringsSpaties } from '../text/tekenafstand.js';
 import { caretKleur, meetOndergrond } from './editor-ondergrond.js';
 import {
   applyPageRotation,
@@ -36,6 +37,7 @@ import {
   originalLineRuns,
   opmaakGewijzigd,
   tekstGewist,
+  textEditLineCharSpacing,
 } from '../text/text-edit-appearance.js';
 import { weergaveRotatie, paginaNaarClient, clientNaarPagina } from '../pdf/weergave-ruimte.js';
 import { groepeerTekstBlokken, blokRegelafstand } from '../text/tekst-blokken.js';
@@ -654,9 +656,13 @@ function getBlockGroups(layer, mode = 'strict') {
       // Kolomstructuur binnen de regel (tab-uitlijning) detecteren: de
       // regeltekst krijgt een TAB op elke duidelijke horizontale sprong en de
       // segment-startposities blijven bewaard voor painter en saver.
+      // Gespatieerde tekst (Tc > 0, #718): zonder de spaties die PDF.js
+      // tussen de letters zette ("G e s p a t" -> "Gespat").
       const lineSeg = buildLineSegments(
         lineItems.map(it => ({
-          text: normalizeBulletText(it.span.textContent),
+          text: Number(it.span.dataset.pdfTc) > 0
+            ? zonderSpatieringsSpaties(normalizeBulletText(it.span.textContent))
+            : normalizeBulletText(it.span.textContent),
           pdfX: it.pdfX,
           pdfY: it.pdfY,
           pdfWidth: it.pdfWidth,
@@ -687,7 +693,9 @@ function getBlockGroups(layer, mode = 'strict') {
         loadedFontName,
         isBold,
         isItalic,
-        color
+        color,
+        // Tekenafstand (Tc, punten) van de regel; de vervanging houdt hem (#718).
+        charSpacing: Number(styleSpan.dataset.pdfTc) > 0 ? Number(styleSpan.dataset.pdfTc) : 0,
       };
     });
 
@@ -763,6 +771,8 @@ function enableTextLayerHover() {
         try {
           const page = await doc?.pdfDoc?.getPage(pageNum);
           if (page) await resolveTextLayerFonts(page, layer);
+          // Gespatieerde tekst (#718): de Tc per span, vóór het groeperen.
+          if (page) await resolveTextLayerCharSpacing(page, layer);
         } catch (_) {
           // Keep editing available with a standard fallback if a font cannot
           // be resolved (damaged or unsupported embedded font).
@@ -930,6 +940,10 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
     'z-index': '1000'
   };
   styleObj['caret-color'] = pdfEditorCaret(styleObj);
+  // Gespatieerde tekst (#718): de editor toont dezelfde tekenafstand.
+  if (lineData[0].charSpacing > 0) {
+    styleObj['letter-spacing'] = `${lineData[0].charSpacing * (editorFontSize / fontSize)}px`;
+  }
   if (kader.theta) {
     styleObj.transform = `rotate(${kader.theta}deg)`;
     styleObj['transform-origin'] = '0 0';
@@ -1427,6 +1441,10 @@ function finishPdfTextEditing() {
       fontStrikethrough: finalStrikethrough,
       textAngle: lineData[0].angle || 0,
       ...(lineStyles ? { lineStyles } : {}),
+      // Tekenafstand per regel (#718): de vervanging houdt de Tc van het
+      // origineel, ook op de terugvalroute en live.
+      ...(lineData.some(l => l.charSpacing > 0)
+        ? { lineCharSpacing: lineData.map(l => l.charSpacing || 0) } : {}),
       ...(hasLineSegments ? { lineSegments } : {}),
       ...(lineJustifyTw ? { lineJustifyTw, justifyWidth } : {}),
       ...(unchangedLines ? { unchangedLines } : {}),
@@ -1765,6 +1783,10 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
   if (textEdit.fontUnderline) decorations.push('underline');
   if (textEdit.fontStrikethrough) decorations.push('line-through');
   styleObj['text-decoration-line'] = decorations.length ? decorations.join(' ') : 'none';
+  // Gespatieerde tekst (#718): dezelfde tekenafstand als het record.
+  if (textEditLineCharSpacing(textEdit, 0) > 0) {
+    styleObj['letter-spacing'] = `${textEditLineCharSpacing(textEdit, 0) * editScale}px`;
+  }
   styleObj['text-decoration-thickness'] = '0.06em';
   styleObj['text-underline-offset'] = '0.08em';
 
