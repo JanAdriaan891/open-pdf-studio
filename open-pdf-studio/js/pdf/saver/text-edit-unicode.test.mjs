@@ -55,7 +55,9 @@ test('tekens buiten WinAnsi komen met een volledig font in het bestand', async (
   assert.doesNotMatch(tekst, /Lodz/);
 });
 
-test('zonder passend font blijft de oude terugval (WinAnsi met vervanging)', async () => {
+// Sinds #717 nooit meer stil een vervanging: zonder font met die tekens
+// weigert de opslag en noemt de tekens (text-edit-glyfen.test.mjs).
+test('zonder passend font weigert de opslag in plaats van te vervangen', async () => {
   const doc = await PDFDocument.load(await bronPdf());
   const edit = {
     id: 'u2', page: 1, originalText: 'Plaats: Lodz', newText: 'Plaats: Łódź',
@@ -65,6 +67,9 @@ test('zonder passend font blijft de oude terugval (WinAnsi met vervanging)', asy
     originalSpanTexts: [['Plaats: Lodz']],
   };
   const kiesUnicodeFont = async () => { throw new Error('geen font'); };
-  await saveTextEditsToPages(doc, doc.getPages(), { textEdits: [edit] }, { kiesUnicodeFont });
-  assert.match(tekstVan(await doc.save()), /Plaats: Lódz/);
+  const fontKeten = async () => ({ index: () => -1, embed: async () => { throw new Error('geen font'); } });
+  await assert.rejects(
+    saveTextEditsToPages(doc, doc.getPages(), { textEdits: [edit] }, { kiesUnicodeFont, fontKeten }),
+    (fout) => fout.code === 'TEXT_EDIT_MISSING_GLYPHS' && fout.tekens.join('') === 'Łź',
+  );
 });

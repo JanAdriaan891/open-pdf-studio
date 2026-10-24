@@ -32,6 +32,31 @@ test('alle 40 talen hebben de teksten, met de invulplekken', () => {
   }
 });
 
+// Oudere versies openen (#712).
+const VERSIE = {
+  hostVersionReadOnly: ['{{version}}', '{{total}}'],
+  hostVersionReadOnlyShort: ['{{version}}'],
+  hostVersionSaveBlocked: [],
+  hostVersionReadOnlyRefused: [],
+  hostVersionInvalid: [],
+};
+
+test('oudere versies (#712): alle 40 talen, met de invulplekken, en de code gebruikt ze', () => {
+  const en = lees('en', 'common');
+  for (const taal of TALEN) {
+    const c = lees(taal, 'common');
+    for (const [k, invul] of Object.entries(VERSIE)) {
+      assert.ok(typeof c[k] === 'string' && c[k].trim(), `${taal}: ${k} ontbreekt`);
+      for (const plek of invul) assert.ok(c[k].includes(plek), `${taal}: ${k} zonder ${plek}`);
+      if (taal !== 'en' && !invul.length) assert.notEqual(c[k], en[k], `${taal}: ${k} niet vertaald`);
+    }
+    assert.doesNotMatch(lees(taal, 'appMenu').openPanel.olderVersionsHint, /^Only the current version/, `${taal}: oude uitleg`);
+  }
+  const code = ['host-versies.js', '../core/host-brug.js', 'saver.js']
+    .map((f) => readFileSync(join(HIER, f), 'utf8')).join('\n');
+  for (const k of Object.keys(VERSIE)) assert.ok(code.includes(`'${k}'`), `de code gebruikt ${k} niet`);
+});
+
 test('de code gebruikt de sleutels', () => {
   const paneel = readFileSync(join(HIER, '../solid/components/app-menu/OpenPanel.jsx'), 'utf8');
   for (const k of PANEEL) assert.ok(paneel.includes(`'openPanel.${k}'`), `OpenPanel gebruikt openPanel.${k} niet`);

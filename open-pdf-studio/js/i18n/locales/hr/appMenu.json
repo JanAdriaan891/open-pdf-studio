@@ -76,7 +76,7 @@
     "currentVersion": "trenutna",
     "noVersions": "Nema verzija",
     "versionsError": "Verzije se nisu mogle učitati",
-    "olderVersionsHint": "Ovdje se može otvoriti samo trenutna verzija.",
+    "olderVersionsHint": "Starije verzije otvaraju se samo za čitanje; Spremi kao preuzima kopiju.",
     "save": "Spremi"
   },
   "importPanel": {

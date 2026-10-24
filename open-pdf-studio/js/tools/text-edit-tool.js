@@ -6,9 +6,14 @@ import { markDocumentModified } from '../ui/chrome/tabs.js';
 import { canvasContainer, continuousContainer, pdfCanvas } from '../ui/dom-elements.js';
 import { showPdfTextEditor, hidePdfTextEditor, getPdfEditorText as getEditorText,
   getPdfEditorLineRuns as getEditorLineRuns,
-  updatePdfEditorStyle, shiftPdfEditorPosition } from '../bridge.js';
-import { injectSyntheticTextSpans, resolveTextLayerFonts } from '../text/text-layer.js';
+  updatePdfEditorStyle, shiftPdfEditorPosition, showMessage } from '../bridge.js';
+import i18next from '../i18n/config.js';
+import {
+  heeftKandidaten, laadBundelDekking, ontbrekendeTekensNu, tekensVoorMelding,
+} from '../text/glyf-dekking.js';
+import { injectSyntheticTextSpans, resolveTextLayerFonts, resolveTextLayerCharSpacing } from '../text/text-layer.js';
 import { toonBewerkingInTekstlaag } from '../text/tekstlaag-bewerking.js';
+import { zonderSpatieringsSpaties } from '../text/tekenafstand.js';
 import { caretKleur, meetOndergrond } from './editor-ondergrond.js';
 import {
   applyPageRotation,
@@ -33,6 +38,7 @@ import {
   originalLineRuns,
   opmaakGewijzigd,
   tekstGewist,
+  textEditLineCharSpacing,
 } from '../text/text-edit-appearance.js';
 import { weergaveRotatie, paginaNaarClient, clientNaarPagina } from '../pdf/weergave-ruimte.js';
 import { groepeerTekstBlokken, blokRegelafstand } from '../text/tekst-blokken.js';
@@ -259,6 +265,56 @@ function cssBaselineOffset(fontFamily, fontSize, lineHeight, isBold = false, isI
     ? metrics.fontBoundingBoxDescent
     : (metrics.actualBoundingBoxDescent || fontSize * 0.2);
   return ascent + (lineHeight - ascent - descent) / 2;
+}
+
+// ── Tekens zonder font (#717) ──
+// Tekst met tekens die geen enkel beschikbaar font heeft (niet de subset van
+// het originele font, niet de gebundelde fonts; bv. Hangul) wordt niet
+// bevestigd: het bestand zou anders '?' krijgen. De dekking van de gebundelde
+// fonts laadt op de achtergrond zodra er zulke tekens in de editor staan.
+function warmGlyfDekking(tekst, bekend = '') {
+  if (heeftKandidaten(tekst, bekend)) laadBundelDekking().catch(() => {});
+}
+
+// Na een toetsaanslag (of IME-invoer) in de editor: dekking alvast laden.
+function warmGlyfDekkingNaInvoer(bekend = '') {
+  setTimeout(() => { if (activeEditor) warmGlyfDekking(getEditorText(), bekend); }, 0);
+}
+
+// Tekens van de originele tekst en van dezelfde fonts elders op de pagina:
+// die staan in de subset van het originele font.
+function bekendeTekensVan(block) {
+  let tekst = block.lineData.map(l => l.text).join('');
+  const fonts = new Set(block.lineData.map(l => l.pdfFontName).filter(Boolean));
+  const laag = block.spans[0]?.closest?.('.textLayer');
+  if (laag && fonts.size) {
+    for (const sp of laag.querySelectorAll('span[data-pdf-font-name]')) {
+      if (!sp.dataset.editId && fonts.has(sp.dataset.pdfFontName)) tekst += sp.textContent;
+    }
+  }
+  return tekst;
+}
+
+/**
+ * Weigert tekst met tekens die geen font heeft: toont de melding en geeft
+ * true. Is de dekking nog niet geladen, dan gaat de bewerking door; volgt
+ * er daarna toch zo'n teken uit, dan waarschuwt de app (opslaan weigert dan).
+ */
+function weigerTekensZonderFont(nieuw, bekend) {
+  if (!heeftKandidaten(nieuw, bekend)) return false;
+  const zonder = ontbrekendeTekensNu(nieuw, bekend);
+  if (zonder === null) {
+    laadBundelDekking().then(() => {
+      const later = ontbrekendeTekensNu(nieuw, bekend);
+      if (later?.length) {
+        showMessage(i18next.t('textEditMissingGlyphsLater', { chars: tekensVoorMelding(later) }));
+      }
+    }).catch(() => {});
+    return false;
+  }
+  if (!zonder.length) return false;
+  showMessage(i18next.t('textEditMissingGlyphs', { chars: tekensVoorMelding(zonder) }));
+  return true;
 }
 
 // ── De editor op het canvas (#698) ──
@@ -601,9 +657,13 @@ function getBlockGroups(layer, mode = 'strict') {
       // Kolomstructuur binnen de regel (tab-uitlijning) detecteren: de
       // regeltekst krijgt een TAB op elke duidelijke horizontale sprong en de
       // segment-startposities blijven bewaard voor painter en saver.
+      // Gespatieerde tekst (Tc > 0, #718): zonder de spaties die PDF.js
+      // tussen de letters zette ("G e s p a t" -> "Gespat").
       const lineSeg = buildLineSegments(
         lineItems.map(it => ({
-          text: normalizeBulletText(it.span.textContent),
+          text: Number(it.span.dataset.pdfTc) > 0
+            ? zonderSpatieringsSpaties(normalizeBulletText(it.span.textContent))
+            : normalizeBulletText(it.span.textContent),
           pdfX: it.pdfX,
           pdfY: it.pdfY,
           pdfWidth: it.pdfWidth,
@@ -634,7 +694,9 @@ function getBlockGroups(layer, mode = 'strict') {
         loadedFontName,
         isBold,
         isItalic,
-        color
+        color,
+        // Tekenafstand (Tc, punten) van de regel; de vervanging houdt hem (#718).
+        charSpacing: Number(styleSpan.dataset.pdfTc) > 0 ? Number(styleSpan.dataset.pdfTc) : 0,
       };
     });
 
@@ -710,6 +772,8 @@ function enableTextLayerHover() {
         try {
           const page = await doc?.pdfDoc?.getPage(pageNum);
           if (page) await resolveTextLayerFonts(page, layer);
+          // Gespatieerde tekst (#718): de Tc per span, vóór het groeperen.
+          if (page) await resolveTextLayerCharSpacing(page, layer);
         } catch (_) {
           // Keep editing available with a standard fallback if a font cannot
           // be resolved (damaged or unsupported embedded font).
@@ -877,6 +941,10 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
     'z-index': '1000'
   };
   styleObj['caret-color'] = pdfEditorCaret(styleObj);
+  // Gespatieerde tekst (#718): de editor toont dezelfde tekenafstand.
+  if (lineData[0].charSpacing > 0) {
+    styleObj['letter-spacing'] = `${lineData[0].charSpacing * (editorFontSize / fontSize)}px`;
+  }
   if (kader.theta) {
     styleObj.transform = `rotate(${kader.theta}deg)`;
     styleObj['transform-origin'] = '0 0';
@@ -1020,6 +1088,8 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
     page: pageNum
   });
 
+  warmGlyfDekking(combinedText);
+
   // Define handlers for the store
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -1027,6 +1097,7 @@ function startPdfTextEditing(span, pageNum, groupMode = 'strict') {
       cancelPdfTextEditing();
       return;
     }
+    warmGlyfDekkingNaInvoer(combinedText);
     // Alt+Arrow verplaatst ook een bestaand-tekst-blok (pariteit met het
     // record-pad); de commit leest de verplaatste coords uit activeEditor.
     if (e.altKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
@@ -1117,6 +1188,13 @@ function finishPdfTextEditing() {
     initialLineRuns: initialRuns, afdekId,
   } = activeEditor;
   const newText = getEditorText();
+
+  // Tekens die geen font heeft (#717): de bewerking gaat niet door, de
+  // originele tekst blijft staan.
+  if (newText !== originalText && weigerTekensZonderFont(newText, bekendeTekensVan(block))) {
+    cancelPdfTextEditing();
+    return;
+  }
 
   verbergPdfEditor();
 
@@ -1364,6 +1442,10 @@ function finishPdfTextEditing() {
       fontStrikethrough: finalStrikethrough,
       textAngle: lineData[0].angle || 0,
       ...(lineStyles ? { lineStyles } : {}),
+      // Tekenafstand per regel (#718): de vervanging houdt de Tc van het
+      // origineel, ook op de terugvalroute en live.
+      ...(lineData.some(l => l.charSpacing > 0)
+        ? { lineCharSpacing: lineData.map(l => l.charSpacing || 0) } : {}),
       ...(hasLineSegments ? { lineSegments } : {}),
       ...(lineJustifyTw ? { lineJustifyTw, justifyWidth } : {}),
       ...(unchangedLines ? { unchangedLines } : {}),
@@ -1705,6 +1787,10 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
   if (textEdit.fontUnderline) decorations.push('underline');
   if (textEdit.fontStrikethrough) decorations.push('line-through');
   styleObj['text-decoration-line'] = decorations.length ? decorations.join(' ') : 'none';
+  // Gespatieerde tekst (#718): dezelfde tekenafstand als het record.
+  if (textEditLineCharSpacing(textEdit, 0) > 0) {
+    styleObj['letter-spacing'] = `${textEditLineCharSpacing(textEdit, 0) * editScale}px`;
+  }
   styleObj['text-decoration-thickness'] = '0.06em';
   styleObj['text-underline-offset'] = '0.08em';
 
@@ -1713,6 +1799,12 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
 
   const finishEditing = () => {
     const newText = getEditorText();
+    // Tekens die geen font heeft (#717): niet bevestigen; het record blijft
+    // zoals het was.
+    if (newText !== oldTextEdit.newText && weigerTekensZonderFont(newText, bekendeTekens)) {
+      cancelEditing();
+      return;
+    }
     verbergPdfEditor();
 
     // Clearing all the text of an INSERTED edit deletes it entirely — this is
@@ -1902,6 +1994,9 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
     page: pageNum
   });
 
+  const bekendeTekens = `${oldTextEdit.originalText || ''}${oldTextEdit.newText || ''}`;
+  warmGlyfDekking(bekendeTekens);
+
   // Define handlers for the store
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -1909,6 +2004,7 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
       cancelEditing();
       return;
     }
+    warmGlyfDekkingNaInvoer(bekendeTekens);
     // Alt+Arrow nudges the inserted text (Alt keeps normal caret arrows free).
     if (e.altKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
       e.preventDefault();

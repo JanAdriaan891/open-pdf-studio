@@ -76,7 +76,7 @@
     "currentVersion": "actual",
     "noVersions": "No hay versiones",
     "versionsError": "No se pudieron cargar las versiones",
-    "olderVersionsHint": "Aquí solo se puede abrir la versión actual.",
+    "olderVersionsHint": "Las versiones anteriores se abren en modo de solo lectura; Guardar como descarga una copia.",
     "save": "Guardar"
   },
   "importPanel": {

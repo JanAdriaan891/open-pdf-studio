@@ -515,3 +515,5 @@ js/pdf/saver/text-edit-formxobject.test.mjs
 js/pdf/saver/text-edit-mcp-scan.test.mjs
 js/pdf/saver/text-edit-unicode.test.mjs
 js/text/tekstlaag-bron.test.mjs
+js/pdf/saver/text-edit-glyfen.test.mjs
+js/text/tekenafstand.test.mjs

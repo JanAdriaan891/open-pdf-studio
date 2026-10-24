@@ -76,7 +76,7 @@
     "currentVersion": "gjeldende",
     "noVersions": "Ingen versjoner",
     "versionsError": "Kunne ikke laste inn versjonene",
-    "olderVersionsHint": "Bare den gjeldende versjonen kan åpnes her.",
+    "olderVersionsHint": "Eldre versjoner åpnes skrivebeskyttet; Lagre som laster ned en kopi.",
     "save": "Lagre"
   },
   "importPanel": {

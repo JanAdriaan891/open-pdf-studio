@@ -13,6 +13,7 @@ import { closeWindow, isTauri } from '../../../core/platform.js';
 import { meldSchoonAfsluiten } from '../../../herstel/haken.js';
 import { knopUit, meldingTekst } from '../../../core/webfuncties.js';
 import i18next from '../../../i18n/config.js';
+import { state } from '../../../core/state.js';
 import { persistAllReaderPositions } from '../../../pdf/reader-mode-view.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import {
@@ -29,7 +30,7 @@ function MenuItem(props) {
       class={`app-menu-item${props.active ? ' active' : ''}`}
       id={props.id}
       title={geenWebvariant() ? meldingTekst(i18next.t.bind(i18next), props.label) : undefined}
-      disabled={geenWebvariant()}
+      disabled={geenWebvariant() || props.disabled === true}
       onClick={props.onClick}
     >
       <span class="app-menu-item-icon" innerHTML={props.icon} />
@@ -130,7 +131,8 @@ export default function AppMenu() {
           <div class="app-menu-items">
             <MenuItem icon={ICONS.new} label={t('new')} shortcut="Ctrl+N" onClick={() => actionAndClose(showNewDocDialog)} />
             <MenuItem icon={ICONS.open} label={t('open')} shortcut="Ctrl+O" active={getActivePanel() === 'open'} onClick={() => setActivePanel('open')} />
-            <MenuItem icon={ICONS.save} label={t('save')} shortcut="Ctrl+S" onClick={() => actionAndClose(savePDF)} />
+            {/* Alleen-lezen van de site (een oudere versie, #712): opslaan staat uit, Opslaan als (een download) niet. */}
+            <MenuItem icon={ICONS.save} label={t('save')} shortcut="Ctrl+S" disabled={state.documents[state.activeDocumentIndex]?.hostAlleenLezen === true} onClick={() => actionAndClose(savePDF)} />
             <MenuItem icon={ICONS.saveAs} label={t('saveAs')} shortcut="Ctrl+Shift+S" onClick={() => actionAndClose(savePDFAs)} />
             <MenuItem id="menu-print" icon={ICONS.print} label={t('print')} shortcut="Ctrl+P" onClick={() => actionAndClose(showPrintDialog)} />
             <Divider />

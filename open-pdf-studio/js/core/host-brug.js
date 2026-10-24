@@ -19,8 +19,13 @@
 //  - Handdruk: elke 250 ms soort "hallo" tot de gastpagina antwoordt (die mag
 //    later laden dan het iframe); na 60 s opgeven.
 //  - Soorten:
-//      open { bestand }            -> { bestand, naam, versie, alleen_lezen, bytes }
-//                                     (bytes: overgedragen ArrayBuffer)
+//      open { bestand, versie? }   -> { bestand, naam, versie, alleen_lezen, bytes }
+//                                     (bytes: overgedragen ArrayBuffer); met
+//                                     `versie` (een volgnummer uit versies) die
+//                                     versie, altijd alleen-lezen en zonder
+//                                     slot (#712). Opslaan weigert dan met code
+//                                     versie_alleen_lezen; een ongeldig
+//                                     nummer geeft versie_ongeldig.
 //      opslaan { bestand, bytes }  -> { bestand, naam, versie, conflict, melding, vergrendeld }
 //      lijst {}                    -> [{ id, name, modified }]
 //      versies { bestand }         -> [{ version, modified, author }]
@@ -57,6 +62,45 @@ export const AI_FOUTCODES = Object.freeze([
   'ongeldige_vraag', 'te_groot', 'geen_tegoed', 'plafond_bereikt', 'te_druk',
   'te_veel_vragen', 'al_bezig', 'opnieuw_inloggen', 'dienst_onbereikbaar',
 ]);
+
+/**
+ * Foutcodes van de gastpagina met een eigen, vertaalde melding (#712); de
+ * `fout`-tekst van de gastpagina is de terugval.
+ */
+export const HOST_FOUTCODES = Object.freeze({
+  versie_alleen_lezen: 'hostVersionReadOnlyRefused',
+  versie_ongeldig: 'hostVersionInvalid',
+});
+
+/** De vertaalsleutel voor een fout van de gastpagina, of null. */
+export function hostFoutSleutel(fout) {
+  const code = fout && typeof fout === 'object' ? fout.hostCode : null;
+  return typeof code === 'string' && Object.hasOwn(HOST_FOUTCODES, code) ? HOST_FOUTCODES[code] : null;
+}
+
+/**
+ * De melding voor de gebruiker bij een fout van de gastpagina met een
+ * bekende code: vertaald, met de tekst van de gastpagina als terugval. Null
+ * als de code onbekend is.
+ * @param {(sleutel: string, opties?: object) => string} t
+ */
+export function hostFoutMelding(fout, t) {
+  const sleutel = hostFoutSleutel(fout);
+  if (!sleutel) return null;
+  const terugval = typeof fout?.message === 'string' && fout.message ? fout.message : sleutel;
+  const tekst = t(sleutel, { defaultValue: terugval });
+  return typeof tekst === 'string' && tekst && tekst !== sleutel ? tekst : terugval;
+}
+
+/**
+ * Een versienummer voor `open { versie }`: een geheel getal blijft een getal
+ * (ook als tekst, zoals de versielijst ze heeft); al het andere gaat zoals
+ * het is, en de gastpagina weigert het met versie_ongeldig.
+ */
+export function versieVoorOpen(versie) {
+  if (typeof versie === 'string' && /^\s*\d+\s*$/.test(versie)) return Number(versie);
+  return versie;
+}
 
 /** Een fout van de brug, met een code voor de koppeling. */
 export class BrugFout extends Error {
@@ -155,8 +199,10 @@ function bytesUit(waarde) {
 const STANDAARD_TEKSTEN = {
   hostOpenFailed: 'The file could not be read from storage. Try again.',
   hostNoContact: 'The page around Open PDF Studio does not respond, so files cannot be opened or saved. Reload the page and try again.',
+  hostVersionInvalid: 'This version of the file cannot be opened: the version number is not valid.',
+  hostVersionReadOnlyRefused: 'The site did not save the file: an older version of it is open read-only. Open the current version again to save, or use Save As to download a copy.',
 };
-const standaardTekst = (sleutel) => STANDAARD_TEKSTEN[sleutel] || sleutel;
+const standaardTekst = (sleutel, opties) => STANDAARD_TEKSTEN[sleutel] || opties?.defaultValue || sleutel;
 
 const tekst = (v) => (v === undefined || v === null ? undefined : String(v));
 
@@ -373,23 +419,34 @@ export function maakHostBrug({
 
   /** Het opslagcontract van #546, over de brug. */
   const opslag = {
-    /** @returns {Promise<{ name: string, data: Uint8Array, versie: unknown, alleenLezen: boolean, bestand: string }>} */
-    async open(bestand) {
+    /**
+     * Met `versie`: die versie van het bestand, alleen-lezen en zonder slot (#712).
+     * @returns {Promise<{ name: string, data: Uint8Array, versie: unknown, alleenLezen: boolean, bestand: string }>}
+     */
+    async open(bestand, versie = undefined) {
       try {
-        const waarde = await verzoek('open', { bestand: String(bestand) });
+        const velden = { bestand: String(bestand) };
+        if (versie !== undefined && versie !== null) velden.versie = versieVoorOpen(versie);
+        const waarde = await verzoek('open', velden);
         const data = waarde && typeof waarde === 'object' ? bytesUit(waarde.bytes) : null;
         if (!data) throw new BrugFout('antwoord', 'The host page returned no bytes for the file');
         return {
           name: tekst(waarde.naam) || 'document.pdf',
           data,
           versie: waarde.versie ?? null,
-          alleenLezen: waarde.alleen_lezen === true,
+          // Een oudere versie is altijd alleen-lezen, ook als de gastpagina
+          // het veld vergeet.
+          alleenLezen: waarde.alleen_lezen === true || 'versie' in velden,
           bestand: tekst(waarde.bestand) ?? String(bestand),
         };
       } catch (e) {
         // Wat de gebruiker ziet bij een mislukte open (pdf/host-document.js);
         // de technische oorzaak blijft in de melding voor de console.
-        if (e && typeof e === 'object' && !e.gemeld) e.gebruikersMelding = vertaal('hostOpenFailed');
+        // Een fout met een bekende code (versie_ongeldig) krijgt zijn eigen
+        // melding, met de tekst van de gastpagina als terugval.
+        if (e && typeof e === 'object' && !e.gemeld) {
+          e.gebruikersMelding = hostFoutMelding(e, vertaal) || vertaal('hostOpenFailed');
+        }
         throw e;
       }
     },

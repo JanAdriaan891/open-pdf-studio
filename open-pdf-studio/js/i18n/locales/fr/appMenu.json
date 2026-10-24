@@ -76,7 +76,7 @@
     "currentVersion": "actuelle",
     "noVersions": "Aucune version",
     "versionsError": "Impossible de charger les versions",
-    "olderVersionsHint": "Seule la version actuelle peut être ouverte ici.",
+    "olderVersionsHint": "Les versions antérieures s'ouvrent en lecture seule ; Enregistrer sous télécharge une copie.",
     "save": "Enregistrer"
   },
   "importPanel": {

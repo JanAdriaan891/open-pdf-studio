@@ -76,7 +76,7 @@
     "currentVersion": "aktuell",
     "noVersions": "Keine Versionen",
     "versionsError": "Die Versionen konnten nicht geladen werden",
-    "olderVersionsHint": "Hier kann nur die aktuelle Version geöffnet werden.",
+    "olderVersionsHint": "Ältere Versionen öffnen schreibgeschützt; „Speichern unter“ lädt eine Kopie herunter.",
     "save": "Speichern"
   },
   "importPanel": {
