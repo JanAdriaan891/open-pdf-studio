@@ -84,11 +84,12 @@ export async function embedMcpTextFont(pdfDocLib, text, { bold = false, italic =
     if (covers(font.glyphs, text)) return { ...await inbedden(pdfDocLib, font), fallback: true };
     geprobeerd.push(font);
   }
-  // Tekens die geen enkel gebundeld font heeft (bv. Hangul, #717) noemen.
+  // Tekens die geen enkel gebundeld font heeft (bv. Hangul, #717) noemen;
+  // sommige kunnen wel in de subset van het originele font staan.
   const zonder = [...new Set([...text].filter(char => char.trim()
     && !geprobeerd.some(f => f.glyphs.hasGlyphForCodePoint(char.codePointAt(0)))))];
   throw new Error('No bundled font contains every replacement glyph'
-    + (zonder.length ? ` (no font has: ${zonder.join(' ')})` : '')
+    + (zonder.length ? ` (not in any bundled font: ${zonder.join(' ')})` : '')
     + '; the PDF was not changed');
 }
 
