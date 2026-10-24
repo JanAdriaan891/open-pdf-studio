@@ -512,3 +512,4 @@ js/tools/text-edit-commit.test.mjs
 js/pdf/saver/text-edit-afbeelding.test.mjs
 js/pdf/saver/text-edit-unicode.test.mjs
 js/text/tekstlaag-bron.test.mjs
+js/pdf/saver/text-edit-glyfen.test.mjs

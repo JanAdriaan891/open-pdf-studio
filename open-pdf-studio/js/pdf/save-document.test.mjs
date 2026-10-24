@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { opslaanGeweigerd, isHostAlleenLezen, markeerBeveiligd } from './wachtwoord-pdf.js';
 import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
 import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
+import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
 
 // Execute the production save functions with controlled I/O. The app imports
 // require a webview; only those dependencies and dynamic imports are replaced.
@@ -47,6 +48,8 @@ function harness() {
     opslaanGeweigerd,
     // Door de gastsite alleen-lezen geopend (#704, echt).
     isHostAlleenLezen,
+    // Tekens zonder font in een tekstbewerking (#717, echt).
+    isOntbrekendeGlyfenFout, tekensVoorMelding,
     // Naamloos of zonder pad: Opslaan vraagt om een plek (handtekeningen/opslaan.js, echt).
     opslaanVraagtOpslaanAls,
     // Leesbare naam, ook voor een content://-URI van Android (#596).
@@ -364,6 +367,21 @@ test('a document the host opened read-only (#704) is not saved back; Save As (a 
   assert.equal(h.a.modified, true, 'nothing is lost: the document stays modified');
   assert.equal(await h.api.savePDF('Plattegrond.pdf', { zonderHandtekeningVraag: true }), true, 'a copy may be downloaded');
   assert.deepEqual(h.writes.map((w) => w.path), ['Plattegrond.pdf']);
+});
+
+test('text without a font (#717) refuses the save with the characters, nothing is written', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  h.deps.i18next = { t: (k, o) => `${k}:${o?.chars ?? ''}` };
+  h.deps.saveTextEditsToPages = async () => {
+    const { OntbrekendeGlyfenFout } = await import('../text/glyf-dekking.js');
+    throw new OntbrekendeGlyfenFout(['안', '녕', '안']);
+  };
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.deepEqual(h.writes, []);
+  assert.deepEqual(meldingen, ['textEditMissingGlyphsSave:안 녕']);
+  assert.equal(h.a.modified, true);
 });
 
 test('a save writes the attachment changes of the document being saved (#376)', async () => {

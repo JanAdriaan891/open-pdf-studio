@@ -41,6 +41,7 @@ import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
   randSleutelZonderRand, markeerZonderRand, onzichtbaarVlak, vlakRect, metVulGs } from './saver/utils.js';
 import { eigenVulDekking } from '../annotations/vul-dekking.js';
 import { saveTextEditsToPages } from './saver/text-edits.js';
+import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrLayers } from './saver/ocr-text-layer.js';
@@ -3358,6 +3359,13 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     return true;
   } catch (error) {
     if (alleenAnnotaties || momentopname) throw error;
+    // Een tekstbewerking met tekens die geen font heeft (#717): het bestand
+    // bleef ongewijzigd; noem de tekens.
+    if (isOntbrekendeGlyfenFout(error)) {
+      console.warn('[saver] opslaan geweigerd:', error.message);
+      showMessage(i18next.t('textEditMissingGlyphsSave', { chars: tekensVoorMelding(error.tekens) }));
+      return false;
+    }
     console.error('Error saving PDF:', error);
     showMessage(i18next.t('failedToSavePdf', { error: error?.message || String(error) }));
     return false;
