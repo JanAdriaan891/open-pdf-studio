@@ -71,6 +71,12 @@
     "site": "На этом сайте",
     "noSiteDocuments": "На этом сайте нет документов",
     "siteListError": "Не удалось загрузить документы этого сайта",
+    "versions": "Версии",
+    "versionNumber": "Версия {{version}}",
+    "currentVersion": "текущая",
+    "noVersions": "Нет версий",
+    "versionsError": "Не удалось загрузить версии",
+    "olderVersionsHint": "Более ранние версии открываются только для чтения; «Сохранить как» скачивает копию.",
     "save": "Сохранить"
   },
   "importPanel": {

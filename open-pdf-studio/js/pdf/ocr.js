@@ -1,9 +1,9 @@
-import {recordOcrPage} from '../core/undo-manager.js';
 // OCR (Optical Character Recognition) orchestration: runs the ocr_pdf_page
 // Tauri command across a document's pages and stores the results on the
 // document so saver.js can write them out as an invisible, searchable text
 // layer next time the file is saved (see saver/ocr-text-layer.js).
 import { state, getActiveDocument } from '../core/state.js';
+import { recordOcrPage, recordOcrPages } from '../core/undo-manager.js';
 import { markDocumentModified } from '../ui/chrome/tabs.js';
 import {
   startPrintProgress, updatePrintProgress, finishPrintProgress, failPrintProgress, sluitPrintProgress,
@@ -37,7 +37,7 @@ export async function ocrCurrentPage(lang = 'auto') {
     }
     const oldWords = JSON.parse(JSON.stringify(doc.ocrResults[pageIndex + 1] || []));
     doc.ocrResults[pageIndex + 1] = words;
-    recordOcrPage(doc,pageIndex+1,oldWords,words);
+    recordOcrPage(doc, pageIndex + 1, oldWords, words);
     markDocumentModified(doc);
     finishPrintProgress(i18next.t('ocr.progress.done', { ns: 'statusbar', count: words.length }) || `Recognized ${words.length} words`);
   } catch (e) {
@@ -58,6 +58,8 @@ export async function ocrAllPages(lang = 'auto') {
 
   startPrintProgress(i18next.t('ocr.progress.starting', { ns: 'statusbar' }) || 'Recognizing text...');
   let totalWords = 0;
+  // One undo step for the whole run, also when a later page fails.
+  const changes = [];
   try {
     for (let i = 0; i < total; i++) {
       const pageNum = i + 1;
@@ -72,7 +74,7 @@ export async function ocrAllPages(lang = 'auto') {
       }
       const oldWords = JSON.parse(JSON.stringify(doc.ocrResults[pageNum] || []));
       doc.ocrResults[pageNum] = words;
-      recordOcrPage(doc,pageNum,oldWords,words);
+      changes.push({ page: pageNum, oldWords, newWords: words });
       // Keep successful pages dirty even if a later page fails.
       markDocumentModified(doc);
       totalWords += words.length;
@@ -81,6 +83,8 @@ export async function ocrAllPages(lang = 'auto') {
   } catch (e) {
     console.warn('OCR failed:', e);
     failPrintProgress(i18next.t('ocr.progress.failed', { ns: 'statusbar' }) || 'Text recognition failed');
+  } finally {
+    if (changes.length) recordOcrPages(doc, changes);
   }
 }
 

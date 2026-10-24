@@ -71,6 +71,12 @@
     "site": "En aquest lloc",
     "noSiteDocuments": "No hi ha documents en aquest lloc",
     "siteListError": "No s'han pogut carregar els documents d'aquest lloc",
+    "versions": "Versions",
+    "versionNumber": "Versió {{version}}",
+    "currentVersion": "actual",
+    "noVersions": "No hi ha versions",
+    "versionsError": "No s'han pogut carregar les versions",
+    "olderVersionsHint": "Les versions anteriors s'obren només per a lectura; Desa com a en baixa una còpia.",
     "save": "Desa"
   },
   "importPanel": {

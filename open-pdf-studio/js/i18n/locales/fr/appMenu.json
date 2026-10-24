@@ -71,6 +71,12 @@
     "site": "Sur ce site",
     "noSiteDocuments": "Aucun document sur ce site",
     "siteListError": "Impossible de charger les documents de ce site",
+    "versions": "Versions",
+    "versionNumber": "Version {{version}}",
+    "currentVersion": "actuelle",
+    "noVersions": "Aucune version",
+    "versionsError": "Impossible de charger les versions",
+    "olderVersionsHint": "Les versions antérieures s'ouvrent en lecture seule ; Enregistrer sous télécharge une copie.",
     "save": "Enregistrer"
   },
   "importPanel": {

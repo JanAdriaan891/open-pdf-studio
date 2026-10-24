@@ -1246,7 +1246,9 @@
     "empty": "Tidak ada kandidat untuk ditinjau. Jalankan OCR terlebih dahulu, atau naikkan ambang. PDF lama tanpa metadata tinjauan perlu di-OCR ulang.",
     "error": "Tidak dapat memperbarui verifikasi. Segarkan antrean jika dokumen telah berubah.",
     "accepted": "Diterima",
-    "corrected": "Dikoreksi"
+    "corrected": "Dikoreksi",
+    "notEncodable": "Teks OCR yang dapat dicari tidak dapat berisi karakter ini: {{characters}}. Perbaiki kata dengan karakter lain.",
+    "archived": "Pemeriksaan tersimpan di file. Jalankan OCR lagi pada halaman ini untuk mengubahnya."
   },
   "portfolio": {
     "title": "Portofolio koleksi PDF",

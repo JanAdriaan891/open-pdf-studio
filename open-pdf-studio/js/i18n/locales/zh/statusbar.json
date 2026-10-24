@@ -140,6 +140,7 @@
     "prepareOcr": "打开以进行 OCR…"
   },
   "symbolSearch": "查找符号",
+  "findMoreOptions": "更多搜索选项",
   "watchActive": "正在监视 {{folder}}",
   "watchFailed": "监视错误：{{folder}}",
   "watchTitle": "文档工作流正在监视 {{input}} 并写入 {{output}}。单击以停止监视。",

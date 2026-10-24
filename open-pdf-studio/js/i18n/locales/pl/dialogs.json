@@ -1246,7 +1246,9 @@
     "empty": "Brak słów do weryfikacji. Najpierw uruchom OCR lub podnieś próg. Starsze pliki PDF bez metadanych weryfikacji wymagają ponownego OCR.",
     "error": "Nie można zaktualizować weryfikacji. Jeśli dokument się zmienił, odśwież kolejkę.",
     "accepted": "Zaakceptowane",
-    "corrected": "Poprawione"
+    "corrected": "Poprawione",
+    "notEncodable": "Przeszukiwalny tekst OCR nie może zawierać tych znaków: {{characters}}. Popraw słowo, używając innych znaków.",
+    "archived": "Weryfikacja zapisana w pliku. Uruchom ponownie OCR na tej stronie, aby ją zmienić."
   },
   "portfolio": {
     "title": "Portfolio kolekcji PDF",

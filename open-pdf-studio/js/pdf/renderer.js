@@ -652,8 +652,11 @@ async function _renderPageImpl(pageNum) {
   const _existingLinkLayer = document.querySelector('#canvas-container .linkLayer');
   const _linkLayerRotationStale = !!_existingLinkLayer
     && Number(_existingLinkLayer.dataset.rotation || 0) !== ((lagenViewport.rotation || 0) % 360);
+  // Een laag uit een ander bestand (na opslaan met tekstbewerkingen herlaadt
+  // het document uit een nieuw werkbestand) toont oude tekst: opnieuw bouwen.
   const _textLayerStale = !_existingTextLayer
     || parseInt(_existingTextLayer.dataset.page) !== pageNum
+    || (_existingTextLayer.dataset.bron ?? '') !== (doc.filePath || '')
     || _linkLayerRotationStale;
   if (!_skipBitmapRender || _textLayerStale) {
     try {
@@ -1116,6 +1119,14 @@ async function renderLowResPreview(doc, pageNum, nogActueel = () => true) {
 // Clear low-res cache (on document close)
 export function clearLowResCache() {
   _lowResCache.clear();
+}
+
+/** Voorvertoningen van één bestand weg (tabblad gesloten, andere blijven open). */
+export function clearLowResCacheForFile(filePath) {
+  const prefix = `${filePath}|`;
+  for (const k of Array.from(_lowResCache.keys())) {
+    if (k.startsWith(prefix)) _lowResCache.delete(k);
+  }
 }
 
 // Render a single page inside its wrapper (used by lazy rendering)
@@ -2280,6 +2291,8 @@ async function _getFitInputs() {
   const pageViewport = page.getViewport(opts);
   const container = document.getElementById('pdf-container');
   if (!container) return null;
+  // Verborgen viewer: niets om in te passen, zoom laten staan (#675).
+  if (!(container.clientWidth > 0 && container.clientHeight > 0)) return null;
   const fit = {
     mode: 'legacy',
     pageW: pageViewport.width,

@@ -71,6 +71,12 @@
     "site": "در این سایت",
     "noSiteDocuments": "هیچ سندی در این سایت نیست",
     "siteListError": "بارگیری اسناد این سایت ممکن نشد",
+    "versions": "نسخه‌ها",
+    "versionNumber": "نسخه {{version}}",
+    "currentVersion": "فعلی",
+    "noVersions": "نسخه‌ای وجود ندارد",
+    "versionsError": "بارگیری نسخه‌ها ممکن نشد",
+    "olderVersionsHint": "نسخه‌های قدیمی‌تر فقط‌خواندنی باز می‌شوند؛ «ذخیره با نام» یک نسخه دانلود می‌کند.",
     "save": "ذخیره"
   },
   "importPanel": {

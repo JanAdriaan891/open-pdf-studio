@@ -17,7 +17,12 @@
 //  - de soorten en velden van voerUit: hallo, open, opslaan (met een
 //    conflictkopie als `conflict` aan staat), lijst, versies, geopend, melding
 //    en ai.vraag (een nepantwoord in OpenAI-chatvorm; een vraag met
-//    "tegoed" erin geeft de foutcode geen_tegoed).
+//    "tegoed" erin geeft de foutcode geen_tegoed);
+//  - open met `versie` (#712, commit 6997255 van de host): die versie,
+//    alleen-lezen en zonder slot; geen geheel getal vanaf 1 geeft de code
+//    versie_ongeldig, een versie die niet bestaat een gewone fout; daarna
+//    weigert opslaan met de code versie_alleen_lezen, tot een open zonder
+//    versie.
 //
 // De opslag van de gastpagina zit in de pagina zelf; de server levert alleen
 // de begininhoud van de documenten (/werkplek/doc/<id>), zoals de klantsite.
@@ -167,6 +172,7 @@ document.cookie = 'sessie=geheim; path=/';
 const docs = ${JSON.stringify(docs)};
 for (const d of Object.values(docs)) d.versies = [];
 const doel = new Map();                                 // id -> conflictkopie (volgende opslagen)
+const versieOpen = new Map();                           // id -> getoonde oudere versie (sessie.ts: versieOpen)
 const toegestaan = new Set([BESTAND]);
 const gast = window.__gast = {
   log: [], opgeslagen: [], geopend: [], meldingen: [], vragen: [], vervalsingen: 0, start: 0, eersteAntwoord: null,
@@ -241,12 +247,34 @@ function fout(tekst, code) { const f = new Error(tekst); if (code) f.code = code
         const echt = doel.get(id) || id;
         const d = docs[echt];
         if (!d) throw fout('Onbekend bestand.');
-        const r = await fetch('/werkplek/doc/' + encodeURIComponent(echt));
-        const bytes = d.versies.length ? d.versies.at(-1).bytes.slice(0).buffer : await r.arrayBuffer();
+        if (v.versie != null) {
+          // Zoals ouder.ts: alleen een geheel getal vanaf 1; altijd alleen-lezen, zonder slot.
+          if (typeof v.versie !== 'number' || !Number.isInteger(v.versie) || v.versie < 1) {
+            throw fout('Ongeldig versienummer.', 'versie_ongeldig');
+          }
+          const aantal = d.versies.length + 1;
+          if (v.versie > aantal) throw fout('Deze versie bestaat niet of je hebt er geen toegang toe.');
+          // Versie 1 is de begininhoud van de server, versie k de (k-1)e opslag.
+          const bytes = v.versie === 1
+            ? await (await fetch('/werkplek/doc/' + encodeURIComponent(echt))).arrayBuffer()
+            : d.versies[v.versie - 2].bytes.slice(0).buffer;
+          versieOpen.set(id, v.versie);
+          return new MetOverdracht({ bestand: id, naam: d.naam, versie: v.versie, alleen_lezen: true, bytes }, [bytes]);
+        }
+        versieOpen.delete(id);
+        // De laatste opgeslagen versie, anders de begininhoud van de server (een
+        // conflictkopie heeft daar niets: die bestaat alleen in deze pagina).
+        const bytes = d.versies.length
+          ? d.versies.at(-1).bytes.slice(0).buffer
+          : await (await fetch('/werkplek/doc/' + encodeURIComponent(echt))).arrayBuffer();
         return new MetOverdracht({ bestand: id, naam: d.naam, versie: d.versies.length + 1, alleen_lezen: d.alleen_lezen, bytes }, [bytes]);
       }
       case 'opslaan': {
         const id = bestandVan(v);
+        // Zoals sessie.ts (weigerVersie): een getoonde oudere versie slaat niet op.
+        if (versieOpen.has(id)) {
+          throw fout('Versie ' + versieOpen.get(id) + ' is alleen-lezen geopend; open de huidige versie om op te slaan.', 'versie_alleen_lezen');
+        }
         if (!(v.bytes instanceof ArrayBuffer)) throw fout('Geen bestand ontvangen.');
         const bytes = new Uint8Array(v.bytes);
         let echt = doel.get(id) || id;
@@ -308,7 +336,7 @@ function fout(tekst, code) { const f = new Error(tekst); if (code) f.code = code
     const v = e.data;
     if (!v || v.werkplek !== 1 || typeof v.soort !== 'string') return;
     const t = Math.round(performance.now() - gast.start);
-    gast.log.push({ t, id: v.id, soort: v.soort, bestand: v.bestand, bytes: v.bytes instanceof ArrayBuffer ? v.bytes.byteLength : undefined });
+    gast.log.push({ t, id: v.id, soort: v.soort, bestand: v.bestand, versie: v.versie, bytes: v.bytes instanceof ArrayBuffer ? v.bytes.byteLength : undefined });
     vervals({ id: v.id, soort: v.soort });
     if (performance.now() - gast.start < ZWIJG_MS) return;
     if (UITSTEL_MS) await new Promise((r) => setTimeout(r, UITSTEL_MS));

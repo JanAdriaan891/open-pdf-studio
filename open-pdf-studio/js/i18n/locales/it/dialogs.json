@@ -1246,7 +1246,9 @@
     "empty": "Nessun elemento da verificare. Esegui prima l'OCR o alza la soglia. I PDF meno recenti senza metadati di verifica richiedono un nuovo OCR.",
     "error": "Impossibile aggiornare la verifica. Aggiorna la coda se il documento è cambiato.",
     "accepted": "Accettato",
-    "corrected": "Corretto"
+    "corrected": "Corretto",
+    "notEncodable": "Il testo OCR ricercabile non può contenere questi caratteri: {{characters}}. Correggi la parola con altri caratteri.",
+    "archived": "Verifica salvata nel file. Esegui di nuovo l'OCR su questa pagina per modificarla."
   },
   "portfolio": {
     "title": "Portfolio PDF (raccolta)",

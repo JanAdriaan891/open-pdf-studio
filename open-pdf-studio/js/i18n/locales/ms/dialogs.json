@@ -1246,7 +1246,9 @@
     "empty": "Tiada calon semakan. Jalankan OCR dahulu, atau naikkan ambang. PDF lama tanpa metadata semakan memerlukan OCR semula.",
     "error": "Tidak dapat mengemas kini pengesahan. Muat semula baris gilir jika dokumen telah berubah.",
     "accepted": "Diterima",
-    "corrected": "Dibetulkan"
+    "corrected": "Dibetulkan",
+    "notEncodable": "Teks OCR yang boleh dicari tidak boleh mengandungi aksara ini: {{characters}}. Betulkan perkataan dengan aksara lain.",
+    "archived": "Semakan disimpan dalam fail. Jalankan OCR pada halaman ini sekali lagi untuk mengubahnya."
   },
   "portfolio": {
     "title": "Portfolio koleksi PDF",

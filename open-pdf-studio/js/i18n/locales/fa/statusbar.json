@@ -140,6 +140,7 @@
     "prepareOcr": "باز کردن برای OCR…"
   },
   "symbolSearch": "یافتن نمادها",
+  "findMoreOptions": "گزینه‌های بیشتر جستجو",
   "watchActive": "در حال پایش {{folder}}",
   "watchFailed": "خطای پایش: {{folder}}",
   "watchTitle": "گردش‌کار سند در حال پایش {{input}} و نوشتن در {{output}} است. برای توقف پایش کلیک کنید.",

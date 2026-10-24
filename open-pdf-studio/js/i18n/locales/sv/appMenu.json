@@ -71,6 +71,12 @@
     "site": "På den här webbplatsen",
     "noSiteDocuments": "Inga dokument på den här webbplatsen",
     "siteListError": "Det gick inte att läsa in dokumenten på den här webbplatsen",
+    "versions": "Versioner",
+    "versionNumber": "Version {{version}}",
+    "currentVersion": "aktuell",
+    "noVersions": "Inga versioner",
+    "versionsError": "Det gick inte att läsa in versionerna",
+    "olderVersionsHint": "Äldre versioner öppnas skrivskyddade; Spara som laddar ned en kopia.",
     "save": "Spara"
   },
   "importPanel": {

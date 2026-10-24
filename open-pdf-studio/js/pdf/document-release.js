@@ -137,17 +137,28 @@ export function sleutelsMetPad(sleutels, pad) {
 
 /** Haalt alles wat per bestandspad gecachet staat weg, in de webview en in Rust. */
 async function geefPadVrij(pad) {
-  const [loader, vector, bitmaps, progressief, weergave] = await Promise.all([
+  const [loader, vector, bitmaps, progressief, weergave, tegels, renderer, snap] = await Promise.all([
     import('./loader.js'),
     import('./vector-renderer.js'),
     import('./page-bitmap-cache.js'),
     import('./progressive-render.js'),
     import('./weergave-per-document.js'),
+    import('./tile-cache.js'),
+    import('./renderer.js'),
+    import('../tools/pdf-snap-extractor.js'),
   ]);
   loader.clearCachedPdfBytes(pad);
   vector.invalidateDocumentCache(pad);
   bitmaps.invalidateDocumentBitmaps(pad);
   progressief.forgetContentBytes(pad);
+  // De tegels van hoge zoom, de JS-bitmapcache en de voorvertoningen bleven
+  // na sluiten staan zolang er een ander tabblad open was (ImageBitmaps en
+  // canvassen, buiten de JS-heap maar wel in het geheugen van de WebView), en
+  // de snap-geometrie van de tekening ook (#705).
+  tegels.tileCacheClearForFile(pad);
+  renderer.clearBitmapJSCacheForFile(pad);
+  renderer.clearLowResCacheForFile(pad);
+  snap.vergeetSnapGeometrie(pad);
   // Bewaarde zoom/uitsnede van de tabwissel (#539): opnieuw openen begint
   // gewoon passend.
   weergave.vergeetWeergaveStand(pad);
@@ -226,8 +237,9 @@ export async function geefDocumentVrij(gesloten, overgebleven) {
   }
 
   if (plan.memoryKey) {
-    const loader = await import('./loader.js');
+    const [loader, snap] = await Promise.all([import('./loader.js'), import('../tools/pdf-snap-extractor.js')]);
     loader.clearCachedPdfBytes(plan.memoryKey);
+    snap.vergeetSnapGeometrie(plan.memoryKey);
   }
   for (const pad of plan.paden) await geefPadVrij(pad);
   // Pas nu de tijdelijke werkbestanden zelf: niets leest er nog uit.

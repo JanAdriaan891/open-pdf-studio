@@ -71,6 +71,12 @@
     "site": "इस साइट पर",
     "noSiteDocuments": "इस साइट पर कोई दस्तावेज़ नहीं है",
     "siteListError": "इस साइट के दस्तावेज़ लोड नहीं हो सके",
+    "versions": "संस्करण",
+    "versionNumber": "संस्करण {{version}}",
+    "currentVersion": "वर्तमान",
+    "noVersions": "कोई संस्करण नहीं",
+    "versionsError": "संस्करण लोड नहीं हो सके",
+    "olderVersionsHint": "पुराने संस्करण केवल पढ़ने के लिए खुलते हैं; \"इस रूप में सहेजें\" एक प्रति डाउनलोड करता है।",
     "save": "सहेजें"
   },
   "importPanel": {

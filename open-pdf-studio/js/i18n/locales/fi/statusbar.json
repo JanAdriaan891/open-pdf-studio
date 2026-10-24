@@ -140,6 +140,7 @@
     "prepareOcr": "Avaa OCR:ää varten…"
   },
   "symbolSearch": "Etsi symboleja",
+  "findMoreOptions": "Lisää hakuasetuksia",
   "watchActive": "Valvotaan: {{folder}}",
   "watchFailed": "Valvontavirhe: {{folder}}",
   "watchTitle": "Asiakirjatyönkulku valvoo kohdetta {{input}} ja kirjoittaa kohteeseen {{output}}. Lopeta valvonta napsauttamalla.",

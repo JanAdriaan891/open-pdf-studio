@@ -71,6 +71,12 @@
     "site": "Na tomto webu",
     "noSiteDocuments": "Na tomto webu nejsou žádné dokumenty",
     "siteListError": "Dokumenty tohoto webu se nepodařilo načíst",
+    "versions": "Verze",
+    "versionNumber": "Verze {{version}}",
+    "currentVersion": "aktuální",
+    "noVersions": "Žádné verze",
+    "versionsError": "Verze se nepodařilo načíst",
+    "olderVersionsHint": "Starší verze se otevírají jen pro čtení; Uložit jako stáhne kopii.",
     "save": "Uložit"
   },
   "importPanel": {

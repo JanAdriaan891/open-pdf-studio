@@ -70,6 +70,12 @@
     "site": "Op deze site",
     "noSiteDocuments": "Geen documenten op deze site",
     "siteListError": "De documenten van deze site konden niet worden geladen",
+    "versions": "Versies",
+    "versionNumber": "Versie {{version}}",
+    "currentVersion": "huidig",
+    "noVersions": "Geen versies",
+    "versionsError": "De versies konden niet worden geladen",
+    "olderVersionsHint": "Oudere versies openen alleen-lezen; Opslaan als downloadt een kopie.",
     "save": "Opslaan"
   },
   "importPanel": {

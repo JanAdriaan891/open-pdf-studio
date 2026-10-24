@@ -140,6 +140,7 @@
     "prepareOcr": "Отвори за OCR…"
   },
   "symbolSearch": "Пронађи симболе",
+  "findMoreOptions": "Још опција претраге",
   "watchActive": "Праћење: {{folder}}",
   "watchFailed": "Грешка праћења: {{folder}}",
   "watchTitle": "Радни ток документа прати {{input}} и уписује у {{output}}. Кликните да бисте зауставили праћење.",

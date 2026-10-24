@@ -140,6 +140,7 @@
     "prepareOcr": "Mở để chạy OCR…"
   },
   "symbolSearch": "Tìm ký hiệu",
+  "findMoreOptions": "Thêm tùy chọn tìm kiếm",
   "watchActive": "Đang theo dõi {{folder}}",
   "watchFailed": "Lỗi theo dõi: {{folder}}",
   "watchTitle": "Quy trình tài liệu đang theo dõi {{input}} và ghi vào {{output}}. Nhấp để dừng theo dõi.",

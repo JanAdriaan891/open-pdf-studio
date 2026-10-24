@@ -71,6 +71,12 @@
     "site": "Na tejto lokalite",
     "noSiteDocuments": "Na tejto lokalite nie sú žiadne dokumenty",
     "siteListError": "Dokumenty tejto lokality sa nepodarilo načítať",
+    "versions": "Verzie",
+    "versionNumber": "Verzia {{version}}",
+    "currentVersion": "aktuálna",
+    "noVersions": "Žiadne verzie",
+    "versionsError": "Verzie sa nepodarilo načítať",
+    "olderVersionsHint": "Staršie verzie sa otvárajú len na čítanie; Uložiť ako stiahne kópiu.",
     "save": "Uložiť"
   },
   "importPanel": {

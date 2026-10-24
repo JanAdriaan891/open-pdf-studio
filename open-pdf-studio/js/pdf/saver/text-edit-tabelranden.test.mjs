@@ -1,9 +1,10 @@
 // Opslaan van een tekstbewerking in een tabel (#669).
 //
 // Kan de saver de originele tekstrun niet in-place uit de content stream
-// knippen (hier: de tekst staat in een Form XObject), dan dekt hij de oude
-// tekst wit af. Dat vlak lag eerst over het hele blok — een tabelrij is één
-// blok — en wiste in het bestand de celranden van die rij. Nu ligt er per
+// knippen (hier: de tekst staat in een Form XObject dat ook op een tweede
+// pagina getekend wordt, #716), dan dekt hij de oude tekst wit af. Dat vlak
+// lag eerst over het hele blok — een tabelrij is één blok — en wiste in het
+// bestand de celranden van die rij. Nu ligt er per
 // originele run een strak vlak: de randen blijven in het bestand staan.
 // Daarnaast komt de vervangtekst in de familie van het origineel terug: een
 // font dat PDF.js als 'sans-serif' meldt, werd Times-Roman.
@@ -62,6 +63,11 @@ async function tabelPdf() {
   page.node.setXObject(PDFName.of('Tx1'), vormRef);
   const inhoud = `${lijnen}q /Tx1 Do Q\n`;
   page.node.set(PDFName.of('Contents'), pdf.context.register(pdf.context.flateStream(inhoud)));
+  // Hetzelfde formulier op een tweede pagina: knippen in het formulier zou
+  // de tekst daar ook weghalen, dus blijft de saver op het terugval-pad.
+  const tweede = pdf.addPage([595, 842]);
+  tweede.node.setXObject(PDFName.of('Tx1'), vormRef);
+  tweede.node.set(PDFName.of('Contents'), pdf.context.register(pdf.context.flateStream('q /Tx1 Do Q\n')));
   return pdf.save({ useObjectStreams: false });
 }
 
@@ -143,7 +149,7 @@ test('terugval-pad: de celranden van de bewerkte rij blijven in het bestand staa
   const edit = await rijRecord(bytes, 2, ['Kolom HEB 240', '2', 'Brandwerend 90 min']);
   const lib = await PDFDocument.load(bytes);
   await saveTextEditsToPages(lib, lib.getPages(), { textEdits: [edit] });
-  assert.equal(edit._pendingBakeInfo?.inplaceBaked ?? null, null, 'tekst in een Form XObject: geen in-place-knip');
+  assert.equal(edit._pendingBakeInfo?.inplaceBaked ?? null, null, 'tekst in een gedeeld Form XObject: geen in-place-knip');
   const uit = await lib.save({ useObjectStreams: false });
 
   const voor = lijnPixels(render(bytes));

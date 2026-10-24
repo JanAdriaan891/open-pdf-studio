@@ -71,6 +71,12 @@
     "site": "บนไซต์นี้",
     "noSiteDocuments": "ไม่มีเอกสารบนไซต์นี้",
     "siteListError": "ไม่สามารถโหลดเอกสารของไซต์นี้ได้",
+    "versions": "เวอร์ชัน",
+    "versionNumber": "เวอร์ชัน {{version}}",
+    "currentVersion": "ปัจจุบัน",
+    "noVersions": "ไม่มีเวอร์ชัน",
+    "versionsError": "ไม่สามารถโหลดเวอร์ชันได้",
+    "olderVersionsHint": "เวอร์ชันเก่าจะเปิดแบบอ่านอย่างเดียว \"บันทึกเป็น\" จะดาวน์โหลดสำเนา",
     "save": "บันทึก"
   },
   "importPanel": {

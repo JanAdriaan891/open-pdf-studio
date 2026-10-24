@@ -140,6 +140,7 @@
     "prepareOcr": "Åbn til OCR…"
   },
   "symbolSearch": "Find symboler",
+  "findMoreOptions": "Flere søgeindstillinger",
   "watchActive": "Overvåger {{folder}}",
   "watchFailed": "Overvågningsfejl: {{folder}}",
   "watchTitle": "Dokumentarbejdsgangen overvåger {{input}} og skriver til {{output}}. Klik for at stoppe overvågningen.",

@@ -140,6 +140,7 @@
     "prepareOcr": "OCR için aç…"
   },
   "symbolSearch": "Sembol bul",
+  "findMoreOptions": "Daha fazla arama seçeneği",
   "watchActive": "{{folder}} izleniyor",
   "watchFailed": "İzleme hatası: {{folder}}",
   "watchTitle": "Belge iş akışı {{input}} klasörünü izliyor ve {{output}} klasörüne yazıyor. İzlemeyi durdurmak için tıklayın.",

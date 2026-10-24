@@ -3,6 +3,7 @@ import { state, getActiveDocument, getPageRotation, setPageRotation, imageCache 
 import { cloneAnnotation } from '../annotations/factory.js';
 import { stampRasterStale } from '../annotations/stamp-appearance-sync.js';
 import { applyOcrShift } from '../pdf/shift-page-geometry.js';
+import { toonOrigineelInTekstlaag, toonBewerkingInTekstlaag } from '../text/tekstlaag-bewerking.js';
 const MAX_UNDO_STACK = 100;
 let undoTransactionDepth = 0;
 let undoTransactionCommands = null;
@@ -120,7 +121,7 @@ function pagesForCommand(cmd) {
   // Watermark/bookmark commands don't carry a page and don't affect the page
   // thumbnail composite — skip them entirely (empty set = no refresh).
   const skipTypes = new Set([
-    'ocrWord', 'ocrPage',
+    'ocrWord', 'ocrPage', 'ocrPages',
     'addWatermark', 'removeWatermark', 'modifyWatermark',
     'addBookmark', 'removeBookmark', 'modifyBookmark', 'setBookmarks',
     // pageStructure (insert/delete/reorder pages) shifts page numbers and is
@@ -441,14 +442,27 @@ function restoreSelectionByIds(doc, ids) {
 }
 
 // Apply undo for a command
+// OCR results per page. An empty list is kept (not deleted): the saver then
+// removes the OCR layer an earlier save of this session wrote on that page.
+function setOcrPage(doc, page, words) {
+  if (!doc.ocrResults) doc.ocrResults = {};
+  doc.ocrResults[page] = clonePlainValue(words) || [];
+}
+
+function setOcrWord(doc, page, index, word) {
+  const words = doc.ocrResults?.[page];
+  if (Array.isArray(words) && index >= 0 && index < words.length) words[index] = clonePlainValue(word);
+}
+
 function applyUndo(cmd, lookup) {
   const doc = getActiveDocument();
   if (!doc) return;
   if (!lookup) lookup = annotationsById(doc);
 
   switch (cmd.type) {
-    case 'ocrWord': doc.ocrResults[cmd.page][cmd.index] = clonePlainValue(cmd.oldWord); break;
-    case 'ocrPage': doc.ocrResults[cmd.page] = clonePlainValue(cmd.oldWords); break;
+    case 'ocrWord': setOcrWord(doc, cmd.page, cmd.index, cmd.oldWord); break;
+    case 'ocrPage': setOcrPage(doc, cmd.page, cmd.oldWords); break;
+    case 'ocrPages': cmd.pages.forEach((p) => setOcrPage(doc, p.page, p.oldWords)); break;
     case 'addAnnotation': {
       const idx = doc.annotations.findIndex(a => a.id === cmd.annotation.id);
       if (idx !== -1) doc.annotations.splice(idx, 1);
@@ -525,60 +539,9 @@ function applyUndo(cmd, lookup) {
       if (!doc.textEdits) doc.textEdits = [];
       const idx = doc.textEdits.findIndex(e => e.id === cmd.textEdit.id);
       if (idx !== -1) doc.textEdits.splice(idx, 1);
-      // Restore original span text in the text layer
-      if (cmd.textEdit.originalSpanTexts) {
-        const pageNum = cmd.textEdit.page;
-        const textLayer = document.querySelector(`.textLayer[data-page="${pageNum}"]`)
-          || document.querySelector('.textLayer');
-        if (textLayer) {
-          const spans = Array.from(textLayer.querySelectorAll('span[data-pdf-transform]'));
-          // Find spans matching the edit's PDF position
-          const editPdfY = cmd.textEdit.pdfY;
-          const editPdfX = cmd.textEdit.pdfX;
-          const fontSize = cmd.textEdit.fontSize;
-          const tolerance = fontSize * 0.3;
-          // Group spans into lines by pdfY
-          const lineMap = new Map();
-          for (const span of spans) {
-            const transform = JSON.parse(span.dataset.pdfTransform);
-            const pdfY = transform[5];
-            let foundKey = null;
-            for (const key of lineMap.keys()) {
-              if (Math.abs(pdfY - key) <= tolerance) { foundKey = key; break; }
-            }
-            if (foundKey !== null) {
-              lineMap.get(foundKey).push({ span, pdfX: transform[4], pdfY });
-            } else {
-              lineMap.set(pdfY, [{ span, pdfX: transform[4], pdfY }]);
-            }
-          }
-          // Match lines from originalSpanTexts to text layer lines
-          const origTexts = cmd.textEdit.originalSpanTexts;
-          const ls = cmd.textEdit.lineSpacing || fontSize * 1.2;
-          for (let li = 0; li < origTexts.length; li++) {
-            const expectedY = editPdfY - li * ls;
-            let bestLine = null;
-            let bestDist = Infinity;
-            for (const [key, lineSpans] of lineMap) {
-              const dist = Math.abs(key - expectedY);
-              if (dist < bestDist) { bestDist = dist; bestLine = lineSpans; }
-            }
-            if (bestLine && bestDist <= tolerance * 3) {
-              bestLine.sort((a, b) => a.pdfX - b.pdfX);
-              // Find starting span that matches the edit's pdfX position
-              let startIdx = 0;
-              let bestXDist = Infinity;
-              for (let si = 0; si < bestLine.length; si++) {
-                const dist = Math.abs(bestLine[si].pdfX - editPdfX);
-                if (dist < bestXDist) { bestXDist = dist; startIdx = si; }
-              }
-              for (let si = 0; si < origTexts[li].length && (startIdx + si) < bestLine.length; si++) {
-                bestLine[startIdx + si].span.textContent = origTexts[li][si];
-              }
-            }
-          }
-        }
-      }
+      // De originele tekst terug in de tekstlaag.
+      const laag = tekstlaagVan(cmd.textEdit.page);
+      if (laag) toonOrigineelInTekstlaag(laag, cmd.textEdit, cmd.tekstlaagNa || null);
       break;
     }
     case 'removeTextEdit': {
@@ -591,6 +554,8 @@ function applyUndo(cmd, lookup) {
       if (!doc.textEdits) doc.textEdits = [];
       const idx = doc.textEdits.findIndex(e => e.id === cmd.newTextEdit.id);
       if (idx !== -1) doc.textEdits[idx] = { ...cmd.oldTextEdit };
+      const laag = tekstlaagVan(cmd.oldTextEdit.page);
+      if (laag) toonBewerkingInTekstlaag(laag, cmd.oldTextEdit, { vorige: cmd.newTextEdit });
       break;
     }
     case 'addWatermark': {
@@ -636,6 +601,13 @@ function applyUndo(cmd, lookup) {
   }
 }
 
+// De tekstlaag van een pagina (enkele pagina: de enige laag).
+function tekstlaagVan(pageNum) {
+  if (typeof document === 'undefined' || typeof document.querySelector !== 'function') return null;
+  return document.querySelector(`.textLayer[data-page="${pageNum}"]`)
+    || document.querySelector('.textLayer');
+}
+
 // Apply redo for a command
 function applyRedo(cmd, lookup) {
   const doc = getActiveDocument();
@@ -643,8 +615,9 @@ function applyRedo(cmd, lookup) {
   if (!lookup) lookup = annotationsById(doc);
 
   switch (cmd.type) {
-    case 'ocrWord': doc.ocrResults[cmd.page][cmd.index] = clonePlainValue(cmd.newWord); break;
-    case 'ocrPage': doc.ocrResults[cmd.page] = clonePlainValue(cmd.newWords); break;
+    case 'ocrWord': setOcrWord(doc, cmd.page, cmd.index, cmd.newWord); break;
+    case 'ocrPage': setOcrPage(doc, cmd.page, cmd.newWords); break;
+    case 'ocrPages': cmd.pages.forEach((p) => setOcrPage(doc, p.page, p.newWords)); break;
     case 'addAnnotation': {
       doc.annotations.push(cloneAnnotation(cmd.annotation));
       lookup.reset();
@@ -710,6 +683,10 @@ function applyRedo(cmd, lookup) {
     case 'addTextEdit': {
       if (!doc.textEdits) doc.textEdits = [];
       doc.textEdits.push({ ...cmd.textEdit });
+      // De bewerkte tekst weer in de tekstlaag, zoals finishPdfTextEditing
+      // hem zette (#719); anders vonden zoeken en selecteren de oude tekst.
+      const laag = tekstlaagVan(cmd.textEdit.page);
+      if (laag) toonBewerkingInTekstlaag(laag, cmd.textEdit, { teksten: cmd.tekstlaagNa || null });
       break;
     }
     case 'removeTextEdit': {
@@ -722,6 +699,8 @@ function applyRedo(cmd, lookup) {
       if (!doc.textEdits) doc.textEdits = [];
       const idx = doc.textEdits.findIndex(e => e.id === cmd.oldTextEdit.id);
       if (idx !== -1) doc.textEdits[idx] = { ...cmd.newTextEdit };
+      const laag = tekstlaagVan(cmd.newTextEdit.page);
+      if (laag) toonBewerkingInTekstlaag(laag, cmd.newTextEdit, { vorige: cmd.oldTextEdit });
       break;
     }
     case 'addWatermark': {
@@ -1089,12 +1068,24 @@ export function recordPageStructure(oldBytes, oldAnnotations, oldRotations, oldP
 
 
 // OCR can finish in a background tab. Never push its command onto the active tab.
-export function recordOcrPage(doc,page,oldWords,newWords) {
-  const cmd={type:'ocrPage',page,oldWords:clonePlainValue(oldWords),newWords:clonePlainValue(newWords)};
-  if (getActiveDocument() === doc) { execute(cmd); return; }
+export function recordOcrPage(doc, page, oldWords, newWords) {
+  recordOcrPages(doc, [{ page, oldWords, newWords }]);
+}
+
+// Several pages of one OCR run: a single undo step.
+export function recordOcrPages(doc, pages) {
+  if (!pages.length) return;
+  const changes = pages.map((p) => ({
+    page: p.page, oldWords: clonePlainValue(p.oldWords), newWords: clonePlainValue(p.newWords),
+  }));
+  const cmd = changes.length === 1 ? { type: 'ocrPage', ...changes[0] } : { type: 'ocrPages', pages: changes };
+  if (getActiveDocument() === doc) {
+    execute(cmd);
+    return;
+  }
   doc.undoStack.push(cmd);
   if (doc.undoStack.length > MAX_UNDO_STACK) doc.undoStack.shift();
-  doc.redoStack=[];
-  doc.savedUndoStackLength=-1;
+  doc.redoStack = [];
+  doc.savedUndoStackLength = -1;
   verhoogInhoudRevisie(doc);
 }

@@ -1,12 +1,14 @@
-import DocumentSearch from './DocumentSearch.jsx';
-import {openDialog} from '../stores/dialogStore.js';
-import { createEffect, createSignal, For, Show } from 'solid-js';
+import { createEffect, createSignal, For, Show, lazy, onCleanup } from 'solid-js';
+import { openDialog } from '../stores/dialogStore.js';
 import {
   visible, resultsText, messageText, notFound, navDisabled, searching,
   searchInText, searchInAnnotations, resultGroups, resultsOpen, setResultsOpen,
   currentResultPage, sourcesOff,
 } from '../stores/findBarStore.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
+
+// Searching across documents is loaded only when the user opens it.
+const DocumentSearch = lazy(() => import('./DocumentSearch.jsx'));
 
 export default function FindBar() {
   const { t } = useTranslation('statusbar');
@@ -90,6 +92,33 @@ export default function FindBar() {
     fireOptionsChange(matchCase(), v);
   };
 
+  // Extra search features live behind one compact options button, so the
+  // default bar stays as small as it was.
+  const [optionsOpen, setOptionsOpen] = createSignal(false);
+  const [documentSearchOpen, setDocumentSearchOpen] = createSignal(false);
+  let optionsRef;
+  const closeOptionsOutside = (e) => {
+    if (optionsRef && !optionsRef.contains(e.target)) setOptionsOpen(false);
+  };
+  createEffect(() => {
+    if (!optionsOpen()) return;
+    document.addEventListener('pointerdown', closeOptionsOutside, true);
+    onCleanup(() => document.removeEventListener('pointerdown', closeOptionsOutside, true));
+  });
+  createEffect(() => {
+    if (visible()) return;
+    setOptionsOpen(false);
+    setDocumentSearchOpen(false);
+  });
+  const openSymbolSearch = () => {
+    setOptionsOpen(false);
+    openDialog('symbol-search');
+  };
+  const toggleDocumentSearch = () => {
+    setOptionsOpen(false);
+    setDocumentSearchOpen(!documentSearchOpen());
+  };
+
   const toggleHighlightAll = () => {
     const v = !highlightAll();
     setHighlightAll(v);
@@ -98,9 +127,7 @@ export default function FindBar() {
 
   return (
     <div class="find-bar" classList={{ visible: visible() }}>
-      <button onClick={() => openDialog('symbol-search')}>{t('symbolSearch')}</button>
       <div class="find-rows">
-        <DocumentSearch />
         {/* Row 1: Find */}
         <div class="find-row">
           {/* Search input with inline count */}
@@ -162,6 +189,47 @@ export default function FindBar() {
             </svg>
           </button>
 
+          {/* More search options: symbols, other documents */}
+          <div class="find-options" ref={optionsRef}>
+            <button
+              class="find-toggle-btn"
+              classList={{ active: optionsOpen() || documentSearchOpen() }}
+              title={t('findMoreOptions')}
+              aria-haspopup="menu"
+              aria-expanded={optionsOpen()}
+              onClick={() => setOptionsOpen(!optionsOpen())}
+            >
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+                <circle cx="3" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="13" cy="8" r="1.3"/>
+              </svg>
+            </button>
+            <Show when={optionsOpen()}>
+              <div
+                class="find-options-menu"
+                role="menu"
+                onKeyDown={(e) => {
+                  if (e.key !== 'Escape') return;
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setOptionsOpen(false);
+                }}
+              >
+                <button class="find-options-item" role="menuitem" onClick={openSymbolSearch}>
+                  {t('symbolSearch')}
+                </button>
+                <button
+                  class="find-options-item"
+                  classList={{ checked: documentSearchOpen() }}
+                  role="menuitemcheckbox"
+                  aria-checked={documentSearchOpen()}
+                  onClick={toggleDocumentSearch}
+                >
+                  {t('documentSearch.title')}
+                </button>
+              </div>
+            </Show>
+          </div>
+
           {/* Close */}
           <button class="find-close-btn" title={t('closeEsc')} onClick={handleClose}>
             <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -184,6 +252,11 @@ export default function FindBar() {
             <span class="find-sources-hint">{t('searchNoSources')}</span>
           </Show>
         </div>
+
+        {/* Zoeken in andere documenten, via het optiemenu */}
+        <Show when={documentSearchOpen()}>
+          <DocumentSearch />
+        </Show>
 
         {/* Rij 3: treffers per pagina */}
         <Show when={resultGroups().length > 0}>

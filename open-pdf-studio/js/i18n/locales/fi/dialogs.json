@@ -1246,7 +1246,9 @@
     "empty": "Ei tarkistettavia ehdokkaita. Suorita ensin OCR tai nosta kynnysarvoa. Vanhemmat PDF:t ilman tarkistusmetatietoja vaativat OCR:n uudelleen.",
     "error": "Vahvistusta ei voitu päivittää. Päivitä jono, jos asiakirja on muuttunut.",
     "accepted": "Hyväksytty",
-    "corrected": "Korjattu"
+    "corrected": "Korjattu",
+    "notEncodable": "Haettava OCR-teksti ei voi sisältää näitä merkkejä: {{characters}}. Korjaa sana käyttämällä muita merkkejä.",
+    "archived": "Tarkistus on tallennettu tiedostoon. Muuta sitä suorittamalla OCR tälle sivulle uudelleen."
   },
   "portfolio": {
     "title": "PDF-kokoelmaportfolio",

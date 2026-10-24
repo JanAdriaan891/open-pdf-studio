@@ -71,6 +71,12 @@
     "site": "على هذا الموقع",
     "noSiteDocuments": "لا توجد مستندات على هذا الموقع",
     "siteListError": "تعذّر تحميل مستندات هذا الموقع",
+    "versions": "الإصدارات",
+    "versionNumber": "الإصدار {{version}}",
+    "currentVersion": "الحالي",
+    "noVersions": "لا توجد إصدارات",
+    "versionsError": "تعذّر تحميل الإصدارات",
+    "olderVersionsHint": "تُفتح الإصدارات الأقدم للقراءة فقط؛ ويُنزّل «حفظ باسم» نسخة.",
     "save": "حفظ"
   },
   "importPanel": {

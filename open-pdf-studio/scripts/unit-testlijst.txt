@@ -76,9 +76,11 @@ js/annotations/wand-join.test.mjs
 js/pdf/saver/wand-join-meta.test.mjs
 js/plattegrond/wand-join-mcp.test.mjs
 js/tools/snap-extractie-beleid.test.mjs
+js/tools/snap-geometrie-cache.test.mjs
 js/annotations/schaal-bronnen.test.mjs
 js/solid/stores/quantitiesStore.test.mjs
 js/core/undo-manager.test.mjs
+js/core/undo-tekstlaag.test.mjs
 js/utils/date-formatter.test.mjs
 js/pdf/loader/annotaties-toevoegen.test.mjs
 js/solid/components/dialogs/SignatureDialog.test.mjs
@@ -145,6 +147,7 @@ js/pdf/loader/ap-fill-alpha.test.mjs
 js/solid/stores/doc-info-format.test.mjs
 js/pdf/overlay-canvas-size.test.mjs
 js/pdf/document-release.test.mjs
+js/pdf/document-release-vrijgeven.test.mjs
 js/pdf/progressive-view-guard.test.mjs
 js/pdf/print-pagina-instelling.test.mjs
 js/pdf/print-papier.test.mjs
@@ -340,6 +343,7 @@ js/plugins/oppx-testpakket.test.mjs
 js/plugins/extensies-mcp-aansluiting.test.mjs
 js/plugins/opslag-wissel-slot.test.mjs
 js/plugins/plugin-api-opruimen.test.mjs
+js/plugins/plugin-feature-calls.test.mjs
 js/tools/pijl-in-tabstrook.test.mjs
 # Ctrl-sneltoetsen met Caps Lock aan (#577)
 js/tools/sneltoetsen-caps-lock.test.mjs
@@ -460,12 +464,17 @@ js/pdf/render-diagnostics.test.mjs
 js/pdf/unicode-export-contract.test.mjs
 js/pdf/saver/unicode-layout-guard.test.mjs
 js/search/document-search.test.mjs
+js/search/find-navigation.test.mjs
 js/annotations/spatial-zones.test.mjs
+js/pdf/spatial-zone-relink.test.mjs
 js/pdf/hidden-information.test.mjs
 js/pdf/hidden-information-private.test.mjs
 js/pdf/print-preflight.test.mjs
 js/pdf/print-preflight-budget.test.mjs
 js/pdf/ocr-review.test.mjs
+js/pdf/ocr-review-service.test.mjs
+js/pdf/ocr-opslaan.test.mjs
+js/solid/components/feature-ui-placement.test.mjs
 js/pdf/portfolio.test.mjs
 js/pdf/portfolio-preview.test.mjs
 js/pdf/export-path-policy.test.mjs
@@ -474,6 +483,7 @@ js/core/nieuwe-kopie-schrijven.test.mjs
 js/pdf/form-recognition.test.mjs
 js/search/symbol-matcher.test.mjs
 js/quantities/workbook-bindings.test.mjs
+js/quantities/location-fields.test.mjs
 js/quantities/workbook-refresh.test.mjs
 js/quantities/schedule-csv.test.mjs
 js/workflows/document-workflow.test.mjs
@@ -491,3 +501,19 @@ js/pdf/vul-dekking-rondgang.test.mjs
 js/symbols/profieltype.test.mjs
 js/tools/editor-ondergrond.test.mjs
 js/pdf/raster-export-plan.test.mjs
+js/annotations/rendering/lint-na-deselecteren.test.mjs
+js/pdf/inpassen-verborgen-viewer.test.mjs
+js/pdf/weergave-na-opslaan-als.test.mjs
+js/pdf/host-versies.test.mjs
+js/pdf/host-versies-i18n.test.mjs
+js/core/volgende-taak.test.mjs
+js/solid/components/ribbon/na-lettertypen.test.mjs
+js/text/tekst-blokken.test.mjs
+js/tools/text-edit-commit.test.mjs
+js/pdf/saver/text-edit-afbeelding.test.mjs
+js/pdf/saver/text-edit-formxobject.test.mjs
+js/pdf/saver/text-edit-mcp-scan.test.mjs
+js/pdf/saver/text-edit-unicode.test.mjs
+js/text/tekstlaag-bron.test.mjs
+js/pdf/saver/text-edit-glyfen.test.mjs
+js/text/tekenafstand.test.mjs

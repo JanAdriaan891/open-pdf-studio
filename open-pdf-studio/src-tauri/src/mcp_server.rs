@@ -2234,7 +2234,7 @@ fn handle_tools_list() -> Value {
             },
             {
                 "name": "app_replace_text",
-                "description": "Replace one existing PDF text span returned by app_get_page_text. Requires the exact expected text to reject stale IDs. Preserves the page artwork by refusing edits that cannot remove the original text in place; fits the replacement inside its original width and embeds a full fallback font when the subset lacks glyphs. Changes stay pending until app_save_pdf is called. One line per call; for translation, map translated lines to span IDs and call repeatedly.",
+                "description": "Replace one existing PDF text span returned by app_get_page_text. Requires the exact expected text to reject stale IDs. Preserves the page artwork by refusing edits that cannot remove the original text in place; fits the replacement inside its original width and embeds a full fallback font when the subset lacks glyphs. On a scanned page with an invisible OCR layer the scanned word is covered and the replacement is drawn visibly, as in the editor (reply: coveredScannedText). Changes stay pending until app_save_pdf is called. One line per call; for translation, map translated lines to span IDs and call repeatedly.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {

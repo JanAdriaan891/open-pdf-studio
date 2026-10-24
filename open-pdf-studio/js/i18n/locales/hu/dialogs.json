@@ -1246,7 +1246,9 @@
     "empty": "Nincs ellenőrizendő szó. Előbb futtassa az OCR-t, vagy emelje a küszöbértéket. Az ellenőrzési metaadatok nélküli régebbi PDF-eken újra le kell futtatni az OCR-t.",
     "error": "Az ellenőrzés nem frissíthető. Ha a dokumentum megváltozott, frissítse a sort.",
     "accepted": "Elfogadva",
-    "corrected": "Javítva"
+    "corrected": "Javítva",
+    "notEncodable": "A kereshető OCR-szöveg nem tartalmazhatja ezeket a karaktereket: {{characters}}. Javítsa a szót más karakterekkel.",
+    "archived": "Az ellenőrzés a fájlban van tárolva. A módosításhoz futtassa újra az OCR-t ezen az oldalon."
   },
   "portfolio": {
     "title": "PDF-gyűjteményportfólió",

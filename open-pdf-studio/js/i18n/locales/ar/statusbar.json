@@ -140,6 +140,7 @@
     "prepareOcr": "فتح لإجراء OCR…"
   },
   "symbolSearch": "البحث عن الرموز",
+  "findMoreOptions": "مزيد من خيارات البحث",
   "watchActive": "مراقبة {{folder}}",
   "watchFailed": "خطأ في المراقبة: {{folder}}",
   "watchTitle": "يراقب سير عمل المستند {{input}} ويكتب إلى {{output}}. انقر لإيقاف المراقبة.",

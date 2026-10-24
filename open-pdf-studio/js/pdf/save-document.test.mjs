@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs';
 import { opslaanGeweigerd, isHostAlleenLezen, markeerBeveiligd } from './wachtwoord-pdf.js';
 import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
 import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
+import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
+import { hostFoutMelding } from '../core/host-brug.js';
 
 // Execute the production save functions with controlled I/O. The app imports
 // require a webview; only those dependencies and dynamic imports are replaced.
@@ -34,6 +36,8 @@ function harness() {
     schrijfAnnotatieLagen() {}, maakCjkFontKeten: () => ({}), layersForSave: doc => { owners.push(doc); return []; }, currentLayerId() {},
     saveTextEditsToPages: async (_pdf, _pages, doc) => owners.push(doc),
     saveWatermarksToPages: async (_pdf, _pages, doc) => owners.push(doc),
+    // Geen OCR-resultaten in deze documenten: geen laag (saver/ocr-text-layer.js).
+    writeOcrLayers: async () => null,
     saveBookmarksToOutline: (_pdf, doc) => owners.push(doc), saveStylePresetsToCatalog() {},
     slaPaginaLabelsOp: (_pdf, doc) => owners.push(doc),
     pasBijlagenToe: (_pdf, wijzigingen) => attachmentEdits.push(wijzigingen),
@@ -45,6 +49,10 @@ function harness() {
     opslaanGeweigerd,
     // Door de gastsite alleen-lezen geopend (#704, echt).
     isHostAlleenLezen,
+    // Tekens zonder font in een tekstbewerking (#717, echt).
+    isOntbrekendeGlyfenFout, tekensVoorMelding,
+    // Foutcodes van de gastsite (#712, echt).
+    hostFoutMelding,
     // Naamloos of zonder pad: Opslaan vraagt om een plek (handtekeningen/opslaan.js, echt).
     opslaanVraagtOpslaanAls,
     // Leesbare naam, ook voor een content://-URI van Android (#596).
@@ -264,6 +272,59 @@ test('Save As keeps a refreshed text edit bound to its new file', async () => {
   assert.equal(h.a.modified, false);
 });
 
+// #673: na het inbakken tekent de viewport uit de werkkopie van de herlaad.
+// Opslaan als ruimt die werkkopie op; de viewport moet dan al uit het
+// opgeslagen bestand tekenen, anders blijft de pagina wazig.
+test('Save As after a text edit moves the view to the saved file before the working copy is removed (#673)', async () => {
+  const h = harness();
+  const log = [];
+  h.a.textEdits = [{ id: 'edit-3', newText: 'Bienvenue', baked: false }];
+  h.deps.saveTextEditsToPages = async (_pdf, _pages, doc) => {
+    doc.textEdits[0]._pendingBakeInfo = { bakedNewText: 'Bienvenue', inplaceBaked: null };
+  };
+  const loadModule = h.deps.loadModule;
+  h.deps.loadModule = async path => {
+    if (path.includes('page-manager')) {
+      return { reloadFromBytes: async (_bytes, _annotations, _rotations, _page, _viewport, doc) => {
+        doc.filePath = 'opds-edit-1761210000000.pdf';
+        doc._renderTemp = true;
+        doc._werkbestanden = ['opds-edit-1761210000000.pdf'];
+        doc.pdfDoc = { fresh: true };
+      } };
+    }
+    if (path.includes('pdf-viewport')) {
+      return { wisselBestandspad: (oud, nieuw) => { log.push(`view ${oud} -> ${nieuw}`); return true; } };
+    }
+    if (path.includes('document-release')) {
+      return {
+        losgelatenWerkbestanden: doc => doc._werkbestanden.filter(p => p !== doc.filePath),
+        ruimWerkbestandenOp: async (_doc, paden) => { for (const p of paden) log.push(`remove ${p}`); },
+      };
+    }
+    return loadModule(path);
+  };
+  h.deps.window = { __TAURI__: { fs: { remove: async p => log.push(`remove ${p}`) } } };
+  assert.equal(await h.api.savePDFAs(h.a), true);
+  assert.equal(h.a.filePath, 'copy.pdf');
+  assert.deepEqual(log, [
+    'view opds-edit-1761210000000.pdf -> copy.pdf',
+    'remove opds-edit-1761210000000.pdf',
+  ]);
+});
+
+test('Save As of a document without a working copy leaves the view alone', async () => {
+  const h = harness();
+  const log = [];
+  const loadModule = h.deps.loadModule;
+  h.deps.loadModule = async path => path.includes('pdf-viewport')
+    ? { wisselBestandspad: (oud, nieuw) => { log.push(`view ${oud} -> ${nieuw}`); return true; } }
+    : loadModule(path);
+  assert.equal(await h.api.savePDFAs(h.a, 'a.pdf'), true);
+  assert.deepEqual(log, [], 'same path: nothing to move');
+  assert.equal(await h.api.savePDFAs(h.a, 'other.pdf'), true);
+  assert.deepEqual(log, ['view a.pdf -> other.pdf'], 'a new path: the view follows the document');
+});
+
 test('saving aborts before writing when a page has model annotations but is not ready', async () => {
   const h = harness();
   h.a.annotations = [{ page: 1, type: 'highlight' }];
@@ -309,6 +370,53 @@ test('a document the host opened read-only (#704) is not saved back; Save As (a 
   assert.equal(h.a.modified, true, 'nothing is lost: the document stays modified');
   assert.equal(await h.api.savePDF('Plattegrond.pdf', { zonderHandtekeningVraag: true }), true, 'a copy may be downloaded');
   assert.deepEqual(h.writes.map((w) => w.path), ['Plattegrond.pdf']);
+});
+
+test('an older version from the host (#712) says so; Save As still downloads', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  h.a.filePath = 'opds-host://DOC-1;versie=2/Plattegrond.pdf';
+  h.a.hostAlleenLezen = true;
+  h.a.hostVersie = { versie: 2, totaal: 3 };
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.deepEqual(h.writes, []);
+  assert.deepEqual(meldingen, ['hostVersionSaveBlocked']);
+  assert.equal(await h.api.savePDF('Plattegrond.pdf', { zonderHandtekeningVraag: true }), true);
+});
+
+test('the host refusing with versie_alleen_lezen (#712) gives its own message, the host text as fallback', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  h.deps.writeBinaryFileAtomic = async () => {
+    const fout = new Error('Versie 2 is alleen-lezen geopend.');
+    fout.hostCode = 'versie_alleen_lezen';
+    throw fout;
+  };
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  // i18next.t is hier de identiteit: dan de tekst van de gastpagina.
+  assert.deepEqual(meldingen, ['Versie 2 is alleen-lezen geopend.']);
+  h.deps.i18next = { t: (k, o) => (k === 'hostVersionReadOnlyRefused' ? 'vertaald' : (o?.defaultValue ?? k)) };
+  meldingen.length = 0;
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.deepEqual(meldingen, ['vertaald']);
+  assert.equal(h.a.modified, true);
+});
+
+test('text without a font (#717) refuses the save with the characters, nothing is written', async () => {
+  const h = harness();
+  const meldingen = [];
+  h.deps.showMessage = (m) => meldingen.push(m);
+  h.deps.i18next = { t: (k, o) => `${k}:${o?.chars ?? ''}` };
+  h.deps.saveTextEditsToPages = async () => {
+    const { OntbrekendeGlyfenFout } = await import('../text/glyf-dekking.js');
+    throw new OntbrekendeGlyfenFout(['안', '녕', '안']);
+  };
+  assert.equal(await h.api.savePDF(null, { zonderHandtekeningVraag: true }), false);
+  assert.deepEqual(h.writes, []);
+  assert.deepEqual(meldingen, ['textEditMissingGlyphsSave:안 녕']);
+  assert.equal(h.a.modified, true);
 });
 
 test('a save writes the attachment changes of the document being saved (#376)', async () => {

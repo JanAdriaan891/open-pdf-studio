@@ -71,6 +71,12 @@
     "site": "اس سائٹ پر",
     "noSiteDocuments": "اس سائٹ پر کوئی دستاویز نہیں",
     "siteListError": "اس سائٹ کی دستاویزات لوڈ نہیں ہو سکیں",
+    "versions": "ورژنز",
+    "versionNumber": "ورژن {{version}}",
+    "currentVersion": "موجودہ",
+    "noVersions": "کوئی ورژن نہیں",
+    "versionsError": "ورژنز لوڈ نہیں ہو سکے",
+    "olderVersionsHint": "پرانے ورژن صرف پڑھنے کے لیے کھلتے ہیں؛ \"بطور محفوظ کریں\" ایک نقل ڈاؤن لوڈ کرتا ہے۔",
     "save": "محفوظ کریں"
   },
   "importPanel": {

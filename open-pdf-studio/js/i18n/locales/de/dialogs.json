@@ -1246,7 +1246,9 @@
     "empty": "Keine Prüfkandidaten. Führen Sie zuerst OCR aus oder erhöhen Sie den Schwellenwert. Ältere PDFs ohne Prüfmetadaten benötigen eine erneute OCR.",
     "error": "Überprüfung konnte nicht aktualisiert werden. Aktualisieren Sie die Warteschlange, falls sich das Dokument geändert hat.",
     "accepted": "Übernommen",
-    "corrected": "Korrigiert"
+    "corrected": "Korrigiert",
+    "notEncodable": "Der durchsuchbare OCR-Text kann diese Zeichen nicht enthalten: {{characters}}. Korrigieren Sie das Wort mit anderen Zeichen.",
+    "archived": "Prüfung in der Datei gespeichert. Führen Sie OCR auf dieser Seite erneut aus, um sie zu ändern."
   },
   "portfolio": {
     "title": "PDF-Portfolio (Sammlung)",

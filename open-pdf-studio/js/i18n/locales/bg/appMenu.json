@@ -71,6 +71,12 @@
     "site": "В този сайт",
     "noSiteDocuments": "Няма документи в този сайт",
     "siteListError": "Документите на този сайт не можаха да бъдат заредени",
+    "versions": "Версии",
+    "versionNumber": "Версия {{version}}",
+    "currentVersion": "текуща",
+    "noVersions": "Няма версии",
+    "versionsError": "Версиите не можаха да бъдат заредени",
+    "olderVersionsHint": "По-старите версии се отварят само за четене; „Запиши като“ изтегля копие.",
     "save": "Запази"
   },
   "importPanel": {

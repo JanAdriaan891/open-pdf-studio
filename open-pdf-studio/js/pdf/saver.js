@@ -41,9 +41,11 @@ import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
   randSleutelZonderRand, markeerZonderRand, onzichtbaarVlak, vlakRect, metVulGs } from './saver/utils.js';
 import { eigenVulDekking } from '../annotations/vul-dekking.js';
 import { saveTextEditsToPages } from './saver/text-edits.js';
+import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
+import { hostFoutMelding } from '../core/host-brug.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
-import { writeOcrTextLayer, embedOcrFont, loadDefaultOcrFontBytes } from './saver/ocr-text-layer.js';
+import { writeOcrLayers } from './saver/ocr-text-layer.js';
 import { maakCjkFontKeten } from './saver/cjk-fonts.js';
 import { saveBookmarksToOutline } from './saver/bookmarks.js';
 import { saveStylePresetsToCatalog } from './saver/style-presets.js';
@@ -254,7 +256,8 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // Door de gastsite alleen-lezen geopend (#704): niet terugschrijven naar de
   // site; "Opslaan als" (een download) mag wel, zo gaat er niets verloren.
   if (!saveAsPath && isHostAlleenLezen(activeDoc)) {
-    showMessage(i18next.t('hostReadOnlySave'));
+    // Een oudere versie (#712) zegt dat ook zo.
+    showMessage(i18next.t(activeDoc.hostVersie ? 'hostVersionSaveBlocked' : 'hostReadOnlySave'));
     return false;
   }
   const currentPath = activeDoc?.filePath;
@@ -3148,31 +3151,19 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // watermerken, bladwijzers, stijlen, paginalabels en bijlagen blijven in
     // het model en gaan pas bij het echte opslaan het bestand in.
     let watermerkUitkomst = null;
-    let ocrWritten = false;
+    let ocrUitkomst = null;
     if (!alleenAnnotaties) {
       // Burn text edits into the PDF (cover-and-replace)
       await saveTextEditsToPages(pdfDocLib, pages, activeDoc);
 
-      // Write out any OCR results as an invisible searchable text layer
-      if (activeDoc && activeDoc.ocrResults && Object.keys(activeDoc.ocrResults).length > 0) {
-        // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
-        // geslaagde opslag; de herkende tekst blijft in het document staan.
-        let ocrFont = null;
-        try {
-          ocrFont = await embedOcrFont(pdfDocLib, await loadDefaultOcrFontBytes(), { unicodeGuard: true });
-        } catch (err) {
-          if (Object.values(activeDoc.ocrResults).some(words => words.some(word => word.review))) throw err;
-          console.warn(`[save] OCR text layer skipped: font not available (${err?.message || err})`);
-        }
-        for (const [pageNumStr, words] of Object.entries(ocrFont ? activeDoc.ocrResults : {})) {
-          const pageIndex = parseInt(pageNumStr, 10) - 1;
-          const page = pages[pageIndex];
-          if (page && words && words.length > 0) {
-            writeOcrTextLayer(page, words, ocrFont);
-            ocrWritten = true;
-          }
-        }
-      }
+      // Write out any OCR results as an invisible searchable text layer.
+      // Zonder lettertype (bestand ontbreekt) geen tekstlaag, maar wel een
+      // geslaagde opslag; de herkende tekst blijft in het document staan.
+      // Ongeldige en niet te coderen ongecontroleerde woorden worden
+      // overgeslagen. Een nagekeken woord dat niet in de laag kan, of
+      // nagekeken woorden zonder lettertype, weigeren de opslag (#657); een
+      // herstelmomentopname laat zo'n woord weg in plaats van te mislukken.
+      ocrUitkomst = await writeOcrLayers(pdfDocLib, pages, activeDoc, { strictReviews: !momentopname });
 
       // Burn watermarks into the PDF. Kop-/voetteksten vervangen die van een
       // eerdere save (#375); de uitkomst zegt welke er nu in het bestand staan.
@@ -3317,7 +3308,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // gebakken text-edit-records zijn daarna overbodig — pixels én tekst
     // zitten in het bestand — en de tekstlaag toont de nieuwe tekst als
     // gewone paginatekst, direct opnieuw bewerkbaar.
-    if ((textEditsGebakken || ocrWritten) && activeDoc) {
+    // Een OCR-laag hoeft de weergave alleen te verversen als ze sinds de
+    // vorige save is veranderd; anders staat ze al in de geladen werkkopie.
+    const ocrLaagGewijzigd = !!ocrUitkomst && ocrUitkomst.signature !== activeDoc?.ocrLayerSignature;
+    if (ocrUitkomst && activeDoc) activeDoc.ocrLayerPages = ocrUitkomst.layerPages;
+    if ((textEditsGebakken || ocrLaagGewijzigd) && activeDoc) {
       try {
         if (saveAsPath) activeDoc.saveTargetPath = saveAsPath;
         const { reloadFromBytes } = await import('./page-manager.js');
@@ -3348,6 +3343,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
         );
       }
     }
+    if (ocrUitkomst && activeDoc) activeDoc.ocrLayerSignature = ocrUitkomst.signature;
 
     // Opgeslagen in het bestand dat ook de weergave is: daar staan de
     // kop-/voetteksten nu in, en het scherm tekent ze zelf. Herladen zonder
@@ -3365,6 +3361,21 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     return true;
   } catch (error) {
     if (alleenAnnotaties || momentopname) throw error;
+    // Een tekstbewerking met tekens die geen font heeft (#717): het bestand
+    // bleef ongewijzigd; noem de tekens.
+    if (isOntbrekendeGlyfenFout(error)) {
+      console.warn('[saver] opslaan geweigerd:', error.message);
+      showMessage(i18next.t('textEditMissingGlyphsSave', { chars: tekensVoorMelding(error.tekens) }));
+      return false;
+    }
+    // De gastsite weigerde met een bekende code (versie_alleen_lezen, #712):
+    // een eigen melding, met de tekst van de site als terugval.
+    const hostMelding = hostFoutMelding(error, (s, o) => i18next.t(s, o));
+    if (hostMelding) {
+      console.warn('[saver] de site weigerde het opslaan:', error.message);
+      showMessage(hostMelding);
+      return false;
+    }
     console.error('Error saving PDF:', error);
     showMessage(i18next.t('failedToSavePdf', { error: error?.message || String(error) }));
     return false;
@@ -3412,12 +3423,26 @@ export async function savePDFAs(doc = getActiveDocument(), explicitPath = null, 
         clearCachedPdfBytes(memKey);
       }
 
+      // Het pad waar de weergave nu uit tekent: na het inbakken van
+      // text-edits een verse werkkopie van de herlaad (opds-edit-…), niet
+      // currentPath.
+      const weergavePad = doc?.filePath;
       if (doc) {
         doc.filePath = savePath;
         doc.fileName = (savePath && bestandsnaamUitPad(savePath)) || 'Untitled';
         doc.isUntitled = false; // now a real, user-chosen file
         doc.saveTargetPath = null; // lives at its real path now; no separate save target
         doc._renderTemp = false;
+      }
+      // De weergave verhuist mee naar het opgeslagen bestand (zelfde bytes),
+      // vóórdat de werkkopie hieronder van schijf gaat. Anders vraagt de
+      // viewport bitmaps uit een verwijderd bestand en blijft de pagina wazig
+      // op elke zoom (#673).
+      if (weergavePad && weergavePad !== savePath) {
+        try {
+          const { wisselBestandspad } = await import('./pdf-viewport.js');
+          wisselBestandspad(weergavePad, savePath);
+        } catch (e) { console.warn('[save-as] view not moved to the saved file:', e); }
       }
       updateWindowTitle();
       // Session now contains the new path (debounced persist).

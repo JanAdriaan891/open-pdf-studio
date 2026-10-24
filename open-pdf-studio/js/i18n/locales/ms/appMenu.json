@@ -71,6 +71,12 @@
     "site": "Di laman ini",
     "noSiteDocuments": "Tiada dokumen di laman ini",
     "siteListError": "Dokumen laman ini tidak dapat dimuatkan",
+    "versions": "Versi",
+    "versionNumber": "Versi {{version}}",
+    "currentVersion": "semasa",
+    "noVersions": "Tiada versi",
+    "versionsError": "Versi tidak dapat dimuatkan",
+    "olderVersionsHint": "Versi lama dibuka baca sahaja; Simpan Sebagai memuat turun salinan.",
     "save": "Simpan"
   },
   "importPanel": {

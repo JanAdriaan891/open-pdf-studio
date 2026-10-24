@@ -266,6 +266,20 @@ const COMMON = [
   F('count', 'Count', 'number', () => 1, '', 0),
 ];
 
+// Velden die per element een zone-opzoeking kosten (spatial-zones.js).
+const LOCATION_FIELDS = new Set(['location', 'locationSource']);
+
+/**
+ * Heeft de staat de locatie van de elementen nodig: als kolom, filter of
+ * sortering? Alleen dan zoekt de hoeveelhedenstaat per element de zone op.
+ * @param {{fields?: string[], filters?: {field: string}[], sort?: {field: string}[]}} cfg
+ */
+export function scheduleUsesLocation({ fields = [], filters = [], sort = [] } = {}) {
+  return (fields || []).some((key) => LOCATION_FIELDS.has(key))
+    || (filters || []).some((f) => LOCATION_FIELDS.has(f?.field))
+    || (sort || []).some((s) => LOCATION_FIELDS.has(s?.field));
+}
+
 export const FIELD_REGISTRY = {
   'area': [...COMMON,
     F('area', 'Area', 'number', areaValue, 'm²', undefined, areaUnit),
