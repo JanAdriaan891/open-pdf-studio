@@ -76,7 +76,7 @@
     "currentVersion": "saat ini",
     "noVersions": "Tidak ada versi",
     "versionsError": "Versi tidak dapat dimuat",
-    "olderVersionsHint": "Hanya versi saat ini yang dapat dibuka di sini.",
+    "olderVersionsHint": "Versi lama dibuka hanya-baca; Simpan Sebagai mengunduh salinan.",
     "save": "Simpan"
   },
   "importPanel": {

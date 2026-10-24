@@ -76,7 +76,7 @@
     "currentVersion": "ປັດຈຸບັນ",
     "noVersions": "ບໍ່ມີເວີຊັນ",
     "versionsError": "ບໍ່ສາມາດໂຫຼດເວີຊັນໄດ້",
-    "olderVersionsHint": "ຢູ່ນີ້ເປີດໄດ້ສະເພາະເວີຊັນປັດຈຸບັນ.",
+    "olderVersionsHint": "ເວີຊັນເກົ່າຈະເປີດແບບອ່ານຢ່າງດຽວ; \"ບັນທຶກເປັນ\" ຈະດາວໂຫຼດສຳເນົາ.",
     "save": "ບັນທຶກ"
   },
   "importPanel": {

@@ -76,7 +76,7 @@
     "currentVersion": "hiện tại",
     "noVersions": "Không có phiên bản",
     "versionsError": "Không thể tải các phiên bản",
-    "olderVersionsHint": "Chỉ có thể mở phiên bản hiện tại ở đây.",
+    "olderVersionsHint": "Các phiên bản cũ hơn mở ở chế độ chỉ đọc; Lưu thành tải xuống một bản sao.",
     "save": "Lưu"
   },
   "importPanel": {

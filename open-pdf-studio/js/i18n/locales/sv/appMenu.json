@@ -76,7 +76,7 @@
     "currentVersion": "aktuell",
     "noVersions": "Inga versioner",
     "versionsError": "Det gick inte att läsa in versionerna",
-    "olderVersionsHint": "Endast den aktuella versionen kan öppnas här.",
+    "olderVersionsHint": "Äldre versioner öppnas skrivskyddade; Spara som laddar ned en kopia.",
     "save": "Spara"
   },
   "importPanel": {

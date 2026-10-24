@@ -75,7 +75,7 @@
     "currentVersion": "huidig",
     "noVersions": "Geen versies",
     "versionsError": "De versies konden niet worden geladen",
-    "olderVersionsHint": "Alleen de huidige versie kan hier worden geopend.",
+    "olderVersionsHint": "Oudere versies openen alleen-lezen; Opslaan als downloadt een kopie.",
     "save": "Opslaan"
   },
   "importPanel": {

@@ -76,7 +76,7 @@
     "currentVersion": "aktuális",
     "noVersions": "Nincsenek verziók",
     "versionsError": "A verziókat nem sikerült betölteni",
-    "olderVersionsHint": "Itt csak az aktuális verzió nyitható meg.",
+    "olderVersionsHint": "A régebbi verziók csak olvasásra nyílnak meg; a Mentés másként letölt egy másolatot.",
     "save": "Mentés"
   },
   "importPanel": {

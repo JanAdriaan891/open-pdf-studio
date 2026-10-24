@@ -76,7 +76,7 @@
     "currentVersion": "actual",
     "noVersions": "No hi ha versions",
     "versionsError": "No s'han pogut carregar les versions",
-    "olderVersionsHint": "Aquí només es pot obrir la versió actual.",
+    "olderVersionsHint": "Les versions anteriors s'obren només per a lectura; Desa com a en baixa una còpia.",
     "save": "Desa"
   },
   "importPanel": {

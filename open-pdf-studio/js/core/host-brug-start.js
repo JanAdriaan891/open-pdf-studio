@@ -16,7 +16,7 @@ export function startHostBrug(venster = window) {
   try {
     return installeerHostBrug({
       venster,
-      vertaal: (sleutel) => i18next.t(sleutel),
+      vertaal: (sleutel, opties) => i18next.t(sleutel, opties),
       bijGeenContact: (fout) => {
         console.warn('[brug]', fout?.message);
         showMessage(i18next.t('hostNoContact'));

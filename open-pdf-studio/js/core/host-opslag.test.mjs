@@ -56,11 +56,65 @@ async function alsGast(site, fn) {
 test('een pad van de site draagt id en naam, ook met schuine strepen erin', () => {
   const pad = hostPad('Drawing/2026 01', 'map/blad A.pdf');
   assert.equal(pad, 'opds-host://Drawing%2F2026%2001/map_blad A.pdf');
-  assert.deepEqual(leesHostPad(pad), { id: 'Drawing/2026 01', naam: 'map_blad A.pdf' });
+  assert.deepEqual(leesHostPad(pad), { id: 'Drawing/2026 01', naam: 'map_blad A.pdf', versie: null });
   assert.equal(extractFileName(pad), 'map_blad A.pdf', 'tabblad en titel lezen de naam gewoon');
   assert.equal(leesHostPad('C:/docs/a.pdf'), null);
   assert.equal(leesHostPad('opds-host://zonder-naam'), null);
 });
+
+test('een oudere versie (#712) heeft een eigen pad met het versienummer', () => {
+  const pad = hostPad('Drawing/2026 01', 'blad A.pdf', 3);
+  assert.equal(pad, 'opds-host://Drawing%2F2026%2001;versie=3/blad A.pdf');
+  assert.deepEqual(leesHostPad(pad), { id: 'Drawing/2026 01', naam: 'blad A.pdf', versie: '3' });
+  assert.equal(extractFileName(pad), 'blad A.pdf');
+  assert.notEqual(pad, hostPad('Drawing/2026 01', 'blad A.pdf'), 'een eigen tabblad naast het huidige document');
+});
+
+test('een oudere versie openen: open(id, versie) als getal, alleen-lezen, en nooit terugschrijven', () => {
+  const gevraagd = [];
+  const opgeslagen = [];
+  const site = {
+    storage: {
+      async open(id, versie) {
+        gevraagd.push(versie === undefined ? [id] : [id, versie]);
+        return { name: 'Plattegrond.pdf', data: Uint8Array.from([versie ?? 9]), ...(versie !== undefined ? { versie } : {}) };
+      },
+      async save(id, bytes) { opgeslagen.push({ id, lengte: bytes.length }); },
+    },
+  };
+  return alsGast(site, async () => {
+    const oud = await openHostBestand('DOC-1', '2');
+    assert.deepEqual(gevraagd.at(-1), ['DOC-1', 2], 'het versienummer gaat als getal');
+    assert.equal(oud.pad, 'opds-host://DOC-1;versie=2/Plattegrond.pdf');
+    assert.equal(oud.alleenLezen, true);
+    assert.equal(oud.versie, 2);
+    assert.deepEqual([...oud.data], [2]);
+    // De versie herladen opent die versie weer; terugschrijven wordt een download.
+    assert.deepEqual([...(await readBinaryFile(oud.pad))], [2]);
+    assert.deepEqual(gevraagd.at(-1), ['DOC-1', 2]);
+    downloads.length = 0;
+    await writeBinaryFile(oud.pad, Uint8Array.from([1, 2, 3]));
+    assert.equal(opgeslagen.length, 0, 'een oudere versie schrijft nooit naar de site');
+    assert.deepEqual(downloads.filter(Boolean), ['Plattegrond.pdf']);
+    // De huidige versie opent zonder versienummer en schrijft wel terug.
+    const huidig = await openHostBestand('DOC-1');
+    assert.deepEqual(gevraagd.at(-1), ['DOC-1']);
+    assert.equal(huidig.alleenLezen, false);
+    await writeBinaryFile(huidig.pad, Uint8Array.from([4]));
+    assert.deepEqual(opgeslagen, [{ id: 'DOC-1', lengte: 1 }]);
+  });
+});
+
+test('de brug van de werkplek zelf meldt readOnly en version', () => alsGast({
+  storage: {
+    open: async (_id, versie) => ({ name: 'a.pdf', data: Uint8Array.from([1]), version: versie, readOnly: true }),
+    save: async () => {},
+  },
+}, async () => {
+  const r = await openHostBestand('X', 4);
+  assert.equal(r.alleenLezen, true);
+  assert.equal(r.versie, 4);
+}));
 
 test('zonder gastsite is er geen opslagcontract', async () => {
   assert.equal(hostOpslag(), null);

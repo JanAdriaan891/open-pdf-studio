@@ -76,7 +76,7 @@
     "currentVersion": "curentă",
     "noVersions": "Nicio versiune",
     "versionsError": "Versiunile nu au putut fi încărcate",
-    "olderVersionsHint": "Aici se poate deschide doar versiunea curentă.",
+    "olderVersionsHint": "Versiunile mai vechi se deschid doar pentru citire; Salvare ca descarcă o copie.",
     "save": "Salvare"
   },
   "importPanel": {

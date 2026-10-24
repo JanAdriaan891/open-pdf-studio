@@ -22,8 +22,8 @@
 //     melding met de naam van de kopie en de melding van de host; de bytes
 //     staan in de kopie, niets is weg; een derde opslag gaat naar de kopie;
 //  5. lijst en versies in de vorm van de host; de versielijst in "Op deze
-//     site" vraagt `versies`, toont de huidige versie bovenaan en opent alleen
-//     die (via `open`); een oudere versie stuurt niets (#707);
+//     site" vraagt `versies`, toont de huidige versie bovenaan en opent die
+//     via `open` (#707);
 //  6. de assistent vraagt via ai.vraag (OpenAI-chatvorm); het antwoord van
 //     de host gaat ongewijzigd mee in de volgende beurt; de foutcode
 //     geen_tegoed wordt een vertaalde melding;
@@ -31,6 +31,13 @@
 //     er gaat geen opslaan naar de host;
 //  8. een mislukte open toont de vertaalde melding en gaat als `melding`
 //     naar de host; bytes die geen PDF zijn ook (#707);
+//  8b. een oudere versie uit de versielijst (#712): `open { bestand, versie }`
+//     (een getal), een eigen tabblad met "Version 2 of 3 – read-only" (ook in
+//     de titel), opslaan staat uit en Ctrl+S stuurt niets; "Opslaan als" geeft
+//     een download met die versie; opslaan bij de host weigert dan met
+//     versie_alleen_lezen (ook voor het huidige tabblad, met de vertaalde
+//     melding); een ongeldig versienummer geeft versie_ongeldig en de
+//     vertaalde melding, een versie die niet bestaat de gewone;
 //  9. geen enkel vervalst antwoord telde;
 // 10. 0 CSP-overtredingen, 0 consolefouten (op de verwachte fout bij de
 //     kapotte PDF na), 0 waarschuwingen over lock_file/unlock_file (#707),
@@ -247,11 +254,7 @@ try {
   eis(rijen.length === 3 && rijen.map((r) => r.versie).join() === '3,2,1', 'de versies staan niet nieuwste eerst');
   eis(rijen[0].huidig && rijen.slice(1).every((r) => !r.huidig), 'niet precies de nieuwste versie is de huidige');
   eis(/^Version 3 \(current\)/.test(rijen[0].tekst) && rijen[2].tekst.includes('beheer@klant.example'), 'tekst van de versies');
-  eis(/Only the current version/.test(hint), 'de uitleg bij oudere versies ontbreekt');
-  // Een oudere versie: er gaat niets naar de host.
-  await frame.locator('.site-version[data-versie="1"]').click();
-  await wacht(700);
-  eis((await gast()).log.filter((r) => r.soort === 'open').length === opensVoor, 'een oudere versie stuurde toch een open');
+  eis(/open read-only/.test(hint), 'de uitleg bij oudere versies ontbreekt');
   await page.screenshot({ path: path.join(UIT, '2-versies.png') });
   // De huidige versie opent het bestand via `open`, en het menu gaat dicht.
   await frame.locator('.site-version.current').click();
@@ -330,6 +333,92 @@ try {
   // De verwachte fout van de lader ("Error loading PDF") telt niet als consolefout.
   const kapotFouten = p.consolefouten.splice(foutenVoorKapot).filter((t) => !/^Error loading PDF/.test(t));
   p.consolefouten.push(...kapotFouten);
+
+  // 8b. Een oudere versie (#712).
+  const opens = async () => (await gast()).log.filter((r) => r.soort === 'open');
+  const opensVoorVersie = (await opens()).length;
+  await frame.locator('#file-tab').click();
+  await frame.locator('.app-menu-items .app-menu-item', { hasText: /^\s*Open\s*(Ctrl\+O)?\s*$/ }).first().click();
+  const rijV = frame.locator('.site-doc[data-site-doc="DOC-1"]');
+  await rijV.waitFor({ timeout: 30_000 });
+  await rijV.locator('.site-versions-btn').click();
+  await totDat(() => frame.locator('.site-version').count(), 30_000, 'versielijst voor een oudere versie');
+  await frame.locator('.site-version[data-versie="2"]').click();
+  await totDat(async () => (await opens()).length > opensVoorVersie, 30_000, 'open met versie');
+  const openV = (await opens()).at(-1);
+  noteer(`8b. oudere versie: ${JSON.stringify({ bestand: openV.bestand, versie: openV.versie })}`);
+  eis(openV.bestand === 'DOC-1' && openV.versie === 2, 'de oudere versie ging niet als open { bestand: DOC-1, versie: 2 } (getal)');
+  await wachtOpDocument(frame, 'Version 2 of 3');
+  const versieTab = await frame.evaluate(() => ({
+    badge: document.querySelector('.document-tab.active .document-tab-version')?.textContent ?? null,
+    naam: document.querySelector('.document-tab.active .document-tab-title')?.textContent ?? null,
+    titel: document.title,
+    titelbalk: document.querySelector('.file-name')?.textContent ?? null,
+    tabs: document.querySelectorAll('.document-tab').length,
+    opslaanUit: document.querySelector('button.quick-access-btn[title="Save (Ctrl+S)"]')?.disabled ?? null,
+  }));
+  noteer(`   tabblad: ${JSON.stringify(versieTab)}`);
+  eis(versieTab.badge === 'Version 2 of 3 \u2013 read-only', `het tabblad toont niet "Version 2 of 3 \u2013 read-only" (${versieTab.badge})`);
+  eis(versieTab.titel.includes('Version 2 of 3 \u2013 read-only') && !!versieTab.titelbalk?.includes('Version 2 of 3'),
+    'de titel noemt de versie niet');
+  eis(versieTab.opslaanUit === true, 'de opslaanknop staat niet uit');
+  await page.screenshot({ path: path.join(UIT, '3-oudere-versie.png') });
+  // Ctrl+S: een vertaalde melding, er gaat niets naar de host.
+  const opgeslagenVoorV = (await gast()).opgeslagen.length;
+  const opslaanVoorV = (await gast()).log.filter((r) => r.soort === 'opslaan').length;
+  await page.keyboard.press('Escape');
+  const vakV = await (await frame.$('canvas#annotation-canvas') || await frame.$('canvas#pdf-canvas')).boundingBox();
+  await page.mouse.click(vakV.x + 30, Math.max(vakV.y, 0) + 30);
+  await page.keyboard.press('Control+s');
+  const versieRo = await totDat(() => melding(frame), 30_000, 'melding bij opslaan van een oudere versie');
+  noteer(`   Ctrl+S: "${versieRo}"`);
+  eis(/older version/.test(versieRo) && /Save As/.test(versieRo), 'geen vertaalde melding bij opslaan van een oudere versie');
+  await sluitMelding(frame);
+  eis((await gast()).log.filter((r) => r.soort === 'opslaan').length === opslaanVoorV, 'een oudere versie ging met opslaan naar de host');
+  // Opslaan als: een download met de bytes van die versie (twee rechthoeken).
+  const [download] = await Promise.all([
+    page.waitForEvent('download', { timeout: 60_000 }),
+    page.keyboard.press('Control+Shift+S'),
+  ]);
+  const gedownload = fs.readFileSync(await download.path());
+  const sDl = await soortenIn(gedownload);
+  noteer(`   Opslaan als: download "${download.suggestedFilename()}", ${gedownload.length} bytes, annotaties: ${sDl.soorten.join(', ')}`);
+  eis(sDl.paginas === 2 && sDl.soorten.filter((x) => x === '/Square').length === 2, 'de download is niet versie 2');
+  eis((await gast()).opgeslagen.length === opgeslagenVoorV, 'Opslaan als ging naar de host');
+  // Opslaan bij de host terwijl de oudere versie getoond wordt: versie_alleen_lezen.
+  const weigering = await frame.evaluate(async () => {
+    try { await window.__OPDS_HOST__.storage.save('DOC-1', new TextEncoder().encode('%PDF-1.4')); return null; }
+    catch (e) { return { code: e.code, hostCode: e.hostCode, bericht: e.message }; }
+  });
+  noteer(`   storage.save tijdens de oudere versie: ${JSON.stringify(weigering)}`);
+  eis(weigering?.hostCode === 'versie_alleen_lezen', 'opslaan bij de host weigerde niet met versie_alleen_lezen');
+  // Het huidige tabblad opslaan: de host weigert, de app toont de vertaalde melding.
+  await frame.locator('.document-tab', { has: frame.locator('.document-tab-title', { hasText: /^Plattegrond\.pdf$/ }) }).first().click();
+  await wacht(800);
+  await tekenRechthoek(page, frame, { x: 0.45, y: 0.6 });
+  await page.keyboard.press('Control+s');
+  const huidigGeweigerd = await totDat(() => melding(frame), 60_000, 'melding na versie_alleen_lezen');
+  noteer(`   huidig tabblad opslaan: "${huidigGeweigerd.replace(/\s+/g, ' ')}"`);
+  eis(/older version of it is open read-only/.test(huidigGeweigerd), 'geen vertaalde melding bij versie_alleen_lezen');
+  await sluitMelding(frame);
+  eis((await gast()).opgeslagen.length === opgeslagenVoorV, 'de host bewaarde toch een versie');
+  // Een ongeldig versienummer: versie_ongeldig en de vertaalde melding.
+  const meldingenVoorV = (await gast()).meldingen.length;
+  await frame.evaluate(() => window.dispatchEvent(new CustomEvent('opds:open-document', { detail: { id: 'DOC-1', versie: 0 } })));
+  const ongeldig = await totDat(() => melding(frame), 30_000, 'melding na een ongeldige versie');
+  const openOngeldig = (await opens()).at(-1);
+  noteer(`   versie 0: open ${JSON.stringify({ bestand: openOngeldig.bestand, versie: openOngeldig.versie })} -> "${ongeldig}"`);
+  eis(openOngeldig.versie === 0, 'de ongeldige versie ging niet naar de host');
+  eis(ongeldig === 'This version of the file cannot be opened: the version number is not valid.', 'niet de vertaalde melding bij versie_ongeldig');
+  await sluitMelding(frame);
+  await totDat(async () => (await gast()).meldingen.length > meldingenVoorV, 10_000, 'melding bij de host na een ongeldige versie');
+  // Een versie die niet bestaat: de gewone melding.
+  await frame.evaluate(() => window.dispatchEvent(new CustomEvent('opds:open-document', { detail: { id: 'DOC-1', versie: 99 } })));
+  const bestaatNiet = await totDat(() => melding(frame), 30_000, 'melding na een versie die niet bestaat');
+  noteer(`   versie 99: "${bestaatNiet}"`);
+  eis(bestaatNiet === 'The file could not be read from storage. Try again.', 'niet de gewone melding bij een versie die niet bestaat');
+  await sluitMelding(frame);
+  g = await gast();
 
   // 9. Geen vervalst antwoord telde.
   const tekst = await frame.evaluate(() => document.body.innerText);

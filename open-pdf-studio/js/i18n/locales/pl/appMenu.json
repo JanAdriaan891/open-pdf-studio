@@ -76,7 +76,7 @@
     "currentVersion": "bieżąca",
     "noVersions": "Brak wersji",
     "versionsError": "Nie udało się wczytać wersji",
-    "olderVersionsHint": "Tutaj można otworzyć tylko bieżącą wersję.",
+    "olderVersionsHint": "Starsze wersje otwierają się tylko do odczytu; Zapisz jako pobiera kopię.",
     "save": "Zapisz"
   },
   "importPanel": {

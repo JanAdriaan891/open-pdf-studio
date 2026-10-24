@@ -1,10 +1,10 @@
 // De versies van een document van de site, voor de lijst in "Op deze site" (#707).
 //
 // De site geeft ze via het opslagcontract (`versions(id)`, in de werkplek het
-// bericht `versies`) als [{ version, modified?, author? }]. Openen kan alleen
-// via `open { bestand }`: dat protocol kent geen versienummer (ouder.ts van de
-// werkplek), dus alleen de huidige versie gaat open. Oudere versies staan er
-// ter informatie.
+// bericht `versies`) als [{ version, modified?, author? }]. De huidige versie
+// opent gewoon (`open { bestand }`); een oudere versie opent sinds #712 met
+// `open { bestand, versie }`: alleen-lezen, zonder slot, in een eigen
+// tabblad met "Versie 3 van 5 – alleen-lezen" (pdf/host-document.js).
 
 const alsGetal = (v) => (typeof v === 'number' ? v : (/^\s*\d+\s*$/.test(String(v ?? '')) ? Number(v) : NaN));
 
@@ -30,4 +30,28 @@ export function ordenVersies(lijst) {
     versies[0].huidig = true;
   }
   return versies;
+}
+
+/**
+ * Het aantal versies voor "Versie 3 van 5": het hoogste versienummer, of
+ * zonder nummers het aantal in de lijst.
+ * @param {ReturnType<typeof ordenVersies>} versies
+ */
+export function aantalVersies(versies) {
+  if (!Array.isArray(versies) || !versies.length) return null;
+  const nummers = versies.map((v) => alsGetal(v.version));
+  return nummers.every(Number.isFinite) ? Math.max(...nummers) : versies.length;
+}
+
+/**
+ * "Versie 3 van 5 – alleen-lezen" voor een document dat als oudere versie
+ * geopend is (doc.hostVersie), anders null.
+ * @param {(sleutel: string, opties?: object) => string} t
+ */
+export function hostVersieLabel(doc, t) {
+  const hv = doc?.hostVersie;
+  if (!hv || hv.versie === null || hv.versie === undefined || hv.versie === '') return null;
+  return hv.totaal
+    ? t('hostVersionReadOnly', { version: hv.versie, total: hv.totaal })
+    : t('hostVersionReadOnlyShort', { version: hv.versie });
 }

@@ -1,7 +1,21 @@
 // node --test js/pdf/host-versies.test.mjs
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { ordenVersies } from './host-versies.js';
+import { ordenVersies, aantalVersies, hostVersieLabel } from './host-versies.js';
+
+test('het aantal versies: het hoogste nummer, anders de lengte van de lijst', () => {
+  assert.equal(aantalVersies(ordenVersies([{ version: '1' }, { version: '3' }, { version: '2' }])), 3);
+  assert.equal(aantalVersies(ordenVersies([{ version: 'b' }, { version: 'a' }])), 2);
+  assert.equal(aantalVersies([]), null);
+});
+
+test('"Versie 3 van 5 – alleen-lezen" voor een oudere versie (#712)', () => {
+  const t = (s, o) => `${s}:${JSON.stringify(o)}`;
+  assert.equal(hostVersieLabel({ hostVersie: { versie: 3, totaal: 5 } }, t), 'hostVersionReadOnly:{"version":3,"total":5}');
+  assert.equal(hostVersieLabel({ hostVersie: { versie: 3, totaal: null } }, t), 'hostVersionReadOnlyShort:{"version":3}');
+  assert.equal(hostVersieLabel({}, t), null);
+  assert.equal(hostVersieLabel(null, t), null);
+});
 
 test('versienummers: nieuwste eerst, de hoogste is de huidige', () => {
   const uit = ordenVersies([

@@ -76,7 +76,7 @@
     "currentVersion": "aktuální",
     "noVersions": "Žádné verze",
     "versionsError": "Verze se nepodařilo načíst",
-    "olderVersionsHint": "Zde lze otevřít pouze aktuální verzi.",
+    "olderVersionsHint": "Starší verze se otevírají jen pro čtení; Uložit jako stáhne kopii.",
     "save": "Uložit"
   },
   "importPanel": {

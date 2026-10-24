@@ -5,7 +5,7 @@ import { getRecentFiles, removeRecentFile, pinRecentFile, unpinRecentFile } from
 import { createTab } from '../../../ui/chrome/tabs.js';
 import { isTauri, fileExists, openFolderDialog, downloadPdfFromUrl, listPdfFiles, hostOpslag, hostDocumenten, hostVersies } from '../../../core/platform.js';
 import { openHostDocument } from '../../../pdf/host-document.js';
-import { ordenVersies } from '../../../pdf/host-versies.js';
+import { ordenVersies, aantalVersies } from '../../../pdf/host-versies.js';
 import { useTranslation, localizeNumber } from '../../../i18n/useTranslation.js';
 import { getSavedSessions, saveCurrentSession, deleteSession, restoreSession } from '../../../stores/sessions.js';
 import { getSavedPlaces, addPlace, removePlace } from '../../../stores/places.js';
@@ -73,8 +73,16 @@ export default function OpenPanel() {
     await openHostDocument(doc.id);
   }
 
-  // Versies tonen of verbergen. Alleen de huidige versie gaat open: het
-  // protocol van de werkplek opent een bestand, geen versie (host-versies.js).
+  // Een versie openen: de huidige gewoon, een oudere alleen-lezen in een
+  // eigen tabblad (#712, `open { bestand, versie }`).
+  async function handleOpenVersie(doc, v) {
+    if (v.huidig) return handleOpenSiteDoc(doc);
+    const totaal = aantalVersies(versies());
+    closeAppMenu();
+    await openHostDocument(doc.id, { versie: v.version, totaal });
+  }
+
+  // Versies tonen of verbergen.
   async function toggleVersies(e, doc) {
     e.stopPropagation();
     if (versiesVan() === doc.id) {
@@ -533,7 +541,7 @@ export default function OpenPanel() {
                                       class={`place-file-item site-version${v.huidig ? ' current' : ' older'}`}
                                       data-versie={v.version}
                                       title={v.huidig ? undefined : t('openPanel.olderVersionsHint')}
-                                      onClick={() => { if (v.huidig) handleOpenSiteDoc(doc); }}
+                                      onClick={() => handleOpenVersie(doc, v)}
                                     >
                                       <span class="place-file-name">
                                         {t('openPanel.versionNumber', { version: v.version })}

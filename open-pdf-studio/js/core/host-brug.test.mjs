@@ -9,6 +9,7 @@ import {
   isGeldigeOorsprong, leesBrugHash, brugGegevens, maakHostBrug, installeerHostBrug,
   BrugFout, WERKPLEK, HALLO_INTERVAL_MS, HALLO_OPGEVEN_MS, VERZOEK_TIMEOUT_MS,
   normaliseerOpslaan, opslaanMelding, AI_FOUTCODES,
+  HOST_FOUTCODES, hostFoutSleutel, hostFoutMelding, versieVoorOpen,
 } from './host-brug.js';
 
 const OUDER = 'https://cloud.example.org';
@@ -365,6 +366,65 @@ test('open: elke mislukking draagt de vertaalde melding voor de gebruiker', asyn
   tijd.vooruit(VERZOEK_TIMEOUT_MS);
   await assert.rejects(open, (e) => e.code === 'time-out'
     && e.gebruikersMelding === 'The file could not be read from storage. Try again.');
+});
+
+test('open met versie (#712): het nummer als getal, altijd alleen-lezen; versie_ongeldig krijgt zijn eigen melding', async () => {
+  const { brug, venster, ouder } = await verbondenBrug({ vertaal: (s, o) => (s === 'hostOpenFailed' ? 'kon niet' : `vertaald:${s}|${o?.defaultValue ?? ''}`) });
+  const open = brug.opslag.open('DOC-1', '3');
+  await rust();
+  const v = ouder.laatste('open').bericht;
+  assert.deepEqual(v, { bestand: 'DOC-1', versie: 3, werkplek: 1, id: v.id, soort: 'open' });
+  // Ook als de gastpagina alleen_lezen vergeet: een oudere versie is alleen-lezen.
+  venster.ontvang(ok(v.id, { bestand: 'DOC-1', naam: 'P.pdf', versie: 3, bytes: pdfBytes() }));
+  const uit = await open;
+  assert.equal(uit.alleenLezen, true);
+  assert.equal(uit.versie, 3);
+
+  // Een ongeldig nummer: de gastpagina weigert met versie_ongeldig.
+  const ongeldig = brug.opslag.open('DOC-1', 0);
+  await rust();
+  const v2 = ouder.laatste('open').bericht;
+  assert.equal(v2.versie, 0);
+  venster.ontvang(mis(v2.id, 'Ongeldig versienummer.', 'versie_ongeldig'));
+  await assert.rejects(ongeldig, (e) => e.hostCode === 'versie_ongeldig'
+    && e.gebruikersMelding === 'vertaald:hostVersionInvalid|Ongeldig versienummer.');
+
+  // Een versie die niet bestaat: een gewone fout, de gewone melding.
+  const weg = brug.opslag.open('DOC-1', 99);
+  await rust();
+  venster.ontvang(mis(ouder.laatste('open').bericht.id, 'Geen toegang.'));
+  await assert.rejects(weg, (e) => e.gebruikersMelding === 'kon niet');
+
+  // Zonder versie: geen veld versie in het bericht.
+  const gewoon = brug.opslag.open('DOC-1');
+  await rust();
+  assert.equal('versie' in ouder.laatste('open').bericht, false);
+  venster.ontvang(ok(ouder.laatste('open').bericht.id, { naam: 'P.pdf', versie: 5, alleen_lezen: false, bytes: pdfBytes() }));
+  assert.equal((await gewoon).alleenLezen, false);
+});
+
+test('opslaan na een oudere versie: versie_alleen_lezen komt als hostCode mee', async () => {
+  const { brug, venster, ouder } = await verbondenBrug();
+  const opslaan = brug.opslag.save('DOC-1', new Uint8Array([1, 2]));
+  await rust();
+  venster.ontvang(mis(ouder.laatste('opslaan').bericht.id, 'Versie 2 is alleen-lezen geopend.', 'versie_alleen_lezen'));
+  await assert.rejects(opslaan, (e) => e instanceof BrugFout && e.hostCode === 'versie_alleen_lezen');
+});
+
+test('foutcodes van de gastpagina: vertaald, met de tekst van de gastpagina als terugval', () => {
+  assert.deepEqual(Object.keys(HOST_FOUTCODES).sort(), ['versie_alleen_lezen', 'versie_ongeldig']);
+  const fout = new BrugFout('host', 'Tekst van de site', 'versie_alleen_lezen');
+  assert.equal(hostFoutSleutel(fout), 'hostVersionReadOnlyRefused');
+  assert.equal(hostFoutSleutel(new BrugFout('host', 'x', 'geen_tegoed')), null);
+  assert.equal(hostFoutSleutel(new Error('x')), null);
+  assert.equal(hostFoutMelding(fout, (s) => `[${s}]`), '[hostVersionReadOnlyRefused]');
+  // Zonder vertaling (i18next geeft de sleutel of defaultValue terug): de tekst van de site.
+  assert.equal(hostFoutMelding(fout, (s, o) => o.defaultValue), 'Tekst van de site');
+  assert.equal(hostFoutMelding(fout, (s) => s), 'Tekst van de site');
+  assert.equal(hostFoutMelding(new BrugFout('host', 'x', 'onbekend'), (s) => s), null);
+  assert.equal(versieVoorOpen('3'), 3);
+  assert.equal(versieVoorOpen(2), 2);
+  assert.equal(versieVoorOpen('2.5'), '2.5', 'de gastpagina weigert het zelf');
 });
 
 test('opslaan: een eigen kopie van de bytes gaat als transferable mee; het antwoord in vaste vorm', async () => {

@@ -42,6 +42,7 @@ import { hexToRgb, buildBorderStyle, computeAnnotFlags, mapFontToPdfName,
 import { eigenVulDekking } from '../annotations/vul-dekking.js';
 import { saveTextEditsToPages } from './saver/text-edits.js';
 import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
+import { hostFoutMelding } from '../core/host-brug.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrLayers } from './saver/ocr-text-layer.js';
@@ -255,7 +256,8 @@ export async function savePDF(saveAsPath = null, opties = {}, activeDoc = getAct
   // Door de gastsite alleen-lezen geopend (#704): niet terugschrijven naar de
   // site; "Opslaan als" (een download) mag wel, zo gaat er niets verloren.
   if (!saveAsPath && isHostAlleenLezen(activeDoc)) {
-    showMessage(i18next.t('hostReadOnlySave'));
+    // Een oudere versie (#712) zegt dat ook zo.
+    showMessage(i18next.t(activeDoc.hostVersie ? 'hostVersionSaveBlocked' : 'hostReadOnlySave'));
     return false;
   }
   const currentPath = activeDoc?.filePath;
@@ -3364,6 +3366,14 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     if (isOntbrekendeGlyfenFout(error)) {
       console.warn('[saver] opslaan geweigerd:', error.message);
       showMessage(i18next.t('textEditMissingGlyphsSave', { chars: tekensVoorMelding(error.tekens) }));
+      return false;
+    }
+    // De gastsite weigerde met een bekende code (versie_alleen_lezen, #712):
+    // een eigen melding, met de tekst van de site als terugval.
+    const hostMelding = hostFoutMelding(error, (s, o) => i18next.t(s, o));
+    if (hostMelding) {
+      console.warn('[saver] de site weigerde het opslaan:', error.message);
+      showMessage(hostMelding);
       return false;
     }
     console.error('Error saving PDF:', error);

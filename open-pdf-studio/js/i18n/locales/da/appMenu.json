@@ -76,7 +76,7 @@
     "currentVersion": "aktuel",
     "noVersions": "Ingen versioner",
     "versionsError": "Versionerne kunne ikke indlæses",
-    "olderVersionsHint": "Kun den aktuelle version kan åbnes her.",
+    "olderVersionsHint": "Ældre versioner åbnes skrivebeskyttet; Gem som downloader en kopi.",
     "save": "Gem"
   },
   "importPanel": {

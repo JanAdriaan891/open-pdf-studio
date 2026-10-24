@@ -3,6 +3,7 @@ import { state } from '../../core/state.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
 import i18next from '../../i18n/config.js';
 import { invoke } from '../../core/platform.js';
+import { hostVersieLabel } from '../../pdf/host-versies.js';
 import {
   revealInFileManager,
   revealInFileManagerLabelKey,
@@ -550,6 +551,10 @@ export default function DocumentTabs() {
                 onBlur={() => cancelRename()}
                 onClick={(e) => e.stopPropagation()}
               />
+            </Show>
+            {/* Een oudere versie van de site: "Versie 3 van 5 – alleen-lezen" (#712). */}
+            <Show when={hostVersieLabel(doc, tCommon)}>
+              <span class="document-tab-version">{hostVersieLabel(doc, tCommon)}</span>
             </Show>
             <span class="document-tab-close" title={t('closeTab')} onClick={(e) => handleCloseTab(e, i())}>&times;</span>
           </div>

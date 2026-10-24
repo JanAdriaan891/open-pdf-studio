@@ -76,7 +76,7 @@
     "currentVersion": "geçerli",
     "noVersions": "Sürüm yok",
     "versionsError": "Sürümler yüklenemedi",
-    "olderVersionsHint": "Burada yalnızca geçerli sürüm açılabilir.",
+    "olderVersionsHint": "Eski sürümler salt okunur açılır; Farklı Kaydet bir kopya indirir.",
     "save": "Kaydet"
   },
   "importPanel": {

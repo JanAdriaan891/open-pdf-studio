@@ -2,6 +2,7 @@ import { isObservedRenderCommand, observeNativeRender } from '../pdf/render-diag
 import { leesOpslag, verwijderOpslag } from './opslag.js';
 import { bestandsnaamUitPad } from './bestandsnaam.js';
 import { gastObject } from './gehost.js';
+import { versieVoorOpen } from './host-brug.js';
 import { rustRenderPadBeschikbaar } from '../pdf/render-route.js';
 import { slaOverInHeadless } from './headless.js';
 
@@ -34,7 +35,7 @@ export function cacheWebFile(name, data) {
 //
 //   window.__OPDS_HOST__ = {
 //     storage: {
-//       open(id)                  -> Promise<{ name, data }>  data: Uint8Array |
+//       open(id, versie?)         -> Promise<{ name, data }>  data: Uint8Array |
 //                                    ArrayBuffer | Blob
 //       save(id, bytes, { name }) -> Promise<unknown>  schrijft over het
 //                                    geopende document heen (nieuwe versie)
@@ -48,8 +49,12 @@ export function cacheWebFile(name, data) {
 //     melding(tekst, toon) -> Promise<true>  melding in de statusbalk van de site
 //   };
 //
-// open() mag ook `alleenLezen: true` meegeven: dan opent het document
-// alleen-lezen (pdf/host-document.js).
+// open() mag ook `alleenLezen: true` (of `readOnly: true`) meegeven: dan
+// opent het document alleen-lezen (pdf/host-document.js). Met een tweede
+// argument `versie` (#712) geeft de site een oudere versie, altijd
+// alleen-lezen. Die heeft als pad `opds-host://<id>;versie=<n>/<naam>` (een
+// ';' komt in een gecodeerd id niet voor): een eigen tabblad naast het
+// huidige document, dat nooit terugschrijft naar de site.
 //
 // Een document van de site heeft als pad `opds-host://<id>/<naam>`: de naam
 // achteraan houdt alles wat een bestandsnaam uit het pad haalt (tabbladen,
@@ -69,20 +74,28 @@ export function hostOpslag() {
     : null;
 }
 
-/** Pad van een document van de site. */
-export function hostPad(id, naam) {
+/** Pad van een document van de site; met `versie` dat van een oudere versie. */
+export function hostPad(id, naam, versie = null) {
   const veilig = String(naam || 'document.pdf').replace(/[\\/]/g, '_').trim() || 'document.pdf';
-  return `${HOST_SCHEMA}${encodeURIComponent(String(id))}/${veilig}`;
+  const deel = versie === null || versie === undefined ? '' : `;versie=${encodeURIComponent(String(versie))}`;
+  return `${HOST_SCHEMA}${encodeURIComponent(String(id))}${deel}/${veilig}`;
 }
 
-/** `{ id, naam }` uit een pad van de site, of null. */
+/** `{ id, naam, versie }` uit een pad van de site (versie null: de huidige), of null. */
 export function leesHostPad(pad) {
   if (typeof pad !== 'string' || !pad.startsWith(HOST_SCHEMA)) return null;
   const rest = pad.slice(HOST_SCHEMA.length);
   const schuin = rest.indexOf('/');
   if (schuin <= 0) return null;
+  const [idDeel, ...extra] = rest.slice(0, schuin).split(';');
+  if (!idDeel) return null;
+  const versieDeel = extra.find((e) => e.startsWith('versie='));
   try {
-    return { id: decodeURIComponent(rest.slice(0, schuin)), naam: rest.slice(schuin + 1) };
+    return {
+      id: decodeURIComponent(idDeel),
+      naam: rest.slice(schuin + 1),
+      versie: versieDeel === undefined ? null : decodeURIComponent(versieDeel.slice('versie='.length)),
+    };
   } catch {
     return null;
   }
@@ -97,18 +110,32 @@ async function naarBytes(data) {
 }
 
 /**
- * Haal een document van de site op.
- * @returns {Promise<{ pad: string, naam: string, data: Uint8Array, alleenLezen: boolean }>}
+ * Haal een document van de site op; met `versie` een oudere versie (#712),
+ * altijd alleen-lezen, met een eigen pad dat nooit terugschrijft.
+ * @returns {Promise<{ pad: string, naam: string, data: Uint8Array, alleenLezen: boolean, versie: unknown }>}
  */
-export async function openHostBestand(id) {
+export async function openHostBestand(id, versie = null) {
   const opslag = hostOpslag();
   if (!opslag) throw new Error('This page has no site storage');
-  const antwoord = await opslag.open(String(id));
+  const metVersie = versie !== null && versie !== undefined;
+  // Als getal: zo vraagt het protocol het (een pad of de lijst geeft tekst).
+  const antwoord = metVersie
+    ? await opslag.open(String(id), versieVoorOpen(versie))
+    : await opslag.open(String(id));
   const data = await naarBytes(antwoord?.data ?? antwoord?.bytes ?? antwoord);
   const naam = String(antwoord?.name || 'document.pdf');
-  const pad = hostPad(id, naam);
-  _hostPaden.set(pad, String(id));
-  return { pad, naam, data, alleenLezen: antwoord?.alleenLezen === true };
+  // Het nummer zoals de site het teruggeeft (deze brug: `versie`, de brug van
+  // de werkplek zelf: `version`), anders het gevraagde.
+  const gekregen = antwoord?.versie ?? antwoord?.version ?? null;
+  const pad = metVersie ? hostPad(id, naam, versie) : hostPad(id, naam);
+  if (!metVersie) _hostPaden.set(pad, String(id));
+  return {
+    pad,
+    naam,
+    data,
+    alleenLezen: metVersie || antwoord?.alleenLezen === true || antwoord?.readOnly === true,
+    versie: metVersie ? (gekregen ?? versie) : gekregen,
+  };
 }
 
 /** De assistent van de site (`ai.vraag`), of null als de site er geen heeft. */
@@ -424,6 +451,8 @@ export async function readBinaryFile(path) {
   // veranderde (bv. een recent bestand na een herlaadbeurt).
   const host = leesHostPad(path);
   if (host && hostOpslag()) {
+    // Een oudere versie blijft die versie en schrijft nooit terug (#712).
+    if (host.versie !== null) return (await openHostBestand(host.id, host.versie)).data;
     const { data } = await openHostBestand(host.id);
     _hostPaden.set(path, host.id);
     return data;

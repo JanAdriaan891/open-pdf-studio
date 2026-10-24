@@ -76,7 +76,7 @@
     "currentVersion": "현재",
     "noVersions": "버전 없음",
     "versionsError": "버전을 불러올 수 없습니다",
-    "olderVersionsHint": "여기에서는 현재 버전만 열 수 있습니다.",
+    "olderVersionsHint": "이전 버전은 읽기 전용으로 열립니다. 다른 이름으로 저장을 사용하면 사본이 다운로드됩니다.",
     "save": "저장"
   },
   "importPanel": {
