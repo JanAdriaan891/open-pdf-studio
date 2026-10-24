@@ -80,6 +80,7 @@ js/tools/snap-geometrie-cache.test.mjs
 js/annotations/schaal-bronnen.test.mjs
 js/solid/stores/quantitiesStore.test.mjs
 js/core/undo-manager.test.mjs
+js/core/undo-tekstlaag.test.mjs
 js/utils/date-formatter.test.mjs
 js/pdf/loader/annotaties-toevoegen.test.mjs
 js/solid/components/dialogs/SignatureDialog.test.mjs

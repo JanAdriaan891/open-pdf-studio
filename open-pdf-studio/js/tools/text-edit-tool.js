@@ -8,6 +8,7 @@ import { showPdfTextEditor, hidePdfTextEditor, getPdfEditorText as getEditorText
   getPdfEditorLineRuns as getEditorLineRuns,
   updatePdfEditorStyle, shiftPdfEditorPosition } from '../bridge.js';
 import { injectSyntheticTextSpans, resolveTextLayerFonts } from '../text/text-layer.js';
+import { toonBewerkingInTekstlaag } from '../text/tekstlaag-bewerking.js';
 import { caretKleur, meetOndergrond } from './editor-ondergrond.js';
 import {
   applyPageRotation,
@@ -1406,7 +1407,10 @@ function finishPdfTextEditing() {
         }
       }
 
-      execute({ type: 'addTextEdit', textEdit: { ...editRecord, originalSpanTexts } });
+      // De span-teksten zoals hierboven gezet: opnieuw uitvoeren zet precies
+      // deze terug (ook verdeeld over kolom-segmenten).
+      const tekstlaagNa = lineData.map(ld => ld.spans.map(s => s.textContent));
+      execute({ type: 'addTextEdit', textEdit: { ...editRecord, originalSpanTexts }, tekstlaagNa });
       markDocumentModified();
 
       if (getActiveDocument()?.viewMode === 'continuous') {
@@ -1817,6 +1821,11 @@ export function startTextEditEditing(textEdit, pageNum, canvasEl) {
         execute({ type: 'addTextEdit', textEdit: { ...textEdit } });
       } else {
         execute({ type: 'modifyTextEdit', oldTextEdit, newTextEdit: { ...textEdit } });
+        // Herbewerking van bestaande tekst: de tekstlaag toont de nieuwe
+        // versie, zoals na de eerste bewerking (en na opnieuw uitvoeren).
+        const laag = document.querySelector(`.textLayer[data-page="${pageNum}"]`)
+          || document.querySelector('.textLayer');
+        if (laag) toonBewerkingInTekstlaag(laag, textEdit, { vorige: oldTextEdit });
       }
       markDocumentModified();
       reRenderAddedText(pageNum);
