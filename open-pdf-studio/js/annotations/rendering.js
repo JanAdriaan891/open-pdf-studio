@@ -2858,10 +2858,9 @@ function tekenTekstAfdekking(ctx, doc, pageNum, edit, offX, top, sleutels) {
   // Een afdruk of export tekent synchroon: alleen een uitsnede die al klaar
   // ligt, geen nieuwe plannen die pas na de uitvoer binnenkomt.
   const uitvoer = !!_lagen && !_lagen.bewerkhulp;
-  // Een MCP-bewerking (mcpStrict) knipt alleen de vectortekst en dekt in het
-  // bestand nooit af: dan ook in de weergave de afbeelding laten staan.
-  const uitsnede = afdekUitsnede(doc, pageNum, sleutel, omhullende, pxPerPt,
-    { plannen: !uitvoer, behoudBeeld: !!edit.mcpStrict });
+  // Ook een bewerking via de MCP-teksttools dekt op een scan het gescande
+  // woord af (#720), in het bestand en dus ook hier.
+  const uitsnede = afdekUitsnede(doc, pageNum, sleutel, omhullende, pxPerPt, { plannen: !uitvoer });
   ctx.save();
   ctx.clip(vlakken);
   if (uitsnede) {

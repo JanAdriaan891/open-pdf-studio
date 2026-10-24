@@ -511,5 +511,6 @@ js/text/tekst-blokken.test.mjs
 js/tools/text-edit-commit.test.mjs
 js/pdf/saver/text-edit-afbeelding.test.mjs
 js/pdf/saver/text-edit-formxobject.test.mjs
+js/pdf/saver/text-edit-mcp-scan.test.mjs
 js/pdf/saver/text-edit-unicode.test.mjs
 js/text/tekstlaag-bron.test.mjs

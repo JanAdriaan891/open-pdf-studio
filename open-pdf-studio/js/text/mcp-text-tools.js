@@ -4,7 +4,7 @@ import { pageTextSpans } from './mcp-page-text.js';
 import { textItemColors } from './mcp-text-color.js';
 import { embedMcpTextFont } from './mcp-text-font.js';
 import {
-  MAX_VERVANGINGEN, parseSpanId, vervangingVormFout, planVervanging, proefOpKopie,
+  MAX_VERVANGINGEN, parseSpanId, vervangingVormFout, planVervanging, proefOpKopie, verslag,
 } from './mcp-text-plan.js';
 
 const failure = error => ({ ok: false, error });
@@ -64,14 +64,6 @@ async function pasToe(doc, page, records) {
   }
 }
 
-function verslag(plan) {
-  const { span, record, textColor } = plan;
-  return { spanId: span.id, editId: record.id, originalText: span.text, newText: record.newText,
-    fontUsed: plan.fontUsed, fontFallback: plan.fontFallback, fontSize: record.fontSize,
-    color: textColor, bbox: span.bbox,
-    ...(plan.needsCover ? { rasterBackgroundOverlap: true,
-      warning: 'An image overlaps this text. The vector glyphs will be removed without covering the image; text already baked into image pixels may remain visible.' } : {}) };
-}
 
 export async function replaceTextForMcp({ spanId, expectedText, newText, color } = {}) {
   const item = { spanId, expectedText, newText, color };
