@@ -43,6 +43,7 @@ import { eigenVulDekking } from '../annotations/vul-dekking.js';
 import { saveTextEditsToPages } from './saver/text-edits.js';
 import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
 import { hostFoutMelding } from '../core/host-brug.js';
+import { formaatUitBytes, isInsluitbaar } from '../annotations/stempel-afbeelding.js';
 import { runsToText, dsMargeUitInzet } from '../annotations/rendering/textbox-layout.js';
 import { saveWatermarksToPages } from './saver/watermarks.js';
 import { writeOcrLayers } from './saver/ocr-text-layer.js';
@@ -177,8 +178,31 @@ async function imageBytesFromDataUrl(dataUrl) {
     const base64 = dataUrl.split(',')[1];
     bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
   }
+  // pdf-lib sluit alleen PNG en JPEG in. Een GIF, BMP, SVG of WebP (een
+  // eigen stempel uit zo'n bestand, #749) wordt eerst PNG, anders faalde het
+  // insluiten stil en was de stempel na opnieuw openen weg.
+  const formaat = formaatUitBytes(bytes);
+  if (!isInsluitbaar(formaat)) bytes = await naarPngBytes(bytes, formaat);
   const isJpeg = bytes.length > 2 && bytes[0] === 0xFF && bytes[1] === 0xD8;
   return { bytes, isJpeg };
+}
+
+async function naarPngBytes(bytes, formaat) {
+  const type = formaat === 'svg' ? 'image/svg+xml' : (formaat ? `image/${formaat}` : '');
+  const url = URL.createObjectURL(new Blob([bytes], type ? { type } : {}));
+  try {
+    const img = new Image();
+    img.src = url;
+    await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth || 512;
+    canvas.height = img.naturalHeight || 512;
+    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+    return new Uint8Array(await blob.arrayBuffer());
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 // Gedeclareerd in het deel hieronder, dat save-document.test.mjs los draait.

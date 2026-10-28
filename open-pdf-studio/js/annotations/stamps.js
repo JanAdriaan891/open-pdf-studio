@@ -12,6 +12,7 @@ import { overrideStampMaat } from './svg-real-size.js';
 import { stampPxPerMm } from './stamp-scale.js';
 import { rasterizeSvg } from './svg-raster.js';
 import { paginaMaat, rechtopRotatie } from '../pdf/weergave-ruimte.js';
+import { mimeUitNaam, formaatUitBytes, isInsluitbaar } from './stempel-afbeelding.js';
 
 // Built-in stamp definitions
 // (in stamp-defaults.js, zodat ook de loader ze kan lezen)
@@ -232,6 +233,15 @@ export async function updateStampImage(ann, svgString) {
 }
 
 // Load custom stamp from image file
+// Een geladen afbeelding als PNG-data-URL (een SVG zonder eigen maat krijgt 512 px).
+function alsPngDataUrl(img) {
+  const canvas = document.createElement('canvas');
+  canvas.width = img.naturalWidth || 512;
+  canvas.height = img.naturalHeight || 512;
+  canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/png');
+}
+
 async function loadCustomStamp(x, y) {
   try {
     const { openFileDialog } = await import('../core/platform.js');
@@ -240,12 +250,29 @@ async function loadCustomStamp(x, y) {
 
     const { readBinaryFile } = await import('../core/platform.js');
     const data = await readBinaryFile(filePath);
-    const blob = new Blob([data]);
+    // Met het juiste type: een SVG zonder type laadt niet als afbeelding.
+    const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+    const formaat = formaatUitBytes(bytes);
+    const mime = mimeUitNaam(filePath) || (formaat ? `image/${formaat === 'svg' ? 'svg+xml' : formaat}` : '');
+    const blob = new Blob([bytes], mime ? { type: mime } : {});
     const url = URL.createObjectURL(blob);
 
     const img = new Image();
     img.src = url;
     await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; });
+
+    // Als data:-URL bewaren, niet als tijdelijke blob:-URL (#749): die
+    // overleeft geen sessie en de saver kan alleen PNG en JPEG insluiten.
+    // Andere formaten (GIF, BMP, SVG, WebP) worden hier PNG.
+    const imageData = isInsluitbaar(formaat)
+      ? await new Promise((resolve, reject) => {
+        const lezer = new FileReader();
+        lezer.onload = () => resolve(lezer.result);
+        lezer.onerror = () => reject(lezer.error);
+        lezer.readAsDataURL(blob);
+      })
+      : alsPngDataUrl(img);
+    URL.revokeObjectURL(url);
 
     const { generateImageId } = await import('../utils/helpers.js');
     const imageId = generateImageId();
@@ -270,7 +297,7 @@ async function loadCustomStamp(x, y) {
       stampName: 'Custom',
       stampText: '',
       imageId: imageId,
-      imageData: url,
+      imageData,
       originalWidth: img.naturalWidth,
       originalHeight: img.naturalHeight,
       color: '#000000',
