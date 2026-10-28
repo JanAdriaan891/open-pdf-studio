@@ -276,6 +276,9 @@ function pijlVoorBesturing(e) {
   return typeof t?.closest === 'function' && !!t.closest(PIJL_BESTURING);
 }
 
+// Loopt er nog een PageUp/PageDown-sprong (#713)?
+let _paginaToetsBezig = false;
+
 export async function handleKeydown(e) {
   // De tabwissel-toetsen zijn al afgehandeld (of bewust geweigerd) door
   // handleTabSneltoets; niets hieronder mag er nog op reageren.
@@ -628,6 +631,27 @@ export async function handleKeydown(e) {
         const cur = navDoc.currentPage || 1;
         const next = e.key === 'ArrowDown' ? Math.min(total, cur + 1) : Math.max(1, cur - 1);
         if (next !== cur) goToPage(next);
+      }
+    }
+  }
+
+  // PageDown/PageUp: volgende/vorige pagina, zoals de ribbonknoppen Volgende/
+  // Vorige (#713, #751). goToPage regelt enkel, doorlopend en facing (per
+  // spread). Ctrl+PageUp/PageDown is de tabwissel (#539) en Compare vangt de
+  // toetsen zelf in de capture-fase; invoervelden zijn hierboven al afgevangen.
+  else if (!ctrl && !shift && !e.altKey && (e.key === 'PageDown' || e.key === 'PageUp')) {
+    const navDoc = getActiveDocument();
+    if (navDoc?.pdfDoc && !e.defaultPrevented && !state.isEditingText && !state.pdfTextEditState) {
+      e.preventDefault();
+      // Ingedrukt houden: pas een volgende stap als de vorige klaar is, zodat
+      // er geen achterstand aan sprongen ontstaat.
+      if (_paginaToetsBezig && e.repeat) return;
+      const total = navDoc.pdfDoc.numPages || 1;
+      const cur = navDoc.currentPage || 1;
+      const next = e.key === 'PageDown' ? Math.min(total, cur + 1) : Math.max(1, cur - 1);
+      if (next !== cur) {
+        _paginaToetsBezig = true;
+        try { await goToPage(next); } finally { _paginaToetsBezig = false; }
       }
     }
   }
