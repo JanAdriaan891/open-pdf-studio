@@ -161,3 +161,18 @@ test('the AUR reference PKGBUILD and .SRCINFO agree (#620)', async () => {
   assert.doesNotMatch(srcinfo, /depends = .*(tesseract|leptonica)/i);
   assert.doesNotMatch(srcinfo, /\r/, '.SRCINFO uses LF line endings');
 });
+
+test('the bundle icon list carries the large PNGs Linux launchers use (#774)', async () => {
+  const base = await readJson('src-tauri/tauri.conf.json');
+  const icons = base.bundle.icon;
+  for (const naam of ['icons/icon.png', 'icons/256x256.png', 'icons/512x512.png']) {
+    assert.ok(icons.includes(naam), `bundle.icon contains ${naam}`);
+  }
+  const { readFileSync } = await import('node:fs');
+  for (const [naam, maat] of [['icons/256x256.png', 256], ['icons/512x512.png', 512], ['icons/icon.png', 512]]) {
+    const png = readFileSync(new URL(`src-tauri/${naam}`, appRoot));
+    // IHDR: width and height as big-endian uint32 at bytes 16 and 20.
+    assert.equal(png.readUInt32BE(16), maat, `${naam} width`);
+    assert.equal(png.readUInt32BE(20), maat, `${naam} height`);
+  }
+});
