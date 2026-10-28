@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { middelmuisActie, maakMiddelmuisHandlers } from './middelmuis-pan-beleid.js';
+import {
+  middelmuisActie, maakMiddelmuisHandlers, maakMiddelDubbelklik,
+  MIDDEL_DUBBELKLIK_MS, MIDDEL_DUBBELKLIK_TOLERANTIE,
+} from './middelmuis-pan-beleid.js';
 
 // Middelmuisknop ingedrukt, verder geen knoppen: een gewone pan-start.
 const basis = { button: 1, buttons: 4, binnenWeergave: true, inVergelijking: false, alPannen: false };
@@ -103,4 +106,91 @@ test('mousedown-vangnet bij akkoord met linkerknop: alleen preventDefault', () =
   h.onMouseDown(e);
   assert.equal(e.prevented, true);
   assert.deepEqual(log, []);
+});
+
+// ── Middel-dubbelklik = passend zoomen (#767) ──
+
+// Klik: druk en loslaten op (x, y), met de druk op tijdstip t.
+function klik(dk, x, y, t, losX = x, losY = y) {
+  dk.omlaag(x, y, t);
+  return dk.omhoog(losX, losY);
+}
+
+test('dubbelklik: twee klikken binnen de tijd en op dezelfde plek', () => {
+  const dk = maakMiddelDubbelklik();
+  assert.equal(klik(dk, 100, 100, 0), false, 'eerste klik is nog geen dubbelklik');
+  assert.equal(klik(dk, 101, 99, 250), true, 'tweede klik maakt hem af');
+  assert.equal(klik(dk, 100, 100, 400), false, 'een derde klik begint opnieuw');
+});
+
+test('dubbelklik: te traag is twee losse klikken', () => {
+  const dk = maakMiddelDubbelklik();
+  klik(dk, 100, 100, 0);
+  assert.equal(klik(dk, 100, 100, MIDDEL_DUBBELKLIK_MS + 1), false);
+  // De trage tweede klik telt wel als eerste klik van een nieuwe dubbelklik.
+  assert.equal(klik(dk, 100, 100, MIDDEL_DUBBELKLIK_MS + 200), true);
+});
+
+test('dubbelklik: buiten de bewegingstolerantie geen dubbelklik', () => {
+  const t = MIDDEL_DUBBELKLIK_TOLERANTIE;
+  const dk = maakMiddelDubbelklik();
+  klik(dk, 100, 100, 0);
+  assert.equal(klik(dk, 100 + t + 1, 100, 100), false, 'tweede klik te ver van de eerste');
+  const dk2 = maakMiddelDubbelklik();
+  klik(dk2, 100, 100, 0);
+  assert.equal(klik(dk2, 100 + t, 100 - t, 100), true, 'precies op de grens telt nog');
+});
+
+test('dubbelklik: een pan (slepen) zoomt nooit, ook niet na een snelle klik', () => {
+  const dk = maakMiddelDubbelklik();
+  klik(dk, 100, 100, 0);
+  assert.equal(klik(dk, 100, 100, 100, 180, 140), false, 'tweede druk sleept: pan');
+  assert.equal(klik(dk, 180, 140, 200), false, 'na de pan begint het opnieuw');
+  const dk2 = maakMiddelDubbelklik();
+  assert.equal(klik(dk2, 100, 100, 0, 160, 100), false, 'eerste druk sleept');
+  assert.equal(klik(dk2, 160, 100, 100), false, 'een gesleepte druk telt niet als eerste klik');
+});
+
+function maakMetZoom({ aan = true } = {}) {
+  const log = [];
+  const h = maakMiddelmuisHandlers({
+    heeftDocument: () => true,
+    weergaveModus: () => 'continuous',
+    isPanning: () => false,
+    rondBewerkingenAf: () => {},
+    sluitMenu: () => {},
+    startScrollPan: () => {},
+    startViewportPan: () => false,
+    dubbelklikAan: () => aan,
+    zoomAlles: () => log.push('zoom'),
+  });
+  const middel = (x, y, t, o = {}) => {
+    h.onPointerDown(nepEvent({ event: { clientX: x, clientY: y, timeStamp: t, ...o } }));
+    h.onPointerUp({ button: o.button ?? 1, clientX: o.losX ?? x, clientY: o.losY ?? y, timeStamp: t + 50 });
+  };
+  return { h, log, middel };
+}
+
+test('handlers: middel-dubbelklik zoomt passend, slepen en andere knoppen niet', () => {
+  let m = maakMetZoom();
+  m.middel(10, 10, 0);
+  m.middel(10, 10, 200);
+  assert.deepEqual(m.log, ['zoom']);
+
+  m = maakMetZoom();
+  m.middel(10, 10, 0);
+  m.middel(10, 10, 200, { losX: 90 });
+  assert.deepEqual(m.log, [], 'tweede druk werd een pan');
+
+  m = maakMetZoom();
+  m.middel(10, 10, 0, { button: 0, buttons: 1 });
+  m.middel(10, 10, 200, { button: 0, buttons: 1 });
+  assert.deepEqual(m.log, [], 'linkerknop telt niet');
+});
+
+test('handlers: met de voorkeur uit zoomt een middel-dubbelklik niet', () => {
+  const m = maakMetZoom({ aan: false });
+  m.middel(10, 10, 0);
+  m.middel(10, 10, 200);
+  assert.deepEqual(m.log, []);
 });

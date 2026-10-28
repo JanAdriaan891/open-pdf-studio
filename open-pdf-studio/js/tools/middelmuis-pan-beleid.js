@@ -33,6 +33,35 @@ export function middelmuisActie({ button, buttons, binnenWeergave, inVergelijkin
   return 'pan';
 }
 
+// Dubbelklik met de middelknop = passend zoomen (#767), zoals in CAD-pakketten.
+// Een klik is een druk en loslaten zonder slepen; twee klikken binnen de
+// dubbelkliktijd en dicht bij elkaar vormen een dubbelklik. Pas het loslaten
+// van de tweede klik telt, zodat een middelmuis-pan die met een snelle druk
+// begint nooit zoomt.
+export const MIDDEL_DUBBELKLIK_MS = 500;        // standaard dubbelkliktijd van Windows
+export const MIDDEL_DUBBELKLIK_TOLERANTIE = 4;  // px, de helft van SM_CXDOUBLECLK
+
+export function maakMiddelDubbelklik({ ms = MIDDEL_DUBBELKLIK_MS, tolerantie = MIDDEL_DUBBELKLIK_TOLERANTIE } = {}) {
+  let druk = null;    // { x, y, t } van de lopende druk
+  let vorige = null;  // { x, y, t } van de vorige klik
+  const dichtbij = (a, b) => Math.abs(a.x - b.x) <= tolerantie && Math.abs(a.y - b.y) <= tolerantie;
+  return {
+    omlaag(x, y, t) { druk = { x, y, t }; },
+    // true = dit loslaten maakt een dubbelklik af.
+    omhoog(x, y) {
+      const d = druk;
+      druk = null;
+      if (!d) return false;
+      // Gesleept: een pan, geen klik; begint ook geen nieuwe dubbelklik.
+      if (!dichtbij(d, { x, y })) { vorige = null; return false; }
+      if (vorige && d.t - vorige.t <= ms && dichtbij(vorige, d)) { vorige = null; return true; }
+      vorige = d;
+      return false;
+    },
+    reset() { druk = null; vorige = null; },
+  };
+}
+
 function doelVan(e) {
   const t = e && e.target;
   return t && typeof t.closest === 'function' ? t : null;
@@ -50,8 +79,12 @@ function doelVan(e) {
  * @param {() => void} d.sluitMenu            open contextmenu sluiten
  * @param {(e: any) => void} d.startScrollPan pan in een scrollende weergave
  * @param {(e: any) => boolean} d.startViewportPan pan in de viewport; false = niet actief
+ * @param {() => boolean} [d.dubbelklikAan]   voorkeur: middel-dubbelklik zoomt passend (#767)
+ * @param {() => void} [d.zoomAlles]          passend zoomen op de huidige pagina
  */
 export function maakMiddelmuisHandlers(d) {
+  const dubbel = maakMiddelDubbelklik();
+
   const actieVoor = (e) => {
     const doel = doelVan(e);
     return middelmuisActie({
@@ -69,6 +102,7 @@ export function maakMiddelmuisHandlers(d) {
     // Onderdrukt de autoscroll (en de afgeleide mousedown).
     e.preventDefault();
     if (actie !== 'pan') return;
+    dubbel.omlaag(e.clientX, e.clientY, e.timeStamp);
     // Laag-specifieke handlers (gereedschap, tekstlaag, viewport, de
     // klik-buiten-commit van de tekst-editor) zien dit event niet meer.
     e.stopPropagation();
@@ -94,5 +128,13 @@ export function maakMiddelmuisHandlers(d) {
     if (doel && doel.closest('#pdf-container') && !doel.closest('.compare-view')) e.preventDefault();
   }
 
-  return { onPointerDown, onMouseDown, onAuxClick };
+  // Loslaten van de middelknop: maakt dit een dubbelklik af, dan passend
+  // zoomen. Een lopende teken- of sleepbewerking blijft gewoon staan.
+  function onPointerUp(e) {
+    if (e.button !== 1) return;
+    if (!d.dubbelklikAan || !d.dubbelklikAan()) { dubbel.reset(); return; }
+    if (dubbel.omhoog(e.clientX, e.clientY)) d.zoomAlles();
+  }
+
+  return { onPointerDown, onMouseDown, onAuxClick, onPointerUp };
 }

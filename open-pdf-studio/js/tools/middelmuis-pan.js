@@ -11,6 +11,7 @@
 // laag-specifieke handler. De pan zelf hergebruikt de bestaande logica:
 // pan-handler.js (scrollende weergaven) en pdf-viewport.js (enkele pagina).
 // Het gedrag staat in maakMiddelmuisHandlers (middelmuis-pan-beleid.js).
+// Een dubbelklik met de middelknop zoomt passend (#767).
 
 import { state, getActiveDocument } from '../core/state.js';
 import { startPan, startContinuousPan } from './pan-handler.js';
@@ -39,8 +40,28 @@ export function installeerMiddelmuisPan() {
       else startPan(e, true);
     },
     startViewportPan: (e) => startViewportMiddelmuisPan(e),
+    dubbelklikAan: () => state.preferences?.middleDoubleClickFit !== false,
+    // Na de pointerup-afhandeling van de pan, die nog op dit event loopt.
+    zoomAlles: () => { setTimeout(zoomAlles, 0); },
   });
   window.addEventListener('pointerdown', h.onPointerDown, { capture: true });
   window.addEventListener('mousedown', h.onMouseDown, { capture: true });
   window.addEventListener('auxclick', h.onAuxClick, { capture: true });
+  window.addEventListener('pointerup', h.onPointerUp, { capture: true });
+}
+
+// Middel-dubbelklik (#767): de huidige pagina passend in beeld, zoals Pagina
+// passend. In de doorlopende weergave blijft die pagina de referentie en
+// springt de weergave niet naar pagina 1.
+async function zoomAlles() {
+  const doc = getActiveDocument();
+  if (!doc?.pdfDoc) return;
+  const pagina = doc.currentPage || 1;
+  const { fitPage } = await import('../pdf/renderer.js');
+  await fitPage();
+  if (doc.viewMode === 'continuous') {
+    doc.currentPage = pagina;
+    document.querySelector(`.page-wrapper[data-page="${pagina}"]`)
+      ?.scrollIntoView({ block: 'center', inline: 'center' });
+  }
 }

@@ -167,6 +167,7 @@
     "snapToPdfContent": "Uitlijnen op PDF-tekeninhoud",
     "navigation": "Navigatie",
     "wheelZoomWithoutCtrl": "Zoomen met muiswiel (zonder Ctrl ingedrukt)",
+    "middleDoubleClickFit": "Dubbelklik met de middelste muisknop zoomt passend",
     "dynamicScaling": "Markeringen automatisch schalen"
   },
   "fileAssoc": {
