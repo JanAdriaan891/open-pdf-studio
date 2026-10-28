@@ -200,6 +200,7 @@ export interface Preferences {
   autoSelectAfterCreate: boolean;
   confirmBeforeDelete: boolean;
   wheelZoomWithoutCtrl: boolean;
+  keyboardShortcuts: Record<string, string[]>;
 
   // Startup
   restoreLastSession: boolean;

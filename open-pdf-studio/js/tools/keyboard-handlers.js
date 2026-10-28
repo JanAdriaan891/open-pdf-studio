@@ -38,6 +38,9 @@ import { gevelPreset } from '../gevelelement/herkenning.js';
 import { isTextAnchored, expandCorrectionGroups, replaceParentOf } from '../annotations/corrections/model.js';
 import { deleteAnnotationsWithUndo } from '../annotations/mutations.js';
 import { installProofreadingKeys } from './proofreading-mode.js';
+import { combinatieVan, eventVoor } from './sneltoetsen/toets-combinatie.js';
+import { beslis, schoonEigen } from './sneltoetsen/sneltoets-model.js';
+import { alleOpdrachten } from './sneltoetsen/opdrachten.js';
 
 function redraw() {
   if (getActiveDocument()?.viewMode === 'continuous') redrawContinuous();
@@ -1032,12 +1035,64 @@ function handlePaste(e) {
 }
 
 // Initialize keyboard handlers
+// ── Eigen sneltoetsen (#714) ────────────────────────────────────────────────
+// Speel een standaardsneltoets af alsof hij ingedrukt werd: dezelfde weg als
+// een echte toets, dus precies hetzelfde gedrag.
+function speelSneltoetsAf(combinatie) {
+  const ev = eventVoor(combinatie, document.body);
+  if (!ev) return;
+  if (tabSneltoetsRichting(ev)) handleTabSneltoets(ev);
+  else handleKeydown(ev);
+}
+
+/** Alle opdrachten die een sneltoets kunnen hebben (ingebouwd en extensies). */
+export function sneltoetsOpdrachten() {
+  // De taal van de app (useTranslation zet hem op <html lang>), voor de namen van extensie-opdrachten.
+  const taal = (typeof document !== 'undefined' && document.documentElement?.lang) || 'en';
+  return alleOpdrachten({ speelAf: speelSneltoetsAf, taal });
+}
+
+// Grijpt alleen in waar de gebruiker iets veranderde (sneltoets-model.js,
+// beslis): een eigen combinatie voert haar opdracht uit, een weggehaalde
+// standaardtoets doet niets meer. Al het andere gaat ongewijzigd door naar de
+// gewone afhandeling. Typen, dialogen en lopende bewerkingen houden hun eigen
+// toetsen, zoals bij de standaardsneltoetsen.
+function handleEigenSneltoets(e) {
+  const eigen = schoonEigen(state.preferences?.keyboardShortcuts);
+  if (Object.keys(eigen).length === 0 || e.defaultPrevented) return;
+  const combinatie = combinatieVan(e);
+  if (!combinatie) return;
+  if (isTextEntryTarget(e.target) || isModalOpen()
+      || (typeof getDialogs === 'function' && (getDialogs() || []).length > 0)
+      || state.isEditingText || state.pdfTextEditState
+      || typeLengthActive() || isGMoveModeActive() || isGRotateModeActive()) return;
+  const opdrachten = sneltoetsOpdrachten();
+  const keuze = beslis(combinatie, opdrachten, eigen);
+  if (keuze.soort === 'door') return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  if (keuze.soort === 'uitvoeren') {
+    // Ingedrukt houden herhaalt geen opdracht die geen toets van zichzelf had.
+    if (e.repeat) return;
+    const opdracht = opdrachten.find((o) => o.id === keuze.id);
+    try {
+      const uitkomst = opdracht?.uitvoeren();
+      if (uitkomst && typeof uitkomst.catch === 'function') uitkomst.catch((err) => console.warn('[sneltoets]', keuze.id, err));
+    } catch (err) {
+      console.warn('[sneltoets]', keuze.id, err);
+    }
+  }
+}
+
 export function initKeyboardHandlers() {
   // Capture-fase op window: vóór alle keydown-luisteraars op document en
   // daaronder, ook de capture-luisteraars (#539).
   // Proofreading mode (#508): F2, and while it is on every key it uses,
   // before any other handler (also before the tab switch keys).
   installProofreadingKeys();
+  // Eigen sneltoetsen vóór de tabwissel, zodat ook Ctrl+PageUp/PageDown een
+  // andere opdracht kunnen krijgen (#714).
+  window.addEventListener('keydown', handleEigenSneltoets, true);
   window.addEventListener('keydown', handleTabSneltoets, true);
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('paste', handlePaste);

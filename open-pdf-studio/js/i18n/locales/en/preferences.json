@@ -9,7 +9,8 @@
     "behavior": "Behavior",
     "fileAssociation": "File Association",
     "virtualPrinter": "Virtual Printer",
-    "pageDisplay": "Page Display"
+    "pageDisplay": "Page Display",
+    "shortcuts": "Keyboard Shortcuts"
   },
   "resetToDefaults": "Reset to Defaults",
   "resetConfirm": "Reset all preferences to default values?",
@@ -284,5 +285,115 @@
     "how3": "Preview, reorder, merge and save the jobs as one PDF, or open them in Studio.",
     "openWindow": "Open printer window",
     "openWindowTip": "Show the captured print jobs"
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "search": "Search command or key",
+    "add": "Add",
+    "reset": "Reset",
+    "resetAll": "Reset all",
+    "import": "Import…",
+    "export": "Export…",
+    "remove": "Remove",
+    "pressKeys": "Press a key combination… (Esc cancels)",
+    "inUse": "{{key}} is already used by \"{{command}}\".",
+    "reassign": "Reassign",
+    "cancel": "Cancel",
+    "notAllowed": "{{key}} cannot be used as a shortcut.",
+    "exported": "Shortcuts exported.",
+    "exportFailed": "Export failed: {{error}}",
+    "imported": "Shortcuts imported. Click Save to use them.",
+    "importFailed": "This file does not contain Open PDF Studio shortcuts.",
+    "customize": "Customize…",
+    "categories": {
+      "file": "File",
+      "edit": "Edit",
+      "view": "View",
+      "navigation": "Navigation",
+      "tools": "Tools",
+      "drafting": "Drafting",
+      "extensions": "Extensions"
+    },
+    "commands": {
+      "file": {
+        "new": "New Document",
+        "open": "Open",
+        "save": "Save",
+        "saveAs": "Save As",
+        "close": "Close Tab",
+        "properties": "Document Properties",
+        "preferences": "Preferences",
+        "print": "Print",
+        "mergePdfs": "Merge PDFs"
+      },
+      "edit": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "selectAll": "Select All",
+        "copy": "Copy",
+        "cut": "Cut",
+        "paste": "Paste",
+        "pasteInPlace": "Paste in Place",
+        "delete": "Delete",
+        "clearPage": "Clear Page",
+        "insertPage": "Insert Page",
+        "extractPages": "Extract Pages"
+      },
+      "view": {
+        "zoomIn": "Zoom In",
+        "zoomOut": "Zoom Out",
+        "actualSize": "Actual Size",
+        "fitWidth": "Fit Width",
+        "fitPage": "Fit Page",
+        "thinLines": "Thin Lines",
+        "rotateRight": "Rotate Page Right",
+        "rotateLeft": "Rotate Page Left",
+        "fullscreen": "Full Screen",
+        "find": "Find",
+        "findNext": "Find Next",
+        "leftPanel": "Toggle Left Panel",
+        "annotationsList": "Toggle Annotations List",
+        "properties": "Toggle Properties",
+        "shortcuts": "Keyboard Shortcuts"
+      },
+      "navigation": {
+        "nextTab": "Next Tab",
+        "previousTab": "Previous Tab",
+        "nextPage": "Next Page",
+        "previousPage": "Previous Page",
+        "firstPage": "First Page",
+        "lastPage": "Last Page"
+      },
+      "drafting": {
+        "grid": "Toggle Grid",
+        "snap": "Toggle Snap to Grid",
+        "polar": "Toggle Polar Tracking",
+        "objectSnap": "Toggle Object Snap"
+      },
+      "tools": {
+        "select": "Select",
+        "hand": "Hand",
+        "highlight": "Highlight",
+        "draw": "Freehand",
+        "line": "Line",
+        "box": "Rectangle",
+        "circle": "Ellipse",
+        "textbox": "Text Box",
+        "comment": "Note",
+        "arrow": "Arrow",
+        "polyline": "Polyline",
+        "polygon": "Polygon",
+        "cloud": "Cloud",
+        "callout": "Callout",
+        "stamp": "Stamp",
+        "eraser": "Eraser",
+        "measureDistance": "Measure Distance",
+        "measureArea": "Measure Area",
+        "measurePerimeter": "Measure Perimeter",
+        "measureAngle": "Measure Angle",
+        "count": "Count",
+        "redaction": "Redaction"
+      }
+    }
   }
 }

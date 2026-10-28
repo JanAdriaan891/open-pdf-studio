@@ -9,7 +9,8 @@
     "behavior": "Gedrag",
     "fileAssociation": "Bestandskoppeling",
     "virtualPrinter": "Virtuele printer",
-    "pageDisplay": "Paginaweergave"
+    "pageDisplay": "Paginaweergave",
+    "shortcuts": "Sneltoetsen"
   },
   "resetToDefaults": "Standaardwaarden herstellen",
   "resetConfirm": "Alle voorkeuren terugzetten naar standaardwaarden?",
@@ -291,5 +292,115 @@
     "openArrowReversed": "Open pijl (omgekeerd)",
     "closedArrowReversed": "Gesloten pijl (omgekeerd)",
     "slash": "Schuine streep"
+  },
+  "shortcuts": {
+    "title": "Sneltoetsen",
+    "search": "Zoek een opdracht of toets",
+    "add": "Toevoegen",
+    "reset": "Standaard",
+    "resetAll": "Alles standaard",
+    "import": "Importeren…",
+    "export": "Exporteren…",
+    "remove": "Verwijderen",
+    "pressKeys": "Druk op een toetscombinatie… (Esc annuleert)",
+    "inUse": "{{key}} wordt al gebruikt door \"{{command}}\".",
+    "reassign": "Opnieuw toewijzen",
+    "cancel": "Annuleren",
+    "notAllowed": "{{key}} kan geen sneltoets zijn.",
+    "exported": "Sneltoetsen geëxporteerd.",
+    "exportFailed": "Exporteren mislukt: {{error}}",
+    "imported": "Sneltoetsen geïmporteerd. Klik op Opslaan om ze te gebruiken.",
+    "importFailed": "Dit bestand bevat geen sneltoetsen van Open PDF Studio.",
+    "customize": "Aanpassen…",
+    "categories": {
+      "file": "Bestand",
+      "edit": "Bewerken",
+      "view": "Beeld",
+      "navigation": "Navigatie",
+      "tools": "Gereedschap",
+      "drafting": "Tekenen",
+      "extensions": "Extensies"
+    },
+    "commands": {
+      "file": {
+        "new": "Nieuw document",
+        "open": "Openen",
+        "save": "Opslaan",
+        "saveAs": "Opslaan als",
+        "close": "Tabblad sluiten",
+        "properties": "Documenteigenschappen",
+        "preferences": "Voorkeuren",
+        "print": "Afdrukken",
+        "mergePdfs": "PDF's samenvoegen"
+      },
+      "edit": {
+        "undo": "Ongedaan maken",
+        "redo": "Opnieuw",
+        "selectAll": "Alles selecteren",
+        "copy": "Kopiëren",
+        "cut": "Knippen",
+        "paste": "Plakken",
+        "pasteInPlace": "Op dezelfde plek plakken",
+        "delete": "Verwijderen",
+        "clearPage": "Pagina leegmaken",
+        "insertPage": "Pagina invoegen",
+        "extractPages": "Pagina's extraheren"
+      },
+      "view": {
+        "zoomIn": "Inzoomen",
+        "zoomOut": "Uitzoomen",
+        "actualSize": "Werkelijke grootte",
+        "fitWidth": "Passend in breedte",
+        "fitPage": "Pagina passend",
+        "thinLines": "Dunne lijnen",
+        "rotateRight": "Pagina rechtsom draaien",
+        "rotateLeft": "Pagina linksom draaien",
+        "fullscreen": "Volledig scherm",
+        "find": "Zoeken",
+        "findNext": "Volgende zoeken",
+        "leftPanel": "Linkerpaneel aan/uit",
+        "annotationsList": "Lijst met opmerkingen aan/uit",
+        "properties": "Eigenschappen aan/uit",
+        "shortcuts": "Sneltoetsen"
+      },
+      "navigation": {
+        "nextTab": "Volgend tabblad",
+        "previousTab": "Vorig tabblad",
+        "nextPage": "Volgende pagina",
+        "previousPage": "Vorige pagina",
+        "firstPage": "Eerste pagina",
+        "lastPage": "Laatste pagina"
+      },
+      "drafting": {
+        "grid": "Raster aan/uit",
+        "snap": "Vangen op raster aan/uit",
+        "polar": "Poolvolgen aan/uit",
+        "objectSnap": "Objectvangen aan/uit"
+      },
+      "tools": {
+        "select": "Selecteren",
+        "hand": "Hand",
+        "highlight": "Markeren",
+        "draw": "Uit de vrije hand",
+        "line": "Lijn",
+        "box": "Rechthoek",
+        "circle": "Ellips",
+        "textbox": "Tekstvak",
+        "comment": "Notitie",
+        "arrow": "Pijl",
+        "polyline": "Polylijn",
+        "polygon": "Veelhoek",
+        "cloud": "Wolk",
+        "callout": "Toelichting",
+        "stamp": "Stempel",
+        "eraser": "Gum",
+        "measureDistance": "Afstand meten",
+        "measureArea": "Oppervlakte meten",
+        "measurePerimeter": "Omtrek meten",
+        "measureAngle": "Hoek meten",
+        "count": "Tellen",
+        "redaction": "Redactie"
+      }
+    }
   }
 }

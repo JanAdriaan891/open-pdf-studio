@@ -94,11 +94,12 @@ test('in de vergelijkingsweergave bladert alleen PageUp/PageDown zonder Ctrl', (
 });
 
 test('het sneltoetsenoverzicht noemt de nieuwe toetsen', () => {
+  // Het overzicht (F1) komt sinds #714 uit het opdrachtenregister.
+  const register = bron('tools/sneltoetsen/opdrachten.js');
+  assert.match(register, /\['navigation\.nextTab', 'navigation', 'Next Tab', \['Ctrl\+Tab', 'Ctrl\+PageDown'\]\]/);
+  assert.match(register, /\['navigation\.previousTab', 'navigation', 'Previous Tab', \['Ctrl\+Shift\+Tab', 'Ctrl\+PageUp'\]\]/);
   const dialoog = bron('solid/components/dialogs/ShortcutsDialog.jsx');
-  assert.match(dialoog, /'tabs\.nextTab'[^\n]*\['Ctrl', 'Tab'\]/);
-  assert.match(dialoog, /'tabs\.previousTab'[^\n]*\['Ctrl', 'Shift', 'Tab'\]/);
-  assert.match(dialoog, /'tabs\.nextTab'[^\n]*\['Ctrl', 'PgDn'\]/);
-  assert.match(dialoog, /'tabs\.previousTab'[^\n]*\['Ctrl', 'PgUp'\]/);
+  assert.match(dialoog, /sneltoetsOpdrachten\(\)/);
 });
 
 // ── Vertalingen ──────────────────────────────────────────────────────────────

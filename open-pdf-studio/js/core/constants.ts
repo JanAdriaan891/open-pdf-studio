@@ -265,6 +265,8 @@ export const DEFAULT_PREFERENCES: Preferences = {
   autoSelectAfterCreate: true,
   confirmBeforeDelete: true,
   wheelZoomWithoutCtrl: false,
+  // Eigen sneltoetsen (#714): { [opdracht-id]: ['Ctrl+Shift+F', …] }, alleen wat afwijkt.
+  keyboardShortcuts: {},
 
   // Startup
   restoreLastSession: false,

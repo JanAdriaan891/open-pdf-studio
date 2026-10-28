@@ -3923,6 +3923,64 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
+.shortcuts-dialog .preferences-body-wrapper,
+.shortcuts-dialog .shortcuts-grid { max-height: 70vh; overflow-y: auto; }
+.shortcuts-or { color: var(--theme-text-secondary, #777); padding: 0 2px; font-size: 11px; }
+
+/* Voorkeuren > Sneltoetsen (#714) */
+.shortcuts-tab { display: flex; flex-direction: column; gap: 6px; }
+.shortcuts-toolbar { display: flex; gap: 6px; align-items: center; }
+.shortcuts-search { flex: 1; min-width: 120px; }
+.shortcuts-message { font-size: 12px; color: var(--theme-text, #333); }
+.shortcuts-list { max-height: 52vh; overflow-y: auto; padding-right: 4px; }
+.shortcuts-command {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(90px, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 12px;
+  border-bottom: 1px solid var(--theme-border-light, #eee);
+}
+.shortcuts-command.changed .shortcuts-command-name { font-weight: 600; }
+.shortcuts-command-keys { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.shortcuts-command-actions { display: flex; gap: 4px; }
+.shortcuts-command-actions .pref-btn { padding: 2px 8px; font-size: 11px; white-space: nowrap; min-width: 0; }
+.shortcuts-toolbar .pref-btn { white-space: nowrap; }
+.shortcuts-chip { display: inline-flex; align-items: center; gap: 1px; }
+.shortcuts-chip kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-family: var(--ui-font);
+  background: var(--theme-bg, #f0f0f0);
+  border: 1px solid var(--theme-border, #ccc);
+  color: var(--theme-text, #333);
+  line-height: 16px;
+}
+.shortcuts-chip-remove {
+  border: none;
+  background: none;
+  color: var(--theme-text-secondary, #777);
+  padding: 0 3px;
+  font-size: 13px;
+  line-height: 1;
+  cursor: default;
+}
+.shortcuts-chip-remove:hover { color: #e81123; }
+.shortcuts-recording { font-style: italic; color: var(--theme-accent, #0066cc); }
+.shortcuts-conflict {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 6px;
+  background: var(--theme-warning-bg, #fff4ce);
+  border: 1px solid var(--theme-warning-border, #e0c060);
+  color: #333;
+}
+.shortcuts-conflict span { flex: 1; }
+
 /* Extensions Panel */
 .ext-install-section {
   margin-bottom: 16px;
