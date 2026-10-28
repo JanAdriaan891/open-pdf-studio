@@ -27,6 +27,7 @@ test('alle gekozen instellingen komen terug', () => {
     autoCenter: false,
     content: 'doc-only',
     asImage: true,
+    colorMode: 'grayscale',
     perSheet: 'custom',
     sheetCols: 3,
     sheetRows: 4,

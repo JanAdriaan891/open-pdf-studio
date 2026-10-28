@@ -111,6 +111,7 @@ export default function PrintDialog(props) {
   const [autoCenter, setAutoCenter] = createSignal(bewaard.autoCenter);
   const [printContent, setPrintContent] = createSignal(bewaard.content);
   const [printAsImage, setPrintAsImage] = createSignal(bewaard.asImage);
+  const [colorMode, setColorMode] = createSignal(bewaard.colorMode);
   const [perSheet, setPerSheet] = createSignal(bewaard.perSheet);
   const [sheetCols, setSheetCols] = createSignal(bewaard.sheetCols);
   const [sheetRows, setSheetRows] = createSignal(bewaard.sheetRows);
@@ -372,7 +373,7 @@ export default function PrintDialog(props) {
       // pagina die haaks op het vel staat.
       const deel = renderDeel(plaatsing, pxPerPt);
       const beeld = deel
-        ? await renderPrintBeeld(pageNum, pxPerPt, plaatsing, deel, { markeringen })
+        ? await renderPrintBeeld(pageNum, pxPerPt, plaatsing, deel, { markeringen, kleur: colorMode() })
         : null;
       if (beurt !== voorbeeldBeurt) return;
 
@@ -476,7 +477,7 @@ export default function PrintDialog(props) {
       const sleutel = deel ? `${paginaVan(cel)}|${pxPerPt}|${JSON.stringify(deel.px)}` : null;
       let beeld = sleutel ? gerenderd.get(sleutel) : null;
       if (deel && !beeld) {
-        beeld = await renderPrintBeeld(paginaVan(cel), pxPerPt, cel.plaatsing, deel, { markeringen });
+        beeld = await renderPrintBeeld(paginaVan(cel), pxPerPt, cel.plaatsing, deel, { markeringen, kleur: colorMode() });
         gerenderd.set(sleutel, beeld);
       }
       if (beurt !== voorbeeldBeurt) return;
@@ -618,7 +619,7 @@ export default function PrintDialog(props) {
       const pxPerPt = v.plaatsing.schaal * MM_PER_PT * vak.pxPerMm;
       const deel = renderDeel(v.plaatsing, pxPerPt);
       const beeld = deel
-        ? await renderPrintBeeld(pageNum, pxPerPt, v.plaatsing, deel, { markeringen })
+        ? await renderPrintBeeld(pageNum, pxPerPt, v.plaatsing, deel, { markeringen, kleur: colorMode() })
         : null;
       if (beurt !== voorbeeldBeurt) return;
 
@@ -983,6 +984,7 @@ export default function PrintDialog(props) {
       autoCenter: autoCenter(),
       content: printContent(),
       asImage: printAsImage(),
+      colorMode: colorMode(),
       perSheet: perSheet(),
       sheetCols: sheetCols(),
       sheetRows: sheetRows(),
@@ -1041,6 +1043,7 @@ export default function PrintDialog(props) {
         poster: posterKeuze,
         boekje: boekjeKeuze,
         inhoud: printContent(),
+        kleur: colorMode(),
         openen: openOpgeslagen,
       });
       return;
@@ -1060,6 +1063,7 @@ export default function PrintDialog(props) {
       boekje: boekjeKeuze,
       // "Afdrukken: Document" laat de markeringen ook echt weg.
       inhoud: printContent(),
+      kleur: colorMode(),
     });
   }
 
@@ -1286,7 +1290,7 @@ export default function PrintDialog(props) {
   // zoom, centreren, automatisch draaien, Pagina-instelling en printerpapier)
   // of de pagina's per vel (aantal, raster, volgorde, rand).
   createEffect(on([
-    previewPages, previewIndex, printContent, plaatsingKeuzes, meerPerBlad, boekje, katern, boekjeZijden,
+    previewPages, previewIndex, printContent, colorMode, plaatsingKeuzes, meerPerBlad, boekje, katern, boekjeZijden,
     bookletCreep, posterVellenLijst,
   ], () => {
     renderPreview();
@@ -1834,6 +1838,19 @@ export default function PrintDialog(props) {
             >
               <option value="doc-and-markups">{t('print.documentAndMarkups')}</option>
               <option value="doc-only">{t('print.document')}</option>
+            </select>
+          </div>
+          {/* Kleurmodus (#754): grijs en zwart-wit op de paginabeelden. */}
+          <div class="print-row">
+            <label class="print-label">{t('print.colorLabel', 'Color:')}</label>
+            <select
+              class="print-select"
+              value={colorMode()}
+              onChange={(e) => setColorMode(e.target.value)}
+            >
+              <option value="color">{t('print.colorModeColor', 'Color')}</option>
+              <option value="grayscale">{t('print.colorModeGrayscale', 'Grayscale')}</option>
+              <option value="bw">{t('print.colorModeBw', 'Black & white')}</option>
             </select>
           </div>
           <div class="print-row print-checkbox-row">

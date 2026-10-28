@@ -8,6 +8,7 @@
 // of met de hand bewerkt voorkeurenbestand de dialoog nooit kan breken.
 
 import { isPdfDoel } from '../../pdf/print-doel.js';
+import { KLEUR_MODI } from '../../pdf/print-kleur.js';
 import {
   KATERN_KEUZES, BOEKJE_BINDINGEN, BOEKJE_KANTEN, geldigeKruip,
 } from '../../pdf/print-boekje.js';
@@ -27,6 +28,8 @@ export const PRINT_STANDAARD = Object.freeze({
   autoCenter: true,
   content: 'doc-and-markups',
   asImage: false,
+  // Kleurmodus van de afdruk (#754, print-kleur.js).
+  colorMode: 'color',
   perSheet: '1',
   sheetCols: 2,
   sheetRows: 2,
@@ -57,6 +60,7 @@ export const PRINT_KEUZES = Object.freeze({
   subset: ['all', 'odd', 'even'],
   scaling: ['fit', 'actual', 'shrink', 'custom-scale', 'poster'],
   content: ['doc-and-markups', 'doc-only'],
+  colorMode: [...KLEUR_MODI],
   perSheet: ['1', '2', '4', '6', '9', '16', 'custom', 'flyer', 'booklet'],
   flyerCount: ['2', '4', '6', '8', '9', '16'],
   sheetOrder: ['horizontal', 'horizontal-reversed', 'vertical', 'vertical-reversed'],
