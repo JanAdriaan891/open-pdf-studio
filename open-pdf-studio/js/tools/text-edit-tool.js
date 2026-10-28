@@ -2341,7 +2341,11 @@ function removeTextEditRecord(rec) {
   if (!doc || !doc.textEdits) return;
   const index = doc.textEdits.findIndex(e => e.id === rec.id);
   if (index === -1) return;
-  execute({ type: 'removeTextEdit', textEdit: { ...rec }, index });
+  // execute() legt alleen de undo-stap vast; de verwijdering zelf gebeurt
+  // hier. Zonder deze splice bleef de tekst in het document en kwam hij bij
+  // opslaan terug (#722). Undo zet het record op dezelfde index terug.
+  const [verwijderd] = doc.textEdits.splice(index, 1);
+  execute({ type: 'removeTextEdit', textEdit: { ...verwijderd }, index });
   markDocumentModified();
   reRenderAddedText(rec.page);
 }

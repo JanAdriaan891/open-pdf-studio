@@ -49,3 +49,19 @@ test('het verwijder-record van bestaande tekst draagt de tekstrichting', () => {
   const cover = bron.slice(bron.indexOf('function coverExistingText('));
   assert.match(cover, /textAngle: block\.lineData\[0\]\.angle \|\| 0/);
 });
+
+test('ingevoegde tekst verwijderen haalt het record echt uit doc.textEdits (#722)', () => {
+  const fn = bron.slice(bron.indexOf('function removeTextEditRecord('), bron.indexOf('function coverExistingText('));
+  const splice = fn.indexOf('doc.textEdits.splice(index, 1)');
+  const exec = fn.indexOf("execute({ type: 'removeTextEdit'");
+  assert.ok(splice > 0, 'removeTextEditRecord verwijdert het record niet uit doc.textEdits');
+  assert.ok(exec > splice, 'de undo-stap komt na de verwijdering, met dezelfde index');
+  assert.match(fn, /execute\(\{ type: 'removeTextEdit', textEdit: \{ \.\.\.verwijderd \}, index \}\)/);
+
+  // Undo en redo passen het record in undo-manager.js zelf toe.
+  const undo = fs.readFileSync(new URL('../core/undo-manager.js', import.meta.url), 'utf8');
+  const terug = undo.slice(undo.indexOf('function applyUndo('), undo.indexOf('function applyRedo('));
+  const vooruit = undo.slice(undo.indexOf('function applyRedo('));
+  assert.match(terug.slice(terug.indexOf("case 'removeTextEdit'")), /^case 'removeTextEdit': \{[\s\S]{0,200}doc\.textEdits\.splice\(insertIdx, 0,/);
+  assert.match(vooruit.slice(vooruit.indexOf("case 'removeTextEdit'")), /^case 'removeTextEdit': \{[\s\S]{0,200}doc\.textEdits\.splice\(idx, 1\)/);
+});
