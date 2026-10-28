@@ -209,6 +209,7 @@
   "noPagesSelected": "Geen pagina's geselecteerd om te extraheren.",
   "selectedPdfNoPages": "De geselecteerde PDF heeft geen pagina's.",
   "failedToSavePdf": "PDF opslaan mislukt: {{error}}",
+  "saveCancelled": "Opslaan geannuleerd. Er is niets weggeschreven.",
   "failedToLoadPdf": "PDF laden mislukt: {{error}}",
   "hostOpenFailed": "Het bestand kon niet uit de opslag worden gelezen. Probeer het opnieuw.",
   "hostInvalidPdf": "{{name}} is geen geldig PDF-bestand en kon niet worden geopend.",

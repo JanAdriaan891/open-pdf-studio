@@ -139,6 +139,7 @@
   "noPagesSelected": "No pages selected for extraction.",
   "selectedPdfNoPages": "The selected PDF has no pages.",
   "failedToSavePdf": "Failed to save PDF: {{error}}",
+  "saveCancelled": "Saving cancelled. Nothing was written.",
   "failedToLoadPdf": "Failed to load PDF: {{error}}",
   "hostOpenFailed": "The file could not be read from storage. Try again.",
   "hostInvalidPdf": "{{name}} is not a valid PDF file and could not be opened.",

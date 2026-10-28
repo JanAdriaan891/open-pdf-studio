@@ -28,6 +28,7 @@ import { bytesVan as knipselBytesVan } from '../annotations/vector-snippet-store
 import { getAnnotationStorage, getAnnotIdToFieldName } from './form-layer.js';
 import { getAnnotationType } from '../plugins/annotation-type-registry.js';
 import { metOpslagSlot } from '../plugins/opslag-wissel-slot.js';
+import { maakOpslaanAnnulering, isOpslaanGeannuleerd } from './saver/opslaan-annuleren.js';
 import { createPluginPdfAnnotation, renderPluginAnnotationPng, readPluginPdfAnnotation } from '../plugins/plugin-pdf.js';
 import i18next from '../i18n/config.js';
 import { showMessage } from '../bridge.js';
@@ -375,8 +376,12 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
   const changedDuringSave = () => new Error(i18next.t('documentChangedDuringSave', {
     defaultValue: 'The document changed while saving. Save again.',
   }));
+  // Annuleren (#766): alleen bij echt opslaan, niet bij een momentopname of
+  // Alles vlakken. Esc en de knop in het laadvenster vragen het stoppen.
+  const annulering = maakOpslaanAnnulering();
+  const annuleerbaar = !momentopname && !alleenAnnotaties;
   try {
-    if (!momentopname) showLoading('Saving PDF...');
+    if (!momentopname) showLoading('Saving PDF...', annuleerbaar ? { annuleren: () => annulering.annuleer() } : {});
 
     // Get original PDF bytes (from cache or disk, with memory key fallback for untitled docs)
     let existingPdfBytes = getCachedPdfBytes(currentPath);
@@ -392,6 +397,7 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     const pdfDocLib = momentopname
       ? await PDFDocument.load(existingPdfBytes, { parseSpeed: MOMENTOPNAME_OBJECTEN_PER_TIK })
       : await PDFDocument.load(existingPdfBytes);
+    if (annuleerbaar) annulering.controleer();
     // Een voorbeeld van het importvenster kan inhoud missen en wordt nooit
     // als document opgeslagen (#400).
     {
@@ -453,6 +459,9 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
       // Momentopname: de bediening krijgt na elke pagina even ruimte.
       if (momentopname) await new Promise((r) => setTimeout(r, 0));
+      // Opslaan: af en toe ruimte voor de knop Annuleren, en stoppen als
+      // daarom gevraagd is (#766).
+      else if (annuleerbaar) await annulering.tik();
       const pageNum = pageIndex + 1;
       const page = pages[pageIndex];
 
@@ -3209,9 +3218,11 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // nummers: anders groeit het bestand bij elke save (saver/objecten-
     // opruimen.js). Eerst alles laten aanmaken wat pdf-lib anders pas bij
     // save() aanmaakt.
+    if (annuleerbaar) await annulering.tik();
     pdfDocLib.formCache.getValue()?.updateFieldAppearances();
     await pdfDocLib.flush();
     ruimOngebruikteObjectenOp(pdfDocLib, { nieuwVanaf: eersteNieuwObject });
+    if (annuleerbaar) await annulering.tik();
 
     // Herstelmomentopname: alleen de bytes; niets wegschrijven of bijwerken.
     if (momentopname) {
@@ -3225,6 +3236,14 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     // Structural edits replace the PDF and often move its working path. A
     // serialization started before that replacement must not write old bytes.
     if (!stillCurrent()) throw changedDuringSave();
+
+    // Laatste kans om te annuleren: daarna wordt er geschreven (tijdelijk
+    // bestand + hernoemen), en dat breken we niet halverwege af (#766).
+    if (annuleerbaar) {
+      await annulering.tik();
+      annulering.beginSchrijven();
+      showLoading('Saving PDF...');
+    }
 
     // Temporarily release lock so we can write, then re-lock
     await unlockFile(outputPath);
@@ -3361,6 +3380,14 @@ async function _savePDFNu(saveAsPath, activeDoc, { alleenAnnotaties = false, mom
     return true;
   } catch (error) {
     if (alleenAnnotaties || momentopname) throw error;
+    // Geannuleerd (#766): er is niets geschreven, het document houdt zijn
+    // wijzigingen en kan later gewoon opnieuw worden opgeslagen.
+    if (isOpslaanGeannuleerd(error)) {
+      updateStatusMessage(i18next.t('saveCancelled', {
+        defaultValue: 'Saving cancelled. Nothing was written.',
+      }), 4000);
+      return false;
+    }
     // Een tekstbewerking met tekens die geen font heeft (#717): het bestand
     // bleef ongewijzigd; noem de tekens.
     if (isOntbrekendeGlyfenFout(error)) {

@@ -6,6 +6,7 @@ import { bestandsnaamUitPad } from '../core/bestandsnaam.js';
 import { opslaanVraagtOpslaanAls } from './handtekeningen/opslaan.js';
 import { isOntbrekendeGlyfenFout, tekensVoorMelding } from '../text/glyf-dekking.js';
 import { hostFoutMelding } from '../core/host-brug.js';
+import { maakOpslaanAnnulering, isOpslaanGeannuleerd } from './saver/opslaan-annuleren.js';
 
 // Execute the production save functions with controlled I/O. The app imports
 // require a webview; only those dependencies and dynamic imports are replaced.
@@ -57,6 +58,8 @@ function harness() {
     opslaanVraagtOpslaanAls,
     // Leesbare naam, ook voor een content://-URI van Android (#596).
     bestandsnaamUitPad,
+    // Opslaan annuleren (#766, echt).
+    maakOpslaanAnnulering, isOpslaanGeannuleerd, updateStatusMessage() {},
     // Herstelmomentopname weg na opslaan (js/herstel/haken.js).
     meldOpgeslagen: doc => opgeslagenGemeld.push(doc),
     console: { error() {}, warn() {} },
@@ -75,6 +78,37 @@ function harness() {
   const api = new Function('deps', `with (deps) { ${saved}\n${functions}\n return {savePDF, savePDFAs, bouwMomentopname}; }`)(deps);
   return { a, b, deps, api, writes, owners, attachmentEdits, opgeslagenGemeld, switchToB: () => { active = b; } };
 }
+
+test('cancelling a save writes nothing and keeps the document modified (#766)', async () => {
+  const h = harness();
+  const meldingen = [];
+  let annuleer = null;
+  h.deps.showLoading = (_tekst, opties = {}) => { if (opties.annuleren) annuleer = opties.annuleren; };
+  h.deps.updateStatusMessage = (tekst) => meldingen.push(tekst);
+  const load = h.deps.PDFDocument.load;
+  // De gebruiker klikt Annuleren terwijl het bestand gelezen wordt.
+  h.deps.PDFDocument = { load: async (bytes) => { annuleer(); return load(bytes); } };
+  assert.equal(await h.api.savePDF('copy-of-a.pdf'), false);
+  assert.deepEqual(h.writes, [], 'nothing is written');
+  assert.equal(h.a.modified, true, 'the document keeps its changes');
+  assert.deepEqual(meldingen, ['saveCancelled']);
+  assert.deepEqual(h.opgeslagenGemeld, []);
+
+  // Een volgende save werkt gewoon.
+  h.deps.PDFDocument = { load };
+  assert.equal(await h.api.savePDF('copy-of-a.pdf'), true);
+  assert.deepEqual(h.writes, [{ path: 'copy-of-a.pdf', source: 'a.pdf' }]);
+  assert.equal(h.a.modified, false);
+});
+
+test('cancelling once the write has started does not interrupt it (#766)', async () => {
+  const h = harness();
+  let annuleer = null;
+  h.deps.showLoading = (_tekst, opties = {}) => { if (opties.annuleren) annuleer = opties.annuleren; };
+  h.deps.unlockFile = async () => { annuleer(); };
+  assert.equal(await h.api.savePDF('copy-of-a.pdf'), true);
+  assert.deepEqual(h.writes, [{ path: 'copy-of-a.pdf', source: 'a.pdf' }]);
+});
 
 test('tab switch during signature verification still saves A to the requested path', async () => {
   const h = harness(), gate = deferred(), entered = deferred();

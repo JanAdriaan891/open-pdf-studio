@@ -1,4 +1,4 @@
-import { Show, createSignal, createEffect } from 'solid-js';
+import { Show, createSignal, createEffect, onMount, onCleanup } from 'solid-js';
 import { visible, message, progress, cancelHandler } from '../stores/loadingStore.js';
 import { useTranslation } from '../../i18n/useTranslation.js';
 
@@ -8,6 +8,22 @@ export default function LoadingOverlay() {
   // volgende taak (het werk stopt pas na de lopende stap).
   const [geannuleerd, setGeannuleerd] = createSignal(false);
   createEffect(() => { if (!visible()) setGeannuleerd(false); });
+  const annuleer = () => {
+    if (geannuleerd() || !cancelHandler()) return;
+    setGeannuleerd(true);
+    cancelHandler()?.();
+  };
+  // Esc doet hetzelfde als Annuleren (#766), alleen als er iets te annuleren is.
+  onMount(() => {
+    const opToets = (e) => {
+      if (e.key !== 'Escape' || !visible() || !cancelHandler()) return;
+      e.preventDefault();
+      e.stopPropagation();
+      annuleer();
+    };
+    window.addEventListener('keydown', opToets, true);
+    onCleanup(() => window.removeEventListener('keydown', opToets, true));
+  });
   return (
     <div class="loading-overlay" classList={{ visible: visible() }}>
       <div class="loading-content">
@@ -23,7 +39,7 @@ export default function LoadingOverlay() {
         </Show>
         <Show when={cancelHandler()}>
           <button type="button" class="loading-cancel" disabled={geannuleerd()}
-            onClick={() => { setGeannuleerd(true); cancelHandler()?.(); }}>
+            onClick={annuleer}>
             {t('cancel')}
           </button>
         </Show>
