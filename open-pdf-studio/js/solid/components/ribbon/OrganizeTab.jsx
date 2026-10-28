@@ -9,7 +9,9 @@ import { isPdfAReadOnly } from '../../../pdf/loader.js';
 import { showInsertPageDialog, showExtractPagesDialog, showMergePdfsDialog } from '../../../ui/chrome/dialogs.js';
 import { draaiVanafKnop } from '../../../pdf/pagina-draaien.js';
 import { setTool } from '../../../tools/manager.js';
-import { setLeftPanelActiveTab, setLeftPanelCollapsed } from '../../../bridge.js';
+import { setLeftPanelActiveTab, leftPanelActiveTab, leftPanelCollapsed, toggleLeftPanelCollapsed } from '../../../bridge.js';
+import { volgordePaneelBreedte } from '../../../ui/panels/miniatuur-maat.js';
+import { updateStatusMessage } from '../../../ui/chrome/status-bar.js';
 import { useTranslation } from '../../../i18n/useTranslation.js';
 import { openDialog } from '../../stores/dialogStore.js';
 import { compareActive, exitCompare } from '../../../compare/compare-store.js';
@@ -22,6 +24,9 @@ const splitDocumentIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentC
 
 const scanTextIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3"/><path d="M8.5 9.5h7M12 9.5v6"/></svg>`;
 
+// Paneelbreedte van voor de knop Volgorde (#763), om bij de tweede klik terug te zetten.
+let reorderVorigeBreedte = null;
+
 export default function OrganizeTab() {
   const { t } = useTranslation('ribbon');
   const ro = () => noPdf() || isPdfAReadOnly();
@@ -32,16 +37,32 @@ export default function OrganizeTab() {
   // huidige pagina (#464).
   const rotateCurrentPage = (delta) => draaiVanafKnop(delta);
 
+  // Volgorde (#763): open de miniaturen als raster van meerdere kolommen om
+  // pagina's te verslepen. Alleen het tabblad kiezen deed niets zichtbaars
+  // zolang de miniaturen al open stonden. Nog een klik zet de vorige
+  // paneelbreedte terug, als de gebruiker het paneel intussen niet zelf
+  // versleept heeft.
   function openPageReorder() {
-    // Open the left panel and switch to the page-thumbnails tab so the user
-    // can drag pages to reorder.
-    try {
-      setLeftPanelCollapsed(false);
-      setLeftPanelActiveTab('thumbnails');
-    } catch (_) {
-      // Fallback: just toggle whatever panel exists
-      import('../../../ui/panels/left-panel.js').then(m => m.toggleLeftPanel && m.toggleLeftPanel()).catch(() => {});
+    const panel = document.getElementById('left-panel');
+    const doel = volgordePaneelBreedte(window.innerWidth);
+    if (panel && reorderVorigeBreedte !== null && !leftPanelCollapsed()
+        && leftPanelActiveTab() === 'thumbnails' && Math.round(panel.offsetWidth) === doel) {
+      panel.style.width = reorderVorigeBreedte;
+      reorderVorigeBreedte = null;
+      return;
     }
+    // Inklappen bewaart de breedte; uitklappen via de toggle zet die terug.
+    if (leftPanelCollapsed()) toggleLeftPanelCollapsed();
+    setLeftPanelActiveTab('thumbnails');
+    if (panel && panel.offsetWidth < doel) {
+      reorderVorigeBreedte = panel.style.width;
+      panel.style.width = doel + 'px';
+    }
+    updateStatusMessage(t('organize.reorderPagesHint', 'Drag the page thumbnails into the new order'), 4000);
+    // Na de breedteovergang de huidige pagina in beeld houden.
+    setTimeout(() => {
+      document.querySelector('#left-panel .thumbnail-item.active')?.scrollIntoView({ block: 'nearest' });
+    }, 200);
   }
 
   return (

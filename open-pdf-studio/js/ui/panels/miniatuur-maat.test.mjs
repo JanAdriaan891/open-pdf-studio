@@ -12,6 +12,7 @@ import {
   MIN_KOLOM, KOLOM_GAP, MIN_RENDER, MAX_RENDER,
   kolomBreedte, aantalKolommen, renderBreedte, renderBreedteVoorLijst,
   halveerStappen, maxPaneelBreedte, dropPositie,
+  VOLGORDE_KOLOMMEN, volgordePaneelBreedte,
 } from './miniatuur-maat.js';
 
 const hier = dirname(fileURLToPath(import.meta.url));
@@ -91,6 +92,22 @@ test('slepen: in kolommen ervoor of erachter, in een kolom erboven of eronder', 
   assert.equal(dropPositie(rect, 240, 60, true), 'after', 'rechts van het midden');
   assert.equal(dropPositie(rect, 240, 60, false), 'before', 'boven het midden');
   assert.equal(dropPositie(rect, 120, 260, false), 'after', 'onder het midden');
+});
+
+test('Volgorde (#763): paneel breed genoeg voor een raster, nooit breder dan toegestaan', () => {
+  for (const venster of [1280, 1600, 1920, 2560]) {
+    const b = volgordePaneelBreedte(venster);
+    assert.ok(b <= maxPaneelBreedte(venster), `${venster}: binnen de grens`);
+    for (const goot of [8, 11, 17]) {
+      assert.equal(aantalKolommen(binnen(b, goot)), VOLGORDE_KOLOMMEN, `${venster} px, goot ${goot}`);
+    }
+  }
+  // Klein venster: begrensd door maxPaneelBreedte, nog steeds meerdere kolommen.
+  assert.equal(volgordePaneelBreedte(800), maxPaneelBreedte(800));
+  assert.ok(aantalKolommen(binnen(volgordePaneelBreedte(800), 17)) >= 2);
+
+  const tab = lees('js/solid/components/ribbon/OrganizeTab.jsx');
+  assert.match(tab, /volgordePaneelBreedte\(window\.innerWidth\)/, 'de knop Volgorde verbreedt het paneel');
 });
 
 test('CSS, paneel en renderpaden zijn aangesloten', () => {

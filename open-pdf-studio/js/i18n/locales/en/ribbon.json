@@ -323,6 +323,7 @@
     "compressLabel": "Compress",
     "reorderPages": "Reorder",
     "reorderPagesTitle": "Open thumbnails to drag pages into a new order",
+    "reorderPagesHint": "Drag the page thumbnails into the new order",
     "ocr": "Recognize Text (OCR)",
     "straighten": "Straighten Page",
     "scanText": "Edit Scan Text",

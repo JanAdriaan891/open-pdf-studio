@@ -64,6 +64,18 @@ export function maxPaneelBreedte(vensterBreedte) {
   return Math.max(500, Math.round(v * 0.6));
 }
 
+// Paneelbreedte voor de knop Volgorde (#763): breed genoeg voor een raster van
+// VOLGORDE_KOLOMMEN kolommen, zodat de pagina's naast elkaar staan om te slepen.
+// Tabstrook 32 px + rand 1, padding 2x4 en de ruimste scrollbalkgoot (17 px).
+// Nooit breder dan maxPaneelBreedte.
+export const VOLGORDE_KOLOMMEN = 4;
+const PANEEL_OMLIJSTING = 33 + 8 + 17;
+
+export function volgordePaneelBreedte(vensterBreedte, kolommen = VOLGORDE_KOLOMMEN) {
+  const nodig = kolommen * MIN_KOLOM + (kolommen - 1) * KOLOM_GAP + PANEEL_OMLIJSTING;
+  return Math.min(nodig, maxPaneelBreedte(vensterBreedte));
+}
+
 // Waar een gesleepte miniatuur neerkomt: bij meerdere kolommen links/rechts
 // van het doel (de buren staan naast elkaar), anders erboven/eronder.
 export function dropPositie(rect, x, y, meerdereKolommen) {

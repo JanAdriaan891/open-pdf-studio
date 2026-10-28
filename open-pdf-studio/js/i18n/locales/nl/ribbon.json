@@ -323,6 +323,7 @@
     "compressLabel": "Comprimeren",
     "reorderPages": "Volgorde",
     "reorderPagesTitle": "Open miniaturen om pagina’s in een nieuwe volgorde te slepen",
+    "reorderPagesHint": "Sleep de paginaminiaturen in de nieuwe volgorde",
     "ocr": "Tekst herkennen (OCR)",
     "straighten": "Pagina Rechtzetten",
     "scanText": "Gescande tekst bewerken",
